@@ -9,6 +9,7 @@ Deadline: March 31, 2026 for the first physical prototype
 Table of Contents:
 - [December 15, 2025](#december-15-2025)
 - [December 16, 2025](#december-16-2025)
+- [December 18, 2025](#december-18-2025)
 
 ## December 15, 2025
 
@@ -23,3 +24,20 @@ Current estimate for the press release is Dec 18 2025.
 ## December 16, 2025
 
 This is ridiculous. The United States is the only country where taxes are such a pain: https://www.propublica.org/article/inside-turbotax-20-year-fight-to-stop-americans-from-filing-their-taxes-for-free
+
+## December 18, 2025
+
+I want to make the creepless SPM happen in the shortest amount of time, and publish transparent data that can be fact-checked. To stay true to my motive, I made another attempt to persuade Robert Wolkow to cooperate. I could save many person-hours, recycling existing designs for creepless SPM hardware.
+
+Regardless of whether he shares any design information, I will proceed according to plan. Any data published by other sources should be treated with extreme skepticism. Do not trust any other lab's data, except data gathered in my own house.
+
+| Phase | Description | Voltage |
+| ----- | ----------- | ------: |
+| 0.2   | PZT metrology | 24&ndash;40 V |
+| I     | LiNbO3 metrology | 850 V |
+| II.1  | LiNbO3 kinematic mount | 850 V |
+| II.2  | LiNbO3 STM, inverted mode tip registration | 850 V |
+
+I can shortcut to an important milestone, without the expensive vacuum chamber. Just need to speed up the progress with tripod synthesis. No additional employees or contractors needed for hardware design.
+
+At the end of Phase 0.2, we'll reflect on how long this phase took. If it happened quickly, we can reach the end goal with a single employee. Otherwise, I will probably hire a temporary contractor for hardware design. Phase II.2 should be completed before Dec 31 2026.
