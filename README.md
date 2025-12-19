@@ -34,8 +34,9 @@ Regardless of whether he shares any design information, I will proceed according
 | Phase | Description | Voltage |
 | ----- | ----------- | ------: |
 | 0.2   | PZT metrology | 24&ndash;40 V |
-| I     | LiNbO3 metrology | 850 V |
-| II.1  | LiNbO3 kinematic mount | 850 V |
+| I.1   | LiNbO3 metrology | 850 V |
+| I.2   | LiNbO3 kinematic mount | 850 V |
+| II.1  | LiNbO3 STM, graphite sample | 850 V |
 | II.2  | LiNbO3 STM, inverted mode tip registration | 850 V |
 
 I can shortcut to an important milestone, without the expensive vacuum chamber. Just need to speed up the progress with tripod synthesis. No additional employees or contractors needed for hardware design.
