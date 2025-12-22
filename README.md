@@ -10,6 +10,7 @@ Table of Contents:
 - [December 15, 2025](#december-15-2025)
 - [December 16, 2025](#december-16-2025)
 - [December 18, 2025](#december-18-2025)
+- [December 22, 2025](#december-22-2025)
 
 ## December 15, 2025
 
@@ -42,3 +43,9 @@ Regardless of whether he shares any design information, I will proceed according
 I can shortcut to an important milestone, without the expensive vacuum chamber. Just need to speed up the progress with tripod synthesis. No additional employees or contractors needed for hardware design.
 
 At the end of Phase 0.2, we'll reflect on how long this phase took. If it happened quickly, we can reach the end goal with a single employee. Otherwise, I will probably hire a temporary contractor for hardware design. Phase II.2 should be completed before Dec 31 2026.
+
+## December 22, 2025
+
+Still figuring out taxes, but making progress. Putting work on the next MNT animation on hold. Not really motivated when the response to the tutorial is anemic.
+
+Figuring out the details of a possible contract with ChimiaDAO. Our funds should last us well beyond 6 months into the future: oversee completion of Phase 0.2, stable income while raising funds for the next round. Progress on the tripod synthesis will be reported in the Phase 0.2 repository, alongside hardware progress.
