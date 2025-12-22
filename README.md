@@ -33,16 +33,20 @@ I want to make the creepless SPM happen in the shortest amount of time, and publ
 Regardless of whether he shares any design information, I will proceed according to plan. Any data published by other sources should be treated with extreme skepticism. Do not trust any other lab's data, except data gathered in my own house.
 
 | Phase | Description | Voltage |
-| ----- | ----------- | ------: |
+| ----: | ----------- | ------: |
 | 0.2   | PZT metrology | 24&ndash;40 V |
-| I.1   | LiNbO3 metrology | 850 V |
-| I.2   | LiNbO3 kinematic mount | 850 V |
-| II.1  | LiNbO3 STM, graphite sample | 850 V |
-| II.2  | LiNbO3 STM, inverted mode tip registration | 850 V |
+| 1.1   | LiNbO3 metrology | 850 V |
+| 1.2   | LiNbO3 kinematic mount | 850 V |
+| 2.1   | LiNbO3 STM, graphite sample | 850 V |
+| 2.2   | LiNbO3 STM, inverted mode tip registration | 850 V |
 
 I can shortcut to an important milestone, without the expensive vacuum chamber. Just need to speed up the progress with tripod synthesis. No additional employees or contractors needed for hardware design.
 
-At the end of Phase 0.2, we'll reflect on how long this phase took. If it happened quickly, we can reach the end goal with a single employee. Otherwise, I will probably hire a temporary contractor for hardware design. Phase II.2 should be completed before Dec 31 2026.
+At the end of Phase 0.2, we'll reflect on how long this phase took. If it happened quickly, we can reach the end goal with a single employee. Otherwise, I will probably hire a temporary contractor for hardware design. Phase 2.2 should be completed before Dec 31 2026.
+
+> Nomenclature change: exclude Roman numerals from the phase names, at least when numbering sub-phases. It's highly cumbersome to process "I.1" and "II.2", versus "1.1" and "2.2".
+>
+> In addition, we may right-align the phase names in tables and spreadsheets.
 
 ## December 22, 2025
 
