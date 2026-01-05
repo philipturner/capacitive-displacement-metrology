@@ -84,3 +84,10 @@ The plate area is important now, because smaller plates have less capacitance, a
 ### Modeling Piezo Force Requirements
 
 To break static friction, the piezo needs to generate a certain amount of force. In addition to the range and waveform frequency requirements.
+
+Assuming a 0.5 mm thick plate:
+
+| Voltage | Displacement | Shear Proportion |
+| ------: | -----------: | ---------------: |
+| 200 V   | 13.6 nm      | 2.72e-5          |
+| 850 V   | 57.8 nm      | 1.16e-4          |
