@@ -80,3 +80,7 @@ Design options for piezo stack geometry:
 - 10 plates, 10 mm x 10 mm area, 10 mm stack height
 
 The plate area is important now, because smaller plates have less capacitance, and thus lower current pulse requirements for the power supply. We may also use different plate areas for the fine vs. coarse actuators. Mechanically, sticking two 5 mm x 5 mm stacks on top of each other would create a 12 mm high tower. Not a good idea.
+
+### Modeling Piezo Force Requirements
+
+To break static friction, the piezo needs to generate a certain amount of force. In addition to the range and waveform frequency requirements.
