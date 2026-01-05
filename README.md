@@ -69,3 +69,9 @@ https://www.matsusada.com/corporate/management.html
 Might contact Matsusada after doing my own research on their products and my performance requirements.
 
 https://www.matsusada.com/column/hvps-safty.html
+
+### Modeling Power Supply Requirements
+
+To be conservative, assume we'll need 3 kinematic mounts for X, Y, and Z. We're also reducing the range, with 6 plates from Wolkow's patent instead of 10. Now all actuators, for all axes, use 6-high piezo stacks. The capacitance of the kinematic mount probably prevents utilization of the PA94 for high slew rates.
+
+TODO
