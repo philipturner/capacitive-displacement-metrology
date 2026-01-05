@@ -74,4 +74,9 @@ https://www.matsusada.com/column/hvps-safty.html
 
 To be conservative, assume we'll need 3 kinematic mounts for X, Y, and Z. We're also reducing the range, with 6 plates from Wolkow's patent instead of 10. Now all actuators, for all axes, use 6-high piezo stacks. The capacitance of the kinematic mount probably prevents utilization of the PA94 for high slew rates.
 
-TODO
+Design options for piezo stack geometry:
+- 6 plates, 5 mm x 5 mm area, 6 mm stack height
+- 6 plates, 10 mm x 10 mm area, 6 mm stack height
+- 10 plates, 10 mm x 10 mm area, 10 mm stack height
+
+The plate area is important now, because smaller plates have less capacitance, and thus lower current pulse requirements for the power supply. We may also use different plate areas for the fine vs. coarse actuators. Mechanically, sticking two 5 mm x 5 mm stacks on top of each other would create a 12 mm high tower. Not a good idea.
