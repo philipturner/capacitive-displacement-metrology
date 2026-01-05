@@ -63,3 +63,5 @@ We are now sufficiently ready to return to experiments. Paid labor will start on
 ## January 5, 2026
 
 I will start by resolving an important unknown. How much does it cost to have 500 nm range instead of 80 nm range for the LiNbO3 piezos? This has implications all through Phase III, where we integrate a custom scanner into the vacuum chamber. It explodes the design cost in Phase III because Wolkow will likely be selling his own design. Already designed hardware is cheaper than the person-hours cost of designing new hardware.
+
+https://www.matsusada.com/corporate/management.html
