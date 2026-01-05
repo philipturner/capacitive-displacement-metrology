@@ -85,9 +85,27 @@ The plate area is important now, because smaller plates have less capacitance, a
 
 To break static friction, the piezo needs to generate a certain amount of force. In addition to the range and waveform frequency requirements.
 
-Assuming a 0.5 mm thick plate:
+Assuming a 0.5 mm thick plate and 69.2 GPa shear modulus:
 
-| Voltage | Displacement | Shear Proportion |
-| ------: | -----------: | ---------------: |
-| 200 V   | 13.6 nm      | 2.72e-5          |
-| 850 V   | 57.8 nm      | 1.16e-4          |
+| Voltage | Displacement | Shear Proportion | Shear Pressure |
+| ------: | -----------: | ---------------: | -------------: |
+| 200 V   | 13.6 nm      | 2.72e-5          | 1.88e6 Pa      |
+| 850 V   | 57.8 nm      | 1.16e-4          | 8.00e6 Pa      |
+
+Forces for various setups at 200 V:
+
+| Plate Size | Plate Count | Shear Force |
+| ---------- | ----------: | ----------: |
+| 5 mm x 5 mm   | 1 | 47.1 N |
+| 5 mm x 5 mm   | 3 | 141.1 N |
+| 10 mm x 10 mm | 1 | 188.2 N |
+| 10 mm x 10 mm | 3 | 564.7 N |
+
+Forces for various setups at 800 V:
+
+| Plate Size | Plate Count | Shear Force |
+| ---------- | ----------: | ----------: |
+| 5 mm x 5 mm   | 1 | 200.0 N |
+| 5 mm x 5 mm   | 3 | 600.0 N |
+| 10 mm x 10 mm | 1 | 800.0 N |
+| 10 mm x 10 mm | 3 | 2399.9 N |
