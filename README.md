@@ -12,6 +12,7 @@ Table of Contents:
 - [December 18, 2025](#december-18-2025)
 - [December 22, 2025](#december-22-2025)
 - [January 3, 2026](#january-3-2026)
+- [January 5, 2026](#january-5-2026)
 
 ## December 15, 2025
 
@@ -58,3 +59,7 @@ Figuring out the details of a possible contract with ChimiaDAO. Our funds should
 ## January 3, 2026
 
 We are now sufficiently ready to return to experiments. Paid labor will start on January 5. Rippling costs a ridiculous $1,800 sign-on contract over 18 months ($150 down payment). Definitely not what they publicly advertise or what you get from LLM summaries. In the future, we will face similar obfuscation of quotes from hardware suppliers (e.g. UHV-quality turbopumps cost $14,000 minimum).
+
+## January 5, 2026
+
+I will start by resolving an important unknown. How much does it cost to have 500 nm range instead of 80 nm range for the LiNbO3 piezos? This has implications all through Phase III, where we integrate a custom scanner into the vacuum chamber. It explodes the design cost in Phase III because Wolkow will likely be selling his own design. Already designed hardware is cheaper than the person-hours cost of designing new hardware.
