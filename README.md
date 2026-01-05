@@ -94,18 +94,20 @@ Assuming a 0.5 mm thick plate and 69.2 GPa shear modulus:
 
 Forces for various setups at 200 V:
 
-| Plate Size | Plate Count | Shear Force |
-| ---------- | ----------: | ----------: |
-| 5 mm x 5 mm   | 1 | 47.1 N |
-| 5 mm x 5 mm   | 3 | 141.1 N |
-| 10 mm x 10 mm | 1 | 188.2 N |
-| 10 mm x 10 mm | 3 | 564.7 N |
+| Plate Size | Plate Count | Shear Force | Max Weight |
+| ---------- | ----------: | ----------: | ---------: |
+| 5 mm x 5 mm   | 1 | 47.1 N | 4.8 kg |
+| 5 mm x 5 mm   | 3 | 141.1 N | 14.4 kg |
+| 10 mm x 10 mm | 1 | 188.2 N | 19.2 kg |
+| 10 mm x 10 mm | 3 | 564.7 N | 57.6 kg |
 
 Forces for various setups at 800 V:
 
 | Plate Size | Plate Count | Shear Force |
 | ---------- | ----------: | ----------: |
-| 5 mm x 5 mm   | 1 | 200.0 N |
-| 5 mm x 5 mm   | 3 | 600.0 N |
-| 10 mm x 10 mm | 1 | 800.0 N |
-| 10 mm x 10 mm | 3 | 2399.9 N |
+| 5 mm x 5 mm   | 1 | 200.0 N | 20.4 kg |
+| 5 mm x 5 mm   | 3 | 600.0 N | 61.2 kg |
+| 10 mm x 10 mm | 1 | 800.0 N | 81.6 kg |
+| 10 mm x 10 mm | 3 | 2399.9 N | 244.9 kg |
+
+Even though shear force doesn't increase with the number of plates per stack, the above numbers should exceed all reasonable force requirements.
