@@ -111,3 +111,12 @@ Forces for various setups at 800 V:
 | 10 mm x 10 mm | 3 | 2399.9 N | 244.9 kg |
 
 Even though shear force doesn't increase with the number of plates per stack, the above numbers should exceed all reasonable force requirements.
+
+### Modeling Required Slew Rate
+
+Dive deeper into the waveform requirements for stick-slip nanopositioning:
+- Does the waveform need to contain components above the resonance frequency?
+- What is the target rate in steps/second?
+- Why is woodpecker coarse tip approach so slow?
+
+These variables can probably be resolved at a later date. I mostly want a lower capacitance in the kinematic mount, while still attaining 30 V/μs slew rate of the PA95 op amp.
