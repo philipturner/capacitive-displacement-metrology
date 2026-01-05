@@ -121,7 +121,7 @@ Dive deeper into the waveform requirements for stick-slip nanopositioning:
 
 These variables can probably be resolved at a later date. I mostly want a lower capacitance in the kinematic mount, while still attaining 30 V/μs slew rate of the PA95 op amp.
 
-### Final Calculations
+### Design Space Exploration
 
 Quiescent current demands on power supply:
 - Conservatively 6 DAC channels and 6 PA95 op amps for Phase III
@@ -162,3 +162,20 @@ Frequency of an 850 V triangle wave:
 | Rise time (μs)       | 28   | 43   | 85  | 170 | 283 |
 | Wave period (μs)     | 57   | 85   | 170 | 340 | 567 |
 | Wave frequency (kHz) | 17.6 | 11.8 | 5.9 | 2.9 | 1.8 |
+
+### Final Current Demands
+
+Making the smart design choice to use 5 mm instead of 10 mm piezo plates for the kinematic mount.
+
+Providing two negotiable options for maximum waveform frequency: 5.9 kHz, 17.6 kHz
+
+| Wave frequency                        | 5.9 kHz  | 17.6 kHz |
+| ------------------------------------- | -------: | -------: |
+| Quiescent current                     | 13.2 mA  | 13.2 mA  |
+| Current of one active kinematic mount |  7.0 mA  | 21.0 mA  |
+| Peak current in either 450 V supply   | 20.2 mA  | 34.2 mA  |
+| Peak power in either 450 V supply     | 9.1 W    | 15.4 W   |
+| Average power in either 450 V supply  | 7.5 W    | 10.7 W   |
+| Total power in both supplies combined | 15.0 W   | 21.3 W   |
+
+I will state the peak (not average) demands when emailing Matsusada.
