@@ -120,3 +120,12 @@ Dive deeper into the waveform requirements for stick-slip nanopositioning:
 - Why is woodpecker coarse tip approach so slow?
 
 These variables can probably be resolved at a later date. I mostly want a lower capacitance in the kinematic mount, while still attaining 30 V/μs slew rate of the PA95 op amp.
+
+### Final Calculations
+
+A kinematic mount has 18 piezo plates: 3 stacks, each with 6 piezo plates. The dielectric constant of lithium niobate at 300 K is 88. The thickness of each plate is 0.5 mm. With these parameters, we first derive capacitance (in pF) of the entire kinematic mount:
+
+| Configuration | Capacitance |
+| ------------- | ----------: |
+| 5 mm x 5 mm   | 701         |
+| 10 mm x 10 mm | 2805        |
