@@ -212,3 +212,9 @@ Other important preliminary tasks to remember:
   - Lithium niobate is symmetric, so there should be multiple directions where such a coupling occurs.
   - Might use [Molecular Renderer](https://github.com/philipturner/molecular-renderer) to visualize crystal atoms and control programmable animations.
 - Why is coarse tip approach so slow?
+
+### Update
+
+Got the first email response back from Matsusada. Working on the next steps regarding our discussion.
+
+Regarding electrical feedthroughs for vacuum systems: it boils down to dielectric breakdown and [Paschen's curve](https://en.wikipedia.org/wiki/Paschen%27s_law#/media/File:Paschen_curves.svg). I don't think I need to spend much additional time on this topic, for now.
