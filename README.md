@@ -194,3 +194,5 @@ Monocrystalline Au(111) surfaces are indeed very expensive. Most vendors obfusca
 I will start with trying to reproduce Dan Berard's results, with my imperfect Au(111) "textured" surface prepared at Virginia Tech. Next, reproduce the self-assembled monolayer structure of densely packed tripods on gold. If everything works well, attempt a sparse monolayer that can generate reverse-phase images (RPIs) from the CBN paper.
 
 I'm highly skeptical this will work out. We may need complicated EC-STM or $3,000 pristine commercial gold samples. However, both of these are cheaper/better than a complete UHV chamber.
+
+The end state of this sample preparation must be something actually usable for inverted mode mechanosynthesis.
