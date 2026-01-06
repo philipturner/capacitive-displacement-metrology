@@ -218,3 +218,5 @@ Other important preliminary tasks to remember:
 Got the first email response back from Matsusada. Working on the next steps regarding our discussion.
 
 Regarding electrical feedthroughs for vacuum systems: it boils down to dielectric breakdown and [Paschen's curve](https://en.wikipedia.org/wiki/Paschen%27s_law#/media/File:Paschen_curves.svg). I don't think I need to spend much additional time on this topic, for now.
+
+I'll call it a day for now. Tomorrow, I will investigate the crystallographic vectors of lithium niobate.
