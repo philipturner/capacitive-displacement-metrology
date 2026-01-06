@@ -196,3 +196,7 @@ I will start with trying to reproduce Dan Berard's results, with my imperfect Au
 I'm highly skeptical this will work out. We may need complicated EC-STM or $3,000 pristine commercial gold samples. However, both of these are cheaper/better than a complete UHV chamber.
 
 The end state of this sample preparation must be something actually usable for inverted mode mechanosynthesis.
+
+<b>Second concern:</b> do we need to bake off the Au surface prior to entering into the UHV chamber? That would remove all the tripods deposited in solution. I want to avoid the vapor-phase deposition of tripods onto gold, that previous literature used.
+
+<b>Worst case:</b> final vacuum system requires complicated and expensive MBE and/or XPS hardware. But the chemical design space for Au-S linkers is still unlocked.
