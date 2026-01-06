@@ -102,7 +102,7 @@ Forces for various setups at 200 V:
 | 10 mm x 10 mm | 1 | 188.2 N | 19.2 kg |
 | 10 mm x 10 mm | 3 | 564.7 N | 57.6 kg |
 
-Forces for various setups at 800 V:
+Forces for various setups at 850 V:
 
 | Plate Size | Plate Count | Shear Force |
 | ---------- | ----------: | ----------: |
