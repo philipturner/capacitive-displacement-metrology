@@ -202,3 +202,13 @@ The end state of this sample preparation must be something actually usable for i
 <b>Second concern:</b> do we need to bake off the Au surface prior to entering into the UHV chamber? That would remove all the tripods deposited in solution. I want to avoid the vapor-phase deposition of tripods onto gold, that previous literature used.
 
 <b>Worst case:</b> final vacuum system requires complicated and expensive MBE and/or XPS hardware. But the chemical design space for Au-S linkers is still unlocked.
+
+---
+
+Other important preliminary tasks to remember:
+- What is going on with the crystallographic vectors and shear directions for 41 X-cut lithium niobate?
+  - Does some extra displacement happen in the off-axis direction?
+  - What is the physical (atomic) justification for perfect 90 degree misalignment between E-field and position displacement?
+  - Lithium niobate is symmetric, so there should be multiple directions where such a coupling occurs.
+  - Might use [Molecular Renderer](https://github.com/philipturner/molecular-renderer) to visualize crystal atoms and control programmable animations.
+- Why is coarse tip approach so slow?
