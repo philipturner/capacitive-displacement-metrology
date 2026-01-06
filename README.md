@@ -13,6 +13,7 @@ Table of Contents:
 - [December 22, 2025](#december-22-2025)
 - [January 3, 2026](#january-3-2026)
 - [January 5, 2026](#january-5-2026)
+- [January 6, 2026](#january-6-2026)
 
 ## December 15, 2025
 
@@ -179,3 +180,9 @@ Providing two negotiable options for maximum waveform frequency: 5.9 kHz, 17.6 k
 | Total power in both supplies combined | 15.0 W   | 21.3 W   |
 
 I will state the peak (not average) demands when emailing Matsusada.
+
+## January 6, 2026
+
+Still waiting to hear back. Customer service things tend to take a long time, and have many delays.
+
+Where else can I make progress regarding the pathway to a final-state LiNbO3 SPM? The design of a custom UHV chamber with custom electrical feedthroughs. Not the UHV-SPM system that Wolkow might be selling.
