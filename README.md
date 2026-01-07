@@ -14,6 +14,7 @@ Table of Contents:
 - [January 3, 2026](#january-3-2026)
 - [January 5, 2026](#january-5-2026)
 - [January 6, 2026](#january-6-2026)
+- [January 7, 2026](#january-7-2026)
 
 ## December 15, 2025
 
@@ -220,3 +221,7 @@ Got the first email response back from Matsusada. Working on the next steps rega
 Regarding electrical feedthroughs for vacuum systems: it boils down to dielectric breakdown and [Paschen's curve](https://en.wikipedia.org/wiki/Paschen%27s_law#/media/File:Paschen_curves.svg). I don't think I need to spend much additional time on this topic, for now.
 
 I'll call it a day for now. Tomorrow, I will investigate the crystallographic vectors of lithium niobate.
+
+## January 7, 2026
+
+The Islam and Beamish (2018) precursor paper corrects for the effect of the 41° angle on the piezo constant. They measured a 23 ppm change in capacitance at 300 μm. Voltage was 40 V and there were 3 plates in the stack. Raw data for piezo constant should be 57.5 pm/V, but they stated 49.7 pm/V in the paper. I reproduced the ratio of 57.5 vs 49.7 when simulating the response of 41° vs 0° cut lithium niobate.
