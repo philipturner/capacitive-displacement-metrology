@@ -225,3 +225,9 @@ I'll call it a day for now. Tomorrow, I will investigate the crystallographic ve
 ## January 7, 2026
 
 The Islam and Beamish (2018) precursor paper corrects for the effect of the 41° angle on the piezo constant. They measured a 23 ppm change in capacitance at 300 μm. Voltage was 40 V and there were 3 plates in the stack. Raw data for piezo constant should be 57.5 pm/V, but they stated 49.7 pm/V in the paper. I reproduced the ratio of 57.5 vs 49.7 when simulating the response of 41° vs 0° cut lithium niobate.
+
+I think positive 41° means the manufacturer rotated the crystal boule by that amount. The X reference plane ready to slice a wafer hasn't moved. This explains why the script has to invert the rotation angle to match literature data.
+
+Wafers from crystal substrates have no special 41° rotation. They are xyt 0° in IRE notation. Provided that you select "X-cut (1 1 2-bar 0)".
+
+---
