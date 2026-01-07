@@ -236,7 +236,7 @@ Wafers from Crystal Substrates have no special 41° rotation. They are xyt 0° i
 
 [PiezoelectricCoefficients2.swift](./Models/Code/PiezoelectricCoefficients2.swift)
 
-The actual shear constant is 80 pm/V, in a direction 32° counterclockwise from Z (0 0 0 1). The electric field is always being applied across the X-axis, regardless of the rotation of the wafer cut. If Wolkow has realized this, then the 80 nm quoted from the patent corresponds to 167 V at 6 piezo plates. Not 197 V.
+The actual shear constant is 80 pm/V, in a direction 32° counterclockwise from Z (0 0 0 1). The electric field is always being applied across the X-axis, regardless of the rotation of the wafer cut. If Wolkow has realized this, then the 80 nm quoted from the patent corresponds to 167 V at 6 piezo plates. Not 196 V.
 
 ```
 swift PiezoelectricCoefficients2.swift 0
