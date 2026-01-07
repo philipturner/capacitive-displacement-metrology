@@ -228,7 +228,7 @@ The Islam and Beamish (2018) precursor paper corrects for the effect of the 41°
 
 I think positive 41° means the manufacturer rotated the crystal boule by that amount. The X reference plane ready to slice a wafer hasn't moved. This explains why the script has to invert the rotation angle to match literature data.
 
-Wafers from crystal substrates have no special 41° rotation. They are xyt 0° in IRE notation. Provided that you select "X-cut (1 1 2-bar 0)".
+Wafers from Crystal Substrates have no special 41° rotation. They are xyt 0° in IRE notation. Provided that you select "X-cut (1 1 2-bar 0)".
 
 ![Lithium Niobate Orientation](./Documentation/Lithium_Niobate_Orientation.jpg)
 
