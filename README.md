@@ -296,3 +296,20 @@ swift PiezoelectricCoefficients2.swift 41
 ```
 
 If we double the plate Y and Z dimensions to 10 mm, the 41 degree case changes from 54.9 to 109.8 nm, and from 335.2 to 670.4 nm. But after correcting for the ratio of X dimension to Y or Z dimension and summing into the X-axis shear, the true displacement is still 11.0 nm and 67.0 nm.
+
+---
+
+The X-axis of the crystal boule doesn't create any charge when compressed. It cannot, because the crystal structure is symmetric across the YZ plane. The Y and Z axes in IRE notation are piezoelectric. That explains why they produce displacements.
+
+I can imagine 6 symmetry operations for a valid pair of E-field axis and shear direction. The shear piezo constant is 80 pm/V, not 68 pm/V.
+
+| X, Y, Z Principal Axes | Shear Direction |
+| ---------------------- | -----------: |
+| standard IRE orientation                       | Z rotated +32° counterclockwise about X |
+| rotate X, Y by  +60° counterclockwise around Z | Z rotated -32° counterclockwise about X |
+| rotate X, Y by +120° counterclockwise around Z | Z rotated +32° counterclockwise about X |
+| rotate X, Y by +180° counterclockwise around Z | Z rotated -32° counterclockwise about X |
+| rotate X, Y by +240° counterclockwise around Z | Z rotated +32° counterclockwise about X |
+| rotate X, Y by +300° counterclockwise around Z | Z rotated -32° counterclockwise about X |
+
+Due to the IRE standard, readily stocked commercial wafers only fall in the first row. But in theory, there are 5 other crystal cuts with the same piezoelectric response. Rows 3 and 5 are equivalent to row 1 by a symmetry operation. Thus, the IRE standard has prevented the opposite chirality of X-cut lithium niobate (rows 2, 4, 6) from ever reaching the market.
