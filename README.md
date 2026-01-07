@@ -230,4 +230,69 @@ I think positive 41° means the manufacturer rotated the crystal boule by that a
 
 Wafers from crystal substrates have no special 41° rotation. They are xyt 0° in IRE notation. Provided that you select "X-cut (1 1 2-bar 0)".
 
+![Lithium Niobate Orientation](./Documentation/Lithium_Niobate_Orientation.jpg)
+
 ---
+
+[PiezoelectricCoefficients2.swift](./Models/Code/PiezoelectricCoefficients2.swift)
+
+The actual shear constant is 80 pm/V, in a direction 32° counterclockwise from Z (0 0 0 1). The electric field is always being applied across the X-axis, regardless of the rotation of the wafer cut.
+
+```
+swift PiezoelectricCoefficients2.swift 0
+
+// 0°
+//  ∂(∂u/∂x1)/∂E1: SIMD3<Float>(0.0, -21.0, 34.0) pm/V
+//  ∂(∂u/∂x2)/∂E1: SIMD3<Float>(-21.0, 0.0, 0.0) pm/V
+//  ∂(∂u/∂x3)/∂E1: SIMD3<Float>(34.0, 0.0, 0.0) pm/V
+
+// 0°
+//  u (x-axis): [0.0, -17.9, 28.9] nm
+//  u (y-axis): [-178.5, 0.0, 0.0] nm
+//  u (z-axis): [289.0, 0.0, 0.0] nm
+
+// 0°
+//  u (x-axis): [0.0, -35.7, 57.8] nm
+//  u (y-axis): [0.0, 0.0, 0.0] nm
+//  u (z-axis): [0.0, 0.0, 0.0] nm
+```
+
+```
+swift PiezoelectricCoefficients2.swift 32
+
+// 32°
+//  ∂(∂u/∂x1)/∂E1: SIMD3<Float>(0.0, 0.20824544, 39.961945) pm/V
+//  ∂(∂u/∂x2)/∂E1: SIMD3<Float>(0.20824254, 0.0, 0.0) pm/V
+//  ∂(∂u/∂x3)/∂E1: SIMD3<Float>(39.961945, 0.0, 0.0) pm/V
+
+// 32°
+//  u (x-axis): [0.0, 0.2, 34.0] nm
+//  u (y-axis): [1.8, 0.0, 0.0] nm
+//  u (z-axis): [339.7, 0.0, 0.0] nm
+
+// 32°
+//  u (x-axis): [0.0, 0.4, 67.9] nm
+//  u (y-axis): [0.0, 0.0, 0.0] nm
+//  u (z-axis): [0.0, 0.0, 0.0] nm
+```
+
+```
+swift PiezoelectricCoefficients2.swift 41
+
+// 41°
+//  ∂(∂u/∂x1)/∂E1: SIMD3<Float>(0.0, 6.4571033, 39.437363) pm/V
+//  ∂(∂u/∂x2)/∂E1: SIMD3<Float>(6.4571033, 0.0, 0.0) pm/V
+//  ∂(∂u/∂x3)/∂E1: SIMD3<Float>(39.437366, 0.0, 0.0) pm/V
+
+// 41°
+//  u (x-axis): [0.0, 5.5, 33.5] nm
+//  u (y-axis): [54.9, 0.0, 0.0] nm
+//  u (z-axis): [335.2, 0.0, 0.0] nm
+
+// 41°
+//  u (x-axis): [0.0, 11.0, 67.0] nm
+//  u (y-axis): [0.0, 0.0, 0.0] nm
+//  u (z-axis): [0.0, 0.0, 0.0] nm
+```
+
+If we double the plate Y and Z dimensions to 10 mm, the 41 degree case changes from 54.9 to 109.8 nm, and from 335.2 to 670.4 nm. But after correcting for the ratio of X dimension to Y or Z dimension and summing into the X-axis shear, the true displacement is still 11.0 nm and 67.0 nm.
