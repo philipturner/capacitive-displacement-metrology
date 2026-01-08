@@ -15,6 +15,7 @@ Table of Contents:
 - [January 5, 2026](#january-5-2026)
 - [January 6, 2026](#january-6-2026)
 - [January 7, 2026](#january-7-2026)
+- [January 8, 2026](#january-8-2026)
 
 ## December 15, 2025
 
@@ -315,3 +316,17 @@ I can imagine 6 symmetry operations for a valid pair of E-field axis and shear d
 Due to the IRE standard, readily stocked commercial wafers only fall in the first row. But in theory, there are 5 other crystal cuts with the same piezoelectric response. Rows 3 and 5 are equivalent to row 1 by a symmetry operation. Thus, the IRE standard has prevented the opposite chirality of X-cut lithium niobate (rows 2, 4, 6) from ever reaching the market.
 
 In Islam and Beamish (2018), the erroneous off-axis displacement would not be measured. Moving the parallel plates in a direction parallel to each other, will decrease the capacitance no matter which direction it moves. The case of zero off-axis displacement is a local maximum of capacitance. The first derivative with respect to position is zero. In contrast, the first derivative with respect to on-axis displacement (distance between the two plates) is very high. It is the only component that could affect the measurements.
+
+# January 8, 2026
+
+I did some investigation of why coarse tip approach is slow. There are three limiting factors:
+- Allowed positional excursion before tip crashes, relative to point of minimum detectable current
+- Delay for sensor to register the tip's new position
+- Inertial overshoot even after the piezo stops applying force
+
+At the speeds we're moving, capacitive currents have no effect on measurements.
+
+| Bias Voltage | dC/dx | dx/dt | Capacitive Current |
+| -----------: | ----: | ----: | -----------------: |
+| 1 V          | 1.50e-10 F/m | 5.88 μm/s | 0.9 fA |
+| 3 V          | 1.50e-10 F/m | 5.88 μm/s | 2.6 fA |
