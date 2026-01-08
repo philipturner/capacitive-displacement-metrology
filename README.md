@@ -432,3 +432,5 @@ At high frequency, the piezo doesn't move instantly in response to voltage. An i
 After reflecting on [this physics page](http://hyperphysics.phy-astr.gsu.edu/hbase/frict2.html), I should expand the combinatorial space for coefficient of kinetic friction. Now include 0.3, 0.4, and 0.5. There is an asymmetry between static and kinetic friction purely due to the shape of the graph.
 
 Once the simulation is debugged and investigated, I can export CSV to plot on Google Sheets and present here. If that is needed.
+
+I will just examine the Z kinematic mount for this analysis. Although it represents the far end of the distribution of load masses, it is a sane way to reduce the size of the combinatorial space. Compared to examining two or three kinematic mounts.
