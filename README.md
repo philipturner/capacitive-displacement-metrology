@@ -348,6 +348,14 @@ In the screenshot above, the maximum acceptable velocity was 0.95 μm/s.
 | RC Time Constants | Sensor Error from Lag | Proportion of Limit from Vibrational Excursion | Maximum Acceptable Velocity |
 | ----------------: | --------------------: | ---------------------------------------------: | --------------------------: |
 | 6.28              | 0.2%                  | 32.1% | 0.95 μm/s |
-| 3.00              | 5.0%                  | 49.8% |
-| 2.00              | 13.5%                 | 59.8% |
-| 1.00              | 36.7%                 | 74.9% |
+| 3.00              | 5.0%                  | 49.8% | 1.47 μm/s |
+| 2.00              | 13.5%                 | 59.8% | 1.77 μm/s |
+| 1.00              | 36.7%                 | 74.9% | 2.21 μm/s |
+
+Anything shorter than 3 RC time constants seems questionable. I'll set the revised velocity to 1.47 μm/s.
+
+---
+
+Next, walk through the algorithm for coarse displacements during tip approach.
+
+Start with a conservatively slow waveform. The time to move the tip during the coarse steps is a tiny fraction of the overall time during coarse approach. Start with a 1 kHz triangle wave, 850 V peak-to-peak amplitude, or ±425 V. Displacement range is 408 nm, or ±204 nm. Each edge of the wave form takes 500 μs. Slew rate is 1.7 V/μs, much less than the PA95's limit of 30 V/μs. Speed is 816 μm/s. The kinematic mount moves back and forth at 816 μm/s in alternating directions, always returning to the same position.
