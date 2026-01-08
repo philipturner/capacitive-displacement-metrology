@@ -330,3 +330,8 @@ At the speeds we're moving, capacitive currents have no effect on measurements.
 | -----------: | ----: | ----: | -----------------: |
 | 1 V          | 1.50e-10 F/m | 5.88 μm/s | 0.9 fA |
 | 3 V          | 1.50e-10 F/m | 5.88 μm/s | 2.6 fA |
+
+![January 8, Part 1](./Documentation/January8_Part1.jpg)
+
+The allowed positional excursion was set to 280 pm, the difference between 1 nA and 313 fA at 80 pm/decade. True tip crash likely occurs at 10 nA, or a limit of 360 pm. To improve the safety margin, the target displacement is half of the 280 pm range, or 140 pm.
+
