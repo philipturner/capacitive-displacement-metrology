@@ -426,3 +426,9 @@ I'll try a sophisticated time-stepping simulation in a Swift script, with a time
 At high frequency, the piezo doesn't move instantly in response to voltage. An instantaneous force of O(600 N) is generated. Then, within the resonant period of O(20 μs), the piezo moves to the expected position. There is no high-frequency creep that would lead to hysteresis. The simulation will show a growing force calculated from the difference between the piezo's actual and desired position, as set by the control voltage. The force will eventually push the piezo to the desired position, and it will overshoot (resonance), oscillating around the desired point. We should test that, in a basic form of the simulation, the oscillation never dies out because there is no damping/friction.
 
 <b>First doable goal:</b> set up a simulation that reproduces the behavior in the above paragraph.
+
+---
+
+After reflecting on [this physics page](http://hyperphysics.phy-astr.gsu.edu/hbase/frict2.html), I should expand the combinatorial space for coefficient of kinetic friction. Now include 0.3, 0.4, and 0.5. There is an asymmetry between static and kinetic friction purely due to the shape of the graph.
+
+Once the simulation is debugged and investigated, I can export CSV to plot on Google Sheets and present here. If that is needed.
