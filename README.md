@@ -359,3 +359,9 @@ Anything shorter than 3 RC time constants seems questionable. I'll set the revis
 Next, walk through the algorithm for coarse displacements during tip approach.
 
 Start with a conservatively slow waveform. The time to move the tip during the coarse steps is a tiny fraction of the overall time during coarse approach. Start with a 1 kHz triangle wave, 850 V peak-to-peak amplitude, or ±425 V. Displacement range is 408 nm, or ±204 nm. Each edge of the wave form takes 500 μs. Slew rate is 1.7 V/μs, much less than the PA95's limit of 30 V/μs. Speed is 816 μm/s. The kinematic mount moves back and forth at 816 μm/s in alternating directions, always returning to the same position.
+
+| Kinematic Mount | Mass of Load | Equivalent Gravitational Force |
+| --------------- | -----------: | -----------------------------: |
+| X Axis          | 13.02 g      | 127.6 mN |
+| Y Axis          | 23.37 g      | 229.0 mN |
+| Z Axis          | 8.94 g       | 87.6 mN |
