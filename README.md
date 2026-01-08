@@ -343,4 +343,11 @@ Finally, the vibrational excursion. This is easier to model than I anticipated. 
 
 In the screenshot above, the maximum acceptable velocity was 0.95 μm/s.
 
----
+### Correction for more optimistic sensor response time
+
+| RC Time Constants | Sensor Error from Lag | Proportion of Limit from Vibrational Excursion | Maximum Acceptable Velocity |
+| ----------------: | --------------------: | ---------------------------------------------: | --------------------------: |
+| 6.28              | 0.2%                  | 32.1% | 0.95 μm/s |
+| 3.00              | 5.0%                  | 49.8% |
+| 2.00              | 13.5%                 | 59.8% |
+| 1.00              | 36.7%                 | 74.9% |
