@@ -360,10 +360,49 @@ Next, walk through the algorithm for coarse displacements during tip approach.
 
 Start with a conservatively slow waveform. The time to move the tip during the coarse steps is a tiny fraction of the overall time during coarse approach. Start with a 1 kHz triangle wave, 850 V peak-to-peak amplitude, or ±425 V. Displacement range is 408 nm, or ±204 nm. Each edge of the wave form takes 500 μs. Slew rate is 1.7 V/μs, much less than the PA95's limit of 30 V/μs. Speed is 816 μm/s. The kinematic mount moves back and forth at 816 μm/s in alternating directions, always returning to the same position.
 
-| Kinematic Mount | Mass of Load | Equivalent Gravitational Force |
-| --------------- | -----------: | -----------------------------: |
-| X Axis          | 13.02 g      | 127.6 mN |
-| Y Axis          | 23.37 g      | 229.0 mN |
-| Z Axis          | 8.94 g       | 87.6 mN |
+| Kinematic Mount | Mass of Load | Equivalent Gravitational Force | Force in Pounds |
+| --------------- | -----------: | -----------------------------: | --------------: |
+| X Axis          | 13.02 g      | 127.6 mN | 0.03 lb |
+| Y Axis          | 23.37 g      | 229.0 mN | 0.05 lb |
+| Z Axis          | 8.94 g       | 87.6 mN | 0.02 lb |
+
+---
 
 Using the N42 grade of magnets.
+
+Magnets need to be extremely close to the surface, to achieve optimal force. I'm setting 300 μm tolerance as the practical upper limit, which nerfs magnetic force ~50% for my geometry. The smaller X and Z kinematic mount can use two 5 mm magnets, while the Y kinematic mount can use four.
+
+Playing around with parameters on: https://www.kjmagnetics.com/magnet-strength-calculator.asp?srsltid=AfmBOorsJBupnrQ9hcxNIcvuajbopfTptJDigBCl6Y_YctyCHKSyzlxy
+
+| Diameter | Thickness | Distance | Pull Force Case 1 |
+| -------: | --------: | -------: | ----------------: |
+| 5 mm     | 3 mm      | 0.0 mm   | 1.45 lb           |
+| 5 mm     | 5 mm      | 0.0 mm   | 2.04 lb           |
+| 5 mm     | 7 mm      | 0.0 mm   | 2.19 lb           |
+| 10 mm    | 3 mm      | 0.0 mm   | 4.33 lb           |
+| 10 mm    | 5 mm      | 0.0 mm   | 6.48 lb           |
+| 10 mm    | 7 mm      | 0.0 mm   | 7.73 lb           |
+
+| Diameter | Thickness | Distance | Pull Force Case 1 |
+| -------: | --------: | -------: | ----------------: |
+| 5 mm     | 3 mm      | 0.3 mm   | 0.73 lb           |
+| 5 mm     | 5 mm      | 0.3 mm   | 1.05 lb           |
+| 5 mm     | 7 mm      | 0.3 mm   | 1.15 lb           |
+| 10 mm    | 3 mm      | 0.0 mm   | 2.75 lb           |
+| 10 mm    | 5 mm      | 0.0 mm   | 4.19 lb           |
+| 10 mm    | 7 mm      | 0.0 mm   | 5.07 lb           |
+
+| Diameter | Thickness | Distance | Pull Force Case 1 |
+| -------: | --------: | -------: | ----------------: |
+| 5 mm     | 3 mm      | 1.0 mm   | 0.29 lb           |
+| 5 mm     | 5 mm      | 1.0 mm   | 0.44 lb           |
+| 5 mm     | 7 mm      | 1.0 mm   | 0.50 lb           |
+| 10 mm    | 3 mm      | 0.0 mm   | 1.50 lb           |
+| 10 mm    | 5 mm      | 0.0 mm   | 2.36 lb           |
+| 10 mm    | 7 mm      | 0.0 mm   | 2.90 lb           |
+
+We do need two magnets aligned in the center of the path of motion. Both Voigtlander and Wolkow's reference designs do this. We can just tweak the force for the Y-axis magnets to be doubled.
+
+All numbers in the above tables are an order of magnitude greater than the amount required to counteract gravity. I will use a design where all kinematic mounts are 45° away from perfectly vertical, and the Y axis's direction of motion is perpendicular to gravity. That does not remove the disparity in load mass between kinematic mounts; it just seems like the most sensible geometry.
+
+To start, let's set the magnet force to 0.50 lb (2.22 N) for all kinematic mounts. This is probably too large, but we can correct it later if needed. In addition, the coefficient of static friction is 0.5 and the coefficient of kinetic friction is either 0.3 or 0.4. We want to explore a combinatorial space for uncertainty in the nature of friction. Finally, the transition from stationary to the "riding" part of the waveform is smoothed out enough to not break static friction. The computer code controlling the DAC makes this part of the waveform smooth.
