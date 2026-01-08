@@ -433,4 +433,4 @@ After reflecting on [this physics page](http://hyperphysics.phy-astr.gsu.edu/hba
 
 Once the simulation is debugged and investigated, I can export CSV to plot on Google Sheets and present here. If that is needed.
 
-I will just examine the Z kinematic mount for this analysis. Although it represents the far end of the distribution of load masses, it is a sane way to reduce the size of the combinatorial space. Compared to examining two or three kinematic mounts.
+I will just examine the Z kinematic mount for this analysis. Although it represents the far end of the distribution of load masses, it is a sane way to reduce the size of the combinatorial space. Compared to examining two or three kinematic mounts. I will also change so, instead of pointing at a 45-degree angle, gravity points directly parallel to the direction of motion. This choice simplifies the code.
