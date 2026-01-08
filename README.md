@@ -364,7 +364,7 @@ Start with a conservatively slow waveform. The time to move the tip during the c
 | --------------- | -----------: | -----------------------------: | --------------: |
 | X Axis          | 13.02 g      | 127.6 mN | 0.03 lb |
 | Y Axis          | 23.37 g      | 229.0 mN | 0.05 lb |
-| Z Axis          | 8.94 g       | 87.6 mN | 0.02 lb |
+| Z Axis          | 8.94 g       | 87.6 mN  | 0.02 lb |
 
 ---
 
