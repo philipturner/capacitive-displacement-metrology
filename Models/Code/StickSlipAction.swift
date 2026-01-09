@@ -24,6 +24,11 @@ import Foundation
 // improvements to include velocity damping sourced from
 // https://scholarlypublications.universiteitleiden.nl/handle/1887/18057
 
+enum FrictionMode {
+  case kinetic
+  case `static`
+}
+
 struct System {
   // Allowed range: -425 V to 425 V
   // For simplicity, 0 V to 850 V is also permitted
@@ -32,6 +37,7 @@ struct System {
   static let normalForce: Float = 2.22
   static let coefficientStatic: Float = 0.5
   static let coefficientKinetic: Float = 0.4
+  static let kineticVelocityThreshold: Float = 100e-6
   
   static let piezoConstant: Float = 80e-12 * 6
   static let piezoMass: Float = 3 * 1.02e-3
@@ -44,7 +50,7 @@ struct System {
   var sliderPosition: Float = .zero
   var sliderVelocity: Float = .zero
   
-  func controlVoltageForce() -> Float {
+  var controlVoltageForce: Float {
     let expectedPosition = controlVoltage * System.piezoConstant
     let deltaX = piezoPosition - expectedPosition
     return -System.piezoStiffness * deltaX
@@ -54,6 +60,27 @@ struct System {
     var dampingCoefficient = 1 / System.piezoQualityFactor
     dampingCoefficient *= (System.piezoStiffness * engagedMass).squareRoot()
     return -dampingCoefficient * piezoVelocity
+  }
+}
+
+extension System {
+  var mode: FrictionMode {
+    let velocityDelta = sliderVelocity - piezoVelocity
+    if velocityDelta.magnitude > Self.kineticVelocityThreshold {
+      return .kinetic
+    }
+    
+    let engagedMass = System.piezoMass + System.sliderMass
+    let piezoForce = controlVoltageForce + dampingForce(engagedMass: engagedMass)
+    let massRatio = System.sliderMass / (System.piezoMass + System.sliderMass)
+    let appliedSurfaceForce = piezoForce * massRatio
+    
+    let staticThreshold = System.normalForce * System.coefficientStatic
+    if appliedSurfaceForce > staticThreshold {
+      return .kinetic
+    } else {
+      return .static
+    }
   }
   
   // DO NOT invoke this if the surfaces have non-negligible relative velocity.
@@ -73,8 +100,7 @@ struct System {
     // are in the kinetic regime of friction force, re-evaluate damping
     // based on the piezo mass.
     let engagedMass = System.piezoMass + System.sliderMass
-    let piezoForce =
-    controlVoltageForce() + dampingForce(engagedMass: engagedMass)
+    let piezoForce = controlVoltageForce + dampingForce(engagedMass: engagedMass)
     
     // Sign convention for applied surface force: the direction that the piezo
     // pushes on the slider, to move the slider in that direction.
@@ -118,9 +144,6 @@ struct System {
     let appliedSurfaceForce = piezoForce * massRatio
     
     
-    
-    
-    print(appliedFriction, staticFrictionThreshold)
     
     piezoVelocity += timeStep * piezoForce / engagedMass
     piezoPosition += timeStep * piezoVelocity
