@@ -84,10 +84,13 @@ struct System {
     //
     // Gravity should be factored into the calculation. The combined gravity
     // of the piezo and slider (~100 mN) are exerted entirely in the piezo
-    // material, straining it and causing a displacement from linear elasticity.
+    // material, straining it and causing a displacement via linear elasticity.
     // If this displacement caused a permanent voltage differential across the
     // piezo, we'd have an infinite source of energy that violates physics. So
-    // pretend this doesn't do anything to voltage.
+    // pretend this doesn't do anything to voltage. Perhaps it induces charge
+    // that dissipates into the circuit holding the plates exactly 0 V apart.
+    // It is a capacitor charged to the associated voltage in pm/V, which gets
+    // dissipated on contact.
     //
     // In the static regime, the combined gravity of the entire engaged mass
     // can factor into 'piezoForce'. Both the slider and piezo share the same
