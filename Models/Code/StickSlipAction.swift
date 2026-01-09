@@ -32,23 +32,32 @@ struct System {
   static let piezoConstant: Float = 80e-12 * 6
   static let piezoMass: Float = 3 * 1.02e-3
   var piezoPosition: Float = .zero
+  static let piezoQualityFactor: Float = 1000
   static let piezoStiffness: Float = 1.47e9
   var piezoVelocity: Float = .zero
   
   static let sliderMass: Float = 8.94e-3
   // sliderVelocity = piezoVelocity
   
-  var piezoForce: Float {
+  func piezoForce() -> Float {
     let expectedPosition = controlVoltage * System.piezoConstant
-    let remainingDistance = expectedPosition - piezoPosition
-    return System.piezoStiffness * remainingDistance
+    let deltaX = piezoPosition - expectedPosition
+    return -System.piezoStiffness * deltaX
+  }
+  
+  func dampingForce(engagedMass: Float) -> Float {
+    var dampingCoefficient: Float = 1 / System.piezoQualityFactor
+    dampingCoefficient *= (System.piezoStiffness * engagedMass).squareRoot()
+    return -dampingCoefficient * piezoVelocity
   }
   
   // No friction force yet (which derives from magnetic normal force)
   // No gravitational force yet (where sign matters)
   mutating func integrate(timeStep: Float) {
     let engagedMass: Float = System.piezoMass + System.sliderMass
-    piezoVelocity += timeStep * piezoForce / engagedMass
+    print(dampingForce(engagedMass: engagedMass) / piezoForce() * 1000)
+    
+    piezoVelocity += timeStep * piezoForce() / engagedMass
     piezoPosition += timeStep * piezoVelocity
   }
 }
@@ -88,7 +97,7 @@ for i in 1...600 {
   let slewRate: Float = 850 / 500e-6
   let straightLineVoltage = time * slewRate
   
-  #if true
+  #if false
   // Triangle wave at the maximum slew rate.
   let quotient = Int((straightLineVoltage / 850).rounded(.down))
   let remainder = straightLineVoltage - Float(quotient) * 850
