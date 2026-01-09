@@ -1,3 +1,5 @@
+import Foundation
+
 // force behavior in static mode
 //   reaction force = pulling force
 //   unless pulling force > μ_s N
@@ -48,12 +50,42 @@ struct System {
   }
 }
 
+struct Format {
+  static func format(voltage: Float) -> String {
+    var output = String(format: "%.1f", voltage)
+    while output.count < "-425.0".count {
+      output = " " + output
+    }
+    return output
+  }
+
+  static func format(position: Float) -> String {
+    var output = String(format: "%.1f", position / 1e-9)
+    while output.count < "-1000.0".count {
+      output = " " + output
+    }
+    return output
+  }
+  
+  static func format(velocity: Float) -> String {
+    var output = String(format: "%.1f", velocity / 1e-6)
+    while output.count < "-10000.0".count {
+      output = " " + output
+    }
+    return output
+  }
+}
+
+// MARK: - Script
+
 var system = System()
 //system.controlVoltage = 850
-for i in 1...30 {
+for i in 1...600 {
   let time = Float(i) * 1e-6
-  let straightLineVoltage = time * 30e6
+  let slewRate: Float = 30e6
+  let straightLineVoltage = time * slewRate
   
+  #if false
   // Triangle wave at the maximum slew rate.
   let quotient = Int((straightLineVoltage / 850).rounded(.down))
   let remainder = straightLineVoltage - Float(quotient) * 850
@@ -62,11 +94,17 @@ for i in 1...30 {
   } else {
     system.controlVoltage = 850 - remainder
   }
+  #else
+  system.controlVoltage = min(straightLineVoltage, 850)
+  #endif
   
   system.integrate(timeStep: 1e-6)
-  print("t = \(i) μs", terminator: " | ")
-  print(system.controlVoltage, "V", terminator: " | ")
-  print(system.piezoPosition / 1e-9, "nm", terminator: " | ")
-  print(system.piezoVelocity / 1e-6, "μm/s")
+  
+  if i % 2 == 0 {
+    print("t = \(i) μs", terminator: " | ")
+    print(Format.format(voltage: system.controlVoltage), "V", terminator: " | ")
+    print(Format.format(position: system.piezoPosition), "nm", terminator: " | ")
+    print(Format.format(velocity: system.piezoVelocity), "μm/s")
+  }
 }
-print(system.controlVoltage * System.piezoConstant / 1e-9, "nm")
+print("expected position:", system.controlVoltage * System.piezoConstant / 1e-9, "nm")
