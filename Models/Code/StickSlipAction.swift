@@ -17,3 +17,21 @@
 //   coarse approach woodpecker algorithm: 1.47 μm/s
 //   rising edge of 1 kHz triangle wave: 816 μm/s
 //   maximum slew rate, slip-inducing action: 14.4 mm/s
+
+struct System {
+  // Allowed range: -425 V to 425 V
+  var controlVoltage: Float = .zero
+  
+  var piezoPosition: Float = .zero
+  
+  var piezoForce: Float {
+    let expectedPosition = controlVoltage * 80e-12 * 6
+    let remainingDistance = expectedPosition - piezoPosition
+    return 1.47e9 * remainingDistance
+  }
+}
+
+var system = System()
+system.controlVoltage = 425
+system.piezoPosition = -425 * 80e-12 * 6
+print(system.piezoForce)
