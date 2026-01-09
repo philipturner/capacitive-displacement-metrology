@@ -37,7 +37,7 @@ struct System {
   static let normalForce: Float = 2.22
   static let coefficientStatic: Float = 0.5
   static let coefficientKinetic: Float = 0.4
-  static let kineticVelocityThreshold: Float = 100e-6
+  static let kineticVelocityThreshold: Float = 1000e-6
   
   static let piezoConstant: Float = 80e-12 * 6
   static let piezoMass: Float = 3 * 1.02e-3
@@ -126,6 +126,34 @@ extension System {
   
   mutating func integrate(timeStep: Float) {
     let mode: FrictionMode = self.mode
+    if mode == .static {
+      let velocityDelta = sliderVelocity - piezoVelocity
+      if velocityDelta.magnitude >= 0.001 * Self.kineticVelocityThreshold {
+        // EUV dosing: 53 mJ/cm^2 -> 530 J/m^2
+        //
+        // vdW surface energy density (http://apm.bplaced.net/w/index.php?title=VdW_suck-in_and_suck-on)
+        // diamond: 0.2 J/m^2
+        // silicon: 0.7 J/m^2
+        //
+        // prior literature for SiDB encapsulation technique
+        // (https://doi.org/10.1016/j.apsusc.2013.09.124)
+        // 0.15 J/m^2
+        
+        print()
+        print("dissipated leftover kinetic energy:")
+        print("velocity delta:", Format.format(velocity: piezoVelocity), "μm/s")
+        
+        let kineticEnergy = 0.5 * System.sliderMass * velocityDelta * velocityDelta
+        print("energy:", kineticEnergy, "J")
+        
+        let surfaceWidth: Float = 100e-9
+        let energyDensity = kineticEnergy / (surfaceWidth * surfaceWidth)
+        print("energy density:", energyDensity, "J/m^2")
+        print()
+      }
+      sliderVelocity = piezoVelocity
+    }
+    
     let forceOnPiezo = self.forceOnPiezo(mode: mode)
     let forceOnSlider = self.forceOnSlider(mode: mode)
     print(Format.format(force: forceOnPiezo), "N", terminator: " | ")
