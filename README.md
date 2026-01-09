@@ -439,3 +439,5 @@ I will just examine the Z kinematic mount for this analysis. Although it represe
 # January 9, 2026
 
 I just sorted out a few more interesting details about how to simulate kinetic friction. I will incorporate the notes into the Swift script.
+
+[StickSlipAction.swift](./Models/Code/StickSlipAction.swift)
