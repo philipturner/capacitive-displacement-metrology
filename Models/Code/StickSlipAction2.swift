@@ -67,12 +67,14 @@ extension System {
   var mode: FrictionMode {
     let velocityDelta = sliderVelocity - piezoVelocity
     if velocityDelta.magnitude > Self.kineticVelocityThreshold {
+      // One remaining bug: system must snap the slider's velocity to exactly
+      // the piezo's velocity when it becomes static again
       return .kinetic
     }
     
     let appliedSurfaceForce = forceOnSlider(mode: .static)
     let staticThreshold = System.normalForce * System.coefficientStatic
-    if appliedSurfaceForce > staticThreshold {
+    if appliedSurfaceForce.magnitude > staticThreshold {
       return .kinetic
     } else {
       return .static
@@ -123,9 +125,11 @@ extension System {
   }
   
   mutating func integrate(timeStep: Float) {
-    let mode: FrictionMode = .static
+    let mode: FrictionMode = self.mode
     let forceOnPiezo = self.forceOnPiezo(mode: mode)
     let forceOnSlider = self.forceOnSlider(mode: mode)
+    print(Format.format(force: forceOnPiezo), "N", terminator: " | ")
+    print(Format.format(force: forceOnSlider), "N", terminator: " | ")
     
     piezoVelocity += timeStep * forceOnPiezo / System.piezoMass
     sliderVelocity += timeStep * forceOnSlider / System.sliderMass
@@ -136,14 +140,14 @@ extension System {
 }
 
 struct Format {
-  static func format(voltage: Float) -> String {
-    var output = String(format: "%.1f", voltage)
-    while output.count < "-425.0".count {
+  static func format(force: Float) -> String {
+    var output = String(format: "%.3f", force)
+    while output.count < "-10.000".count {
       output = " " + output
     }
     return output
   }
-
+  
   static func format(position: Float) -> String {
     var output = String(format: "%.1f", position / 1e-9)
     while output.count < "-1000.0".count {
@@ -155,6 +159,14 @@ struct Format {
   static func format(velocity: Float) -> String {
     var output = String(format: "%.1f", velocity / 1e-6)
     while output.count < "-10000.0".count {
+      output = " " + output
+    }
+    return output
+  }
+  
+  static func format(voltage: Float) -> String {
+    var output = String(format: "%.1f", voltage)
+    while output.count < "-425.0".count {
       output = " " + output
     }
     return output
@@ -217,6 +229,7 @@ for i in 1...1000 {
     #endif
   }
   
+  let mode = system.mode
   system.integrate(timeStep: 1e-6)
   
   if i % 1 == 0 {
@@ -225,7 +238,8 @@ for i in 1...1000 {
     print(Format.format(position: system.piezoPosition), "nm", terminator: " | ")
     print(Format.format(position: system.sliderPosition), "nm", terminator: " | ")
     print(Format.format(velocity: system.piezoVelocity), "μm/s", terminator: " | ")
-    print(Format.format(velocity: system.sliderVelocity), "μm/s")
+    print(Format.format(velocity: system.sliderVelocity), "μm/s", terminator: " | ")
+    print(mode)
   }
 }
 print("expected position:", system.controlVoltage * System.piezoConstant / 1e-9, "nm")
