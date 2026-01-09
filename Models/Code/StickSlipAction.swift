@@ -89,26 +89,60 @@ struct Format {
   }
 }
 
+// Piecewise function where 1/3 of the trajectory is a parabola, 2/3 is a line,
+// and the regions cross with no discontinuity in velocity.
+func piecewiseFunction(x: Float) -> Float {
+  if x < 1 {
+    return x * x
+  } else {
+    return 1 + 2 * (x - 1)
+  }
+}
+
 // MARK: - Script
 
 var system = System()
-for i in 1...10000 {
-  let time = Float(i) * 1e-6
-  let slewRate: Float = 850 / 500e-6
-  let straightLineVoltage = time * slewRate
-  
-  #if true
-  // Triangle wave at the maximum slew rate.
-  let quotient = Int((straightLineVoltage / 850).rounded(.down))
-  let remainder = straightLineVoltage - Float(quotient) * 850
-  if quotient % 2 == 0 {
-    system.controlVoltage = remainder
+for i in 1...1000 {
+  if i <= 500 {
+    let time = Float(i) * 1e-6
+    
+//    let slewRate: Float = 850 / 500e-6
+//    let straightLineVoltage = time * slewRate
+//    system.controlVoltage = straightLineVoltage
+    
+    let timeFraction = 3 * time / 500e-6
+    let yFraction = piecewiseFunction(x: timeFraction)
+    system.controlVoltage = yFraction / 5 * 850
   } else {
-    system.controlVoltage = 850 - remainder
+    let time = Float(i - 500) * 1e-6
+    let slewRate: Float = 30 / 1e-6
+    
+    let straightLineVoltage = time * slewRate
+    system.controlVoltage = max(0, 850 - straightLineVoltage)
+    
+//    let endTime = 850 / slewRate
+//    func timeFraction(time: Float) -> Float {
+//      var output = endTime - time
+//      output = max(output, 0)
+//      output /= endTime
+//      output = output * output
+//      return output
+//    }
+//    system.controlVoltage = timeFraction(time: time) * 850
   }
-  #else
-  system.controlVoltage = min(straightLineVoltage, 850)
-  #endif
+  
+//  #if true
+//  // Triangle wave at the maximum slew rate.
+//  let quotient = Int((straightLineVoltage / 850).rounded(.down))
+//  let remainder = straightLineVoltage - Float(quotient) * 850
+//  if quotient % 2 == 0 {
+//    system.controlVoltage = remainder
+//  } else {
+//    system.controlVoltage = 850 - remainder
+//  }
+//  #else
+//  system.controlVoltage = min(straightLineVoltage, 850)
+//  #endif
   
   system.integrate(timeStep: 1e-6)
   
