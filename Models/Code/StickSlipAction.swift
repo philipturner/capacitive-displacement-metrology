@@ -21,6 +21,7 @@
 
 struct System {
   // Allowed range: -425 V to 425 V
+  // For simplicity, 0 to 850 V is also permitted
   var controlVoltage: Float = .zero
   
   static let piezoConstant: Float = 80e-12 * 6
@@ -42,11 +43,11 @@ struct System {
   // No gravitational force yet (where sign matters)
   mutating func integrate(timeStep: Float) {
     let engagedMass: Float = System.piezoMass + System.sliderMass
-    
+    piezoVelocity += timeStep * piezoForce / engagedMass
+    piezoPosition += timeStep * piezoVelocity
   }
 }
 
 var system = System()
-system.controlVoltage = 425
-system.piezoPosition = -425 * System.piezoConstant
+system.controlVoltage = 850
 print(system.piezoForce)
