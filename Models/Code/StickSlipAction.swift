@@ -10,10 +10,11 @@ import Foundation
 //   unless relative surface velocity < threshold (Δv_thres)
 //   then Δv immediately snaps to 0 (by changing the slider's velocity)
 //   and switch to static mode
+//   INCORRECT
 //
 // combinatorial space:
 //   μ_k ∈ {0.3, 0.4, 0.5}
-//   Δv_thres ∈ {1e-5, 1e-4, 1e-3, 1e-2} m/s
+//   Δv_thres ∈ {1e-5, 1e-4, 1e-3, 1e-2} m/s | INCORRECT
 //   gravity ∈ {positive, negative} direction
 //
 // exemplary velocities:
@@ -37,9 +38,10 @@ struct System {
   var piezoVelocity: Float = .zero
   
   static let sliderMass: Float = 8.94e-3
-  // sliderVelocity = piezoVelocity
+  static var sliderPosition: Float = .zero
+  static var sliderVelocity: Float = .zero
   
-  func piezoForce() -> Float {
+  func controlVoltageForce() -> Float {
     let expectedPosition = controlVoltage * System.piezoConstant
     let deltaX = piezoPosition - expectedPosition
     return -System.piezoStiffness * deltaX
@@ -55,10 +57,10 @@ struct System {
   // No gravitational force yet (where sign matters)
   mutating func integrate(timeStep: Float) {
     let engagedMass = System.piezoMass + System.sliderMass
-    var totalForce = piezoForce()
-    totalForce += dampingForce(engagedMass: engagedMass)
+    let piezoForce =
+    controlVoltageForce() + dampingForce(engagedMass: engagedMass)
     
-    piezoVelocity += timeStep * totalForce / engagedMass
+    piezoVelocity += timeStep * piezoForce / engagedMass
     piezoPosition += timeStep * piezoVelocity
   }
 }
@@ -130,7 +132,7 @@ for i in 1...1000 {
     
   } else {
     let time = Float(i - riseTimeSpan) * 1e-6
-    let slewRate: Float = 30 / 1e-6
+    let slewRate: Float = 10 / 1e-6
     
     #if false
     let straightLineVoltage = time * slewRate
