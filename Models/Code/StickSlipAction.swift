@@ -49,5 +49,11 @@ struct System {
 }
 
 var system = System()
-system.controlVoltage = 850
-print(system.piezoForce)
+system.controlVoltage = 100
+for i in 1...30 {
+  system.integrate(timeStep: 1e-6)
+  print("t = \(i) μs", terminator: " | ")
+  print(system.piezoPosition / 1e-9, "nm", terminator: " | ")
+  print(system.piezoVelocity / 1e-6, "μm/s")
+}
+print(system.controlVoltage * System.piezoConstant / 1e-9, "nm")
