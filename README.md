@@ -441,3 +441,9 @@ I will just examine the Z kinematic mount for this analysis. Although it represe
 I just sorted out a few more interesting details about how to simulate kinetic friction. I will incorporate the notes into the Swift script.
 
 [StickSlipAction.swift](./Models/Code/StickSlipAction.swift)
+
+I have reproduced the piezoelectric vibration quite intricately. The first doable goal is completed. I added viscoelastic damping and smoothed out the control voltage waveforms, slightly reducing the amount of vibrational energy.
+
+Task 2: add kinetic friction
+
+Task 3: add gravity and vary the magnet's strength

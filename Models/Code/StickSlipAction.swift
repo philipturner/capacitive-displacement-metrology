@@ -103,50 +103,51 @@ func piecewiseFunction(x: Float) -> Float {
 
 var system = System()
 for i in 1...1000 {
-  if i <= 500 {
+  // 500 μs hits a strange combination that perfectly cancels the vibrational
+  // energy. 400 μs provides a better representation of typical responses. From
+  // there, we increase the timespan a factor of 6 / 5 to 480 μs.
+  let riseTimeSpan: Int = 480
+  
+  if i <= riseTimeSpan {
     let time = Float(i) * 1e-6
     
-//    let slewRate: Float = 850 / 500e-6
-//    let straightLineVoltage = time * slewRate
-//    system.controlVoltage = straightLineVoltage
+    #if false
+    guard riseTimeSpan == 400 else {
+      fatalError("Activate this case when rise time span is 400.")
+    }
+    let slewRate: Float = 850 / 400e-6
+    let straightLineVoltage = time * slewRate
+    system.controlVoltage = straightLineVoltage
+    #else
     
-    let timeFraction = 3 * time / 500e-6
+    guard riseTimeSpan == 480 else {
+      fatalError("Activate this case when rise time span is 480.")
+    }
+    let timeFraction = 3 * time / 480e-6
     let yFraction = piecewiseFunction(x: timeFraction)
     system.controlVoltage = yFraction / 5 * 850
+    #endif
+    
   } else {
-    let time = Float(i - 500) * 1e-6
+    let time = Float(i - riseTimeSpan) * 1e-6
     let slewRate: Float = 30 / 1e-6
     
+    #if false
     let straightLineVoltage = time * slewRate
     system.controlVoltage = max(0, 850 - straightLineVoltage)
+    #else
     
-//    let endTime = 850 / slewRate
-//    func timeFraction(time: Float) -> Float {
-//      var output = endTime - time
-//      output = max(output, 0)
-//      output /= endTime
-//      output = output * output
-//      return output
-//    }
-//    system.controlVoltage = timeFraction(time: time) * 850
+    let endTime = 0.4 * 850 / slewRate
+    var timeFraction = time / endTime
+    timeFraction = max(0, 3 - timeFraction)
+    let yFraction = piecewiseFunction(x: timeFraction)
+    system.controlVoltage = yFraction / 5 * 850
+    #endif
   }
-  
-//  #if true
-//  // Triangle wave at the maximum slew rate.
-//  let quotient = Int((straightLineVoltage / 850).rounded(.down))
-//  let remainder = straightLineVoltage - Float(quotient) * 850
-//  if quotient % 2 == 0 {
-//    system.controlVoltage = remainder
-//  } else {
-//    system.controlVoltage = 850 - remainder
-//  }
-//  #else
-//  system.controlVoltage = min(straightLineVoltage, 850)
-//  #endif
   
   system.integrate(timeStep: 1e-6)
   
-  if i % 2 == 0 {
+  if i % 1 == 0 {
     print("t = \(i) μs", terminator: " | ")
     print(Format.format(voltage: system.controlVoltage), "V", terminator: " | ")
     print(Format.format(position: system.piezoPosition), "nm", terminator: " | ")
