@@ -30,6 +30,10 @@ struct System {
   // For simplicity, 0 V to 850 V is also permitted
   var controlVoltage: Float = .zero
   
+  static let normalForce: Float = 2.22
+  static let coefficientStatic: Float = 0.5
+  static let coefficientKinetic: Float = 0.4
+  
   static let piezoConstant: Float = 80e-12 * 6
   static let piezoMass: Float = 3 * 1.02e-3
   var piezoPosition: Float = .zero
@@ -38,8 +42,8 @@ struct System {
   var piezoVelocity: Float = .zero
   
   static let sliderMass: Float = 8.94e-3
-  static var sliderPosition: Float = .zero
-  static var sliderVelocity: Float = .zero
+  var sliderPosition: Float = .zero
+  var sliderVelocity: Float = .zero
   
   func controlVoltageForce() -> Float {
     let expectedPosition = controlVoltage * System.piezoConstant
@@ -56,9 +60,35 @@ struct System {
   // No friction force yet (which derives from magnetic normal force)
   // No gravitational force yet (where sign matters)
   mutating func integrate(timeStep: Float) {
+    // Evaluate once with damping based on the engaged mass. If the surfaces
+    // are in the kinetic regime of friction force, re-evaluate damping
+    // based on the piezo mass.
     let engagedMass = System.piezoMass + System.sliderMass
     let piezoForce =
     controlVoltageForce() + dampingForce(engagedMass: engagedMass)
+    
+    // Sign convention for applied surface force: the direction that the piezo
+    // pushes on the slider, to move the slider in that direction.
+    //
+    // Gravity may also be applied here: the sign of gravity equals the sign
+    // gravity pulls on the slider. Static friction cancels gravity on the
+    // slider and exerts all of it on the piezo. Instead of the piezo getting
+    // displaced by the slider's gravity, it re-exerts the force onto the table.
+    //
+    // Gravity doesn't affect motion in the static regime. But it does increase
+    // or reduce the applied surface force (depending on whether the signs are
+    // constructive or destructive). In turn, the transition from static to
+    // kinetic friction could happen more quickly or slowly.
+    let massRatio = System.sliderMass / (System.piezoMass + System.sliderMass)
+    let piezoForceOnSlider = piezoForce * massRatio
+    
+    //
+    static func frictionForce(appliedSurfaceForce: Float) -> Float {
+      
+    }
+    
+    let staticFrictionThreshold = System.normalForce * System.coefficientStatic
+    print(appliedFriction, staticFrictionThreshold)
     
     piezoVelocity += timeStep * piezoForce / engagedMass
     piezoPosition += timeStep * piezoVelocity
@@ -153,7 +183,22 @@ for i in 1...1000 {
     print("t = \(i) μs", terminator: " | ")
     print(Format.format(voltage: system.controlVoltage), "V", terminator: " | ")
     print(Format.format(position: system.piezoPosition), "nm", terminator: " | ")
-    print(Format.format(velocity: system.piezoVelocity), "μm/s")
+    print(Format.format(position: system.sliderPosition), "nm", terminator: " | ")
+    print(Format.format(velocity: system.piezoVelocity), "μm/s", terminator: " | ")
+    print(Format.format(velocity: system.sliderVelocity), "μm/s")
   }
 }
 print("expected position:", system.controlVoltage * System.piezoConstant / 1e-9, "nm")
+
+/*
+ t = 991 μs |    0.0 V |   -13.9 nm |     0.0 nm |  -3216.1 μm/s |      0.0 μm/s
+ t = 992 μs |    0.0 V |   -15.4 nm |     0.0 nm |  -1511.8 μm/s |      0.0 μm/s
+ t = 993 μs |    0.0 V |   -15.0 nm |     0.0 nm |    377.0 μm/s |      0.0 μm/s
+ t = 994 μs |    0.0 V |   -12.8 nm |     0.0 nm |   2219.1 μm/s |      0.0 μm/s
+ t = 995 μs |    0.0 V |    -9.0 nm |     0.0 nm |   3788.6 μm/s |      0.0 μm/s
+ t = 996 μs |    0.0 V |    -4.1 nm |     0.0 nm |   4893.5 μm/s |      0.0 μm/s
+ t = 997 μs |    0.0 V |     1.3 nm |     0.0 nm |   5398.6 μm/s |      0.0 μm/s
+ t = 998 μs |    0.0 V |     6.5 nm |     0.0 nm |   5242.1 μm/s |      0.0 μm/s
+ t = 999 μs |    0.0 V |    10.9 nm |     0.0 nm |   4443.6 μm/s |      0.0 μm/s
+ t = 1000 μs |    0.0 V |    14.0 nm |     0.0 nm |   3101.0 μm/s |      0.0 μm/s
+ */
