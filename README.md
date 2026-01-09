@@ -446,4 +446,4 @@ I have reproduced the piezoelectric vibration quite intricately. The first doabl
 
 Task 2: add kinetic friction
 
-Task 3: add gravity and vary the magnet's strength
+<s>Task 3: add gravity and vary the magnet's strength</s>

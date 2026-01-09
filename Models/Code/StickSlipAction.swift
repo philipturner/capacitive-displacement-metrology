@@ -79,6 +79,29 @@ struct System {
     // or reduce the applied surface force (depending on whether the signs are
     // constructive or destructive). In turn, the transition from static to
     // kinetic friction could happen more quickly or slowly.
+    //
+    // INCORRECT
+    //
+    // Gravity should be factored into the calculation. The combined gravity
+    // of the piezo and slider (~100 mN) are exerted entirely in the piezo
+    // material, straining it and causing a displacement from linear elasticity.
+    // If this displacement caused a permanent voltage differential across the
+    // piezo, we'd have an infinite source of energy that violates physics. So
+    // pretend this doesn't do anything to voltage.
+    //
+    // In the static regime, the combined gravity of the entire engaged mass
+    // can factor into 'piezoForce'. Both the slider and piezo share the same
+    // position. Gravitational acceleration is the same for both parts. All of
+    // the gravitational energy gets stored in elastic strain energy of the
+    // piezo. There is a disparity between actual position and position desired
+    // by the control voltage. When the objects detach, some of this strain
+    // energy (the portion due to the slider's gravity force) can be released,
+    // making the piezo move upward more toward its equilibrium position.
+    //
+    // Due to the complexity of modeling gravity, we will not include it in
+    // this analysis. We know that in prior literature, piezo step sizes are
+    // skewed more toward the direction aligning with gravity. Gravity should
+    // not be a deciding factor in whether stick-slip action works at all.
     let massRatio = System.sliderMass / (System.piezoMass + System.sliderMass)
     let piezoForceOnSlider = piezoForce * massRatio
     
