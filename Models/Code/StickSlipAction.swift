@@ -20,6 +20,9 @@ import Foundation
 //   coarse approach woodpecker algorithm: 1.47 μm/s
 //   rising edge of 1 kHz triangle wave: 816 μm/s
 //   maximum slew rate, slip-inducing action: 14.4 mm/s
+//
+// improvements to include velocity damping sourced from
+// https://scholarlypublications.universiteitleiden.nl/handle/1887/18057
 
 struct System {
   // Allowed range: -425 V to 425 V
@@ -82,10 +85,10 @@ var system = System()
 //system.controlVoltage = 850
 for i in 1...600 {
   let time = Float(i) * 1e-6
-  let slewRate: Float = 30e6
+  let slewRate: Float = 850 / 500e-6
   let straightLineVoltage = time * slewRate
   
-  #if false
+  #if true
   // Triangle wave at the maximum slew rate.
   let quotient = Int((straightLineVoltage / 850).rounded(.down))
   let remainder = straightLineVoltage - Float(quotient) * 850
