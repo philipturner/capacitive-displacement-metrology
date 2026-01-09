@@ -26,7 +26,7 @@ import Foundation
 
 struct System {
   // Allowed range: -425 V to 425 V
-  // For simplicity, 0 to 850 V is also permitted
+  // For simplicity, 0 V to 850 V is also permitted
   var controlVoltage: Float = .zero
   
   static let piezoConstant: Float = 80e-12 * 6
@@ -46,7 +46,7 @@ struct System {
   }
   
   func dampingForce(engagedMass: Float) -> Float {
-    var dampingCoefficient: Float = 1 / System.piezoQualityFactor
+    var dampingCoefficient = 1 / System.piezoQualityFactor
     dampingCoefficient *= (System.piezoStiffness * engagedMass).squareRoot()
     return -dampingCoefficient * piezoVelocity
   }
@@ -54,10 +54,11 @@ struct System {
   // No friction force yet (which derives from magnetic normal force)
   // No gravitational force yet (where sign matters)
   mutating func integrate(timeStep: Float) {
-    let engagedMass: Float = System.piezoMass + System.sliderMass
-    print(dampingForce(engagedMass: engagedMass) / piezoForce() * 1000)
+    let engagedMass = System.piezoMass + System.sliderMass
+    var totalForce = piezoForce()
+    totalForce += dampingForce(engagedMass: engagedMass)
     
-    piezoVelocity += timeStep * piezoForce() / engagedMass
+    piezoVelocity += timeStep * totalForce / engagedMass
     piezoPosition += timeStep * piezoVelocity
   }
 }
@@ -91,13 +92,12 @@ struct Format {
 // MARK: - Script
 
 var system = System()
-//system.controlVoltage = 850
-for i in 1...600 {
+for i in 1...10000 {
   let time = Float(i) * 1e-6
   let slewRate: Float = 850 / 500e-6
   let straightLineVoltage = time * slewRate
   
-  #if false
+  #if true
   // Triangle wave at the maximum slew rate.
   let quotient = Int((straightLineVoltage / 850).rounded(.down))
   let remainder = straightLineVoltage - Float(quotient) * 850
