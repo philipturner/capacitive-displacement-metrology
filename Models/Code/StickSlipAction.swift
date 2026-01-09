@@ -10,11 +10,10 @@ import Foundation
 //   unless relative surface velocity < threshold (Δv_thres)
 //   then Δv immediately snaps to 0 (by changing the slider's velocity)
 //   and switch to static mode
-//   INCORRECT
 //
 // combinatorial space:
 //   μ_k ∈ {0.3, 0.4, 0.5}
-//   Δv_thres ∈ {1e-5, 1e-4, 1e-3, 1e-2} m/s | INCORRECT
+//   Δv_thres ∈ {1e-5, 1e-4, 1e-3, 1e-2} m/s
 //   gravity ∈ {positive, negative} direction
 //
 // exemplary velocities:
@@ -55,6 +54,16 @@ struct System {
     var dampingCoefficient = 1 / System.piezoQualityFactor
     dampingCoefficient *= (System.piezoStiffness * engagedMass).squareRoot()
     return -dampingCoefficient * piezoVelocity
+  }
+  
+  // DO NOT invoke this if the surfaces have non-negligible relative velocity.
+  static func staticFriction(appliedSurfaceForce: Float) -> Float? {
+    let staticThreshold = System.normalForce * System.coefficientStatic
+    if appliedSurfaceForce <= staticThreshold {
+      return appliedSurfaceForce
+    } else {
+      return nil
+    }
   }
   
   // No friction force yet (which derives from magnetic normal force)
@@ -106,14 +115,11 @@ struct System {
     // skewed more toward the direction aligning with gravity. Gravity should
     // not be a deciding factor in whether stick-slip action works at all.
     let massRatio = System.sliderMass / (System.piezoMass + System.sliderMass)
-    let piezoForceOnSlider = piezoForce * massRatio
+    let appliedSurfaceForce = piezoForce * massRatio
     
-    //
-    static func frictionForce(appliedSurfaceForce: Float) -> Float {
-      
-    }
     
-    let staticFrictionThreshold = System.normalForce * System.coefficientStatic
+    
+    
     print(appliedFriction, staticFrictionThreshold)
     
     piezoVelocity += timeStep * piezoForce / engagedMass
