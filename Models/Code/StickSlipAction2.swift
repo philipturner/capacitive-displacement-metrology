@@ -94,21 +94,9 @@ extension System {
       let massRatio = System.piezoMass / (System.piezoMass + System.sliderMass)
       return piezoForce * massRatio
     } else {
-//      let engagedMass = System.piezoMass
-//      let piezoForce = controlVoltageForce + dampingForce(engagedMass: engagedMass)
-//      return piezoForce
-      
       let engagedMass = System.piezoMass
-            let piezoForce = controlVoltageForce + dampingForce(engagedMass: engagedMass)
-            
-            func kineticForce() -> Float {
-              if sliderVelocity > piezoVelocity {
-                return Self.kineticForceMagnitude
-              } else {
-                return -Self.kineticForceMagnitude
-              }
-            }
-            return piezoForce + 0 * kineticForce()
+      let piezoForce = controlVoltageForce + dampingForce(engagedMass: engagedMass)
+      return piezoForce
     }
   }
   
@@ -119,15 +107,7 @@ extension System {
       let massRatio = System.sliderMass / (System.piezoMass + System.sliderMass)
       return piezoForce * massRatio
     } else {
-//      return 0
-      func kineticForce() -> Float {
-              if piezoVelocity > sliderVelocity {
-                return Self.kineticForceMagnitude
-              } else {
-                return -Self.kineticForceMagnitude
-              }
-            }
-            return 0 * kineticForce()
+      return 0
     }
   }
   
@@ -177,21 +157,10 @@ extension System {
           return -Self.kineticForceMagnitude
         }
       }
-      func kineticForce2() -> Float {
-        if sliderVelocity >= piezoVelocity {
-          return Self.kineticForceMagnitude
-        } else {
-          return -Self.kineticForceMagnitude
-        }
-      }
       let safeKineticForce = kineticForce()
-      let safeKineticForce2 = kineticForce2()
-      
-//      let oldDelta = sliderVelocity - piezoVelocity
-//      piezo
       
       piezoVelocity += timeStep * safeKineticForce / System.piezoMass
-      sliderVelocity += timeStep * -safeKineticForce2 / System.sliderMass
+      sliderVelocity += timeStep * -safeKineticForce / System.sliderMass
     }
     
     piezoVelocity += timeStep * forceOnPiezo / System.piezoMass
@@ -306,31 +275,3 @@ for i in 1...1000 {
   }
 }
 print("expected position:", system.controlVoltage * System.piezoConstant / 1e-9, "nm")
-
-/*
- t = 991 μs |    0.0 V |   -13.9 nm |     0.0 nm |  -3216.1 μm/s |      0.0 μm/s
- t = 992 μs |    0.0 V |   -15.4 nm |     0.0 nm |  -1511.8 μm/s |      0.0 μm/s
- t = 993 μs |    0.0 V |   -15.0 nm |     0.0 nm |    377.0 μm/s |      0.0 μm/s
- t = 994 μs |    0.0 V |   -12.8 nm |     0.0 nm |   2219.1 μm/s |      0.0 μm/s
- t = 995 μs |    0.0 V |    -9.0 nm |     0.0 nm |   3788.6 μm/s |      0.0 μm/s
- t = 996 μs |    0.0 V |    -4.1 nm |     0.0 nm |   4893.5 μm/s |      0.0 μm/s
- t = 997 μs |    0.0 V |     1.3 nm |     0.0 nm |   5398.6 μm/s |      0.0 μm/s
- t = 998 μs |    0.0 V |     6.5 nm |     0.0 nm |   5242.1 μm/s |      0.0 μm/s
- t = 999 μs |    0.0 V |    10.9 nm |     0.0 nm |   4443.6 μm/s |      0.0 μm/s
- t = 1000 μs |    0.0 V |    14.0 nm |     0.0 nm |   3101.0 μm/s |      0.0 μm/s
- */
-
-/*
- -1.072 N |   0.888 N | t = 989 μs |    0.0 V |     0.0 nm |   133.9 nm |   -118.6 μm/s |     49.5 μm/s | kinetic
-  0.879 N |  -0.888 N | t = 990 μs |    0.0 V |     0.2 nm |   133.7 nm |    168.6 μm/s |   -337.0 μm/s | kinetic
- -1.146 N |   0.888 N | t = 991 μs |    0.0 V |    -0.0 nm |   133.6 nm |   -205.8 μm/s |    136.7 μm/s | kinetic
-  0.934 N |  -0.888 N | t = 992 μs |    0.0 V |     0.1 nm |   133.5 nm |     99.3 μm/s |   -267.7 μm/s | kinetic
- -0.989 N |   0.888 N | t = 993 μs |    0.0 V |    -0.2 nm |   133.4 nm |   -223.9 μm/s |    154.8 μm/s | kinetic
-  1.117 N |  -0.888 N | t = 994 μs |    0.0 V |    -0.0 nm |   133.2 nm |    141.1 μm/s |   -309.5 μm/s | kinetic
- -0.867 N |   0.888 N | t = 995 μs |    0.0 V |    -0.2 nm |   133.2 nm |   -142.4 μm/s |     73.3 μm/s | kinetic
-  1.118 N |  -0.888 N | t = 996 μs |    0.0 V |     0.1 nm |   133.0 nm |    223.1 μm/s |   -391.6 μm/s | kinetic
- -0.986 N |   0.888 N | t = 997 μs |    0.0 V |    -0.0 nm |   132.9 nm |    -99.2 μm/s |     30.1 μm/s | kinetic
-  0.936 N |  -0.888 N | t = 998 μs |    0.0 V |     0.2 nm |   132.8 nm |    206.8 μm/s |   -375.2 μm/s | kinetic
- -1.144 N |   0.888 N | t = 999 μs |    0.0 V |     0.0 nm |   132.7 nm |   -167.2 μm/s |     98.1 μm/s | kinetic
-  0.878 N |  -0.888 N | t = 1000 μs |    0.0 V |     0.1 nm |   132.5 nm |    119.8 μm/s |   -288.2 μm/s | kinetic
- */
