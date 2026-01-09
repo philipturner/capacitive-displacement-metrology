@@ -49,10 +49,23 @@ struct System {
 }
 
 var system = System()
-system.controlVoltage = 100
+//system.controlVoltage = 850
 for i in 1...30 {
+  let time = Float(i) * 1e-6
+  let straightLineVoltage = time * 30e6
+  
+  // Triangle wave at the maximum slew rate.
+  let quotient = Int((straightLineVoltage / 850).rounded(.down))
+  let remainder = straightLineVoltage - Float(quotient) * 850
+  if quotient % 2 == 0 {
+    system.controlVoltage = remainder
+  } else {
+    system.controlVoltage = 850 - remainder
+  }
+  
   system.integrate(timeStep: 1e-6)
   print("t = \(i) μs", terminator: " | ")
+  print(system.controlVoltage, "V", terminator: " | ")
   print(system.piezoPosition / 1e-9, "nm", terminator: " | ")
   print(system.piezoVelocity / 1e-6, "μm/s")
 }
