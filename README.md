@@ -16,6 +16,7 @@ Table of Contents:
 - [January 6, 2026](#january-6-2026)
 - [January 7, 2026](#january-7-2026)
 - [January 8, 2026](#january-8-2026)
+- [January 9, 2026](#january-9-2026)
 
 ## December 15, 2025
 
@@ -434,3 +435,7 @@ After reflecting on [this physics page](http://hyperphysics.phy-astr.gsu.edu/hba
 Once the simulation is debugged and investigated, I can export CSV to plot on Google Sheets and present here. If that is needed.
 
 I will just examine the Z kinematic mount for this analysis. Although it represents the far end of the distribution of load masses, it is a sane way to reduce the size of the combinatorial space. Compared to examining two or three kinematic mounts. I will also change so, instead of pointing at a 45-degree angle, gravity points directly parallel to the direction of motion. This choice simplifies the code.
+
+# January 9, 2026
+
+I just sorted out a few more interesting details about how to simulate kinetic friction. I will incorporate the notes into the Swift script.
