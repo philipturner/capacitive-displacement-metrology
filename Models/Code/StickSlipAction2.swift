@@ -37,7 +37,7 @@ struct System {
   static let normalForce: Float = 2.22
   static let coefficientStatic: Float = 0.5
   static let coefficientKinetic: Float = 0.4
-  static let kineticVelocityThreshold: Float = 1000e-6
+  static let kineticVelocityThreshold: Float = 10e-6
   
   static let piezoConstant: Float = 80e-12 * 6
   static let piezoMass: Float = 3 * 1.02e-3
@@ -141,7 +141,7 @@ extension System {
         
         print()
         print("dissipated leftover kinetic energy:")
-        print("velocity delta:", Format.format(velocity: piezoVelocity), "μm/s")
+        print("velocity delta:", Format.format(velocity: velocityDelta), "μm/s")
         
         let kineticEnergy = 0.5 * System.sliderMass * velocityDelta * velocityDelta
         print("energy:", kineticEnergy, "J")
@@ -159,6 +159,7 @@ extension System {
     print(Format.format(force: forceOnPiezo), "N", terminator: " | ")
     print(Format.format(force: forceOnSlider), "N", terminator: " | ")
     
+    // TODO: How to prevent inversions of relative velocity in kinetic mode
     piezoVelocity += timeStep * forceOnPiezo / System.piezoMass
     sliderVelocity += timeStep * forceOnSlider / System.sliderMass
     
@@ -266,7 +267,7 @@ for i in 1...1000 {
     print(Format.format(position: system.piezoPosition), "nm", terminator: " | ")
     print(Format.format(position: system.sliderPosition), "nm", terminator: " | ")
     print(Format.format(velocity: system.piezoVelocity), "μm/s", terminator: " | ")
-    print(Format.format(velocity: system.sliderVelocity), "μm/s", terminator: " | ")
+    print(Format.format(velocity: system.sliderVelocity - system.piezoVelocity), "μm/s", terminator: " | ")
     print(mode)
   }
 }
