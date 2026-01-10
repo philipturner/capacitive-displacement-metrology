@@ -449,3 +449,5 @@ Task 2: add kinetic friction
 <s>Task 3: add gravity and vary the magnet's strength</s>
 
 [StickSlipAction2.swift](./Models/Code/StickSlipAction2.swift)
+
+The script has improved significantly. I plan on investigating gravity &times; magnet force, after studying coefficient of kinetic friction &times; kinetic velocity threshold &times; slew rate.

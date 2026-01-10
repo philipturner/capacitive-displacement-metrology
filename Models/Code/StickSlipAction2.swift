@@ -61,9 +61,7 @@ struct System {
     dampingCoefficient *= (System.piezoStiffness * engagedMass).squareRoot()
     return -dampingCoefficient * piezoVelocity
   }
-}
-
-extension System {
+  
   var mode: FrictionMode {
     let velocityDelta = sliderVelocity - piezoVelocity
     if velocityDelta.magnitude > Self.kineticVelocityThreshold {
@@ -102,7 +100,9 @@ extension System {
       return 0
     }
   }
-  
+}
+
+extension System {
   mutating func integrate(timeStep: Float) {
     let mode: FrictionMode = self.mode
     if mode == .static {
@@ -135,8 +135,9 @@ extension System {
     
     let controlForceOnPiezo = self.controlForceOnPiezo(mode: mode)
     let controlForceOnSlider = self.controlForceOnSlider(mode: mode)
+    piezoVelocity += timeStep * controlForceOnPiezo / System.piezoMass
+    sliderVelocity += timeStep * controlForceOnSlider / System.sliderMass
     
-    // Prevent inversions of relative velocity in kinetic mode
     var kineticForceOnPiezo: Float = .zero
     var kineticForceOnSlider: Float = .zero
     if mode == .kinetic {
@@ -151,7 +152,6 @@ extension System {
           return 0
         }
       }
-      
       var safeKineticForce = kineticForce()
       
       let deltaBefore = sliderVelocity - piezoVelocity
@@ -160,17 +160,10 @@ extension System {
       let deltaAfter = sliderTemp - piezoTemp
       
       if deltaBefore * deltaAfter < 0 {
-        print(deltaBefore * 1e6, deltaAfter * 1e6)
-        
         // The relative velocity is about to invert.
         let progressBefore = deltaBefore.magnitude
         let progressAfter = deltaAfter.magnitude
         safeKineticForce *= progressBefore / (progressBefore + progressAfter)
-        
-        let piezoTemp = piezoVelocity + timeStep * safeKineticForce / System.piezoMass
-        let sliderTemp = sliderVelocity - timeStep * safeKineticForce / System.sliderMass
-        let deltaAfter2 = sliderTemp - piezoTemp
-        print(deltaBefore * 1e6, deltaAfter2 * 1e6)
       }
       
       kineticForceOnPiezo = safeKineticForce
@@ -178,11 +171,6 @@ extension System {
     }
     piezoVelocity += timeStep * kineticForceOnPiezo / System.piezoMass
     sliderVelocity += timeStep * kineticForceOnSlider / System.sliderMass
-    
-    // TODO: Add this contribution first, but once the inversion problem is
-    // fixed
-    piezoVelocity += timeStep * controlForceOnPiezo / System.piezoMass
-    sliderVelocity += timeStep * controlForceOnSlider / System.sliderMass
     
     do {
       let forceOnPiezo = controlForceOnPiezo + kineticForceOnPiezo
