@@ -34,10 +34,11 @@ struct System {
   // For simplicity, 0 V to 850 V is also permitted
   var controlVoltage: Float = .zero
   
-  static let normalForce: Float = 0.50
-  static let coefficientStatic: Float = 0.5
-  static let coefficientKinetic: Float = 0.5
+  static var normalForce: Float = 2.22
+  static var coefficientStatic: Float = 0.5
+  static var coefficientKinetic: Float = 0.4
   static let kineticVelocityThreshold: Float = 1e-6
+  static var maxSlewRate: Float = 10e6
   
   static let piezoConstant: Float = 80e-12 * 6
   static let piezoMass: Float = 3 * 1.02e-3
@@ -230,61 +231,71 @@ func piecewiseFunction(x: Float) -> Float {
 
 // MARK: - Script
 
-var system = System()
-for i in 1...100000 {
-  // 500 μs hits a strange combination that perfectly cancels the vibrational
-  // energy. 400 μs provides a better representation of typical responses. From
-  // there, we increase the timespan a factor of 6 / 5 to 480 μs.
-  let riseTimeSpan: Int = 480
-  
-  if i <= riseTimeSpan {
-    let time = Float(i) * 1e-6
+func runTrial() {
+  var system = System()
+  for i in 1...100_000 {
+    // 500 μs hits a strange combination that perfectly cancels the vibrational
+    // energy. 400 μs provides a better representation of typical responses. From
+    // there, we increase the timespan a factor of 6 / 5 to 480 μs.
+    let riseTimeSpan: Int = 480
     
-    #if false
-    guard riseTimeSpan == 400 else {
-      fatalError("Activate this case when rise time span is 400.")
+    if i <= riseTimeSpan {
+      let time = Float(i) * 1e-6
+      
+#if false
+      guard riseTimeSpan == 400 else {
+        fatalError("Activate this case when rise time span is 400.")
+      }
+      let slewRate: Float = 850 / 400e-6
+      let straightLineVoltage = time * slewRate
+      system.controlVoltage = straightLineVoltage
+#else
+      
+      guard riseTimeSpan == 480 else {
+        fatalError("Activate this case when rise time span is 480.")
+      }
+      let timeFraction = 3 * time / 480e-6
+      let yFraction = piecewiseFunction(x: timeFraction)
+      system.controlVoltage = yFraction / 5 * 850
+#endif
+      
+    } else {
+      let time = Float(i - riseTimeSpan) * 1e-6
+      let slewRate: Float = System.maxSlewRate
+      
+#if false
+      let straightLineVoltage = time * slewRate
+      system.controlVoltage = max(0, 850 - straightLineVoltage)
+#else
+      
+      let endTime = 0.4 * 850 / slewRate
+      var timeFraction = time / endTime
+      timeFraction = max(0, 3 - timeFraction)
+      let yFraction = piecewiseFunction(x: timeFraction)
+      system.controlVoltage = yFraction / 5 * 850
+#endif
     }
-    let slewRate: Float = 850 / 400e-6
-    let straightLineVoltage = time * slewRate
-    system.controlVoltage = straightLineVoltage
-    #else
     
-    guard riseTimeSpan == 480 else {
-      fatalError("Activate this case when rise time span is 480.")
+    let mode = system.mode
+    system.integrate(timeStep: 1e-6)
+    
+    if i == 100_000 {
+      print("t = \(i) μs", terminator: " | ")
+      print(Format.format(voltage: system.controlVoltage), "V", terminator: " | ")
+      print(Format.format(position: system.piezoPosition), "nm", terminator: " | ")
+      print(Format.format(position: system.sliderPosition), "nm", terminator: " | ")
+      print(Format.format(velocity: system.piezoVelocity), "μm/s", terminator: " | ")
+      print(Format.format(velocity: system.sliderVelocity - system.piezoVelocity), "μm/s", terminator: " | ")
+      print(mode)
     }
-    let timeFraction = 3 * time / 480e-6
-    let yFraction = piecewiseFunction(x: timeFraction)
-    system.controlVoltage = yFraction / 5 * 850
-    #endif
-    
-  } else {
-    let time = Float(i - riseTimeSpan) * 1e-6
-    let slewRate: Float = 2 / 1e-6
-    
-    #if false
-    let straightLineVoltage = time * slewRate
-    system.controlVoltage = max(0, 850 - straightLineVoltage)
-    #else
-    
-    let endTime = 0.4 * 850 / slewRate
-    var timeFraction = time / endTime
-    timeFraction = max(0, 3 - timeFraction)
-    let yFraction = piecewiseFunction(x: timeFraction)
-    system.controlVoltage = yFraction / 5 * 850
-    #endif
-  }
-  
-  let mode = system.mode
-  system.integrate(timeStep: 1e-6)
-  
-  if i % 100 == 0 {
-    print("t = \(i) μs", terminator: " | ")
-    print(Format.format(voltage: system.controlVoltage), "V", terminator: " | ")
-    print(Format.format(position: system.piezoPosition), "nm", terminator: " | ")
-    print(Format.format(position: system.sliderPosition), "nm", terminator: " | ")
-    print(Format.format(velocity: system.piezoVelocity), "μm/s", terminator: " | ")
-    print(Format.format(velocity: system.sliderVelocity - system.piezoVelocity), "μm/s", terminator: " | ")
-    print(mode)
   }
 }
-print("expected position:", system.controlVoltage * System.piezoConstant / 1e-9, "nm")
+
+do {
+//  System.normalForce = 2.22
+//  System.coefficientStatic = 0.50
+//  System.coefficientKinetic = 0.40
+//  System.maxSlewRate = 3e6
+  
+  runTrial()
+}
