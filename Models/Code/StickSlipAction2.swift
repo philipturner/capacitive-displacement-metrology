@@ -37,7 +37,7 @@ struct System {
   static let normalForce: Float = 2.22
   static let coefficientStatic: Float = 0.5
   static let coefficientKinetic: Float = 0.4
-  static let kineticVelocityThreshold: Float = 10e-6
+  static let kineticVelocityThreshold: Float = 1e-6
   
   static let piezoConstant: Float = 80e-12 * 6
   static let piezoMass: Float = 3 * 1.02e-3
@@ -67,12 +67,10 @@ extension System {
   var mode: FrictionMode {
     let velocityDelta = sliderVelocity - piezoVelocity
     if velocityDelta.magnitude > Self.kineticVelocityThreshold {
-      // One remaining bug: system must snap the slider's velocity to exactly
-      // the piezo's velocity when it becomes static again
       return .kinetic
     }
     
-    let appliedSurfaceForce = forceOnSlider(mode: .static)
+    let appliedSurfaceForce = controlForceOnPiezo(mode: .static)
     let staticThreshold = System.normalForce * System.coefficientStatic
     if appliedSurfaceForce.magnitude > staticThreshold {
       return .kinetic
@@ -81,13 +79,7 @@ extension System {
     }
   }
   
-  static var kineticForceMagnitude: Float {
-    System.normalForce * System.coefficientKinetic
-  }
-  
-  // Instead of including kinetic force here, include it somewhere else. That
-  // prevents inversions of relative velocity in kinetic mode.
-  func forceOnPiezo(mode: FrictionMode) -> Float {
+  func controlForceOnPiezo(mode: FrictionMode) -> Float {
     if mode == .static {
       let engagedMass = System.piezoMass + System.sliderMass
       let piezoForce = controlVoltageForce + dampingForce(engagedMass: engagedMass)
@@ -100,7 +92,7 @@ extension System {
     }
   }
   
-  func forceOnSlider(mode: FrictionMode) -> Float {
+  func controlForceOnSlider(mode: FrictionMode) -> Float {
     if mode == .static {
       let engagedMass = System.piezoMass + System.sliderMass
       let piezoForce = controlVoltageForce + dampingForce(engagedMass: engagedMass)
@@ -141,30 +133,45 @@ extension System {
       sliderVelocity = piezoVelocity
     }
     
-    let forceOnPiezo = self.forceOnPiezo(mode: mode)
-    let forceOnSlider = self.forceOnSlider(mode: mode)
-    print(Format.format(force: forceOnPiezo), "N", terminator: " | ")
-    print(Format.format(force: forceOnSlider), "N", terminator: " | ")
+    let controlForceOnPiezo = self.controlForceOnPiezo(mode: mode)
+    let controlForceOnSlider = self.controlForceOnSlider(mode: mode)
     
     // Prevent inversions of relative velocity in kinetic mode
+    var kineticForceOnPiezo: Float = .zero
+    var kineticForceOnSlider: Float = .zero
     if mode == .kinetic {
       // WARNING: Do not mutate the instance of 'System' in between calls to
       // this function.
       func kineticForce() -> Float {
-        if sliderVelocity > piezoVelocity {
-          return Self.kineticForceMagnitude
+        if piezoVelocity < sliderVelocity {
+          return System.normalForce * System.coefficientKinetic
+        } else if piezoVelocity > sliderVelocity {
+          return -System.normalForce * System.coefficientKinetic
         } else {
-          return -Self.kineticForceMagnitude
+          return 0
         }
       }
-      let safeKineticForce = kineticForce()
       
-      piezoVelocity += timeStep * safeKineticForce / System.piezoMass
-      sliderVelocity += timeStep * -safeKineticForce / System.sliderMass
+      // TODO: Prevent inversions
+      
+      let safeKineticForce = kineticForce()
+      kineticForceOnPiezo = safeKineticForce
+      kineticForceOnSlider = -safeKineticForce
     }
+    piezoVelocity += timeStep * kineticForceOnPiezo / System.piezoMass
+    sliderVelocity += timeStep * kineticForceOnSlider / System.sliderMass
     
-    piezoVelocity += timeStep * forceOnPiezo / System.piezoMass
-    sliderVelocity += timeStep * forceOnSlider / System.sliderMass
+    // TODO: Add this contribution first, but once the inversion problem is
+    // fixed
+    piezoVelocity += timeStep * controlForceOnPiezo / System.piezoMass
+    sliderVelocity += timeStep * controlForceOnSlider / System.sliderMass
+    
+    do {
+      let forceOnPiezo = controlForceOnPiezo + kineticForceOnPiezo
+      let forceOnSlider = controlForceOnSlider + kineticForceOnSlider
+      print(Format.format(force: forceOnPiezo), "N", terminator: " | ")
+      print(Format.format(force: forceOnSlider), "N", terminator: " | ")
+    }
     
     piezoPosition += timeStep * piezoVelocity
     sliderPosition += timeStep * sliderVelocity
