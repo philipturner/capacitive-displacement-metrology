@@ -452,6 +452,8 @@ Task 2: add kinetic friction
 
 The script has improved significantly. I plan on investigating gravity &times; magnet force, after studying coefficient of kinetic friction &times; kinetic velocity threshold &times; slew rate.
 
-TODO: Add screenshots of spreadsheet data
+![January 9, Part 1](./Documentation/January9/January9_Part1.png)
+
+![January 9, Part 2](./Documentation/January9/January9_Part2.png)
 
 I still plan to study the effect of gravity, and using stronger magnets to prevent bad outcomes. I have the time budget to do due diligence here.
