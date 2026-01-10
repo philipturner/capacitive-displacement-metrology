@@ -152,9 +152,27 @@ extension System {
         }
       }
       
-      // TODO: Prevent inversions
+      var safeKineticForce = kineticForce()
       
-      let safeKineticForce = kineticForce()
+      let deltaBefore = sliderVelocity - piezoVelocity
+      let piezoTemp = piezoVelocity + timeStep * safeKineticForce / System.piezoMass
+      let sliderTemp = sliderVelocity - timeStep * safeKineticForce / System.sliderMass
+      let deltaAfter = sliderTemp - piezoTemp
+      
+      if deltaBefore * deltaAfter < 0 {
+        print(deltaBefore * 1e6, deltaAfter * 1e6)
+        
+        // The relative velocity is about to invert.
+        let progressBefore = deltaBefore.magnitude
+        let progressAfter = deltaAfter.magnitude
+        safeKineticForce *= progressBefore / (progressBefore + progressAfter)
+        
+        let piezoTemp = piezoVelocity + timeStep * safeKineticForce / System.piezoMass
+        let sliderTemp = sliderVelocity - timeStep * safeKineticForce / System.sliderMass
+        let deltaAfter2 = sliderTemp - piezoTemp
+        print(deltaBefore * 1e6, deltaAfter2 * 1e6)
+      }
+      
       kineticForceOnPiezo = safeKineticForce
       kineticForceOnSlider = -safeKineticForce
     }
