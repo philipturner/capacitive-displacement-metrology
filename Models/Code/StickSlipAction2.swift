@@ -119,6 +119,7 @@ extension System {
         // (https://doi.org/10.1016/j.apsusc.2013.09.124)
         // 0.15 J/m^2
         
+        /*
         print()
         print("dissipated leftover kinetic energy:")
         print("velocity delta:", Format.format(velocity: velocityDelta), "μm/s")
@@ -130,6 +131,7 @@ extension System {
         let energyDensity = kineticEnergy / (surfaceWidth * surfaceWidth)
         print("energy density:", energyDensity, "J/m^2")
         print()
+         */
       }
       sliderVelocity = piezoVelocity
     }
@@ -276,26 +278,33 @@ func runTrial() {
 #endif
     }
     
-    let mode = system.mode
+    // let mode = system.mode
     system.integrate(timeStep: 1e-6)
     
     if i == 100_000 {
-      print("t = \(i) μs", terminator: " | ")
-      print(Format.format(voltage: system.controlVoltage), "V", terminator: " | ")
-      print(Format.format(position: system.piezoPosition), "nm", terminator: " | ")
-      print(Format.format(position: system.sliderPosition), "nm", terminator: " | ")
-      print(Format.format(velocity: system.piezoVelocity), "μm/s", terminator: " | ")
-      print(Format.format(velocity: system.sliderVelocity - system.piezoVelocity), "μm/s", terminator: " | ")
-      print(mode)
+//      print("t = \(i) μs", terminator: " | ")
+//      print(Format.format(voltage: system.controlVoltage), "V", terminator: " | ")
+//      print(Format.format(position: system.piezoPosition), "nm", terminator: " | ")
+//      print(Format.format(position: system.sliderPosition), "nm", terminator: " | ")
+//      print(Format.format(velocity: system.piezoVelocity), "μm/s", terminator: " | ")
+//      print(Format.format(velocity: system.sliderVelocity - system.piezoVelocity), "μm/s", terminator: " | ")
+//      print(mode)
+      
+      print(Format.format(position: system.sliderPosition))
     }
   }
 }
 
-do {
-//  System.normalForce = 2.22
-//  System.coefficientStatic = 0.50
-//  System.coefficientKinetic = 0.40
-//  System.maxSlewRate = 3e6
-  
-  runTrial()
+let maxSlewRateList: [Float] = [3e6, 5e6, 10e6, 20e6]
+let coefficientStaticList: [Float] = [0.10, 0.30, 0.50, 0.70, 0.90]
+for maxSlewRate in maxSlewRateList {
+  for coefficientStatic in coefficientStaticList {
+    System.normalForce = 1.00
+    System.coefficientStatic = coefficientStatic
+    System.coefficientKinetic = coefficientStatic * 0.8
+    System.maxSlewRate = maxSlewRate
+    
+    runTrial()
+  }
+  print()
 }
