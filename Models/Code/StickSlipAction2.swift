@@ -34,9 +34,9 @@ struct System {
   // For simplicity, 0 V to 850 V is also permitted
   var controlVoltage: Float = .zero
   
-  static let normalForce: Float = 2.22
+  static let normalForce: Float = 0.50
   static let coefficientStatic: Float = 0.5
-  static let coefficientKinetic: Float = 0.4
+  static let coefficientKinetic: Float = 0.5
   static let kineticVelocityThreshold: Float = 1e-6
   
   static let piezoConstant: Float = 80e-12 * 6
@@ -259,7 +259,7 @@ for i in 1...100000 {
     
   } else {
     let time = Float(i - riseTimeSpan) * 1e-6
-    let slewRate: Float = 10 / 1e-6
+    let slewRate: Float = 2 / 1e-6
     
     #if false
     let straightLineVoltage = time * slewRate
