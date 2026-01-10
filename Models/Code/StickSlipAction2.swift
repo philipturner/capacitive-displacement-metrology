@@ -172,12 +172,12 @@ extension System {
     piezoVelocity += timeStep * kineticForceOnPiezo / System.piezoMass
     sliderVelocity += timeStep * kineticForceOnSlider / System.sliderMass
     
-    do {
-      let forceOnPiezo = controlForceOnPiezo + kineticForceOnPiezo
-      let forceOnSlider = controlForceOnSlider + kineticForceOnSlider
-      print(Format.format(force: forceOnPiezo), "N", terminator: " | ")
-      print(Format.format(force: forceOnSlider), "N", terminator: " | ")
-    }
+//    do {
+//      let forceOnPiezo = controlForceOnPiezo + kineticForceOnPiezo
+//      let forceOnSlider = controlForceOnSlider + kineticForceOnSlider
+//      print(Format.format(force: forceOnPiezo), "N", terminator: " | ")
+//      print(Format.format(force: forceOnSlider), "N", terminator: " | ")
+//    }
     
     piezoPosition += timeStep * piezoVelocity
     sliderPosition += timeStep * sliderVelocity
@@ -231,7 +231,7 @@ func piecewiseFunction(x: Float) -> Float {
 // MARK: - Script
 
 var system = System()
-for i in 1...1000 {
+for i in 1...100000 {
   // 500 μs hits a strange combination that perfectly cancels the vibrational
   // energy. 400 μs provides a better representation of typical responses. From
   // there, we increase the timespan a factor of 6 / 5 to 480 μs.
@@ -277,7 +277,7 @@ for i in 1...1000 {
   let mode = system.mode
   system.integrate(timeStep: 1e-6)
   
-  if i % 1 == 0 {
+  if i % 100 == 0 {
     print("t = \(i) μs", terminator: " | ")
     print(Format.format(voltage: system.controlVoltage), "V", terminator: " | ")
     print(Format.format(position: system.piezoPosition), "nm", terminator: " | ")
