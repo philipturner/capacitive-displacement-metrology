@@ -390,18 +390,18 @@ Playing around with parameters on: https://www.kjmagnetics.com/magnet-strength-c
 | 5 mm     | 3 mm      | 0.3 mm   | 0.73 lb           |
 | 5 mm     | 5 mm      | 0.3 mm   | 1.05 lb           |
 | 5 mm     | 7 mm      | 0.3 mm   | 1.15 lb           |
-| 10 mm    | 3 mm      | 0.0 mm   | 2.75 lb           |
-| 10 mm    | 5 mm      | 0.0 mm   | 4.19 lb           |
-| 10 mm    | 7 mm      | 0.0 mm   | 5.07 lb           |
+| 10 mm    | 3 mm      | 0.3 mm   | 2.75 lb           |
+| 10 mm    | 5 mm      | 0.3 mm   | 4.19 lb           |
+| 10 mm    | 7 mm      | 0.3 mm   | 5.07 lb           |
 
 | Diameter | Thickness | Distance | Pull Force Case 1 |
 | -------: | --------: | -------: | ----------------: |
 | 5 mm     | 3 mm      | 1.0 mm   | 0.29 lb           |
 | 5 mm     | 5 mm      | 1.0 mm   | 0.44 lb           |
 | 5 mm     | 7 mm      | 1.0 mm   | 0.50 lb           |
-| 10 mm    | 3 mm      | 0.0 mm   | 1.50 lb           |
-| 10 mm    | 5 mm      | 0.0 mm   | 2.36 lb           |
-| 10 mm    | 7 mm      | 0.0 mm   | 2.90 lb           |
+| 10 mm    | 3 mm      | 1.0 mm   | 1.50 lb           |
+| 10 mm    | 5 mm      | 1.0 mm   | 2.36 lb           |
+| 10 mm    | 7 mm      | 1.0 mm   | 2.90 lb           |
 
 We do need two magnets aligned in the center of the path of motion. Both Voigtlander and Wolkow's reference designs do this. We can just tweak the force for the Y-axis magnets to be doubled.
 
