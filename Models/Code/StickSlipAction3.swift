@@ -261,14 +261,18 @@ func runTrial() {
     #endif
   }
   
-  if system.sliderPosition.magnitude > 2e-6 {
-    print("       ", terminator: " ")
-  } else {
-    print(Format.format(position: system.sliderPosition), terminator: " ")
+  var positionToPrint = system.sliderPosition
+  if positionToPrint.magnitude > 2e-6 {
+    if positionToPrint < 0 {
+      positionToPrint = -Float.infinity
+    } else {
+      positionToPrint = Float.infinity
+    }
   }
+  print(Format.format(position: positionToPrint), terminator: " ")
 }
 
-let maxSlewRateList: [Float] = [3e6, 5e6, 10e6, 20e6]
+let maxSlewRateList: [Float] = [3e6, 5e6, 10e6, 20e6, 30e6]
 let frictionCoefficientsList: [SIMD2<Float>] = [
   SIMD2<Float>(1.0, 0.4) * 0.1,
   SIMD2<Float>(1.0, 0.4) * 0.3,
@@ -286,7 +290,7 @@ let gravityList: [Float] = [-9.8, 0.0, 9.8]
 
 for maxSlewRate in maxSlewRateList {
   for frictionCoefficients in frictionCoefficientsList {
-    System.normalForce = 1.00
+    System.normalForce = 0.1
     System.coefficientStatic = frictionCoefficients[0]
     System.coefficientKinetic = frictionCoefficients[1]
     System.maxSlewRate = maxSlewRate
