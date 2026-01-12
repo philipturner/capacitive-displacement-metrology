@@ -52,9 +52,9 @@ struct System {
   var sliderVelocity: Float = .zero
   
   var controlVoltageForce: Float {
-    let expectedPosition = controlVoltage * System.piezoConstant
-    let deltaX = piezoPosition - expectedPosition
-    return -System.piezoStiffness * deltaX
+    var targetDisplacement = System.piezoConstant * controlVoltage
+    targetDisplacement -= piezoPosition
+    return System.piezoStiffness * targetDisplacement
   }
   
   func dampingForce(engagedMass: Float) -> Float {
@@ -115,6 +115,12 @@ extension System {
     piezoVelocity += timeStep * controlForceOnPiezo / System.piezoMass
     sliderVelocity += timeStep * controlForceOnSlider / System.sliderMass
     
+    // Just add gravity
+    // F = ma
+    // v += t * F / m
+    // v += t * a
+    // TODO
+    
     var kineticForceOnPiezo: Float = .zero
     var kineticForceOnSlider: Float = .zero
     if mode == .kinetic {
@@ -171,6 +177,14 @@ struct Format {
     return output
   }
   
+  static func format(positionHighRes: Float) -> String {
+    var output = String(format: "%.3f", positionHighRes / 1e-9)
+    while output.count < "-1000.000".count {
+      output = " " + output
+    }
+    return output
+  }
+  
   static func format(velocity: Float) -> String {
     var output = String(format: "%.1f", velocity / 1e-6)
     while output.count < "-10000.0".count {
@@ -202,6 +216,7 @@ func piecewiseFunction(x: Float) -> Float {
 
 var system = System()
 for i in 1...1000 {
+  // Rise time for the slow-moving part of the waveform, in microseconds.
   let riseTimeSpan: Int = 480
   
   if i <= riseTimeSpan {
@@ -231,8 +246,8 @@ for i in 1...1000 {
   if i % 1 == 0 {
     print("t = \(i) μs", terminator: " | ")
     print(Format.format(voltage: system.controlVoltage), "V", terminator: " | ")
-    print(Format.format(position: system.piezoPosition), "nm", terminator: " | ")
-    print(Format.format(position: system.sliderPosition), "nm", terminator: " | ")
+    print(Format.format(positionHighRes: system.piezoPosition), "nm", terminator: " | ")
+    print(Format.format(positionHighRes: system.sliderPosition), "nm", terminator: " | ")
     print(Format.format(velocity: system.piezoVelocity), "μm/s", terminator: " | ")
     print(Format.format(velocity: system.sliderVelocity - system.piezoVelocity), "μm/s", terminator: " | ")
     print(mode)
