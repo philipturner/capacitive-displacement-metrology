@@ -48,7 +48,7 @@ struct System {
   static let piezoStiffness: Float = 0.644e9
   var piezoVelocity: Float = .zero
   
-  static let sliderMass: Float = 8.94e-3
+  static var sliderMass: Float = 8.94e-3
   var sliderPosition: Float = .zero
   var sliderVelocity: Float = .zero
   
@@ -274,6 +274,7 @@ func runTrial() {
   print(Format.format(position: positionToPrint), terminator: terminator)
 }
 
+let sliderMassList: [Float] = [8.94e-3, 13.02e-3, 23.37e-3]
 let maxSlewRateList: [Float] = [3e6, 5e6, 10e6, 20e6, 30e6]
 let frictionCoefficientsList: [SIMD2<Float>] = [
   SIMD2<Float>(1.0, 0.4) * 0.1,
@@ -290,23 +291,28 @@ let frictionCoefficientsList: [SIMD2<Float>] = [
 ]
 let gravityList: [Float] = [-9.8, 0.0, 9.8]
 
-for maxSlewRate in maxSlewRateList {
-  for frictionCoefficients in frictionCoefficientsList {
-    System.normalForce = 0.1
-    System.coefficientStatic = frictionCoefficients[0]
-    System.coefficientKinetic = frictionCoefficients[1]
+System.normalForce = 0.1
+for sliderMass in sliderMassList {
+  System.sliderMass = sliderMass
+  for maxSlewRate in maxSlewRateList {
     System.maxSlewRate = maxSlewRate
-    
-    print(String(format: "%.1f", System.normalForce), terminator: terminator)
-    print(String(format: "%.2f", System.coefficientStatic), terminator: terminator)
-    print(String(format: "%.2f", System.coefficientKinetic), terminator: terminator)
-    print(System.maxSlewRate, terminator: terminator)
-    
-    for gravity in gravityList {
-      System.gravityAcceleration = gravity
-      runTrial()
+    for frictionCoefficients in frictionCoefficientsList {
+      System.coefficientStatic = frictionCoefficients[0]
+      System.coefficientKinetic = frictionCoefficients[1]
+      
+      print(String(format: "%.1f", System.normalForce), terminator: terminator)
+      print(String(format: "%.2f", System.coefficientStatic), terminator: terminator)
+      print(String(format: "%.2f", System.coefficientKinetic), terminator: terminator)
+      print(System.maxSlewRate, terminator: terminator)
+      
+      for gravity in gravityList {
+        System.gravityAcceleration = gravity
+        runTrial()
+      }
+      print()
     }
     print()
   }
+  print()
   print()
 }
