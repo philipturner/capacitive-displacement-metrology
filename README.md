@@ -482,3 +482,5 @@ _All table entries are in GN/m._
 | above + epoxy layer (0.05 mm) | 0.065 GN/m |  40.2 kHz |
 
 I need to revise the kinematic mount's stiffness to 0.644 GN/m. Compared to yesterday's data, vibrational responses should be 1.5x slower.
+
+For the piezoelectric constitutive equations, shear modulus (c<sup>E</sup>) should change from 69.2 GPa to 25.7 GPa.
