@@ -463,6 +463,22 @@ I still plan to study the effect of gravity, and using stronger magnets to preve
 
 I found an error in the script. Instead of the piezo stiffness being 1.47 GN/m, it should be 1.73 GN/m. The problem stems from taking 600 N / 408 nm, when the two inputs to this division are incorrect. The piezo constant has changed from 68 pm/V to 80 pm/V. Either take 705 N / 408 nm or 600 N / 347 nm.
 
-Regarding stiffness: shear modulus is set to 69.2 GPa. Copper plates and epoxy could make the piezo more compliant. Copper has almost double the Young's modulus of LiNbO3 and consumes ~50% of the stack's volume. Epoxy is 3 GPa and consumes 10% or less of the volume. Before derating the stiffness by 50%, I need to work through the piezoelectric constitutive equations and understand the effects.
+Regarding stiffness: shear modulus is set to 69.2 GPa. Copper plates and epoxy could make the piezo more compliant. Copper has 2/3 the Young's modulus of LiNbO3 and consumes ~50% of the stack's volume. Epoxy is 3 GPa and consumes 10% or less of the volume. Before derating the stiffness by 50%, I need to work through the piezoelectric constitutive equations and understand the effects.
 
-I think we can neglect the effects of epoxy on stiffness. A non-negligible layer would derate the stiffness by a factor of up to 10. In the literature, a resonance frequency of 171 kHz matched bulk moduli of LiNbO3 and Cu after dividing the frequency by 2. Alternatively, the questionable "electromechanical transformer ratio" of 0.15 N/V reflected stiffness derating of epoxy consuming 10% of total volume.
+I think we can neglect the effects of epoxy on stiffness. A non-negligible layer would derate the stiffness by a factor of up to 10. In the literature, a resonance frequency of 171 kHz matched bulk moduli of LiNbO3 and Cu after dividing the frequency by 2. Alternatively, the questionable "electromechanical transformer ratio" of 0.15 N/V reflected stiffness derating of epoxy consuming 5% of total volume.
+
+| Model | Stiffness, 1 Plate | Stiffness, 6 Plates | Stiffness, 3 Stacks |
+| ----- | -----------------: | ------------------: | ------------------: |
+| single LiNbO3 plate (0.5 mm)  | 3.462 | 0.577 | 1.731 |
+| plate + Cu electrode (0.5 mm) | 1.288 | 0.215 | 0.644 |
+| above + epoxy layer (0.05 mm) | 0.388 | 0.065 | 0.194 |
+
+_All table entries are in GN/m._
+
+| Model | Stiffness, 6 Plates | Resonance @ 1.02 g |
+| ----- | ------------------: | -----------------: |
+| single LiNbO3 plate (0.5 mm)  | 0.577 GN/m | 119.7 kHz |
+| plate + Cu electrode (0.5 mm) | 0.215 GN/m |  73.1 kHz |
+| above + epoxy layer (0.05 mm) | 0.065 GN/m |  40.2 kHz |
+
+I need to revise the kinematic mount's stiffness to 0.644 GN/m. Compared to yesterday's data, vibrational responses should be 1.5x slower.
