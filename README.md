@@ -17,6 +17,7 @@ Table of Contents:
 - [January 7, 2026](#january-7-2026)
 - [January 8, 2026](#january-8-2026)
 - [January 9, 2026](#january-9-2026)
+- [January 12, 2026](#january-12-2026)
 
 ## December 15, 2025
 
@@ -318,7 +319,7 @@ Due to the IRE standard, readily stocked commercial wafers only fall in the firs
 
 In Islam and Beamish (2018), the erroneous off-axis displacement would not be measured. Moving the parallel plates in a direction parallel to each other, will decrease the capacitance no matter which direction it moves. The case of zero off-axis displacement is a local maximum of capacitance. The first derivative with respect to position is zero. In contrast, the first derivative with respect to on-axis displacement (distance between the two plates) is very high. It is the only component that could affect the measurements.
 
-# January 8, 2026
+## January 8, 2026
 
 I did some investigation of why coarse tip approach is slow. There are three limiting factors:
 - Allowed positional excursion before tip crashes, relative to point of minimum detectable current
@@ -436,7 +437,7 @@ Once the simulation is debugged and investigated, I can export CSV to plot on Go
 
 I will just examine the Z kinematic mount for this analysis. Although it represents the far end of the distribution of load masses, it is a sane way to reduce the size of the combinatorial space. Compared to examining two or three kinematic mounts. I will also change so, instead of pointing at a 45-degree angle, gravity points directly parallel to the direction of motion. This choice simplifies the code.
 
-# January 9, 2026
+## January 9, 2026
 
 I just sorted out a few more interesting details about how to simulate kinetic friction. I will incorporate the notes into the Swift script.
 
@@ -457,3 +458,9 @@ The script has improved significantly. I plan on investigating gravity &times; m
 ![January 9, Part 2](./Documentation/January9/January9_Part2.png)
 
 I still plan to study the effect of gravity, and using stronger magnets to prevent bad outcomes. I have the time budget to do due diligence here.
+
+## January 12, 2026
+
+I found an error in the script. Instead of the piezo stiffness being 1.47 GN/m, it should be 1.73 GN/m. The problem stems from taking 600 N / 408 nm, when the two inputs to this division are incorrect. The piezo constant has changed from 68 pm/V to 80 pm/V. Either take 705 N / 408 nm or 600 N / 347 nm.
+
+Regarding stiffness: shear modulus is set to 69.2 GPa. Copper plates and epoxy could make the piezo more compliant. Copper has almost double the Young's modulus of LiNbO3 and consumes ~50% of the stack's volume. Epoxy is 3 GPa and consumes 10% or less of the volume. Before derating the stiffness by 50%, I need to work through the piezoelectric constitutive equations and understand the effects.

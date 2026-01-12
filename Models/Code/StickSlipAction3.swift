@@ -44,7 +44,7 @@ struct System {
   static let piezoMass: Float = 3 * 1.02e-3
   var piezoPosition: Float = .zero
   static let piezoQualityFactor: Float = 1000
-  static let piezoStiffness: Float = 1.47e9
+  static let piezoStiffness: Float = 1.73e9
   var piezoVelocity: Float = .zero
   
   static let sliderMass: Float = 8.94e-3
