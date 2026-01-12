@@ -216,6 +216,8 @@ func piecewiseFunction(x: Float) -> Float {
 
 // MARK: - Script
 
+let terminator: String = ", "
+
 func runTrial() {
   var system = System()
   for i in 1...100_000 {
@@ -269,7 +271,7 @@ func runTrial() {
       positionToPrint = Float.infinity
     }
   }
-  print(Format.format(position: positionToPrint), terminator: " ")
+  print(Format.format(position: positionToPrint), terminator: terminator)
 }
 
 let maxSlewRateList: [Float] = [3e6, 5e6, 10e6, 20e6, 30e6]
@@ -295,10 +297,10 @@ for maxSlewRate in maxSlewRateList {
     System.coefficientKinetic = frictionCoefficients[1]
     System.maxSlewRate = maxSlewRate
     
-    print(String(format: "%.2f", System.normalForce), terminator: " ")
-    print(String(format: "%.2f", System.coefficientStatic), terminator: " ")
-    print(String(format: "%.2f", System.coefficientKinetic), terminator: " ")
-    print(System.maxSlewRate, terminator: " ")
+    print(String(format: "%.1f", System.normalForce), terminator: terminator)
+    print(String(format: "%.2f", System.coefficientStatic), terminator: terminator)
+    print(String(format: "%.2f", System.coefficientKinetic), terminator: terminator)
+    print(System.maxSlewRate, terminator: terminator)
     
     for gravity in gravityList {
       System.gravityAcceleration = gravity
