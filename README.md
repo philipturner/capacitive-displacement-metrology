@@ -500,4 +500,10 @@ The Google Sheet covers 1.65 thousand permutations of the ~5 controlling variabl
 
 ### Insights
 
-I will likely need to test a few permutations of the design IRL, to calibrate the right magnet force.
+![January 12, Part 1](./Documentation/January12_Part1.png)
+
+I will likely need to test a few permutations of the design IRL, to calibrate the right magnet force. Also, be cautious about magnets demagnetizing in UHV during bakeout.
+
+I can also run FEM simulations with Elmer in FreeCAD. Use [FEM EquationMagnetodynamic](https://wiki.freecad.org/FEM_EquationMagnetodynamic) and calculate nodal forces. Also, valuable statement from the FreeCAD docs:
+
+> Despite the name, the Magnetodynamic equation can be used to perform magnetostatic analyses.
