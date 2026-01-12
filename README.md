@@ -484,3 +484,14 @@ _All table entries are in GN/m._
 I need to revise the kinematic mount's stiffness to 0.644 GN/m. Compared to yesterday's data, vibrational responses should be 1.5x slower.
 
 For the piezoelectric constitutive equations, shear modulus (c<sup>E</sup>) should change from 69.2 GPa to 25.7 GPa.
+
+---
+
+I have now documented the entire combinatorial space of variables for a kinematic mount:
+- Different axes (X, Y, Z) having different masses
+- Coefficient of static and kinetic friction, not necessarily being proportional to each other
+- Various slew rates up to the limit of 30 V/μs
+- Gravity acting toward, against, or perpendicular to stepping direction
+- Magnet strength varying from 0.1 N (0.02 lb) to 5.6 N (1.26 lb), on a logarithmic scale with 1.4x steps
+
+[LiNbO3 Piezo Calculations (Google Sheets)](https://docs.google.com/spreadsheets/d/1vBnCa-WxlORrH1MnVM8QzBGzUekIoL9DoZVunZ4Nscg/edit?gid=2067282552#gid=2067282552)
