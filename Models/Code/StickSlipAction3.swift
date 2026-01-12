@@ -34,7 +34,7 @@ struct System {
   // For simplicity, 0 V to 850 V is also permitted
   var controlVoltage: Float = .zero
   
-  static var gravityAcceleration: Float = -9.8
+  static var gravityAcceleration: Float = 0.0
   static var normalForce: Float = 2.22
   static var coefficientStatic: Float = 0.5
   static var coefficientKinetic: Float = 0.4
@@ -115,19 +115,13 @@ extension System {
     let controlForceOnSlider = self.controlForceOnSlider(mode: mode)
     piezoVelocity += timeStep * controlForceOnPiezo / System.piezoMass
     sliderVelocity += timeStep * controlForceOnSlider / System.sliderMass
-    print(Format.format(force: controlForceOnPiezo), "N", terminator: " | ")
-    print(Format.format(force: controlForceOnSlider), "N", terminator: " | ")
     
     // Just add gravity
     // F = ma
     // v += t * F / m
     // v += t * a
-    let gravityForceOnPiezo = System.gravityAcceleration * System.piezoMass
-    let gravityForceOnSlider = System.gravityAcceleration * System.sliderMass
     piezoVelocity += timeStep * System.gravityAcceleration
     sliderVelocity += timeStep * System.gravityAcceleration
-    print(Format.format(force: gravityForceOnPiezo), "N", terminator: " | ")
-    print(Format.format(force: gravityForceOnSlider), "N", terminator: " | ")
     
     var kineticForceOnPiezo: Float = .zero
     var kineticForceOnSlider: Float = .zero
@@ -160,12 +154,8 @@ extension System {
       kineticForceOnPiezo = safeKineticForce
       kineticForceOnSlider = -safeKineticForce
     }
-    /*
     piezoVelocity += timeStep * kineticForceOnPiezo / System.piezoMass
     sliderVelocity += timeStep * kineticForceOnSlider / System.sliderMass
-    print(Format.format(force: kineticForceOnPiezo), "N", terminator: " | ")
-    print(Format.format(force: kineticForceOnSlider), "N", terminator: " | ")
-    */
     
     piezoPosition += timeStep * piezoVelocity
     sliderPosition += timeStep * sliderVelocity
@@ -226,92 +216,83 @@ func piecewiseFunction(x: Float) -> Float {
 
 // MARK: - Script
 
-var system = System()
-
-/*
-for i in 1...1000 {
-  // Rise time for the slow-moving part of the waveform, in microseconds.
-  let riseTimeSpan: Int = 480
-  
-  if i <= riseTimeSpan {
-    let time = Float(i) * 1e-6
+func runTrial() {
+  var system = System()
+  for i in 1...100_000 {
+    // Rise time for the slow-moving part of the waveform, in microseconds.
+    let riseTimeSpan: Int = 480
     
-    guard riseTimeSpan == 480 else {
-      fatalError("Activate this case when rise time span is 480.")
+    if i <= riseTimeSpan {
+      let time = Float(i) * 1e-6
+      
+      guard riseTimeSpan == 480 else {
+        fatalError("Activate this case when rise time span is 480.")
+      }
+      let timeFraction = 3 * time / 480e-6
+      let yFraction = piecewiseFunction(x: timeFraction)
+      system.controlVoltage = yFraction / 5 * 850
+      
+    } else {
+      let time = Float(i - riseTimeSpan) * 1e-6
+      let slewRate: Float = System.maxSlewRate
+      
+      let endTime = 0.4 * 850 / slewRate
+      var timeFraction = time / endTime
+      timeFraction = max(0, 3 - timeFraction)
+      let yFraction = piecewiseFunction(x: timeFraction)
+      system.controlVoltage = yFraction / 5 * 850
     }
-    let timeFraction = 3 * time / 480e-6
-    let yFraction = piecewiseFunction(x: timeFraction)
-    system.controlVoltage = yFraction / 5 * 850
     
-  } else {
-    let time = Float(i - riseTimeSpan) * 1e-6
-    let slewRate: Float = System.maxSlewRate
+    #if false
+    let mode = system.mode
+    #endif
+    system.integrate(timeStep: 1e-6)
     
-    let endTime = 0.4 * 850 / slewRate
-    var timeFraction = time / endTime
-    timeFraction = max(0, 3 - timeFraction)
-    let yFraction = piecewiseFunction(x: timeFraction)
-    system.controlVoltage = yFraction / 5 * 850
-  }
-  
-  let mode = system.mode
-  system.integrate(timeStep: 1e-6)
-  
-  if i % 1 == 0 {
-    print("t = \(i) μs", terminator: " | ")
-    print(Format.format(voltage: system.controlVoltage), "V", terminator: " | ")
-    print(Format.format(positionHighRes: system.piezoPosition), "nm", terminator: " | ")
-    print(Format.format(positionHighRes: system.sliderPosition), "nm", terminator: " | ")
-    print(Format.format(velocity: system.piezoVelocity), "μm/s", terminator: " | ")
-    print(Format.format(velocity: system.sliderVelocity - system.piezoVelocity), "μm/s", terminator: " | ")
-    print(mode)
-  }
-}
-*/
-
-for i in 1...100_000 {
-  print("t = \(i) μs", terminator: " | ")
-  
-  // Rise time for the slow-moving part of the waveform, in microseconds.
-  let riseTimeSpan: Int = 480
-  
-  if i <= riseTimeSpan {
-    let time = Float(i) * 1e-6
-    
-    guard riseTimeSpan == 480 else {
-      fatalError("Activate this case when rise time span is 480.")
+    #if false
+    if i % 1 == 0 {
+      print("t = \(i) μs", terminator: " | ")
+      print(Format.format(voltage: system.controlVoltage), "V", terminator: " | ")
+      print(Format.format(positionHighRes: system.piezoPosition), "nm", terminator: " | ")
+      print(Format.format(positionHighRes: system.sliderPosition), "nm", terminator: " | ")
+      print(Format.format(velocity: system.piezoVelocity), "μm/s", terminator: " | ")
+      print(Format.format(velocity: system.sliderVelocity - system.piezoVelocity), "μm/s", terminator: " | ")
+      print(mode)
     }
-    let timeFraction = 3 * time / 480e-6
-    let yFraction = piecewiseFunction(x: timeFraction)
-    system.controlVoltage = yFraction / 5 * -850
+    #endif
   }
   
-  let mode = system.mode
-  system.integrate(timeStep: 1e-6)
-  
-  if i % 1 == 0 {
-    print(Format.format(voltage: system.controlVoltage), "V", terminator: " | ")
-    print(Format.format(positionHighRes: system.piezoPosition), "nm", terminator: " | ")
-    print(Format.format(positionHighRes: system.sliderPosition), "nm", terminator: " | ")
-    print(Format.format(velocity: system.piezoVelocity), "μm/s", terminator: " | ")
-    print(Format.format(velocity: system.sliderVelocity - system.piezoVelocity), "μm/s", terminator: " | ")
-    print(mode)
-  }
+  print(Format.format(position: system.sliderPosition), terminator: " ")
 }
+runTrial()
 
-system.sliderVelocity = -100e-6
-for i in 1...100_000 {
-  print("t = \(i) μs", terminator: " | ")
+let maxSlewRateList: [Float] = [3e6, 5e6, 10e6, 20e6]
+let frictionCoefficientsList: [SIMD2<Float>] = [
+  SIMD2<Float>(1.0, 0.4) * 0.1,
+  SIMD2<Float>(1.0, 0.4) * 0.3,
+  SIMD2<Float>(1.0, 0.4) * 0.5,
+  SIMD2<Float>(1.0, 0.4) * 0.7,
+  SIMD2<Float>(1.0, 0.4) * 0.9,
   
-  let mode = system.mode
-  system.integrate(timeStep: 1e-6)
-  
-  if i % 1 == 0 {
-    print(Format.format(voltage: system.controlVoltage), "V", terminator: " | ")
-    print(Format.format(positionHighRes: system.piezoPosition), "nm", terminator: " | ")
-    print(Format.format(positionHighRes: system.sliderPosition), "nm", terminator: " | ")
-    print(Format.format(velocity: system.piezoVelocity), "μm/s", terminator: " | ")
-    print(Format.format(velocity: system.sliderVelocity - system.piezoVelocity), "μm/s", terminator: " | ")
-    print(mode)
+  SIMD2<Float>(1.0, 0.8) * 0.1,
+  SIMD2<Float>(1.0, 0.8) * 0.3,
+  SIMD2<Float>(1.0, 0.8) * 0.5,
+  SIMD2<Float>(1.0, 0.8) * 0.7,
+  SIMD2<Float>(1.0, 0.8) * 0.9,
+]
+let gravityList: [Float] = [-9.8, 0.0, 9.8]
+
+for maxSlewRate in maxSlewRateList {
+  for frictionCoefficients in frictionCoefficientsList {
+    System.normalForce = 1.00
+    System.coefficientStatic = frictionCoefficients[0]
+    System.coefficientKinetic = frictionCoefficients[1]
+    System.maxSlewRate = maxSlewRate
+    
+    for gravity in gravityList {
+      System.gravityAcceleration = gravity
+      runTrial()
+    }
+    print()
   }
+  print()
 }
