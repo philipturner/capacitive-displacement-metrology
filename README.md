@@ -556,3 +556,10 @@ I think there is enough product selection, as least for adjustable LM317-style r
 | four LiNbO3 plates | 0.32 nm/V | 12.8 nm |
 
 _Displacements of various actuators accessible with 40 Vpp and existing stock of LiNbO3 plates. In the Islam and Beamish papers, sensor resolution was 0.1 nm with 4 seconds of averaging time._
+
+---
+
+I just got some leads on lower-cost alternatives to $2500 and $3000 costs for pristine (not "textured") Au(111) samples. I will need to question the suppliers and ensure they actually did the annealing step after sputtering.
+- [Arrandee - $139.79](https://www.arrandee.com)
+- [MSE Supplies - $299.95](https://www.msesupplies.com/products/platypus-high-quality-gold-au-thin-films-on-substrates)
+- [Ted Pella - $147.40](https://www.tedpella.com/vacuum_html/Substrates_Supports_Wafers_Slides.aspx#_16012_G)
