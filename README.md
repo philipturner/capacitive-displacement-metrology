@@ -522,7 +522,7 @@ A couple of questions (but not all):
 
 24 V * 80 pm/V * 6 = 11.52 nm
 
-I could speed up progress by ordering the AH2550 now, and testing the first LiNbO3 piezo stack with low voltage. The metrology junction should be capable of both shear and longitudinal piezo types. Alternatively, ThorLabs sells [single shear piezos](https://www.thorlabs.com/low-voltage-shear-piezoelectric-chips-and-stacks) for ~$90. This cost pales in comparison to the AH2550 (~$1,000).
+I could speed up progress by ordering the AH2550 now, and testing the first LiNbO3 piezo stack with low voltage. The metrology junction should be capable of both shear and longitudinal piezo types. Alternatively, ThorLabs sells [single shear piezos](https://www.thorlabs.com/low-voltage-shear-piezoelectric-chips-and-stacks) for \~$90. This cost pales in comparison to the AH2550 (\~$1,000).
 
 This product has the same physical dimensions as a 5 mm x 5 mm x 0.5 mm LiNbO3 piezo plate. It has a piezo constant of 2.00&ndash;3.25 nm/V, depending on hysteresis and creep. Compare that to a stack of six LiNbO3 plates, at 0.48 nm/V.
 
