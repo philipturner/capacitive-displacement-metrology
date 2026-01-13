@@ -563,3 +563,5 @@ I just got some leads on lower-cost alternatives to $2500 and $3000 costs for pr
 - [Arrandee - $139.79](https://www.arrandee.com)
 - [MSE Supplies - $299.95](https://www.msesupplies.com/products/platypus-high-quality-gold-au-thin-films-on-substrates)
 - [Ted Pella - $147.40](https://www.tedpella.com/vacuum_html/Substrates_Supports_Wafers_Slides.aspx#_16012_G)
+
+I'm still trying to stay on good terms with Wolkow. It's just, all the economic motivations require that I act in my own interests. I wish him the best of luck in proliferating creepless SPMs, but his products have insufficient specifications for my research. That's why I need an open source design.
