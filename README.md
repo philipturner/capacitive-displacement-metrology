@@ -18,6 +18,7 @@ Table of Contents:
 - [January 8, 2026](#january-8-2026)
 - [January 9, 2026](#january-9-2026)
 - [January 12, 2026](#january-12-2026)
+- [January 13, 2026](#january-13-2026)
 
 ## December 15, 2025
 
@@ -507,3 +508,7 @@ I will likely need to test a few permutations of the design IRL, to calibrate th
 I can also run FEM simulations with Elmer in FreeCAD. Use [FEM EquationMagnetodynamic](https://wiki.freecad.org/FEM_EquationMagnetodynamic) and calculate nodal forces. Also, valuable statement from the FreeCAD docs:
 
 > Despite the name, the Magnetodynamic equation can be used to perform magnetostatic analyses.
+
+## January 13, 2026
+
+I now need to embark on a difficult task: specify the core mechanical layout of the metrology junction. But before that, I would like to read up more on epoxy. Specify how LiNbO3 piezo stacks would be fabricated.
