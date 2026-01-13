@@ -517,3 +517,42 @@ A couple of questions (but not all):
 - What temperature is epoxy baked at?
 - Are rough or smooth substrate surfaces best for applying epoxy?
 - How much does UHV-quality epoxy cost?
+
+---
+
+24 V * 80 pm/V * 6 = 11.52 nm
+
+I could speed up progress by ordering the AH2550 now, and testing the first LiNbO3 piezo stack with low voltage. The metrology junction should be capable of both shear and longitudinal piezo types. Alternatively, ThorLabs sells [single shear piezos](https://www.thorlabs.com/low-voltage-shear-piezoelectric-chips-and-stacks) for ~$90. This cost pales in comparison to the AH2550 (~$1,000).
+
+This product has the same physical dimensions as a 5 mm x 5 mm x 0.5 mm LiNbO3 piezo plate. It has a piezo constant of 2.00&ndash;3.25 nm/V, depending on hysteresis and creep. Compare that to a stack of six LiNbO3 plates, at 0.48 nm/V.
+
+Two derisking notes:
+- Consider buying an extra pack of ten 5 mm x 5 mm plates from Crystal Substrates. If the experiment with 6 plates fails, I will barely have any backup. And the 3 week lead time is concerning. Alternatively, use 4 plates (just 7.68 nm displacement) for this experiment.
+- To do due diligence in saving time, ask whether ThorLabs could contract out the labor and equipment for bonding plates with epoxy. If their lead times are as ridiculous as Boston Piezo Optics (6&ndash;8 weeks), fabricate the piezo stacks in-house.
+
+Jumping directly to using AH2550, instead of designing a PCB with AD7745, will save much time. Another time saver is trying the DAC81401 with hand-soldering, just higher tip temperatures this time. Design the circuit to easily swap in up to 10 trial boards for the DAC. No need for the complexity of solder paste and reflow ovens yet.
+
+Perhaps, with the type of displacements involved, we don't even need the DAC. Just a battery with a multimeter checking the exact voltage. But we are building hardware infrastructure for the kinematic mount in Phase I and II. That will require programmable, controlled waveforms amplifying the DAC8140x output to the PA95. It's better to not cut corners, and to also fix the problems causing DAC failure in Phase 0.1.
+
+| Function | Cheap Option | Expensive Option |
+| -------- | ------------ | ---------------- |
+| power supply | 9V batteries, ±18&ndash;22 V regulators | Matsusada ±650 V power solution |
+| DAC      | DAC81401, ±12&ndash;20 V | PA95, amplify ±20 V to ±425 V |
+| ADC      | ADS8699        | oscilloscope |
+| capacitance sensor | AD7745 | AH2550 |
+
+_By switching to the expensive options, the number of TSSOPs on a custom PCB is reduced. That reduces the need for reflow soldering, and reduces design cost of PCB layout._
+
+24 V regulators may be a more expensive product grade than 18 V regulators. The DAC81401 cannot operate with 48 V across its power terminals; only 44 V absolute maximum, 43 V recommended. In the Art of Electronics, one possibility is adjustable regulators like LM317, except rated for higher voltage.
+
+Another option is, in the final design, amplify ±12 V to ±425 V. That would be a gain factor of 35.4 instead of 21.3. The example circuit on the PA95 datasheet has 100x gain and a 10 pF compensation capacitor. With a 4.7 pF capacitor, the gain-bandwidth tradeoff sets a maximum bandwidth of 100 kHz at 100x gain. But this curve is just for small signals and calculating loop stability. At large signals, a 4.7 pF capacitor limits the frequency to 15 kHz for 850 Vpp swings.
+
+I think there is enough product selection, as least for adjustable LM317-style regulators, to have 36 V input and 21.5 V output of both polarities. At least for this experiment in the low-voltage regime, I would prefer ±20 V instead of ±12 V. Maximum piezo stacks should be 4 plates, at least for now because of limited stock. In the future, a full kinematic mount and multiple fine axes will require more orders from Crystal Substrates. At that point, I will consider 6 plates to maximize range.
+
+| Actuator | Piezo Constant | Range |
+| -------- | -------------- | ----- |
+| ThorLabs shear plate | 2.00 nm/V | 80.0 nm |
+| single LiNbO3 plate | 0.08 nm/V | 3.2 nm |
+| four LiNbO3 plates | 0.32 nm/V | 12.8 nm |
+
+_Displacements of various actuators accessible with 40 Vpp and existing stock of LiNbO3 plates. In the Islam and Beamish papers, sensor resolution was 0.1 nm with 4 seconds of averaging time._
