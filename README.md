@@ -550,7 +550,7 @@ Another option is, in the final design, amplify ±12 V to ±425 V. That would be
 I think there is enough product selection, as least for adjustable LM317-style regulators, to have 36 V input and 21.5 V output of both polarities. At least for this experiment in the low-voltage regime, I would prefer ±20 V instead of ±12 V. Maximum piezo stacks should be 4 plates, at least for now because of limited stock. In the future, a full kinematic mount and multiple fine axes will require more orders from Crystal Substrates. At that point, I will consider 6 plates to maximize range.
 
 | Actuator | Piezo Constant | Range |
-| -------- | -------------- | ----- |
+| -------- | -------------: | ----: |
 | ThorLabs shear plate | 2.00 nm/V | 80.0 nm |
 | single LiNbO3 plate | 0.08 nm/V | 3.2 nm |
 | four LiNbO3 plates | 0.32 nm/V | 12.8 nm |
