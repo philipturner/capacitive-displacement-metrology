@@ -512,3 +512,8 @@ I can also run FEM simulations with Elmer in FreeCAD. Use [FEM EquationMagnetody
 ## January 13, 2026
 
 I now need to embark on a difficult task: specify the core mechanical layout of the metrology junction. But before that, I would like to read up more on epoxy. Specify how LiNbO3 piezo stacks would be fabricated.
+
+A couple of questions (but not all):
+- What temperature is epoxy baked at?
+- Are rough or smooth substrate surfaces best for applying epoxy?
+- How much does UHV-quality epoxy cost?
