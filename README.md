@@ -19,6 +19,7 @@ Table of Contents:
 - [January 9, 2026](#january-9-2026)
 - [January 12, 2026](#january-12-2026)
 - [January 13, 2026](#january-13-2026)
+- [January 14, 2026](#january-14-2026)
 
 ## December 15, 2025
 
@@ -565,3 +566,10 @@ I just got some leads on lower-cost alternatives to $2500 and $3000 costs for pr
 - [Ted Pella - $147.40](https://www.tedpella.com/vacuum_html/Substrates_Supports_Wafers_Slides.aspx#_16012_G)
 
 I'm still trying to stay on good terms with Wolkow. It's just, all the economic motivations require that I act in my own interests. I wish him the best of luck in proliferating creepless SPMs, but his products have insufficient specifications for my research. That's why I need an open source design.
+
+## January 14, 2026
+
+Today's discoveries:
+- Use a Controleo3 reflow oven to cure the epoxy at 120°C
+- Best if a compact 3D-printed or similar isolator is used, rather than a bulky table like the OpenSTM design. Keep the same height dimension, just shrink the lateral dimensions.
+- By averaging several samples each at 9.1 Hz, it might be possible to vastly surpass the ~25 aF six-sigma noise of the AD7745
