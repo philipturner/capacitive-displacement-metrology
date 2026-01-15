@@ -620,3 +620,26 @@ Regarding DAC power consumption, the PA95 datasheet shows 100 kΩ as the larger 
 | 28 kΩ          | 1 MΩ           | ±0.43 mA |  ±1.28 mA |
 
 These currents are less than the ±15 mA drive capability of the DAC81404. We do not know whether this spec applies to each DAC channel individually, or the sum of all currents exiting the chip at any moment. Allowing ±45 mA out of the chip would actually not approach any limitation for the regulator. Phase 0.1 used LM78/LM79 instead of LM78L/LM79L. These support up to 1.5 A of current.
+
+---
+
+Other design simplifications today:
+- Use just the 100 MΩ TIA instead of the 330 MΩ TIA. We are not working with extremely low currents like the Si + Si junction, which doesn't even show a detectable current at standard biases of 1 V. We are performing STM on conductors, not insulators. Typical currents are in the nanoamps.
+- Use v<sub>bias</sub> only and not v<sub>comp</sub>. Even through Phase III, it's advantageous to avoid liquid nitrogen if possible. Bubbles in the evaporating liquid may cause vibrations, which require an internal isolator inside the UHV chamber. Cryo also may prevent optically guided tip approach. No need to test possibilities for capacitance sensing to improve usability of coarse tip approach, in the absence of optical guidance.
+- The kinematic mount should also serve as the fine Z axis. If there are backlash problems (the simulations suggest so), just halve the range of the step from 408 nm to 204 nm. We can finally afford this because the range is now so large. And there's a very high chance someone got it working with 80 nm range.
+
+There will be just one DAC chip, the DAC81401. Three of its ±12 V outputs will go to the three PA95 instances for later phases of the roadmap. The fourth output is the piezo control voltage in Phase 0.2, and the bias voltage in Phase II. Phase I just uses the first of the lines designated for PA95.
+
+| Signal | Chip | Teensy Port |
+| ------ | ---- | ----------- |
+| fine X, 10 mm plates  | DAC81404 port 1 + PA95 | SPI0 |
+| fine Y, 10 mm plates  | DAC81404 port 2 + PA95 | SPI0 |
+| coarse Z, 5 mm plates | DAC81404 port 3 + PA95 | SPI0 |
+| Phase 0.2 / v<sub>bias</sub> | DAC81404 port 4 | SPI0 |
+| current | OPA828 + ADS8699 | SPI1 |
+| capacitance | AD7745 | I2C |
+
+We will assemble the board with reflow soldering, in the Controleo3 oven that also bakes epoxy. We will not engineer detachable PCBs just for failed DACs. <b>That drastically worsens design cost.</b> Instead, we will:
+- Follow standard procedures for bypass capacitors and ESD mitigation. Use 0.1 μF + 10 μF, not 1 μF for the DAC. ADC will still use 1 μF + 10 μF.
+- Use higher yield techniques: reflow soldering primarily, then higher tip temperature for hand soldering
+- Order 5 spare chips for TSSOPs/QFNs and 5&ndash;6 copies of the PCB. We have the funds, and ~$252 extra here pales in comparison to ~$2500 for the commercial E-boxes.
