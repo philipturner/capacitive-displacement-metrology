@@ -20,6 +20,7 @@ Table of Contents:
 - [January 12, 2026](#january-12-2026)
 - [January 13, 2026](#january-13-2026)
 - [January 14, 2026](#january-14-2026)
+- [January 15, 2026](#january-15-2026)
 
 ## December 15, 2025
 
@@ -573,3 +574,49 @@ Today's discoveries:
 - Use a Controleo3 reflow oven to cure the epoxy at 120°C
 - Best if a compact 3D-printed or similar isolator is used, rather than a bulky table like the OpenSTM design. Keep the same height dimension, just shrink the lateral dimensions.
 - By averaging several samples each at 9.1 Hz, it might be possible to vastly surpass the ~25 aF six-sigma noise of the AD7745
+
+## January 15, 2026
+
+Instead of 9V batteries, I should try sourcing the ±21.5 V and ±15 V linear regulators from a commercial "power box". The box(es) rely on residential AC power and output a bipolar ±30 V. Through a chain of low-voltage regulators, this box also supplies +5 V and +3.3 V for digital circuitry in the data converters. Altogether, the power module should not cost more than $100. I would like it to be cheap.
+
+To run the DAC81404 at ±20 V output, tolerance from the linear regulator is razor thin. Recommended maximum and amount of power supply footroom is 1.5 V. Absolute maximum is 2.0 V. I will need to run the math on tolerances for LM337-style regulators. Even 2% off from 21.5 is 21.0 or 22.0. The reference voltage of the LM337 can vary ±4%. We will need trimming potentiometers.
+
+It looks much simpler to take the range reduction of ±20 V -> ±12 V. The plan is to recycle this one PCB for Phase 0.2, I, and II. In later phases, we only need ±12 V for bias voltage, and the increased gain of 20x -> 35x for PA95 is acceptable. Design cost and usability issues are lower, if a single ±15 V regulator supplies both the DAC and TIA. Even if a separate regulator supplies the DAC vs. TIA, the advantage is clear.
+
+---
+
+Phase 0.2 hinges on using averaging over multiple data samples, to drastically improve the resolution of the AD7745. Here are the multiplicative factors:
+- Taking ~100 samples at ~10 Hz, reduce 6σ noise from 25.5 aF to 2.67 aF. Compare that to 1.3 aF from the Islam and Beamish paper, and the 0.8 aF limit for AH2550A. <b>10.0x</b>
+- One vs. four LiNbO3 plates: <b>4.0x</b>
+- 24 V vs. 40 V range: <b>1.67x</b>
+- Orienting plates along the 32° shear direction: <b>1.17x</b>
+
+Let's examine this, starting with a single LiNbO3 plate, not aligned at any angle, and no improvements stated above. 68 pm/V * 24 V = <b>1.63 nm</b>. 25.5 aF * (1 nm / 13 aF) = <b>1.96 nm</b>.
+
+Now, just examine the improvement from averaging 100 samples for 10.0 seconds. 2.67 aF * (1 nm / 13 aF) = <b>0.21 nm</b>. The displacement is now vastly within resolution of the sensor.
+
+Instead, consider only improving the state of a single LiNbO3 plate. 80 pm/V * 40 V = <b>3.20 nm</b>.
+
+Finally, consider only changing the number of plates. 4 * 68 pm/V * 24 V = <b>6.53 nm</b>.
+
+|               | Piezo Range | Sensor Noise Envelope |
+| ------------- | ----------: | --------------------: |
+| Original      | 1.63 nm     | 1.96 nm               |
+| Improvement 1 | 1.63 nm     | 0.21 nm               |
+| Improvement 2 | 3.20 nm     | 1.96 nm               |
+| Improvement 3 | 6.53 nm     | 1.96 nm               |
+
+Both Improvement 1 and Improvement 3 make me highly confident the metrology can work. Improvement 2 could make-or-break the results, but is very close to the margin of error for theoretical calculations.
+
+We can choose to use the lower voltages of ±12 V, supplies by fixed ±15 V regulators.
+
+---
+
+Regarding DAC power consumption, the PA95 datasheet shows 100 kΩ as the larger resistance of an inverting amplifier example. The datasheet also mentions 1 MΩ being an acceptable feedback resistor. With 0.2&ndash;0.5 pF parasitic capacitance, the R<sub>f</sub>C<sub>f</sub> pole would be 318&ndash;796 kHz.
+
+| Small Resistor | Large Resistor | Current | Current x3 |
+| -------------: | -------------: | ------: | ---------: |
+| 2.8 kΩ         | 100 kΩ         | ±4.25 mA | ±12.75 mA |
+| 28 kΩ          | 1 MΩ           | ±0.43 mA |  ±1.28 mA |
+
+These currents are less than the ±15 mA drive capability of the DAC81404. We do not know whether this spec applies to each DAC channel individually, or the sum of all currents exiting the chip at any moment. Allowing ±45 mA out of the chip would actually not approach any limitation for the regulator. Phase 0.1 used LM78/LM79 instead of LM78L/LM79L. These support up to 1.5 A of current.
