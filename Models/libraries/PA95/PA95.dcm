@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP PA95
+D 900V, 1.6mA Power Amplifier with Low Standby Current, High voltage  900V (+/-450V), Low quiescent current  1.6mA, High output current  100mA continuous, 200mA PEAK.
+K
+F https://www.apexanalog.com/resources/products/pa95u.pdf
+$ENDCMP
+#
+#End Doc Library
