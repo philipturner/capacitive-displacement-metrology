@@ -648,5 +648,3 @@ We will assemble the board with reflow soldering, in the Controleo3 oven that al
 ## January 16, 2026
 
 Two of these for Phase 0.2: https://www.amazon.com/Tekpower-TP3005T-Variable-Linear-Alligator/dp/B00ZBCLJSY
-
-Also need handheld multimeter capable of 900 V or 1300 V differentials, for Phase I.
