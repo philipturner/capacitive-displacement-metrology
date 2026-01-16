@@ -21,6 +21,7 @@ Table of Contents:
 - [January 13, 2026](#january-13-2026)
 - [January 14, 2026](#january-14-2026)
 - [January 15, 2026](#january-15-2026)
+- [January 16, 2026](#january-16-2026)
 
 ## December 15, 2025
 
@@ -643,3 +644,9 @@ We will assemble the board with reflow soldering, in the Controleo3 oven that al
 - Follow standard procedures for bypass capacitors and ESD mitigation. Use 0.1 μF + 10 μF, not 1 μF for the DAC. ADC will still use 1 μF + 10 μF.
 - Use higher yield techniques: reflow soldering primarily, then higher tip temperature for hand soldering
 - Order 5 spare chips for TSSOPs/QFNs and 5&ndash;6 copies of the PCB. We have the funds, and ~$252 extra here pales in comparison to ~$2500 for the commercial E-boxes.
+
+## January 16, 2026
+
+Two of these for Phase 0.2: https://www.amazon.com/Tekpower-TP3005T-Variable-Linear-Alligator/dp/B00ZBCLJSY
+
+Also need handheld multimeter capable of 900 V or 1300 V differentials, for Phase I.
