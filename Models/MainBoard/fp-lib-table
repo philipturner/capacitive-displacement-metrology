@@ -4,4 +4,5 @@
   (lib (name "IC")(type "KiCad")(uri "/Users/philipturner/Documents/STM/capacitive-displacement-metrology/Models/libraries/IC.pretty")(options "")(descr ""))
   (lib (name "ThreeTerminal")(type "KiCad")(uri "/Users/philipturner/Documents/STM/capacitive-displacement-metrology/Models/libraries/ThreeTerminal.pretty")(options "")(descr ""))
   (lib (name "TwoTerminal")(type "KiCad")(uri "/Users/philipturner/Documents/STM/capacitive-displacement-metrology/Models/libraries/TwoTerminal.pretty")(options "")(descr ""))
+  (lib (name "DAC81404")(type "KiCad")(uri "/Users/philipturner/Documents/STM/capacitive-displacement-metrology/Models/libraries/DAC81404/footprints.pretty")(options "")(descr ""))
 )

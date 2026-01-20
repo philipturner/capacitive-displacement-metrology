@@ -7,4 +7,5 @@
   (lib (name "OPA828")(type "KiCad")(uri "/Users/philipturner/Documents/STM/capacitive-displacement-metrology/Models/libraries/OPA828/2025-08-05_18-19-05.kicad_sym")(options "")(descr ""))
   (lib (name "teensy")(type "KiCad")(uri "/Users/philipturner/Documents/STM/capacitive-displacement-metrology/Models/libraries/teensy/teensy.kicad_sym")(options "")(descr ""))
   (lib (name "PA95")(type "KiCad")(uri "/Users/philipturner/Documents/STM/capacitive-displacement-metrology/Models/libraries/PA95/PA95.kicad_sym")(options "")(descr ""))
+  (lib (name "DAC81404")(type "KiCad")(uri "/Users/philipturner/Documents/STM/capacitive-displacement-metrology/Models/libraries/DAC81404/2026-01-20_19-22-06.kicad_sym")(options "")(descr ""))
 )

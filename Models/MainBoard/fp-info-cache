@@ -1,4 +1,4 @@
-25992156276375303
+26001001744285313
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -57511,6 +57511,34 @@ ceramic
 0
 3
 3
+DAC81404
+RHB0032E-IPC_A
+
+DAC81404RHBR 
+0
+33
+33
+DAC81404
+RHB0032E-IPC_B
+
+DAC81404RHBR 
+0
+33
+33
+DAC81404
+RHB0032E-IPC_C
+
+DAC81404RHBR 
+0
+33
+33
+DAC81404
+RHB0032E-MFG
+
+DAC81404RHBR 
+0
+38
+38
 Diode_SMD
 D_0201_0603Metric
 Diode SMD 0201 (0603 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: https://www.vishay.com/docs/20052/crcw0201e3.pdf), generated with kicad-footprint-generator
@@ -60830,13 +60858,6 @@ heatsink
 0
 0
 IC
-ISO7641FM
-
-
-0
-16
-16
-IC
 PA95
 
 
@@ -60851,12 +60872,26 @@ SOIC-8
 8
 8
 IC
+SOIC-16-Wide
+
+
+0
+16
+16
+IC
 TSSOP-16
 
 
 0
 16
 16
+IC
+VQFN-32
+
+
+0
+38
+33
 Inductor_SMD
 L_6.3x6.3_H3
 Choke, SMD, 6.3x6.3mm 3mm height

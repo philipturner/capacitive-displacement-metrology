@@ -1,4 +1,4 @@
-(footprint "ISO7641FM"
+(footprint "SOIC-16-Wide"
 	(version 20241229)
 	(generator "pcbnew")
 	(generator_version "9.0")
@@ -15,7 +15,7 @@
 			)
 		)
 	)
-	(property "Value" "ISO7641FM"
+	(property "Value" "SOIC-16-Wide"
 		(at -0.0325 -5.0225 0)
 		(unlocked yes)
 		(layer "F.Fab")
