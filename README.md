@@ -22,6 +22,7 @@ Table of Contents:
 - [January 14, 2026](#january-14-2026)
 - [January 15, 2026](#january-15-2026)
 - [January 16, 2026](#january-16-2026)
+- [January 20, 2026](#january-20-2026)
 
 ## December 15, 2025
 
@@ -648,3 +649,9 @@ We will assemble the board with reflow soldering, in the Controleo3 oven that al
 ## January 16, 2026
 
 Two of these for Phase 0.2: https://www.amazon.com/Tekpower-TP3005T-Variable-Linear-Alligator/dp/B00ZBCLJSY
+
+## January 20, 2026
+
+I should use FreeCAD to create a professional, computer-generated technical drawing of my desired chamfer for LiNbO3 plates.
+
+I can use these openly available dimensions to model the 650 V power supplies in FreeCAD: https://www.manualslib.com/manual/2615215/Matsusada-R4g-Series.html?page=18#manual
