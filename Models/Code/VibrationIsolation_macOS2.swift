@@ -152,7 +152,7 @@ func complexAmplitudes(
 // (frequency domain). Does not alter the units for acceleration.
 func noiseSpectralDensity(
   _ sequence: [SIMD4<Double>]
-) -> [SIMD4<Float>] {
+) -> [SIMD4<Double>] {
   let originalSize = UInt32(sequence.count)
   let truncatedSize = truncateToDivisibleSize(originalSize)
   
@@ -173,16 +173,16 @@ func noiseSpectralDensity(
   let amplitudeY = transformToFourier(laneID: 2)
   let amplitudeZ = transformToFourier(laneID: 3)
   
-  var output: [SIMD4<Float>] = []
+  var output: [SIMD4<Double>] = []
   for k in 0..<truncatedSize {
-    let Δt = 1 / Float(samplingRate)
-    let f = Float(k) / (Float(truncatedSize) * Δt)
+    let Δt = 1 / Double(samplingRate)
+    let f = Double(k) / (Double(truncatedSize) * Δt)
     
-    let coefficient = ((Δt * Δt) / (Float(truncatedSize) * Δt)).squareRoot()
-    let amplitudes = SIMD3<Float>(
+    let coefficient = ((Δt * Δt) / (Double(truncatedSize) * Δt)).squareRoot()
+    let amplitudes = SIMD3<Double>(SIMD3<Float>(
       amplitudeX[Int(k)],
       amplitudeY[Int(k)],
-      amplitudeZ[Int(k)])
+      amplitudeZ[Int(k)]))
     let dataPoint = SIMD4(
       f,
       coefficient * amplitudes[0],
@@ -677,14 +677,113 @@ func createFourChannelData() -> [SIMD4<Double>] {
   return output
 }
 
-let fourChannelData = createFourChannelData()
-let nsd = noiseSpectralDensity(fourChannelData)
-print("sample count =", nsd.count)
-print("df =", Float(8000) / Float(nsd.count))
-for i in nsd.indices {
-  let dataPoint = SIMD4<Float>(nsd[i])
-  print(i, dataPoint[0], dataPoint[1], dataPoint[2], dataPoint[3])
+// Add negative frequencies to positive frequencies, reduce size of dataset.
+func correct(nsd: [SIMD4<Double>]) -> [SIMD4<Double>] {
+  var output: [SIMD4<Double>] = []
+  output.append(nsd[0])
+  
+  for i in 1..<(nsd.count / 2) {
+    var dataPoint = nsd[i]
+    dataPoint[1] *= 2
+    dataPoint[2] *= 2
+    output.append(dataPoint)
+  }
+  output.append(nsd[nsd.count / 2])
+  return output
 }
+
+let fourChannelData = createFourChannelData()
+let original_nsd = noiseSpectralDensity(fourChannelData)
+let new_nsd = correct(nsd: original_nsd)
+
+print("original count =", original_nsd.count)
+print("new count =", new_nsd.count)
+print("df =", Float(8000) / Float(original_nsd.count))
+
+//print()
+//print(original_nsd[0])
+//print(original_nsd[1])
+//print(original_nsd[2])
+//print(original_nsd[3])
+//print(original_nsd[81920 - 1])
+//print(original_nsd[81920])
+//print(original_nsd[81920 + 1])
+//print(original_nsd[163840 - 3])
+//print(original_nsd[163840 - 2])
+//print(original_nsd[163840 - 1])
+//print()
+//print(new_nsd[0])
+//print(new_nsd[1])
+//print(new_nsd[2])
+//print(new_nsd[3])
+//print(new_nsd[81920 - 1])
+//print(new_nsd[81920])
 
 // Next, average a sub-range, where different parts of the logarithmic scale
 // Get different treatments. Include 'df' as the 4th lane of the vector.
+func compressedData(
+  original: [SIMD4<Double>],
+  original_df: Double,
+  range: Range<Int>,
+  ratio: Int
+) -> [SIMD4<Double>] {
+  guard range.count % ratio == 0 else {
+    fatalError("Range size was not divisible by ratio.")
+  }
+  
+  var output: [SIMD4<Double>] = []
+  for outputPointID in 0..<range.count / ratio {
+    let baseInputPointID = range.first! + outputPointID * ratio
+    let endInputPointID = baseInputPointID + ratio
+    
+    var accumulator: SIMD2<Double> = .zero
+    for inputPointID in baseInputPointID..<endInputPointID {
+      let inputPoint = original[inputPointID]
+      accumulator[0] += inputPoint[1]
+      accumulator[1] += inputPoint[2]
+    }
+    accumulator /= Double(ratio)
+    
+    let startPoint = original[baseInputPointID]
+    let startFrequency = startPoint[0]
+    
+    let outputPoint = SIMD4<Double>(
+      startFrequency,
+      accumulator[0],
+      accumulator[1],
+      original_df * Double(ratio))
+    output.append(outputPoint)
+  }
+  return output
+}
+
+
+guard original_nsd.count == 163840 else {
+  fatalError("Unexpected sample count.")
+}
+guard new_nsd.count == 81921 else {
+  fatalError("Unexpected sample count.")
+}
+
+
+func _compressedData(range: Range<Int>, ratio: Int) -> [SIMD4<Double>] {
+  compressedData(
+    original: new_nsd,
+    original_df: Double(samplingRate) / Double(original_nsd.count),
+    range: range,
+    ratio: ratio)
+}
+
+var output: [SIMD4<Double>] = []
+output += _compressedData(range: 0..<256, ratio: 1)
+output += _compressedData(range: 256..<512, ratio: 2)
+output += _compressedData(range: 512..<1024, ratio: 4)
+output += _compressedData(range: 1024..<2048, ratio: 8)
+output += _compressedData(range: 2048..<4096, ratio: 16)
+output += _compressedData(range: 4096..<8192, ratio: 32)
+output += _compressedData(range: 8192..<(1 << 14), ratio: 64)
+output += _compressedData(range: (1 << 14)..<(1 << 15), ratio: 128)
+output += _compressedData(range: (1 << 15)..<81920, ratio: 384)
+output.append(new_nsd[81920])
+
+print(output.count)
