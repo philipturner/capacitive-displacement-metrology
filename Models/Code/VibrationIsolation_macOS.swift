@@ -904,6 +904,8 @@ func negativeStiffness(ω: Float) -> Float {
 
 // MARK: - Scripting
 
+// TODO: Remember to save progress to repo
+
 // TODO: Compare these two data sets:
 // - https://github.com/Digiducer/matlab/blob/master/TMS%20Digital%20Audio%20Matlab%20Examples.pdf
 // - https://docs.google.com/spreadsheets/d/176Aklm0jmut0bbd_DLOGd5mFAoFTXh9oIp-u1CQBKbU/edit?gid=1708820223#gid=1708820223
@@ -911,7 +913,6 @@ func negativeStiffness(ω: Float) -> Float {
 // Low-pass filters:
 // - negativeStiffness
 // - springSuspensionVoigtlander (1 Hz, 2nd-order, Q = 5)
-// - airTable (1.7 Hz, 2nd-order, Q = variable)
 // - twoStageSpringSuspension (2.4 Hz, 4th-order, Q = TBD)
 // - springEddyCurrent (3 Hz, 2nd-order, Q = 3)
 // - rubberPads (5 Hz, 2nd-order, Q = 15)
@@ -919,7 +920,27 @@ func negativeStiffness(ω: Float) -> Float {
 // - eightStage220Hz (92 Hz, 16th-order, Q = undefined)
 // - eightStage700Hz (295 Hz, 16th-order, Q = undefined)
 //
+// Air table:
+// - airTable (1.7 Hz, 2nd-order, Q = 0.5)
+// - airTable (1.7 Hz, 2nd-order, Q = 1)
+// - airTable (1.7 Hz, 2nd-order, Q = 3)
+// - airTable (1.7 Hz, 2nd-order, Q = 10)
+// - airTable (1.7 Hz, 2nd-order, Q = 30)
+//
 // High-pass filters:
 // - microscopeVoigtlander (1 kHz, 2nd-order, Q = 1000)
 // - typicalStructure (3 kHz, 2nd-order, Q = 30)
-// - bestPiezoCeramic (100 kHz, 2nd-order, Q = 100)
+
+func transferFunction(ω: Float) -> Float {
+  return typicalStructure(ω: ω)
+}
+
+// Displaying data at 20 points/decade
+// 0.1 Hz to 10 kHz
+for pointID in (-1 * 20)...(4 * 20) {
+  let frequency = pow(10, Float(pointID) / 20)
+  
+  let ω = frequency * (2 * Float.pi)
+  let output = transferFunction(ω: ω)
+  print(output)
+}
