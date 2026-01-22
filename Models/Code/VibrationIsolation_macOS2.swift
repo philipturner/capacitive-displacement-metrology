@@ -787,3 +787,7 @@ output += _compressedData(range: (1 << 15)..<81920, ratio: 384)
 output.append(new_nsd[81920])
 
 print(output.count)
+
+for element in output {
+  print(element[0], element[3], element[1], element[2])
+}
