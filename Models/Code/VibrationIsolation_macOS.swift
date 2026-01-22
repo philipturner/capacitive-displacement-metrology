@@ -928,7 +928,7 @@ func negativeStiffness(ω: Float) -> Float {
 // - airTable (1.7 Hz, 2nd-order, Q = 30)
 //
 // High-pass filters:
-// - microscopeVoigtlander (1 kHz, 2nd-order, Q = 1000)
+// - microscopeVoigtlander (1 kHz, 2nd-order, Q = 100)
 // - typicalStructure (3 kHz, 2nd-order, Q = 30)
 
 func transferFunction(ω: Float) -> Float {
