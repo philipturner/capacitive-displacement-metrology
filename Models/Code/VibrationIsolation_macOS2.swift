@@ -9,180 +9,7 @@ import Accelerate.vecLib
 import AVFAudio
 import ComplexModule
 
-let samplingRate: Int = 512
-
-// Prints a table to the console, which characterizes the position noise.
-// - sequence: raw accelerations (in m/s^2) from the accelerometer
-func reportTable(
-  sequence: [SIMD4<Double>],
-  transferFunction: (Float) -> Float
-) {
-  let accelerationNSD_original = noiseSpectralDensity(sequence)
-  let startingPoint = extrapolationStartingPoint(accelerationNSD_original)
-  
-  // Utility that applies the transfer function.
-  func applyTransferFunction(
-    frequencyDomainSequence: [SIMD4<Float>]
-  ) -> [SIMD4<Float>] {
-    var output: [SIMD4<Float>] = []
-    for inputDataPoint in frequencyDomainSequence {
-      let frequency = inputDataPoint[0]
-      let inputXYZ = SIMD3(
-        inputDataPoint[1],
-        inputDataPoint[2],
-        inputDataPoint[3])
-      
-      // Multiply by the transfer function.
-      let gainValue = transferFunction(frequency)
-      let outputXYZ = inputXYZ * gainValue
-      let outputDataPoint = SIMD4(
-        frequency,
-        outputXYZ[0],
-        outputXYZ[1],
-        outputXYZ[2])
-      output.append(outputDataPoint)
-    }
-    return output
-  }
-  
-  // Add whitespace to separate the table from preceding text.
-  print()
-  
-  // Add the rows for extrapolation.
-  let powers: [Float] = [-0.5, -1.0, -1.5, -2.0, -2.5]
-  for power in powers {
-    // The nominal 'power' is for position. To find the power for acceleration,
-    // add two.
-    let accelerationPower = power + 2
-    let accelerationNSD_tail = extrapolation(
-      startingPoint: startingPoint, power: accelerationPower)
-    
-    // Apply the transfer function.
-    var accelerationNSD = accelerationNSD_original + accelerationNSD_tail
-    accelerationNSD = applyTransferFunction(
-      frequencyDomainSequence: accelerationNSD)
-    
-    // Display the table row.
-    let powerRepr = String(format: "%.1f", power)
-    let row = tableRow(accelerationNSD: accelerationNSD)
-    print("x = f^\(powerRepr)       | \(row)")
-  }
-  
-  // Add the row for without extrapolation.
-  do {
-    // Apply the transfer function.
-    var accelerationNSD = accelerationNSD_original
-    accelerationNSD = applyTransferFunction(
-      frequencyDomainSequence: accelerationNSD)
-    
-    // Display the table row.
-    let row = tableRow(accelerationNSD: accelerationNSD)
-    print("no extrapolation | \(row)")
-  }
-  
-  // Add the row for exact quantities.
-  do {
-    let acceleration3D = trueNoiseEnvelope(
-      timeDomainSequence: sequence)
-    let acceleration1D = (acceleration3D * acceleration3D).sum().squareRoot()
-    let a = "\(format(distance: acceleration1D / 1e6))/ms^2"
-    print("exact            |          |             | \(a)")
-  }
-}
-
-// Utility function for getting just the f^-2.0 row of the table.
-//
-// Input:
-// - sequence: absolute acceleration over time, in SI units
-// - transfer function: accepts frequency in units of Hz
-//
-// Returns:
-// - vector lane 0: position noise, in SI units
-// - vector lane 1: position noise, in SI units
-func noiseInverseSquareScaling(
-  sequence: [SIMD4<Double>],
-  transferFunction: (Float) -> Float
-) -> SIMD2<Float> {
-  let accelerationNSD_original = noiseSpectralDensity(sequence)
-  let startingPoint = extrapolationStartingPoint(accelerationNSD_original)
-  
-  // The nominal 'power' is for position. To find the power for acceleration,
-  // add two.
-  let power: Float = -2
-  let accelerationPower = power + 2
-  let accelerationNSD_tail = extrapolation(
-    startingPoint: startingPoint, power: accelerationPower)
-  
-  // Utility that applies the transfer function.
-  func applyTransferFunction(
-    frequencyDomainSequence: [SIMD4<Float>]
-  ) -> [SIMD4<Float>] {
-    var output: [SIMD4<Float>] = []
-    for inputDataPoint in frequencyDomainSequence {
-      let frequency = inputDataPoint[0]
-      let inputXYZ = SIMD3(
-        inputDataPoint[1],
-        inputDataPoint[2],
-        inputDataPoint[3])
-      
-      // Multiply by the transfer function.
-      let gainValue = transferFunction(frequency)
-      let outputXYZ = inputXYZ * gainValue
-      let outputDataPoint = SIMD4(
-        frequency,
-        outputXYZ[0],
-        outputXYZ[1],
-        outputXYZ[2])
-      output.append(outputDataPoint)
-    }
-    return output
-  }
-  
-  // Apply the transfer function.
-  var accelerationNSD = accelerationNSD_original + accelerationNSD_tail
-  accelerationNSD = applyTransferFunction(
-    frequencyDomainSequence: accelerationNSD)
-  
-  // Derive position and velocity from acceleration.
-  var positionNSD: [SIMD4<Float>] = []
-  var velocityNSD: [SIMD4<Float>] = []
-  for dataPoint in accelerationNSD {
-    let frequency = dataPoint[0]
-    let accelerationXYZ = SIMD3(
-      dataPoint[1],
-      dataPoint[2],
-      dataPoint[3])
-    
-    let ω = 2 * Float.pi * frequency
-    let velocityXYZ = accelerationXYZ / ω
-    let positionXYZ = accelerationXYZ / (ω * ω)
-    
-    let positionPoint = SIMD4(
-      frequency,
-      positionXYZ[0],
-      positionXYZ[1],
-      positionXYZ[2])
-    let velocityPoint = SIMD4(
-      frequency,
-      velocityXYZ[0],
-      velocityXYZ[1],
-      velocityXYZ[2])
-    positionNSD.append(positionPoint)
-    velocityNSD.append(velocityPoint)
-  }
-  
-  // Calculate all statistical quantities.
-  let position3D = integratedNoiseEnvelope(
-    frequencyDomainSequence: positionNSD)
-  let velocity3D = integratedNoiseEnvelope(
-    frequencyDomainSequence: velocityNSD)
-  
-  // Combine the X, Y, and Z noise with root-square summation.
-  let position1D = (position3D * position3D).sum().squareRoot()
-  let velocity1D = (velocity3D * velocity3D).sum().squareRoot()
-  
-  return SIMD2(position1D, velocity1D)
-}
+let samplingRate: Int = 8000
 
 // Utility function for integrating an arbitrary noise spectrum.
 func integratedNoiseEnvelope(
@@ -254,114 +81,6 @@ func trueNoiseEnvelope(
   // Calculate the standard deviation and the 6σ interval.
   let standardDeviation = variance.squareRoot()
   return 6 * standardDeviation
-}
-
-// Utility for formatting distance measurements.
-func format(distance: Float) -> String {
-  var unit: String
-  var number: Float
-  
-  // Pick the order of magnitude.
-  if distance < 999 * 1e-12 {
-    unit = "pm"
-    number = distance / 1e-12
-  } else if distance < 999 * 1e-9 {
-    unit = "nm"
-    number = distance / 1e-9
-  } else if distance < 999 * 1e-6 {
-    unit = "μm"
-    number = distance / 1e-6
-  } else if distance < 999 * 1e-3 {
-    unit = "mm"
-    number = distance / 1e-3
-  } else {
-    return " >1.0  m"
-  }
-  
-  // Pad the text to a fixed number of characters.
-  var formattedNumber = String(format: "%.1f", number)
-  while formattedNumber.count < 5 {
-    formattedNumber = " " + formattedNumber
-  }
-  
-  // Combine the numerical representation with the unit.
-  return formattedNumber + " " + unit
-}
-
-// Calculate and display the 0th, 1st and 2nd derivatives of position.
-func tableRow(accelerationNSD: [SIMD4<Float>]) -> String {
-  // Derive position and velocity from acceleration.
-  var positionNSD: [SIMD4<Float>] = []
-  var velocityNSD: [SIMD4<Float>] = []
-  for dataPoint in accelerationNSD {
-    let frequency = dataPoint[0]
-    let accelerationXYZ = SIMD3(
-      dataPoint[1],
-      dataPoint[2],
-      dataPoint[3])
-    
-    let ω = 2 * Float.pi * frequency
-    let velocityXYZ = accelerationXYZ / ω
-    let positionXYZ = accelerationXYZ / (ω * ω)
-    
-    let positionPoint = SIMD4(
-      frequency,
-      positionXYZ[0],
-      positionXYZ[1],
-      positionXYZ[2])
-    let velocityPoint = SIMD4(
-      frequency,
-      velocityXYZ[0],
-      velocityXYZ[1],
-      velocityXYZ[2])
-    positionNSD.append(positionPoint)
-    velocityNSD.append(velocityPoint)
-  }
-  
-  // Calculate all statistical quantities.
-  let position3D = integratedNoiseEnvelope(
-    frequencyDomainSequence: positionNSD)
-  let velocity3D = integratedNoiseEnvelope(
-    frequencyDomainSequence: velocityNSD)
-  let acceleration3D = integratedNoiseEnvelope(
-    frequencyDomainSequence: accelerationNSD)
-  
-  // Combine the X, Y, and Z noise with root-square summation.
-  let position1D = (position3D * position3D).sum().squareRoot()
-  let velocity1D = (velocity3D * velocity3D).sum().squareRoot()
-  let acceleration1D = (acceleration3D * acceleration3D).sum().squareRoot()
-  
-  // Display the table row.
-  let x = "\(format(distance: position1D))"
-  let v = "\(format(distance: velocity1D / 1e3))/ms"
-  let a = "\(format(distance: acceleration1D / 1e6))/ms^2"
-  return "\(x) | \(v) | \(a)"
-}
-
-// Fill empty samples with the nearest neighbor on the left.
-func fillMissingSamples(
-  _ input: [SIMD4<Double>?]
-) -> [SIMD4<Double>] {
-  // Initialize the 'nearest sample' variable.
-  guard input.count > 0,
-        var nearestSample = input[0] else {
-    fatalError("Could not initialize 'nearest sample'.")
-  }
-  
-  // Generate the output.
-  var output: [SIMD4<Double>] = []
-  for sample in input {
-    if let sample {
-      nearestSample = sample
-    }
-    output.append(nearestSample)
-  }
-  
-  // Check the integrity of the output.
-  guard output.count == input.count else {
-    fatalError("Output data stream had different size than input stream.")
-  }
-  return output
 }
 
 // MARK: - Generate Frequency Domain Data
@@ -458,9 +177,6 @@ func noiseSpectralDensity(
   for k in 0..<truncatedSize {
     let Δt = 1 / Float(samplingRate)
     let f = Float(k) / (Float(truncatedSize) * Δt)
-    guard k > 0, f <= 50 else {
-      continue
-    }
     
     let coefficient = ((Δt * Δt) / (Float(truncatedSize) * Δt)).squareRoot()
     let amplitudes = SIMD3<Float>(
@@ -472,59 +188,6 @@ func noiseSpectralDensity(
       coefficient * amplitudes[0],
       coefficient * amplitudes[1],
       coefficient * amplitudes[2])
-    output.append(dataPoint)
-  }
-  return output
-}
-
-// Take the RMS over all frequencies between 40 Hz and 50 Hz.
-func extrapolationStartingPoint(
-  _ accelerationNSD: [SIMD4<Float>]
-) -> SIMD3<Float> {
-  var integral: SIMD3<Float> = .zero
-  var count: Int = .zero
-  for dataPoint in accelerationNSD {
-    guard dataPoint[0] >= 40, dataPoint[0] <= 50 else {
-      continue
-    }
-    
-    let xyz = SIMD3(
-      dataPoint[1],
-      dataPoint[2],
-      dataPoint[3])
-    integral += xyz * xyz
-    count += 1
-  }
-  
-  var rms = integral
-  rms /= Float(count)
-  rms.formSquareRoot()
-  
-  // Correct for the 1/f scaling of acceleration between 45 Hz and 50 Hz.
-  let rms50 = rms * 45.0 / 50.0
-  return rms50
-}
-
-// Utility function for generating an extrapolation.
-func extrapolation(
-  startingPoint: SIMD3<Float>,
-  power: Float
-) -> [SIMD4<Float>] {
-  var output: [SIMD4<Float>] = []
-  
-  var frequency: Float = 50
-  while frequency <= 1e12 {
-    frequency *= 1.02
-    
-    let frequencyRatio = frequency / 50
-    let amplitudeRatio = pow(frequencyRatio, power)
-    
-    let xyz = startingPoint * amplitudeRatio
-    let dataPoint = SIMD4(
-      frequency,
-      xyz[0],
-      xyz[1],
-      xyz[2])
     output.append(dataPoint)
   }
   return output
@@ -918,8 +581,110 @@ print(audioFile.fileFormat)
 print(audioFile.processingFormat)
 print(audioFile.length)
 print(audioFile.framePosition)
+print()
+
+/*
+ https://www.modalshop.com/docs/themodalshoplibraries/software/usb-audio-interface-guide-man-0343.pdf
+ 
+ 62 49 1
+ 
+ 63 48 0
+ 64 53 5
+ 65 52 4
+ 66 52 4
+ 67 53 5
+ 68 52 4
+ 
+ 69 51 3
+ 70 54 6
+ 71 54 6
+ 72 55 7
+ 73 57 9
+ 
+ 74 55 7
+ 75 49 1
+ 76 57 9
+ 77 55 7
+ 78 50 2
+ 
+ 79 49 1
+ 80 52 4
+ 
+ 81 48 0
+ 82 54 6
+ 
+ 83 50 2
+ 84 51 3
+ 
+ format version 1
+ serial number: 054454
+ CalA: 36679
+ CalB: 71972
+ date: June 23, 2014
+ */
+let channelCalibrations = SIMD2<Float>(36679, 71972) * 1.03214014
 
 let audioBuffer = AVAudioPCMBuffer(
   pcmFormat: audioFile.processingFormat,
   frameCapacity: UInt32(audioFile.length))!
 try! audioFile.read(into: audioBuffer)
+
+print(audioBuffer.frameLength)
+print(audioBuffer.stride)
+print()
+
+guard let floatChannelData = audioBuffer.floatChannelData else {
+  fatalError("Not implemented.")
+}
+
+// Input: normalized float
+// Output: G's
+func createDataArray(
+  channel: UnsafeMutablePointer<Float>,
+  calibration: Float,
+  pointCount: Int
+) -> [Float] {
+  var output: [Float] = []
+  for i in 0..<pointCount {
+    var dataPoint = channel[i]
+    dataPoint *= 8388608
+    dataPoint /= calibration
+    dataPoint /= 9.80665
+    output.append(dataPoint)
+  }
+  return output
+}
+
+func createFourChannelData() -> [SIMD4<Double>] {
+  let dataArray0 = createDataArray(
+    channel: floatChannelData[0],
+    calibration: channelCalibrations[0],
+    pointCount: Int(audioBuffer.frameLength))
+  let dataArray1 = createDataArray(
+    channel: floatChannelData[1],
+    calibration: channelCalibrations[1],
+    pointCount: Int(audioBuffer.frameLength))
+  
+  var output: [SIMD4<Double>] = []
+  for pointID in 0..<Int(audioBuffer.frameLength) {
+    let time = Double(pointID) / Double(samplingRate)
+    let data0 = Double(dataArray0[pointID])
+    let data1 = Double(dataArray1[pointID])
+    
+    let dataPoint = SIMD4(time, data0, data1, 0)
+    output.append(dataPoint)
+  }
+  return output
+}
+
+let fourChannelData = createFourChannelData()
+let nsd = noiseSpectralDensity(fourChannelData)
+print("sample count =", nsd.count)
+print("df =", Float(8000) / Float(nsd.count))
+for i in nsd.indices {
+  let dataPoint = SIMD4<Float>(nsd[i])
+  print(i, dataPoint[0], dataPoint[1], dataPoint[2], dataPoint[3])
+}
+
+// Next, average a sub-range, where different parts of the logarithmic scale
+// Get different treatments. Include 'df' as the 4th lane of the vector.
