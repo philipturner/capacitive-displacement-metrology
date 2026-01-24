@@ -1934,7 +1934,7 @@ let frequencies = createFrequencies()
 // Simulate Q = 3, 10, 30, 100, 300
 func transferFunction(ω: Float) -> Float {
   let ω0: Float = 0.782 * (2 * Float.pi)
-  let Q: Float = 3
+  let Q: Float = 300
   let γ: Float = ω0 / Q
   
   func x2(ω: Float) -> Complex<Float> {
@@ -1968,15 +1968,15 @@ for frequency in frequencies {
     let start = frequency - 0.125
     var accumulator: Float = .zero
     var accumulatorRMS: Float = .zero
-    for i in 0..<20 {
-      let newFrequency = start + Float(i) * 0.0125
+    for i in 0..<200 {
+      let newFrequency = start + Float(i) * 0.00125
       let ω = newFrequency * (2 * Float.pi)
       let output = transferFunction(ω: ω)
       accumulator += output
       accumulatorRMS += output * output
     }
-    accumulator /= 20
-    accumulatorRMS /= 20
+    accumulator /= 200
+    accumulatorRMS /= 200
     accumulatorRMS = accumulatorRMS.squareRoot()
     print(accumulatorRMS)
   } else {
