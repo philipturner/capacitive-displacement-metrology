@@ -1959,10 +1959,31 @@ func transferFunction(ω: Float) -> Float {
 
 #if true
 // Frequency set 1
+let earlyFrequencies: [Float] = [
+  0.25, 0.50, 0.75, 1.00, 1.25, 1.50
+]
 for frequency in frequencies {
-  let ω = frequency * (2 * Float.pi)
-  let output = transferFunction(ω: ω)
-  print(output)
+  // Correction for large Q factors at 0.602 Hz and 0.782 Hz.
+  if earlyFrequencies.contains(frequency) {
+    let start = frequency - 0.125
+    var accumulator: Float = .zero
+    var accumulatorRMS: Float = .zero
+    for i in 0..<20 {
+      let newFrequency = start + Float(i) * 0.0125
+      let ω = newFrequency * (2 * Float.pi)
+      let output = transferFunction(ω: ω)
+      accumulator += output
+      accumulatorRMS += output * output
+    }
+    accumulator /= 20
+    accumulatorRMS /= 20
+    accumulatorRMS = accumulatorRMS.squareRoot()
+    print(accumulatorRMS)
+  } else {
+    let ω = frequency * (2 * Float.pi)
+    let output = transferFunction(ω: ω)
+    print(output)
+  }
 }
 
 #else
