@@ -1928,11 +1928,53 @@ func createFrequencies() -> [Float] {
 }
 let frequencies = createFrequencies()
 
+// Vertical isolator: 16" -> 0.406 m -> 0.782 Hz
+// Horizontal isolator: 27" -> 0.686 m -> 0.602 Hz
+// Simulate vertical isolator for a conservative frequency
+// Simulate Q = 3, 10, 30, 100, 300
 func transferFunction(ω: Float) -> Float {
-  return typicalStructure(ω: ω)
+  let ω0: Float = 0.782 * (2 * Float.pi)
+  let Q: Float = 3
+  let γ: Float = ω0 / Q
+  
+  func x2(ω: Float) -> Complex<Float> {
+    var output = Complex(ω0 * ω0)
+    output += Complex(imaginary: 1) * Complex(γ * ω)
+    return output
+  }
+  func x1(ω: Float) -> Complex<Float> {
+    var output = Complex(ω0 * ω0 - ω * ω)
+    output += Complex(imaginary: 1) * Complex(γ * ω)
+    return output
+  }
+  func κ(ω: Float) -> Float {
+    let numerator = x2(ω: ω)
+    let denominator = x1(ω: ω)
+    let output = numerator / denominator
+    return output.lengthSquared.squareRoot()
+  }
+  
+  return κ(ω: ω)
 }
+
+#if true
+// Frequency set 1
 for frequency in frequencies {
   let ω = frequency * (2 * Float.pi)
   let output = transferFunction(ω: ω)
   print(output)
 }
+
+#else
+// Frequency set 2
+
+// Displaying data at 20 points/decade
+// 0.1 Hz to 10 kHz
+for pointID in (-1 * 20)...(4 * 20) {
+ let frequency = pow(10, Float(pointID) / 20)
+ 
+ let ω = frequency * (2 * Float.pi)
+ let output = transferFunction(ω: ω)
+ print(output)
+}
+#endif
