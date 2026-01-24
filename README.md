@@ -23,6 +23,7 @@ Table of Contents:
 - [January 15, 2026](#january-15-2026)
 - [January 16, 2026](#january-16-2026)
 - [January 20, 2026](#january-20-2026)
+- [January 24, 2026](#january-24-2026)
 
 ## December 15, 2025
 
@@ -655,3 +656,37 @@ Two of these for Phase 0.2: https://www.amazon.com/Tekpower-TP3005T-Variable-Lin
 I should use FreeCAD to create a professional, computer-generated technical drawing of my desired chamfer for LiNbO3 plates.
 
 I can use these openly available dimensions to model the 650 V power supplies in FreeCAD: https://www.manualslib.com/manual/2615215/Matsusada-R4g-Series.html?page=18#manual
+
+## January 24, 2026
+
+[Vibration Isolation (Google Sheets)](https://docs.google.com/spreadsheets/d/1qzJEl3N8RIIDTsI8JntsrjS57pulaAYeZJ12WaDHFCc/edit?usp=sharing)
+
+[Custom Isolator Investigation (Google Sheets)](https://docs.google.com/spreadsheets/d/1jo_KR99LT2sn_qSUho-MS6aLhETTfZkYWSGUg9xkJJw/edit?usp=sharing)
+
+Eddy current damping is actually needed. Viton damping is superfluous and increases the mass of the STM table beyond acceptable limits (5 kg target mass). 
+
+![January 24, Part 1](./Documentation/January24_Part1.png)
+
+According to the above data, the optimal Q-factor is 2&ndash;5. 10 might not be bad, but 30 will definitely cause problems. Without eddy current damping, there's a very high chance the Q-factor is above acceptable limits.
+
+I found a simple formula to calculate the Q-factor from the half-life of vibration amplitude. Note that amplitude and energy decay at different rates.
+
+$Q = \frac{\pi}{\ln(2)} t_{1/2}$
+
+$t_{1/2} = \frac{\ln(2)}{\pi} Q$
+
+| Q-factor | Amplitude Half-Life |
+| -------: | ------------------: |
+| 1 | 0.22 |
+| 1.5 | 0.33 |
+| 2 | 0.44 |
+| 3 | 0.66 |
+| 5 | 1.10 |
+| 10 | 2.21 |
+| 30 | 6.62 |
+| 100 | 22.06 |
+| 300 | 66.19 |
+
+_Data are in units of oscillation cycle count._
+
+<b>Vertical and horizontal Q-factors are different</b> because the mechanism of magnetic field change is different for these two directions. People probably tune the Q-factor for the horizontal direction, with no rigorous treatment of the vertical Q-factor.
