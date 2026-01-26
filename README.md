@@ -24,6 +24,7 @@ Table of Contents:
 - [January 16, 2026](#january-16-2026)
 - [January 20, 2026](#january-20-2026)
 - [January 24, 2026](#january-24-2026)
+- [January 26, 2026](#january-26-2026)
 
 ## December 15, 2025
 
@@ -690,3 +691,17 @@ $t_{1/2} = \frac{\ln(2)}{\pi} Q$
 _Data are in units of oscillation cycle count._
 
 <b>Vertical and horizontal Q-factors are different</b> because the mechanism of magnetic field change is different for these two directions. People probably tune the Q-factor for the horizontal direction, with no rigorous treatment of the vertical Q-factor.
+
+## January 26, 2026
+
+I just ordered a massive bill of materials: $1,288.00
+
+[Bill of Materials (Google Sheets)](https://docs.google.com/spreadsheets/d/1jiTSs0toMQvT6W_lkJ8dDeunRTFTPh3OK27fztuSNeY/edit?usp=sharing)
+
+I recently finished a deal with Crystal Substrates. I paid approximately $1,500 and the desired quantity of spare LiNbO3 wafers will arrive in mid-March. I am also working on a deal with Matsusada, which will cost about $2,000 after tariffs. It will arrive in late February or early March.
+
+Controleo3 reflow oven kits cost $395.00 and cannot be bought until January 31. I ordered the toaster oven itself in the above BOM.
+
+Industry practice is to keep things secret. Quotes provided by hardware vendors are confidential information. I had to get approval from Matsusada to use the L x W x H dimensions in the open-source FreeCAD project (LabSpace.FCStd). However, it is important to disclose the true costs, especially given how revolutionary creepless SPM is, to save time for others trying to reproduce it. I concealed exact component costs not stated in the public catalog.
+
+I based this vibration isolator on information from Weilin Ma and Dan Berard's public images. The benefit of open-source science is saving time for people trying to reproduce it in the future. Closed-source competitors like Nanofactory CBN Inc. and Quantum Silicon Inc. are wasting my time, gatekeeping information.
