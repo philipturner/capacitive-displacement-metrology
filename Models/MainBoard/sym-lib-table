@@ -9,4 +9,6 @@
   (lib (name "DAC81404")(type "KiCad")(uri "${KIPRJMOD}/../libraries/DAC81404/2026-01-20_19-22-06.kicad_sym")(options "")(descr ""))
   (lib (name "ISO1641DW")(type "KiCad")(uri "${KIPRJMOD}/../libraries/ISO1641DW/2026-01-27_16-41-36.kicad_sym")(options "")(descr ""))
   (lib (name "ISO7761DW")(type "KiCad")(uri "${KIPRJMOD}/../libraries/ISO7761DW/2026-01-27_16-41-53.kicad_sym")(options "")(descr ""))
+  (lib (name "Custom")(type "KiCad")(uri "${KIPRJMOD}/../libraries/Custom.kicad_sym")(options "")(descr ""))
+  (lib (name "TLV761")(type "KiCad")(uri "${KIPRJMOD}/../libraries/TLV761/2025-08-11_17-31-55.kicad_sym")(options "")(descr ""))
 )
