@@ -453,6 +453,7 @@
       "single_global_label": "ignore",
       "unannotated": "error",
       "unconnected_wire_endpoint": "warning",
+      "undefined_netclass": "error",
       "unit_value_mismatch": "error",
       "unresolved_variable": "error",
       "wire_dangling": "error"
@@ -625,6 +626,46 @@
     [
       "600cc1cc-74ca-4bfc-97a0-b230eb3afbcd",
       "Root"
+    ],
+    [
+      "d30698e6-a0ca-49f4-86ac-6bca70afd28d",
+      "Power"
+    ],
+    [
+      "1f13316e-0c37-484d-b72f-e39b8980c6f1",
+      "WallPower"
+    ],
+    [
+      "e4b177e3-23ca-41f2-9b29-ea1382ad6b0a",
+      "HighVoltage"
+    ],
+    [
+      "b99c056f-14af-48c3-ae72-a669e560b470",
+      "LowVoltage"
+    ],
+    [
+      "dcbaa67c-e094-4d47-92d5-6abf5c7cf167",
+      "CPU"
+    ],
+    [
+      "ab121df4-9bf6-4481-9b55-53e129886f9f",
+      "Teensy"
+    ],
+    [
+      "8772b78f-5705-499b-830e-0328869da3e5",
+      "Isolation"
+    ],
+    [
+      "22af18f8-09e3-4d6e-b6b2-aa62b4b18c35",
+      "ADC"
+    ],
+    [
+      "9db17bc5-0a8c-4c2d-8f68-2447b329716c",
+      "DAC"
+    ],
+    [
+      "2651d60f-e970-4f71-9464-733cf625af93",
+      "CDC"
     ]
   ],
   "text_variables": {}

@@ -128,7 +128,7 @@
 				(start 5.08 2.54)
 				(end 17.78 -20.32)
 				(stroke
-					(width 0.254)
+					(width 0.2032)
 					(type solid)
 				)
 				(fill
