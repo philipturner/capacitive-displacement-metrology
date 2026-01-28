@@ -2193,7 +2193,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(symbol "OPA828ID"
+	(symbol "OPA828"
 		(pin_names
 			(offset 0.254)
 		)
@@ -2201,22 +2201,22 @@
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "U"
-			(at 20.32 10.16 0)
+			(at 20.32 9.398 0)
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 			)
 		)
-		(property "Value" "OPA828ID"
-			(at 20.32 7.62 0)
+		(property "Value" "OPA828"
+			(at 20.32 6.858 0)
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 			)
 		)
-		(property "Footprint" "D8_TEX"
+		(property "Footprint" ""
 			(at 0 0 0)
 			(effects
 				(font
@@ -2226,7 +2226,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.ti.com/lit/gpn/opa828"
+		(property "Datasheet" ""
 			(at 0 0 0)
 			(effects
 				(font
@@ -2243,14 +2243,6 @@
 					(size 1.27 1.27)
 				)
 				(hide yes)
-			)
-		)
-		(property "ki_locked" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
 			)
 		)
 		(property "ki_keywords" "OPA828ID"
@@ -2271,7 +2263,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "OPA828ID_0_1"
+		(symbol "OPA828_0_1"
 			(polyline
 				(pts
 					(xy 7.62 5.08) (xy 7.62 -12.7)
@@ -2331,42 +2323,6 @@
 					)
 				)
 				(number "1"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-			)
-			(pin input line
-				(at 0 -2.54 0)
-				(length 7.62)
-				(name "'-IN"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(number "2"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-			)
-			(pin input line
-				(at 0 -5.08 0)
-				(length 7.62)
-				(name "'+IN"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(number "3"
 					(effects
 						(font
 							(size 1.27 1.27)
@@ -2457,6 +2413,44 @@
 					)
 				)
 				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "OPA828_1_1"
+			(pin input line
+				(at 0 -2.54 0)
+				(length 7.62)
+				(name "-IN"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at 0 -5.08 0)
+				(length 7.62)
+				(name "+IN"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
 					(effects
 						(font
 							(size 1.27 1.27)
