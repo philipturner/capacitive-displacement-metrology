@@ -5,6 +5,59 @@
 	(uuid "f19129fc-f916-4692-924c-ee308c6b3e1d")
 	(paper "A4")
 	(lib_symbols)
+	(text "Input: 15V power (grounded interconnect)\nInput: -15V power (grounded interconnect)\nInput: current\nOutput: voltage (grounded interconnect)"
+		(exclude_from_sim no)
+		(at 158.242 76.962 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "431a5fb7-c170-470c-962a-9df782b62c9b")
+	)
+	(sheet
+		(at 101.6 76.2)
+		(size 50.8 50.8)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "040f388f-b39e-48b3-8ec3-54cfca282d15")
+		(property "Sheetname" "Sensor"
+			(at 101.6 75.4884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Sensor.kicad_sch"
+			(at 101.6 127.5846 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "TransimpedanceAmplifier"
+				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
+					(page "2")
+				)
+			)
+		)
+	)
 	(sheet_instances
 		(path "/"
 			(page "1")

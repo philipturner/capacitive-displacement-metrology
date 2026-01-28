@@ -626,6 +626,10 @@
     [
       "f19129fc-f916-4692-924c-ee308c6b3e1d",
       "Root"
+    ],
+    [
+      "040f388f-b39e-48b3-8ec3-54cfca282d15",
+      "Sensor"
     ]
   ],
   "text_variables": {}

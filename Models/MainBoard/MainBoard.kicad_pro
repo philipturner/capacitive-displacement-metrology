@@ -661,11 +661,15 @@
     ],
     [
       "9db17bc5-0a8c-4c2d-8f68-2447b329716c",
-      "DAC"
+      "DAC1"
     ],
     [
       "2651d60f-e970-4f71-9464-733cf625af93",
       "CDC"
+    ],
+    [
+      "faa7de86-5940-41fa-b253-e8ebbf9cc652",
+      "DAC2"
     ]
   ],
   "text_variables": {}

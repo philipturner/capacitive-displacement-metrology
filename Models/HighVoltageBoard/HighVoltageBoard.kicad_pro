@@ -453,6 +453,7 @@
       "single_global_label": "ignore",
       "unannotated": "error",
       "unconnected_wire_endpoint": "warning",
+      "undefined_netclass": "error",
       "unit_value_mismatch": "error",
       "unresolved_variable": "error",
       "wire_dangling": "error"
@@ -625,6 +626,26 @@
     [
       "c83b09c9-14ae-4b68-b7fa-4c89bba29dc5",
       "Root"
+    ],
+    [
+      "1d0db973-f635-4db8-8646-beeec420ec2b",
+      "WallPower"
+    ],
+    [
+      "199886e6-7d04-4776-b29c-ace318fdb365",
+      "AmplifierA"
+    ],
+    [
+      "4ce25162-5acb-4a8d-be91-4e1f0e740ea5",
+      "AmplifierB"
+    ],
+    [
+      "af20753c-bd15-4901-8272-a2513114e228",
+      "AmplifierC"
+    ],
+    [
+      "bd0669b9-2ae0-4bdd-b718-c60fba51a2e0",
+      "AmplifierD"
     ]
   ],
   "text_variables": {}
