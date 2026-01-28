@@ -2,7 +2,7 @@
 	(version 20241209)
 	(generator "kicad_symbol_editor")
 	(generator_version "9.0")
-	(symbol "ADS8699IPW"
+	(symbol "ADS8699"
 		(pin_names
 			(offset 0.254)
 		)
@@ -17,7 +17,7 @@
 				)
 			)
 		)
-		(property "Value" "ADS8699IPW"
+		(property "Value" "ADS8699"
 			(at 35.56 7.62 0)
 			(effects
 				(font
@@ -25,7 +25,7 @@
 				)
 			)
 		)
-		(property "Footprint" "PW16_TEX"
+		(property "Footprint" ""
 			(at 0 0 0)
 			(effects
 				(font
@@ -35,7 +35,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.ti.com/lit/gpn/ads8699"
+		(property "Datasheet" ""
 			(at 0 0 0)
 			(effects
 				(font
@@ -52,14 +52,6 @@
 					(size 1.27 1.27)
 				)
 				(hide yes)
-			)
-		)
-		(property "ki_locked" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
 			)
 		)
 		(property "ki_keywords" "ADS8699IPW"
@@ -80,7 +72,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "ADS8699IPW_0_1"
+		(symbol "ADS8699_0_1"
 			(polyline
 				(pts
 					(xy 7.62 5.08) (xy 7.62 -22.86)
@@ -420,7 +412,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(symbol "DAC81404RHBR"
+	(symbol "DAC81404"
 		(pin_names
 			(offset 0.254)
 		)
@@ -435,7 +427,7 @@
 				)
 			)
 		)
-		(property "Value" "DAC81404RHBR"
+		(property "Value" "DAC81404"
 			(at -0.508 37.084 0)
 			(effects
 				(font
@@ -490,7 +482,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "DAC81404RHBR_0_1"
+		(symbol "DAC81404_0_1"
 			(rectangle
 				(start -20.32 35.56)
 				(end 20.32 -35.56)
@@ -1099,7 +1091,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(symbol "ISO1641DWR"
+	(symbol "ISO1641DW"
 		(pin_names
 			(offset 0.254)
 		)
@@ -1114,7 +1106,7 @@
 				)
 			)
 		)
-		(property "Value" "ISO1641DWR"
+		(property "Value" "ISO1641DW"
 			(at 20.32 7.62 0)
 			(effects
 				(font
@@ -1122,7 +1114,7 @@
 				)
 			)
 		)
-		(property "Footprint" "SOIC16-DW_TEX"
+		(property "Footprint" ""
 			(at 0 0 0)
 			(effects
 				(font
@@ -1132,7 +1124,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.ti.com/lit/gpn/iso1641"
+		(property "Datasheet" ""
 			(at 0 0 0)
 			(effects
 				(font
@@ -1149,14 +1141,6 @@
 					(size 1.27 1.27)
 				)
 				(hide yes)
-			)
-		)
-		(property "ki_locked" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
 			)
 		)
 		(property "ki_keywords" "ISO1641DWR"
@@ -1177,7 +1161,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "ISO1641DWR_0_1"
+		(symbol "ISO1641DW_0_1"
 			(polyline
 				(pts
 					(xy 7.62 5.08) (xy 7.62 -22.86)
@@ -1479,7 +1463,7 @@
 				)
 			)
 		)
-		(symbol "ISO1641DWR_1_1"
+		(symbol "ISO1641DW_1_1"
 			(pin input line
 				(at 0 -12.7 0)
 				(length 7.62)
@@ -1527,7 +1511,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "U"
-			(at 0 2.54 0)
+			(at 0.254 27.178 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -1535,14 +1519,14 @@
 			)
 		)
 		(property "Value" "ISO7761DW"
-			(at 0 0 0)
+			(at 0.254 24.638 0)
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 			)
 		)
-		(property "Footprint" "DW0016B_N"
+		(property "Footprint" ""
 			(at 0 0 0)
 			(effects
 				(font
@@ -1552,7 +1536,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.ti.com/lit/gpn/iso7761"
+		(property "Datasheet" ""
 			(at 0 0 0)
 			(effects
 				(font
@@ -1569,14 +1553,6 @@
 					(size 1.27 1.27)
 				)
 				(hide yes)
-			)
-		)
-		(property "ki_locked" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
 			)
 		)
 		(property "ki_keywords" "ISO7761DW"
@@ -1613,30 +1589,6 @@
 			(polyline
 				(pts
 					(xy -15.24 -22.86) (xy 15.24 -22.86)
-				)
-				(stroke
-					(width 0.2032)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
-			(polyline
-				(pts
-					(xy -1.27 -22.86) (xy -1.27 22.86)
-				)
-				(stroke
-					(width 0.2032)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
-			(polyline
-				(pts
-					(xy 1.27 -22.86) (xy 1.27 22.86)
 				)
 				(stroke
 					(width 0.2032)
@@ -1961,7 +1913,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(symbol "LM7805CT_NOPB"
+	(symbol "LM7805"
 		(pin_names
 			(offset 0.254)
 		)
@@ -1969,22 +1921,22 @@
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "U"
-			(at 22.86 10.16 0)
+			(at 17.78 9.652 0)
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 			)
 		)
-		(property "Value" "LM7805CT/NOPB"
-			(at 22.86 7.62 0)
+		(property "Value" "LM7805"
+			(at 17.78 7.112 0)
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 			)
 		)
-		(property "Footprint" "NDE3_TEX"
+		(property "Footprint" ""
 			(at 0 0 0)
 			(effects
 				(font
@@ -1994,7 +1946,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.ti.com/lit/gpn/lm7800"
+		(property "Datasheet" ""
 			(at 0 0 0)
 			(effects
 				(font
@@ -2011,14 +1963,6 @@
 					(size 1.27 1.27)
 				)
 				(hide yes)
-			)
-		)
-		(property "ki_locked" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
 			)
 		)
 		(property "ki_keywords" "LM7805CT/NOPB"
@@ -2039,93 +1983,20 @@
 				(hide yes)
 			)
 		)
-		(symbol "LM7805CT_NOPB_0_1"
-			(polyline
-				(pts
-					(xy 7.62 5.08) (xy 7.62 -7.62)
-				)
+		(symbol "LM7805_0_1"
+			(rectangle
+				(start 7.62 5.08)
+				(end 27.94 -7.62)
 				(stroke
-					(width 0.127)
+					(width 0)
 					(type default)
 				)
 				(fill
 					(type none)
-				)
-			)
-			(polyline
-				(pts
-					(xy 7.62 -7.62) (xy 38.1 -7.62)
-				)
-				(stroke
-					(width 0.127)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
-			(polyline
-				(pts
-					(xy 38.1 5.08) (xy 7.62 5.08)
-				)
-				(stroke
-					(width 0.127)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
-			(polyline
-				(pts
-					(xy 38.1 -7.62) (xy 38.1 5.08)
-				)
-				(stroke
-					(width 0.127)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
-			(pin input line
-				(at 0 0 0)
-				(length 7.62)
-				(name "INPUT"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(number "1"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-			)
-			(pin output line
-				(at 45.72 0 180)
-				(length 7.62)
-				(name "OUTPUT"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(number "3"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
 				)
 			)
 			(pin power_in line
-				(at 45.72 -2.54 180)
+				(at 35.56 -2.54 180)
 				(length 7.62)
 				(name "GND"
 					(effects
@@ -2143,9 +2014,47 @@
 				)
 			)
 		)
+		(symbol "LM7805_1_1"
+			(pin input line
+				(at 0 0 0)
+				(length 7.62)
+				(name "IN"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output line
+				(at 35.56 0 180)
+				(length 7.62)
+				(name "OUT"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
 		(embedded_fonts no)
 	)
-	(symbol "LM7905CT"
+	(symbol "LM7905"
 		(pin_names
 			(offset 0.254)
 		)
@@ -2153,22 +2062,22 @@
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "U"
-			(at 27.94 10.16 0)
+			(at 18.288 9.652 0)
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 			)
 		)
-		(property "Value" "LM7905CT"
-			(at 27.94 7.62 0)
+		(property "Value" "LM7905"
+			(at 18.288 7.112 0)
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 			)
 		)
-		(property "Footprint" "T03B_TEX"
+		(property "Footprint" ""
 			(at 0 0 0)
 			(effects
 				(font
@@ -2178,7 +2087,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.ti.com/lit/gpn/lm79"
+		(property "Datasheet" ""
 			(at 0 0 0)
 			(effects
 				(font
@@ -2195,14 +2104,6 @@
 					(size 1.27 1.27)
 				)
 				(hide yes)
-			)
-		)
-		(property "ki_locked" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
 			)
 		)
 		(property "ki_keywords" "LM7905CT"
@@ -2223,49 +2124,12 @@
 				(hide yes)
 			)
 		)
-		(symbol "LM7905CT_0_1"
-			(polyline
-				(pts
-					(xy 7.62 5.08) (xy 7.62 -7.62)
-				)
+		(symbol "LM7905_0_1"
+			(rectangle
+				(start 7.62 5.08)
+				(end 27.94 -7.62)
 				(stroke
-					(width 0.127)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
-			(polyline
-				(pts
-					(xy 7.62 -7.62) (xy 48.26 -7.62)
-				)
-				(stroke
-					(width 0.127)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
-			(polyline
-				(pts
-					(xy 48.26 5.08) (xy 7.62 5.08)
-				)
-				(stroke
-					(width 0.127)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
-			(polyline
-				(pts
-					(xy 48.26 -7.62) (xy 48.26 5.08)
-				)
-				(stroke
-					(width 0.127)
+					(width 0)
 					(type default)
 				)
 				(fill
@@ -2291,7 +2155,7 @@
 				)
 			)
 			(pin power_in line
-				(at 55.88 0 180)
+				(at 35.56 0 180)
 				(length 7.62)
 				(name "OUT"
 					(effects
@@ -2309,7 +2173,7 @@
 				)
 			)
 			(pin power_in line
-				(at 55.88 -2.54 180)
+				(at 35.56 -2.54 180)
 				(length 7.62)
 				(name "IN"
 					(effects
@@ -2813,7 +2677,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(symbol "PTLV76118DCYR"
+	(symbol "TLV761"
 		(pin_names
 			(offset 0.254)
 		)
@@ -2821,22 +2685,22 @@
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "U"
-			(at 0 2.54 0)
+			(at 15.748 6.858 0)
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 			)
 		)
-		(property "Value" "PTLV76118DCYR"
-			(at 0 0 0)
+		(property "Value" "TLV761"
+			(at 15.748 4.318 0)
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 			)
 		)
-		(property "Footprint" "DCY0004A-IPC_A"
+		(property "Footprint" ""
 			(at 0 0 0)
 			(effects
 				(font
@@ -2846,7 +2710,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.ti.com/lit/gpn/tlv761"
+		(property "Datasheet" ""
 			(at 0 0 0)
 			(effects
 				(font
@@ -2863,14 +2727,6 @@
 					(size 1.27 1.27)
 				)
 				(hide yes)
-			)
-		)
-		(property "ki_locked" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
 			)
 		)
 		(property "ki_keywords" "PTLV76118DCYR"
@@ -2891,49 +2747,12 @@
 				(hide yes)
 			)
 		)
-		(symbol "PTLV76118DCYR_0_1"
-			(polyline
-				(pts
-					(xy 3.81 3.81) (xy 3.81 -11.43)
-				)
+		(symbol "TLV761_0_1"
+			(rectangle
+				(start 5.08 2.54)
+				(end 25.4 -10.16)
 				(stroke
-					(width 0.2032)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
-			(polyline
-				(pts
-					(xy 3.81 -11.43) (xy 24.13 -11.43)
-				)
-				(stroke
-					(width 0.2032)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
-			(polyline
-				(pts
-					(xy 24.13 3.81) (xy 3.81 3.81)
-				)
-				(stroke
-					(width 0.2032)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
-			(polyline
-				(pts
-					(xy 24.13 -11.43) (xy 24.13 3.81)
-				)
-				(stroke
-					(width 0.2032)
+					(width 0)
 					(type default)
 				)
 				(fill
@@ -2941,7 +2760,7 @@
 				)
 			)
 			(pin power_in line
-				(at -1.27 -1.27 0)
+				(at 0 0 0)
 				(length 5.08)
 				(name "IN"
 					(effects
@@ -2959,7 +2778,7 @@
 				)
 			)
 			(pin power_in line
-				(at 29.21 -1.27 180)
+				(at 30.48 0 180)
 				(length 5.08)
 				(name "OUT"
 					(effects
@@ -2977,7 +2796,7 @@
 				)
 			)
 			(pin power_in line
-				(at 29.21 -3.81 180)
+				(at 30.48 -2.54 180)
 				(length 5.08)
 				(name "OUT"
 					(effects
@@ -2995,7 +2814,7 @@
 				)
 			)
 			(pin power_in line
-				(at 29.21 -8.89 180)
+				(at 30.48 -7.62 180)
 				(length 5.08)
 				(name "GND"
 					(effects

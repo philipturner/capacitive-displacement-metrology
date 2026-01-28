@@ -225,7 +225,7 @@
 					)
 				)
 			)
-			(pin passive line
+			(pin no_connect line
 				(at 15.24 6.35 180)
 				(length 2.54)
 				(name "NC"
@@ -315,7 +315,7 @@
 					)
 				)
 			)
-			(pin passive line
+			(pin no_connect line
 				(at 15.24 -6.35 180)
 				(length 2.54)
 				(name "NC"
@@ -333,7 +333,7 @@
 					)
 				)
 			)
-			(pin passive line
+			(pin no_connect line
 				(at 15.24 -8.89 180)
 				(length 2.54)
 				(name "NC"
