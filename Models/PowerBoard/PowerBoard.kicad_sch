@@ -6,8 +6,50 @@
 	(paper "A4")
 	(lib_symbols)
 	(sheet
-		(at 50.8 76.2)
-		(size 50.8 50.8)
+		(at 152.4 76.2)
+		(size 50.8 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "018e7d12-6b24-44c3-9b74-64995b8fa179")
+		(property "Sheetname" "HighVoltage1"
+			(at 152.4 75.4884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "HighVoltagePair.kicad_sch"
+			(at 152.4 102.1846 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 50.8 101.6)
+		(size 50.8 25.4)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -22,7 +64,7 @@
 		)
 		(uuid "16a77afe-3056-4f83-9f80-787a2ef93cd8")
 		(property "Sheetname" "WallPower"
-			(at 50.8 75.4884 0)
+			(at 50.8 100.8884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -39,6 +81,26 @@
 				(justify left top)
 			)
 		)
+		(pin "-18V" output
+			(at 101.6 121.92 0)
+			(uuid "82444888-e949-43d0-94a1-970e27bb39e7")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "18V" output
+			(at 101.6 106.68 0)
+			(uuid "4af0e715-4cde-449f-90fd-cf8e571a6ca7")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
@@ -48,8 +110,8 @@
 		)
 	)
 	(sheet
-		(at 127 76.2)
-		(size 50.8 50.8)
+		(at 152.4 127)
+		(size 50.8 25.4)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -62,9 +124,9 @@
 		(fill
 			(color 0 0 0 0.0000)
 		)
-		(uuid "4d197147-495c-4ef1-b13c-60e8d6945a1c")
-		(property "Sheetname" "HighVoltage"
-			(at 127 75.4884 0)
+		(uuid "55f1d4dd-dd9a-4f22-90c5-bff482123087")
+		(property "Sheetname" "HighVoltage2"
+			(at 152.4 126.2884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72,8 +134,8 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "HighVoltage.kicad_sch"
-			(at 127 127.5846 0)
+		(property "Sheetfile" "HighVoltagePair.kicad_sch"
+			(at 152.4 152.9846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -84,14 +146,14 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(page "3")
+					(page "5")
 				)
 			)
 		)
 	)
 	(sheet
-		(at 203.2 76.2)
-		(size 50.8 50.8)
+		(at 152.4 25.4)
+		(size 50.8 25.4)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -106,7 +168,7 @@
 		)
 		(uuid "df1ba0e1-55fc-41f2-80f9-aaa8393d43d6")
 		(property "Sheetname" "LowVoltage"
-			(at 203.2 75.4884 0)
+			(at 152.4 24.6884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -115,12 +177,22 @@
 			)
 		)
 		(property "Sheetfile" "LowVoltage.kicad_sch"
-			(at 203.2 127.5846 0)
+			(at 152.4 51.3846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "18V" input
+			(at 152.4 30.48 180)
+			(uuid "b97cf8bb-27f8-433c-af03-56bfa1299e96")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances

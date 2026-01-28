@@ -632,12 +632,16 @@
       "WallPower"
     ],
     [
-      "4d197147-495c-4ef1-b13c-60e8d6945a1c",
-      "HighVoltage"
-    ],
-    [
       "df1ba0e1-55fc-41f2-80f9-aaa8393d43d6",
       "LowVoltage"
+    ],
+    [
+      "018e7d12-6b24-44c3-9b74-64995b8fa179",
+      "HighVoltage1"
+    ],
+    [
+      "55f1d4dd-dd9a-4f22-90c5-bff482123087",
+      "HighVoltage2"
     ]
   ],
   "text_variables": {}
