@@ -6,8 +6,8 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(property "Reference" "IC"
-			(at 19.05 7.62 0)
+		(property "Reference" "U"
+			(at -1.27 16.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16,7 +16,7 @@
 			)
 		)
 		(property "Value" "PA95"
-			(at 19.05 5.08 0)
+			(at -2.794 13.97 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -24,7 +24,7 @@
 				(justify left top)
 			)
 		)
-		(property "Footprint" "PA95"
+		(property "Footprint" ""
 			(at 19.05 -94.92 0)
 			(effects
 				(font
@@ -34,7 +34,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.apexanalog.com/resources/products/pa95u.pdf"
+		(property "Datasheet" ""
 			(at 19.05 -194.92 0)
 			(effects
 				(font
@@ -44,7 +44,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "900V, 1.6mA Power Amplifier with Low Standby Current, High voltage  900V (+/-450V), Low quiescent current  1.6mA, High output current  100mA continuous, 200mA PEAK."
+		(property "Description" ""
 			(at 0 0 0)
 			(effects
 				(font
@@ -53,80 +53,10 @@
 				(hide yes)
 			)
 		)
-		(property "Height" "22.73"
-			(at 19.05 -394.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Name" "Apex Microtechnology"
-			(at 19.05 -494.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Part_Number" "PA95"
-			(at 19.05 -594.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Mouser Part Number" "137-PA95"
-			(at 19.05 -694.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Apex-Microtechnology/PA95?qs=TiOZkKH1s2T5rE6vjqqrxw%3D%3D"
-			(at 19.05 -794.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Arrow Part Number" ""
-			(at 19.05 -894.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Arrow Price/Stock" ""
-			(at 19.05 -994.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
 		(symbol "PA95_1_1"
 			(rectangle
-				(start 5.08 2.54)
-				(end 17.78 -20.32)
+				(start -6.35 11.43)
+				(end 6.35 -11.43)
 				(stroke
 					(width 0.2032)
 					(type solid)
@@ -136,7 +66,7 @@
 				)
 			)
 			(pin passive line
-				(at 0 0 0)
+				(at -11.43 8.89 0)
 				(length 5.08)
 				(name "-IN"
 					(effects
@@ -154,7 +84,7 @@
 				)
 			)
 			(pin passive line
-				(at 0 -2.54 0)
+				(at -11.43 6.35 0)
 				(length 5.08)
 				(name "+IN"
 					(effects
@@ -172,7 +102,7 @@
 				)
 			)
 			(pin passive line
-				(at 0 -5.08 0)
+				(at -11.43 3.81 0)
 				(length 5.08)
 				(name "CC_1"
 					(effects
@@ -190,7 +120,7 @@
 				)
 			)
 			(pin passive line
-				(at 0 -7.62 0)
+				(at -11.43 1.27 0)
 				(length 5.08)
 				(name "CC_2"
 					(effects
@@ -208,7 +138,7 @@
 				)
 			)
 			(pin passive line
-				(at 0 -10.16 0)
+				(at -11.43 -1.27 0)
 				(length 5.08)
 				(name "OUT"
 					(effects
@@ -226,7 +156,7 @@
 				)
 			)
 			(pin passive line
-				(at 0 -12.7 0)
+				(at -11.43 -3.81 0)
 				(length 5.08)
 				(name "CL"
 					(effects
@@ -244,7 +174,7 @@
 				)
 			)
 			(pin passive line
-				(at 0 -15.24 0)
+				(at -11.43 -6.35 0)
 				(length 5.08)
 				(name "-VS"
 					(effects
@@ -262,7 +192,7 @@
 				)
 			)
 			(pin passive line
-				(at 0 -17.78 0)
+				(at -11.43 -8.89 0)
 				(length 5.08)
 				(name "+VS"
 					(effects

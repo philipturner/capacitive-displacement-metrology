@@ -1,6 +1,6 @@
 (sym_lib_table
   (version 7)
-  (lib (name "ADS8699")(type "KiCad")(uri "${KIPRJMOD}/../libraries/ADS8699/2025-08-05_19-00-39.kicad_sym")(options "")(descr ""))
+  (lib (name "ADS8699")(type "KiCad")(uri "${KIPRJMOD}/../libraries/ADS8699/2025-08-05_19-00-39.kicad_sym")(options "")(descr "")(hidden))
   (lib (name "LM78")(type "KiCad")(uri "${KIPRJMOD}/../libraries/LM78/2025-08-23_13-01-07.kicad_sym")(options "")(descr ""))
   (lib (name "LM79")(type "KiCad")(uri "${KIPRJMOD}/../libraries/LM79/2025-08-23_13-01-30.kicad_sym")(options "")(descr ""))
   (lib (name "OPA828")(type "KiCad")(uri "${KIPRJMOD}/../libraries/OPA828/2025-08-05_18-19-05.kicad_sym")(options "")(descr ""))
@@ -11,4 +11,5 @@
   (lib (name "ISO7761DW")(type "KiCad")(uri "${KIPRJMOD}/../libraries/ISO7761DW/2026-01-27_16-41-53.kicad_sym")(options "")(descr ""))
   (lib (name "Custom")(type "KiCad")(uri "${KIPRJMOD}/../libraries/Custom.kicad_sym")(options "")(descr ""))
   (lib (name "TLV761")(type "KiCad")(uri "${KIPRJMOD}/../libraries/TLV761/2025-08-11_17-31-55.kicad_sym")(options "")(descr ""))
+  (lib (name "Vendor")(type "KiCad")(uri "${KIPRJMOD}/../libraries/Vendor.kicad_sym")(options "")(descr ""))
 )
