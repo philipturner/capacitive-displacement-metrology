@@ -1913,7 +1913,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(symbol "LM7805"
+	(symbol "LM78"
 		(pin_names
 			(offset 0.254)
 		)
@@ -1921,15 +1921,15 @@
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "U"
-			(at 17.78 9.652 0)
+			(at 18.034 9.652 0)
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 			)
 		)
-		(property "Value" "LM7805"
-			(at 17.78 7.112 0)
+		(property "Value" "LM78"
+			(at 18.034 7.112 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -1983,7 +1983,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "LM7805_0_1"
+		(symbol "LM78_0_1"
 			(rectangle
 				(start 7.62 5.08)
 				(end 27.94 -7.62)
@@ -2014,7 +2014,7 @@
 				)
 			)
 		)
-		(symbol "LM7805_1_1"
+		(symbol "LM78_1_1"
 			(pin input line
 				(at 0 0 0)
 				(length 7.62)
@@ -2054,7 +2054,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(symbol "LM7905"
+	(symbol "LM79"
 		(pin_names
 			(offset 0.254)
 		)
@@ -2062,15 +2062,15 @@
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "U"
-			(at 18.288 9.652 0)
+			(at 18.034 9.652 0)
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 			)
 		)
-		(property "Value" "LM7905"
-			(at 18.288 7.112 0)
+		(property "Value" "LM79"
+			(at 18.034 7.112 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -2124,7 +2124,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "LM7905_0_1"
+		(symbol "LM79_0_1"
 			(rectangle
 				(start 7.62 5.08)
 				(end 27.94 -7.62)
