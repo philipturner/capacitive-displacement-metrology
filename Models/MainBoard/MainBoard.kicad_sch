@@ -5,9 +5,20 @@
 	(uuid "600cc1cc-74ca-4bfc-97a0-b230eb3afbcd")
 	(paper "A4")
 	(lib_symbols)
+	(text "Print the 2nd DAC, but don't buy the\nnumber of spare QFNs needed for this\n\nThis is a de-risking step to avoid the\ndesign cost of revising the PCB (and\npossibly save money by using spare boards)"
+		(exclude_from_sim no)
+		(at 72.39 69.85 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "3862e3f6-1bf8-4760-a5b7-a623769175f7")
+	)
 	(sheet
-		(at 152.4 50.8)
-		(size 50.8 50.8)
+		(at 228.6 63.5)
+		(size 25.4 50.8)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -20,9 +31,9 @@
 		(fill
 			(color 0 0 0 0.0000)
 		)
-		(uuid "d30698e6-a0ca-49f4-86ac-6bca70afd28d")
-		(property "Sheetname" "Power"
-			(at 152.4 50.0884 0)
+		(uuid "06f343a1-8f8d-44f8-9a8d-c3164f0f170f")
+		(property "Sheetname" "Teensy"
+			(at 228.6 62.7884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -30,8 +41,134 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "Power.kicad_sch"
-			(at 152.4 102.1846 0)
+		(property "Sheetfile" "Teensy.kicad_sch"
+			(at 228.6 114.8846 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "MainBoard"
+				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd"
+					(page "14")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 127 139.7)
+		(size 25.4 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "812a2394-e6f7-4194-9eea-57be5665ec29")
+		(property "Sheetname" "CDC"
+			(at 127 138.9884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "CDC.kicad_sch"
+			(at 127 165.6846 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "MainBoard"
+				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 177.8 50.8)
+		(size 25.4 76.2)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "95c36b0c-feb3-4149-8431-7ba235e4d3be")
+		(property "Sheetname" "Isolation"
+			(at 177.8 50.0884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Isolation.kicad_sch"
+			(at 177.8 127.5846 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "MainBoard"
+				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd"
+					(page "13")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 127 101.6)
+		(size 25.4 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "ce903780-1ca3-4311-afa6-19e51963dd24")
+		(property "Sheetname" "ADC"
+			(at 127 100.8884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "ADC.kicad_sch"
+			(at 127 127.5846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -48,8 +185,8 @@
 		)
 	)
 	(sheet
-		(at 76.2 50.8)
-		(size 50.8 50.8)
+		(at 127 63.5)
+		(size 25.4 25.4)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -62,9 +199,9 @@
 		(fill
 			(color 0 0 0 0.0000)
 		)
-		(uuid "dcbaa67c-e094-4d47-92d5-6abf5c7cf167")
-		(property "Sheetname" "CPU"
-			(at 76.2 50.0884 0)
+		(uuid "ced13514-010b-43dd-8270-2f4fa4cc7e19")
+		(property "Sheetname" "DAC2"
+			(at 127 62.7884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72,8 +209,8 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "CPU.kicad_sch"
-			(at 76.2 102.1846 0)
+		(property "Sheetfile" "DAC.kicad_sch"
+			(at 127 89.4846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -84,7 +221,49 @@
 		(instances
 			(project "MainBoard"
 				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd"
-					(page "6")
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 127 25.4)
+		(size 25.4 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "e222707b-78e5-4be0-8ce1-010f54f4492e")
+		(property "Sheetname" "DAC1"
+			(at 127 24.6884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "DAC.kicad_sch"
+			(at 127 51.3846 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "MainBoard"
+				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd"
+					(page "4")
 				)
 			)
 		)

@@ -31,8 +31,8 @@
 		(fill
 			(color 0 0 0 0.0000)
 		)
-		(uuid "040f388f-b39e-48b3-8ec3-54cfca282d15")
-		(property "Sheetname" "Sensor"
+		(uuid "576e9362-b988-409f-82c5-0c80cb18568a")
+		(property "Sheetname" "Amplifier"
 			(at 101.6 75.4884 0)
 			(effects
 				(font
@@ -41,7 +41,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "Sensor.kicad_sch"
+		(property "Sheetfile" "Amplifier.kicad_sch"
 			(at 101.6 127.5846 0)
 			(effects
 				(font

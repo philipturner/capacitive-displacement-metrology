@@ -2,11 +2,11 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "cef952e2-f81b-43ab-a5cb-6d75df340c71")
+	(uuid "c19e9b7b-7f36-470c-862a-1a648d3f14f6")
 	(paper "A4")
 	(lib_symbols)
 	(sheet
-		(at 50.8 50.8)
+		(at 50.8 76.2)
 		(size 50.8 50.8)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -20,9 +20,9 @@
 		(fill
 			(color 0 0 0 0.0000)
 		)
-		(uuid "1f13316e-0c37-484d-b72f-e39b8980c6f1")
+		(uuid "16a77afe-3056-4f83-9f80-787a2ef93cd8")
 		(property "Sheetname" "WallPower"
-			(at 50.8 50.0884 0)
+			(at 50.8 75.4884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -31,7 +31,7 @@
 			)
 		)
 		(property "Sheetfile" "WallPower.kicad_sch"
-			(at 50.8 102.1846 0)
+			(at 50.8 127.5846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -40,15 +40,15 @@
 			)
 		)
 		(instances
-			(project "MainBoard"
-				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/d30698e6-a0ca-49f4-86ac-6bca70afd28d"
-					(page "3")
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(page "2")
 				)
 			)
 		)
 	)
 	(sheet
-		(at 203.2 50.8)
+		(at 127 76.2)
 		(size 50.8 50.8)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -62,51 +62,9 @@
 		(fill
 			(color 0 0 0 0.0000)
 		)
-		(uuid "b99c056f-14af-48c3-ae72-a669e560b470")
-		(property "Sheetname" "LowVoltage"
-			(at 203.2 50.0884 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Sheetfile" "LowVoltage.kicad_sch"
-			(at 203.2 102.1846 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(instances
-			(project "MainBoard"
-				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/d30698e6-a0ca-49f4-86ac-6bca70afd28d"
-					(page "5")
-				)
-			)
-		)
-	)
-	(sheet
-		(at 127 50.8)
-		(size 50.8 50.8)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(fill
-			(color 0 0 0 0.0000)
-		)
-		(uuid "e4b177e3-23ca-41f2-9b29-ea1382ad6b0a")
+		(uuid "4d197147-495c-4ef1-b13c-60e8d6945a1c")
 		(property "Sheetname" "HighVoltage"
-			(at 127 50.0884 0)
+			(at 127 75.4884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -115,7 +73,7 @@
 			)
 		)
 		(property "Sheetfile" "HighVoltage.kicad_sch"
-			(at 127 102.1846 0)
+			(at 127 127.5846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -124,11 +82,59 @@
 			)
 		)
 		(instances
-			(project "MainBoard"
-				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/d30698e6-a0ca-49f4-86ac-6bca70afd28d"
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 203.2 76.2)
+		(size 50.8 50.8)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "df1ba0e1-55fc-41f2-80f9-aaa8393d43d6")
+		(property "Sheetname" "LowVoltage"
+			(at 203.2 75.4884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "LowVoltage.kicad_sch"
+			(at 203.2 127.5846 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
 					(page "4")
 				)
 			)
 		)
 	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
 )

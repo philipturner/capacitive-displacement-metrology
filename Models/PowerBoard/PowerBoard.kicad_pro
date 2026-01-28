@@ -464,7 +464,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "MainBoard.kicad_pro",
+    "filename": "PowerBoard.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -591,7 +591,7 @@
       "field_names": [],
       "intersheets_ref_own_page": false,
       "intersheets_ref_prefix": "",
-      "intersheets_ref_short": true,
+      "intersheets_ref_short": false,
       "intersheets_ref_show": false,
       "intersheets_ref_suffix": "",
       "junction_size_choice": 3,
@@ -624,32 +624,20 @@
   },
   "sheets": [
     [
-      "600cc1cc-74ca-4bfc-97a0-b230eb3afbcd",
+      "c19e9b7b-7f36-470c-862a-1a648d3f14f6",
       "Root"
     ],
     [
-      "ce903780-1ca3-4311-afa6-19e51963dd24",
-      "ADC"
+      "16a77afe-3056-4f83-9f80-787a2ef93cd8",
+      "WallPower"
     ],
     [
-      "812a2394-e6f7-4194-9eea-57be5665ec29",
-      "CDC"
+      "4d197147-495c-4ef1-b13c-60e8d6945a1c",
+      "HighVoltage"
     ],
     [
-      "e222707b-78e5-4be0-8ce1-010f54f4492e",
-      "DAC1"
-    ],
-    [
-      "ced13514-010b-43dd-8270-2f4fa4cc7e19",
-      "DAC2"
-    ],
-    [
-      "95c36b0c-feb3-4149-8431-7ba235e4d3be",
-      "Isolation"
-    ],
-    [
-      "06f343a1-8f8d-44f8-9a8d-c3164f0f170f",
-      "Teensy"
+      "df1ba0e1-55fc-41f2-80f9-aaa8393d43d6",
+      "LowVoltage"
     ]
   ],
   "text_variables": {}
