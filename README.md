@@ -25,6 +25,7 @@ Table of Contents:
 - [January 20, 2026](#january-20-2026)
 - [January 24, 2026](#january-24-2026)
 - [January 26, 2026](#january-26-2026)
+- [January 29, 2026](#january-29-2026)
 
 ## December 15, 2025
 
