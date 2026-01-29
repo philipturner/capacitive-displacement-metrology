@@ -5,10 +5,7 @@
 	(uuid "c81b5156-63b8-4447-b950-d3dfec575bf0")
 	(paper "A4")
 	(lib_symbols
-		(symbol "Device:D_TVS"
-			(pin_numbers
-				(hide yes)
-			)
+		(symbol "Device:D"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -24,7 +21,7 @@
 					)
 				)
 			)
-			(property "Value" "D_TVS"
+			(property "Value" "D"
 				(at 0 -2.54 0)
 				(effects
 					(font
@@ -50,7 +47,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Bidirectional transient-voltage-suppression diode"
+			(property "Description" "Diode"
 				(at 0 0 0)
 				(effects
 					(font
@@ -59,7 +56,25 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "diode TVS thyrector"
+			(property "Sim.Device" "D"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Sim.Pins" "1=K 2=A"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "diode"
 				(at 0 0 0)
 				(effects
 					(font
@@ -77,10 +92,10 @@
 					(hide yes)
 				)
 			)
-			(symbol "D_TVS_0_1"
+			(symbol "D_0_1"
 				(polyline
 					(pts
-						(xy -2.54 1.27) (xy -2.54 -1.27) (xy 2.54 1.27) (xy 2.54 -1.27) (xy -2.54 1.27)
+						(xy -1.27 1.27) (xy -1.27 -1.27)
 					)
 					(stroke
 						(width 0.254)
@@ -92,7 +107,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0.508 1.27) (xy 0 1.27) (xy 0 -1.27) (xy -0.508 -1.27)
+						(xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 0) (xy 1.27 1.27)
 					)
 					(stroke
 						(width 0.254)
@@ -115,11 +130,11 @@
 					)
 				)
 			)
-			(symbol "D_TVS_1_1"
+			(symbol "D_1_1"
 				(pin passive line
 					(at -3.81 0 0)
 					(length 2.54)
-					(name "A1"
+					(name "K"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -137,7 +152,154 @@
 				(pin passive line
 					(at 3.81 0 180)
 					(length 2.54)
-					(name "A2"
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Device:D_Zener"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "D"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "D_Zener"
+				(at 0 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Zener diode"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "diode"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "TO-???* *_Diode_* *SingleDiode* D_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "D_Zener_0_1"
+				(polyline
+					(pts
+						(xy -1.27 -1.27) (xy -1.27 1.27) (xy -0.762 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 0) (xy -1.27 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -1.27) (xy 1.27 1.27) (xy -1.27 0) (xy 1.27 -1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "D_Zener_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "A"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -156,7 +318,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "bypass capacitors:\n0.1 uF required\n1-2 kV rating required"
+	(text "bypass capacitors:\n0.1 uF, 1 kV, X7R or PP"
 		(exclude_from_sim no)
 		(at 104.14 59.944 0)
 		(effects
@@ -168,33 +330,35 @@
 		(uuid "90a982bf-eea4-4113-b6e0-5bf2b2cc6580")
 	)
 	(symbol
-		(lib_id "Device:D_TVS")
-		(at 104.14 50.8 0)
+		(lib_id "Device:D_Zener")
+		(at 139.7 62.23 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "0284094c-d031-4b8a-a723-3df42878a88f")
+		(uuid "7601b2d6-46b8-4877-8f8c-3c1269b2ec4b")
 		(property "Reference" "D3"
-			(at 104.14 44.45 0)
+			(at 142.24 60.9599 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "D_TVS"
-			(at 104.14 46.99 0)
+		(property "Value" "Vr = 451V"
+			(at 142.24 63.4999 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" ""
-			(at 104.14 50.8 0)
+			(at 139.7 62.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -203,7 +367,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 104.14 50.8 0)
+			(at 139.7 62.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -211,8 +375,17 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Bidirectional transient-voltage-suppression diode"
-			(at 104.14 50.8 0)
+		(property "Description" "Zener diode"
+			(at 139.7 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/littelfuse-inc/P6SMB530A/1764578"
+			(at 139.7 62.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -221,10 +394,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "a802575b-5270-4b27-8295-54f55a7b31dd")
+			(uuid "354cba36-1767-4ebf-bd39-2ed8efd70abf")
 		)
 		(pin "1"
-			(uuid "e1e7e5b5-cd3b-4e34-a83f-8be30f543acc")
+			(uuid "2840b2e8-6bb5-481e-b839-29bd91d7a68f")
 		)
 		(instances
 			(project ""
@@ -248,33 +421,35 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:D_TVS")
-		(at 123.19 50.8 0)
+		(lib_id "Device:D")
+		(at 139.7 80.01 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "3aab2c44-0a5c-41d2-94bc-93e05aa7b085")
+		(uuid "f0c723ae-cd18-4b06-a9ce-6776c068cbd6")
 		(property "Reference" "D7"
-			(at 123.19 44.45 0)
+			(at 142.24 78.7399 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "D_TVS"
-			(at 123.19 46.99 0)
+		(property "Value" "D"
+			(at 142.24 81.2799 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" ""
-			(at 123.19 50.8 0)
+			(at 139.7 80.01 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -283,7 +458,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 123.19 50.8 0)
+			(at 139.7 80.01 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -291,8 +466,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Bidirectional transient-voltage-suppression diode"
-			(at 123.19 50.8 0)
+		(property "Description" "Diode"
+			(at 139.7 80.01 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -300,14 +475,41 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "6fea27d4-2dfe-42e3-aadd-fbeb9e19f063")
+		(property "Sim.Device" "D"
+			(at 139.7 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" "1=K 2=A"
+			(at 139.7 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-general-semiconductor-diodes-division/1N4448W-E3-08/4829905"
+			(at 139.7 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
 		)
 		(pin "1"
-			(uuid "608f6a30-2e51-405d-9dc4-f6e80c357b7b")
+			(uuid "2fed3a3f-825e-497b-b70c-d7c41b62850a")
+		)
+		(pin "2"
+			(uuid "ab683a9d-d6e8-4e07-8527-e0482b65f434")
 		)
 		(instances
-			(project "HighVoltageBoard"
+			(project ""
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/199886e6-7d04-4776-b29c-ace318fdb365"
 					(reference "D7")
 					(unit 1)
