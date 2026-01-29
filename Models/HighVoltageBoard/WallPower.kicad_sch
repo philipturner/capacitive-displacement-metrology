@@ -861,7 +861,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/taiwan-semiconductor-corporation/GS1Z/28023582"
 			(at 158.75 109.22 0)
 			(effects
 				(font
@@ -957,7 +957,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/taiwan-semiconductor-corporation/GS1Z/28023582"
 			(at 158.75 78.74 0)
 			(effects
 				(font

@@ -5,9 +5,31 @@
 	(uuid "c83b09c9-14ae-4b68-b7fa-4c89bba29dc5")
 	(paper "A4")
 	(lib_symbols)
+	(text "input receptacle type\nnot known yet\n\nGND receptacle type\nnot known yet\n\noutput receptacle type\nnot known yet"
+		(exclude_from_sim no)
+		(at 27.178 26.924 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "28230c07-78c1-4db9-8bdd-ae05cd000cf2")
+	)
+	(text "inputs: up to ±12 V\noutputs: up to approx. ∓430 V\npower cords received: 450 V, GND, -450 V"
+		(exclude_from_sim no)
+		(at 102.362 26.924 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "6c795226-d65f-4192-9cf7-d3bbde3a1346")
+	)
 	(text "Print the 4th amplifier, solder required\nSMT components, but don't buy or install a\n4th Apex Op Amp\n\nThis is a de-risking step if future\ndesign revisions require separate coarse\nand fine channels for the Z axis"
 		(exclude_from_sim no)
-		(at 213.868 102.362 0)
+		(at 114.3 127.762 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -16,9 +38,189 @@
 		)
 		(uuid "f49bc873-fcb3-44d6-b164-58e952c16d90")
 	)
+	(label "-450V"
+		(at 99.06 101.6 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "01ced790-b0d9-45e7-8e9f-6cc2c1b385fa")
+	)
+	(label "450V"
+		(at 93.98 101.6 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "08cfa166-cb90-44aa-aa34-8c617a26f918")
+	)
+	(label "450V"
+		(at 93.98 50.8 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "15bbf6af-9676-4de5-8c1a-f8aefb6ef61a")
+	)
+	(label "OUTB"
+		(at 101.6 86.36 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "17de2d16-20fb-44c3-b826-eedc87d37b62")
+	)
+	(label "INB"
+		(at 76.2 86.36 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "23b31b50-8eec-491b-93d2-e7f7a47245d0")
+	)
+	(label "450V"
+		(at 93.98 127 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "248fb116-54d8-4014-8154-5c389443873a")
+	)
+	(label "OUTA"
+		(at 101.6 60.96 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "71bbeaca-4cb4-4d5d-a42c-0e476f9720b1")
+	)
+	(label "INA"
+		(at 76.2 60.96 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "7771aee7-e020-424f-946d-7eb640d2a7b0")
+	)
+	(label "450V"
+		(at 177.8 55.88 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "7c6ac26b-49f5-408d-af60-6184e3d078b1")
+	)
+	(label "-450V"
+		(at 99.06 76.2 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "848cde3b-338d-4c35-ad31-c7b966d0d4b7")
+	)
+	(label "-450V"
+		(at 99.06 50.8 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "85655fd9-4344-4249-bfc8-c66f2a18c95e")
+	)
+	(label "450V"
+		(at 93.98 76.2 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "934a1ed4-02bb-46aa-a7db-417c50613e0d")
+	)
+	(label "INC"
+		(at 76.2 111.76 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "980a5c7e-c8ea-40e3-80b3-8678ced3e265")
+	)
+	(label "IND"
+		(at 76.2 137.16 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "ac415da3-51d9-41f4-9e33-40475088071f")
+	)
+	(label "OUTC"
+		(at 101.6 111.76 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ae49a4e9-b434-4816-969d-8cb1cf78440d")
+	)
+	(label "-450V"
+		(at 177.8 71.12 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d975cf48-34f7-4d52-a18b-684d42b8b6b1")
+	)
+	(label "-450V"
+		(at 99.06 127 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "dd57f0db-88b7-448a-a304-8268b9622416")
+	)
+	(label "OUTD"
+		(at 101.6 137.16 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "fd040e8c-daa5-48e3-85b2-d4d6281a5cc8")
+	)
 	(sheet
-		(at 127 50.8)
-		(size 25.4 25.4)
+		(at 76.2 50.8)
+		(size 25.4 12.7)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -33,7 +235,7 @@
 		)
 		(uuid "199886e6-7d04-4776-b29c-ace318fdb365")
 		(property "Sheetname" "AmplifierA"
-			(at 127 50.0884 0)
+			(at 76.2 50.0884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -42,60 +244,58 @@
 			)
 		)
 		(property "Sheetfile" "Amplifier.kicad_sch"
-			(at 127 76.7846 0)
+			(at 76.2 64.0846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "+VS" input
+			(at 93.98 50.8 90)
+			(uuid "04a1f580-e1c0-45d3-b60c-af3655630130")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "-VS" input
+			(at 99.06 50.8 90)
+			(uuid "01863f93-7dae-470f-bdff-7803de369b30")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "Input" input
+			(at 76.2 60.96 180)
+			(uuid "18776623-1477-4f1a-a429-5b527d7e67e6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "Output" output
+			(at 101.6 60.96 0)
+			(uuid "b4cac0fb-11cd-4192-b4a8-1d33dcb1a453")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 			)
 		)
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
 					(page "3")
-				)
-			)
-		)
-	)
-	(sheet
-		(at 50.8 50.8)
-		(size 50.8 50.8)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(fill
-			(color 0 0 0 0.0000)
-		)
-		(uuid "1d0db973-f635-4db8-8646-beeec420ec2b")
-		(property "Sheetname" "WallPower"
-			(at 50.8 50.0884 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Sheetfile" "WallPower.kicad_sch"
-			(at 50.8 102.1846 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(instances
-			(project "HighVoltageBoard"
-				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
-					(page "2")
 				)
 			)
 		)
@@ -115,8 +315,8 @@
 		(fill
 			(color 0 0 0 0.0000)
 		)
-		(uuid "4ce25162-5acb-4a8d-be91-4e1f0e740ea5")
-		(property "Sheetname" "AmplifierB"
+		(uuid "1d0db973-f635-4db8-8646-beeec420ec2b")
+		(property "Sheetname" "WallPower"
 			(at 177.8 50.0884 0)
 			(effects
 				(font
@@ -125,13 +325,115 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "Amplifier.kicad_sch"
+		(property "Sheetfile" "WallPower.kicad_sch"
 			(at 177.8 76.7846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "-450V" output
+			(at 177.8 71.12 180)
+			(uuid "b5d11c30-3e2a-4b79-a978-e1bffb437d96")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "450V" output
+			(at 177.8 55.88 180)
+			(uuid "4264fe27-9c8f-4b5e-9224-dc5eb0adfe40")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "HighVoltageBoard"
+				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 76.2 76.2)
+		(size 25.4 12.7)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "4ce25162-5acb-4a8d-be91-4e1f0e740ea5")
+		(property "Sheetname" "AmplifierB"
+			(at 76.2 75.4884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Amplifier.kicad_sch"
+			(at 76.2 89.4846 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "+VS" input
+			(at 93.98 76.2 90)
+			(uuid "9785a279-d80c-4351-be80-08b0afdeed22")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "-VS" input
+			(at 99.06 76.2 90)
+			(uuid "9c38e9ef-4307-4979-8832-29ac0a4de69f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "Input" input
+			(at 76.2 86.36 180)
+			(uuid "fff2622e-a826-4950-bf57-03667add0c44")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "Output" output
+			(at 101.6 86.36 0)
+			(uuid "adec044b-7045-44c5-b08a-8e76f2e1e72b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 			)
 		)
 		(instances
@@ -143,8 +445,8 @@
 		)
 	)
 	(sheet
-		(at 127 101.6)
-		(size 25.4 25.4)
+		(at 76.2 101.6)
+		(size 25.4 12.7)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -159,7 +461,7 @@
 		)
 		(uuid "af20753c-bd15-4901-8272-a2513114e228")
 		(property "Sheetname" "AmplifierC"
-			(at 127 100.8884 0)
+			(at 76.2 100.8884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -168,12 +470,52 @@
 			)
 		)
 		(property "Sheetfile" "Amplifier.kicad_sch"
-			(at 127 127.5846 0)
+			(at 76.2 114.8846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "+VS" input
+			(at 93.98 101.6 90)
+			(uuid "972c4f98-2458-4c75-bfa0-5e4b31203fed")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "-VS" input
+			(at 99.06 101.6 90)
+			(uuid "cc5f9520-ed94-4d19-a902-87ebaaf64b6a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "Input" input
+			(at 76.2 111.76 180)
+			(uuid "d4528cf7-05bb-479c-a8c7-3988734efa1d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "Output" output
+			(at 101.6 111.76 0)
+			(uuid "4465ed1e-b0f9-4fc7-afb0-60231370da6c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 			)
 		)
 		(instances
@@ -185,8 +527,8 @@
 		)
 	)
 	(sheet
-		(at 177.8 101.6)
-		(size 25.4 25.4)
+		(at 76.2 127)
+		(size 25.4 12.7)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -201,7 +543,7 @@
 		)
 		(uuid "bd0669b9-2ae0-4bdd-b718-c60fba51a2e0")
 		(property "Sheetname" "AmplifierD"
-			(at 177.8 100.8884 0)
+			(at 76.2 126.2884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -210,12 +552,52 @@
 			)
 		)
 		(property "Sheetfile" "Amplifier.kicad_sch"
-			(at 177.8 127.5846 0)
+			(at 76.2 140.2846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "+VS" input
+			(at 93.98 127 90)
+			(uuid "d7b0d7c6-952c-4bf9-880c-b6683db9b1a5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "-VS" input
+			(at 99.06 127 90)
+			(uuid "cbe3bf8f-73de-407d-bcdc-9a44f1bd4439")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "Input" input
+			(at 76.2 137.16 180)
+			(uuid "af6f11da-0680-40d9-8f72-9361650ebd3a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "Output" output
+			(at 101.6 137.16 0)
+			(uuid "922fa75d-2aa0-4021-9794-c309e006e93d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 			)
 		)
 		(instances
