@@ -705,3 +705,7 @@ Controleo3 reflow oven kits cost $395.00 and cannot be bought until January 31. 
 Industry practice is to keep things secret. Quotes provided by hardware vendors are confidential information. I had to get approval from Matsusada to use the L x W x H dimensions in the open-source FreeCAD project (LabSpace.FCStd). However, it is important to disclose the true costs, especially given how revolutionary creepless SPM is, to save time for others trying to reproduce it. I concealed exact component costs not stated in the public catalog.
 
 I based this vibration isolator on information from Weilin Ma and Dan Berard's public images. The benefit of open-source science is saving time for people trying to reproduce it in the future. Closed-source competitors like Nanofactory CBN Inc. and Quantum Silicon Inc. are wasting my time, gatekeeping information.
+
+## January 29, 2026
+
+![January 29, Part 1](./Documentation/January29/January29_Part1.jpg)
