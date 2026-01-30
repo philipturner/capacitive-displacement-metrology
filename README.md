@@ -721,3 +721,9 @@ I based this vibration isolator on information from Weilin Ma and Dan Berard's p
 ![January 30, Part 1](./Documentation/January30/January30_Part1.jpg)
 
 ![January 30, Part 2](./Documentation/January30/January30_Part2.jpg)
+
+I don’t know how, but both the vertical and horizontal resonances almost match the performance of Minus K isolators: 0.5 Hz. Dan Berard and others were 2.0 Hz. Best vibration isolator in the history of DIY STM (after Q-factor is reduced). 0.9 meters tall.
+
+![January 30, Part 3](./Documentation/January30/January30_Part3.jpg)
+
+![January 30, Part 4](./Documentation/January30/January30_Part4.png)
