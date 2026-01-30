@@ -727,3 +727,11 @@ I don’t know how, but both the vertical and horizontal resonances almost match
 ![January 30, Part 3](./Documentation/January30/January30_Part3.jpg)
 
 ![January 30, Part 4](./Documentation/January30/January30_Part4.png)
+
+<p align="center">
+&nbsp;
+  <img src="./Documentation/January30/January30_Part5.jpg" width="45.00%">
+&nbsp;&nbsp;
+  <img src="./Documentation/January30/January30_Part6.jpg" width="45.00%">
+&nbsp;
+</p>
