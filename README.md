@@ -26,6 +26,7 @@ Table of Contents:
 - [January 24, 2026](#january-24-2026)
 - [January 26, 2026](#january-26-2026)
 - [January 29, 2026](#january-29-2026)
+- [January 30, 2026](#january-30-2026)
 
 ## December 15, 2025
 
@@ -714,3 +715,7 @@ I based this vibration isolator on information from Weilin Ma and Dan Berard's p
 ![January 29, Part 2](./Documentation/January29/January29_Part2.jpg)
 
 ![January 29, Part 3](./Documentation/January29/January29_Part3.jpg)
+
+## January 30, 2026
+
+![January 30, Part 1](./Documentation/January30/January30_Part1.jpg)
