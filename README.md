@@ -719,3 +719,5 @@ I based this vibration isolator on information from Weilin Ma and Dan Berard's p
 ## January 30, 2026
 
 ![January 30, Part 1](./Documentation/January30/January30_Part1.jpg)
+
+![January 30, Part 2](./Documentation/January30/January30_Part2.jpg)
