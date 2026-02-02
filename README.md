@@ -27,6 +27,7 @@ Table of Contents:
 - [January 26, 2026](#january-26-2026)
 - [January 29, 2026](#january-29-2026)
 - [January 30, 2026](#january-30-2026)
+- [February 2, 2026](#february-2-2026)
 
 ## December 15, 2025
 
@@ -735,3 +736,23 @@ I don’t know how, but both the vertical and horizontal resonances almost match
   <img src="./Documentation/January30/January30_Part6.jpg" width="45.00%">
 &nbsp;
 </p>
+
+## February 2, 2026
+
+The Q-factor has been tuned. Close to 14 for both axes. Behavior of the Q-factor was slightly different than anticipated. The block of aluminum in the center indeed disproportionally damps Z more than XY. However, without the block, XY was about 38 and Z was about 25. So it doesn't make sense to widen a disparity in this direction (25 and 13).
+
+I ended up with no special block of aluminum in the center, and just 0.65 cm distance from the magnets, instead of 1.3 cm. Analyzing each video took probably 10 minutes, and I didn't have the motivation to analyze 3 trials per configuration.
+
+[Custom Isolator Investigation - Video Data (Google Sheets)](https://docs.google.com/spreadsheets/d/1jo_KR99LT2sn_qSUho-MS6aLhETTfZkYWSGUg9xkJJw/edit?gid=1881620548#gid=1881620548)
+
+DIY VIBRATION ISOLATION SUB-PROJECT COMPLETE
+
+### Recap
+
+Current state of progress:
+- All equipment on the BOM has arrived. Ordered the new Whizoo Controleo3 kit that just released.
+- 99% finished with the Matsusada deal. Registered my corporation with Customs and Border Protection to import the two power boxes from Japan.
+- Working through some revisions to the Crystal Substrates order. The technician says my first FreeCAD drawing is unrealistic, so we are figuring out alternatives.
+- Having productive private discussions with CCDC/CSD-Core regarding organotins. Also good progress on the contract work with ChimiaDAO regarding both Ge and Sn tripods.
+- About to have a private discussion with Scienta Omicron about the weird vacuum "doors" (load-lock chamber component) and a few other questions.
+- All chips for the Phase 0.2/I/II PCB system have been decided. We also know the exact power supply voltages and a few protection diodes across the 450 V lines.
