@@ -28,6 +28,7 @@ Table of Contents:
 - [January 29, 2026](#january-29-2026)
 - [January 30, 2026](#january-30-2026)
 - [February 2, 2026](#february-2-2026)
+- [February 3, 2026](#february-3-2026)
 
 ## December 15, 2025
 
@@ -756,3 +757,7 @@ Current state of progress:
 - Having productive private discussions with CCDC/CSD-Core regarding organotins. Also good progress on the contract work with ChimiaDAO regarding both Ge and Sn tripods.
 - About to have a private discussion with Scienta Omicron about the weird vacuum "doors" (load-lock chamber component) and a few other questions.
 - All chips for the Phase 0.2/I/II PCB system have been decided. We also know the exact power supply voltages and a few protection diodes across the 450 V lines.
+
+## February 3, 2026
+
+![February 3, Part 1](./Documentation/February3_Part1.jpg)
