@@ -5,7 +5,7 @@
 	(uuid "600cc1cc-74ca-4bfc-97a0-b230eb3afbcd")
 	(paper "A4")
 	(lib_symbols)
-	(text "DAC2:\n- Vbias\n- Vcomp\n- general purpose channel 1\n- general purpose channel 2\n\nall channels ±12 V (mode 1110)"
+	(text "DAC2:\n- Vbias\n- unassigned channel\n- unassigned channel\n- unassigned channel\n\nall channels ±12 V (mode 1110)"
 		(exclude_from_sim no)
 		(at 86.106 64.77 0)
 		(effects
