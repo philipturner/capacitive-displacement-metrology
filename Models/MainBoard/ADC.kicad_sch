@@ -4,5 +4,539 @@
 	(generator_version "9.0")
 	(uuid "25cd1c0e-50fe-4387-a406-f477f1778383")
 	(paper "A4")
-	(lib_symbols)
+	(lib_symbols
+		(symbol "Vendor:ADS8699"
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at 35.56 10.16 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+				)
+			)
+			(property "Value" "ADS8699"
+				(at 35.56 7.62 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(italic yes)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(italic yes)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "ADS8699IPW"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "PW16_TEX PW16_TEX-M PW16_TEX-L"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "ADS8699_0_1"
+				(polyline
+					(pts
+						(xy 7.62 5.08) (xy 7.62 -22.86)
+					)
+					(stroke
+						(width 0.127)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 7.62 -22.86) (xy 63.5 -22.86)
+					)
+					(stroke
+						(width 0.127)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 63.5 5.08) (xy 7.62 5.08)
+					)
+					(stroke
+						(width 0.127)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 63.5 -22.86) (xy 63.5 5.08)
+					)
+					(stroke
+						(width 0.127)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin power_in line
+					(at 0 0 0)
+					(length 7.62)
+					(name "DGND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -2.54 0)
+					(length 7.62)
+					(name "AVDD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -5.08 0)
+					(length 7.62)
+					(name "AGND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 0 -7.62 0)
+					(length 7.62)
+					(name "REFIO"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -10.16 0)
+					(length 7.62)
+					(name "REFGND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 0 -12.7 0)
+					(length 7.62)
+					(name "REFCAP"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 0 -15.24 0)
+					(length 7.62)
+					(name "AIN_P"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 0 -17.78 0)
+					(length 7.62)
+					(name "AIN_GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 71.12 0 180)
+					(length 7.62)
+					(name "DVDD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "16"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 71.12 -2.54 180)
+					(length 7.62)
+					(name "RVS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "15"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 71.12 -5.08 180)
+					(length 7.62)
+					(name "ALARM/SDO-1/GPO"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "14"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 71.12 -7.62 180)
+					(length 7.62)
+					(name "SDO-0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "13"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 71.12 -10.16 180)
+					(length 7.62)
+					(name "SCLK"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 71.12 -12.7 180)
+					(length 7.62)
+					(name "CONVST/*CS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 71.12 -15.24 180)
+					(length 7.62)
+					(name "SDI"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 71.12 -17.78 180)
+					(length 7.62)
+					(name "*RST"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(text "For TIA2, the ground node is on a separate\nboard, possibly with a slightly different\npotential. Connect AIN_GND to ground of that\nboard instead of the current board.\n\nFor TIA1, connect the ADC end of the coaxial\ncable (if present) to the main board. In this\ncase, AIN_GND should connect to GND of the main board."
+		(exclude_from_sim no)
+		(at 51.562 113.284 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "4d1dbc49-a91d-4ec7-a8af-d3b5bfd85937")
+	)
+	(symbol
+		(lib_id "Vendor:ADS8699")
+		(at 88.9 81.28 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ce527635-31c7-43ab-ae85-6d6c5294e467")
+		(property "Reference" "U6"
+			(at 124.46 71.12 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+			)
+		)
+		(property "Value" "ADS8699"
+			(at 124.46 73.66 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 88.9 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 88.9 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 88.9 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "7"
+			(uuid "9f50e569-1700-4ddd-b5d0-417384c68faa")
+		)
+		(pin "8"
+			(uuid "6ef163c6-814f-4df2-83e5-f5e22c676ad6")
+		)
+		(pin "11"
+			(uuid "667c46e9-cb72-46a3-952f-6c6e3a401882")
+		)
+		(pin "6"
+			(uuid "058b6e5d-78c8-4e05-bca3-5a88ec29d05c")
+		)
+		(pin "1"
+			(uuid "676ec4ad-e99e-48b1-a69d-09a5cff5dbb1")
+		)
+		(pin "5"
+			(uuid "a0499997-36d3-407c-994c-d0a7ac73cbdd")
+		)
+		(pin "4"
+			(uuid "654e50ff-2c6a-4051-9240-bd55a1d8710f")
+		)
+		(pin "12"
+			(uuid "de70f15c-c770-4b8a-a8d9-9ffe36a81c97")
+		)
+		(pin "10"
+			(uuid "23a2fa40-6c5d-4253-b660-94a7fb474f02")
+		)
+		(pin "13"
+			(uuid "33c1cd66-b16e-48c5-bd26-2a23486e2e91")
+		)
+		(pin "16"
+			(uuid "60f3d24e-0687-4714-a47d-581f8e3a0c24")
+		)
+		(pin "14"
+			(uuid "4c5e3604-6efd-4128-be76-335ec37ce86b")
+		)
+		(pin "15"
+			(uuid "81e7ebf0-0773-4f0e-a0f5-6037d043654b")
+		)
+		(pin "3"
+			(uuid "23e8ab70-d42b-43d0-aff8-1ca686a323b9")
+		)
+		(pin "2"
+			(uuid "4bcf81b0-d7ee-4074-b2e6-dd90d153556e")
+		)
+		(pin "9"
+			(uuid "ac3d8f3a-9ead-4e4d-9e7a-277184100ec4")
+		)
+		(instances
+			(project ""
+				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/ce903780-1ca3-4311-afa6-19e51963dd24"
+					(reference "U6")
+					(unit 1)
+				)
+			)
+		)
+	)
 )

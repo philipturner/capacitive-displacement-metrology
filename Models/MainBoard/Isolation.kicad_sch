@@ -1574,7 +1574,17 @@
 		)
 		(uuid "e9392cdf-fc12-4d08-83f4-f93792f4d691")
 	)
-	(label "VCC1_I2CISO"
+	(label "VCC2_SPI_ISO"
+		(at 91.44 78.74 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "16ff5042-7227-4c25-b230-d9a21b077e13")
+	)
+	(label "VCC1_I2C_ISO"
 		(at 149.86 137.16 0)
 		(effects
 			(font
@@ -1584,7 +1594,7 @@
 		)
 		(uuid "3c546c9b-11fa-4826-ab9d-cfcc4b3d63b8")
 	)
-	(label "VCC2_I2CISO"
+	(label "VCC2_I2C_ISO"
 		(at 91.44 137.16 0)
 		(effects
 			(font
@@ -1593,6 +1603,16 @@
 			(justify left bottom)
 		)
 		(uuid "b254c43a-a688-4251-9150-2d4a5173af02")
+	)
+	(label "VCC1_SPI_ISO"
+		(at 149.86 78.74 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c9d9f541-1544-4347-b2d1-efd4dd2c17a3")
 	)
 	(hierarchical_label "SDA_Digital"
 		(shape bidirectional)
