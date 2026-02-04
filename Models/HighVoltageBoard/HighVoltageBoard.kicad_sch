@@ -27,17 +27,6 @@
 		)
 		(uuid "6c795226-d65f-4192-9cf7-d3bbde3a1346")
 	)
-	(text "Print the 4th amplifier, solder required\nSMT components, but don't buy or install a\n4th Apex Op Amp\n\nThis is a de-risking step if future\ndesign revisions require separate coarse\nand fine channels for the Z axis"
-		(exclude_from_sim no)
-		(at 114.3 127.762 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "f49bc873-fcb3-44d6-b164-58e952c16d90")
-	)
 	(label "-450V"
 		(at 99.06 101.6 90)
 		(effects
