@@ -1,4 +1,4 @@
-26608529149078180
+26606759870957303
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -58043,34 +58043,6 @@ ceramic
 0
 3
 3
-DAC81404
-RHB0032E-IPC_A
-
-DAC81404RHBR 
-0
-33
-33
-DAC81404
-RHB0032E-IPC_B
-
-DAC81404RHBR 
-0
-33
-33
-DAC81404
-RHB0032E-IPC_C
-
-DAC81404RHBR 
-0
-33
-33
-DAC81404
-RHB0032E-MFG
-
-DAC81404RHBR 
-0
-38
-38
 Diode_SMD
 D_0201_0603Metric
 Diode SMD 0201 (0603 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: https://www.vishay.com/docs/20052/crcw0201e3.pdf), generated with kicad-footprint-generator
@@ -61390,7 +61362,21 @@ heatsink
 0
 0
 IC
+AD8615
+
+
+0
+5
+5
+IC
 PA95
+
+
+0
+8
+8
+IC
+PDIP-8
 
 
 0
@@ -103690,6 +103676,13 @@ test point THT pad
 0
 1
 1
+ThreeTerminal
+Bourns_3296Y
+
+
+0
+3
+3
 ThreeTerminal
 SOT-23
 
