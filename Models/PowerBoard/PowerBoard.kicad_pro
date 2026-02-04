@@ -633,15 +633,19 @@
     ],
     [
       "df1ba0e1-55fc-41f2-80f9-aaa8393d43d6",
-      "LowVoltage"
+      "Converter"
     ],
     [
       "018e7d12-6b24-44c3-9b74-64995b8fa179",
-      "HighVoltage1"
+      "15V"
     ],
     [
       "55f1d4dd-dd9a-4f22-90c5-bff482123087",
-      "HighVoltage2"
+      "PreAmp"
+    ],
+    [
+      "3c1c1dcd-dbca-4c3e-a9c0-5c49f174be9d",
+      "TIA2_Post"
     ]
   ],
   "text_variables": {}

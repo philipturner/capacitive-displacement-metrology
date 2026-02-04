@@ -372,7 +372,7 @@
 			(uuid "cd8f1326-85bc-4625-8432-fb26bd012e0b")
 		)
 		(instances
-			(project ""
+			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/df1ba0e1-55fc-41f2-80f9-aaa8393d43d6"
 					(reference "U6")
 					(unit 1)
@@ -445,7 +445,7 @@
 			(uuid "0116a984-1e7b-434c-93b6-ee6dbf9c039b")
 		)
 		(instances
-			(project ""
+			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/df1ba0e1-55fc-41f2-80f9-aaa8393d43d6"
 					(reference "U5")
 					(unit 1)

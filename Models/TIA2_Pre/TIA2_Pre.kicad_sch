@@ -5,7 +5,7 @@
 	(uuid "f19129fc-f916-4692-924c-ee308c6b3e1d")
 	(paper "A4")
 	(lib_symbols)
-	(text "Input: 2.5V power\nInput: -1.5V power\nInput: current\nOutput: pre voltage\n\nGround connection(s) not yet elaborated"
+	(text "Input: 2.5V power\nInput: -1.5V power\nInput: current\nOutput: pre voltage\nOutput: AD8615 output\n\nGround connection(s) not yet elaborated"
 		(exclude_from_sim no)
 		(at 158.242 76.962 0)
 		(effects

@@ -360,13 +360,9 @@
 			(uuid "8867889e-d5d2-4ee5-81dd-336ae386110a")
 		)
 		(instances
-			(project ""
+			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
 					(reference "U1")
-					(unit 1)
-				)
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "U2")
 					(unit 1)
 				)
 			)
@@ -437,13 +433,9 @@
 			(uuid "99d51ca2-d893-4845-8158-f28e89bc7ed2")
 		)
 		(instances
-			(project ""
+			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
 					(reference "U3")
-					(unit 1)
-				)
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "U4")
 					(unit 1)
 				)
 			)
