@@ -983,6 +983,12 @@
 		(uuid "5fa9171c-7de9-48e1-ad29-9b6e2578f478")
 	)
 	(junction
+		(at 121.92 53.34)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6a8664e9-b7c9-425b-8fe5-a61a931428de")
+	)
+	(junction
 		(at 149.86 53.34)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1158,6 +1164,26 @@
 	)
 	(wire
 		(pts
+			(xy 139.7 43.18) (xy 142.24 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7310125e-30f5-49d6-a39e-9661c6ce3b6f")
+	)
+	(wire
+		(pts
+			(xy 119.38 43.18) (xy 121.92 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "87c65459-2fcd-42a1-a147-c2ea6c4d95e1")
+	)
+	(wire
+		(pts
 			(xy 101.6 124.46) (xy 101.6 129.54)
 		)
 		(stroke
@@ -1215,6 +1241,16 @@
 			(type default)
 		)
 		(uuid "96beb45d-e127-4c60-b9d6-1c89c8a06fb4")
+	)
+	(wire
+		(pts
+			(xy 121.92 53.34) (xy 127 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "98fe89c9-3adf-4d64-90a5-2162e89df4ab")
 	)
 	(wire
 		(pts
@@ -1318,6 +1354,26 @@
 	)
 	(wire
 		(pts
+			(xy 121.92 43.18) (xy 121.92 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dee06912-c7d9-47e1-bb27-64b4753053c3")
+	)
+	(wire
+		(pts
+			(xy 139.7 43.18) (xy 139.7 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e1e278ae-95bd-48e3-b6e8-57b46bac17bd")
+	)
+	(wire
+		(pts
 			(xy 78.74 124.46) (xy 78.74 129.54)
 		)
 		(stroke
@@ -1338,7 +1394,7 @@
 	)
 	(wire
 		(pts
-			(xy 121.92 53.34) (xy 127 53.34)
+			(xy 119.38 53.34) (xy 121.92 53.34)
 		)
 		(stroke
 			(width 0)
@@ -1407,6 +1463,28 @@
 		)
 		(uuid "2ba87e43-fc72-4e4a-9dbe-ac8a379ab251")
 	)
+	(hierarchical_label "SENSEP"
+		(shape output)
+		(at 119.38 43.18 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "59518277-7048-4081-8a07-2d933151cbac")
+	)
+	(hierarchical_label "SENSEN"
+		(shape output)
+		(at 142.24 43.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "60d12344-6db6-452b-a82a-c2f6b5c511a2")
+	)
 	(hierarchical_label "Output"
 		(shape output)
 		(at 144.78 83.82 180)
@@ -1420,7 +1498,7 @@
 	)
 	(hierarchical_label "Input"
 		(shape input)
-		(at 121.92 53.34 180)
+		(at 119.38 53.34 180)
 		(effects
 			(font
 				(size 1.27 1.27)

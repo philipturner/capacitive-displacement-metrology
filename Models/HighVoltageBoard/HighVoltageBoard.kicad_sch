@@ -67,15 +67,15 @@
 		)
 		(uuid "17de2d16-20fb-44c3-b826-eedc87d37b62")
 	)
-	(label "INB"
-		(at 76.2 86.36 180)
+	(label "SENSENA"
+		(at 76.2 60.96 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "23b31b50-8eec-491b-93d2-e7f7a47245d0")
+		(uuid "1a83b3e3-0334-4013-b589-b7ddbecdef56")
 	)
 	(label "450V"
 		(at 93.98 127 90)
@@ -87,6 +87,46 @@
 		)
 		(uuid "248fb116-54d8-4014-8154-5c389443873a")
 	)
+	(label "SENSEND"
+		(at 76.2 137.16 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "32ed1bc0-194a-43cc-9403-4bdde4d558b6")
+	)
+	(label "INC"
+		(at 76.2 106.68 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "362686e7-7a29-4283-a08d-b53842809267")
+	)
+	(label "SENSEPD"
+		(at 76.2 134.62 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "54146f7c-c33c-43b7-9ad1-be4010b6190d")
+	)
+	(label "IND"
+		(at 76.2 132.08 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "702a4bec-5a54-47c5-a8e8-aa8c068b9a59")
+	)
 	(label "OUTA"
 		(at 101.6 60.96 0)
 		(effects
@@ -97,16 +137,6 @@
 		)
 		(uuid "71bbeaca-4cb4-4d5d-a42c-0e476f9720b1")
 	)
-	(label "INA"
-		(at 76.2 60.96 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "7771aee7-e020-424f-946d-7eb640d2a7b0")
-	)
 	(label "450V"
 		(at 177.8 55.88 180)
 		(effects
@@ -116,6 +146,16 @@
 			(justify right bottom)
 		)
 		(uuid "7c6ac26b-49f5-408d-af60-6184e3d078b1")
+	)
+	(label "SENSEPC"
+		(at 76.2 109.22 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "82172745-1808-43cd-b4c9-8b7172dc7313")
 	)
 	(label "-450V"
 		(at 99.06 76.2 90)
@@ -147,7 +187,7 @@
 		)
 		(uuid "934a1ed4-02bb-46aa-a7db-417c50613e0d")
 	)
-	(label "INC"
+	(label "SENSENC"
 		(at 76.2 111.76 180)
 		(effects
 			(font
@@ -155,17 +195,7 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "980a5c7e-c8ea-40e3-80b3-8678ced3e265")
-	)
-	(label "IND"
-		(at 76.2 137.16 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "ac415da3-51d9-41f4-9e33-40475088071f")
+		(uuid "a54a510e-b9c7-400e-8049-66a026536675")
 	)
 	(label "OUTC"
 		(at 101.6 111.76 0)
@@ -176,6 +206,26 @@
 			(justify left bottom)
 		)
 		(uuid "ae49a4e9-b434-4816-969d-8cb1cf78440d")
+	)
+	(label "SENSEPA"
+		(at 76.2 58.42 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b7653b8e-4708-4499-aa33-7e17c8554d9e")
+	)
+	(label "SENSEPB"
+		(at 76.2 83.82 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d103cb9b-37f0-4977-857e-ba7a6abb4426")
 	)
 	(label "-450V"
 		(at 177.8 71.12 180)
@@ -196,6 +246,36 @@
 			(justify left bottom)
 		)
 		(uuid "dd57f0db-88b7-448a-a304-8268b9622416")
+	)
+	(label "SENSENB"
+		(at 76.2 86.36 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e58dc7dd-c8b9-4f0a-bbe5-f5ec2bcafb60")
+	)
+	(label "INB"
+		(at 76.2 81.28 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f4757257-d852-4402-831a-745f5dc69e8b")
+	)
+	(label "INA"
+		(at 76.2 55.88 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f7ca42d3-cdcd-48e1-a735-1ea4d800d60c")
 	)
 	(label "OUTD"
 		(at 101.6 137.16 0)
@@ -262,7 +342,7 @@
 			)
 		)
 		(pin "Input" input
-			(at 76.2 60.96 180)
+			(at 76.2 55.88 180)
 			(uuid "18776623-1477-4f1a-a429-5b527d7e67e6")
 			(effects
 				(font
@@ -279,6 +359,26 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+			)
+		)
+		(pin "SENSEN" output
+			(at 76.2 60.96 180)
+			(uuid "ccb47a98-8b5e-4e35-b94d-737ef6852b72")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SENSEP" output
+			(at 76.2 58.42 180)
+			(uuid "61371c32-ec10-41eb-b974-06b5ac57a31f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances
@@ -406,7 +506,7 @@
 			)
 		)
 		(pin "Input" input
-			(at 76.2 86.36 180)
+			(at 76.2 81.28 180)
 			(uuid "fff2622e-a826-4950-bf57-03667add0c44")
 			(effects
 				(font
@@ -423,6 +523,26 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+			)
+		)
+		(pin "SENSEN" output
+			(at 76.2 86.36 180)
+			(uuid "431ddade-1122-4ad4-a9a6-d3dc91e0762a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SENSEP" output
+			(at 76.2 83.82 180)
+			(uuid "45f166b3-e934-4f78-9c8d-48cc3f4bca39")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances
@@ -488,7 +608,7 @@
 			)
 		)
 		(pin "Input" input
-			(at 76.2 111.76 180)
+			(at 76.2 106.68 180)
 			(uuid "d4528cf7-05bb-479c-a8c7-3988734efa1d")
 			(effects
 				(font
@@ -505,6 +625,26 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+			)
+		)
+		(pin "SENSEN" output
+			(at 76.2 111.76 180)
+			(uuid "57e85eb8-ce51-4dde-85f9-079bceef2b10")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SENSEP" output
+			(at 76.2 109.22 180)
+			(uuid "0df2a63d-e845-4e4c-9b1c-4243b912a4fe")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances
@@ -570,7 +710,7 @@
 			)
 		)
 		(pin "Input" input
-			(at 76.2 137.16 180)
+			(at 76.2 132.08 180)
 			(uuid "af6f11da-0680-40d9-8f72-9361650ebd3a")
 			(effects
 				(font
@@ -587,6 +727,26 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+			)
+		)
+		(pin "SENSEN" output
+			(at 76.2 137.16 180)
+			(uuid "ed24d69f-42b3-4de5-8eca-dd9cdce5c96f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SENSEP" output
+			(at 76.2 134.62 180)
+			(uuid "10d0fc2f-dbaa-4570-873f-a24f05f26252")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances
