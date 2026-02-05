@@ -16,17 +16,6 @@
 		)
 		(uuid "151db267-cda8-4235-a5fe-965d74e1ba98")
 	)
-	(text "Input: 15V power\nInput: -15V power\nInput: pre voltage\nInput: AD8615 output\nOutput: post voltage\n\nGround receptacles(s) for\npreamp not yet elaborated\n\nAll GND nodes for this section\nshould connect to a hierarchical\nsheet pin instead of the regular GND\nsymbol, in case we need to\ncreate separate GND planes for\nTIA2_Post and Power."
-		(exclude_from_sim no)
-		(at 104.394 128.016 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "17ae6a63-83ac-4040-8f12-f567bf0f3ccb")
-	)
 	(text "Input: 18V power\nInput: -18V power\nOutput: 2.5V power\nOutput: -1.5V power"
 		(exclude_from_sim no)
 		(at 206.248 102.87 0)
@@ -149,48 +138,6 @@
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
 					(page "2")
-				)
-			)
-		)
-	)
-	(sheet
-		(at 53.34 127)
-		(size 48.26 25.4)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(fill
-			(color 0 0 0 0.0000)
-		)
-		(uuid "3c1c1dcd-dbca-4c3e-a9c0-5c49f174be9d")
-		(property "Sheetname" "TIA2_Post"
-			(at 53.34 126.2884 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Sheetfile" "TIA2_Post.kicad_sch"
-			(at 53.34 152.9846 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(instances
-			(project "PowerBoard"
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(page "6")
 				)
 			)
 		)

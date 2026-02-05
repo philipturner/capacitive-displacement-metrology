@@ -464,7 +464,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "PowerBoard.kicad_pro",
+    "filename": "TIA2_Post.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -624,24 +624,12 @@
   },
   "sheets": [
     [
-      "c19e9b7b-7f36-470c-862a-1a648d3f14f6",
+      "f19129fc-f916-4692-924c-ee308c6b3e1d",
       "Root"
     ],
     [
-      "16a77afe-3056-4f83-9f80-787a2ef93cd8",
-      "WallPower"
-    ],
-    [
-      "df1ba0e1-55fc-41f2-80f9-aaa8393d43d6",
-      "Converter"
-    ],
-    [
-      "018e7d12-6b24-44c3-9b74-64995b8fa179",
-      "15V"
-    ],
-    [
-      "55f1d4dd-dd9a-4f22-90c5-bff482123087",
-      "PreAmp"
+      "576e9362-b988-409f-82c5-0c80cb18568a",
+      "Amplifier"
     ]
   ],
   "text_variables": {}
