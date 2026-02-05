@@ -5,7 +5,7 @@
 	(uuid "f19129fc-f916-4692-924c-ee308c6b3e1d")
 	(paper "A4")
 	(lib_symbols)
-	(text "Input: 15V power\nInput: -15V power\nInput: current\nOutput: voltage\n\nGround connection(s) not yet elaborated"
+	(text "Input: 15V power\nInput: -15V power\nInput: current\nOutput: voltage"
 		(exclude_from_sim no)
 		(at 158.242 76.962 0)
 		(effects
@@ -18,7 +18,7 @@
 	)
 	(sheet
 		(at 101.6 76.2)
-		(size 50.8 50.8)
+		(size 50.8 25.4)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -42,7 +42,7 @@
 			)
 		)
 		(property "Sheetfile" "Amplifier.kicad_sch"
-			(at 101.6 127.5846 0)
+			(at 101.6 102.1846 0)
 			(effects
 				(font
 					(size 1.27 1.27)

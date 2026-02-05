@@ -630,6 +630,10 @@
     [
       "576e9362-b988-409f-82c5-0c80cb18568a",
       "Amplifier"
+    ],
+    [
+      "d4675321-04be-4323-a412-5fd261d625ce",
+      "CompensationNetwork"
     ]
   ],
   "text_variables": {}

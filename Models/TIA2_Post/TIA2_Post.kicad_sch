@@ -5,9 +5,9 @@
 	(uuid "f19129fc-f916-4692-924c-ee308c6b3e1d")
 	(paper "A4")
 	(lib_symbols)
-	(text "Input: 15V power\nInput: -15V power\nInput: AD8615 output\nOutput: post voltage\n\nInput to board: pre voltage\n\nGround connection(s) not yet elaborated"
+	(text "Input: 15V power\nInput: -15V power\nInput: AD8615 output\nOutput: post voltage"
 		(exclude_from_sim no)
-		(at 158.242 76.962 0)
+		(at 158.242 102.362 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -16,9 +16,20 @@
 		)
 		(uuid "431a5fb7-c170-470c-962a-9df782b62c9b")
 	)
+	(text "Input: pre voltage\nOutput: post voltage"
+		(exclude_from_sim no)
+		(at 155.194 51.562 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "e361dbef-265c-4c61-95f4-303912b3845d")
+	)
 	(sheet
-		(at 101.6 76.2)
-		(size 50.8 50.8)
+		(at 101.6 101.6)
+		(size 50.8 25.4)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -33,7 +44,7 @@
 		)
 		(uuid "576e9362-b988-409f-82c5-0c80cb18568a")
 		(property "Sheetname" "Amplifier"
-			(at 101.6 75.4884 0)
+			(at 101.6 100.8884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -54,6 +65,48 @@
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
 					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 101.6 50.8)
+		(size 50.8 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "d4675321-04be-4323-a412-5fd261d625ce")
+		(property "Sheetname" "CompensationNetwork"
+			(at 101.6 50.0884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "CompensationNetwork.kicad_sch"
+			(at 101.6 76.7846 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "TIA2_Post"
+				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
+					(page "3")
 				)
 			)
 		)
