@@ -1239,7 +1239,7 @@
 		(uuid "e84fd980-81da-4191-9de9-499cd0ff557f")
 	)
 	(junction
-		(at 83.82 137.16)
+		(at 78.74 137.16)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "0fa5c816-dd6b-4231-b094-eb2e87c30d43")
@@ -1251,13 +1251,7 @@
 		(uuid "5229fa5e-3e97-41d7-923a-d9ecc430659c")
 	)
 	(junction
-		(at 175.26 137.16)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5b4ed745-b194-44a6-85a0-98416bdb13a9")
-	)
-	(junction
-		(at 73.66 137.16)
+		(at 63.5 137.16)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "63322282-2d9c-43ad-98a7-d318cabdb0a1")
@@ -1273,6 +1267,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "a7cb0d83-0550-4e16-8ea3-55fc23197b9c")
+	)
+	(junction
+		(at 180.34 137.16)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f34e6cb4-82ca-459d-a263-1edbcb790b89")
 	)
 	(wire
 		(pts
@@ -1296,7 +1296,7 @@
 	)
 	(wire
 		(pts
-			(xy 175.26 134.62) (xy 175.26 137.16)
+			(xy 180.34 134.62) (xy 180.34 137.16)
 		)
 		(stroke
 			(width 0)
@@ -1306,7 +1306,7 @@
 	)
 	(wire
 		(pts
-			(xy 73.66 147.32) (xy 73.66 149.86)
+			(xy 63.5 147.32) (xy 63.5 149.86)
 		)
 		(stroke
 			(width 0)
@@ -1316,7 +1316,7 @@
 	)
 	(wire
 		(pts
-			(xy 175.26 137.16) (xy 175.26 139.7)
+			(xy 180.34 137.16) (xy 180.34 139.7)
 		)
 		(stroke
 			(width 0)
@@ -1336,7 +1336,7 @@
 	)
 	(wire
 		(pts
-			(xy 175.26 147.32) (xy 175.26 149.86)
+			(xy 180.34 147.32) (xy 180.34 149.86)
 		)
 		(stroke
 			(width 0)
@@ -1366,7 +1366,7 @@
 	)
 	(wire
 		(pts
-			(xy 190.5 137.16) (xy 195.58 137.16)
+			(xy 200.66 137.16) (xy 205.74 137.16)
 		)
 		(stroke
 			(width 0)
@@ -1376,7 +1376,7 @@
 	)
 	(wire
 		(pts
-			(xy 73.66 137.16) (xy 83.82 137.16)
+			(xy 63.5 137.16) (xy 78.74 137.16)
 		)
 		(stroke
 			(width 0)
@@ -1396,7 +1396,7 @@
 	)
 	(wire
 		(pts
-			(xy 58.42 137.16) (xy 63.5 137.16)
+			(xy 48.26 137.16) (xy 53.34 137.16)
 		)
 		(stroke
 			(width 0)
@@ -1406,7 +1406,7 @@
 	)
 	(wire
 		(pts
-			(xy 83.82 137.16) (xy 106.68 137.16)
+			(xy 78.74 137.16) (xy 106.68 137.16)
 		)
 		(stroke
 			(width 0)
@@ -1426,7 +1426,7 @@
 	)
 	(wire
 		(pts
-			(xy 73.66 134.62) (xy 73.66 137.16)
+			(xy 63.5 134.62) (xy 63.5 137.16)
 		)
 		(stroke
 			(width 0)
@@ -1446,7 +1446,7 @@
 	)
 	(wire
 		(pts
-			(xy 58.42 149.86) (xy 73.66 149.86)
+			(xy 48.26 149.86) (xy 63.5 149.86)
 		)
 		(stroke
 			(width 0)
@@ -1476,7 +1476,7 @@
 	)
 	(wire
 		(pts
-			(xy 165.1 137.16) (xy 175.26 137.16)
+			(xy 165.1 137.16) (xy 180.34 137.16)
 		)
 		(stroke
 			(width 0)
@@ -1496,7 +1496,7 @@
 	)
 	(wire
 		(pts
-			(xy 175.26 137.16) (xy 185.42 137.16)
+			(xy 180.34 137.16) (xy 195.58 137.16)
 		)
 		(stroke
 			(width 0)
@@ -1516,7 +1516,7 @@
 	)
 	(wire
 		(pts
-			(xy 175.26 149.86) (xy 195.58 149.86)
+			(xy 180.34 149.86) (xy 205.74 149.86)
 		)
 		(stroke
 			(width 0)
@@ -1536,7 +1536,7 @@
 	)
 	(wire
 		(pts
-			(xy 73.66 137.16) (xy 73.66 139.7)
+			(xy 63.5 137.16) (xy 63.5 139.7)
 		)
 		(stroke
 			(width 0)
@@ -1546,7 +1546,7 @@
 	)
 	(wire
 		(pts
-			(xy 83.82 134.62) (xy 83.82 137.16)
+			(xy 78.74 134.62) (xy 78.74 137.16)
 		)
 		(stroke
 			(width 0)
@@ -1556,7 +1556,7 @@
 	)
 	(wire
 		(pts
-			(xy 68.58 137.16) (xy 73.66 137.16)
+			(xy 58.42 137.16) (xy 63.5 137.16)
 		)
 		(stroke
 			(width 0)
@@ -1595,7 +1595,7 @@
 		(uuid "3c546c9b-11fa-4826-ab9d-cfcc4b3d63b8")
 	)
 	(label "VCC2_I2C_ISO"
-		(at 91.44 137.16 0)
+		(at 86.36 137.16 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1682,7 +1682,7 @@
 	)
 	(hierarchical_label "GND_Digital"
 		(shape bidirectional)
-		(at 195.58 149.86 0)
+		(at 205.74 149.86 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1693,7 +1693,7 @@
 	)
 	(hierarchical_label "3.3V_Digital"
 		(shape input)
-		(at 195.58 137.16 0)
+		(at 205.74 137.16 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1748,7 +1748,7 @@
 	)
 	(hierarchical_label "GND_Analog"
 		(shape bidirectional)
-		(at 58.42 149.86 180)
+		(at 48.26 149.86 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1891,7 +1891,7 @@
 	)
 	(hierarchical_label "SCL_Analog"
 		(shape output)
-		(at 73.66 127 90)
+		(at 63.5 127 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1913,7 +1913,7 @@
 	)
 	(hierarchical_label "5V_Analog"
 		(shape input)
-		(at 58.42 137.16 180)
+		(at 48.26 137.16 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1924,7 +1924,7 @@
 	)
 	(hierarchical_label "SCL_Digital"
 		(shape input)
-		(at 175.26 127 90)
+		(at 180.34 127 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1957,7 +1957,7 @@
 	)
 	(hierarchical_label "SDA_Analog"
 		(shape bidirectional)
-		(at 83.82 127 90)
+		(at 78.74 127 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2060,7 +2060,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 175.26 130.81 0)
+		(at 180.34 130.81 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2069,7 +2069,7 @@
 		(fields_autoplaced yes)
 		(uuid "03a2b243-c7ed-45ed-b690-e27eec0d196d")
 		(property "Reference" "R4"
-			(at 177.8 129.5399 0)
+			(at 182.88 129.5399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2077,8 +2077,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k"
-			(at 177.8 132.0799 0)
+		(property "Value" "10k, 1%"
+			(at 182.88 132.0799 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2087,7 +2087,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 176.276 131.064 90)
+			(at 181.356 131.064 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2096,7 +2096,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 175.26 130.81 0)
+			(at 180.34 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2105,7 +2105,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 175.26 130.81 0)
+			(at 180.34 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2130,7 +2130,7 @@
 	)
 	(symbol
 		(lib_id "Device:NetTie_2")
-		(at 66.04 137.16 0)
+		(at 55.88 137.16 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
@@ -2139,7 +2139,7 @@
 		(fields_autoplaced yes)
 		(uuid "19b14289-8d72-4c32-a6d1-4eec36f1e678")
 		(property "Reference" "NT2"
-			(at 66.04 132.08 0)
+			(at 55.88 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2147,7 +2147,7 @@
 			)
 		)
 		(property "Value" "NetTie_2"
-			(at 66.04 134.62 0)
+			(at 55.88 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2155,7 +2155,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 66.04 137.16 0)
+			(at 55.88 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2164,7 +2164,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 66.04 137.16 0)
+			(at 55.88 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2173,7 +2173,7 @@
 			)
 		)
 		(property "Description" "Net tie, 2 pins"
-			(at 66.04 137.16 0)
+			(at 55.88 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2268,7 +2268,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 73.66 130.81 0)
+		(at 63.5 130.81 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2277,7 +2277,7 @@
 		(fields_autoplaced yes)
 		(uuid "207dc29f-4117-4d98-a329-7c8459fb3b40")
 		(property "Reference" "R2"
-			(at 76.2 129.5399 0)
+			(at 66.04 129.5399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2285,8 +2285,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k"
-			(at 76.2 132.0799 0)
+		(property "Value" "10k, 1%"
+			(at 66.04 132.0799 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2295,7 +2295,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 74.676 131.064 90)
+			(at 64.516 131.064 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2304,7 +2304,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 73.66 130.81 0)
+			(at 63.5 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2313,7 +2313,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 73.66 130.81 0)
+			(at 63.5 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2338,7 +2338,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 83.82 130.81 0)
+		(at 78.74 130.81 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2347,7 +2347,7 @@
 		(fields_autoplaced yes)
 		(uuid "29baa18a-ef2a-47a2-8f66-eddcd6cff264")
 		(property "Reference" "R1"
-			(at 86.36 129.5399 0)
+			(at 81.28 129.5399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2355,8 +2355,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k"
-			(at 86.36 132.0799 0)
+		(property "Value" "10k, 1%"
+			(at 81.28 132.0799 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2365,7 +2365,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 84.836 131.064 90)
+			(at 79.756 131.064 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2374,7 +2374,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 83.82 130.81 0)
+			(at 78.74 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2383,7 +2383,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 83.82 130.81 0)
+			(at 78.74 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2408,7 +2408,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 73.66 143.51 0)
+		(at 63.5 143.51 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2417,7 +2417,7 @@
 		(fields_autoplaced yes)
 		(uuid "3f057423-a3ff-4d8e-9f11-ea6a8487e1bc")
 		(property "Reference" "C1"
-			(at 77.47 142.2399 0)
+			(at 67.31 142.2399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2426,7 +2426,7 @@
 			)
 		)
 		(property "Value" "100 nF, 0603"
-			(at 77.47 144.7799 0)
+			(at 67.31 144.7799 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2435,7 +2435,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 74.6252 147.32 0)
+			(at 64.4652 147.32 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2444,7 +2444,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 73.66 143.51 0)
+			(at 63.5 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2453,7 +2453,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 73.66 143.51 0)
+			(at 63.5 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2597,7 +2597,7 @@
 	)
 	(symbol
 		(lib_id "Device:NetTie_2")
-		(at 187.96 137.16 0)
+		(at 198.12 137.16 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
@@ -2606,7 +2606,7 @@
 		(fields_autoplaced yes)
 		(uuid "76bbefc1-64d3-487e-bd9d-9909a4803f14")
 		(property "Reference" "NT1"
-			(at 187.96 132.08 0)
+			(at 198.12 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2614,7 +2614,7 @@
 			)
 		)
 		(property "Value" "NetTie_2"
-			(at 187.96 134.62 0)
+			(at 198.12 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2622,7 +2622,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 187.96 137.16 0)
+			(at 198.12 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2631,7 +2631,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 187.96 137.16 0)
+			(at 198.12 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2640,7 +2640,7 @@
 			)
 		)
 		(property "Description" "Net tie, 2 pins"
-			(at 187.96 137.16 0)
+			(at 198.12 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2852,7 +2852,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 175.26 143.51 0)
+		(at 180.34 143.51 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2861,7 +2861,7 @@
 		(fields_autoplaced yes)
 		(uuid "9d2fdb4c-ecb7-4344-9d98-45b0ea477290")
 		(property "Reference" "C2"
-			(at 179.07 142.2399 0)
+			(at 184.15 142.2399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2870,7 +2870,7 @@
 			)
 		)
 		(property "Value" "100 nF, 0603"
-			(at 179.07 144.7799 0)
+			(at 184.15 144.7799 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2879,7 +2879,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 176.2252 147.32 0)
+			(at 181.3052 147.32 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2888,7 +2888,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 175.26 143.51 0)
+			(at 180.34 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2897,7 +2897,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 175.26 143.51 0)
+			(at 180.34 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2939,7 +2939,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10k, 1%"
 			(at 167.64 132.0799 0)
 			(effects
 				(font
