@@ -315,7 +315,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "power cord receptable type\nnot known yet"
+	(text "power cord receptacle type\nnot known yet"
 		(exclude_from_sim no)
 		(at 160.274 77.978 0)
 		(effects

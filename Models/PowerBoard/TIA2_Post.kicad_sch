@@ -5,4 +5,57 @@
 	(uuid "3d60c9af-a938-4973-a5da-e500e3e7f8b7")
 	(paper "A4")
 	(lib_symbols)
+	(text "Input: 15V power\nInput: -15V power\nInput: AD8615 output\nOutput: post voltage"
+		(exclude_from_sim no)
+		(at 172.212 103.124 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "89eed803-1b39-4fa2-b736-f417d108a470")
+	)
+	(sheet
+		(at 127 101.6)
+		(size 40.64 30.48)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "4d14b1dc-0921-430a-a94b-32ec6029b30c")
+		(property "Sheetname" "Amplifier"
+			(at 127 100.8884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Amplifier.kicad_sch"
+			(at 127 132.6646 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/3c1c1dcd-dbca-4c3e-a9c0-5c49f174be9d"
+					(page "7")
+				)
+			)
+		)
+	)
 )

@@ -16,7 +16,7 @@
 		)
 		(uuid "151db267-cda8-4235-a5fe-965d74e1ba98")
 	)
-	(text "Input: 15V power\nInput: -15V power\nInput: pre voltage\nInput: AD8615 output\nOutput: post voltage\n\nGround receptacles(s) for\npreamp not yet elaborated\n\nAll GND nodes for this board\nshould connect to a hierarchical\nsheet pin instead of the regular GND\nsymbol, in case we need to\ncreate separate GND planes for\nTIA2_Post and Power."
+	(text "Input: 15V power\nInput: -15V power\nInput: pre voltage\nInput: AD8615 output\nOutput: post voltage\n\nGround receptacles(s) for\npreamp not yet elaborated\n\nAll GND nodes for this section\nshould connect to a hierarchical\nsheet pin instead of the regular GND\nsymbol, in case we need to\ncreate separate GND planes for\nTIA2_Post and Power."
 		(exclude_from_sim no)
 		(at 104.394 128.016 0)
 		(effects

@@ -646,6 +646,10 @@
     [
       "3c1c1dcd-dbca-4c3e-a9c0-5c49f174be9d",
       "TIA2_Post"
+    ],
+    [
+      "4d14b1dc-0921-430a-a94b-32ec6029b30c",
+      "Amplifier"
     ]
   ],
   "text_variables": {}
