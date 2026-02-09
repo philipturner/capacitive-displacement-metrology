@@ -2073,7 +2073,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "22, 1%"
+		(property "Value" "15, 1%"
 			(at 182.88 104.1399 0)
 			(effects
 				(font
@@ -2109,7 +2109,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/KTR18EZPF22R0?qs=493kPxzlxfLXWaB%252BGHnXrw%3D%3D"
+		(property "Purchase Link" "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/KTR18EZPF15R0?qs=493kPxzlxfKWknN2g0057g%3D%3D"
 			(at 180.34 102.87 0)
 			(effects
 				(font

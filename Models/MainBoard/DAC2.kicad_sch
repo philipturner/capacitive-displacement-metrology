@@ -864,17 +864,6 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "Bias voltage and Phase 0.2 piezo\nvoltage can be less precise than\nPhase II piezo voltage. No need\nto correct for IR drops or\ndifferent ground potentials.\n\nStill, minimize the loop area of\nthe electric field between positive\nand negative conductors of the\noutput voltage difference. And/or\ninterpret this as being aware of\ncurrent return paths."
-		(exclude_from_sim no)
-		(at 152.908 16.764 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "5450cb28-aedb-43b3-8085-b9cb814dbb47")
-	)
 	(junction
 		(at 226.06 127)
 		(diameter 0)
@@ -900,16 +889,16 @@
 		(uuid "1521ff38-067d-4bed-9d31-e17ef5d3e764")
 	)
 	(junction
-		(at 152.4 66.04)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "19e278d1-2f26-4d85-96e2-497b36da1b8a")
-	)
-	(junction
 		(at 208.28 101.6)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "347d234d-dd2b-4986-84a1-62b79b91ef77")
+	)
+	(junction
+		(at 167.64 66.04)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "65fd08ee-6ecc-4cab-908a-3def8355a53e")
 	)
 	(junction
 		(at 226.06 88.9)
@@ -1043,7 +1032,7 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 73.66) (xy 156.21 73.66)
+			(xy 149.86 73.66) (xy 170.18 73.66)
 		)
 		(stroke
 			(width 0)
@@ -1053,7 +1042,17 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 78.74) (xy 167.64 78.74)
+			(xy 167.64 66.04) (xy 170.18 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "225c41c1-14ce-46ae-a8a6-439feff41680")
+	)
+	(wire
+		(pts
+			(xy 157.48 86.36) (xy 167.64 86.36)
 		)
 		(stroke
 			(width 0)
@@ -1073,7 +1072,7 @@
 	)
 	(wire
 		(pts
-			(xy 175.26 78.74) (xy 177.8 78.74)
+			(xy 175.26 86.36) (xy 177.8 86.36)
 		)
 		(stroke
 			(width 0)
@@ -1110,16 +1109,6 @@
 			(type default)
 		)
 		(uuid "57a290ed-6739-463b-bd83-15c6e9f00f57")
-	)
-	(wire
-		(pts
-			(xy 152.4 66.04) (xy 152.4 71.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "597d9490-200e-498f-ac87-509720b65fcc")
 	)
 	(wire
 		(pts
@@ -1213,7 +1202,7 @@
 	)
 	(wire
 		(pts
-			(xy 165.1 66.04) (xy 170.18 66.04)
+			(xy 165.1 66.04) (xy 167.64 66.04)
 		)
 		(stroke
 			(width 0)
@@ -1253,7 +1242,7 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 71.12) (xy 152.4 71.12)
+			(xy 149.86 71.12) (xy 167.64 71.12)
 		)
 		(stroke
 			(width 0)
@@ -1303,7 +1292,7 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 66.04) (xy 152.4 66.04)
+			(xy 149.86 66.04) (xy 157.48 66.04)
 		)
 		(stroke
 			(width 0)
@@ -1353,16 +1342,6 @@
 	)
 	(wire
 		(pts
-			(xy 152.4 66.04) (xy 157.48 66.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "dccb172c-d6ca-43d6-8273-687f6919283e")
-	)
-	(wire
-		(pts
 			(xy 220.98 88.9) (xy 226.06 88.9)
 		)
 		(stroke
@@ -1370,6 +1349,26 @@
 			(type default)
 		)
 		(uuid "de14f9cd-56d8-43d3-88f5-0e71b7262cb0")
+	)
+	(wire
+		(pts
+			(xy 157.48 78.74) (xy 149.86 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e1851557-4036-4bff-924c-caef0a97ee3d")
+	)
+	(wire
+		(pts
+			(xy 167.64 66.04) (xy 167.64 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eae699a1-4edb-4585-82a4-22b5d86f955c")
 	)
 	(wire
 		(pts
@@ -1410,6 +1409,16 @@
 			(type default)
 		)
 		(uuid "f2c8efc1-0329-4514-9caf-192aba8bfcf7")
+	)
+	(wire
+		(pts
+			(xy 157.48 86.36) (xy 157.48 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fd704cd2-c6fa-4861-9cea-aa8dfdabfeda")
 	)
 	(label "AVSS"
 		(at 149.86 99.06 0)
@@ -1482,7 +1491,7 @@
 		(uuid "9b999c53-1650-47ed-a68b-85c95b6dab54")
 	)
 	(label "IOVDD"
-		(at 177.8 78.74 0)
+		(at 177.8 86.36 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1500,6 +1509,17 @@
 			(justify right bottom)
 		)
 		(uuid "f3f81631-72fc-4f73-af6b-0954c8049521")
+	)
+	(hierarchical_label "SENSEN"
+		(shape output)
+		(at 170.18 73.66 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "03543964-37b8-485e-9bae-bba3a3723324")
 	)
 	(hierarchical_label "Output"
 		(shape output)
@@ -2223,73 +2243,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 156.21 73.66 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "7b69ecf1-bfc1-4a2e-8996-7b6da131ab42")
-		(property "Reference" "#PWR05"
-			(at 162.56 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 160.02 73.6599 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" ""
-			(at 156.21 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 156.21 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 156.21 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "378b0a29-feaf-4b90-8e91-554267c8a3e9")
-		)
-		(instances
-			(project ""
-				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/29478a2e-751a-4158-b6e6-121ba76a9d10"
-					(reference "#PWR05")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C")
 		(at 217.17 114.3 90)
 		(unit 1)
@@ -2510,7 +2463,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 171.45 78.74 90)
+		(at 171.45 86.36 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2519,7 +2472,7 @@
 		(fields_autoplaced yes)
 		(uuid "ada391c4-5b76-4248-8ed5-9e85faad507c")
 		(property "Reference" "R5"
-			(at 171.45 72.39 90)
+			(at 171.45 80.01 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2527,7 +2480,7 @@
 			)
 		)
 		(property "Value" "10k, 1%"
-			(at 171.45 74.93 90)
+			(at 171.45 82.55 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2535,7 +2488,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 171.704 77.724 90)
+			(at 171.704 85.344 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2544,7 +2497,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 171.45 78.74 0)
+			(at 171.45 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2553,7 +2506,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 171.45 78.74 0)
+			(at 171.45 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2562,7 +2515,7 @@
 			)
 		)
 		(property "Purchase Link" ""
-			(at 171.45 78.74 0)
+			(at 171.45 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
