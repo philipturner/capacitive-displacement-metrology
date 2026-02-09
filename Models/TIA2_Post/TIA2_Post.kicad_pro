@@ -573,12 +573,60 @@
           "label": "Datasheet",
           "name": "Datasheet",
           "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Cost (qty10)",
+          "name": "Cost (qty10)",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Purchase Link",
+          "name": "Purchase Link",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "RoHS Compliant",
+          "name": "RoHS Compliant",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Sim.Device",
+          "name": "Sim.Device",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Sim.Pins",
+          "name": "Sim.Pins",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Cost",
+          "name": "Cost",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Description",
+          "name": "Description",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "#",
+          "name": "${ITEM_NUMBER}",
+          "show": false
         }
       ],
       "filter_string": "",
       "group_symbols": true,
       "include_excluded_from_bom": true,
-      "name": "Default Editing",
+      "name": "",
       "sort_asc": true,
       "sort_field": "Reference"
     },
@@ -634,6 +682,10 @@
     [
       "d4675321-04be-4323-a412-5fd261d625ce",
       "CompensationNetwork"
+    ],
+    [
+      "26fbd804-20d9-4790-8391-a3b14d5c1dc5",
+      "Limiter"
     ]
   ],
   "text_variables": {}

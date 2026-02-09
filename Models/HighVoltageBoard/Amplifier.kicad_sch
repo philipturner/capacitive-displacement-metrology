@@ -2648,7 +2648,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:RESC0603"
 			(at 120.904 52.324 90)
 			(effects
 				(font
@@ -2657,7 +2657,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" ""
 			(at 120.65 53.34 0)
 			(effects
 				(font

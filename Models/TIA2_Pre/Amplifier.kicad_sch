@@ -5,6 +5,184 @@
 	(uuid "f2cf6988-d217-49bb-869f-cc16f167d6c5")
 	(paper "A4")
 	(lib_symbols
+		(symbol "Amplifier_Operational:OP179GRT"
+			(pin_names
+				(offset 0.127)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "OP179GRT"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/OP179_279.pdf"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Single Rail-to-Rail High Output Current Operational Amplifiers, SOT-23-5"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "single opamp"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "SOT?23*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "OP179GRT_0_1"
+				(polyline
+					(pts
+						(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin power_in line
+					(at -2.54 7.62 270)
+					(length 3.81)
+					(name "V+"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -2.54 -7.62 90)
+					(length 3.81)
+					(name "V-"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "OP179GRT_1_1"
+				(pin input line
+					(at -7.62 2.54 0)
+					(length 2.54)
+					(name "+"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -7.62 -2.54 0)
+					(length 2.54)
+					(name "-"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Device:C"
 			(pin_numbers
 				(hide yes)
@@ -317,181 +495,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Vendor:AD8615"
-			(pin_names
-				(offset 0.254)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "U"
-				(at 20.828 9.398 0)
-				(effects
-					(font
-						(size 1.524 1.524)
-					)
-				)
-			)
-			(property "Value" "AD8615"
-				(at 20.828 6.858 0)
-				(effects
-					(font
-						(size 1.524 1.524)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-						(italic yes)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-						(italic yes)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "AD8615AUJZ-R2"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "UJ_5_ADI UJ_5_ADI-M UJ_5_ADI-L"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "AD8615_0_1"
-				(rectangle
-					(start 7.62 5.08)
-					(end 33.02 -10.16)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin output line
-					(at 0 0 0)
-					(length 7.62)
-					(name "OUT"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 0 -2.54 0)
-					(length 7.62)
-					(name "V-"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 40.64 0 180)
-					(length 7.62)
-					(name "V+"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at 40.64 -2.54 180)
-					(length 7.62)
-					(name "IN-"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at 40.64 -5.08 180)
-					(length 7.62)
-					(name "IN+"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "power:GND"
 			(power)
 			(pin_numbers
@@ -595,10 +598,20 @@
 		)
 	)
 	(junction
-		(at 142.24 83.82)
+		(at 104.14 78.74)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "6a8c8e05-1000-47a8-a964-128a426c0a0d")
+		(uuid "02dc3c50-f40d-4566-a608-0488d9b4de19")
+	)
+	(wire
+		(pts
+			(xy 102.87 73.66) (xy 106.68 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0e1156c5-4139-42b4-b7ed-12a832e25b95")
 	)
 	(wire
 		(pts
@@ -612,33 +625,43 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 83.82) (xy 144.78 83.82)
+			(xy 121.92 76.2) (xy 127 76.2)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "36389849-d05d-4318-999f-8f36e68ea760")
+		(uuid "233dd14c-ebfb-4491-87ac-b7bb5c976ef8")
 	)
 	(wire
 		(pts
-			(xy 134.62 83.82) (xy 142.24 83.82)
+			(xy 116.84 101.6) (xy 127 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "3870082a-aca5-4eeb-a7ff-b001350b3205")
+		(uuid "5157f0ac-184a-4438-add4-06dafc74a230")
 	)
 	(wire
 		(pts
-			(xy 93.98 63.5) (xy 110.49 63.5)
+			(xy 104.14 78.74) (xy 104.14 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "5f0760a2-33ec-4371-a1bb-31a31bf63c25")
+		(uuid "612d55c8-d91c-43da-a964-4a3024846583")
+	)
+	(wire
+		(pts
+			(xy 104.14 78.74) (xy 106.68 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6d0e5b10-e0e1-4bb0-913d-46fdd93a239f")
 	)
 	(wire
 		(pts
@@ -652,6 +675,16 @@
 	)
 	(wire
 		(pts
+			(xy 101.6 78.74) (xy 104.14 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "70f21abb-9066-40e4-817d-18fa1b0c5aa4")
+	)
+	(wire
+		(pts
 			(xy 127 116.84) (xy 127 119.38)
 		)
 		(stroke
@@ -659,6 +692,16 @@
 			(type default)
 		)
 		(uuid "8edf754e-62e8-495c-ad4a-f34bbb1ea4f0")
+	)
+	(wire
+		(pts
+			(xy 104.14 101.6) (xy 109.22 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ab253bdc-78e1-4d1d-8439-3b424bc3f5f3")
 	)
 	(wire
 		(pts
@@ -670,69 +713,38 @@
 		)
 		(uuid "d7aed34a-60a8-4d6d-99a2-2d69d75d6d73")
 	)
-	(wire
-		(pts
-			(xy 142.24 83.82) (xy 142.24 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d8657653-1b01-4a71-bfa9-c9727587198d")
-	)
-	(wire
-		(pts
-			(xy 118.11 63.5) (xy 142.24 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f6254918-1f44-4973-8321-78b059f43c1b")
-	)
-	(hierarchical_label "PreVoltage"
-		(shape output)
-		(at 93.98 63.5 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "2d993fad-050b-42d6-bf40-5a87a6664e80")
-	)
-	(hierarchical_label "AD8615_Output"
-		(shape output)
-		(at 93.98 81.28 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "66b57f8c-c014-4236-96b9-52ab2801d3e4")
-	)
 	(hierarchical_label "-1.5V"
 		(shape input)
-		(at 93.98 83.82 180)
+		(at 111.76 83.82 270)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right)
 		)
-		(uuid "701dc389-bc5e-4b94-9be2-ec3131ac2435")
+		(uuid "3ec6d2a9-5db7-4f3f-88a2-5c9d67865ce0")
 	)
 	(hierarchical_label "2.5V"
 		(shape input)
-		(at 134.62 81.28 0)
+		(at 111.76 68.58 90)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left)
 		)
-		(uuid "978681f8-0931-4197-92f2-c60180559a24")
+		(uuid "58bc6ebc-30b0-4668-8136-fd3a4e67386e")
+	)
+	(hierarchical_label "Current"
+		(shape input)
+		(at 101.6 78.74 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "6bfd4981-e0d3-4938-bee0-a1cc8a315238")
 	)
 	(hierarchical_label "2.5V"
 		(shape input)
@@ -745,16 +757,16 @@
 		)
 		(uuid "97b74112-2e97-4ef2-9705-1c60f8808c44")
 	)
-	(hierarchical_label "Current"
-		(shape input)
-		(at 144.78 83.82 0)
+	(hierarchical_label "AD8615_Output"
+		(shape output)
+		(at 127 76.2 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left)
 		)
-		(uuid "9ba6f235-4405-4103-b31e-147745340b79")
+		(uuid "a47bd9fd-4edd-4f00-a34a-dd37766c5106")
 	)
 	(hierarchical_label "-1.5V"
 		(shape input)
@@ -766,6 +778,103 @@
 			(justify left)
 		)
 		(uuid "e373c072-09d8-4b4e-9d31-be92f708182b")
+	)
+	(hierarchical_label "PreVoltage"
+		(shape output)
+		(at 127 101.6 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f7b88f8b-eb03-41a9-83a6-7240c41e693c")
+	)
+	(symbol
+		(lib_id "Amplifier_Operational:OP179GRT")
+		(at 114.3 76.2 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0b6b1c95-b1f6-4abe-9ed3-9081d714326a")
+		(property "Reference" "U1"
+			(at 125.73 69.7798 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "AD8615"
+			(at 125.73 72.3198 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 114.3 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 114.3 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 114.3 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" ""
+			(at 114.3 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "78f7ed60-1a40-44d8-9593-632a84a96997")
+		)
+		(pin "1"
+			(uuid "16bd0e4a-1f92-4cf6-a083-58400fef9cf2")
+		)
+		(pin "4"
+			(uuid "02b422fd-bd62-4d3b-81a9-e9edab2cd7e8")
+		)
+		(pin "5"
+			(uuid "45c3f304-ce51-479c-bffc-3cb6fef7a640")
+		)
+		(pin "2"
+			(uuid "3983693c-19c6-4b05-94f8-d63865b73d58")
+		)
+		(instances
+			(project ""
+				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/576e9362-b988-409f-82c5-0c80cb18568a"
+					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Device:C")
@@ -847,85 +956,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Vendor:AD8615")
-		(at 93.98 81.28 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "702bfdc0-da5b-4f20-a659-8aefbfb6d7bc")
-		(property "Reference" "U1"
-			(at 114.3 71.12 0)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-			)
-		)
-		(property "Value" "AD8615"
-			(at 114.3 73.66 0)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 93.98 81.28 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 93.98 81.28 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 93.98 81.28 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "5"
-			(uuid "eb63ae7f-84a7-4086-8aaa-8cbbbcf864a7")
-		)
-		(pin "3"
-			(uuid "e1e1d139-e2b2-4ce2-8a99-79e2cf62a511")
-		)
-		(pin "2"
-			(uuid "ac6b5e9a-b28c-4383-94ea-1f78f0ce2b2b")
-		)
-		(pin "1"
-			(uuid "0854a09e-754e-4518-adc0-d13e03d3a593")
-		)
-		(pin "4"
-			(uuid "2fa2b0ce-3b73-4a65-b5ba-f18353a9da67")
-		)
-		(instances
-			(project ""
-				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/576e9362-b988-409f-82c5-0c80cb18568a"
-					(reference "U1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 101.6 129.54 0)
 		(unit 1)
@@ -992,94 +1022,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_US")
-		(at 114.3 63.5 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "d169326e-c44a-47e5-bd5a-868c6cd7279a")
-		(property "Reference" "R1"
-			(at 114.3 57.15 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "330M, 5%, 0603"
-			(at 114.3 59.69 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 114.554 62.484 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 114.3 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 114.3 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/CRCW0603330MJPEAHR/5072104"
-			(at 114.3 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "227275b7-c012-4c0a-b30d-80e1f53c4155")
-		)
-		(pin "2"
-			(uuid "194d81ac-1524-487e-8c76-240b8df418d9")
-		)
-		(instances
-			(project "TIA2_Pre"
-				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/576e9362-b988-409f-82c5-0c80cb18568a"
-					(reference "R1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
-		(at 134.62 86.36 90)
+		(at 102.87 73.66 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "efb15897-d974-49f8-9cf9-3e520b5bdcb8")
-		(property "Reference" "#PWR03"
-			(at 140.97 86.36 0)
+		(uuid "8cb43598-921e-4836-8bd3-977cd57656c7")
+		(property "Reference" "#PWR04"
+			(at 96.52 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1088,7 +1041,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 138.43 86.3599 90)
+			(at 99.06 73.6599 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1097,7 +1050,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 134.62 86.36 0)
+			(at 102.87 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1106,7 +1059,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 134.62 86.36 0)
+			(at 102.87 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1115,7 +1068,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 134.62 86.36 0)
+			(at 102.87 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1124,12 +1077,89 @@
 			)
 		)
 		(pin "1"
-			(uuid "53d5cc76-b9e1-4776-ae2d-ab7c06d35f61")
+			(uuid "45fc13ed-7618-42dc-ad95-bb370ac3f096")
 		)
 		(instances
-			(project ""
+			(project "TIA2_Pre"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/576e9362-b988-409f-82c5-0c80cb18568a"
-					(reference "#PWR03")
+					(reference "#PWR04")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_US")
+		(at 113.03 101.6 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c643abdc-13ef-47cf-a7ba-3e0796cd9291")
+		(property "Reference" "R2"
+			(at 113.03 95.25 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "330M, 5%, 0603"
+			(at 113.03 97.79 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 113.284 100.584 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 113.03 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 113.03 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/CRCW0603330MJPEAHR/5072104"
+			(at 113.03 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "6e8a0c04-24d8-4d09-8071-3f66c424988e")
+		)
+		(pin "2"
+			(uuid "49f8a84d-b8db-4e29-8fc1-ed4ae8a8ac00")
+		)
+		(instances
+			(project "TIA2_Pre"
+				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/576e9362-b988-409f-82c5-0c80cb18568a"
+					(reference "R2")
 					(unit 1)
 				)
 			)
