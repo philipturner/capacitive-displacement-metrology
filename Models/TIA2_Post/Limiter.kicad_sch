@@ -1513,16 +1513,6 @@
 	)
 	(wire
 		(pts
-			(xy 96.52 78.74) (xy 96.52 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "15c72edb-3cbe-4a91-b65e-ab44c220b58c")
-	)
-	(wire
-		(pts
 			(xy 207.01 105.41) (xy 205.74 105.41)
 		)
 		(stroke
@@ -1570,16 +1560,6 @@
 			(type default)
 		)
 		(uuid "3b775968-d7ec-4e43-9dfc-a8a7fd97c343")
-	)
-	(wire
-		(pts
-			(xy 71.12 50.8) (xy 76.2 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3cb87ab8-0a29-41a4-b710-eed7d26528a2")
 	)
 	(wire
 		(pts
@@ -1640,6 +1620,16 @@
 			(type default)
 		)
 		(uuid "53473d90-bb2b-410b-8048-c5a339dd6670")
+	)
+	(wire
+		(pts
+			(xy 96.52 78.74) (xy 96.52 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5b113478-1e20-46fb-b140-ab081287151b")
 	)
 	(wire
 		(pts
@@ -1763,16 +1753,6 @@
 	)
 	(wire
 		(pts
-			(xy 78.74 50.8) (xy 96.52 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8d841658-cba2-4502-a7ce-0f83d6b33525")
-	)
-	(wire
-		(pts
 			(xy 213.36 90.17) (xy 213.36 96.52)
 		)
 		(stroke
@@ -1883,16 +1863,6 @@
 	)
 	(wire
 		(pts
-			(xy 96.52 66.04) (xy 96.52 76.2)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e38faf70-1eee-4bf7-aa03-c604cb91f943")
-	)
-	(wire
-		(pts
 			(xy 205.74 105.41) (xy 205.74 115.57)
 		)
 		(stroke
@@ -1931,36 +1901,6 @@
 		)
 		(uuid "2bad5d7d-fb56-4054-b94d-836b6ba5e558")
 	)
-	(label "Output"
-		(at 165.1 50.8 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "2c03c63b-67bc-4b3c-9466-92d668cb0393")
-	)
-	(label "Output"
-		(at 96.52 50.8 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "3d05a27c-a0f2-43b2-9d4c-83bfbbf732cd")
-	)
-	(label "Output"
-		(at 96.52 66.04 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "82b67777-7d08-466a-b820-aaa1388e7cbf")
-	)
 	(label "Clamped_Output"
 		(at 119.38 96.52 0)
 		(effects
@@ -1970,16 +1910,6 @@
 			(justify left bottom)
 		)
 		(uuid "efdf6f2d-3e5f-4c5b-ac61-1d929fdd203e")
-	)
-	(label "Output"
-		(at 165.1 142.24 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "fef2bb25-d796-41df-be01-6709204f492e")
 	)
 	(hierarchical_label "InvertingInput"
 		(shape output)
@@ -1994,14 +1924,14 @@
 	)
 	(hierarchical_label "PostVoltage"
 		(shape input)
-		(at 71.12 50.8 180)
+		(at 165.1 142.24 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right)
 		)
-		(uuid "89ae4738-c75e-43ef-8a00-42e7a5dde21e")
+		(uuid "571597c8-57ee-4656-9007-f97b07986fe9")
 	)
 	(hierarchical_label "15V"
 		(shape input)
@@ -2024,6 +1954,28 @@
 			(justify right)
 		)
 		(uuid "ae31bd71-498c-45cc-97ba-758a0890f1ff")
+	)
+	(hierarchical_label "PostVoltage"
+		(shape input)
+		(at 96.52 78.74 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b7cf2c04-9a36-4866-9b10-1904fa2950df")
+	)
+	(hierarchical_label "PostVoltage"
+		(shape input)
+		(at 165.1 50.8 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c42de1f5-b4f1-48ac-b012-57064086a144")
 	)
 	(symbol
 		(lib_id "Custom:D_Zener")
@@ -2464,76 +2416,6 @@
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
 					(reference "R7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x02_Pin")
-		(at 78.74 45.72 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "45e9b9c3-1c8a-4bb1-af3d-a31617dbe3b2")
-		(property "Reference" "J3"
-			(at 80.01 45.0849 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Conn_01x02_Pin"
-			(at 80.01 47.6249 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 78.74 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 78.74 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x02, script generated"
-			(at 78.74 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "5eeb2ddb-0888-4449-9d72-b7fd52d24d6c")
-		)
-		(pin "1"
-			(uuid "e714822d-ceeb-41ee-88cd-340883c05386")
-		)
-		(instances
-			(project ""
-				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "J3")
 					(unit 1)
 				)
 			)
@@ -3493,74 +3375,6 @@
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
 					(reference "J2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x02_Pin")
-		(at 91.44 76.2 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "aebdf8d4-04cc-41f5-8663-5a6229b3d2d4")
-		(property "Reference" "J4"
-			(at 92.075 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Conn_01x02_Pin"
-			(at 92.075 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 91.44 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 91.44 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x02, script generated"
-			(at 91.44 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "6b16552f-0f22-413d-acb0-7b33d54ff8d5")
-		)
-		(pin "2"
-			(uuid "7e090e0d-703f-428f-8fe8-4ed596a05560")
-		)
-		(instances
-			(project ""
-				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "J4")
 					(unit 1)
 				)
 			)
