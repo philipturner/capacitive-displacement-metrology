@@ -603,132 +603,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Device:NetTie_2"
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom no)
-			(on_board yes)
-			(property "Reference" "NT"
-				(at 0 1.27 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "NetTie_2"
-				(at 0 -1.27 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Net tie, 2 pins"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "net tie short"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "Net*Tie*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "NetTie_2_0_1"
-				(polyline
-					(pts
-						(xy -1.27 0) (xy 1.27 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "NetTie_2_1_1"
-				(pin passive line
-					(at -2.54 0 0)
-					(length 2.54)
-					(name "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 2.54 0 180)
-					(length 2.54)
-					(name "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Device:R_Potentiometer_US"
 			(pin_names
 				(offset 1.016)
@@ -1462,7 +1336,7 @@
 	)
 	(wire
 		(pts
-			(xy 55.88 55.88) (xy 58.42 55.88)
+			(xy 55.88 55.88) (xy 66.04 55.88)
 		)
 		(stroke
 			(width 0)
@@ -1522,7 +1396,7 @@
 	)
 	(wire
 		(pts
-			(xy 111.76 139.7) (xy 132.08 139.7)
+			(xy 111.76 139.7) (xy 139.7 139.7)
 		)
 		(stroke
 			(width 0)
@@ -1539,16 +1413,6 @@
 			(type default)
 		)
 		(uuid "4ff50e96-042f-4fc7-969d-29a0978e34a6")
-	)
-	(wire
-		(pts
-			(xy 137.16 132.08) (xy 139.7 132.08)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "57d359dd-ae65-475d-a048-a895f244de7a")
 	)
 	(wire
 		(pts
@@ -1639,16 +1503,6 @@
 			(type default)
 		)
 		(uuid "95757787-56e1-443c-a5d7-de14d816afc5")
-	)
-	(wire
-		(pts
-			(xy 144.78 55.88) (xy 147.32 55.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a41fed9e-b60e-4c8b-95e1-cb1851dfa974")
 	)
 	(wire
 		(pts
@@ -1782,16 +1636,6 @@
 	)
 	(wire
 		(pts
-			(xy 137.16 139.7) (xy 139.7 139.7)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e96d5b61-8aa6-4cfb-b0f4-9190024e268f")
-	)
-	(wire
-		(pts
 			(xy 210.82 104.14) (xy 210.82 106.68)
 		)
 		(stroke
@@ -1799,16 +1643,6 @@
 			(type default)
 		)
 		(uuid "ef9e39d2-1928-4e3d-b51f-4fcad48397bc")
-	)
-	(wire
-		(pts
-			(xy 63.5 55.88) (xy 66.04 55.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f1da2e90-3ba5-47ac-aa04-51b3247fd921")
 	)
 	(wire
 		(pts
@@ -1851,7 +1685,7 @@
 		(uuid "fc55f644-5b3c-494c-b24f-c7c6c8775708")
 	)
 	(label "-5V"
-		(at 139.7 132.08 0)
+		(at 132.08 132.08 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1861,7 +1695,7 @@
 		(uuid "24e00484-499d-4c2c-8f87-bc47d9021994")
 	)
 	(label "5V"
-		(at 147.32 55.88 0)
+		(at 139.7 55.88 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2222,74 +2056,6 @@
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
 					(reference "C10")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 142.24 55.88 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "2a1efb32-a540-49b6-980b-7f4f0ad86514")
-		(property "Reference" "NT3"
-			(at 142.24 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "NetTie_2"
-			(at 142.24 53.34 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 142.24 55.88 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 142.24 55.88 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 142.24 55.88 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "e32e9a71-2ff9-4d3d-a911-913847c2ce2d")
-		)
-		(pin "2"
-			(uuid "38bd741a-04e4-4c84-9bb3-b839f5e88bbe")
-		)
-		(instances
-			(project ""
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "NT3")
 					(unit 1)
 				)
 			)
@@ -3060,74 +2826,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 134.62 139.7 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "66f6b304-e828-43ec-9ebb-e717d52c8bc4")
-		(property "Reference" "NT12"
-			(at 134.62 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "NetTie_2"
-			(at 134.62 137.16 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 134.62 139.7 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 134.62 139.7 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 134.62 139.7 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "3983360f-20de-4539-b6e2-f658b92d0118")
-		)
-		(pin "2"
-			(uuid "cbe2d03e-766e-4276-998e-dc33858ed554")
-		)
-		(instances
-			(project "PowerBoard"
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "NT12")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 68.58 132.08 270)
 		(unit 1)
@@ -3467,74 +3165,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 134.62 132.08 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "b4d4097c-d754-46ee-b46c-44d0b6fffd74")
-		(property "Reference" "NT11"
-			(at 134.62 127 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "NetTie_2"
-			(at 134.62 129.54 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 134.62 132.08 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 134.62 132.08 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 134.62 132.08 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "0f5b89ef-e8bd-42b7-9144-3bd393e01d25")
-		)
-		(pin "2"
-			(uuid "5d1ad590-c192-4417-bae1-0196a609e0f6")
-		)
-		(instances
-			(project "PowerBoard"
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "NT11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 104.14 58.42 90)
 		(unit 1)
@@ -3596,74 +3226,6 @@
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
 					(reference "#PWR04")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 60.96 55.88 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "c142ab49-3a42-4b26-b22d-d6a2f166d1ab")
-		(property "Reference" "NT4"
-			(at 60.96 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "NetTie_2"
-			(at 60.96 53.34 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 60.96 55.88 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 60.96 55.88 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 60.96 55.88 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "a7b73a36-7579-4183-abe5-a2081573cae8")
-		)
-		(pin "2"
-			(uuid "41462da8-6e61-4b4e-a01e-890e062eb166")
-		)
-		(instances
-			(project "PowerBoard"
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "NT4")
 					(unit 1)
 				)
 			)

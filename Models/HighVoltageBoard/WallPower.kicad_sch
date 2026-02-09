@@ -453,6 +453,153 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Device:D_Zener"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "D"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "D_Zener"
+				(at 0 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Zener diode"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "diode"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "TO-???* *_Diode_* *SingleDiode* D_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "D_Zener_0_1"
+				(polyline
+					(pts
+						(xy -1.27 -1.27) (xy -1.27 1.27) (xy -0.762 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 0) (xy -1.27 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -1.27) (xy 1.27 1.27) (xy -1.27 0) (xy 1.27 -1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "D_Zener_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "power:GND"
 			(power)
 			(pin_numbers
@@ -567,10 +714,22 @@
 		(uuid "0cf2ee48-0c67-4b2b-99fa-2204e1247e38")
 	)
 	(junction
+		(at 167.64 78.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "46b4f054-0e79-49b6-9463-ccf5b4ff585c")
+	)
+	(junction
 		(at 132.08 104.14)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "592c832a-f27a-4362-b04f-9f86feaf1117")
+	)
+	(junction
+		(at 167.64 93.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7aa66fe6-69f7-4698-b790-a4a963bf789e")
 	)
 	(junction
 		(at 132.08 93.98)
@@ -583,6 +742,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "c2153d44-b5fd-416d-b7fa-90ab64ded6a8")
+	)
+	(junction
+		(at 167.64 109.22)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e93299ae-437a-4ade-91f2-3d220da232c4")
 	)
 	(no_connect
 		(at 137.16 93.98)
@@ -610,16 +775,6 @@
 	)
 	(wire
 		(pts
-			(xy 162.56 78.74) (xy 167.64 78.74)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "25483087-a87a-4f6f-9285-4a354edfb01b")
-	)
-	(wire
-		(pts
 			(xy 129.54 83.82) (xy 132.08 83.82)
 		)
 		(stroke
@@ -627,6 +782,16 @@
 			(type default)
 		)
 		(uuid "26935426-8cd1-4f60-8d69-6bf54d56b5b8")
+	)
+	(wire
+		(pts
+			(xy 162.56 109.22) (xy 167.64 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "26d42a41-8170-47bc-8a48-1fe57f07c75b")
 	)
 	(wire
 		(pts
@@ -650,6 +815,16 @@
 	)
 	(wire
 		(pts
+			(xy 167.64 93.98) (xy 167.64 97.79)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "48c2904e-7809-493c-8279-16902f0dac56")
+	)
+	(wire
+		(pts
 			(xy 129.54 81.28) (xy 132.08 81.28)
 		)
 		(stroke
@@ -660,13 +835,33 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 93.98) (xy 166.37 93.98)
+			(xy 167.64 90.17) (xy 167.64 93.98)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "7d22a71d-5630-41b2-b068-2bc6a0e16f86")
+		(uuid "636edec9-08f4-44fb-bd33-dfb45a1dd883")
+	)
+	(wire
+		(pts
+			(xy 167.64 109.22) (xy 172.72 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "65efd7e7-8623-4773-a972-f43aa831cc55")
+	)
+	(wire
+		(pts
+			(xy 167.64 78.74) (xy 167.64 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8e849d38-1031-44df-a652-12237ccb8005")
 	)
 	(wire
 		(pts
@@ -710,6 +905,16 @@
 	)
 	(wire
 		(pts
+			(xy 167.64 105.41) (xy 167.64 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b3940d62-d03f-4693-9022-d22fb32c7f90")
+	)
+	(wire
+		(pts
 			(xy 129.54 109.22) (xy 137.16 109.22)
 		)
 		(stroke
@@ -717,6 +922,16 @@
 			(type default)
 		)
 		(uuid "b6222cb3-04a0-4071-99d5-6d8717401c24")
+	)
+	(wire
+		(pts
+			(xy 167.64 93.98) (xy 171.45 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bb182b19-827d-4198-86cf-f5b3ad7cf0bd")
 	)
 	(wire
 		(pts
@@ -740,13 +955,13 @@
 	)
 	(wire
 		(pts
-			(xy 162.56 109.22) (xy 167.64 109.22)
+			(xy 162.56 78.74) (xy 167.64 78.74)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c87e860f-5620-47d9-9e56-3d1320b83d04")
+		(uuid "c23f79d0-896d-463a-a10c-1f0c033ea31a")
 	)
 	(wire
 		(pts
@@ -760,6 +975,16 @@
 	)
 	(wire
 		(pts
+			(xy 149.86 93.98) (xy 167.64 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d625219f-b4f6-480b-bdd6-f164780291fb")
+	)
+	(wire
+		(pts
 			(xy 132.08 93.98) (xy 132.08 104.14)
 		)
 		(stroke
@@ -768,9 +993,19 @@
 		)
 		(uuid "e268a600-6549-4ba5-acb0-e757b8f18610")
 	)
+	(wire
+		(pts
+			(xy 167.64 78.74) (xy 172.72 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e3f28523-da97-461a-99ac-68a68467f69b")
+	)
 	(hierarchical_label "450V"
 		(shape output)
-		(at 167.64 78.74 0)
+		(at 172.72 78.74 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -781,7 +1016,7 @@
 	)
 	(hierarchical_label "-450V"
 		(shape output)
-		(at 167.64 109.22 0)
+		(at 172.72 109.22 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -789,6 +1024,85 @@
 			(justify left)
 		)
 		(uuid "8b011c82-f17c-48c7-a41c-8f0949d5c585")
+	)
+	(symbol
+		(lib_id "Device:D_Zener")
+		(at 167.64 101.6 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "02441721-b56b-494b-b76a-f66585ab4424")
+		(property "Reference" "D8"
+			(at 170.18 100.3299 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Vr = 451V"
+			(at 170.18 102.8699 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 167.64 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 167.64 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Zener diode"
+			(at 167.64 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/littelfuse-inc/P6SMB530A/1764578"
+			(at 167.64 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "cdef3e91-7fb7-4aef-8ae7-8766f0f568ff")
+		)
+		(pin "1"
+			(uuid "11a36c87-30dd-42b3-976f-c33d8a5398c7")
+		)
+		(instances
+			(project "HighVoltageBoard"
+				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/1d0db973-f635-4db8-8646-beeec420ec2b"
+					(reference "D8")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Device:D")
@@ -1053,6 +1367,85 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:D_Zener")
+		(at 167.64 86.36 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b5aa9a35-6f22-45c3-9126-0da02081b479")
+		(property "Reference" "D7"
+			(at 170.18 85.0899 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Vr = 451V"
+			(at 170.18 87.6299 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 167.64 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 167.64 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Zener diode"
+			(at 167.64 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/littelfuse-inc/P6SMB530A/1764578"
+			(at 167.64 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "aa08a6cc-f3b6-429e-a7b1-b73339defa94")
+		)
+		(pin "1"
+			(uuid "7cc9f023-1cf8-4b6a-b619-45eb4d97b873")
+		)
+		(instances
+			(project "HighVoltageBoard"
+				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/1d0db973-f635-4db8-8646-beeec420ec2b"
+					(reference "D7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Custom:R4G650-0.1")
 		(at 121.92 106.68 0)
 		(unit 1)
@@ -1125,7 +1518,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 166.37 93.98 90)
+		(at 171.45 93.98 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1134,7 +1527,7 @@
 		(fields_autoplaced yes)
 		(uuid "ea843515-f5cd-4832-a7c5-9cba422d2914")
 		(property "Reference" "#PWR01"
-			(at 172.72 93.98 0)
+			(at 177.8 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1143,7 +1536,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 170.18 93.9799 90)
+			(at 175.26 93.9799 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1152,7 +1545,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 166.37 93.98 0)
+			(at 171.45 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1161,7 +1554,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 166.37 93.98 0)
+			(at 171.45 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1170,7 +1563,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 166.37 93.98 0)
+			(at 171.45 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
