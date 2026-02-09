@@ -995,11 +995,28 @@
 		)
 		(uuid "839e3a1c-9933-409a-b35e-c33df797cf11")
 	)
+	(text "Footprints for the large components:\nRESC1206_KTR\nRESC1210_TNPV\nCAPC1206_CHV\nCAPC2220\n\nTo designate that they deviate from the\nstandard Vishay resistor or Murata capacitor,\na suffix is applied to a one-off footprint\ngenerated from the vendor-specific tolerances.\n"
+		(exclude_from_sim no)
+		(at 229.362 26.924 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "895399d6-4c0a-46b3-956f-ed9784bc1d17")
+	)
 	(junction
 		(at 134.62 60.96)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "4b8d7e88-109c-47a2-8ac0-814906fab264")
+	)
+	(junction
+		(at 180.34 106.68)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "54461c39-9b19-4355-901a-e79cca56a8f9")
 	)
 	(junction
 		(at 195.58 50.8)
@@ -1008,10 +1025,28 @@
 		(uuid "587858e3-91be-41cd-bb48-99d31bdb40b8")
 	)
 	(junction
+		(at 180.34 99.06)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a06afe47-0803-454b-a549-ea7be568e608")
+	)
+	(junction
+		(at 180.34 83.82)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c03a10d7-ac6e-4111-881c-dd5180bfbcff")
+	)
+	(junction
 		(at 177.8 50.8)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "c1eefc02-fa1e-4d70-8bb5-8a2a52b469d0")
+	)
+	(junction
+		(at 180.34 91.44)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "cbf3ab9e-4814-47f5-ae7a-26eb6b8a81ad")
 	)
 	(junction
 		(at 104.14 88.9)
@@ -1019,11 +1054,15 @@
 		(color 0 0 0 0)
 		(uuid "d29643c1-18d2-44aa-b8b2-7eeef0a95e8d")
 	)
-	(junction
-		(at 187.96 99.06)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "e926aff7-7c1d-4b48-bf78-4b02bad9638d")
+	(wire
+		(pts
+			(xy 177.8 106.68) (xy 180.34 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0883a881-f740-44a7-8d68-7b3a84b333a6")
 	)
 	(wire
 		(pts
@@ -1037,13 +1076,23 @@
 	)
 	(wire
 		(pts
-			(xy 177.8 83.82) (xy 198.12 83.82)
+			(xy 177.8 83.82) (xy 180.34 83.82)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "1eef49ba-2928-45bd-8fba-86dfabc5984f")
+	)
+	(wire
+		(pts
+			(xy 177.8 99.06) (xy 180.34 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "209bfe61-0eef-46d8-8207-fc5690121bbb")
 	)
 	(wire
 		(pts
@@ -1084,6 +1133,16 @@
 			(type default)
 		)
 		(uuid "3353733a-390e-4eed-ab9c-467f4ef6a0ec")
+	)
+	(wire
+		(pts
+			(xy 180.34 83.82) (xy 198.12 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "350b5761-e66b-4e61-aec3-89205e1b96f2")
 	)
 	(wire
 		(pts
@@ -1237,6 +1296,16 @@
 	)
 	(wire
 		(pts
+			(xy 180.34 91.44) (xy 198.12 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7894ad79-093f-4b7f-ba38-4ea69adbe58f")
+	)
+	(wire
+		(pts
 			(xy 177.8 40.64) (xy 177.8 50.8)
 		)
 		(stroke
@@ -1277,17 +1346,17 @@
 	)
 	(wire
 		(pts
-			(xy 187.96 99.06) (xy 198.12 99.06)
+			(xy 177.8 91.44) (xy 180.34 91.44)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "92345be1-9ed7-4e3b-9c97-87496224c2f5")
+		(uuid "98782991-8e25-4edc-b913-548f81120738")
 	)
 	(wire
 		(pts
-			(xy 187.96 106.68) (xy 198.12 106.68)
+			(xy 180.34 106.68) (xy 198.12 106.68)
 		)
 		(stroke
 			(width 0)
@@ -1314,6 +1383,16 @@
 			(type default)
 		)
 		(uuid "aa68fa17-fa5c-4075-8f29-20e775d6c417")
+	)
+	(wire
+		(pts
+			(xy 180.34 99.06) (xy 198.12 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aefea42e-8026-4c16-8c82-9e98d5fb0520")
 	)
 	(wire
 		(pts
@@ -1357,26 +1436,6 @@
 	)
 	(wire
 		(pts
-			(xy 177.8 91.44) (xy 198.12 91.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d20091a2-61e3-42e5-9dd8-c26d9d04a601")
-	)
-	(wire
-		(pts
-			(xy 182.88 99.06) (xy 187.96 99.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d7dfc514-4cbe-4f52-a784-f88df3ee9a10")
-	)
-	(wire
-		(pts
 			(xy 101.6 139.7) (xy 101.6 144.78)
 		)
 		(stroke
@@ -1394,6 +1453,16 @@
 			(type default)
 		)
 		(uuid "f0e235a0-8a61-464a-bc69-107ef5d97029")
+	)
+	(label "CL"
+		(at 177.8 106.68 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "1b1bccc7-ea23-4c24-bb6d-d6a5f4c2396e")
 	)
 	(label "-IN"
 		(at 195.58 68.58 180)
@@ -1480,7 +1549,7 @@
 	)
 	(hierarchical_label "Output"
 		(shape output)
-		(at 182.88 99.06 180)
+		(at 177.8 99.06 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1774,6 +1843,15 @@
 				(hide yes)
 			)
 		)
+		(property "Purchase Link" "https://www.mouser.com/ProductDetail/Apex-Microtechnology/PA95?qs=TiOZkKH1s2T5rE6vjqqrxw%3D%3D"
+			(at 209.55 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "7"
 			(uuid "a3920a06-9235-42e6-8e90-d467c0ea3c9a")
 		)
@@ -1978,7 +2056,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 187.96 102.87 180)
+		(at 180.34 102.87 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1987,7 +2065,7 @@
 		(fields_autoplaced yes)
 		(uuid "2fc9e8bd-971c-40d2-851b-51ceb9211bc5")
 		(property "Reference" "R9"
-			(at 190.5 101.5999 0)
+			(at 182.88 101.5999 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1995,8 +2073,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "24, 1%"
-			(at 190.5 104.1399 0)
+		(property "Value" "22, 1%"
+			(at 182.88 104.1399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2005,7 +2083,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 186.944 102.616 90)
+			(at 179.324 102.616 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2014,7 +2092,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 187.96 102.87 0)
+			(at 180.34 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2023,7 +2101,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 187.96 102.87 0)
+			(at 180.34 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2031,8 +2109,8 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/CRCW060324R0FKEA/1174481"
-			(at 187.96 102.87 0)
+		(property "Purchase Link" "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/KTR18EZPF22R0?qs=493kPxzlxfLXWaB%252BGHnXrw%3D%3D"
+			(at 180.34 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2567,7 +2645,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 177.8 87.63 0)
+		(at 180.34 87.63 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2576,7 +2654,7 @@
 		(fields_autoplaced yes)
 		(uuid "6d83805f-1acb-4641-8789-853941b0539a")
 		(property "Reference" "C1"
-			(at 181.61 86.3599 0)
+			(at 184.15 86.3599 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2585,7 +2663,7 @@
 			)
 		)
 		(property "Value" "10 pF, 1 kV"
-			(at 181.61 88.8999 0)
+			(at 184.15 88.8999 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2594,7 +2672,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 178.7652 91.44 0)
+			(at 181.3052 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2603,7 +2681,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 177.8 87.63 0)
+			(at 180.34 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2612,7 +2690,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 177.8 87.63 0)
+			(at 180.34 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2620,8 +2698,8 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/yageo/CC0805JRNPOCBN100/11490834"
-			(at 177.8 87.63 0)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/cal-chip-electronics-inc/CHV1206N1K0100KCT/27524496"
+			(at 180.34 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
