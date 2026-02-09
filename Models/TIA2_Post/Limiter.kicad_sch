@@ -348,7 +348,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Custom:Q_NPN"
+		(symbol "Custom:Q_NPN_BEC"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -361,7 +361,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "Q_NPN"
+			(property "Value" "Q_NPN_BEC"
 				(at 7.62 -1.27 0)
 				(effects
 					(font
@@ -397,7 +397,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "Q_NPN_0_1"
+			(symbol "Q_NPN_BEC_0_1"
 				(polyline
 					(pts
 						(xy -2.54 0) (xy -6.35 0)
@@ -458,17 +458,6 @@
 						(type none)
 					)
 				)
-				(circle
-					(center 1.27 0)
-					(radius 2.8194)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
 				(polyline
 					(pts
 						(xy 1.27 -1.778) (xy 1.778 -1.27) (xy 2.286 -2.286) (xy 1.27 -1.778)
@@ -517,7 +506,7 @@
 					)
 				)
 			)
-			(symbol "Q_NPN_1_1"
+			(symbol "Q_NPN_BEC_1_1"
 				(pin input line
 					(at -8.89 0 0)
 					(length 2.54)
@@ -575,7 +564,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Custom:Q_PNP"
+		(symbol "Custom:Q_PNP_BEC"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -588,7 +577,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "Q_PNP"
+			(property "Value" "Q_PNP_BEC"
 				(at 7.62 -1.27 0)
 				(effects
 					(font
@@ -624,7 +613,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "Q_PNP_0_1"
+			(symbol "Q_PNP_BEC_0_1"
 				(polyline
 					(pts
 						(xy -2.54 0) (xy -6.35 0)
@@ -685,17 +674,6 @@
 						(type none)
 					)
 				)
-				(circle
-					(center 1.27 0)
-					(radius 2.8194)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
 				(polyline
 					(pts
 						(xy 2.286 -1.778) (xy 1.778 -2.286) (xy 1.27 -1.27) (xy 2.286 -1.778)
@@ -744,7 +722,7 @@
 					)
 				)
 			)
-			(symbol "Q_PNP_1_1"
+			(symbol "Q_PNP_BEC_1_1"
 				(pin input line
 					(at -8.89 0 0)
 					(length 2.54)
@@ -2316,6 +2294,88 @@
 		)
 	)
 	(symbol
+		(lib_id "Custom:Q_NPN_BEC")
+		(at 193.04 121.92 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2f9981c1-e3c8-473f-a7cd-b668e46a2f5a")
+		(property "Reference" "Q1"
+			(at 185.42 123.1901 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Q_NPN_BEC"
+			(at 185.42 120.6501 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 193.04 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 193.04 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 193.04 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/onsemi/MMBT2222ALT1G/919593"
+			(at 193.04 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3410b9ef-6b17-4286-9bda-e554870d6810")
+		)
+		(pin "3"
+			(uuid "d4aa9fb8-a891-431a-8d0c-e7d7f07f928e")
+		)
+		(pin "2"
+			(uuid "a2d2b86d-3a2c-46fc-b097-e6cad52615f0")
+		)
+		(instances
+			(project ""
+				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
+					(reference "Q1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_US")
 		(at 96.52 105.41 0)
 		(unit 1)
@@ -3094,223 +3154,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Custom:Q_PNP")
-		(at 193.04 71.12 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "92df5f54-8f20-48bb-adea-a00b99dda798")
-		(property "Reference" "Q1"
-			(at 185.42 72.3901 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Q_PNP"
-			(at 185.42 69.8501 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "ThreeTerminal:SOT-23"
-			(at 193.04 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 193.04 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 193.04 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/onsemi/MMBT2907ALT1G/919599"
-			(at 193.04 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost" ""
-			(at 193.04 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "RoHS Compliant" ""
-			(at 193.04 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost (qty10)" ""
-			(at 193.04 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "89afe095-0e16-4ea9-ad5d-f5f7a5010c8e")
-		)
-		(pin "3"
-			(uuid "864ef64a-866d-4266-ab9b-c88d3d577a51")
-		)
-		(pin "2"
-			(uuid "c46e1a3c-4c65-4172-9a00-f497eeb56add")
-		)
-		(instances
-			(project "TIA2_Post"
-				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "Q1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Custom:Q_NPN")
-		(at 193.04 121.92 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "9729f3a9-6d31-45da-b697-b6a07690dbf8")
-		(property "Reference" "Q2"
-			(at 185.42 120.6499 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Q_NPN"
-			(at 185.42 123.1899 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "ThreeTerminal:SOT-23"
-			(at 193.04 121.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 193.04 121.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 193.04 121.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/onsemi/MMBT2222ALT1G/919593"
-			(at 193.04 121.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost" ""
-			(at 193.04 121.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "RoHS Compliant" ""
-			(at 193.04 121.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost (qty10)" ""
-			(at 193.04 121.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "a9733f7b-9d8a-4e89-821f-cb5333546ee1")
-		)
-		(pin "3"
-			(uuid "56deab2e-9708-4ef9-8cd3-69430e7862e5")
-		)
-		(pin "2"
-			(uuid "71b3c0b7-2673-48b3-b88a-7dd45bdbe6c7")
-		)
-		(instances
-			(project "TIA2_Post"
-				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "Q2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector:Conn_01x02_Pin")
 		(at 48.26 91.44 270)
 		(unit 1)
@@ -3497,6 +3340,88 @@
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
 					(reference "D5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Custom:Q_PNP_BEC")
+		(at 193.04 71.12 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "bf8bbf12-2cee-4fc0-b3cb-fb96779e266d")
+		(property "Reference" "Q3"
+			(at 185.42 69.8499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Q_PNP_BEC"
+			(at 185.42 72.3899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 193.04 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 193.04 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 193.04 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/onsemi/MMBT2907ALT1G/919599"
+			(at 193.04 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "66b51385-c9ab-4f4c-b638-5413864df79a")
+		)
+		(pin "3"
+			(uuid "fe2c3060-8133-406a-9921-86d52efc77df")
+		)
+		(pin "2"
+			(uuid "3182599d-dd62-40f4-9aef-7ced5f47ad53")
+		)
+		(instances
+			(project ""
+				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
+					(reference "Q3")
 					(unit 1)
 				)
 			)
