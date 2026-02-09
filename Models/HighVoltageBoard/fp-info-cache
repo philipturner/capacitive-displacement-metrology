@@ -1,4 +1,4 @@
-26601453329351009
+26608531056296397
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -61362,7 +61362,21 @@ heatsink
 0
 0
 IC
+AD8615
+
+
+0
+5
+5
+IC
 PA95
+
+
+0
+8
+8
+IC
+PDIP-8
 
 
 0
@@ -61389,6 +61403,13 @@ TSSOP-16
 0
 16
 16
+IC
+TSSOP-20
+
+
+0
+20
+20
 IC
 VQFN-32
 
@@ -103662,6 +103683,13 @@ test point THT pad
 0
 1
 1
+ThreeTerminal
+Bourns_3296Y
+
+
+0
+3
+3
 ThreeTerminal
 SOT-23
 

@@ -5,17 +5,6 @@
 	(uuid "f19129fc-f916-4692-924c-ee308c6b3e1d")
 	(paper "A4")
 	(lib_symbols)
-	(text "Input: 15V power\nInput: -15V power\nInput: current\nOutput: post voltage"
-		(exclude_from_sim no)
-		(at 158.242 76.962 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "431a5fb7-c170-470c-962a-9df782b62c9b")
-	)
 	(sheet
 		(at 101.6 76.2)
 		(size 50.8 25.4)
@@ -48,6 +37,46 @@
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "-15V" input
+			(at 147.32 101.6 270)
+			(uuid "6a83f8b9-f8a3-478b-8d3a-1995cc0d2e6d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "15V" input
+			(at 147.32 76.2 90)
+			(uuid "ea2818a7-6fdf-4bbd-94e3-72d3f98e4224")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "Current" input
+			(at 101.6 88.9 180)
+			(uuid "7d8c154e-54c7-40ac-ba9e-ac92c24a07ef")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "PostVoltage" output
+			(at 152.4 88.9 0)
+			(uuid "a48335ee-572b-44cb-b2de-d9b9fc6f6c69")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 			)
 		)
 		(instances

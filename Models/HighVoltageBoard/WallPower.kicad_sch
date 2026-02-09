@@ -704,7 +704,7 @@
 	)
 	(text "power cord receptacle type\nnot known yet"
 		(exclude_from_sim no)
-		(at 145.288 64.262 0)
+		(at 155.448 64.262 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -714,7 +714,7 @@
 		(uuid "0cf2ee48-0c67-4b2b-99fa-2204e1247e38")
 	)
 	(junction
-		(at 167.64 78.74)
+		(at 177.8 78.74)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "46b4f054-0e79-49b6-9463-ccf5b4ff585c")
@@ -726,7 +726,7 @@
 		(uuid "592c832a-f27a-4362-b04f-9f86feaf1117")
 	)
 	(junction
-		(at 167.64 93.98)
+		(at 177.8 93.98)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "7aa66fe6-69f7-4698-b790-a4a963bf789e")
@@ -744,7 +744,7 @@
 		(uuid "c2153d44-b5fd-416d-b7fa-90ab64ded6a8")
 	)
 	(junction
-		(at 167.64 109.22)
+		(at 177.8 109.22)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e93299ae-437a-4ade-91f2-3d220da232c4")
@@ -754,7 +754,7 @@
 		(uuid "12becb6c-fa7c-4cba-a5ba-9f3295dd7012")
 	)
 	(no_connect
-		(at 149.86 93.98)
+		(at 160.02 93.98)
 		(uuid "1e8cf219-422c-47c4-9875-5de88339a42d")
 	)
 	(no_connect
@@ -762,7 +762,7 @@
 		(uuid "429497ec-2dc9-4f98-8155-695d07abff4c")
 	)
 	(no_connect
-		(at 149.86 78.74)
+		(at 160.02 78.74)
 		(uuid "5797a337-3060-4c8b-88e6-47e525cb231f")
 	)
 	(no_connect
@@ -770,7 +770,7 @@
 		(uuid "b9306e00-9309-4b83-b6c0-8d5be330f421")
 	)
 	(no_connect
-		(at 149.86 109.22)
+		(at 160.02 109.22)
 		(uuid "dd96a51b-24d2-4a13-864e-89c103039c10")
 	)
 	(wire
@@ -785,7 +785,7 @@
 	)
 	(wire
 		(pts
-			(xy 162.56 109.22) (xy 167.64 109.22)
+			(xy 172.72 109.22) (xy 177.8 109.22)
 		)
 		(stroke
 			(width 0)
@@ -815,7 +815,7 @@
 	)
 	(wire
 		(pts
-			(xy 167.64 93.98) (xy 167.64 97.79)
+			(xy 177.8 93.98) (xy 177.8 97.79)
 		)
 		(stroke
 			(width 0)
@@ -835,7 +835,7 @@
 	)
 	(wire
 		(pts
-			(xy 167.64 90.17) (xy 167.64 93.98)
+			(xy 177.8 90.17) (xy 177.8 93.98)
 		)
 		(stroke
 			(width 0)
@@ -845,7 +845,7 @@
 	)
 	(wire
 		(pts
-			(xy 167.64 109.22) (xy 172.72 109.22)
+			(xy 177.8 109.22) (xy 182.88 109.22)
 		)
 		(stroke
 			(width 0)
@@ -855,7 +855,7 @@
 	)
 	(wire
 		(pts
-			(xy 167.64 78.74) (xy 167.64 82.55)
+			(xy 177.8 78.74) (xy 177.8 82.55)
 		)
 		(stroke
 			(width 0)
@@ -875,7 +875,7 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 78.74) (xy 154.94 78.74)
+			(xy 160.02 78.74) (xy 165.1 78.74)
 		)
 		(stroke
 			(width 0)
@@ -885,7 +885,7 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 109.22) (xy 154.94 109.22)
+			(xy 160.02 109.22) (xy 165.1 109.22)
 		)
 		(stroke
 			(width 0)
@@ -905,7 +905,7 @@
 	)
 	(wire
 		(pts
-			(xy 167.64 105.41) (xy 167.64 109.22)
+			(xy 177.8 105.41) (xy 177.8 109.22)
 		)
 		(stroke
 			(width 0)
@@ -925,7 +925,7 @@
 	)
 	(wire
 		(pts
-			(xy 167.64 93.98) (xy 171.45 93.98)
+			(xy 177.8 93.98) (xy 181.61 93.98)
 		)
 		(stroke
 			(width 0)
@@ -955,7 +955,7 @@
 	)
 	(wire
 		(pts
-			(xy 162.56 78.74) (xy 167.64 78.74)
+			(xy 172.72 78.74) (xy 177.8 78.74)
 		)
 		(stroke
 			(width 0)
@@ -975,7 +975,7 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 93.98) (xy 167.64 93.98)
+			(xy 160.02 93.98) (xy 177.8 93.98)
 		)
 		(stroke
 			(width 0)
@@ -995,7 +995,7 @@
 	)
 	(wire
 		(pts
-			(xy 167.64 78.74) (xy 172.72 78.74)
+			(xy 177.8 78.74) (xy 182.88 78.74)
 		)
 		(stroke
 			(width 0)
@@ -1003,9 +1003,29 @@
 		)
 		(uuid "e3f28523-da97-461a-99ac-68a68467f69b")
 	)
+	(label "-450V_PreDiode"
+		(at 162.56 109.22 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "720406a6-d7ae-431d-9159-2dd37fa24cdf")
+	)
+	(label "450V_PreDiode"
+		(at 162.56 78.74 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "cc5ca138-5afd-4c7f-99d0-59eb3244f3a0")
+	)
 	(hierarchical_label "450V"
 		(shape output)
-		(at 172.72 78.74 0)
+		(at 182.88 78.74 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1016,7 +1036,7 @@
 	)
 	(hierarchical_label "-450V"
 		(shape output)
-		(at 172.72 109.22 0)
+		(at 182.88 109.22 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1027,7 +1047,7 @@
 	)
 	(symbol
 		(lib_id "Device:D_Zener")
-		(at 167.64 101.6 270)
+		(at 177.8 101.6 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1036,7 +1056,7 @@
 		(fields_autoplaced yes)
 		(uuid "02441721-b56b-494b-b76a-f66585ab4424")
 		(property "Reference" "D8"
-			(at 170.18 100.3299 90)
+			(at 180.34 100.3299 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1045,7 +1065,7 @@
 			)
 		)
 		(property "Value" "Vr = 451V"
-			(at 170.18 102.8699 90)
+			(at 180.34 102.8699 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1054,7 +1074,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 167.64 101.6 0)
+			(at 177.8 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1063,7 +1083,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 167.64 101.6 0)
+			(at 177.8 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1072,7 +1092,7 @@
 			)
 		)
 		(property "Description" "Zener diode"
-			(at 167.64 101.6 0)
+			(at 177.8 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1081,7 +1101,7 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/littelfuse-inc/P6SMB530A/1764578"
-			(at 167.64 101.6 0)
+			(at 177.8 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1106,7 +1126,7 @@
 	)
 	(symbol
 		(lib_id "Device:D")
-		(at 158.75 109.22 0)
+		(at 168.91 109.22 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1115,7 +1135,7 @@
 		(fields_autoplaced yes)
 		(uuid "2977ff95-e978-45e6-b8e7-c56e2725e45e")
 		(property "Reference" "D2"
-			(at 158.75 102.87 0)
+			(at 168.91 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1123,7 +1143,7 @@
 			)
 		)
 		(property "Value" "Vr = 2 kV"
-			(at 158.75 105.41 0)
+			(at 168.91 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1131,7 +1151,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 158.75 109.22 0)
+			(at 168.91 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1140,7 +1160,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 158.75 109.22 0)
+			(at 168.91 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1149,7 +1169,7 @@
 			)
 		)
 		(property "Description" "Diode"
-			(at 158.75 109.22 0)
+			(at 168.91 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1158,7 +1178,7 @@
 			)
 		)
 		(property "Sim.Device" "D"
-			(at 158.75 109.22 0)
+			(at 168.91 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1167,7 +1187,7 @@
 			)
 		)
 		(property "Sim.Pins" "1=K 2=A"
-			(at 158.75 109.22 0)
+			(at 168.91 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1176,7 +1196,7 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/taiwan-semiconductor-corporation/GS1Z/28023582"
-			(at 158.75 109.22 0)
+			(at 168.91 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1202,7 +1222,7 @@
 	(symbol
 		(lib_name "D_1")
 		(lib_id "Device:D")
-		(at 158.75 78.74 180)
+		(at 168.91 78.74 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1211,7 +1231,7 @@
 		(fields_autoplaced yes)
 		(uuid "418d6051-9ac6-45c7-96da-80d7ff1208eb")
 		(property "Reference" "D1"
-			(at 158.75 72.39 0)
+			(at 168.91 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1219,7 +1239,7 @@
 			)
 		)
 		(property "Value" "Vr = 2 kV"
-			(at 158.75 74.93 0)
+			(at 168.91 74.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1227,7 +1247,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 158.75 78.74 0)
+			(at 168.91 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1236,7 +1256,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 158.75 78.74 0)
+			(at 168.91 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1245,7 +1265,7 @@
 			)
 		)
 		(property "Description" "Diode"
-			(at 158.75 78.74 0)
+			(at 168.91 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1254,7 +1274,7 @@
 			)
 		)
 		(property "Sim.Device" "D"
-			(at 158.75 78.74 0)
+			(at 168.91 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1263,7 +1283,7 @@
 			)
 		)
 		(property "Sim.Pins" "1=K 2=A"
-			(at 158.75 78.74 0)
+			(at 168.91 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1272,7 +1292,7 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/taiwan-semiconductor-corporation/GS1Z/28023582"
-			(at 158.75 78.74 0)
+			(at 168.91 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1368,7 +1388,7 @@
 	)
 	(symbol
 		(lib_id "Device:D_Zener")
-		(at 167.64 86.36 270)
+		(at 177.8 86.36 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1377,7 +1397,7 @@
 		(fields_autoplaced yes)
 		(uuid "b5aa9a35-6f22-45c3-9126-0da02081b479")
 		(property "Reference" "D7"
-			(at 170.18 85.0899 90)
+			(at 180.34 85.0899 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1386,7 +1406,7 @@
 			)
 		)
 		(property "Value" "Vr = 451V"
-			(at 170.18 87.6299 90)
+			(at 180.34 87.6299 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1395,7 +1415,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 167.64 86.36 0)
+			(at 177.8 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1404,7 +1424,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 167.64 86.36 0)
+			(at 177.8 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1413,7 +1433,7 @@
 			)
 		)
 		(property "Description" "Zener diode"
-			(at 167.64 86.36 0)
+			(at 177.8 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1422,7 +1442,7 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/littelfuse-inc/P6SMB530A/1764578"
-			(at 167.64 86.36 0)
+			(at 177.8 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1518,7 +1538,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 171.45 93.98 90)
+		(at 181.61 93.98 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1527,7 +1547,7 @@
 		(fields_autoplaced yes)
 		(uuid "ea843515-f5cd-4832-a7c5-9cba422d2914")
 		(property "Reference" "#PWR01"
-			(at 177.8 93.98 0)
+			(at 187.96 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1536,7 +1556,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 175.26 93.9799 90)
+			(at 185.42 93.9799 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1545,7 +1565,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 171.45 93.98 0)
+			(at 181.61 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1554,7 +1574,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 171.45 93.98 0)
+			(at 181.61 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1563,7 +1583,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 171.45 93.98 0)
+			(at 181.61 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
