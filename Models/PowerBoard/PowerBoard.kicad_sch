@@ -5,38 +5,177 @@
 	(uuid "c19e9b7b-7f36-470c-862a-1a648d3f14f6")
 	(paper "A4")
 	(lib_symbols)
-	(text "Input: 18V power\nOutput: 5V power\nOutput: 3.3V power"
-		(exclude_from_sim no)
-		(at 206.756 27.178 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "151db267-cda8-4235-a5fe-965d74e1ba98")
+	(junction
+		(at 142.24 83.82)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "06bd5cbb-9e93-477d-a512-9725c1fd81bd")
 	)
-	(text "Input: 18V power\nInput: -18V power\nOutput: 2.5V power\nOutput: -1.5V power"
-		(exclude_from_sim no)
-		(at 206.248 102.87 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "623351ca-7081-4cf4-8663-76034fe77138")
+	(junction
+		(at 147.32 78.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5174acb0-e709-42fe-93ed-1eddd3c90958")
 	)
-	(text "Input: 18V power\nInput: -18V power\nOutput: 15V power\nOutput: -15V power"
-		(exclude_from_sim no)
-		(at 206.248 64.516 0)
+	(wire
+		(pts
+			(xy 142.24 83.82) (xy 152.4 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0f02231f-574d-4c3e-a01c-0fae7000824c")
+	)
+	(wire
+		(pts
+			(xy 147.32 45.72) (xy 147.32 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4d857dd9-bd44-4081-9952-3b437e5b6fc6")
+	)
+	(wire
+		(pts
+			(xy 147.32 78.74) (xy 152.4 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "629c835c-f55e-427b-8b02-0ba986b3714f")
+	)
+	(wire
+		(pts
+			(xy 147.32 116.84) (xy 152.4 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6f70483c-85b2-4bea-a9f7-c101dd1f61d1")
+	)
+	(wire
+		(pts
+			(xy 152.4 45.72) (xy 147.32 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9e074d74-eeeb-4c35-8b4c-0b0a80390456")
+	)
+	(wire
+		(pts
+			(xy 142.24 83.82) (xy 142.24 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d44fa226-8807-43e7-bf9a-9238bd463734")
+	)
+	(wire
+		(pts
+			(xy 102.87 78.74) (xy 147.32 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "da5447ea-eedb-413e-9c5b-6bb0d931688f")
+	)
+	(wire
+		(pts
+			(xy 152.4 121.92) (xy 142.24 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dd8bf03c-2df0-4821-a1bf-0c65942d0428")
+	)
+	(wire
+		(pts
+			(xy 147.32 78.74) (xy 147.32 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e3ade1af-1954-4182-9b4b-4664b4306c44")
+	)
+	(wire
+		(pts
+			(xy 102.87 83.82) (xy 142.24 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fad72e6e-b283-47b4-a985-50967e443d7f")
+	)
+	(label "2.5V"
+		(at 203.2 116.84 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left top)
+			(justify left bottom)
 		)
-		(uuid "cc627a40-d0b9-44f7-8d94-7deb7a793351")
+		(uuid "031c4780-51f1-40b6-9abc-d87f79662c05")
+	)
+	(label "3.3V"
+		(at 203.2 45.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1e75837c-2ccf-4daf-87d5-dac21f6c3ba5")
+	)
+	(label "5V"
+		(at 203.2 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5e3240aa-50c3-4746-a8f1-fd655409d748")
+	)
+	(label "15V"
+		(at 203.2 78.74 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9b28dd0c-b72b-4442-afda-6848ac969330")
+	)
+	(label "-15V"
+		(at 203.2 83.82 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "b3b68a37-3aa7-4b2e-bda5-03fbe7f08f52")
+	)
+	(label "-1.5V"
+		(at 203.2 121.92 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ea6c09b6-dc67-4fcf-a1ef-c485009b8d4b")
 	)
 	(sheet
 		(at 152.4 63.5)
@@ -70,6 +209,46 @@
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "-15V" output
+			(at 203.2 83.82 0)
+			(uuid "4bb2fec6-dab5-4e8d-ac44-98bedb8b63f3")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "-18V" input
+			(at 152.4 83.82 180)
+			(uuid "f75c13a8-a489-4007-b811-5a29d66cd79c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "15V" output
+			(at 203.2 78.74 0)
+			(uuid "0fee81d1-4e24-43de-84b1-691a6de96461")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "18V" input
+			(at 152.4 78.74 180)
+			(uuid "f158b7ff-1ebb-44b0-ab9e-7ddddd68ce62")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances
@@ -125,7 +304,7 @@
 			)
 		)
 		(pin "18V" output
-			(at 102.87 68.58 0)
+			(at 102.87 78.74 0)
 			(uuid "4af0e715-4cde-449f-90fd-cf8e571a6ca7")
 			(effects
 				(font
@@ -176,6 +355,46 @@
 				(justify left top)
 			)
 		)
+		(pin "-1.5V" output
+			(at 203.2 121.92 0)
+			(uuid "e1dfa1d6-bba9-4a2f-abae-82ce31704425")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "-18V" input
+			(at 152.4 121.92 180)
+			(uuid "b3688347-7d3c-4266-bad0-327b34a46612")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "2.5V" output
+			(at 203.2 116.84 0)
+			(uuid "164ac7ff-c019-4e14-aaf0-602de460bc9c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "18V" input
+			(at 152.4 116.84 180)
+			(uuid "af325295-6756-466d-9676-001b40aade3b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
@@ -216,6 +435,36 @@
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "3.3V" output
+			(at 203.2 45.72 0)
+			(uuid "884e6ea4-fa5f-4748-a105-827c2a7e23b4")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "5V" output
+			(at 203.2 40.64 0)
+			(uuid "7fd3667d-ca23-42fc-8d45-f681cedcf646")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "18V" input
+			(at 152.4 45.72 180)
+			(uuid "88378dad-5933-4fb1-961d-057f1b1e6583")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances
