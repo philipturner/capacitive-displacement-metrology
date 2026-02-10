@@ -600,6 +600,179 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Device:R_US"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "R"
+				(at 2.54 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R_US"
+				(at -2.54 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 1.016 -0.254 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Resistor, US symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "R res resistor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "R_US_0_1"
+				(polyline
+					(pts
+						(xy 0 2.286) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.286) (xy 1.016 1.905) (xy 0 1.524) (xy -1.016 1.143) (xy 0 0.762)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0.762) (xy 1.016 0.381) (xy 0 0) (xy -1.016 -0.381) (xy 0 -0.762)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -0.762) (xy 1.016 -1.143) (xy 0 -1.524) (xy -1.016 -1.905) (xy 0 -2.286)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.286) (xy 0 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_US_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "power:GND"
 			(power)
 			(pin_numbers
@@ -726,6 +899,18 @@
 		(uuid "592c832a-f27a-4362-b04f-9f86feaf1117")
 	)
 	(junction
+		(at 195.58 109.22)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "69e4c0cb-5769-4701-a455-2354184b6903")
+	)
+	(junction
+		(at 195.58 78.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "78e55847-4de1-4d52-957e-21217a4f9600")
+	)
+	(junction
 		(at 177.8 93.98)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -736,6 +921,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "7aeca7e3-d79b-46bb-877c-b8b4d7f5c8c7")
+	)
+	(junction
+		(at 195.58 93.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a98f71ed-b40e-47e6-a8c5-ce1f8ba3b5f0")
 	)
 	(junction
 		(at 132.08 83.82)
@@ -775,6 +966,16 @@
 	)
 	(wire
 		(pts
+			(xy 195.58 93.98) (xy 195.58 97.79)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "25503fff-f41c-4c9c-9669-5d268a1b2353")
+	)
+	(wire
+		(pts
 			(xy 129.54 83.82) (xy 132.08 83.82)
 		)
 		(stroke
@@ -805,6 +1006,16 @@
 	)
 	(wire
 		(pts
+			(xy 195.58 78.74) (xy 213.36 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "34aa1b2d-6522-49a5-9424-d5e06ec286ad")
+	)
+	(wire
+		(pts
 			(xy 132.08 83.82) (xy 132.08 93.98)
 		)
 		(stroke
@@ -822,6 +1033,16 @@
 			(type default)
 		)
 		(uuid "48c2904e-7809-493c-8279-16902f0dac56")
+	)
+	(wire
+		(pts
+			(xy 195.58 105.41) (xy 195.58 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4cd866f3-fe64-412c-aca0-fb642c9b15d1")
 	)
 	(wire
 		(pts
@@ -845,7 +1066,7 @@
 	)
 	(wire
 		(pts
-			(xy 177.8 109.22) (xy 182.88 109.22)
+			(xy 177.8 109.22) (xy 195.58 109.22)
 		)
 		(stroke
 			(width 0)
@@ -925,7 +1146,7 @@
 	)
 	(wire
 		(pts
-			(xy 177.8 93.98) (xy 181.61 93.98)
+			(xy 177.8 93.98) (xy 195.58 93.98)
 		)
 		(stroke
 			(width 0)
@@ -965,6 +1186,26 @@
 	)
 	(wire
 		(pts
+			(xy 195.58 109.22) (xy 213.36 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c3fd2921-2d44-48ff-b057-99f3778c4f2d")
+	)
+	(wire
+		(pts
+			(xy 195.58 93.98) (xy 213.36 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ca121505-ae6b-4e4c-b316-eb03b78a4b1c")
+	)
+	(wire
+		(pts
 			(xy 132.08 81.28) (xy 132.08 83.82)
 		)
 		(stroke
@@ -995,13 +1236,33 @@
 	)
 	(wire
 		(pts
-			(xy 177.8 78.74) (xy 182.88 78.74)
+			(xy 177.8 78.74) (xy 195.58 78.74)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "e3f28523-da97-461a-99ac-68a68467f69b")
+	)
+	(wire
+		(pts
+			(xy 195.58 78.74) (xy 195.58 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ec8c9987-1cd6-431f-93a6-3dfe591b2a31")
+	)
+	(wire
+		(pts
+			(xy 195.58 90.17) (xy 195.58 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f5923bc6-7269-4d62-8dce-931341b07ce7")
 	)
 	(label "-450V_PreDiode"
 		(at 162.56 109.22 180)
@@ -1025,7 +1286,7 @@
 	)
 	(hierarchical_label "V+"
 		(shape output)
-		(at 182.88 78.74 0)
+		(at 213.36 78.74 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1036,7 +1297,7 @@
 	)
 	(hierarchical_label "V-"
 		(shape output)
-		(at 182.88 109.22 0)
+		(at 213.36 109.22 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1316,6 +1577,83 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_US")
+		(at 195.58 86.36 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "43a80404-5df5-482f-bb10-9ff42951a88c")
+		(property "Reference" "R13"
+			(at 198.12 85.0899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1M, 5%, 0.33W, 800V"
+			(at 198.12 87.6299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 196.596 86.614 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 195.58 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "bleeder resistor"
+			(at 205.74 82.296 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/RCV12061M00JNEA/4303607"
+			(at 195.58 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "9f0fd2f0-4c16-4722-8b0f-18b8d9f9da42")
+		)
+		(pin "2"
+			(uuid "a77fb56c-b79c-4ad0-971d-6731eddce440")
+		)
+		(instances
+			(project ""
+				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/1d0db973-f635-4db8-8646-beeec420ec2b"
+					(reference "R13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Custom:R4G650-0.1")
 		(at 121.92 81.28 0)
 		(unit 1)
@@ -1538,16 +1876,15 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 181.61 93.98 90)
+		(at 213.36 93.98 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "ea843515-f5cd-4832-a7c5-9cba422d2914")
 		(property "Reference" "#PWR01"
-			(at 187.96 93.98 0)
+			(at 219.71 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1556,7 +1893,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 185.42 93.9799 90)
+			(at 217.17 93.9799 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1565,7 +1902,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 181.61 93.98 0)
+			(at 213.36 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1574,7 +1911,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 181.61 93.98 0)
+			(at 213.36 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1583,7 +1920,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 181.61 93.98 0)
+			(at 213.36 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1598,6 +1935,83 @@
 			(project ""
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/1d0db973-f635-4db8-8646-beeec420ec2b"
 					(reference "#PWR01")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_US")
+		(at 195.58 101.6 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f8f0fba9-cb38-4f2d-98c8-dfd4702a0056")
+		(property "Reference" "R14"
+			(at 198.12 100.3299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1M, 5%, 0.33W, 800V"
+			(at 198.12 102.8699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 196.596 101.854 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 195.58 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "bleeder resistor"
+			(at 205.74 97.536 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/RCV12061M00JNEA/4303607"
+			(at 195.58 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fb58138c-eea3-48cb-acfd-780651b2fb18")
+		)
+		(pin "2"
+			(uuid "af968914-0a9c-4dc0-ab67-70612683f087")
+		)
+		(instances
+			(project "HighVoltageBoard"
+				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/1d0db973-f635-4db8-8646-beeec420ec2b"
+					(reference "R14")
 					(unit 1)
 				)
 			)

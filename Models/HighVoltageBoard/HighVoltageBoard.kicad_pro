@@ -534,10 +534,6 @@
       {
         "netclass": "HighVoltage",
         "pattern": "/Amplifier*/CC_*"
-      },
-      {
-        "netclass": "HighVoltage",
-        "pattern": "/Amplifier*/CL"
       }
     ]
   },
