@@ -1098,7 +1098,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "For the piezo driver channels, the load\n(28k resistor) sits on a different board.\nWe want the GND side of that resistor to sit\nat the same potential as the non-inverting\ninput to the PA95 op amp.\n\nSENSEN detects the IR drop from difference in\nground potentials (large power currents). Such\ncurrents do not flow through the SENSEN wire\nitself, thus IR drop is 0 across this one.\n\nSENSEP detects the small IR drop from up to 428 uA\ncurrent flowing through the OUT wire. Current across\nSENSEP is (OUT wire resistance / 40k) * 428 uA.\n\nIn the worst case, 5 inches of 28 AWG wire are 0.027 Ω.\nVoltage drop is up to 11 μV. That is 1 part in 2 million\nerror with 24 V range. With 15 mA (35x higher current),\nit is 1 part in 60,000 and noticeable.\n\nWe do not need to utilize SENSEP for this particular\nDAC, avoiding much confusion and debugging. Only a\ndifferential + and - pairs for the voltage difference\nthat is transmitted between boards. OUT and SENSEN.\n\nTODO: Implement the above change."
+	(text "For the piezo driver channels, the load\n(28k resistor) sits on a different board.\nWe want the GND side of that resistor to sit\nat the same potential as the non-inverting\ninput to the PA95 op amp.\n\nSENSEN detects the IR drop from difference in\nground potentials (large power currents). Such\ncurrents do not flow through the SENSEN wire\nitself, thus IR drop is 0 across this one.\n\nSENSEP detects the small IR drop from up to 428 uA\ncurrent flowing through the OUT wire. Current across\nSENSEP is (OUT wire resistance / 40k) * 428 uA.\n\nIn the worst case, 5 inches of 28 AWG wire are 0.027 Ω.\nVoltage drop is up to 11 μV. That is 1 part in 2 million\nerror with 24 V range. With 15 mA (35x higher current),\nit is 1 part in 60,000 and noticeable.\n\nWe do not need to utilize SENSEP for this particular\nDAC, avoiding much confusion and debugging. Only a\ndifferential + and - pair for the voltage difference\nthat is transmitted between boards. OUT and SENSEN."
 		(exclude_from_sim no)
 		(at 22.606 19.304 0)
 		(effects
@@ -1116,6 +1116,12 @@
 		(uuid "220644ee-fc64-4b5a-8a84-a59dc26376cc")
 	)
 	(junction
+		(at 160.02 93.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "3f6818b7-d747-4ed1-bb0c-6ac19e4878e1")
+	)
+	(junction
 		(at 226.06 63.5)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1126,6 +1132,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "5b011722-22ab-4f0f-9a1a-9c5adeb97410")
+	)
+	(junction
+		(at 160.02 68.58)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5cd81791-ba71-4111-894f-adb671297a70")
 	)
 	(junction
 		(at 208.28 101.6)
@@ -1152,10 +1164,22 @@
 		(uuid "c01217bc-580a-4bcb-9064-6189ef003a73")
 	)
 	(junction
+		(at 160.02 81.28)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "cb6e95c6-ac59-4afb-9a3f-df9981ff9c8c")
+	)
+	(junction
 		(at 226.06 114.3)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d14674cd-f752-428e-bd6a-d5e3f04fccf5")
+	)
+	(junction
+		(at 160.02 55.88)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e6d2d290-fa60-4ac1-90a7-6451352dd63b")
 	)
 	(junction
 		(at 208.28 76.2)
@@ -1237,6 +1261,16 @@
 	)
 	(wire
 		(pts
+			(xy 162.56 99.06) (xy 157.48 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0aa10d22-0f86-49b2-a46e-ff77b5e8b833")
+	)
+	(wire
+		(pts
 			(xy 208.28 114.3) (xy 213.36 114.3)
 		)
 		(stroke
@@ -1267,6 +1301,16 @@
 	)
 	(wire
 		(pts
+			(xy 160.02 55.88) (xy 160.02 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "12fca75c-60f5-4c5e-8bd3-c1396984fd18")
+	)
+	(wire
+		(pts
 			(xy 91.44 99.06) (xy 106.68 99.06)
 		)
 		(stroke
@@ -1284,6 +1328,16 @@
 			(type default)
 		)
 		(uuid "147a8318-e298-4015-9bdf-4fdad82909a4")
+	)
+	(wire
+		(pts
+			(xy 160.02 93.98) (xy 157.48 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1b974e5d-d881-4455-aadd-0855114a4a82")
 	)
 	(wire
 		(pts
@@ -1307,6 +1361,26 @@
 	)
 	(wire
 		(pts
+			(xy 160.02 55.88) (xy 157.48 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2f2a9b2c-5ffc-4109-9960-1e6935833148")
+	)
+	(wire
+		(pts
+			(xy 157.48 96.52) (xy 160.02 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "34336ede-50f2-4141-9289-bdd8b6ae316b")
+	)
+	(wire
+		(pts
 			(xy 213.36 76.2) (xy 208.28 76.2)
 		)
 		(stroke
@@ -1314,6 +1388,16 @@
 			(type default)
 		)
 		(uuid "396911b9-55af-4cb2-a75e-269cfaf2eb99")
+	)
+	(wire
+		(pts
+			(xy 162.56 73.66) (xy 157.48 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3b62756d-a33a-4e23-aa31-3a15a54209f1")
 	)
 	(wire
 		(pts
@@ -1354,6 +1438,16 @@
 			(type default)
 		)
 		(uuid "4680fb0a-d912-4d4c-a9d8-6df8058e1699")
+	)
+	(wire
+		(pts
+			(xy 162.56 55.88) (xy 160.02 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4b075ac6-3d30-4ee5-88e0-7fbb7b3feb96")
 	)
 	(wire
 		(pts
@@ -1417,6 +1511,26 @@
 	)
 	(wire
 		(pts
+			(xy 160.02 93.98) (xy 160.02 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6c2ff10c-45dc-488b-8def-5b75cd892a00")
+	)
+	(wire
+		(pts
+			(xy 157.48 71.12) (xy 160.02 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6f83a4a1-ce75-4ef5-bff9-29142e672cdb")
+	)
+	(wire
+		(pts
 			(xy 203.2 50.8) (xy 208.28 50.8)
 		)
 		(stroke
@@ -1424,6 +1538,16 @@
 			(type default)
 		)
 		(uuid "7262c7f6-26a1-43d2-a9f6-a23a7d0c34b3")
+	)
+	(wire
+		(pts
+			(xy 160.02 68.58) (xy 160.02 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "73d7005d-60f0-4803-9160-56da2de22dd7")
 	)
 	(wire
 		(pts
@@ -1457,6 +1581,26 @@
 	)
 	(wire
 		(pts
+			(xy 160.02 81.28) (xy 160.02 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8212019f-6de8-446e-b710-06904a9eec81")
+	)
+	(wire
+		(pts
+			(xy 162.56 93.98) (xy 160.02 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "88102718-5a78-4b3e-af69-fba79ed9990b")
+	)
+	(wire
+		(pts
 			(xy 88.9 109.22) (xy 88.9 111.76)
 		)
 		(stroke
@@ -1487,6 +1631,26 @@
 	)
 	(wire
 		(pts
+			(xy 162.56 86.36) (xy 157.48 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "94301c8f-087e-4def-a0e2-7f6a401a2f67")
+	)
+	(wire
+		(pts
+			(xy 162.56 68.58) (xy 160.02 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "98e528cd-8ee3-4d0a-a0be-f986a1599f48")
+	)
+	(wire
+		(pts
 			(xy 226.06 127) (xy 241.3 127)
 		)
 		(stroke
@@ -1504,6 +1668,16 @@
 			(type default)
 		)
 		(uuid "a1e2ef01-f57c-4c42-a707-2eeaef6c15f4")
+	)
+	(wire
+		(pts
+			(xy 157.48 58.42) (xy 160.02 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a2264a00-80fa-4668-b567-49ee8c76250c")
 	)
 	(wire
 		(pts
@@ -1534,6 +1708,26 @@
 			(type default)
 		)
 		(uuid "b1763cdb-857e-4722-97b9-4dab821c1590")
+	)
+	(wire
+		(pts
+			(xy 162.56 81.28) (xy 160.02 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b9be8ac9-31d5-48d0-8109-a807fe33b661")
+	)
+	(wire
+		(pts
+			(xy 162.56 60.96) (xy 157.48 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "be13dc92-29d8-4ab1-b46a-c4c6ad80f4e6")
 	)
 	(wire
 		(pts
@@ -1577,6 +1771,26 @@
 	)
 	(wire
 		(pts
+			(xy 160.02 81.28) (xy 157.48 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e64b0547-9f0f-4082-84ca-b473197a866f")
+	)
+	(wire
+		(pts
+			(xy 160.02 68.58) (xy 157.48 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f17ebedc-669b-4ca2-b3aa-554ac834bdb0")
+	)
+	(wire
+		(pts
 			(xy 208.28 63.5) (xy 213.36 63.5)
 		)
 		(stroke
@@ -1594,6 +1808,16 @@
 			(type default)
 		)
 		(uuid "fd64a891-47c7-47d8-9bd0-b1e4b2b9aa10")
+	)
+	(wire
+		(pts
+			(xy 157.48 83.82) (xy 160.02 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ff8c0a5e-eeea-4cca-92c0-84655c32b3a3")
 	)
 	(label "IOVDD"
 		(at 241.3 139.7 0)
@@ -1715,31 +1939,9 @@
 		)
 		(uuid "93a46efe-f5dd-4aec-8512-bd65b83cf948")
 	)
-	(hierarchical_label "SENSEPA"
-		(shape input)
-		(at 157.48 58.42 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "10e04310-0cc7-4337-9bde-b47b1361fd38")
-	)
-	(hierarchical_label "SENSEPB"
-		(shape input)
-		(at 157.48 71.12 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "1148d0e6-b441-4d3f-93ec-a8d756cd4349")
-	)
 	(hierarchical_label "SENSENB"
 		(shape input)
-		(at 157.48 73.66 0)
+		(at 162.56 73.66 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1750,7 +1952,7 @@
 	)
 	(hierarchical_label "OUTC"
 		(shape output)
-		(at 157.48 81.28 0)
+		(at 162.56 81.28 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1761,7 +1963,7 @@
 	)
 	(hierarchical_label "OUTB"
 		(shape output)
-		(at 157.48 68.58 0)
+		(at 162.56 68.58 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1772,7 +1974,7 @@
 	)
 	(hierarchical_label "OUTD"
 		(shape output)
-		(at 157.48 93.98 0)
+		(at 162.56 93.98 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1794,7 +1996,7 @@
 	)
 	(hierarchical_label "SENSENA"
 		(shape input)
-		(at 157.48 60.96 0)
+		(at 162.56 60.96 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1805,7 +2007,7 @@
 	)
 	(hierarchical_label "SENSEND"
 		(shape input)
-		(at 157.48 99.06 0)
+		(at 162.56 99.06 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1824,17 +2026,6 @@
 			(justify left)
 		)
 		(uuid "64f00da9-f4bb-43ef-a772-16957e82dafa")
-	)
-	(hierarchical_label "SENSEPD"
-		(shape input)
-		(at 157.48 96.52 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "6ba918f3-52de-454e-9c56-50dc942c9bc8")
 	)
 	(hierarchical_label "-15V"
 		(shape input)
@@ -1860,7 +2051,7 @@
 	)
 	(hierarchical_label "OUTA"
 		(shape output)
-		(at 157.48 55.88 0)
+		(at 162.56 55.88 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1913,20 +2104,9 @@
 		)
 		(uuid "f5aa3e15-005e-483c-824a-ba6217e30441")
 	)
-	(hierarchical_label "SENSEPC"
-		(shape input)
-		(at 157.48 83.82 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "fcce5abe-807c-469d-b638-db3c5dd0397b")
-	)
 	(hierarchical_label "SENSENC"
 		(shape input)
-		(at 157.48 86.36 0)
+		(at 162.56 86.36 0)
 		(effects
 			(font
 				(size 1.27 1.27)

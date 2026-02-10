@@ -16,7 +16,7 @@
 		)
 		(uuid "0c0d89c2-0f77-4a65-9f4c-1d4acd67c350")
 	)
-	(text "DAC1:\n- fine X\n- fine Y\n- fine Z\n- coarse Z\n\nfour channels, ±12 V (mode 1110)\n±15 mA current drive\n"
+	(text "DAC1:\n- fine X\n- fine Y\n- fine Z\n- coarse Z\n\nfour channels, ±12 V (mode 1110)"
 		(exclude_from_sim no)
 		(at 86.106 26.162 0)
 		(effects
