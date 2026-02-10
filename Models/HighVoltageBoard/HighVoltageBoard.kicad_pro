@@ -513,11 +513,11 @@
     "netclass_patterns": [
       {
         "netclass": "HighVoltage",
-        "pattern": "/450V"
+        "pattern": "450V"
       },
       {
         "netclass": "HighVoltage",
-        "pattern": "/-450V"
+        "pattern": "-450V"
       },
       {
         "netclass": "HighVoltage",

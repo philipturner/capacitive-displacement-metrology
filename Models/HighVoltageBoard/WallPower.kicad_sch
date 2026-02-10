@@ -1023,7 +1023,7 @@
 		)
 		(uuid "cc5ca138-5afd-4c7f-99d0-59eb3244f3a0")
 	)
-	(hierarchical_label "450V"
+	(hierarchical_label "V+"
 		(shape output)
 		(at 182.88 78.74 0)
 		(effects
@@ -1032,9 +1032,9 @@
 			)
 			(justify left)
 		)
-		(uuid "5f8d3b11-cdf3-45b9-ad8c-fd1b0f837b7b")
+		(uuid "ab3662c1-d9c7-41a7-8b34-048031cf1cd8")
 	)
-	(hierarchical_label "-450V"
+	(hierarchical_label "V-"
 		(shape output)
 		(at 182.88 109.22 0)
 		(effects
@@ -1043,7 +1043,7 @@
 			)
 			(justify left)
 		)
-		(uuid "8b011c82-f17c-48c7-a41c-8f0949d5c585")
+		(uuid "dadedf30-dde2-4239-8fb7-f611fcb955d9")
 	)
 	(symbol
 		(lib_id "Device:D_Zener")
