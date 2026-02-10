@@ -496,6 +496,132 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Device:NetTie_2"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(property "Reference" "NT"
+				(at 0 1.27 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "NetTie_2"
+				(at 0 -1.27 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Net tie, 2 pins"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "net tie short"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Net*Tie*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "NetTie_2_0_1"
+				(polyline
+					(pts
+						(xy -1.27 0) (xy 1.27 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "NetTie_2_1_1"
+				(pin passive line
+					(at -2.54 0 0)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 0 180)
+					(length 2.54)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Device:R_US"
 			(pin_numbers
 				(hide yes)
@@ -772,16 +898,16 @@
 		)
 	)
 	(junction
-		(at 227.33 50.8)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "2fca2500-0096-40d6-9b06-30c27d5f97d4")
-	)
-	(junction
 		(at 132.08 78.74)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "84a97f0f-66d0-4037-b45f-fa5ef048e2e7")
+	)
+	(junction
+		(at 226.06 50.8)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "949933d4-a50e-449c-988b-e18f752a37f5")
 	)
 	(junction
 		(at 91.44 78.74)
@@ -790,13 +916,13 @@
 		(uuid "b6bfa88a-6eb4-49f1-8503-4a3495d0832f")
 	)
 	(junction
-		(at 227.33 63.5)
+		(at 226.06 63.5)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "b93b7565-47ea-4a17-ad15-71cdbfe3201b")
 	)
 	(junction
-		(at 209.55 50.8)
+		(at 208.28 50.8)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f0f78707-b906-406f-b45b-0b1d8f872bd9")
@@ -841,7 +967,17 @@
 	)
 	(wire
 		(pts
-			(xy 204.47 50.8) (xy 209.55 50.8)
+			(xy 236.22 50.8) (xy 241.3 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "03a1ffd6-fc98-4339-ada8-7f3a2addbda9")
+	)
+	(wire
+		(pts
+			(xy 203.2 50.8) (xy 208.28 50.8)
 		)
 		(stroke
 			(width 0)
@@ -871,7 +1007,7 @@
 	)
 	(wire
 		(pts
-			(xy 222.25 63.5) (xy 227.33 63.5)
+			(xy 220.98 63.5) (xy 226.06 63.5)
 		)
 		(stroke
 			(width 0)
@@ -901,7 +1037,7 @@
 	)
 	(wire
 		(pts
-			(xy 209.55 63.5) (xy 214.63 63.5)
+			(xy 208.28 63.5) (xy 213.36 63.5)
 		)
 		(stroke
 			(width 0)
@@ -921,7 +1057,7 @@
 	)
 	(wire
 		(pts
-			(xy 214.63 50.8) (xy 209.55 50.8)
+			(xy 213.36 50.8) (xy 208.28 50.8)
 		)
 		(stroke
 			(width 0)
@@ -941,7 +1077,7 @@
 	)
 	(wire
 		(pts
-			(xy 222.25 50.8) (xy 227.33 50.8)
+			(xy 220.98 50.8) (xy 226.06 50.8)
 		)
 		(stroke
 			(width 0)
@@ -971,6 +1107,16 @@
 	)
 	(wire
 		(pts
+			(xy 226.06 50.8) (xy 231.14 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "be101bb5-417f-40d4-a3be-5cff7d0a560b")
+	)
+	(wire
+		(pts
 			(xy 96.52 83.82) (xy 99.06 83.82)
 		)
 		(stroke
@@ -981,7 +1127,7 @@
 	)
 	(wire
 		(pts
-			(xy 227.33 63.5) (xy 242.57 63.5)
+			(xy 226.06 63.5) (xy 241.3 63.5)
 		)
 		(stroke
 			(width 0)
@@ -1001,16 +1147,6 @@
 	)
 	(wire
 		(pts
-			(xy 227.33 50.8) (xy 242.57 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "dd470c3d-9454-49c6-94a1-69946b994ffd")
-	)
-	(wire
-		(pts
 			(xy 96.52 96.52) (xy 99.06 96.52)
 		)
 		(stroke
@@ -1021,7 +1157,7 @@
 	)
 	(wire
 		(pts
-			(xy 227.33 63.5) (xy 227.33 50.8)
+			(xy 226.06 63.5) (xy 226.06 50.8)
 		)
 		(stroke
 			(width 0)
@@ -1031,7 +1167,7 @@
 	)
 	(wire
 		(pts
-			(xy 209.55 50.8) (xy 209.55 63.5)
+			(xy 208.28 50.8) (xy 208.28 63.5)
 		)
 		(stroke
 			(width 0)
@@ -1050,7 +1186,7 @@
 		(uuid "28aa5cbd-11e9-4c60-a7a6-7334791404c7")
 	)
 	(label "VDD"
-		(at 242.57 63.5 0)
+		(at 241.3 63.5 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1079,16 +1215,27 @@
 		)
 		(uuid "f6f2d8b3-e5bd-4f58-8155-db132289b907")
 	)
-	(hierarchical_label "5V"
+	(global_label "5V"
 		(shape input)
-		(at 242.57 50.8 0)
+		(at 241.3 50.8 0)
+		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left)
 		)
-		(uuid "01cf5b1a-f743-4e0e-b6a7-33b7963d3b52")
+		(uuid "cadcd276-16b7-4e04-907a-c2e263b3b227")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 246.5833 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
 	)
 	(hierarchical_label "SDA"
 		(shape bidirectional)
@@ -1343,7 +1490,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 204.47 50.8 270)
+		(at 203.2 50.8 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1352,7 +1499,7 @@
 		(fields_autoplaced yes)
 		(uuid "33e6d81e-aff2-435f-9ac7-13eefe6dd9fb")
 		(property "Reference" "#PWR026"
-			(at 198.12 50.8 0)
+			(at 196.85 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1361,7 +1508,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 200.66 50.7999 90)
+			(at 199.39 50.7999 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1370,7 +1517,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 204.47 50.8 0)
+			(at 203.2 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1379,7 +1526,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 204.47 50.8 0)
+			(at 203.2 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1388,7 +1535,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 204.47 50.8 0)
+			(at 203.2 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1520,7 +1667,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 218.44 50.8 90)
+		(at 217.17 50.8 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1529,7 +1676,7 @@
 		(fields_autoplaced yes)
 		(uuid "750ba140-6d4b-41ab-893f-dfcfdbf12766")
 		(property "Reference" "C28"
-			(at 218.44 43.18 90)
+			(at 217.17 43.18 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1537,7 +1684,7 @@
 			)
 		)
 		(property "Value" "100 nF, 0603"
-			(at 218.44 45.72 90)
+			(at 217.17 45.72 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1545,7 +1692,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 222.25 49.8348 0)
+			(at 220.98 49.8348 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1554,7 +1701,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 218.44 50.8 0)
+			(at 217.17 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1563,7 +1710,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 218.44 50.8 0)
+			(at 217.17 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1572,7 +1719,7 @@
 			)
 		)
 		(property "Purchase Link" ""
-			(at 218.44 50.8 0)
+			(at 217.17 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1596,25 +1743,25 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 218.44 63.5 90)
+		(lib_id "Device:NetTie_2")
+		(at 233.68 50.8 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "a5381cdb-073d-4612-b8e2-d7b9cbaee656")
-		(property "Reference" "C29"
-			(at 218.44 55.88 90)
+		(uuid "89dce841-909b-4f4a-b2ce-4bbafe6c1ab5")
+		(property "Reference" "NT7"
+			(at 233.68 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "10 uF, 0805"
-			(at 218.44 58.42 90)
+		(property "Value" "NetTie_2"
+			(at 233.68 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1622,7 +1769,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 222.25 62.5348 0)
+			(at 233.68 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1631,7 +1778,75 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 218.44 63.5 0)
+			(at 233.68 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Net tie, 2 pins"
+			(at 233.68 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "aebc0b0e-8eda-435d-b9fb-79d9ecef770c")
+		)
+		(pin "2"
+			(uuid "6d4a0f25-7352-469f-903b-43eb27373702")
+		)
+		(instances
+			(project ""
+				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/812a2394-e6f7-4194-9eea-57be5665ec29"
+					(reference "NT7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 217.17 63.5 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a5381cdb-073d-4612-b8e2-d7b9cbaee656")
+		(property "Reference" "C29"
+			(at 217.17 55.88 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10 uF, 0805"
+			(at 217.17 58.42 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 220.98 62.5348 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 217.17 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1640,7 +1855,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 218.44 63.5 0)
+			(at 217.17 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1649,7 +1864,7 @@
 			)
 		)
 		(property "Purchase Link" ""
-			(at 218.44 63.5 0)
+			(at 217.17 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
