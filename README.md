@@ -783,3 +783,13 @@ The physical dimensions/layout of the STM and PCBs need to be resolved together.
 I am deciding to reduce the scope of the PCB design work for Phase 0.2. I will build off the library of datasheets and symbols/footprints. I will use the same isolators, converters, regulators, and low-voltage power supply as Phase I/II. I am just archiving the 6 KiCad projects into a "PhaseI" folder, and continuing with a reduced subset.
 
 Just looking at the Phase 0.2 capacitance junction, a 5 mm x 5 mm LiNbO3 piezo doesn't seem large enough to hold the weight of the associated plate. It looks mechanically unbalanced or wobbly. Moreso if a stack of 3 plates is used. I'll have to think very deeply about this.
+
+---
+
+I unpacked one of my 5 mm x 5 mm LiNbO3 plates for the first time, and tested a 14 mm x 16 mm x 16 mm pyrite cube on top of it. The cube balances and is mechanically stable. Just keep the center of mass over the piezo plate.
+
+I will reproduce the Islam & Beamish junction as closely as possible, except the larger block has smaller dimensions (14 x 14 x 16 -> 10 x 10 x 12 mm). Both the ThorLabs plate and the existing LiNbO3 plates are 5 mm x 5 mm. I am not bothering with the complex setup from the Harvard (2024) paper, although I will take inspiration from how they arranged their electrodes and BNC connectors.
+
+The Islam & Beamish paper used both machining and epoxy handling. I will have to get basic experience with both. This is a great, simple testing ground for learning these skills. Less demanding than a full STM body or multi-plate piezo stack.
+
+I can also use copper foil to easily assemble a piezo stack held together by magnetism. This would triple the range of the LiNbO3 shear piezo. It is slightly different than stiffer "copper shim" used for piezo stacks. Actually, for non-UHV conditions, aluminum foil could be even more practical.
