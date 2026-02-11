@@ -29,6 +29,7 @@ Table of Contents:
 - [January 30, 2026](#january-30-2026)
 - [February 2, 2026](#february-2-2026)
 - [February 3, 2026](#february-3-2026)
+- [February 11, 2026](#february-11-2026)
 
 ## December 15, 2025
 
@@ -761,3 +762,18 @@ Current state of progress:
 ## February 3, 2026
 
 ![February 3, Part 1](./Documentation/February3_Part1.jpg)
+
+## February 11, 2026
+
+I have answered many design questions about the PCBs. I was researching shielded RF connectors. The best approach is to start with mechanical design of Phase 0.2, I, II junctions. Work back from there.
+
+Doing this step next will pave the way to answer the following questions:
+- Which wires need to be coaxial?
+- Are bulky SHV connectors actually needed for the piezo voltages?
+- How do we prevent 430 V control voltages from coupling to sensitive parts like the ADC and preamp?
+- What does the electromagnetic shielding look like?
+- What is the length of connecting cables?
+
+I need to figure out the exact connectors to use, but not the length of the cables. From that information, I can specify rough PCB dimensions and physical structure. Work back from that to figure out where electrical contacts are made on the STM junction. Finally, I can figure out the length of connecting cables.
+
+The physical dimensions/layout of the STM and PCBs need to be resolved together. You cannot have one without the other. It's a paradox: neither is specified in enough detail yet. It's probably best to return to this problem tomorrow, when my mind is fresh.
