@@ -777,3 +777,9 @@ Doing this step next will pave the way to answer the following questions:
 I need to figure out the exact connectors to use, but not the length of the cables. From that information, I can specify rough PCB dimensions and physical structure. Work back from that to figure out where electrical contacts are made on the STM junction. Finally, I can figure out the length of connecting cables.
 
 The physical dimensions/layout of the STM and PCBs need to be resolved together. You cannot have one without the other. It's a paradox: neither is specified in enough detail yet. It's probably best to return to this problem tomorrow, when my mind is fresh.
+
+---
+
+I am deciding to reduce the scope of the PCB design work for Phase 0.2. I will build off the library of datasheets and symbols/footprints. I will use the same isolators, converters, regulators, and low-voltage power supply as Phase I/II. I am just archiving the 6 KiCad projects into a "PhaseI" folder, and continuing with a reduced subset.
+
+Just looking at the Phase 0.2 capacitance junction, a 5 mm x 5 mm LiNbO3 piezo doesn't seem large enough to hold the weight of the associated plate. It looks mechanically unbalanced or wobbly. Moreso if a stack of 3 plates is used. I'll have to think very deeply about this.
