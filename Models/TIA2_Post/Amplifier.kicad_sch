@@ -828,6 +828,116 @@
 		)
 		(uuid "ec2edb86-200f-4a3e-9529-6a3fe3a2167b")
 	)
+	(global_label "-15V"
+		(shape input)
+		(at 114.3 83.82 270)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "0d27769d-2716-424c-be9a-62139851d8b7")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 114.3 91.8852 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "15V"
+		(shape input)
+		(at 114.3 68.58 90)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "6c29cc5f-c77c-46c6-930c-e61627817073")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 114.3 62.0872 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "ISO_GND"
+		(shape bidirectional)
+		(at 91.44 101.6 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7b037613-bf36-4173-8d82-78fc0882e2e8")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 79.3606 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "15V"
+		(shape input)
+		(at 101.6 116.84 90)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9803dbcb-6701-4d01-bf9a-c2c1119da9a7")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 101.6 110.3472 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "-15V"
+		(shape input)
+		(at 127 116.84 90)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "bc85b279-5efe-4710-a42d-604273507ba1")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 127 108.7748 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
 	(hierarchical_label "PostVoltage"
 		(shape output)
 		(at 129.54 76.2 0)
@@ -838,17 +948,6 @@
 			(justify left)
 		)
 		(uuid "04cd4c80-4f67-4b7a-a15a-c3e3b5226191")
-	)
-	(hierarchical_label "-15V"
-		(shape input)
-		(at 127 116.84 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "0cf0ec03-72b4-4be7-9034-61d18a29ef6d")
 	)
 	(hierarchical_label "InvertingInput"
 		(shape input)
@@ -871,39 +970,6 @@
 			(justify right)
 		)
 		(uuid "47b5ca2b-7f6d-491f-8c23-92afc05fba7a")
-	)
-	(hierarchical_label "15V"
-		(shape input)
-		(at 114.3 68.58 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "85153403-bed1-43b8-8cc5-4855e8795419")
-	)
-	(hierarchical_label "-15V"
-		(shape input)
-		(at 114.3 83.82 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "c7002dcd-7cfc-423d-ab76-53df36a0c48b")
-	)
-	(hierarchical_label "15V"
-		(shape input)
-		(at 101.6 116.84 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "f2ce3141-f499-42de-bd93-d28c5ff35072")
 	)
 	(symbol
 		(lib_id "Device:C")
@@ -1190,73 +1256,6 @@
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/576e9362-b988-409f-82c5-0c80cb18568a"
 					(reference "R9")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 91.44 101.6 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "9e2b4b63-8f04-4332-bb77-519b4a18967f")
-		(property "Reference" "#PWR06"
-			(at 85.09 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 87.63 101.5999 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" ""
-			(at 91.44 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 91.44 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 91.44 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "3b62d730-8817-44ab-9cf8-4a5cd55386d9")
-		)
-		(instances
-			(project "TIA2_Post"
-				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/576e9362-b988-409f-82c5-0c80cb18568a"
-					(reference "#PWR06")
 					(unit 1)
 				)
 			)
