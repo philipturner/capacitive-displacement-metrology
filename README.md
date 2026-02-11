@@ -617,7 +617,7 @@ Finally, consider only changing the number of plates. 4 * 68 pm/V * 24 V = <b>6.
 
 Both Improvement 1 and Improvement 3 make me highly confident the metrology can work. Improvement 2 could make-or-break the results, but is very close to the margin of error for theoretical calculations.
 
-We can choose to use the lower voltages of ±12 V, supplies by fixed ±15 V regulators.
+We can choose to use the lower voltages of ±12 V, supplied by fixed ±15 V regulators.
 
 ---
 
