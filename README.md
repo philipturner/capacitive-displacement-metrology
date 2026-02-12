@@ -804,3 +804,10 @@ I tried assembling a stack of 3 plates, with electrodes made of two scraps of al
 I split the two 5 mm x 12 mm scraps of aluminum foil into four 5 mm x 6 mm scraps. Then, I assembled the piezo stack like before, except odd and even electrode pairs weren't connected. This stack almost fell apart from the vibrations of something hitting the table. The pyrite block still wobbled when placed on top.
 
 I tried omitting all electrodes except the piece of foil between the 1st and 2nd plate. The pyrite block still wobbled. Finally, I tried once more with only the piezo plates and no foil. The wobble did not exist. From this investigation, I can conclude that the simple "aluminum foil" piezo stack is impossible for Phase 0.2.
+
+| Configuration | Piezo Stack | Balancing Pyrite Block |
+| ------------- | ----------- | ---------------------- |
+| only piezo plates    | ![](./Documentation/February12/T1_1.jpg) | ![](./Documentation/February12/T1_2.jpg) |
+| two foil electrodes  | ![](./Documentation/February12/T2_1.jpg) | ![](./Documentation/February12/T2_2.jpg) |
+| four foil electrodes | ![](./Documentation/February12/T3_1.jpg) | ![](./Documentation/February12/T3_2.jpg) |
+| one foil electrode   | ![](./Documentation/February12/T4_1.jpg) | ![](./Documentation/February12/T4_2.jpg) |
