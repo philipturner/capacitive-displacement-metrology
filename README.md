@@ -801,3 +801,6 @@ A good, stiff STM should have a resonance frequency in the several kHz. When a m
 
 I tried assembling a stack of 3 plates, with electrodes made of two scraps of aluminum foil. It was very tedious to assemble: the stack kept falling apart, and I only got to balance the pyrite block on the 2nd attempt. When placing the block on the stack, it wobbled with a frequency in the single Hz range. When removing the foil and just stacking the flat plates themselves, the wobble disappeared. The same dichotomy happened with a LiNbO3 plate inside its plastic packaging, versus outside.
 
+I split the two 5 mm x 12 mm scraps of aluminum foil into four 5 mm x 6 mm scraps. Then, I assembled the piezo stack like before, except odd and even electrode pairs weren't connected. This stack almost fell apart from the vibrations of something hitting the table. The pyrite block still wobbled when placed on top.
+
+I tried omitting all electrodes except the piece of foil between the 1st and 2nd plate. The pyrite block still wobbled. Finally, I tried once more with only the piezo plates and no foil. The wobble did not exist. From this investigation, I can conclude that the simple "aluminum foil" piezo stack is impossible for Phase 0.2.
