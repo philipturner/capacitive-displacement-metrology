@@ -824,3 +824,5 @@ Everything but epoxy is a reversible connection mechanism. Solder can be undone 
 I can probably test certain subsystems for correct functioning before final assembly, such as a piezo stack. I can make the magnet force on the kinematic mount tunable, if both the top and bottom plates are made of steel. Many variables fall on a spectrum of tunability. But unfortunately, a few of them are probably 100% baked in ahead of time.
 
 My task is to minimize the chance something goes wrong. Make as many connections as possible reversible, whether for practicality of storing the piece of hardware, or for correcting design errors. De-risk whenever possible. Accept the real possibility that I could run out of spare LiNbO3 piezo plates and face another 3-6 week lead time.
+
+Too much fear of something going wrong will scare me away from trying anything.
