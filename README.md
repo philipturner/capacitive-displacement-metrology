@@ -30,6 +30,7 @@ Table of Contents:
 - [February 2, 2026](#february-2-2026)
 - [February 3, 2026](#february-3-2026)
 - [February 11, 2026](#february-11-2026)
+- [February 12, 2026](#february-12-2026)
 
 ## December 15, 2025
 
@@ -793,3 +794,10 @@ I will reproduce the Islam & Beamish junction as closely as possible, except the
 The Islam & Beamish paper used both machining and epoxy handling. I will have to get basic experience with both. This is a great, simple testing ground for learning these skills. Less demanding than a full STM body or multi-plate piezo stack.
 
 I can also use copper foil to easily assemble a piezo stack held together by magnetism. This would triple the range of the LiNbO3 shear piezo. It is slightly different than stiffer "copper shim" used for piezo stacks. Actually, for non-UHV conditions, aluminum foil could be even more practical.
+
+## February 12, 2026
+
+A good, stiff STM should have a resonance frequency in the several kHz. When a mechanical device wobbles with a frequency in the single Hz range, something is wrong.
+
+I tried assembling a stack of 3 plates, with electrodes made of two scraps of aluminum foil. It was very tedious to assemble: the stack kept falling apart, and I only got to balance the pyrite block on the 2nd attempt. When placing the block on the stack, it wobbled with a frequency in the single Hz range. When removing the foil and just stacking the flat plates themselves, the wobble disappeared. The same dichotomy happened with a LiNbO3 plate inside its plastic packaging, versus outside.
+
