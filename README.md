@@ -811,3 +811,16 @@ I tried omitting all electrodes except the piece of foil between the 1st and 2nd
 | two foil electrodes  | ![](./Documentation/February12/T2_1.jpg) | ![](./Documentation/February12/T2_2.jpg) |
 | four foil electrodes | ![](./Documentation/February12/T3_1.jpg) | ![](./Documentation/February12/T3_2.jpg) |
 | one foil electrode   | ![](./Documentation/February12/T4_1.jpg) | ![](./Documentation/February12/T4_2.jpg) |
+
+This wobbliness problem can appear anywhere in a mechanical system. It happens because two surfaces aren't held together by a strong force. To solve the problem, we need one of the following:
+- large gravitational force
+- magnetism
+- chemical bonding (epoxy, solder)
+- a spring clamp
+- frictional force in a tightened screw, which is parallel to the contacting surfaces inside the screw
+
+Everything but epoxy is a reversible connection mechanism. Solder can be undone and redone a small number of times, under the right conditions. The overarching problem is, if I mess up the layout of a mechanical system, there is no way to rearrange the existing parts. It would require buying the same individual parts all over again.
+
+I can probably test certain subsystems for correct functioning before final assembly, such as a piezo stack. I can make the magnet force on the kinematic mount tunable, if both the top and bottom plates are made of steel. Many variables fall on a spectrum of tunability. But unfortunately, a few of them are probably 100% baked in ahead of time.
+
+My task is to minimize the chance something goes wrong. Make as many connections as possible reversible, whether for practicality of storing the piece of hardware, or for correcting design errors. De-risk whenever possible. Accept the real possibility that I could run out of spare LiNbO3 piezo plates and face another 3-6 week lead time.
