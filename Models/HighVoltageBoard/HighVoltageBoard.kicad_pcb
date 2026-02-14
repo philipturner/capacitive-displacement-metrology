@@ -130,5 +130,17 @@
 		)
 	)
 	(net 0 "")
+	(gr_text "Layer 4: signals and power\nLayer 3: GND (temp.)\nLayer 2: signals and power (temp.)\nLayer 1: GND\n\nviolates IPC-2221 clearance of 0.25 mm\nonly permit 0.2 mm distance to GND\nnever allow between two high voltage conductors,\nwhich could be 900V instead of 450V\n\nminimize length of regions with\n0.2 mm distance to GND conductor\n\nhigh voltage vias should respect 0.8 mm\nclearance to GND conductor\n\nDESIGN REVISION: 4-layer PCB\nno longer needed or helpful\nfor the routing problem"
+		(at 134.9 166.9 0)
+		(layer "Cmts.User")
+		(uuid "8752510f-a789-4966-aeea-5f74871719ea")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+			(justify left top)
+		)
+	)
 	(embedded_fonts no)
 )
