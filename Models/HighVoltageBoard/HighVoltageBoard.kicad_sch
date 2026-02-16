@@ -5,7 +5,7 @@
 	(uuid "c83b09c9-14ae-4b68-b7fa-4c89bba29dc5")
 	(paper "A4")
 	(lib_symbols)
-	(text "IN/SENSEN receptacle type:\npin/socket connections\n\noutput voltage receptacle type:\n(1) SMA with 500V rating and RG-58/U\n(2) 1x3 pin header, GND + OUT + OUT\n\nGND interface to other boards:\nmany pin/socket connections"
+	(text "IN/SENSEN receptacle type:\npin/socket connections\n\noutput voltage receptacle type:\n(1) SMA with 500V rating and RG-58/U\n(2) 1x3 pin socket, GND + OUT + OUT\n\nGND interface to other boards:\nmany pin/socket connections"
 		(exclude_from_sim no)
 		(at 27.178 26.924 0)
 		(effects
