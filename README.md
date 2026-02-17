@@ -31,6 +31,7 @@ Table of Contents:
 - [February 3, 2026](#february-3-2026)
 - [February 11, 2026](#february-11-2026)
 - [February 12, 2026](#february-12-2026)
+- [February 17, 2026](#february-17-2026)
 
 ## December 15, 2025
 
@@ -826,3 +827,7 @@ I can probably test certain subsystems for correct functioning before final asse
 My task is to minimize the chance something goes wrong. Make as many connections as possible reversible, whether for practicality of storing the piece of hardware, or for correcting design errors. De-risk whenever possible. Accept the real possibility that I could run out of spare LiNbO3 piezo plates and face another 3-6 week lead time.
 
 Too much fear of something going wrong will scare me away from trying anything.
+
+## February 17, 2026
+
+![February 17, Part 1](./Documentation/February17_Part1.jpg)
