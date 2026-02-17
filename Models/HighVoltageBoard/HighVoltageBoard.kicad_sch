@@ -225,17 +225,6 @@
 		)
 		(uuid "28230c07-78c1-4db9-8bdd-ae05cd000cf2")
 	)
-	(text "inputs: up to ±12 V\noutputs: up to approx. ∓430 V\npower cords received: 450 V, GND, -450 V"
-		(exclude_from_sim no)
-		(at 102.362 26.924 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "6c795226-d65f-4192-9cf7-d3bbde3a1346")
-	)
 	(label "OUTB"
 		(at 101.6 86.36 0)
 		(effects

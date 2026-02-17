@@ -247,6 +247,17 @@
 		)
 		(uuid "3779d128-ad00-47b0-b818-10e857541328")
 	)
+	(text "output voltage receptacle type:\n(1) SMA\n(2) 1x3 pin socket, GND + OUT + GND"
+		(exclude_from_sim no)
+		(at 25.908 26.67 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "41890dfe-571f-4609-898d-835962d4a660")
+	)
 	(text "Input:\n- 3 pF total capacitance\n- 300 μm separation\n- 13 aF/nm\n\nconversion time 109.6 ms (mode 111)\nmax excitation voltage (mode 11)\n\n10x resolution boost in software:\n - 100 samples at 9 Hz\n - 0.09 Hz measurement rate"
 		(exclude_from_sim no)
 		(at 61.468 163.83 0)

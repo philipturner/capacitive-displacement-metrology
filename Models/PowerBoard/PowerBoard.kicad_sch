@@ -214,9 +214,31 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "Allocate 2 pins on a large pin socket for\neach of the following nodes, in case design\nrevisions require more boards:\n- 18V\n- -18V\n- GND\n- 5V (converter)\n- 3.3V\n- GND\n- 5V (preamp)\n- -5V (preamp)"
+	(text "18V: no external interface\n-18V: no external interface"
 		(exclude_from_sim no)
-		(at 51.054 26.67 0)
+		(at 77.724 65.024 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "6c3b5c3a-8dab-4226-a8cd-5f89c61b4078")
+	)
+	(text "5V (preamp): breadboard\n-5V (preamp): breadboard\n2.5V: shielded\n-1.5V: shielded"
+		(exclude_from_sim no)
+		(at 178.816 102.616 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "b87af1ec-7e71-4821-8ba2-3c9be9cc264f")
+	)
+	(text "interface to main board:\nmany pin/socket connections\n\nexternal interface (shielded):\n(1) SMA\n(2) 1x4 pin socket, GND + OUT + OUT + GND\n\nexternal interface (breadboard):\n(1) 1x4 pin socket, GND + OUT + OUT + GND"
+		(exclude_from_sim no)
+		(at 26.162 26.416 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -225,21 +247,43 @@
 		)
 		(uuid "b893f1d7-c5bf-409e-a38f-69efcb619fac")
 	)
+	(text "15V: shielded\n-15V: shielded"
+		(exclude_from_sim no)
+		(at 178.816 64.262 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "dbd1245f-a340-47d6-a34b-4d1c2f65c096")
+	)
+	(text "5V: no external interface\n3.3V: no external interface"
+		(exclude_from_sim no)
+		(at 179.324 26.67 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "ffe76578-abc0-466a-a0b3-cd9cf155b95e")
+	)
 	(junction
-		(at 142.24 83.82)
+		(at 116.84 83.82)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "06bd5cbb-9e93-477d-a512-9725c1fd81bd")
 	)
 	(junction
-		(at 147.32 78.74)
+		(at 121.92 78.74)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "5174acb0-e709-42fe-93ed-1eddd3c90958")
 	)
 	(wire
 		(pts
-			(xy 142.24 83.82) (xy 152.4 83.82)
+			(xy 116.84 83.82) (xy 127 83.82)
 		)
 		(stroke
 			(width 0)
@@ -249,7 +293,7 @@
 	)
 	(wire
 		(pts
-			(xy 147.32 45.72) (xy 147.32 78.74)
+			(xy 121.92 45.72) (xy 121.92 78.74)
 		)
 		(stroke
 			(width 0)
@@ -259,7 +303,7 @@
 	)
 	(wire
 		(pts
-			(xy 147.32 78.74) (xy 152.4 78.74)
+			(xy 121.92 78.74) (xy 127 78.74)
 		)
 		(stroke
 			(width 0)
@@ -269,7 +313,7 @@
 	)
 	(wire
 		(pts
-			(xy 147.32 116.84) (xy 152.4 116.84)
+			(xy 121.92 116.84) (xy 127 116.84)
 		)
 		(stroke
 			(width 0)
@@ -279,7 +323,7 @@
 	)
 	(wire
 		(pts
-			(xy 152.4 45.72) (xy 147.32 45.72)
+			(xy 127 45.72) (xy 121.92 45.72)
 		)
 		(stroke
 			(width 0)
@@ -289,7 +333,7 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 83.82) (xy 142.24 121.92)
+			(xy 116.84 83.82) (xy 116.84 121.92)
 		)
 		(stroke
 			(width 0)
@@ -299,7 +343,7 @@
 	)
 	(wire
 		(pts
-			(xy 102.87 78.74) (xy 147.32 78.74)
+			(xy 76.2 78.74) (xy 121.92 78.74)
 		)
 		(stroke
 			(width 0)
@@ -309,7 +353,7 @@
 	)
 	(wire
 		(pts
-			(xy 152.4 121.92) (xy 142.24 121.92)
+			(xy 127 121.92) (xy 116.84 121.92)
 		)
 		(stroke
 			(width 0)
@@ -319,7 +363,7 @@
 	)
 	(wire
 		(pts
-			(xy 147.32 78.74) (xy 147.32 116.84)
+			(xy 121.92 78.74) (xy 121.92 116.84)
 		)
 		(stroke
 			(width 0)
@@ -329,7 +373,7 @@
 	)
 	(wire
 		(pts
-			(xy 102.87 83.82) (xy 142.24 83.82)
+			(xy 76.2 83.82) (xy 116.84 83.82)
 		)
 		(stroke
 			(width 0)
@@ -338,7 +382,7 @@
 		(uuid "fad72e6e-b283-47b4-a985-50967e443d7f")
 	)
 	(label "2.5V"
-		(at 203.2 116.84 0)
+		(at 177.8 116.84 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -348,7 +392,7 @@
 		(uuid "031c4780-51f1-40b6-9abc-d87f79662c05")
 	)
 	(label "3.3V"
-		(at 203.2 45.72 0)
+		(at 177.8 45.72 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -358,7 +402,7 @@
 		(uuid "1e75837c-2ccf-4daf-87d5-dac21f6c3ba5")
 	)
 	(label "5V"
-		(at 203.2 40.64 0)
+		(at 177.8 40.64 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -368,7 +412,7 @@
 		(uuid "5e3240aa-50c3-4746-a8f1-fd655409d748")
 	)
 	(label "15V"
-		(at 203.2 78.74 0)
+		(at 177.8 78.74 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -378,7 +422,7 @@
 		(uuid "9b28dd0c-b72b-4442-afda-6848ac969330")
 	)
 	(label "-15V"
-		(at 203.2 83.82 0)
+		(at 177.8 83.82 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -388,7 +432,7 @@
 		(uuid "b3b68a37-3aa7-4b2e-bda5-03fbe7f08f52")
 	)
 	(label "-1.5V"
-		(at 203.2 121.92 0)
+		(at 177.8 121.92 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1002,7 +1046,7 @@
 		)
 	)
 	(sheet
-		(at 152.4 63.5)
+		(at 127 63.5)
 		(size 50.8 25.4)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1018,7 +1062,7 @@
 		)
 		(uuid "018e7d12-6b24-44c3-9b74-64995b8fa179")
 		(property "Sheetname" "15V"
-			(at 152.4 62.7884 0)
+			(at 127 62.7884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1027,7 +1071,7 @@
 			)
 		)
 		(property "Sheetfile" "15V.kicad_sch"
-			(at 152.4 89.4846 0)
+			(at 127 89.4846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1036,7 +1080,7 @@
 			)
 		)
 		(pin "-15V" output
-			(at 203.2 83.82 0)
+			(at 177.8 83.82 0)
 			(uuid "4bb2fec6-dab5-4e8d-ac44-98bedb8b63f3")
 			(effects
 				(font
@@ -1046,7 +1090,7 @@
 			)
 		)
 		(pin "-18V" input
-			(at 152.4 83.82 180)
+			(at 127 83.82 180)
 			(uuid "f75c13a8-a489-4007-b811-5a29d66cd79c")
 			(effects
 				(font
@@ -1056,7 +1100,7 @@
 			)
 		)
 		(pin "15V" output
-			(at 203.2 78.74 0)
+			(at 177.8 78.74 0)
 			(uuid "0fee81d1-4e24-43de-84b1-691a6de96461")
 			(effects
 				(font
@@ -1066,7 +1110,7 @@
 			)
 		)
 		(pin "18V" input
-			(at 152.4 78.74 180)
+			(at 127 78.74 180)
 			(uuid "f158b7ff-1ebb-44b0-ab9e-7ddddd68ce62")
 			(effects
 				(font
@@ -1084,7 +1128,7 @@
 		)
 	)
 	(sheet
-		(at 52.07 63.5)
+		(at 25.4 63.5)
 		(size 50.8 25.4)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1100,7 +1144,7 @@
 		)
 		(uuid "16a77afe-3056-4f83-9f80-787a2ef93cd8")
 		(property "Sheetname" "WallPower"
-			(at 52.07 62.7884 0)
+			(at 25.4 62.7884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1109,7 +1153,7 @@
 			)
 		)
 		(property "Sheetfile" "WallPower.kicad_sch"
-			(at 52.07 89.4846 0)
+			(at 25.4 89.4846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1118,7 +1162,7 @@
 			)
 		)
 		(pin "-18V" output
-			(at 102.87 83.82 0)
+			(at 76.2 83.82 0)
 			(uuid "82444888-e949-43d0-94a1-970e27bb39e7")
 			(effects
 				(font
@@ -1128,7 +1172,7 @@
 			)
 		)
 		(pin "18V" output
-			(at 102.87 78.74 0)
+			(at 76.2 78.74 0)
 			(uuid "4af0e715-4cde-449f-90fd-cf8e571a6ca7")
 			(effects
 				(font
@@ -1146,7 +1190,7 @@
 		)
 	)
 	(sheet
-		(at 152.4 101.6)
+		(at 127 101.6)
 		(size 50.8 25.4)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1162,7 +1206,7 @@
 		)
 		(uuid "55f1d4dd-dd9a-4f22-90c5-bff482123087")
 		(property "Sheetname" "PreAmp"
-			(at 152.4 100.8884 0)
+			(at 127 100.8884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1171,7 +1215,7 @@
 			)
 		)
 		(property "Sheetfile" "PreAmp.kicad_sch"
-			(at 152.4 127.5846 0)
+			(at 127 127.5846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1180,7 +1224,7 @@
 			)
 		)
 		(pin "-1.5V" output
-			(at 203.2 121.92 0)
+			(at 177.8 121.92 0)
 			(uuid "e1dfa1d6-bba9-4a2f-abae-82ce31704425")
 			(effects
 				(font
@@ -1190,7 +1234,7 @@
 			)
 		)
 		(pin "-18V" input
-			(at 152.4 121.92 180)
+			(at 127 121.92 180)
 			(uuid "b3688347-7d3c-4266-bad0-327b34a46612")
 			(effects
 				(font
@@ -1200,7 +1244,7 @@
 			)
 		)
 		(pin "2.5V" output
-			(at 203.2 116.84 0)
+			(at 177.8 116.84 0)
 			(uuid "164ac7ff-c019-4e14-aaf0-602de460bc9c")
 			(effects
 				(font
@@ -1210,7 +1254,7 @@
 			)
 		)
 		(pin "18V" input
-			(at 152.4 116.84 180)
+			(at 127 116.84 180)
 			(uuid "af325295-6756-466d-9676-001b40aade3b")
 			(effects
 				(font
@@ -1228,7 +1272,7 @@
 		)
 	)
 	(sheet
-		(at 152.4 25.4)
+		(at 127 25.4)
 		(size 50.8 25.4)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1244,7 +1288,7 @@
 		)
 		(uuid "df1ba0e1-55fc-41f2-80f9-aaa8393d43d6")
 		(property "Sheetname" "Converter"
-			(at 152.4 24.6884 0)
+			(at 127 24.6884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1253,7 +1297,7 @@
 			)
 		)
 		(property "Sheetfile" "Converter.kicad_sch"
-			(at 152.4 51.3846 0)
+			(at 127 51.3846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1262,7 +1306,7 @@
 			)
 		)
 		(pin "3.3V" output
-			(at 203.2 45.72 0)
+			(at 177.8 45.72 0)
 			(uuid "884e6ea4-fa5f-4748-a105-827c2a7e23b4")
 			(effects
 				(font
@@ -1272,7 +1316,7 @@
 			)
 		)
 		(pin "5V" output
-			(at 203.2 40.64 0)
+			(at 177.8 40.64 0)
 			(uuid "7fd3667d-ca23-42fc-8d45-f681cedcf646")
 			(effects
 				(font
@@ -1282,7 +1326,7 @@
 			)
 		)
 		(pin "18V" input
-			(at 152.4 45.72 180)
+			(at 127 45.72 180)
 			(uuid "88378dad-5933-4fb1-961d-057f1b1e6583")
 			(effects
 				(font
