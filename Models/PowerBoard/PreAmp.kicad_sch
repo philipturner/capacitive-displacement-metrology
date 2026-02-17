@@ -1684,45 +1684,93 @@
 		)
 		(uuid "fc55f644-5b3c-494c-b24f-c7c6c8775708")
 	)
-	(label "-5V"
-		(at 132.08 132.08 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "24e00484-499d-4c2c-8f87-bc47d9021994")
-	)
-	(label "5V"
+	(global_label "5V_PreAmp"
+		(shape output)
 		(at 139.7 55.88 0)
+		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify left)
 		)
-		(uuid "2923ba74-5cc3-4f8a-84ce-b91f78f2ec31")
+		(uuid "33ff2095-01b2-4b02-abfc-3cb5fca41747")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 153.0266 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
 	)
-	(label "5V"
-		(at 203.2 43.18 0)
+	(global_label "-5V_PreAmp"
+		(shape output)
+		(at 203.2 124.46 270)
+		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right)
 		)
-		(uuid "cd82fbe7-8189-40d4-8cfe-a161931374fa")
+		(uuid "b74abbbf-93fe-49dd-91fd-8e765f981793")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 203.2 139.359 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
 	)
-	(label "-5V"
-		(at 203.2 124.46 0)
+	(global_label "-5V_PreAmp"
+		(shape output)
+		(at 132.08 132.08 0)
+		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify left)
 		)
-		(uuid "d2d245b0-f5a6-43c4-bbea-88be421abf39")
+		(uuid "e86b364e-0fe7-4dbc-99a2-3f4c8bbd0e9f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 146.979 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "5V_PreAmp"
+		(shape output)
+		(at 203.2 43.18 90)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f3e434d8-dc58-4052-81cf-ca92c92142c0")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 203.2 29.8534 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
 	)
 	(hierarchical_label "18V"
 		(shape input)

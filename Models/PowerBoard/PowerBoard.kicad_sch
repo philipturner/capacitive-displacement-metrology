@@ -5,6 +5,17 @@
 	(uuid "c19e9b7b-7f36-470c-862a-1a648d3f14f6")
 	(paper "A4")
 	(lib_symbols)
+	(text "Allocate 2 pins on a large pin socket for\neach of the following nodes, in case design\nrevisions require more boards:\n- 18V\n- -18V\n- GND\n- 5V (converter)\n- 3.3V\n- GND\n- 5V (preamp)\n- -5V (preamp)"
+		(exclude_from_sim no)
+		(at 51.054 26.67 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "b893f1d7-c5bf-409e-a38f-69efcb619fac")
+	)
 	(junction
 		(at 142.24 83.82)
 		(diameter 0)

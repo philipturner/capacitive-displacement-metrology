@@ -5,6 +5,171 @@
 	(uuid "26384b66-999c-4ccc-a882-e80a2b0a1fb6")
 	(paper "A4")
 	(lib_symbols
+		(symbol "Connector:Conn_01x02_Socket"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x02_Socket"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x02, script generated"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x02_Socket_1_1"
+				(polyline
+					(pts
+						(xy -1.27 0) (xy -0.508 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -2.54) (xy -0.508 -2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -0.508)
+					(mid -0.5058 0)
+					(end 0 0.508)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -3.048)
+					(mid -0.5058 -2.54)
+					(end 0 -2.032)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Custom:TP-3005D-3"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -315,210 +480,119 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "power cord receptacle type\nnot known yet"
-		(exclude_from_sim no)
-		(at 160.274 77.978 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "90c4a857-a51c-48d6-884a-598014ab046f")
-	)
 	(junction
-		(at 147.32 91.44)
+		(at 167.64 76.2)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "68680a52-39aa-49d3-af21-825ef63e89f8")
+		(uuid "2f3cd22a-f649-4fc1-89ae-73f3ac7fa82c")
 	)
 	(junction
-		(at 147.32 93.98)
+		(at 167.64 101.6)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "ec7a9648-365e-405f-9198-5970256d4541")
+		(uuid "4d15e5ad-05b9-4f1d-9269-a74d81ae17e5")
 	)
 	(junction
-		(at 147.32 92.71)
+		(at 167.64 88.9)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "f4a1502d-6609-482f-99fc-a761c853f71b")
+		(uuid "a74702d5-7012-4474-8000-31e4f05630bd")
 	)
 	(no_connect
 		(at 144.78 81.28)
 		(uuid "061c667a-152a-4b15-904a-c1788656b7b3")
 	)
 	(no_connect
-		(at 165.1 86.36)
-		(uuid "0879c277-3497-41cb-a636-c075ce242d9d")
+		(at 144.78 88.9)
+		(uuid "07c5df8e-7334-4456-80dc-5e208e371fb7")
 	)
 	(no_connect
-		(at 152.4 86.36)
-		(uuid "1e553248-55b5-4752-9684-b67fac42154a")
+		(at 144.78 99.06)
+		(uuid "40f59d48-b0d1-4177-b1d9-dee9d97cc5b2")
 	)
 	(no_connect
-		(at 165.1 99.06)
-		(uuid "1fd94582-ede1-4ae6-b87d-5a04aba9a3f9")
-	)
-	(no_connect
-		(at 152.4 92.71)
-		(uuid "27393e2e-935f-48f4-bacf-7730dc6acbd0")
-	)
-	(no_connect
-		(at 165.1 92.71)
-		(uuid "6e2155e8-1eaa-445b-8f4b-ff929bf5505d")
+		(at 144.78 93.98)
+		(uuid "4aecf69f-174e-404b-bc15-28a613e2df03")
 	)
 	(no_connect
 		(at 144.78 83.82)
 		(uuid "7e7033b7-a220-417c-8e96-da0cfe36a99a")
 	)
 	(no_connect
-		(at 152.4 99.06)
-		(uuid "95a9d1d4-73f0-4b1f-b65b-a114e1d0334f")
+		(at 144.78 86.36)
+		(uuid "a401d19c-6d10-4692-861e-967697627a7e")
+	)
+	(no_connect
+		(at 144.78 91.44)
+		(uuid "aa13a012-cba9-4ef0-818e-51a005447cc4")
+	)
+	(no_connect
+		(at 144.78 96.52)
+		(uuid "d7b7fa41-d4a5-499c-bff3-140e142750c4")
 	)
 	(wire
 		(pts
-			(xy 144.78 88.9) (xy 147.32 88.9)
+			(xy 165.1 88.9) (xy 167.64 88.9)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "1834147e-de7c-4ed0-882d-8d45f31616f4")
+		(uuid "4be657ca-9b61-41e3-8669-258fe15fb5b6")
 	)
 	(wire
 		(pts
-			(xy 147.32 92.71) (xy 152.4 92.71)
+			(xy 165.1 101.6) (xy 167.64 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "18fffcdf-252a-490e-b9c4-f8bd4e5cdfcb")
+		(uuid "58509dde-cab1-4c51-99e9-f0f799081152")
 	)
 	(wire
 		(pts
-			(xy 147.32 92.71) (xy 147.32 93.98)
+			(xy 167.64 88.9) (xy 196.85 88.9)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "240db218-3923-4acb-b36f-1e74adbb3e5b")
+		(uuid "74eee95d-b94e-4879-984a-e397326049db")
 	)
 	(wire
 		(pts
-			(xy 144.78 93.98) (xy 147.32 93.98)
+			(xy 167.64 101.6) (xy 198.12 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "2af133e8-70cc-4843-989c-ff82871048ad")
+		(uuid "8131f4c0-c5dc-4960-a110-a17dddbaafff")
 	)
 	(wire
 		(pts
-			(xy 144.78 91.44) (xy 147.32 91.44)
+			(xy 167.64 76.2) (xy 198.12 76.2)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "32163a6b-c56b-4154-829f-81462b881085")
+		(uuid "9cc189e8-9ef7-4be8-ac48-31b9065bc68c")
 	)
 	(wire
 		(pts
-			(xy 165.1 86.36) (xy 170.18 86.36)
+			(xy 165.1 76.2) (xy 167.64 76.2)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "40c9e99b-a197-4df7-bc89-065b3302a1b5")
-	)
-	(wire
-		(pts
-			(xy 147.32 88.9) (xy 147.32 91.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4a1fd0df-e4d8-446a-a78d-ac8195f85262")
-	)
-	(wire
-		(pts
-			(xy 144.78 86.36) (xy 152.4 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4a77d86b-148c-4707-a4c3-27b6c4c72043")
-	)
-	(wire
-		(pts
-			(xy 147.32 91.44) (xy 147.32 92.71)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7a8a3bcc-aebe-4f1d-83ea-17add445b2b3")
-	)
-	(wire
-		(pts
-			(xy 165.1 92.71) (xy 168.91 92.71)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8174f846-34f4-46d7-be09-1dc5c8dc4c40")
-	)
-	(wire
-		(pts
-			(xy 147.32 96.52) (xy 147.32 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "85a09bbf-8dc4-4a24-942a-17d8fe4e7b65")
-	)
-	(wire
-		(pts
-			(xy 144.78 99.06) (xy 152.4 99.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b12e4412-7352-4549-a084-3a62ae9873a4")
-	)
-	(wire
-		(pts
-			(xy 144.78 96.52) (xy 147.32 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d4e2656f-af79-406c-b1cb-f86016bb50f5")
-	)
-	(wire
-		(pts
-			(xy 165.1 99.06) (xy 170.18 99.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "dca08492-e4b3-476c-a529-71e9c2bd2a6e")
+		(uuid "b872b289-7378-450e-a739-ec70eb34c399")
 	)
 	(hierarchical_label "-18V"
 		(shape output)
-		(at 170.18 99.06 0)
+		(at 198.12 101.6 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -529,7 +603,7 @@
 	)
 	(hierarchical_label "18V"
 		(shape output)
-		(at 170.18 86.36 0)
+		(at 198.12 76.2 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -539,26 +613,26 @@
 		(uuid "a37f5d0c-bcdf-4cb5-9e23-296aa97af818")
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 168.91 92.71 90)
+		(lib_id "Connector:Conn_01x02_Socket")
+		(at 165.1 96.52 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "84b7ccf9-ad39-4c65-874c-68154f09c462")
-		(property "Reference" "#PWR01"
-			(at 175.26 92.71 0)
+		(uuid "40ce59db-e22f-4e8d-a446-f9aeadf7ee71")
+		(property "Reference" "J3"
+			(at 168.91 95.8849 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(hide yes)
+				(justify right)
 			)
 		)
-		(property "Value" "GND"
-			(at 172.72 92.7099 90)
+		(property "Value" "Banana Socket, Blue"
+			(at 168.91 98.4249 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -567,7 +641,271 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 168.91 92.71 0)
+			(at 165.1 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 165.1 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 165.1 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.newark.com/multicomp/24-243-5/test-socket-32a-panel-blue/dp/80P3614"
+			(at 165.1 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.490"
+			(at 165.1 96.52 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "83f2d924-3167-428a-ae4c-3ba6cddd6f24")
+		)
+		(pin "2"
+			(uuid "9ac60708-8f07-4702-baed-cca1fe8e7a11")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/16a77afe-3056-4f83-9f80-787a2ef93cd8"
+					(reference "J3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x02_Socket")
+		(at 165.1 71.12 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4af9b9e7-62dc-4e5d-8a2d-629194b88e48")
+		(property "Reference" "J1"
+			(at 168.91 70.4849 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "Banana Socket, Green"
+			(at 168.91 73.0249 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 165.1 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 165.1 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 165.1 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.newark.com/multicomp/24-243-4/banana-jack-4mm-24a-th-green/dp/80P3615"
+			(at 165.1 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.490"
+			(at 165.1 71.12 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "56ff381a-ef6a-41ef-9452-2ec06a4c601e")
+		)
+		(pin "2"
+			(uuid "2fe89ec9-03cd-49da-bcf3-21d0b618ef5b")
+		)
+		(instances
+			(project ""
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/16a77afe-3056-4f83-9f80-787a2ef93cd8"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x02_Socket")
+		(at 165.1 83.82 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "80a4b01a-c4a6-4fc9-a801-2e8c5108745c")
+		(property "Reference" "J2"
+			(at 168.91 83.1849 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "Banana Socket, Black"
+			(at 168.91 85.7249 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 165.1 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 165.1 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 165.1 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.newark.com/multicomp/24-243-2/pcb-socket-4mm-black/dp/80P3613"
+			(at 165.1 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.490"
+			(at 165.1 83.82 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7db18c3f-4760-470a-ba66-4e97baf02aaf")
+		)
+		(pin "2"
+			(uuid "fb7130e3-c045-40f3-a586-16f353fc62f2")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/16a77afe-3056-4f83-9f80-787a2ef93cd8"
+					(reference "J2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 196.85 88.9 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "84b7ccf9-ad39-4c65-874c-68154f09c462")
+		(property "Reference" "#PWR01"
+			(at 203.2 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 200.66 88.8999 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 196.85 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -576,7 +914,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 168.91 92.71 0)
+			(at 196.85 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -585,7 +923,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 168.91 92.71 0)
+			(at 196.85 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -610,8 +948,8 @@
 		(at 134.62 90.17 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9891eafc-9331-404d-8c20-f5c21f912f1f")
@@ -650,6 +988,15 @@
 			)
 		)
 		(property "Description" ""
+			(at 134.62 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" ""
 			(at 134.62 90.17 0)
 			(effects
 				(font

@@ -1040,9 +1040,9 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "power cord receptacle type:\nbanana socket\n\nWARNING:\nconnection is high voltage,\nbut not CAT III rated"
+	(text "WARNING:\nconnection is high voltage,\nbut not CAT III rated"
 		(exclude_from_sim no)
-		(at 124.714 46.482 0)
+		(at 106.68 62.738 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1050,6 +1050,18 @@
 			(justify left top)
 		)
 		(uuid "0cf2ee48-0c67-4b2b-99fa-2204e1247e38")
+	)
+	(junction
+		(at 134.62 78.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2803a398-abf3-44f4-8464-7d953d746acb")
+	)
+	(junction
+		(at 134.62 93.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "38c7f2f5-8a4b-4ccb-bef6-03a1fe86ef6c")
 	)
 	(junction
 		(at 177.8 78.74)
@@ -1076,6 +1088,12 @@
 		(uuid "7aa66fe6-69f7-4698-b790-a4a963bf789e")
 	)
 	(junction
+		(at 134.62 109.22)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "93436d5d-e005-49ea-9cb4-f5c92e457ca0")
+	)
+	(junction
 		(at 195.58 93.98)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1086,6 +1104,40 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e93299ae-437a-4ade-91f2-3d220da232c4")
+	)
+	(no_connect
+		(at 104.14 104.14)
+		(uuid "0449b97f-2f5b-4417-9017-d02d1a45e4ca")
+	)
+	(no_connect
+		(at 104.14 78.74)
+		(uuid "0b89162d-20e4-4414-85d5-f07a514a7809")
+	)
+	(no_connect
+		(at 104.14 83.82)
+		(uuid "34807991-eab1-478b-8f34-d7ef4089b0a9")
+	)
+	(no_connect
+		(at 104.14 81.28)
+		(uuid "7ab5a5b4-55b3-4ef7-adc8-54038b4da649")
+	)
+	(no_connect
+		(at 104.14 109.22)
+		(uuid "7d2dd5f2-2c9d-4921-8904-bbf593cb15e4")
+	)
+	(no_connect
+		(at 104.14 106.68)
+		(uuid "848bfb31-2fc7-4241-bf12-2e249bab6f6f")
+	)
+	(wire
+		(pts
+			(xy 134.62 78.74) (xy 165.1 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1602283f-45be-45d3-8d50-663cc718b9d1")
 	)
 	(wire
 		(pts
@@ -1139,6 +1191,16 @@
 	)
 	(wire
 		(pts
+			(xy 132.08 78.74) (xy 134.62 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5f3207d8-61de-4659-a615-c926c9324d2f")
+	)
+	(wire
+		(pts
 			(xy 177.8 90.17) (xy 177.8 93.98)
 		)
 		(stroke
@@ -1159,6 +1221,16 @@
 	)
 	(wire
 		(pts
+			(xy 132.08 109.22) (xy 134.62 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "732aa9cd-efa8-4898-ae35-153d73ba2d7b")
+	)
+	(wire
+		(pts
 			(xy 177.8 78.74) (xy 177.8 82.55)
 		)
 		(stroke
@@ -1166,6 +1238,16 @@
 			(type default)
 		)
 		(uuid "8e849d38-1031-44df-a652-12237ccb8005")
+	)
+	(wire
+		(pts
+			(xy 134.62 109.22) (xy 165.1 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9b433e7b-7564-4157-b533-164b70e38f74")
 	)
 	(wire
 		(pts
@@ -1209,6 +1291,16 @@
 	)
 	(wire
 		(pts
+			(xy 132.08 93.98) (xy 134.62 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c4f0cc13-d349-4eea-884d-079bd431a227")
+	)
+	(wire
+		(pts
 			(xy 195.58 93.98) (xy 213.36 93.98)
 		)
 		(stroke
@@ -1216,6 +1308,16 @@
 			(type default)
 		)
 		(uuid "ca121505-ae6b-4e4c-b316-eb03b78a4b1c")
+	)
+	(wire
+		(pts
+			(xy 134.62 93.98) (xy 177.8 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e1738c1d-43be-45b8-91f7-518beef824dd")
 	)
 	(wire
 		(pts
@@ -1638,16 +1740,15 @@
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x02_Socket")
-		(at 127 73.66 90)
+		(at 132.08 73.66 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "57deb0ba-3464-4bcb-a438-74286926070f")
 		(property "Reference" "J1"
-			(at 130.81 73.0249 90)
+			(at 135.89 73.0249 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1655,8 +1756,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "Conn_01x02_Socket"
-			(at 130.81 75.5649 90)
+		(property "Value" "Banana Socket, Red"
+			(at 135.89 75.5649 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1665,7 +1766,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 127 73.66 0)
+			(at 132.08 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1674,7 +1775,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 127 73.66 0)
+			(at 132.08 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1683,7 +1784,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated"
-			(at 127 73.66 0)
+			(at 132.08 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1691,8 +1792,17 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
-			(at 127 73.66 0)
+		(property "Purchase Link" "https://www.newark.com/multicomp/24-243-1/pcb-socket-4mm-red/dp/80P3616"
+			(at 132.08 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.490"
+			(at 132.08 73.66 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1716,17 +1826,105 @@
 		)
 	)
 	(symbol
-		(lib_id "Custom:R4G650-0.1")
-		(at 81.28 81.28 0)
+		(lib_id "Connector:Conn_01x02_Socket")
+		(at 132.08 104.14 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
+		(uuid "5d0c8b67-dc77-496d-b7c5-2d69d2370679")
+		(property "Reference" "J2"
+			(at 135.89 103.5049 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "Banana Socket, Yellow"
+			(at 135.89 106.0449 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 132.08 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 132.08 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 132.08 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.newark.com/multicomp/24-243-3/test-socket-pcb-4mm-yellow/dp/80P3617"
+			(at 132.08 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.490"
+			(at 132.08 104.14 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "adc21898-364f-4f83-9488-a3d2a9258752")
+		)
+		(pin "1"
+			(uuid "45f3de52-f32a-47bc-a0ed-37af3a95da33")
+		)
+		(instances
+			(project "HighVoltageBoard"
+				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/1d0db973-f635-4db8-8646-beeec420ec2b"
+					(reference "J2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Custom:R4G650-0.1")
+		(at 96.52 81.28 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(fields_autoplaced yes)
 		(uuid "81664ee7-39c5-4da3-bd64-5600fc162eed")
 		(property "Reference" "BT1"
-			(at 81.28 71.12 0)
+			(at 96.52 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1734,7 +1932,7 @@
 			)
 		)
 		(property "Value" "R4G650-0.1"
-			(at 81.28 73.66 0)
+			(at 96.52 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1742,7 +1940,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 81.28 81.28 0)
+			(at 96.52 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1751,7 +1949,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 81.28 81.28 0)
+			(at 96.52 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1760,7 +1958,16 @@
 			)
 		)
 		(property "Description" ""
-			(at 81.28 81.28 0)
+			(at 96.52 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" ""
+			(at 96.52 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1867,16 +2074,16 @@
 	)
 	(symbol
 		(lib_id "Custom:R4G650-0.1")
-		(at 81.28 106.68 0)
+		(at 96.52 106.68 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b6df4f07-dc43-4294-b65f-3215190d4cfd")
 		(property "Reference" "BT2"
-			(at 81.28 96.52 0)
+			(at 96.52 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1884,7 +2091,7 @@
 			)
 		)
 		(property "Value" "R4G650-0.1"
-			(at 81.28 99.06 0)
+			(at 96.52 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1892,7 +2099,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 81.28 106.68 0)
+			(at 96.52 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1901,7 +2108,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 81.28 106.68 0)
+			(at 96.52 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1910,7 +2117,16 @@
 			)
 		)
 		(property "Description" ""
-			(at 81.28 106.68 0)
+			(at 96.52 106.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" ""
+			(at 96.52 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1997,6 +2213,94 @@
 			(project ""
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/1d0db973-f635-4db8-8646-beeec420ec2b"
 					(reference "#PWR01")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x02_Socket")
+		(at 132.08 88.9 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "eea09bc0-4431-4621-8491-7b587f3a8a70")
+		(property "Reference" "J3"
+			(at 135.89 88.2649 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "Banana Socket, Black"
+			(at 135.89 90.8049 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 132.08 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 132.08 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 132.08 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.newark.com/multicomp/24-243-2/pcb-socket-4mm-black/dp/80P3613"
+			(at 132.08 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.490"
+			(at 132.08 88.9 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "cdfea30b-6786-47da-8d0e-67e24c8beadc")
+		)
+		(pin "1"
+			(uuid "6c00572e-3a5b-4cc8-b88e-3d0b333016c8")
+		)
+		(instances
+			(project "HighVoltageBoard"
+				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/1d0db973-f635-4db8-8646-beeec420ec2b"
+					(reference "J3")
 					(unit 1)
 				)
 			)
