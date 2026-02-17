@@ -1,0 +1,77 @@
+(footprint "DowelPin_2.5mm"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -9.94 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "df91abb3-6220-4bf0-a7e0-8282196c431e")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Value" "DowelPin_2.5mm"
+		(at 0 -8.74 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "d29174fb-0a52-43b6-8a6d-9abc2ae9b0d6")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3739b3cf-f208-4b10-93e7-8353db698bca")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "06371383-b8cc-4dfb-87b6-831f51a2d310")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_text user "${REFERENCE}"
+		(at 0 -7.54 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "3c7fe699-06c2-4ab6-b567-2a89ba899362")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(pad "" np_thru_hole circle
+		(at 0 0)
+		(size 2.6 2.6)
+		(drill 2.6)
+		(layers "*.Cu" "*.Paste" "*.Mask")
+		(uuid "b96bf32e-1b3e-4d58-a8af-4253c197d344")
+	)
+	(embedded_fonts no)
+)

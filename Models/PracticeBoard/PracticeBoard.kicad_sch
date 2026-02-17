@@ -5,7 +5,7 @@
 	(uuid "aa80420b-0ade-4f03-9f10-fbca86120701")
 	(paper "A4")
 	(lib_symbols)
-	(text "Contents:\n1x 32-VQFN 5x5\n1x TSSOP-16\n1x SOIC-16-Wide\n2x 2220 Capacitor (exclude from steel template)\n\nVQFN purchase link: https://www.digikey.com/en/products/detail/texas-instruments/MSPM0C1105SRHBR/27802389\nSOIC-16-Wide: ISO6761 because so cheap"
+	(text "Contents:\n1x 32-VQFN 5x5\n1x TSSOP-16\n1x SOIC-16-Wide\n1x 2220 Capacitor (exclude from steel template)\n1x Vishay resistor (exclude from steel template)\n\nVQFN purchase link: https://www.digikey.com/en/products/detail/texas-instruments/MSPM0C1105SRHBR/27802389\nSOIC-16-Wide: ISO6761 because so cheap\n\nChanged my mind about practice board for now\nJust omit the SOIC-16-Wide from steel template for main board\nSolder paste application is now less error-prone\nNo need to spend time designing practice board"
 		(exclude_from_sim no)
 		(at 102.108 52.07 0)
 		(effects

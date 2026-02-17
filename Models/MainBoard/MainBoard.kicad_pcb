@@ -150,9 +150,9 @@
 			(subtractmaskfromsilk no)
 			(outputformat 1)
 			(mirror no)
-			(drillshape 1)
+			(drillshape 0)
 			(scaleselection 1)
-			(outputdirectory "")
+			(outputdirectory "../../../../../Desktop/Gerbers/")
 		)
 	)
 	(net 0 "")
@@ -1528,6 +1528,82 @@
 			(roundrect_rratio 0.25)
 			(thermal_bridge_angle 45)
 			(uuid "a36b68ae-4dad-4afd-ba0a-164734bd20ed")
+		)
+		(embedded_fonts no)
+	)
+	(footprint "Connector_Custom:DowelPin_2.5mm"
+		(layer "F.Cu")
+		(uuid "32b76e15-7cbe-40dc-b364-cb4cdffe1d5f")
+		(at 153.4 65.1)
+		(property "Reference" "REF**"
+			(at 0 -9.94 0)
+			(unlocked yes)
+			(layer "F.SilkS")
+			(uuid "25852243-36bc-42bf-a29d-782ddcc0fa27")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Value" "DowelPin_2.5mm"
+			(at 0 -8.74 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(uuid "4ac4a606-583e-46e1-ba7e-41f67e3fee5b")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "e7244d51-47f5-4d25-90a0-30eddf514ce1")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "012f1564-f7cf-43a1-8cba-81602062b13c")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(attr through_hole)
+		(fp_text user "${REFERENCE}"
+			(at 0 -7.54 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(uuid "5b3e26b1-ac8b-49d0-9d76-a884be3c2966")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(pad "" np_thru_hole circle
+			(at 0 0)
+			(size 2.6 2.6)
+			(drill 2.6)
+			(layers "*.Cu" "*.Paste" "*.Mask")
+			(uuid "da22b9a9-1e81-4ced-ab3b-22446856553c")
 		)
 		(embedded_fonts no)
 	)

@@ -1,4 +1,4 @@
-26608533138466397
+26610304643883744
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -9057,6 +9057,13 @@ Coaxial Connector 50 ohms Female
 0
 7
 2
+Connector_Custom
+DowelPin_2.5mm
+
+
+0
+0
+0
 Connector_Custom
 NetTie_0.2mm
 

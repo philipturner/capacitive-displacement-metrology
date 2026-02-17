@@ -37,9 +37,9 @@
         "other_text_thickness": 0.12,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.28,
-          "height": 0.5,
-          "width": 0.5
+          "drill": 2.6,
+          "height": 2.6,
+          "width": 2.6
         },
         "silk_line_width": 0.12,
         "silk_text_italic": false,
@@ -500,7 +500,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "../../../../../Desktop/Gerbers/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",

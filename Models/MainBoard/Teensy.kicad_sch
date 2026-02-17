@@ -3680,6 +3680,24 @@
 				(hide yes)
 			)
 		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC241LFBN-RC/810196"
+			(at 96.52 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.350"
+			(at 96.52 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "17"
 			(uuid "567d81dd-0662-4a25-8493-9b989eef9eee")
 		)
@@ -3813,6 +3831,24 @@
 				(hide yes)
 			)
 		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC241LFBN-RC/810196"
+			(at 208.28 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.350"
+			(at 208.28 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "15"
 			(uuid "0935fcd5-5332-41bf-8a4e-fca9ea86856a")
 		)
@@ -3899,8 +3935,8 @@
 		(at 119.38 90.17 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(uuid "da63b5c7-984d-4786-824d-6b55aab92742")
 		(property "Reference" "J1"
@@ -3938,6 +3974,15 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x24, script generated"
+			(at 119.38 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" ""
 			(at 119.38 90.17 0)
 			(effects
 				(font
@@ -4032,8 +4077,8 @@
 		(at 185.42 92.71 180)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(uuid "db5780ec-aa30-4e0e-a225-19e5c9c3d1f5")
 		(property "Reference" "J2"
@@ -4073,6 +4118,15 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x24, script generated"
+			(at 185.42 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" ""
 			(at 185.42 92.71 0)
 			(effects
 				(font
@@ -4167,8 +4221,8 @@
 		(at 152.4 66.04 180)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "dd0c0ca7-5814-47da-aa06-3b99aa4d61cb")
@@ -4207,6 +4261,15 @@
 			)
 		)
 		(property "Description" ""
+			(at 152.4 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" ""
 			(at 152.4 66.04 0)
 			(effects
 				(font
