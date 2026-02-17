@@ -5,6 +5,425 @@
 	(uuid "c19e9b7b-7f36-470c-862a-1a648d3f14f6")
 	(paper "A4")
 	(lib_symbols
+		(symbol "Connector:Conn_01x04_Socket"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x04_Socket"
+				(at 0 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x04, script generated"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x04_Socket_1_1"
+				(polyline
+					(pts
+						(xy -1.27 2.54) (xy -0.508 2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 0) (xy -0.508 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -2.54) (xy -0.508 -2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -5.08) (xy -0.508 -5.08)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 2.032)
+					(mid -0.5058 2.54)
+					(end 0 3.048)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -0.508)
+					(mid -0.5058 0)
+					(end 0 0.508)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -3.048)
+					(mid -0.5058 -2.54)
+					(end 0 -2.032)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -5.588)
+					(mid -0.5058 -5.08)
+					(end 0 -4.572)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Connector:Conn_Coaxial"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0.254 3.048 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_Coaxial"
+				(at 2.921 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "BNC SMA SMB SMC LEMO coaxial connector CINCH RCA MCX MMCX U.FL UMRF"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "*BNC* *SMA* *SMB* *SMC* *Cinch* *LEMO* *UMRF* *MCX* *U.FL*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_Coaxial_0_1"
+				(polyline
+					(pts
+						(xy -2.54 0) (xy -0.508 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 1.778 0)
+					(mid 0.222 -1.8079)
+					(end -1.778 -0.508)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start -1.778 0.508)
+					(mid 0.2221 1.8084)
+					(end 1.778 0)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 0 0)
+					(radius 0.508)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.54) (xy 0 -1.778)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Conn_Coaxial_1_1"
+				(pin passive line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "In"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 90)
+					(length 2.54)
+					(name "Ext"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Mechanical:MountingHole_Pad"
 			(pin_numbers
 				(hide yes)
@@ -216,7 +635,7 @@
 	)
 	(text "18V: no external interface\n-18V: no external interface"
 		(exclude_from_sim no)
-		(at 77.724 65.024 0)
+		(at 179.324 63.5 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -227,7 +646,7 @@
 	)
 	(text "5V (preamp): breadboard\n-5V (preamp): breadboard\n2.5V: shielded\n-1.5V: shielded"
 		(exclude_from_sim no)
-		(at 178.816 102.616 0)
+		(at 243.84 92.71 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -238,7 +657,7 @@
 	)
 	(text "interface to main board:\nmany pin/socket connections\n\nexternal interface (shielded):\n(1) SMA\n(2) 1x4 pin socket, GND + OUT + OUT + GND\n\nexternal interface (breadboard):\n(1) 1x4 pin socket, GND + OUT + OUT + GND"
 		(exclude_from_sim no)
-		(at 26.162 26.416 0)
+		(at 166.116 24.13 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -249,7 +668,7 @@
 	)
 	(text "15V: shielded\n-15V: shielded"
 		(exclude_from_sim no)
-		(at 178.816 64.262 0)
+		(at 254.762 63.5 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -260,7 +679,7 @@
 	)
 	(text "5V: no external interface\n3.3V: no external interface"
 		(exclude_from_sim no)
-		(at 179.324 26.67 0)
+		(at 243.332 33.274 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -270,119 +689,635 @@
 		(uuid "ffe76578-abc0-466a-a0b3-cd9cf155b95e")
 	)
 	(junction
-		(at 116.84 83.82)
+		(at 68.58 114.3)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "06bd5cbb-9e93-477d-a512-9725c1fd81bd")
+		(uuid "1cf8d565-7252-4075-ac31-9930be988cda")
 	)
 	(junction
-		(at 121.92 78.74)
+		(at 68.58 165.1)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "5174acb0-e709-42fe-93ed-1eddd3c90958")
+		(uuid "2847523e-55a8-4e1f-b9c1-da2146b9e11e")
+	)
+	(junction
+		(at 68.58 38.1)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "346f5666-70da-4fe4-abba-a2846e17ef73")
+	)
+	(junction
+		(at 68.58 88.9)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "3a0dd850-d2d0-44b7-8a2f-a06663975bc5")
+	)
+	(junction
+		(at 68.58 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "548a2272-91f1-4baf-9242-88274fab9b8d")
+	)
+	(junction
+		(at 226.06 76.2)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a90480da-0480-47e9-b6ca-dfd5488ec532")
+	)
+	(junction
+		(at 68.58 139.7)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b2b601b8-1f52-4c8e-90b8-a62fb94377b9")
+	)
+	(junction
+		(at 223.52 78.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c3794a9c-ef99-4664-ae31-5d850b9af91f")
 	)
 	(wire
 		(pts
-			(xy 116.84 83.82) (xy 127 83.82)
+			(xy 68.58 139.7) (xy 66.04 139.7)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "0f02231f-574d-4c3e-a01c-0fae7000824c")
+		(uuid "0410f8a9-961c-4fe1-9c8b-07f9aff8ac83")
 	)
 	(wire
 		(pts
-			(xy 121.92 45.72) (xy 121.92 78.74)
+			(xy 60.96 33.02) (xy 63.5 33.02)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "4d857dd9-bd44-4081-9952-3b437e5b6fc6")
+		(uuid "06399c37-4de2-45e6-aa3a-9df72838574e")
 	)
 	(wire
 		(pts
-			(xy 121.92 78.74) (xy 127 78.74)
+			(xy 63.5 55.88) (xy 63.5 58.42)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "629c835c-f55e-427b-8b02-0ba986b3714f")
+		(uuid "0648b3cc-3997-4a87-b286-60a054820dfe")
 	)
 	(wire
 		(pts
-			(xy 121.92 116.84) (xy 127 116.84)
+			(xy 68.58 55.88) (xy 68.58 63.5)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "6f70483c-85b2-4bea-a9f7-c101dd1f61d1")
+		(uuid "077c09a7-67ef-4fb5-9573-fa1e04e48567")
 	)
 	(wire
 		(pts
-			(xy 127 45.72) (xy 121.92 45.72)
+			(xy 205.74 78.74) (xy 223.52 78.74)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "9e074d74-eeeb-4c35-8b4c-0b0a80390456")
+		(uuid "0bd0e9d4-2232-40f3-a13a-29e844d9212b")
 	)
 	(wire
 		(pts
-			(xy 116.84 83.82) (xy 116.84 121.92)
+			(xy 71.12 157.48) (xy 71.12 160.02)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d44fa226-8807-43e7-bf9a-9238bd463734")
+		(uuid "0ed5078a-7a24-4f47-8d33-fab09c106721")
 	)
 	(wire
 		(pts
-			(xy 76.2 78.74) (xy 121.92 78.74)
+			(xy 71.12 83.82) (xy 73.66 83.82)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "da5447ea-eedb-413e-9c5b-6bb0d931688f")
+		(uuid "17c5de10-7e34-4513-943f-a90d0fde1112")
 	)
 	(wire
 		(pts
-			(xy 127 121.92) (xy 116.84 121.92)
+			(xy 68.58 132.08) (xy 68.58 139.7)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "dd8bf03c-2df0-4821-a1bf-0c65942d0428")
+		(uuid "231d85b5-0a70-4811-a8bd-9372fbd43d31")
 	)
 	(wire
 		(pts
-			(xy 121.92 78.74) (xy 121.92 116.84)
+			(xy 66.04 55.88) (xy 66.04 63.5)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e3ade1af-1954-4182-9b4b-4664b4306c44")
+		(uuid "24507ed0-8a9f-4f25-b16c-c6c1df56bdf6")
 	)
 	(wire
 		(pts
-			(xy 76.2 83.82) (xy 116.84 83.82)
+			(xy 71.12 160.02) (xy 73.66 160.02)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "fad72e6e-b283-47b4-a985-50967e443d7f")
+		(uuid "2555024a-4b06-4e9d-9f0f-dac7db4f1da9")
+	)
+	(wire
+		(pts
+			(xy 66.04 132.08) (xy 66.04 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2781091f-f80d-421e-901c-032a710389a5")
+	)
+	(wire
+		(pts
+			(xy 71.12 132.08) (xy 71.12 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "32827788-f3b5-480a-937e-5d699901ea41")
+	)
+	(wire
+		(pts
+			(xy 68.58 165.1) (xy 66.04 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "354d3abc-e1fa-49d2-8491-77147893f029")
+	)
+	(wire
+		(pts
+			(xy 66.04 106.68) (xy 66.04 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "37084b5c-5951-464d-9656-603cfc1f932e")
+	)
+	(wire
+		(pts
+			(xy 71.12 109.22) (xy 73.66 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "37cf43c5-c433-4de1-a40b-7dfac393f57e")
+	)
+	(wire
+		(pts
+			(xy 68.58 114.3) (xy 73.66 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3cdd1ea5-5cf5-438d-b605-60613c301b4b")
+	)
+	(wire
+		(pts
+			(xy 60.96 109.22) (xy 63.5 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3e417ce6-c4d3-4e1f-a3f5-d8b058a43a7c")
+	)
+	(wire
+		(pts
+			(xy 68.58 38.1) (xy 73.66 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "41eae3f9-ac08-4807-a7bc-514fbed376b7")
+	)
+	(wire
+		(pts
+			(xy 71.12 58.42) (xy 73.66 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "42d8b2d9-e245-4209-9958-000159e3165e")
+	)
+	(wire
+		(pts
+			(xy 60.96 83.82) (xy 63.5 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "458d01f1-e734-4571-a374-c6d6797c6f6a")
+	)
+	(wire
+		(pts
+			(xy 68.58 88.9) (xy 66.04 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "47cc6b63-a411-4aaa-8d62-67c8d47f8499")
+	)
+	(wire
+		(pts
+			(xy 60.96 58.42) (xy 63.5 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "563e7ee1-36ed-4b67-a202-b368f2184f63")
+	)
+	(wire
+		(pts
+			(xy 63.5 157.48) (xy 63.5 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "58975777-ca1a-4902-835e-3c1b5ec17692")
+	)
+	(wire
+		(pts
+			(xy 205.74 76.2) (xy 226.06 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5d872833-4a58-4e28-b8ed-5b369fa10ad6")
+	)
+	(wire
+		(pts
+			(xy 63.5 30.48) (xy 63.5 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5f8e5433-e807-4d5d-81e8-9a63c0a30510")
+	)
+	(wire
+		(pts
+			(xy 68.58 38.1) (xy 66.04 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "62773ebd-f76f-4808-95d6-adbbff796e7e")
+	)
+	(wire
+		(pts
+			(xy 63.5 132.08) (xy 63.5 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "64290174-99e6-4a0d-8796-13eb23ae46a8")
+	)
+	(wire
+		(pts
+			(xy 68.58 81.28) (xy 68.58 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6c13e3b1-9fff-4bc8-a612-c32fc6843ad1")
+	)
+	(wire
+		(pts
+			(xy 63.5 106.68) (xy 63.5 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7cab1636-79c6-4b86-b47d-b47f8d17383b")
+	)
+	(wire
+		(pts
+			(xy 68.58 88.9) (xy 73.66 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7dce7d4e-555a-46b3-b6d2-59a199025356")
+	)
+	(wire
+		(pts
+			(xy 71.12 55.88) (xy 71.12 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7eef003b-1c95-433e-b2e2-896057e3ec8b")
+	)
+	(wire
+		(pts
+			(xy 223.52 78.74) (xy 223.52 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "87951867-545a-4d44-be48-f4f8f9fc136b")
+	)
+	(wire
+		(pts
+			(xy 66.04 157.48) (xy 66.04 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8969397d-2074-4395-82dc-bfb42215b2f1")
+	)
+	(wire
+		(pts
+			(xy 223.52 111.76) (xy 231.14 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8d1f286d-7982-45e1-b163-5e86a9e32f58")
+	)
+	(wire
+		(pts
+			(xy 71.12 134.62) (xy 73.66 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "927957f7-6c6c-433a-ae30-35f0cf628acb")
+	)
+	(wire
+		(pts
+			(xy 68.58 106.68) (xy 68.58 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "92e98190-d06f-4e6c-b4cd-63fa79ed905f")
+	)
+	(wire
+		(pts
+			(xy 71.12 30.48) (xy 71.12 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9345d443-5587-4c13-a708-6327ef3d1ef5")
+	)
+	(wire
+		(pts
+			(xy 68.58 157.48) (xy 68.58 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "945538e3-7a75-4418-812f-0a320eb3758c")
+	)
+	(wire
+		(pts
+			(xy 66.04 30.48) (xy 66.04 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a42f69c3-50eb-4497-b37b-0bc0565c2058")
+	)
+	(wire
+		(pts
+			(xy 226.06 76.2) (xy 226.06 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a4974fab-5206-49a7-87eb-a7a41df31269")
+	)
+	(wire
+		(pts
+			(xy 226.06 48.26) (xy 231.14 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a606ccf7-582a-4ba4-a067-5187d2ed3150")
+	)
+	(wire
+		(pts
+			(xy 63.5 81.28) (xy 63.5 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ac683361-e0a4-4116-aaae-a7e27fe0366e")
+	)
+	(wire
+		(pts
+			(xy 68.58 165.1) (xy 73.66 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "add4320e-0711-4570-9503-e59930a2c3ce")
+	)
+	(wire
+		(pts
+			(xy 66.04 81.28) (xy 66.04 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ae128ec1-2a87-4ecf-88b8-b920b337311d")
+	)
+	(wire
+		(pts
+			(xy 68.58 63.5) (xy 73.66 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b80ba144-0294-4265-8aef-876e6ae82215")
+	)
+	(wire
+		(pts
+			(xy 71.12 106.68) (xy 71.12 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b8115156-1305-4144-a3b1-75c4b4fd59db")
+	)
+	(wire
+		(pts
+			(xy 68.58 63.5) (xy 66.04 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c1f66b7a-ba3a-4230-ad25-0a9b03a40349")
+	)
+	(wire
+		(pts
+			(xy 60.96 134.62) (xy 63.5 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c4ca29c7-2651-47f1-9079-4dc9aad53233")
+	)
+	(wire
+		(pts
+			(xy 226.06 76.2) (xy 226.06 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cbc41fcd-c461-4915-aa79-8002ba3563b4")
+	)
+	(wire
+		(pts
+			(xy 223.52 78.74) (xy 231.14 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d88a2299-7004-482d-ac96-282c0e59c08b")
+	)
+	(wire
+		(pts
+			(xy 60.96 160.02) (xy 63.5 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d9871ee5-4467-420c-83c1-33e574620c10")
+	)
+	(wire
+		(pts
+			(xy 68.58 139.7) (xy 73.66 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dc53f1a5-db56-4e8b-85aa-ff0ce21c96f1")
+	)
+	(wire
+		(pts
+			(xy 71.12 33.02) (xy 73.66 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e231c223-cf1d-4b08-8b00-6d55a283db48")
+	)
+	(wire
+		(pts
+			(xy 68.58 114.3) (xy 66.04 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ecfa5dc8-b6cb-4c1d-b621-eddc38baf166")
+	)
+	(wire
+		(pts
+			(xy 71.12 81.28) (xy 71.12 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f5a97fc2-35a7-4c12-91d1-f88a30f4e642")
+	)
+	(wire
+		(pts
+			(xy 226.06 76.2) (xy 231.14 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f9b07840-50e3-417e-85b5-525de4c56624")
+	)
+	(wire
+		(pts
+			(xy 68.58 30.48) (xy 68.58 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fa676cdf-63bd-4275-a7ed-59958e99a7c9")
+	)
+	(wire
+		(pts
+			(xy 226.06 109.22) (xy 231.14 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fb096fb4-a065-4fe2-b3e7-6e0be9e2d653")
 	)
 	(label "2.5V"
-		(at 177.8 116.84 0)
+		(at 269.24 109.22 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -392,7 +1327,7 @@
 		(uuid "031c4780-51f1-40b6-9abc-d87f79662c05")
 	)
 	(label "3.3V"
-		(at 177.8 45.72 0)
+		(at 269.24 48.26 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -402,7 +1337,7 @@
 		(uuid "1e75837c-2ccf-4daf-87d5-dac21f6c3ba5")
 	)
 	(label "5V"
-		(at 177.8 40.64 0)
+		(at 269.24 45.72 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -412,7 +1347,7 @@
 		(uuid "5e3240aa-50c3-4746-a8f1-fd655409d748")
 	)
 	(label "15V"
-		(at 177.8 78.74 0)
+		(at 269.24 76.2 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -422,7 +1357,7 @@
 		(uuid "9b28dd0c-b72b-4442-afda-6848ac969330")
 	)
 	(label "-15V"
-		(at 177.8 83.82 0)
+		(at 269.24 78.74 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -432,7 +1367,7 @@
 		(uuid "b3b68a37-3aa7-4b2e-bda5-03fbe7f08f52")
 	)
 	(label "-1.5V"
-		(at 177.8 121.92 0)
+		(at 269.24 111.76 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -443,7 +1378,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 256.54 44.45 0)
+		(at 193.04 146.05 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -452,7 +1387,7 @@
 		(fields_autoplaced yes)
 		(uuid "049c009a-b65b-4164-a0f5-80cad2bee0f0")
 		(property "Reference" "#PWR033"
-			(at 256.54 50.8 0)
+			(at 193.04 152.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -461,7 +1396,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 256.54 49.53 0)
+			(at 193.04 151.13 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -469,7 +1404,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 256.54 44.45 0)
+			(at 193.04 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -478,7 +1413,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 256.54 44.45 0)
+			(at 193.04 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -487,7 +1422,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 256.54 44.45 0)
+			(at 193.04 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -509,7 +1444,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 228.6 29.21 0)
+		(at 165.1 130.81 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -518,7 +1453,7 @@
 		(fields_autoplaced yes)
 		(uuid "075b0bb9-c3f3-4400-8b4c-8b82beccfac9")
 		(property "Reference" "#PWR026"
-			(at 228.6 35.56 0)
+			(at 165.1 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -527,7 +1462,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 228.6 34.29 0)
+			(at 165.1 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -535,7 +1470,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 228.6 29.21 0)
+			(at 165.1 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -544,7 +1479,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 228.6 29.21 0)
+			(at 165.1 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -553,7 +1488,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 228.6 29.21 0)
+			(at 165.1 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -574,17 +1509,84 @@
 		)
 	)
 	(symbol
-		(lib_id "Mechanical:MountingHole_Pad")
-		(at 256.54 26.67 0)
+		(lib_id "power:GND")
+		(at 73.66 134.62 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "3bb41304-99e0-42cd-9ce3-409c3efab536")
-		(property "Reference" "H2"
-			(at 259.08 24.1299 0)
+		(uuid "09f855fd-077a-4228-813e-51d7dfc8a4ee")
+		(property "Reference" "#PWR050"
+			(at 80.01 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 77.47 134.6199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 73.66 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 73.66 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 73.66 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a95d2f2d-9512-4621-ae73-72b6b5c92380")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR050")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_Coaxial")
+		(at 38.1 50.8 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "15f8bd2f-ec3d-4fc5-8c57-9887f466e660")
+		(property "Reference" "J6"
+			(at 41.91 49.8231 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -592,8 +1594,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Mounting Hole, M2.5"
-			(at 259.08 26.6699 0)
+		(property "Value" "Conn_Coaxial"
+			(at 41.91 52.3631 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -601,8 +1603,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
-			(at 256.54 26.67 0)
+		(property "Footprint" ""
+			(at 38.1 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -611,7 +1613,520 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 256.54 26.67 0)
+			(at 38.1 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)"
+			(at 38.1 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/gct/RFPC-SMA27-F/22162144"
+			(at 38.1 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.916"
+			(at 38.1 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "312532a1-511e-4d6a-b269-2ab4c20252f2")
+		)
+		(pin "1"
+			(uuid "f4834791-9d88-4235-9549-db1d705625e2")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "J6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x04_Socket")
+		(at 66.04 127 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1bf8d3d6-4842-46d9-8357-3eba066010f4")
+		(property "Reference" "J14"
+			(at 67.31 121.92 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x04_Socket"
+			(at 67.31 124.46 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 66.04 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x04, script generated"
+			(at 66.04 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC041LFBN-RC/810176"
+			(at 66.04 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.321"
+			(at 66.04 127 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "42960ee6-3e0f-4b59-8673-849be92b0bdd")
+		)
+		(pin "2"
+			(uuid "b2695e93-c109-4afa-8b72-68f8e5c02c32")
+		)
+		(pin "1"
+			(uuid "f0ae25a5-44e0-4168-b973-d1b285b38b9e")
+		)
+		(pin "4"
+			(uuid "71c8252c-66d0-4141-91cf-3d985da80876")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "J14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 38.1 132.08 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "201a13a8-f064-41f9-895e-3a53218c5c00")
+		(property "Reference" "#PWR046"
+			(at 38.1 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 38.1 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 38.1 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 38.1 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 38.1 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "9800e101-982a-4ec1-8e64-dd03c204d97d")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR046")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 73.66 109.22 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2669ebf8-d822-4655-8f36-4c36be8ee729")
+		(property "Reference" "#PWR045"
+			(at 80.01 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 77.47 109.2199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 73.66 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 73.66 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 73.66 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b79541f6-aa9e-41d7-bea2-939766d82589")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR045")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 60.96 160.02 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2785913b-a3af-449a-badb-7ce4b7d233b4")
+		(property "Reference" "#PWR049"
+			(at 54.61 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 57.15 160.0199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 60.96 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 60.96 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 60.96 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "15561a33-d71c-4d0c-a795-fcf11a301b04")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR049")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 73.66 83.82 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2e834ce7-1a91-4457-9ef9-56c66cc6f348")
+		(property "Reference" "#PWR042"
+			(at 80.01 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 77.47 83.8199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 73.66 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 73.66 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 73.66 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d02ed7e1-5f84-41d1-9f2f-81fcce7ceac6")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR042")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 38.1 157.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3795d4a9-e32e-4074-a2b7-18f01acbf449")
+		(property "Reference" "#PWR047"
+			(at 38.1 163.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 38.1 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 38.1 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 38.1 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 38.1 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fc8efc74-fdb9-420c-bc1c-faf77ee90255")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR047")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 193.04 128.27 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3bb41304-99e0-42cd-9ce3-409c3efab536")
+		(property "Reference" "H2"
+			(at 195.58 125.7299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Mounting Hole, M2.5"
+			(at 195.58 128.2699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
+			(at 193.04 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 193.04 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -620,7 +2135,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 256.54 26.67 0)
+			(at 193.04 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -629,7 +2144,7 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/keystone-electronics/24929/16343683"
-			(at 256.54 26.67 0)
+			(at 193.04 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -638,7 +2153,7 @@
 			)
 		)
 		(property "Cost" "$0.419"
-			(at 256.54 26.67 0)
+			(at 193.04 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -659,17 +2174,285 @@
 		)
 	)
 	(symbol
-		(lib_id "Mechanical:MountingHole_Pad")
-		(at 228.6 41.91 0)
+		(lib_id "power:GND")
+		(at 60.96 109.22 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "646e2258-c2ad-4d46-8622-83eb16e676bb")
-		(property "Reference" "H3"
-			(at 231.14 39.3699 0)
+		(uuid "4153fae7-72ce-4bc2-a11a-83e828014627")
+		(property "Reference" "#PWR044"
+			(at 54.61 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 57.15 109.2199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 60.96 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 60.96 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 60.96 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a6a09e32-db4a-432e-8060-d01a8e62e929")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR044")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 60.96 83.82 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4ca2852b-4986-4aee-bf7c-c87cc0860660")
+		(property "Reference" "#PWR041"
+			(at 54.61 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 57.15 83.8199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 60.96 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 60.96 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 60.96 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7a415911-db96-4113-b189-37d57df64302")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR041")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 73.66 58.42 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "51a2a562-506a-418d-b998-3f50bbf78261")
+		(property "Reference" "#PWR039"
+			(at 80.01 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 77.47 58.4199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 73.66 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 73.66 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 73.66 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "457f9330-2753-43a0-be32-383419d1eb03")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR039")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 60.96 134.62 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5520c402-80c4-4da9-9bce-f1cdcf425934")
+		(property "Reference" "#PWR048"
+			(at 54.61 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 57.15 134.6199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 60.96 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 60.96 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 60.96 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "326f3aac-07bf-4382-baad-51c2724d00fd")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR048")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_Coaxial")
+		(at 38.1 127 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "55ee0cda-4ccf-465c-9d70-c3704d0cfa88")
+		(property "Reference" "J12"
+			(at 41.91 126.0231 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -677,8 +2460,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Mounting Hole, M2.5"
-			(at 231.14 41.9099 0)
+		(property "Value" "Conn_Coaxial"
+			(at 41.91 128.5631 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -686,8 +2469,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
-			(at 228.6 41.91 0)
+		(property "Footprint" ""
+			(at 38.1 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -696,7 +2479,162 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 228.6 41.91 0)
+			(at 38.1 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)"
+			(at 38.1 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/gct/RFPC-SMA27-F/22162144"
+			(at 38.1 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.916"
+			(at 38.1 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "0a5f3aeb-deb2-4482-82f4-459333facf41")
+		)
+		(pin "1"
+			(uuid "1b1a5a81-88ef-451a-9443-f7ae8bf74539")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "J12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 60.96 58.42 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "61c901ab-d2f9-4506-a21f-46c34e990745")
+		(property "Reference" "#PWR038"
+			(at 54.61 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 57.15 58.4199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 60.96 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 60.96 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 60.96 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1e28b468-1e6e-4bc6-8e30-deeb36de05e3")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR038")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 165.1 143.51 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "646e2258-c2ad-4d46-8622-83eb16e676bb")
+		(property "Reference" "H3"
+			(at 167.64 140.9699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Mounting Hole, M2.5"
+			(at 167.64 143.5099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
+			(at 165.1 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 165.1 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -705,7 +2643,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 228.6 41.91 0)
+			(at 165.1 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -714,7 +2652,7 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/keystone-electronics/24929/16343683"
-			(at 228.6 41.91 0)
+			(at 165.1 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -723,7 +2661,7 @@
 			)
 		)
 		(property "Cost" "$0.419"
-			(at 228.6 41.91 0)
+			(at 165.1 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -745,16 +2683,16 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 256.54 29.21 0)
+		(at 38.1 30.48 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "81e71bf0-de10-4eac-92b7-a3b564fe4484")
-		(property "Reference" "#PWR032"
-			(at 256.54 35.56 0)
+		(uuid "7ee7acbb-52d8-4916-a58a-2c46a485a0a7")
+		(property "Reference" "#PWR034"
+			(at 38.1 36.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -763,7 +2701,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 256.54 34.29 0)
+			(at 38.1 35.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -771,7 +2709,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 256.54 29.21 0)
+			(at 38.1 30.48 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -780,7 +2718,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 256.54 29.21 0)
+			(at 38.1 30.48 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -789,7 +2727,73 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 256.54 29.21 0)
+			(at 38.1 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2217cde8-e64e-4a1a-9a78-e7d09466a4b4")
+		)
+		(instances
+			(project ""
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR034")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 193.04 130.81 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "81e71bf0-de10-4eac-92b7-a3b564fe4484")
+		(property "Reference" "#PWR032"
+			(at 193.04 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 193.04 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 193.04 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 193.04 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 193.04 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -810,35 +2814,33 @@
 		)
 	)
 	(symbol
-		(lib_id "Mechanical:MountingHole_Pad")
-		(at 228.6 26.67 0)
+		(lib_id "Connector:Conn_01x04_Socket")
+		(at 66.04 25.4 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "86204cb4-e9eb-424c-a89c-dfc07520ae74")
-		(property "Reference" "H1"
-			(at 231.14 24.1299 0)
+		(uuid "825e1a5d-286e-4892-8435-e4867c19c87c")
+		(property "Reference" "J5"
+			(at 67.31 20.32 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Value" "Mounting Hole, M2.5"
-			(at 231.14 26.6699 0)
+		(property "Value" "Conn_01x04_Socket"
+			(at 67.31 22.86 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
-			(at 228.6 26.67 0)
+		(property "Footprint" ""
+			(at 66.04 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -847,7 +2849,101 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 228.6 26.67 0)
+			(at 66.04 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x04, script generated"
+			(at 66.04 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC041LFBN-RC/810176"
+			(at 66.04 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.321"
+			(at 66.04 25.4 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "3debafc0-ad9e-4797-b179-dedc1fa6b900")
+		)
+		(pin "2"
+			(uuid "5756a7ff-02e7-41ea-8ef0-a2982b323941")
+		)
+		(pin "1"
+			(uuid "96b1ef2f-8450-4271-8360-20eb4319581a")
+		)
+		(pin "4"
+			(uuid "3975230e-377a-4847-8a6c-cbbdc6356451")
+		)
+		(instances
+			(project ""
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "J5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 165.1 128.27 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "86204cb4-e9eb-424c-a89c-dfc07520ae74")
+		(property "Reference" "H1"
+			(at 167.64 125.7299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Mounting Hole, M2.5"
+			(at 167.64 128.2699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
+			(at 165.1 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 165.1 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -856,7 +2952,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 228.6 26.67 0)
+			(at 165.1 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -865,7 +2961,7 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/keystone-electronics/24929/16343683"
-			(at 228.6 26.67 0)
+			(at 165.1 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -874,7 +2970,7 @@
 			)
 		)
 		(property "Cost" "$0.419"
-			(at 228.6 26.67 0)
+			(at 165.1 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -895,8 +2991,464 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:Conn_01x04_Socket")
+		(at 66.04 101.6 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8a5243de-7850-4a6c-8c33-99278d9ab44a")
+		(property "Reference" "J11"
+			(at 67.31 96.52 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x04_Socket"
+			(at 67.31 99.06 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 66.04 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x04, script generated"
+			(at 66.04 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC041LFBN-RC/810176"
+			(at 66.04 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.321"
+			(at 66.04 101.6 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "ece2ae6e-1c3b-4f80-b70e-e88566065dc9")
+		)
+		(pin "2"
+			(uuid "24b9e4ba-e124-4c5b-9fa0-0fc803374375")
+		)
+		(pin "1"
+			(uuid "71f45de2-07c7-402e-9e20-9590609140b9")
+		)
+		(pin "4"
+			(uuid "f346bdd7-343a-48ac-aba0-921bd2f3be43")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "J11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x04_Socket")
+		(at 66.04 76.2 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a2b1a908-92ff-4876-adef-ad4ccb32d429")
+		(property "Reference" "J9"
+			(at 67.31 71.12 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x04_Socket"
+			(at 67.31 73.66 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 66.04 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x04, script generated"
+			(at 66.04 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC041LFBN-RC/810176"
+			(at 66.04 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.321"
+			(at 66.04 76.2 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "8c7b4f3a-2458-4124-8b1c-3310508f7e36")
+		)
+		(pin "2"
+			(uuid "31d115f4-96f0-435d-ad28-70a5a83ba9f3")
+		)
+		(pin "1"
+			(uuid "3a49e3a5-3b28-471a-a929-8ff4671edd1a")
+		)
+		(pin "4"
+			(uuid "274e4e0e-d2e5-4c26-bc62-e58efb38a82e")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "J9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x04_Socket")
+		(at 66.04 50.8 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a66ccbb8-3fa8-4050-b0fb-39e94d93dcc0")
+		(property "Reference" "J7"
+			(at 67.31 45.72 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x04_Socket"
+			(at 67.31 48.26 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 66.04 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x04, script generated"
+			(at 66.04 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC041LFBN-RC/810176"
+			(at 66.04 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.321"
+			(at 66.04 50.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "edb3a4ff-b4a0-458c-a5f8-0d0ab831d465")
+		)
+		(pin "2"
+			(uuid "d1b5f26f-08c8-433a-bb31-fce7302af501")
+		)
+		(pin "1"
+			(uuid "9df1ed37-d1be-4fbb-bf7b-63f4275e55ea")
+		)
+		(pin "4"
+			(uuid "fbc26485-8365-41e0-a87c-24ab19ae9bfe")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "J7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x04_Socket")
+		(at 66.04 152.4 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a6e3afd0-93d2-465e-b188-6d70421c5072")
+		(property "Reference" "J15"
+			(at 67.31 147.32 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x04_Socket"
+			(at 67.31 149.86 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 66.04 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x04, script generated"
+			(at 66.04 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC041LFBN-RC/810176"
+			(at 66.04 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.321"
+			(at 66.04 152.4 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "b5edb9ea-a85b-416c-b957-fd31a07d5822")
+		)
+		(pin "2"
+			(uuid "5c5a57f3-52bd-4722-bc40-77eaa973d7d3")
+		)
+		(pin "1"
+			(uuid "b80b66f0-a216-44bb-8e87-8032cd3be2c3")
+		)
+		(pin "4"
+			(uuid "735561be-a2f4-4542-a251-b97fcc2a39d9")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "J15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_Coaxial")
+		(at 38.1 25.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ad312ec7-be4e-4d23-a515-6fc0e53b68d8")
+		(property "Reference" "J4"
+			(at 41.91 24.4231 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_Coaxial"
+			(at 41.91 26.9631 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 38.1 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)"
+			(at 38.1 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/gct/RFPC-SMA27-F/22162144"
+			(at 38.1 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.916"
+			(at 38.1 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "dae6d2b8-250c-48dd-9d7f-3b60f148558f")
+		)
+		(pin "1"
+			(uuid "6b15ce41-8450-4002-8d59-57b24ba52428")
+		)
+		(instances
+			(project ""
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "J4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
-		(at 228.6 44.45 0)
+		(at 165.1 146.05 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -905,7 +3457,7 @@
 		(fields_autoplaced yes)
 		(uuid "aee91a2d-274c-4d74-ba52-3e96b00a5f95")
 		(property "Reference" "#PWR031"
-			(at 228.6 50.8 0)
+			(at 165.1 152.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -914,7 +3466,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 228.6 49.53 0)
+			(at 165.1 151.13 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -922,7 +3474,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 228.6 44.45 0)
+			(at 165.1 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -931,7 +3483,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 228.6 44.45 0)
+			(at 165.1 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -940,7 +3492,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 228.6 44.45 0)
+			(at 165.1 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -961,17 +3513,150 @@
 		)
 	)
 	(symbol
-		(lib_id "Mechanical:MountingHole_Pad")
-		(at 256.54 41.91 0)
+		(lib_id "power:GND")
+		(at 73.66 33.02 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "f52b707a-1f05-40e7-9b1d-9372e7629d8c")
-		(property "Reference" "H4"
-			(at 259.08 39.3699 0)
+		(uuid "cd91e62d-f05e-4e7a-b709-38a83dd1ff57")
+		(property "Reference" "#PWR036"
+			(at 80.01 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 77.47 33.0199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 73.66 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 73.66 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 73.66 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "dc036b00-aa2c-43c6-912f-61fcbd71bdb8")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR036")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 38.1 55.88 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "dab9c677-ff30-49ea-b5ab-3e3e0fdabe2d")
+		(property "Reference" "#PWR037"
+			(at 38.1 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 38.1 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 38.1 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 38.1 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 38.1 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "cb87a6c3-b937-4f36-8f9c-725620905cbf")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR037")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_Coaxial")
+		(at 38.1 152.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e4cec892-bce8-42db-9ee3-62f6c7f3c834")
+		(property "Reference" "J13"
+			(at 41.91 151.4231 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -979,8 +3664,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Mounting Hole, M2.5"
-			(at 259.08 41.9099 0)
+		(property "Value" "Conn_Coaxial"
+			(at 41.91 153.9631 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -988,8 +3673,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
-			(at 256.54 41.91 0)
+		(property "Footprint" ""
+			(at 38.1 152.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -998,7 +3683,162 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 256.54 41.91 0)
+			(at 38.1 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)"
+			(at 38.1 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/gct/RFPC-SMA27-F/22162144"
+			(at 38.1 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.916"
+			(at 38.1 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "fe95421f-a9f3-4d96-a890-e0f0ad3175ad")
+		)
+		(pin "1"
+			(uuid "f7a09710-c47d-47ac-90f3-981656669a8a")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "J13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 60.96 33.02 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f31f71c7-f7b4-4c58-99ac-17a0e95d97ec")
+		(property "Reference" "#PWR035"
+			(at 54.61 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 57.15 33.0199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 60.96 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 60.96 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 60.96 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3b9c9394-4497-4d78-8a15-658deb2812e1")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR035")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 193.04 143.51 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f52b707a-1f05-40e7-9b1d-9372e7629d8c")
+		(property "Reference" "H4"
+			(at 195.58 140.9699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Mounting Hole, M2.5"
+			(at 195.58 143.5099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
+			(at 193.04 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 193.04 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1007,7 +3847,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 256.54 41.91 0)
+			(at 193.04 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1016,7 +3856,7 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/keystone-electronics/24929/16343683"
-			(at 256.54 41.91 0)
+			(at 193.04 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1025,7 +3865,7 @@
 			)
 		)
 		(property "Cost" "$0.419"
-			(at 256.54 41.91 0)
+			(at 193.04 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1045,9 +3885,76 @@
 			)
 		)
 	)
+	(symbol
+		(lib_id "power:GND")
+		(at 73.66 160.02 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "fc2e86c9-fb97-446c-b6b0-b5b99dfd4cc8")
+		(property "Reference" "#PWR051"
+			(at 80.01 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 77.47 160.0199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 73.66 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 73.66 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 73.66 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "89e2bd7b-c931-4296-9612-ba3e37a7301e")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "#PWR051")
+					(unit 1)
+				)
+			)
+		)
+	)
 	(sheet
-		(at 127 63.5)
-		(size 50.8 25.4)
+		(at 231.14 68.58)
+		(size 38.1 12.7)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -1062,7 +3969,7 @@
 		)
 		(uuid "018e7d12-6b24-44c3-9b74-64995b8fa179")
 		(property "Sheetname" "15V"
-			(at 127 62.7884 0)
+			(at 231.14 67.8684 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1071,7 +3978,7 @@
 			)
 		)
 		(property "Sheetfile" "15V.kicad_sch"
-			(at 127 89.4846 0)
+			(at 231.14 81.8646 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1080,7 +3987,7 @@
 			)
 		)
 		(pin "-15V" output
-			(at 177.8 83.82 0)
+			(at 269.24 78.74 0)
 			(uuid "4bb2fec6-dab5-4e8d-ac44-98bedb8b63f3")
 			(effects
 				(font
@@ -1090,7 +3997,7 @@
 			)
 		)
 		(pin "-18V" input
-			(at 127 83.82 180)
+			(at 231.14 78.74 180)
 			(uuid "f75c13a8-a489-4007-b811-5a29d66cd79c")
 			(effects
 				(font
@@ -1100,7 +4007,7 @@
 			)
 		)
 		(pin "15V" output
-			(at 177.8 78.74 0)
+			(at 269.24 76.2 0)
 			(uuid "0fee81d1-4e24-43de-84b1-691a6de96461")
 			(effects
 				(font
@@ -1110,7 +4017,7 @@
 			)
 		)
 		(pin "18V" input
-			(at 127 78.74 180)
+			(at 231.14 76.2 180)
 			(uuid "f158b7ff-1ebb-44b0-ab9e-7ddddd68ce62")
 			(effects
 				(font
@@ -1128,8 +4035,8 @@
 		)
 	)
 	(sheet
-		(at 25.4 63.5)
-		(size 50.8 25.4)
+		(at 167.64 68.58)
+		(size 38.1 12.7)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -1144,7 +4051,7 @@
 		)
 		(uuid "16a77afe-3056-4f83-9f80-787a2ef93cd8")
 		(property "Sheetname" "WallPower"
-			(at 25.4 62.7884 0)
+			(at 167.64 67.8684 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1153,7 +4060,7 @@
 			)
 		)
 		(property "Sheetfile" "WallPower.kicad_sch"
-			(at 25.4 89.4846 0)
+			(at 167.64 81.8646 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1162,7 +4069,7 @@
 			)
 		)
 		(pin "-18V" output
-			(at 76.2 83.82 0)
+			(at 205.74 78.74 0)
 			(uuid "82444888-e949-43d0-94a1-970e27bb39e7")
 			(effects
 				(font
@@ -1172,7 +4079,7 @@
 			)
 		)
 		(pin "18V" output
-			(at 76.2 78.74 0)
+			(at 205.74 76.2 0)
 			(uuid "4af0e715-4cde-449f-90fd-cf8e571a6ca7")
 			(effects
 				(font
@@ -1190,8 +4097,8 @@
 		)
 	)
 	(sheet
-		(at 127 101.6)
-		(size 50.8 25.4)
+		(at 231.14 101.6)
+		(size 38.1 12.7)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -1206,7 +4113,7 @@
 		)
 		(uuid "55f1d4dd-dd9a-4f22-90c5-bff482123087")
 		(property "Sheetname" "PreAmp"
-			(at 127 100.8884 0)
+			(at 231.14 100.8884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1215,7 +4122,7 @@
 			)
 		)
 		(property "Sheetfile" "PreAmp.kicad_sch"
-			(at 127 127.5846 0)
+			(at 231.14 114.8846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1224,7 +4131,7 @@
 			)
 		)
 		(pin "-1.5V" output
-			(at 177.8 121.92 0)
+			(at 269.24 111.76 0)
 			(uuid "e1dfa1d6-bba9-4a2f-abae-82ce31704425")
 			(effects
 				(font
@@ -1234,7 +4141,7 @@
 			)
 		)
 		(pin "-18V" input
-			(at 127 121.92 180)
+			(at 231.14 111.76 180)
 			(uuid "b3688347-7d3c-4266-bad0-327b34a46612")
 			(effects
 				(font
@@ -1244,7 +4151,7 @@
 			)
 		)
 		(pin "2.5V" output
-			(at 177.8 116.84 0)
+			(at 269.24 109.22 0)
 			(uuid "164ac7ff-c019-4e14-aaf0-602de460bc9c")
 			(effects
 				(font
@@ -1254,7 +4161,7 @@
 			)
 		)
 		(pin "18V" input
-			(at 127 116.84 180)
+			(at 231.14 109.22 180)
 			(uuid "af325295-6756-466d-9676-001b40aade3b")
 			(effects
 				(font
@@ -1272,8 +4179,8 @@
 		)
 	)
 	(sheet
-		(at 127 25.4)
-		(size 50.8 25.4)
+		(at 231.14 38.1)
+		(size 38.1 12.7)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -1288,7 +4195,7 @@
 		)
 		(uuid "df1ba0e1-55fc-41f2-80f9-aaa8393d43d6")
 		(property "Sheetname" "Converter"
-			(at 127 24.6884 0)
+			(at 231.14 37.3884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1297,7 +4204,7 @@
 			)
 		)
 		(property "Sheetfile" "Converter.kicad_sch"
-			(at 127 51.3846 0)
+			(at 231.14 51.3846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1306,7 +4213,7 @@
 			)
 		)
 		(pin "3.3V" output
-			(at 177.8 45.72 0)
+			(at 269.24 48.26 0)
 			(uuid "884e6ea4-fa5f-4748-a105-827c2a7e23b4")
 			(effects
 				(font
@@ -1316,7 +4223,7 @@
 			)
 		)
 		(pin "5V" output
-			(at 177.8 40.64 0)
+			(at 269.24 45.72 0)
 			(uuid "7fd3667d-ca23-42fc-8d45-f681cedcf646")
 			(effects
 				(font
@@ -1326,7 +4233,7 @@
 			)
 		)
 		(pin "18V" input
-			(at 127 45.72 180)
+			(at 231.14 48.26 180)
 			(uuid "88378dad-5933-4fb1-961d-057f1b1e6583")
 			(effects
 				(font

@@ -214,7 +214,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "IN/SENSEN receptacle type:\npin/socket connections\n\noutput voltage receptacle type:\n(1) SMA with 500V rating and RG-58/U\n(2) 1x3 pin socket, GND + OUT + OUT\n\nGND interface to other boards:\nmany pin/socket connections"
+	(text "IN/SENSEN receptacle type:\npin/socket connections\n\noutput voltage receptacle type:\n(1) SMA with RG-58/U for 500V rating\n(2) 1x3 pin socket, GND + OUT + OUT\n\nGND interface to other boards:\nmany pin/socket connections"
 		(exclude_from_sim no)
 		(at 27.178 26.924 0)
 		(effects
