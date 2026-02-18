@@ -3911,7 +3911,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3799044c-4685-4670-a853-00656a1da85e")
-		(property "Reference" "J3"
+		(property "Reference" "J15"
 			(at 94.488 57.658 0)
 			(effects
 				(font
@@ -4049,7 +4049,7 @@
 		(instances
 			(project ""
 				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/06f343a1-8f8d-44f8-9a8d-c3164f0f170f"
-					(reference "J3")
+					(reference "J15")
 					(unit 1)
 				)
 			)
@@ -4064,7 +4064,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "45d12987-dffd-4851-8fa9-e61c6f4eb8a8")
-		(property "Reference" "J4"
+		(property "Reference" "J18"
 			(at 209.296 56.896 0)
 			(effects
 				(font
@@ -4200,7 +4200,7 @@
 		(instances
 			(project ""
 				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/06f343a1-8f8d-44f8-9a8d-c3164f0f170f"
-					(reference "J4")
+					(reference "J18")
 					(unit 1)
 				)
 			)
@@ -4215,7 +4215,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "da63b5c7-984d-4786-824d-6b55aab92742")
-		(property "Reference" "J1"
+		(property "Reference" "J16"
 			(at 121.412 56.896 0)
 			(effects
 				(font
@@ -4342,7 +4342,7 @@
 		(instances
 			(project ""
 				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/06f343a1-8f8d-44f8-9a8d-c3164f0f170f"
-					(reference "J1")
+					(reference "J16")
 					(unit 1)
 				)
 			)
@@ -4357,7 +4357,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "db5780ec-aa30-4e0e-a225-19e5c9c3d1f5")
-		(property "Reference" "J2"
+		(property "Reference" "J17"
 			(at 183.896 57.404 0)
 			(effects
 				(font
@@ -4486,7 +4486,7 @@
 		(instances
 			(project ""
 				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/06f343a1-8f8d-44f8-9a8d-c3164f0f170f"
-					(reference "J2")
+					(reference "J17")
 					(unit 1)
 				)
 			)
@@ -4502,7 +4502,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "dd0c0ca7-5814-47da-aa06-3b99aa4d61cb")
-		(property "Reference" "U1"
+		(property "Reference" "U7"
 			(at 152.4 130.81 0)
 			(effects
 				(font
@@ -4758,7 +4758,7 @@
 		(instances
 			(project ""
 				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/06f343a1-8f8d-44f8-9a8d-c3164f0f170f"
-					(reference "U1")
+					(reference "U7")
 					(unit 1)
 				)
 			)

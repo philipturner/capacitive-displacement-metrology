@@ -1393,7 +1393,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0386bed3-7b19-411a-99c7-b61ed92e0525")
-		(property "Reference" "#PWR02"
+		(property "Reference" "#PWR032"
 			(at 110.49 58.42 0)
 			(effects
 				(font
@@ -1444,7 +1444,7 @@
 		(instances
 			(project ""
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
-					(reference "#PWR02")
+					(reference "#PWR032")
 					(unit 1)
 				)
 			)
@@ -1756,7 +1756,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "64381ad2-deb5-426e-9894-6ccbf92412fe")
-		(property "Reference" "D1"
+		(property "Reference" "D7"
 			(at 139.7 65.7224 90)
 			(effects
 				(font
@@ -1819,7 +1819,7 @@
 		(instances
 			(project ""
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
-					(reference "D1")
+					(reference "D7")
 					(unit 1)
 				)
 			)
@@ -1835,7 +1835,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "69cc4ae5-3af3-4884-9179-5d84435afbde")
-		(property "Reference" "#PWR03"
+		(property "Reference" "#PWR029"
 			(at 62.23 132.08 0)
 			(effects
 				(font
@@ -1886,7 +1886,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
-					(reference "#PWR03")
+					(reference "#PWR029")
 					(unit 1)
 				)
 			)
@@ -1902,7 +1902,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "71ad7740-eb1c-45ac-9a00-7f6be8f8be20")
-		(property "Reference" "D7"
+		(property "Reference" "D4"
 			(at 114.3 134.6199 90)
 			(effects
 				(font
@@ -1983,7 +1983,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
-					(reference "D7")
+					(reference "D4")
 					(unit 1)
 				)
 			)
@@ -1999,7 +1999,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "84075d7f-fc6c-45c4-97ce-8263536a8637")
-		(property "Reference" "#PWR016"
+		(property "Reference" "#PWR042"
 			(at 137.16 80.01 0)
 			(effects
 				(font
@@ -2049,7 +2049,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
-					(reference "#PWR016")
+					(reference "#PWR042")
 					(unit 1)
 				)
 			)
@@ -2065,7 +2065,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8de637f8-ff56-4cdd-910a-a6a6be130f62")
-		(property "Reference" "D2"
+		(property "Reference" "D5"
 			(at 132.08 116.5224 90)
 			(effects
 				(font
@@ -2128,7 +2128,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
-					(reference "D2")
+					(reference "D5")
 					(unit 1)
 				)
 			)
@@ -2144,7 +2144,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8eba6492-283d-402a-a244-91447a3b8dab")
-		(property "Reference" "#PWR019"
+		(property "Reference" "#PWR035"
 			(at 106.68 161.29 0)
 			(effects
 				(font
@@ -2194,7 +2194,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
-					(reference "#PWR019")
+					(reference "#PWR035")
 					(unit 1)
 				)
 			)
@@ -2210,7 +2210,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "942f9ef1-9ecb-4fca-b647-d929d0302c92")
-		(property "Reference" "#PWR018"
+		(property "Reference" "#PWR039"
 			(at 129.54 105.41 0)
 			(effects
 				(font
@@ -2260,7 +2260,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
-					(reference "#PWR018")
+					(reference "#PWR039")
 					(unit 1)
 				)
 			)
@@ -2276,7 +2276,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9ca56d21-b169-45f3-9d98-ae6335c799dc")
-		(property "Reference" "D8"
+		(property "Reference" "D1"
 			(at 86.36 31.75 0)
 			(effects
 				(font
@@ -2355,7 +2355,7 @@
 		(instances
 			(project ""
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
-					(reference "D8")
+					(reference "D1")
 					(unit 1)
 				)
 			)
@@ -2371,7 +2371,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9cc07e0b-e1e7-4591-9837-c59ef7c3476d")
-		(property "Reference" "#PWR014"
+		(property "Reference" "#PWR028"
 			(at 66.04 80.01 0)
 			(effects
 				(font
@@ -2421,7 +2421,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
-					(reference "#PWR014")
+					(reference "#PWR028")
 					(unit 1)
 				)
 			)
@@ -2437,7 +2437,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "bf85cf3a-ee51-4e41-9fd5-d2dc2a6b6146")
-		(property "Reference" "C3"
+		(property "Reference" "C5"
 			(at 110.49 147.3199 0)
 			(effects
 				(font
@@ -2500,7 +2500,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
-					(reference "C3")
+					(reference "C5")
 					(unit 1)
 				)
 			)
@@ -2516,7 +2516,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c3ba972f-6f9b-4ac7-b675-3cec3eff6a06")
-		(property "Reference" "#PWR015"
+		(property "Reference" "#PWR038"
 			(at 114.3 80.01 0)
 			(effects
 				(font
@@ -2566,7 +2566,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
-					(reference "#PWR015")
+					(reference "#PWR038")
 					(unit 1)
 				)
 			)
@@ -2582,7 +2582,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c4e3a35a-da35-47f1-96b8-a65dcd39ab01")
-		(property "Reference" "C2"
+		(property "Reference" "C7"
 			(at 118.11 66.0399 0)
 			(effects
 				(font
@@ -2636,7 +2636,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
-					(reference "C2")
+					(reference "C7")
 					(unit 1)
 				)
 			)
@@ -2652,7 +2652,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f8f1fb07-b01d-4793-8760-075278f4df6b")
-		(property "Reference" "#PWR017"
+		(property "Reference" "#PWR034"
 			(at 106.68 105.41 0)
 			(effects
 				(font
@@ -2702,7 +2702,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/018e7d12-6b24-44c3-9b74-64995b8fa179"
-					(reference "#PWR017")
+					(reference "#PWR034")
 					(unit 1)
 				)
 			)

@@ -1258,7 +1258,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0d355a4a-96ed-46f9-aa10-fca4c7faf424")
-		(property "Reference" "#PWR029"
+		(property "Reference" "#PWR06"
 			(at 228.6 50.8 0)
 			(effects
 				(font
@@ -1308,7 +1308,7 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
-					(reference "#PWR029")
+					(reference "#PWR06")
 					(unit 1)
 				)
 			)
@@ -1324,7 +1324,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1abfb1fe-8a53-4311-8037-9584d1cddde5")
-		(property "Reference" "J12"
+		(property "Reference" "J1"
 			(at 213.36 96.52 90)
 			(effects
 				(font
@@ -1427,7 +1427,7 @@
 		(instances
 			(project ""
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
-					(reference "J12")
+					(reference "J1")
 					(unit 1)
 				)
 			)
@@ -1516,7 +1516,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3bb41304-99e0-42cd-9ce3-409c3efab536")
-		(property "Reference" "H2"
+		(property "Reference" "H4"
 			(at 259.08 24.1299 0)
 			(effects
 				(font
@@ -1585,7 +1585,7 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
-					(reference "H2")
+					(reference "H4")
 					(unit 1)
 				)
 			)
@@ -1601,7 +1601,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "50c4fb18-25fe-4a3d-83da-43e683de55c5")
-		(property "Reference" "#PWR036"
+		(property "Reference" "#PWR03"
 			(at 213.36 113.03 0)
 			(effects
 				(font
@@ -1651,7 +1651,7 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
-					(reference "#PWR036")
+					(reference "#PWR03")
 					(unit 1)
 				)
 			)
@@ -1667,7 +1667,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "50eb3071-b705-4b57-aca0-ff721b56d45c")
-		(property "Reference" "H5"
+		(property "Reference" "H3"
 			(at 231.14 54.6099 0)
 			(effects
 				(font
@@ -1724,7 +1724,7 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
-					(reference "H5")
+					(reference "H3")
 					(unit 1)
 				)
 			)
@@ -1740,7 +1740,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "646e2258-c2ad-4d46-8622-83eb16e676bb")
-		(property "Reference" "H3"
+		(property "Reference" "H2"
 			(at 231.14 39.3699 0)
 			(effects
 				(font
@@ -1809,7 +1809,7 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
-					(reference "H3")
+					(reference "H2")
 					(unit 1)
 				)
 			)
@@ -1825,7 +1825,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6596dc29-3a28-4d09-93ba-55ef29eda5d7")
-		(property "Reference" "#PWR038"
+		(property "Reference" "#PWR07"
 			(at 228.6 113.03 0)
 			(effects
 				(font
@@ -1875,7 +1875,7 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
-					(reference "#PWR038")
+					(reference "#PWR07")
 					(unit 1)
 				)
 			)
@@ -1891,7 +1891,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "79fb8bde-3a08-467d-b3e6-018829d7fe73")
-		(property "Reference" "#PWR037"
+		(property "Reference" "#PWR04"
 			(at 220.98 113.03 0)
 			(effects
 				(font
@@ -1941,7 +1941,7 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
-					(reference "#PWR037")
+					(reference "#PWR04")
 					(unit 1)
 				)
 			)
@@ -2042,7 +2042,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "95b3b471-b6ca-415d-8fbc-5bb48435b57b")
-		(property "Reference" "#PWR035"
+		(property "Reference" "#PWR02"
 			(at 205.74 113.03 0)
 			(effects
 				(font
@@ -2092,7 +2092,7 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
-					(reference "#PWR035")
+					(reference "#PWR02")
 					(unit 1)
 				)
 			)
@@ -2108,7 +2108,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9f2ca179-81d4-449a-a593-cb8f69ced947")
-		(property "Reference" "#PWR028"
+		(property "Reference" "#PWR08"
 			(at 256.54 35.56 0)
 			(effects
 				(font
@@ -2158,7 +2158,7 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
-					(reference "#PWR028")
+					(reference "#PWR08")
 					(unit 1)
 				)
 			)
@@ -2174,7 +2174,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b4474719-5feb-42a9-bdda-3d0e9a2eef54")
-		(property "Reference" "#PWR034"
+		(property "Reference" "#PWR01"
 			(at 198.12 113.03 0)
 			(effects
 				(font
@@ -2224,7 +2224,7 @@
 		(instances
 			(project ""
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
-					(reference "#PWR034")
+					(reference "#PWR01")
 					(unit 1)
 				)
 			)
@@ -2240,7 +2240,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c2eb79ce-35a7-46f5-8438-93cc67025f36")
-		(property "Reference" "#PWR027"
+		(property "Reference" "#PWR05"
 			(at 228.6 35.56 0)
 			(effects
 				(font
@@ -2290,7 +2290,7 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
-					(reference "#PWR027")
+					(reference "#PWR05")
 					(unit 1)
 				)
 			)
@@ -2306,7 +2306,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "cff2f7a3-0e47-429d-a73c-98bcd891b6a4")
-		(property "Reference" "#PWR030"
+		(property "Reference" "#PWR09"
 			(at 256.54 50.8 0)
 			(effects
 				(font
@@ -2356,7 +2356,7 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
-					(reference "#PWR030")
+					(reference "#PWR09")
 					(unit 1)
 				)
 			)
@@ -2372,7 +2372,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f52b707a-1f05-40e7-9b1d-9372e7629d8c")
-		(property "Reference" "H4"
+		(property "Reference" "H5"
 			(at 259.08 39.3699 0)
 			(effects
 				(font
@@ -2441,7 +2441,7 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5"
-					(reference "H4")
+					(reference "H5")
 					(unit 1)
 				)
 			)

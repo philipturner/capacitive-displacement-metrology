@@ -1893,7 +1893,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "06024991-1074-4255-9900-44912fb1f595")
-		(property "Reference" "J1"
+		(property "Reference" "J2"
 			(at 219.71 33.02 90)
 			(effects
 				(font
@@ -1981,7 +1981,7 @@
 		(instances
 			(project ""
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "J1")
+					(reference "J2")
 					(unit 1)
 				)
 			)
@@ -1998,7 +1998,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0a282242-e9a0-494f-a55e-65b3224216bc")
-		(property "Reference" "U2"
+		(property "Reference" "U1"
 			(at 148.59 67.2398 0)
 			(effects
 				(font
@@ -2077,7 +2077,7 @@
 		(instances
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "U2")
+					(reference "U1")
 					(unit 1)
 				)
 			)
@@ -2093,7 +2093,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "19932509-5667-4a0f-9a85-7a95782e7dc4")
-		(property "Reference" "R3"
+		(property "Reference" "R1"
 			(at 135.89 92.71 90)
 			(effects
 				(font
@@ -2154,7 +2154,7 @@
 		(instances
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "R3")
+					(reference "R1")
 					(unit 1)
 				)
 			)
@@ -2247,7 +2247,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2a6fab0d-80ed-43a3-aa11-b10ed6ec809d")
-		(property "Reference" "J2"
+		(property "Reference" "J1"
 			(at 143.51 27.94 90)
 			(effects
 				(font
@@ -2320,7 +2320,7 @@
 		(instances
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "J2")
+					(reference "J1")
 					(unit 1)
 				)
 			)
@@ -2336,7 +2336,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "429245f8-848d-406f-8012-428e659282c4")
-		(property "Reference" "#PWR05"
+		(property "Reference" "#PWR03"
 			(at 147.32 133.35 0)
 			(effects
 				(font
@@ -2386,7 +2386,7 @@
 		(instances
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "#PWR05")
+					(reference "#PWR03")
 					(unit 1)
 				)
 			)
@@ -2506,7 +2506,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5a7239c3-3911-43d0-b1ae-edfca8ee6fca")
-		(property "Reference" "#PWR01"
+		(property "Reference" "#PWR02"
 			(at 132.08 40.64 0)
 			(effects
 				(font
@@ -2557,7 +2557,7 @@
 		(instances
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "#PWR01")
+					(reference "#PWR02")
 					(unit 1)
 				)
 			)
@@ -2573,7 +2573,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "62c0d205-a727-46e0-abd2-d87615cb6daf")
-		(property "Reference" "C3"
+		(property "Reference" "C1"
 			(at 125.73 119.3799 0)
 			(effects
 				(font
@@ -2636,7 +2636,7 @@
 		(instances
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "C3")
+					(reference "C1")
 					(unit 1)
 				)
 			)
@@ -2718,7 +2718,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "71d1b7be-2947-489a-af96-0b7f54d59645")
-		(property "Reference" "#PWR02"
+		(property "Reference" "#PWR04"
 			(at 165.1 40.64 0)
 			(effects
 				(font
@@ -2769,7 +2769,7 @@
 		(instances
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "#PWR02")
+					(reference "#PWR04")
 					(unit 1)
 				)
 			)
@@ -2785,7 +2785,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a323dfa0-51a5-415c-8d86-fe46a44782fe")
-		(property "Reference" "#PWR04"
+		(property "Reference" "#PWR01"
 			(at 121.92 133.35 0)
 			(effects
 				(font
@@ -2835,7 +2835,7 @@
 		(instances
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "#PWR04")
+					(reference "#PWR01")
 					(unit 1)
 				)
 			)
@@ -2851,7 +2851,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c437b86a-2780-4974-afbf-f5003de072f2")
-		(property "Reference" "#PWR03"
+		(property "Reference" "#PWR05"
 			(at 213.36 82.55 0)
 			(effects
 				(font
@@ -2901,7 +2901,7 @@
 		(instances
 			(project ""
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "#PWR03")
+					(reference "#PWR05")
 					(unit 1)
 				)
 			)
@@ -2917,7 +2917,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f5703923-dd80-47b9-be79-244c906064cb")
-		(property "Reference" "C4"
+		(property "Reference" "C2"
 			(at 151.13 119.3799 0)
 			(effects
 				(font
@@ -2980,7 +2980,7 @@
 		(instances
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "C4")
+					(reference "C2")
 					(unit 1)
 				)
 			)
