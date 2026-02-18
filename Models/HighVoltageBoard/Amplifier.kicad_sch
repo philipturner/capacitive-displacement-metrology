@@ -1793,6 +1793,17 @@
 		)
 		(uuid "895399d6-4c0a-46b3-956f-ed9784bc1d17")
 	)
+	(text "Excluded from BOM because of high cost\nand not needed until Phase I"
+		(exclude_from_sim no)
+		(at 218.948 66.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "d10e4fd5-342e-48f3-a960-1a80b1c0151f")
+	)
 	(junction
 		(at 177.8 68.58)
 		(diameter 0)

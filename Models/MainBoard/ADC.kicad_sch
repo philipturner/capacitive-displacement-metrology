@@ -955,6 +955,17 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "Excluded from BOM because already have 3\nspares in stock from Phase 0.1"
+		(exclude_from_sim no)
+		(at 93.98 57.15 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "a3f4ecc9-dea6-4c4a-87c5-fc38fe31b27a")
+	)
 	(junction
 		(at 226.06 76.2)
 		(diameter 0)
@@ -2395,7 +2406,7 @@
 		(at 86.36 81.28 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -2437,6 +2448,15 @@
 			)
 		)
 		(property "Description" ""
+			(at 86.36 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/texas-instruments/ADS8699IPWR/6600065"
 			(at 86.36 81.28 0)
 			(effects
 				(font
