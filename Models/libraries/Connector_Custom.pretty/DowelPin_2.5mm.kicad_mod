@@ -4,7 +4,7 @@
 	(generator_version "9.0")
 	(layer "F.Cu")
 	(property "Reference" "REF**"
-		(at 0 -9.94 0)
+		(at 0.07 -2.555 0)
 		(unlocked yes)
 		(layer "F.SilkS")
 		(uuid "df91abb3-6220-4bf0-a7e0-8282196c431e")
@@ -16,9 +16,10 @@
 		)
 	)
 	(property "Value" "DowelPin_2.5mm"
-		(at 0 -8.74 0)
+		(at 0.07 -1.355 0)
 		(unlocked yes)
 		(layer "F.Fab")
+		(hide yes)
 		(uuid "d29174fb-0a52-43b6-8a6d-9abc2ae9b0d6")
 		(effects
 			(font
@@ -55,7 +56,7 @@
 	)
 	(attr through_hole)
 	(fp_text user "${REFERENCE}"
-		(at 0 -7.54 0)
+		(at 0.095 -1.155 0)
 		(unlocked yes)
 		(layer "F.Fab")
 		(uuid "3c7fe699-06c2-4ab6-b567-2a89ba899362")
