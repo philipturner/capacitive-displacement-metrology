@@ -955,17 +955,6 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "For TIA2, the ground node is on a separate\nboard, possibly with a slightly different\npotential. Connect AIN_GND to ground of that\nboard instead of the current board.\n\nFor TIA1, connect the ADC end of the coaxial\ncable (if present) to the main board. In this\ncase, AIN_GND should connect to GND of the main board."
-		(exclude_from_sim no)
-		(at 72.644 111.76 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "4d1dbc49-a91d-4ec7-a8af-d3b5bfd85937")
-	)
 	(junction
 		(at 226.06 76.2)
 		(diameter 0)

@@ -1707,7 +1707,7 @@
 		)
 	)
 	(global_label "-5V_PreAmp"
-		(shape output)
+		(shape input)
 		(at 203.2 124.46 270)
 		(fields_autoplaced yes)
 		(effects
@@ -1751,7 +1751,7 @@
 		)
 	)
 	(global_label "5V_PreAmp"
-		(shape output)
+		(shape input)
 		(at 203.2 43.18 90)
 		(fields_autoplaced yes)
 		(effects

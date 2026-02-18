@@ -1227,6 +1227,17 @@
 		)
 		(uuid "4e1bf69b-86da-4c5f-8574-b7c05ac7f737")
 	)
+	(text "Add cutouts for shield in the isolation barrier"
+		(exclude_from_sim no)
+		(at 107.442 16.764 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "9fd7ef56-93f7-4d0c-9fe0-f71d0a29f2c4")
+	)
 	(text "Digital"
 		(exclude_from_sim no)
 		(at 132.588 23.114 0)

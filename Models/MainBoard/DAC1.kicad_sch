@@ -1224,6 +1224,17 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "Orient at right angle so digital\npins come out from the bottom"
+		(exclude_from_sim no)
+		(at 111.252 27.432 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "0e4c3c7f-f338-4ffb-b75f-b72d2bdf63bf")
+	)
 	(text "For the piezo driver channels, the load\n(28k resistor) sits on a different board.\nWe want the GND side of that resistor to sit\nat the same potential as the non-inverting\ninput to the PA95 op amp.\n\nSENSEN detects the IR drop from difference in\nground potentials (large power currents). Such\ncurrents do not flow through the SENSEN wire\nitself, thus IR drop is 0 across this one.\n\nSENSEP detects the small IR drop from up to 428 uA\ncurrent flowing through the OUT wire. Current across\nSENSEP is (OUT wire resistance / 40k) * 428 uA.\n\nIn the worst case, 5 inches of 28 AWG wire are 0.027 Ω.\nVoltage drop is up to 11 μV. That is 1 part in 2 million\nerror with 24 V range. With 15 mA (35x higher current),\nit is 1 part in 60,000 and noticeable.\n\nWe do not need to utilize SENSEP for this particular\nDAC, avoiding much confusion and debugging. Only a\ndifferential + and - pair for the voltage difference\nthat is transmitted between boards. OUT and SENSEN."
 		(exclude_from_sim no)
 		(at 22.606 19.304 0)
