@@ -3551,84 +3551,360 @@
 		)
 	)
 	(no_connect
-		(at 160.02 33.02)
+		(at 91.44 99.06)
+		(uuid "04212c83-a203-4f25-99ee-0d4f755d787c")
+	)
+	(no_connect
+		(at 160.02 34.29)
 		(uuid "0440ca4c-3500-44ba-9583-d147f34b1db4")
 	)
 	(no_connect
-		(at 180.34 40.64)
+		(at 91.44 63.5)
+		(uuid "0840425d-f820-4abd-bafd-f8a257b29892")
+	)
+	(no_connect
+		(at 91.44 93.98)
+		(uuid "08c2a7c3-67d5-45d9-ae83-1ff571fd88a1")
+	)
+	(no_connect
+		(at 91.44 91.44)
+		(uuid "0de4d9f0-1ea3-422e-b27f-0993605c1359")
+	)
+	(no_connect
+		(at 213.36 119.38)
+		(uuid "1089c793-9c58-4fa4-9c6e-8969de2f2ebe")
+	)
+	(no_connect
+		(at 213.36 76.2)
+		(uuid "14c3fd75-4358-47df-b9bd-1f039dcc66e4")
+	)
+	(no_connect
+		(at 91.44 78.74)
+		(uuid "1600af76-408e-4a41-8411-93efe5417da2")
+	)
+	(no_connect
+		(at 180.34 41.91)
 		(uuid "1aa4cc3b-6696-4749-b5a9-57dbebda1c56")
 	)
 	(no_connect
-		(at 148.59 33.02)
+		(at 148.59 34.29)
 		(uuid "1c7a48a6-7b77-4364-8c4c-2bedc476a60a")
 	)
 	(no_connect
-		(at 124.46 55.88)
+		(at 91.44 109.22)
+		(uuid "3a68e9f2-e425-4397-883d-f5e97d408775")
+	)
+	(no_connect
+		(at 124.46 57.15)
 		(uuid "3af70a50-4276-413b-8745-ff9ed7a54836")
 	)
 	(no_connect
-		(at 180.34 50.8)
+		(at 91.44 83.82)
+		(uuid "44a11085-9f1c-42b9-aeda-c3e31bf4ae00")
+	)
+	(no_connect
+		(at 180.34 52.07)
 		(uuid "451ea26c-16fe-4341-a8dc-29507a5d654a")
 	)
 	(no_connect
-		(at 180.34 57.15)
+		(at 180.34 58.42)
 		(uuid "4bf76090-4a44-4e9c-b3e5-0b20f729d9c0")
 	)
 	(no_connect
-		(at 124.46 48.26)
+		(at 213.36 114.3)
+		(uuid "502a398d-cf81-4930-84da-4d34c60f1b1f")
+	)
+	(no_connect
+		(at 213.36 66.04)
+		(uuid "5b0dd633-b867-4fac-a103-2f38fac8909e")
+	)
+	(no_connect
+		(at 91.44 81.28)
+		(uuid "60bce48f-8608-4642-bdf8-0db5f2d9026e")
+	)
+	(no_connect
+		(at 213.36 106.68)
+		(uuid "61460a6b-fee6-4350-a502-5578ccef92f0")
+	)
+	(no_connect
+		(at 91.44 114.3)
+		(uuid "621a7d48-eb49-4825-a1a4-049daac5d502")
+	)
+	(no_connect
+		(at 124.46 49.53)
 		(uuid "6657f536-c26e-4ead-a87c-2f9c313a3d35")
 	)
 	(no_connect
-		(at 156.21 33.02)
+		(at 91.44 121.92)
+		(uuid "67308005-51ea-4811-9d3b-75788c2ab9d6")
+	)
+	(no_connect
+		(at 213.36 111.76)
+		(uuid "6be2a349-7a5e-48cc-b47a-cf0883d33a68")
+	)
+	(no_connect
+		(at 213.36 109.22)
+		(uuid "6e4baf90-1dbf-419b-817e-c75f1725c625")
+	)
+	(no_connect
+		(at 156.21 34.29)
 		(uuid "6f147013-0180-479c-a8c4-b34a91a897c8")
 	)
 	(no_connect
-		(at 124.46 50.8)
+		(at 91.44 106.68)
+		(uuid "742f3902-814b-4a14-9e5c-17082ddaf785")
+	)
+	(no_connect
+		(at 213.36 101.6)
+		(uuid "779deb3b-a399-40a4-ab0a-065b325bc04f")
+	)
+	(no_connect
+		(at 213.36 104.14)
+		(uuid "799c10d5-ac58-406d-9ecf-d854a64f1676")
+	)
+	(no_connect
+		(at 124.46 52.07)
 		(uuid "7c5c4d7c-a4d7-4f7e-b11c-d160b60c7be6")
 	)
 	(no_connect
-		(at 124.46 43.18)
+		(at 213.36 63.5)
+		(uuid "874d36f8-a42c-4c42-b562-60ec2e32775b")
+	)
+	(no_connect
+		(at 124.46 44.45)
 		(uuid "8a081094-fcfd-4377-be41-b066042b2e5a")
 	)
 	(no_connect
-		(at 180.34 45.72)
+		(at 213.36 71.12)
+		(uuid "8c4e1eac-86d4-4cfa-a335-18e8986cbe91")
+	)
+	(no_connect
+		(at 213.36 96.52)
+		(uuid "8d272b00-8656-4fa4-b267-7f89966b50e3")
+	)
+	(no_connect
+		(at 213.36 73.66)
+		(uuid "8f896ee0-7012-4b64-b869-549c40f8892d")
+	)
+	(no_connect
+		(at 213.36 116.84)
+		(uuid "90ddb402-7a27-462e-a721-e20b494a2735")
+	)
+	(no_connect
+		(at 180.34 46.99)
 		(uuid "91006fe6-1ef3-4317-bc85-dec5c264fd26")
 	)
 	(no_connect
-		(at 124.46 45.72)
+		(at 124.46 46.99)
 		(uuid "94c1bd07-99b4-48ce-9df5-963814bca23a")
 	)
 	(no_connect
-		(at 144.78 33.02)
+		(at 144.78 34.29)
 		(uuid "95dae9c8-91ed-4bec-8b1f-11048f9e7e40")
 	)
 	(no_connect
-		(at 152.4 33.02)
+		(at 152.4 34.29)
 		(uuid "96a42261-7923-4104-b380-c414aeb1ae28")
 	)
 	(no_connect
-		(at 124.46 124.46)
+		(at 91.44 76.2)
+		(uuid "9a6420d3-6230-4b09-8dd4-eb9aad90c663")
+	)
+	(no_connect
+		(at 213.36 86.36)
+		(uuid "9e0360d7-f777-4c4e-b18f-242110b078af")
+	)
+	(no_connect
+		(at 91.44 111.76)
+		(uuid "b15ebbd0-36ae-46e1-bde1-0a8e55ad1542")
+	)
+	(no_connect
+		(at 91.44 68.58)
+		(uuid "b1b4f3e2-5f10-4014-8aab-8b449afa0cea")
+	)
+	(no_connect
+		(at 213.36 78.74)
+		(uuid "b2735802-4a62-4cf1-89f5-6b86bb142922")
+	)
+	(no_connect
+		(at 213.36 83.82)
+		(uuid "b29d4b52-6a3c-4444-8093-04730b6df4a4")
+	)
+	(no_connect
+		(at 213.36 99.06)
+		(uuid "bed31ba7-e152-45fe-b8c1-98fcf3b9aa12")
+	)
+	(no_connect
+		(at 213.36 68.58)
+		(uuid "bfe37554-4056-4f6c-90c5-9c98dc86897a")
+	)
+	(no_connect
+		(at 124.46 125.73)
 		(uuid "cb82b582-e9e3-44b8-9b34-ffc3702e8420")
 	)
 	(no_connect
-		(at 180.34 54.61)
+		(at 180.34 55.88)
 		(uuid "cd6170e6-1e79-491e-a1f7-93fa703822bf")
 	)
 	(no_connect
-		(at 124.46 53.34)
+		(at 124.46 54.61)
 		(uuid "cf6a417a-506c-4b2f-8d3a-04caffc24059")
 	)
 	(no_connect
-		(at 180.34 43.18)
+		(at 180.34 44.45)
 		(uuid "d9559839-aeb8-41eb-9d7f-0421eefbb7cf")
 	)
 	(no_connect
-		(at 180.34 48.26)
+		(at 213.36 81.28)
+		(uuid "e143884e-f434-456f-a9c4-72a629965564")
+	)
+	(no_connect
+		(at 91.44 96.52)
+		(uuid "e391440a-ea2d-463c-a1c3-e8b9bbb711de")
+	)
+	(no_connect
+		(at 180.34 49.53)
 		(uuid "e6ff5e81-a87f-4659-a60b-014ac89852a2")
+	)
+	(no_connect
+		(at 91.44 66.04)
+		(uuid "f973e54a-943d-4149-997f-7c12f7b96bb2")
+	)
+	(hierarchical_label "MISO"
+		(shape input)
+		(at 213.36 88.9 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "15fb66e5-090e-47a9-9ee4-7c118b5787af")
+	)
+	(hierarchical_label "3.3V"
+		(shape output)
+		(at 91.44 116.84 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "44fc4526-5da8-4469-81a5-0a78890a39e9")
+	)
+	(hierarchical_label "SCL"
+		(shape output)
+		(at 91.44 104.14 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "4b16d5b2-4a32-411b-8ae8-fa2a58e1d32a")
+	)
+	(hierarchical_label "GND"
+		(shape bidirectional)
+		(at 213.36 121.92 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4de5adc8-abe1-44e3-8b42-2f652474e549")
+	)
+	(hierarchical_label "GND"
+		(shape bidirectional)
+		(at 91.44 119.38 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7bb693e4-79ea-497e-bbca-8135ecfbe902")
+	)
+	(hierarchical_label "CS1"
+		(shape output)
+		(at 91.44 71.12 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "b6eeb9a2-d3e3-42d0-8e11-492e16546cb4")
+	)
+	(hierarchical_label "CS2"
+		(shape output)
+		(at 91.44 73.66 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "b8f76668-b495-4a32-893b-7b9b2ac45ffb")
+	)
+	(hierarchical_label "GND"
+		(shape bidirectional)
+		(at 91.44 86.36 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ba1cff64-2c73-445b-bb0a-ddfa649dedfd")
+	)
+	(hierarchical_label "CS3"
+		(shape output)
+		(at 213.36 93.98 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "bed404c0-c1cd-42d6-a892-da4145041cfe")
+	)
+	(hierarchical_label "MOSI"
+		(shape output)
+		(at 213.36 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c517b29a-b50f-41f6-9f2f-4bd523e01829")
+	)
+	(hierarchical_label "SCK"
+		(shape output)
+		(at 91.44 88.9 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "dfafa54d-c0d6-4859-bcb4-a06171f001b4")
+	)
+	(hierarchical_label "SDA"
+		(shape bidirectional)
+		(at 91.44 101.6 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ef700832-3b78-4b96-9c05-4802fa27f6e5")
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x24_Socket")
-		(at 96.52 90.17 0)
+		(at 96.52 91.44 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3636,7 +3912,7 @@
 		(dnp no)
 		(uuid "3799044c-4685-4670-a853-00656a1da85e")
 		(property "Reference" "J3"
-			(at 94.488 56.388 0)
+			(at 94.488 57.658 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3645,7 +3921,7 @@
 			)
 		)
 		(property "Value" "Conn_01x24_Socket"
-			(at 77.978 58.928 0)
+			(at 77.978 60.198 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3654,7 +3930,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 96.52 90.17 0)
+			(at 96.52 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3663,7 +3939,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 96.52 90.17 0)
+			(at 96.52 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3672,7 +3948,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x24, script generated"
-			(at 96.52 90.17 0)
+			(at 96.52 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3681,7 +3957,7 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC241LFBN-RC/810196"
-			(at 96.52 90.17 0)
+			(at 96.52 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3690,7 +3966,7 @@
 			)
 		)
 		(property "Cost" "$1.350"
-			(at 96.52 90.17 0)
+			(at 96.52 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3781,7 +4057,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x24_Socket")
-		(at 208.28 92.71 180)
+		(at 208.28 93.98 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3789,7 +4065,7 @@
 		(dnp no)
 		(uuid "45d12987-dffd-4851-8fa9-e61c6f4eb8a8")
 		(property "Reference" "J4"
-			(at 209.296 55.626 0)
+			(at 209.296 56.896 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3797,7 +4073,7 @@
 			)
 		)
 		(property "Value" "Conn_01x24_Socket"
-			(at 217.678 58.42 0)
+			(at 217.678 59.69 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3805,7 +4081,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 208.28 92.71 0)
+			(at 208.28 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3814,7 +4090,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 208.28 92.71 0)
+			(at 208.28 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3823,7 +4099,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x24, script generated"
-			(at 208.28 92.71 0)
+			(at 208.28 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3832,7 +4108,7 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC241LFBN-RC/810196"
-			(at 208.28 92.71 0)
+			(at 208.28 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3841,7 +4117,7 @@
 			)
 		)
 		(property "Cost" "$1.350"
-			(at 208.28 92.71 0)
+			(at 208.28 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3932,7 +4208,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x24_Pin")
-		(at 119.38 90.17 0)
+		(at 119.38 91.44 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
@@ -3940,7 +4216,7 @@
 		(dnp no)
 		(uuid "da63b5c7-984d-4786-824d-6b55aab92742")
 		(property "Reference" "J1"
-			(at 121.412 55.626 0)
+			(at 121.412 56.896 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3948,7 +4224,7 @@
 			)
 		)
 		(property "Value" "Conn_01x24_Pin"
-			(at 114.808 58.166 0)
+			(at 114.808 59.436 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3956,7 +4232,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 119.38 90.17 0)
+			(at 119.38 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3965,7 +4241,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 119.38 90.17 0)
+			(at 119.38 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3974,7 +4250,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x24, script generated"
-			(at 119.38 90.17 0)
+			(at 119.38 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3983,7 +4259,7 @@
 			)
 		)
 		(property "Purchase Link" ""
-			(at 119.38 90.17 0)
+			(at 119.38 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4074,7 +4350,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x24_Pin")
-		(at 185.42 92.71 180)
+		(at 185.42 93.98 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
@@ -4082,7 +4358,7 @@
 		(dnp no)
 		(uuid "db5780ec-aa30-4e0e-a225-19e5c9c3d1f5")
 		(property "Reference" "J2"
-			(at 183.896 56.134 0)
+			(at 183.896 57.404 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4091,7 +4367,7 @@
 			)
 		)
 		(property "Value" "Conn_01x24_Pin"
-			(at 183.896 58.674 0)
+			(at 183.896 59.944 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4100,7 +4376,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 185.42 92.71 0)
+			(at 185.42 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4109,7 +4385,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 185.42 92.71 0)
+			(at 185.42 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4118,7 +4394,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x24, script generated"
-			(at 185.42 92.71 0)
+			(at 185.42 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4127,7 +4403,7 @@
 			)
 		)
 		(property "Purchase Link" ""
-			(at 185.42 92.71 0)
+			(at 185.42 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4218,7 +4494,7 @@
 	)
 	(symbol
 		(lib_id "teensy:Teensy4.1")
-		(at 152.4 66.04 180)
+		(at 152.4 67.31 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
@@ -4227,7 +4503,7 @@
 		(fields_autoplaced yes)
 		(uuid "dd0c0ca7-5814-47da-aa06-3b99aa4d61cb")
 		(property "Reference" "U1"
-			(at 152.4 129.54 0)
+			(at 152.4 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4235,7 +4511,7 @@
 			)
 		)
 		(property "Value" "Teensy4.1"
-			(at 152.4 132.08 0)
+			(at 152.4 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4243,7 +4519,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 162.56 76.2 0)
+			(at 162.56 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4252,7 +4528,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 162.56 76.2 0)
+			(at 162.56 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4261,7 +4537,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 152.4 66.04 0)
+			(at 152.4 67.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4270,7 +4546,7 @@
 			)
 		)
 		(property "Purchase Link" ""
-			(at 152.4 66.04 0)
+			(at 152.4 67.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)

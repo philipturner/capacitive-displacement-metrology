@@ -1216,6 +1216,17 @@
 		)
 		(uuid 6a26c4cc-97cf-40d8-9da2-932b0affc939)
 	)
+	(text "Do not create cutouts for shield to be\nacross the isolation barrier. This\ncauses too many issues and is just a\nwaste of time in the design phase."
+		(exclude_from_sim no)
+		(at 232.41 26.416 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "2795d1ed-ff7a-4eab-b186-930a298d2aea")
+	)
 	(text "Analog / High Voltage"
 		(exclude_from_sim no)
 		(at 25.654 22.86 0)
@@ -1226,17 +1237,6 @@
 			(justify left top)
 		)
 		(uuid "4e1bf69b-86da-4c5f-8574-b7c05ac7f737")
-	)
-	(text "Add cutouts for shield in the isolation barrier"
-		(exclude_from_sim no)
-		(at 107.442 16.764 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "9fd7ef56-93f7-4d0c-9fe0-f71d0a29f2c4")
 	)
 	(text "Digital"
 		(exclude_from_sim no)
