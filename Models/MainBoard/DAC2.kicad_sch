@@ -2283,6 +2283,24 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$13.230"
+			(at 127 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/texas-instruments/DAC81401PWR/22077523"
+			(at 127 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "5"
 			(uuid "f041b80e-35bf-499d-a26d-5c2820fb0f2a")
 		)

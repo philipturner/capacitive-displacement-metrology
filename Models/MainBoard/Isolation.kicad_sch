@@ -2608,7 +2608,16 @@
 				)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/texas-instruments/ISO7761DWR/22517079"
+			(at 127 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$3.670"
 			(at 127 60.96 0)
 			(effects
 				(font
@@ -2727,7 +2736,16 @@
 				)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/texas-instruments/ISO1641DWR/15666790"
+			(at 147.32 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$4.550"
 			(at 147.32 142.24 0)
 			(effects
 				(font

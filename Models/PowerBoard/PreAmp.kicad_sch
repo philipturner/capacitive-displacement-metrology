@@ -2477,6 +2477,15 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.059"
+			(at 86.36 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "406fd8e9-a18d-4c79-971c-12189e7d8ceb")
 		)
@@ -2567,6 +2576,15 @@
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/evvo/1N4007W/21407138"
 			(at 111.76 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.059"
+			(at 111.76 135.89 90)
 			(effects
 				(font
 					(size 1.27 1.27)

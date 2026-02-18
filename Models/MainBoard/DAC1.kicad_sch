@@ -3029,6 +3029,24 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$41.54"
+			(at 132.08 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.mouser.com/ProductDetail/Texas-Instruments/DAC81404RHBT?qs=81r%252BiQLm7BQ4JX8PINPzgw%3D%3D"
+			(at 132.08 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "28"
 			(uuid "857a05ab-4a6f-4127-b490-52fa158f1bac")
 		)

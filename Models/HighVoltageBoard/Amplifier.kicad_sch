@@ -2654,6 +2654,15 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.283"
+			(at 125.73 86.36 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "16978303-567d-45eb-9f8c-4d201152418f")
 		)
@@ -3196,6 +3205,15 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.041"
+			(at 177.8 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "0c1e4f4b-4e63-4b9f-9cfd-42a44788e145")
 		)
@@ -3362,6 +3380,15 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.283"
+			(at 97.79 82.55 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "ce622289-5887-4fb9-a3e4-63c1b5ff0a4c")
 		)
@@ -3448,6 +3475,15 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRJ55DR7LV474KW01L/16821217"
+			(at 114.3 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.646"
 			(at 114.3 143.51 0)
 			(effects
 				(font
@@ -3695,6 +3731,15 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/cal-chip-electronics-inc/CHV1206N1K0100KCT/27524496"
+			(at 182.88 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.079"
 			(at 182.88 87.63 0)
 			(effects
 				(font
@@ -4056,6 +4101,15 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.646"
+			(at 139.7 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "a19f89d9-3c93-4928-9c51-e2388109577c")
 		)
@@ -4140,6 +4194,15 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/TNPV12101M00BEEN/5361792"
+			(at 160.02 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.980"
 			(at 160.02 74.93 0)
 			(effects
 				(font
@@ -4310,6 +4373,15 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay/MCT06030D2802BP500/462794"
+			(at 160.02 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.089"
 			(at 160.02 62.23 0)
 			(effects
 				(font

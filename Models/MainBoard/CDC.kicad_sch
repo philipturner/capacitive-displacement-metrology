@@ -1608,6 +1608,24 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$14.230"
+			(at 114.3 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/analog-devices-inc/AD7745ARUZ-REEL/994647"
+			(at 114.3 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "14"
 			(uuid "005d27c8-3db0-4331-83ef-cf8c3b3628b6")
 		)

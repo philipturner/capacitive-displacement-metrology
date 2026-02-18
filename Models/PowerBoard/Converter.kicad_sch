@@ -2624,6 +2624,15 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.059"
+			(at 86.36 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "12e83a73-1d53-473d-891f-81da5f5d83d5")
 		)

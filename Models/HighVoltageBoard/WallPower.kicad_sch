@@ -1455,6 +1455,15 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.370"
+			(at 177.8 101.6 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "cdef3e91-7fb7-4aef-8ae7-8766f0f568ff")
 		)
@@ -1542,6 +1551,15 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/taiwan-semiconductor-corporation/GS1Z/28023582"
+			(at 168.91 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.093"
 			(at 168.91 109.22 0)
 			(effects
 				(font
@@ -1646,6 +1664,15 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.093"
+			(at 168.91 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "d42b540d-8add-42c3-8d29-3363eecb8514")
 		)
@@ -1715,6 +1742,15 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/RCV12061M00JNEA/4303607"
+			(at 195.58 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.109"
 			(at 195.58 86.36 0)
 			(effects
 				(font
@@ -2057,6 +2093,15 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.370"
+			(at 177.8 86.36 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "aa08a6cc-f3b6-429e-a7b1-b73339defa94")
 		)
@@ -2360,6 +2405,15 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/RCV12061M00JNEA/4303607"
+			(at 195.58 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.109"
 			(at 195.58 101.6 0)
 			(effects
 				(font
