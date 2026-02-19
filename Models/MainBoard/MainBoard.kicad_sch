@@ -5662,7 +5662,7 @@
 				)
 			)
 		)
-		(property "Value" "10"
+		(property "Value" "10, 1%"
 			(at 77.47 54.61 90)
 			(effects
 				(font
@@ -5697,8 +5697,17 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/CRCW060310R0FKEA/1174440"
 			(at 77.47 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.030"
+			(at 77.47 58.42 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6913,7 +6922,7 @@
 				)
 			)
 		)
-		(property "Value" "10"
+		(property "Value" "10, 1%"
 			(at 77.47 105.41 90)
 			(effects
 				(font
@@ -6948,8 +6957,17 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/CRCW060310R0FKEA/1174440"
 			(at 77.47 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.030"
+			(at 77.47 109.22 90)
 			(effects
 				(font
 					(size 1.27 1.27)

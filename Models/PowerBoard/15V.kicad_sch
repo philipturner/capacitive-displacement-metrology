@@ -1505,6 +1505,24 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.074"
+			(at 66.04 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRM188R71H224KAC4D/5797498"
+			(at 66.04 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "a99cc423-bc06-4e0b-a305-ab0118207898")
 		)
@@ -1567,6 +1585,24 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 106.68 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.078"
+			(at 106.68 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRT188R61H105KE13D/5416752"
 			(at 106.68 118.11 0)
 			(effects
 				(font
@@ -1645,7 +1681,16 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/texas-instruments/LM7815CT-NOPB/3901976"
+			(at 68.58 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.800"
 			(at 68.58 55.88 0)
 			(effects
 				(font
@@ -1719,6 +1764,24 @@
 			)
 		)
 		(property "Description" ""
+			(at 68.58 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.480"
+			(at 68.58 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.mouser.com/ProductDetail/Texas-Instruments/LM7915CT-NOPB?qs=QbsRYf82W3F%252BRPQrGl%252ByOA%3D%3D"
 			(at 68.58 132.08 0)
 			(effects
 				(font
@@ -1801,8 +1864,17 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/diodes-incorporated/1N5819HW-7-F/814970"
 			(at 137.16 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.166"
+			(at 137.16 67.31 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2119,8 +2191,17 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/diodes-incorporated/1N5819HW-7-F/814970"
 			(at 129.54 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.166"
+			(at 129.54 118.11 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2500,7 +2581,16 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRT188R61H105KE13D/5416752"
+			(at 106.68 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.078"
 			(at 106.68 148.59 0)
 			(effects
 				(font
@@ -2637,6 +2727,24 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 114.3 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.079"
+			(at 114.3 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRM188R72A104KA35D/702549"
 			(at 114.3 67.31 0)
 			(effects
 				(font

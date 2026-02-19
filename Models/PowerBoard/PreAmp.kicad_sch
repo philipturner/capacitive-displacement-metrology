@@ -1871,6 +1871,24 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.078"
+			(at 106.68 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRT188R61H105KE13D/5416752"
+			(at 106.68 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "d7f702d8-737f-431e-bf59-328faa3d7c17")
 		)
@@ -1941,7 +1959,16 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/texas-instruments/LM7805CT-NOPB/3901929"
+			(at 68.58 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.800"
 			(at 68.58 55.88 0)
 			(effects
 				(font
@@ -2092,8 +2119,17 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/diodes-incorporated/1N5819HW-7-F/814970"
 			(at 129.54 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.166"
+			(at 129.54 118.11 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2171,7 +2207,16 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRT188R61H105KE13D/5416752"
+			(at 106.68 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.078"
 			(at 106.68 148.59 0)
 			(effects
 				(font
@@ -2242,6 +2287,24 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 210.82 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.087"
+			(at 210.82 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRM21BR61E106KA73K/4905532"
 			(at 210.82 57.15 0)
 			(effects
 				(font
@@ -2993,6 +3056,24 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.079"
+			(at 114.3 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRM188R72A104KA35D/702549"
+			(at 114.3 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "9a48df79-94cd-49dc-b563-4c5334c98cb4")
 		)
@@ -3063,7 +3144,16 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/texas-instruments/LM7905CT-NOPB/6349"
+			(at 68.58 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.530"
 			(at 68.58 132.08 0)
 			(effects
 				(font
@@ -3215,6 +3305,24 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.074"
+			(at 66.04 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRM188R71H224KAC4D/5797498"
+			(at 66.04 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "0cde445c-33a9-4e95-9014-ec4baf45c9cd")
 		)
@@ -3352,6 +3460,24 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.087"
+			(at 210.82 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRM21BR61E106KA73K/4905532"
+			(at 210.82 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "2f6558d3-16bb-4d7f-b8ee-3d63336f43bf")
 		)
@@ -3423,8 +3549,17 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/diodes-incorporated/1N5819HW-7-F/814970"
 			(at 137.16 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.166"
+			(at 137.16 67.31 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3568,6 +3703,24 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$2.050"
+			(at 203.2 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/bourns-inc/3296Y-1-102LF/1088084"
+			(at 203.2 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "e60817a0-03a4-4e76-963a-807426a4d06d")
 		)
@@ -3633,6 +3786,24 @@
 			)
 		)
 		(property "Description" "Potentiometer, US symbol"
+			(at 203.2 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$2.050"
+			(at 203.2 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/bourns-inc/3296Y-1-102LF/1088084"
 			(at 203.2 116.84 0)
 			(effects
 				(font

@@ -1782,17 +1782,6 @@
 		)
 		(uuid "862b80a8-18a5-4f2f-90d6-8028077786e0")
 	)
-	(text "Footprints for the large components:\nRESC1206\nRESC1210\nCAPC1206_CHV\nCAPC2220\n\nTo designate that they deviate from the\nstandard Vishay resistor or Murata capacitor,\na suffix is applied to a one-off footprint\ngenerated from vendor-specific tolerances.\n"
-		(exclude_from_sim no)
-		(at 234.442 17.526 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "895399d6-4c0a-46b3-956f-ed9784bc1d17")
-	)
 	(text "Excluded from BOM because of high cost\nand not needed until Phase I"
 		(exclude_from_sim no)
 		(at 218.948 66.04 0)
