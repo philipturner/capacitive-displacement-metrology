@@ -4,4 +4,5 @@
   (lib (name "IC")(type "KiCad")(uri "${KIPRJMOD}/../libraries/IC.pretty")(options "")(descr ""))
   (lib (name "ThreeTerminal")(type "KiCad")(uri "${KIPRJMOD}/../libraries/ThreeTerminal.pretty")(options "")(descr ""))
   (lib (name "TwoTerminal")(type "KiCad")(uri "${KIPRJMOD}/../libraries/TwoTerminal.pretty")(options "")(descr ""))
+  (lib (name "Multicomp_Temp")(type "KiCad")(uri "/Users/philipturner/Documents/STM/capacitive-displacement-metrology/Models/libraries/Multicomp_Temp")(options "")(descr ""))
 )

@@ -1,4 +1,4 @@
-26610310597748770
+26606779238534236
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -72589,6 +72589,13 @@ threaded screw
 0
 4
 1
+Multicomp_Temp
+242431
+24.243.1-1
+Connector
+0
+2
+2
 NetTie
 NetTie-2_SMD_Pad0.5mm
 Net tie, 2 pin, 0.5mm square SMD pads
@@ -104588,27 +104595,6 @@ RESC0805
 2
 TwoTerminal
 SOD-123
-
-
-0
-2
-2
-TwoTerminal
-THT_2.54mm
-
-
-0
-2
-2
-TwoTerminal
-THT_10.16mm
-
-
-0
-2
-2
-TwoTerminal
-THT_12.70mm
 
 
 0
