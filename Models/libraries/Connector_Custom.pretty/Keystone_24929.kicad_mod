@@ -1,14 +1,14 @@
-(footprint "DowelPin_2.5mm"
+(footprint "Keystone_24929"
 	(version 20241229)
 	(generator "pcbnew")
 	(generator_version "9.0")
 	(layer "F.Cu")
 	(property "Reference" "REF**"
-		(at 0.07 -2.555 0)
+		(at 0.255 -6.305 0)
 		(unlocked yes)
 		(layer "F.SilkS")
 		(hide yes)
-		(uuid "df91abb3-6220-4bf0-a7e0-8282196c431e")
+		(uuid "8e63193a-7aea-4b61-84e5-ed2d8a08eee7")
 		(effects
 			(font
 				(size 0.8 0.8)
@@ -16,12 +16,12 @@
 			)
 		)
 	)
-	(property "Value" "DowelPin_2.5mm"
-		(at 0.07 -1.355 0)
+	(property "Value" "Keystone_24929"
+		(at 0.22 -10.14 0)
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "d29174fb-0a52-43b6-8a6d-9abc2ae9b0d6")
+		(uuid "35454b77-bff9-465e-a7a9-d9787923cd54")
 		(effects
 			(font
 				(size 0.8 0.8)
@@ -34,7 +34,7 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "3739b3cf-f208-4b10-93e7-8353db698bca")
+		(uuid "acbe4adb-dea6-4469-8d54-005bcc45ee59")
 		(effects
 			(font
 				(size 0.8 0.8)
@@ -47,7 +47,7 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "06371383-b8cc-4dfb-87b6-831f51a2d310")
+		(uuid "053b2a46-8429-4e0c-b2c8-7d51105dacdc")
 		(effects
 			(font
 				(size 0.8 0.8)
@@ -56,12 +56,13 @@
 		)
 	)
 	(attr through_hole)
-	(pad "" np_thru_hole circle
+	(pad "1" thru_hole circle
 		(at 0 0)
-		(size 2.6 2.6)
-		(drill 2.6)
-		(layers "*.Cu" "*.Paste" "*.Mask")
-		(uuid "b96bf32e-1b3e-4d58-a8af-4253c197d344")
+		(size 6.2 6.2)
+		(drill 4.2)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "5022795f-4c3f-451f-9d9a-5bf49014727d")
 	)
 	(embedded_fonts no)
 )

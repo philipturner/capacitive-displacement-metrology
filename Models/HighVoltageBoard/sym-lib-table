@@ -3,5 +3,4 @@
   (lib (name "teensy")(type "KiCad")(uri "${KIPRJMOD}/../libraries/teensy/teensy.kicad_sym")(options "")(descr ""))
   (lib (name "Custom")(type "KiCad")(uri "${KIPRJMOD}/../libraries/Custom.kicad_sym")(options "")(descr ""))
   (lib (name "Vendor")(type "KiCad")(uri "${KIPRJMOD}/../libraries/Vendor.kicad_sym")(options "")(descr ""))
-  (lib (name "Multicomp_Temp")(type "KiCad")(uri "/Users/philipturner/Documents/STM/capacitive-displacement-metrology/Models/libraries/Multicomp_Temp/24_243_1.kicad_sym")(options "")(descr ""))
 )

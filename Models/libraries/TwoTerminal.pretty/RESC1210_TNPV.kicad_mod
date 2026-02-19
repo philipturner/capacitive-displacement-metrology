@@ -1,0 +1,84 @@
+(footprint "RESC1210_TNPV"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0.035 -12.465 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "35b5e72f-77d5-48b4-8367-b6daaa95fb59")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Value" "RESC1210_TNPV"
+		(at 0.035 -11.265 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "f6d67724-8303-4f9c-80e9-a954112f3a95")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "bb944422-203f-42cd-8788-32bff376632f")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "cf68f2f0-c90f-4e0e-a385-62fdcfb6b585")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(attr smd)
+	(fp_text user "${REFERENCE}"
+		(at 0.035 -10.065 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "65ad960e-31ca-4310-8418-1eaaf15a1e95")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(pad "1" smd roundrect
+		(at -1.5575 0)
+		(size 1.345 2.76)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "fb120e14-d822-48f4-bca0-f853d04b3014")
+	)
+	(pad "2" smd roundrect
+		(at 1.5575 0)
+		(size 1.345 2.76)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "efeebecf-1425-4bbb-a8ac-1517a134d5da")
+	)
+	(embedded_fonts no)
+)
