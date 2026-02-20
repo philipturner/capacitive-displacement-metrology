@@ -2510,7 +2510,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/texas-instruments/ADS8699IPWR/6600065"
+		(property "Purchase Link" ""
 			(at 86.36 81.28 0)
 			(effects
 				(font

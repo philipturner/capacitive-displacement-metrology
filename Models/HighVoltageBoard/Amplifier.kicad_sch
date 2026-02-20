@@ -2848,6 +2848,15 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$283.630"
+			(at 209.55 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "7"
 			(uuid "a3920a06-9235-42e6-8e90-d467c0ea3c9a")
 		)

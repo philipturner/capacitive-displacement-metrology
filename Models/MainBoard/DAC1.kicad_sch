@@ -3074,7 +3074,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" "$41.54"
+		(property "Cost" "$41.540"
 			(at 132.08 86.36 0)
 			(effects
 				(font

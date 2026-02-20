@@ -1275,9 +1275,9 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "OPA828: already have one in stock, but order two\nspares to not worry about supply during Phase II"
+	(text "OPA828: Already have one in stock; order two spares\n(3 total) and stock will be 4. That way, do not\nhave to worry about supply during Phase II."
 		(exclude_from_sim no)
-		(at 142.494 60.198 0)
+		(at 141.224 57.912 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2061,7 +2061,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" "$7.45"
+		(property "Cost" "$7.450"
 			(at 137.16 73.66 0)
 			(effects
 				(font
