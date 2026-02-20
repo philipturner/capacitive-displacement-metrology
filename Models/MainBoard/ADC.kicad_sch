@@ -1712,7 +1712,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0603"
 			(at 220.98 75.2348 0)
 			(effects
 				(font
@@ -1798,7 +1798,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:NetTie_0.2mm"
 			(at 233.68 50.8 0)
 			(effects
 				(font
@@ -2000,7 +2000,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0805"
 			(at 220.98 113.3348 0)
 			(effects
 				(font
@@ -2153,7 +2153,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0603"
 			(at 220.98 49.8348 0)
 			(effects
 				(font
@@ -2239,7 +2239,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:NetTie_0.2mm"
 			(at 233.68 76.2 0)
 			(effects
 				(font
@@ -2307,7 +2307,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0805"
 			(at 220.98 62.5348 0)
 			(effects
 				(font
@@ -2395,7 +2395,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0805"
 			(at 51.7652 101.6 0)
 			(effects
 				(font
@@ -2481,7 +2481,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "IC:TSSOP-16"
 			(at 86.36 81.28 0)
 			(effects
 				(font
@@ -2602,7 +2602,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0805"
 			(at 220.98 87.9348 0)
 			(effects
 				(font
@@ -2688,7 +2688,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0603"
 			(at 220.98 100.6348 0)
 			(effects
 				(font
@@ -2907,7 +2907,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:RESC0603"
 			(at 171.704 98.044 90)
 			(effects
 				(font

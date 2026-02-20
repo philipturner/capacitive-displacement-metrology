@@ -1920,7 +1920,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x8"
 			(at 218.44 38.1 0)
 			(effects
 				(font
@@ -2025,7 +2025,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "IC:SOIC-8"
 			(at 137.16 73.66 0)
 			(effects
 				(font
@@ -2129,7 +2129,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:RESC0603"
 			(at 136.144 98.044 90)
 			(effects
 				(font
@@ -2215,7 +2215,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:RESC0603"
 			(at 152.654 39.624 90)
 			(effects
 				(font
@@ -2301,7 +2301,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x3"
 			(at 143.51 33.02 0)
 			(effects
 				(font
@@ -2456,7 +2456,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x8"
 			(at 218.44 71.12 0)
 			(effects
 				(font
@@ -2629,7 +2629,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0603"
 			(at 122.8852 124.46 0)
 			(effects
 				(font
@@ -2982,7 +2982,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0603"
 			(at 148.2852 124.46 0)
 			(effects
 				(font

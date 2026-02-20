@@ -640,7 +640,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:Multicomp_24.243"
 			(at 165.1 96.52 0)
 			(effects
 				(font
@@ -728,7 +728,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:Multicomp_24.243"
 			(at 165.1 71.12 0)
 			(effects
 				(font
@@ -816,7 +816,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:Multicomp_24.243"
 			(at 165.1 83.82 0)
 			(effects
 				(font

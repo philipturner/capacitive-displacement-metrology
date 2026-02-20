@@ -2027,7 +2027,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0603"
 			(at 92.4052 88.9 0)
 			(effects
 				(font
@@ -2115,7 +2115,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:RESC0603"
 			(at 181.356 131.064 90)
 			(effects
 				(font
@@ -2201,7 +2201,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:NetTie_0.2mm"
 			(at 198.12 137.16 0)
 			(effects
 				(font
@@ -2271,7 +2271,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0603"
 			(at 163.5252 88.9 0)
 			(effects
 				(font
@@ -2359,7 +2359,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:RESC0603"
 			(at 64.516 131.064 90)
 			(effects
 				(font
@@ -2447,7 +2447,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:RESC0603"
 			(at 79.756 131.064 90)
 			(effects
 				(font
@@ -2533,7 +2533,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:NetTie_0.2mm"
 			(at 55.88 137.16 0)
 			(effects
 				(font
@@ -2603,7 +2603,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0603"
 			(at 64.4652 147.32 0)
 			(effects
 				(font
@@ -2688,7 +2688,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "IC:SOIC-16-Wide"
 			(at 127 60.96 0)
 			(effects
 				(font
@@ -2816,7 +2816,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "IC:SOIC-16-Wide"
 			(at 147.32 142.24 0)
 			(effects
 				(font
@@ -2945,7 +2945,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:NetTie_0.2mm"
 			(at 83.82 78.74 0)
 			(effects
 				(font
@@ -3015,7 +3015,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0603"
 			(at 181.3052 147.32 0)
 			(effects
 				(font
@@ -3103,7 +3103,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:RESC0603"
 			(at 166.116 131.064 90)
 			(effects
 				(font
@@ -3189,7 +3189,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:NetTie_0.2mm"
 			(at 170.18 78.74 0)
 			(effects
 				(font

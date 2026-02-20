@@ -1340,7 +1340,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x13"
 			(at 213.36 101.6 0)
 			(effects
 				(font
@@ -1461,7 +1461,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:DowelPin_2.5mm"
 			(at 256.54 55.88 0)
 			(effects
 				(font
@@ -1534,7 +1534,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
+		(property "Footprint" "Connector_Custom:Keystone_24929"
 			(at 256.54 26.67 0)
 			(effects
 				(font
@@ -1685,7 +1685,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:DowelPin_2.5mm"
 			(at 228.6 55.88 0)
 			(effects
 				(font
@@ -1758,7 +1758,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
+		(property "Footprint" "Connector_Custom:Keystone_24929"
 			(at 228.6 41.91 0)
 			(effects
 				(font
@@ -1975,7 +1975,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
+		(property "Footprint" "Connector_Custom:Keystone_24929"
 			(at 228.6 26.67 0)
 			(effects
 				(font
@@ -2390,7 +2390,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
+		(property "Footprint" "Connector_Custom:Keystone_24929"
 			(at 256.54 41.91 0)
 			(effects
 				(font

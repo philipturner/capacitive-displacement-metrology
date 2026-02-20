@@ -1844,7 +1844,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0603"
 			(at 107.6452 121.92 0)
 			(effects
 				(font
@@ -1930,7 +1930,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "ThreeTerminal:TO-220"
 			(at 68.58 55.88 0)
 			(effects
 				(font
@@ -2092,7 +2092,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:SOD-123"
 			(at 129.54 118.11 0)
 			(effects
 				(font
@@ -2180,7 +2180,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0603"
 			(at 107.6452 152.4 0)
 			(effects
 				(font
@@ -2268,7 +2268,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0805"
 			(at 211.7852 60.96 0)
 			(effects
 				(font
@@ -2486,7 +2486,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:SOD-123FL"
 			(at 86.36 38.1 0)
 			(effects
 				(font
@@ -2592,7 +2592,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:SOD-123FL"
 			(at 111.76 135.89 0)
 			(effects
 				(font
@@ -3029,7 +3029,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0603"
 			(at 115.2652 71.12 0)
 			(effects
 				(font
@@ -3115,7 +3115,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "ThreeTerminal:TO-220"
 			(at 68.58 132.08 0)
 			(effects
 				(font
@@ -3278,7 +3278,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0603"
 			(at 67.0052 71.12 0)
 			(effects
 				(font
@@ -3433,7 +3433,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0805"
 			(at 211.7852 114.3 0)
 			(effects
 				(font
@@ -3522,7 +3522,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:SOD-123"
 			(at 137.16 67.31 0)
 			(effects
 				(font
@@ -3676,7 +3676,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "ThreeTerminal:Bourns_3296Y"
 			(at 203.2 50.8 0)
 			(effects
 				(font
@@ -3767,7 +3767,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "ThreeTerminal:Bourns_3296Y"
 			(at 203.2 116.84 0)
 			(effects
 				(font

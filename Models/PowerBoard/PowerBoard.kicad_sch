@@ -2195,7 +2195,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:RFPC-SMA27-F"
 			(at 38.1 50.8 0)
 			(effects
 				(font
@@ -2548,7 +2548,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:DowelPin_2.5mm"
 			(at 139.7 177.8 0)
 			(effects
 				(font
@@ -2685,7 +2685,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x4"
 			(at 66.04 152.4 0)
 			(effects
 				(font
@@ -3112,7 +3112,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:DowelPin_2.5mm"
 			(at 111.76 177.8 0)
 			(effects
 				(font
@@ -3185,7 +3185,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:RFPC-SMA27-F"
 			(at 38.1 127 0)
 			(effects
 				(font
@@ -3273,7 +3273,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
+		(property "Footprint" "Connector_Custom:Keystone_24929"
 			(at 139.7 163.83 0)
 			(effects
 				(font
@@ -3356,7 +3356,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x9"
 			(at 127 111.76 0)
 			(effects
 				(font
@@ -3465,7 +3465,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
+		(property "Footprint" "Connector_Custom:Keystone_24929"
 			(at 139.7 148.59 0)
 			(effects
 				(font
@@ -3682,7 +3682,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x4"
 			(at 66.04 25.4 0)
 			(effects
 				(font
@@ -3909,7 +3909,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
+		(property "Footprint" "Connector_Custom:Keystone_24929"
 			(at 111.76 148.59 0)
 			(effects
 				(font
@@ -4327,7 +4327,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:RFPC-SMA27-F"
 			(at 38.1 25.4 0)
 			(effects
 				(font
@@ -4413,7 +4413,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x4"
 			(at 66.04 127 0)
 			(effects
 				(font
@@ -4572,7 +4572,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x4"
 			(at 66.04 76.2 0)
 			(effects
 				(font
@@ -4997,7 +4997,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:RFPC-SMA27-F"
 			(at 38.1 152.4 0)
 			(effects
 				(font
@@ -5083,7 +5083,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x4"
 			(at 66.04 101.6 0)
 			(effects
 				(font
@@ -5177,7 +5177,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5_DIN965_Pad"
+		(property "Footprint" "Connector_Custom:Keystone_24929"
 			(at 111.76 163.83 0)
 			(effects
 				(font
@@ -5260,7 +5260,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x4"
 			(at 66.04 50.8 0)
 			(effects
 				(font

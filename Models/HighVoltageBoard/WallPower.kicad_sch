@@ -1419,7 +1419,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:DO-214AA"
 			(at 177.8 101.6 0)
 			(effects
 				(font
@@ -1505,7 +1505,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:DO-214AC"
 			(at 168.91 109.22 0)
 			(effects
 				(font
@@ -1610,7 +1610,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:DO-214AC"
 			(at 168.91 78.74 0)
 			(effects
 				(font
@@ -1715,7 +1715,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:RESC1206_RCV"
 			(at 196.596 86.614 90)
 			(effects
 				(font
@@ -1801,7 +1801,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:Multicomp_24.243"
 			(at 132.08 73.66 0)
 			(effects
 				(font
@@ -1889,7 +1889,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:Multicomp_24.243"
 			(at 132.08 104.14 0)
 			(effects
 				(font
@@ -2057,7 +2057,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:DO-214AA"
 			(at 177.8 86.36 0)
 			(effects
 				(font
@@ -2291,7 +2291,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:Multicomp_24.243"
 			(at 132.08 88.9 0)
 			(effects
 				(font
@@ -2378,7 +2378,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:RESC1206_RCV"
 			(at 196.596 101.854 90)
 			(effects
 				(font
