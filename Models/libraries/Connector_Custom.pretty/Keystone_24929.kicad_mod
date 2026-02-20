@@ -4,10 +4,9 @@
 	(generator_version "9.0")
 	(layer "F.Cu")
 	(property "Reference" "REF**"
-		(at 0.255 -6.305 0)
+		(at 0.175 -6.765 0)
 		(unlocked yes)
 		(layer "F.SilkS")
-		(hide yes)
 		(uuid "8e63193a-7aea-4b61-84e5-ed2d8a08eee7")
 		(effects
 			(font
@@ -17,10 +16,9 @@
 		)
 	)
 	(property "Value" "Keystone_24929"
-		(at 0.22 -10.14 0)
+		(at 0.16 -5.565 0)
 		(unlocked yes)
 		(layer "F.Fab")
-		(hide yes)
 		(uuid "35454b77-bff9-465e-a7a9-d9787923cd54")
 		(effects
 			(font
@@ -56,6 +54,18 @@
 		)
 	)
 	(attr through_hole)
+	(fp_text user "${REFERENCE}"
+		(at -0.045 -4.24 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "15cfe182-3eda-4806-957e-b4889364830f")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
 	(pad "1" thru_hole circle
 		(at 0 0)
 		(size 6.2 6.2)
