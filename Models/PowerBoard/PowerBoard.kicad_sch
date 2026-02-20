@@ -2195,7 +2195,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_Custom:RFPC-SMA27-F"
+		(property "Footprint" ""
 			(at 38.1 50.8 0)
 			(effects
 				(font
@@ -2222,7 +2222,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/gct/RFPC-SMA27-F/22162144"
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/molex/0733660030/1465162"
 			(at 38.1 50.8 0)
 			(effects
 				(font
@@ -2231,7 +2231,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" "$1.916"
+		(property "Cost" "$3.146"
 			(at 38.1 50.8 0)
 			(effects
 				(font
@@ -3185,7 +3185,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_Custom:RFPC-SMA27-F"
+		(property "Footprint" ""
 			(at 38.1 127 0)
 			(effects
 				(font
@@ -3212,7 +3212,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/gct/RFPC-SMA27-F/22162144"
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/molex/0733660030/1465162"
 			(at 38.1 127 0)
 			(effects
 				(font
@@ -3221,7 +3221,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" "$1.916"
+		(property "Cost" "$3.146"
 			(at 38.1 127 0)
 			(effects
 				(font
@@ -4327,7 +4327,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_Custom:RFPC-SMA27-F"
+		(property "Footprint" ""
 			(at 38.1 25.4 0)
 			(effects
 				(font
@@ -4354,7 +4354,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/gct/RFPC-SMA27-F/22162144"
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/molex/0733660030/1465162"
 			(at 38.1 25.4 0)
 			(effects
 				(font
@@ -4363,7 +4363,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" "$1.916"
+		(property "Cost" "$3.146"
 			(at 38.1 25.4 0)
 			(effects
 				(font
@@ -4997,7 +4997,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_Custom:RFPC-SMA27-F"
+		(property "Footprint" ""
 			(at 38.1 152.4 0)
 			(effects
 				(font
@@ -5024,7 +5024,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/gct/RFPC-SMA27-F/22162144"
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/molex/0733660030/1465162"
 			(at 38.1 152.4 0)
 			(effects
 				(font
@@ -5033,7 +5033,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" "$1.916"
+		(property "Cost" "$3.146"
 			(at 38.1 152.4 0)
 			(effects
 				(font

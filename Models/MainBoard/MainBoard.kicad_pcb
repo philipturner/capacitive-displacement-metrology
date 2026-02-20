@@ -1089,7 +1089,7 @@
 	(footprint "Connector_Custom:RFPC-SMA27-F"
 		(layer "F.Cu")
 		(uuid "0cd9821e-fdb6-42d8-bdbf-f7b675b30739")
-		(at 53.98 60.66)
+		(at 53.48 48.34)
 		(property "Reference" "J1"
 			(at 0.415 -4.385 0)
 			(unlocked yes)
@@ -1141,7 +1141,7 @@
 				)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/gct/RFPC-SMA27-F/22162144"
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/molex/0733660030/1465162"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1154,7 +1154,7 @@
 				)
 			)
 		)
-		(property "Cost" "$1.916"
+		(property "Cost" "$3.146"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -5379,7 +5379,7 @@
 				)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/gct/RFPC-SMA27-F/22162144"
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/molex/0733660030/1465162"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -5392,7 +5392,7 @@
 				)
 			)
 		)
-		(property "Cost" "$1.916"
+		(property "Cost" "$3.146"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -7642,7 +7642,7 @@
 				)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/gct/RFPC-SMA27-F/22162144"
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/molex/0733660030/1465162"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -7655,7 +7655,7 @@
 				)
 			)
 		)
-		(property "Cost" "$1.916"
+		(property "Cost" "$3.146"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -10630,7 +10630,7 @@
 	(footprint "Connector_Custom:RFPC-SMA27-F"
 		(layer "F.Cu")
 		(uuid "a85679b0-3ecc-4144-a388-e8e3a7c5d442")
-		(at 53.98 73.36)
+		(at 70.78 57.08)
 		(property "Reference" "J2"
 			(at 0.415 -4.385 0)
 			(unlocked yes)
@@ -10682,7 +10682,7 @@
 				)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/gct/RFPC-SMA27-F/22162144"
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/molex/0733660030/1465162"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -10695,7 +10695,7 @@
 				)
 			)
 		)
-		(property "Cost" "$1.916"
+		(property "Cost" "$3.146"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -14699,7 +14699,7 @@
 				)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/gct/RFPC-SMA27-F/22162144"
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/molex/0733660030/1465162"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -14712,7 +14712,7 @@
 				)
 			)
 		)
-		(property "Cost" "$1.916"
+		(property "Cost" "$3.146"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -15157,7 +15157,7 @@
 				)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/gct/RFPC-SMA27-F/22162144"
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/molex/0733660030/1465162"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -15170,7 +15170,7 @@
 				)
 			)
 		)
-		(property "Cost" "$1.916"
+		(property "Cost" "$3.146"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
