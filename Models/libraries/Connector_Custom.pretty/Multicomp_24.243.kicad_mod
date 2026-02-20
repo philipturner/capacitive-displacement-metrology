@@ -55,8 +55,18 @@
 	)
 	(attr through_hole)
 	(fp_line
+		(start -13.06 5.96)
+		(end -13.06 -5.96)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "ef4eba5d-594b-421f-97e3-263477466499")
+	)
+	(fp_line
 		(start 13.06 -5.96)
-		(end -12.95 -5.96)
+		(end -13.06 -5.96)
 		(stroke
 			(width 0.12)
 			(type default)
@@ -76,7 +86,7 @@
 	)
 	(fp_line
 		(start 13.06 5.96)
-		(end -12.95 5.96)
+		(end -13.06 5.96)
 		(stroke
 			(width 0.12)
 			(type default)
@@ -118,7 +128,7 @@
 			)
 		)
 	)
-	(pad "1" thru_hole circle
+	(pad "1" thru_hole rect
 		(at -7.75 0)
 		(size 3.07 3.07)
 		(drill 2.07)
