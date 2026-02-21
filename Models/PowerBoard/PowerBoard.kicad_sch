@@ -5,7 +5,7 @@
 	(uuid "c19e9b7b-7f36-470c-862a-1a648d3f14f6")
 	(paper "A4")
 	(lib_symbols
-		(symbol "Connector:Conn_01x04_Pin"
+		(symbol "Connector:Conn_01x03_Pin"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -21,8 +21,8 @@
 					)
 				)
 			)
-			(property "Value" "Conn_01x04_Pin"
-				(at 0 -7.62 0)
+			(property "Value" "Conn_01x03_Pin"
+				(at 0 -5.08 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -47,7 +47,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Generic connector, single row, 01x04, script generated"
+			(property "Description" "Generic connector, single row, 01x03, script generated"
 				(at 0 0 0)
 				(effects
 					(font
@@ -82,7 +82,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "Conn_01x04_Pin_1_1"
+			(symbol "Conn_01x03_Pin_1_1"
 				(rectangle
 					(start 0.8636 2.667)
 					(end 0 2.413)
@@ -108,17 +108,6 @@
 				(rectangle
 					(start 0.8636 -2.413)
 					(end 0 -2.667)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(rectangle
-					(start 0.8636 -4.953)
-					(end 0 -5.207)
 					(stroke
 						(width 0.1524)
 						(type default)
@@ -154,18 +143,6 @@
 				(polyline
 					(pts
 						(xy 1.27 -2.54) (xy 0.8636 -2.54)
-					)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.27 -5.08) (xy 0.8636 -5.08)
 					)
 					(stroke
 						(width 0.1524)
@@ -222,24 +199,6 @@
 						)
 					)
 					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 -5.08 180)
-					(length 3.81)
-					(name "Pin_4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1365,26 +1324,6 @@
 	)
 	(wire
 		(pts
-			(xy 60.96 58.42) (xy 63.5 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "12f18806-5610-4e3f-8576-9be962a52c18")
-	)
-	(wire
-		(pts
-			(xy 63.5 132.08) (xy 63.5 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "18b89e42-989c-4a2e-9c2a-e033a6e20e57")
-	)
-	(wire
-		(pts
 			(xy 71.12 132.08) (xy 71.12 134.62)
 		)
 		(stroke
@@ -1425,16 +1364,6 @@
 	)
 	(wire
 		(pts
-			(xy 60.96 134.62) (xy 63.5 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2a99d1b0-85a8-454b-a840-06fd2b3933e5")
-	)
-	(wire
-		(pts
 			(xy 71.12 160.02) (xy 73.66 160.02)
 		)
 		(stroke
@@ -1452,16 +1381,6 @@
 			(type default)
 		)
 		(uuid "34f3015f-f190-4e0b-aef6-f67596740234")
-	)
-	(wire
-		(pts
-			(xy 63.5 81.28) (xy 63.5 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3642c0be-5ea3-4a49-83e0-10b8edea973c")
 	)
 	(wire
 		(pts
@@ -1565,16 +1484,6 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 30.48) (xy 63.5 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "68164598-c7bb-4e0b-ba58-f700412dd5d8")
-	)
-	(wire
-		(pts
 			(xy 68.58 139.7) (xy 73.66 139.7)
 		)
 		(stroke
@@ -1582,16 +1491,6 @@
 			(type default)
 		)
 		(uuid "73be1d24-de77-4b51-9dee-0d010617a4ad")
-	)
-	(wire
-		(pts
-			(xy 63.5 106.68) (xy 63.5 109.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7c87823f-7160-4288-a5f9-9c8872caf61d")
 	)
 	(wire
 		(pts
@@ -1645,36 +1544,6 @@
 	)
 	(wire
 		(pts
-			(xy 60.96 160.02) (xy 63.5 160.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8f2f2d94-f1f2-43b7-b6e2-3fc61342c2c4")
-	)
-	(wire
-		(pts
-			(xy 63.5 157.48) (xy 63.5 160.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "982ab340-bf21-4480-aca4-5a6f16d4b063")
-	)
-	(wire
-		(pts
-			(xy 63.5 55.88) (xy 63.5 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "999ae283-fe9b-41ba-87eb-6b165d5cc50d")
-	)
-	(wire
-		(pts
 			(xy 68.58 38.1) (xy 73.66 38.1)
 		)
 		(stroke
@@ -1692,16 +1561,6 @@
 			(type default)
 		)
 		(uuid "9cd9634e-1f67-4632-acb0-b6e10660cbfe")
-	)
-	(wire
-		(pts
-			(xy 60.96 83.82) (xy 63.5 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a01b1ada-44d2-4c53-857c-9abf4f3a90a9")
 	)
 	(wire
 		(pts
@@ -1762,16 +1621,6 @@
 			(type default)
 		)
 		(uuid "cbc41fcd-c461-4915-aa79-8002ba3563b4")
-	)
-	(wire
-		(pts
-			(xy 60.96 33.02) (xy 63.5 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ce0f1963-1850-4a1f-89ed-cdeaf3555314")
 	)
 	(wire
 		(pts
@@ -1932,16 +1781,6 @@
 			(type default)
 		)
 		(uuid "fcdbb1ea-471f-419d-96d5-b407e88180a8")
-	)
-	(wire
-		(pts
-			(xy 60.96 109.22) (xy 63.5 109.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fe829ccb-de4c-41e6-8103-792ecbba0851")
 	)
 	(label "15V"
 		(at 33.02 25.4 180)
@@ -2660,33 +2499,33 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x04_Pin")
-		(at 66.04 152.4 90)
+		(lib_id "Connector:Conn_01x03_Pin")
+		(at 68.58 76.2 90)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "32d99f72-a149-45d2-a3ab-0325281a9b9a")
-		(property "Reference" "J10"
-			(at 67.31 147.32 90)
+		(uuid "32b1b766-ada2-437e-99c4-e5fb41b54c88")
+		(property "Reference" "J7"
+			(at 68.58 71.12 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "Conn_01x04_Pin"
-			(at 67.31 149.86 90)
+		(property "Value" "Conn_01x03_Pin"
+			(at 68.58 73.66 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x4"
-			(at 66.04 152.4 0)
+		(property "Footprint" ""
+			(at 68.58 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2695,7 +2534,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 66.04 152.4 0)
+			(at 68.58 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2703,49 +2542,28 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x04, script generated"
-			(at 66.04 152.4 0)
+		(property "Description" "Generic connector, single row, 01x03, script generated"
+			(at 68.58 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(hide yes)
 			)
-		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PRPC024SAAN-RC/2775230"
-			(at 66.04 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost" "$0.563"
-			(at 66.04 152.4 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "4"
-			(uuid "042612e3-e412-4a67-981b-b65e1c93d314")
 		)
 		(pin "1"
-			(uuid "27d64c22-5091-4f1c-9bac-29333ae5c59d")
+			(uuid "4561760b-f38b-49af-815d-20c5b13ae25c")
 		)
 		(pin "2"
-			(uuid "df2bfdcd-41cd-4eee-ace8-e1fac2fe3286")
+			(uuid "8843d9fb-b3f8-4419-8f42-1ccb793be9fe")
 		)
 		(pin "3"
-			(uuid "7862d2aa-5f26-4d0b-8788-b10cc5316139")
+			(uuid "6482cb35-0c98-4e99-b511-c51e3d395a90")
 		)
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "J10")
+					(reference "J7")
 					(unit 1)
 				)
 			)
@@ -3018,35 +2836,33 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 60.96 33.02 270)
+		(lib_id "Connector:Conn_01x03_Pin")
+		(at 68.58 101.6 90)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "3d832db1-e8d2-4d5d-ab0d-8407a1368adc")
-		(property "Reference" "#PWR05"
-			(at 54.61 33.02 0)
+		(uuid "491fe0c5-7ac6-4eb4-9edd-047e8024d9e5")
+		(property "Reference" "J8"
+			(at 68.58 96.52 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(hide yes)
 			)
 		)
-		(property "Value" "GND"
-			(at 57.15 33.0199 90)
+		(property "Value" "Conn_01x03_Pin"
+			(at 68.58 99.06 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Footprint" ""
-			(at 60.96 33.02 0)
+			(at 68.58 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3054,8 +2870,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" ""
-			(at 60.96 33.02 0)
+		(property "Datasheet" "~"
+			(at 68.58 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3063,8 +2879,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 60.96 33.02 0)
+		(property "Description" "Generic connector, single row, 01x03, script generated"
+			(at 68.58 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3073,12 +2889,18 @@
 			)
 		)
 		(pin "1"
-			(uuid "e072ffe8-2878-4aa1-8ef2-3bdeba1b39f8")
+			(uuid "292e1d31-30bc-4f4f-a01f-326c79dd5f1b")
+		)
+		(pin "2"
+			(uuid "d8093ce1-9e17-4ef8-b5db-252f514486f7")
+		)
+		(pin "3"
+			(uuid "74e10c60-d650-4c16-b0f0-c115d0aa51b2")
 		)
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR05")
+					(reference "J8")
 					(unit 1)
 				)
 			)
@@ -3152,6 +2974,77 @@
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
 					(reference "H3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x03_Pin")
+		(at 68.58 152.4 90)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "516bc76b-afb9-4427-a0d7-b0161c788982")
+		(property "Reference" "J10"
+			(at 68.58 147.32 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x03_Pin"
+			(at 68.58 149.86 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 68.58 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 68.58 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x03, script generated"
+			(at 68.58 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "67ca12c5-44db-4306-a9ad-7b2944b92916")
+		)
+		(pin "2"
+			(uuid "5dfc6c08-6ead-44dc-a681-c6b5275d8594")
+		)
+		(pin "3"
+			(uuid "9e4e3959-e0b2-4323-ab24-f89820b6df38")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "J10")
 					(unit 1)
 				)
 			)
@@ -3524,232 +3417,6 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 60.96 109.22 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "6c3722da-277f-4fe4-bfca-ef789b7a0d7e")
-		(property "Reference" "#PWR08"
-			(at 54.61 109.22 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 57.15 109.2199 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" ""
-			(at 60.96 109.22 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 60.96 109.22 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 60.96 109.22 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "d7c331d3-744a-49c6-8a6c-a6f9284fa0f8")
-		)
-		(instances
-			(project "PowerBoard"
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR08")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 60.96 83.82 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "7287ecb2-fce1-4207-aacc-ea34b094ef40")
-		(property "Reference" "#PWR07"
-			(at 54.61 83.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 57.15 83.8199 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" ""
-			(at 60.96 83.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 60.96 83.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 60.96 83.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "cda9336b-be33-4d09-8678-ffeecde19e78")
-		)
-		(instances
-			(project "PowerBoard"
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR07")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x04_Pin")
-		(at 66.04 25.4 90)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "75b8f33f-4168-4fcd-a90b-146014d9e7f7")
-		(property "Reference" "J5"
-			(at 67.31 20.32 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Conn_01x04_Pin"
-			(at 67.31 22.86 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x4"
-			(at 66.04 25.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 66.04 25.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x04, script generated"
-			(at 66.04 25.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PRPC024SAAN-RC/2775230"
-			(at 66.04 25.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost" "$0.563"
-			(at 66.04 25.4 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "4"
-			(uuid "d25e6d2a-04ba-48e3-8568-52220f928264")
-		)
-		(pin "1"
-			(uuid "f21bca32-5f74-4f78-bb83-e732537b37ee")
-		)
-		(pin "2"
-			(uuid "252cd42f-cf3f-4d68-8c4e-f3b870e73cac")
-		)
-		(pin "3"
-			(uuid "e82a5003-08d7-42b9-8a79-d8e1bf833be9")
-		)
-		(instances
-			(project "PowerBoard"
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "J5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
 		(at 73.66 83.82 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4033,6 +3700,77 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:Conn_01x03_Pin")
+		(at 68.58 25.4 90)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "81ae8a0c-33ff-4a2e-b61b-30a8c9e7f2f3")
+		(property "Reference" "J5"
+			(at 68.58 20.32 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x03_Pin"
+			(at 68.58 22.86 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 68.58 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 68.58 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x03, script generated"
+			(at 68.58 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e1897a47-e4e1-47b2-864a-edcd09849e84")
+		)
+		(pin "2"
+			(uuid "2e1e7b39-5ff8-4e85-9bbf-f0c21d92f4f5")
+		)
+		(pin "3"
+			(uuid "bb482873-2e7e-42dd-9eff-96d91cbe82c7")
+		)
+		(instances
+			(project ""
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "J5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 137.16 116.84 0)
 		(unit 1)
@@ -4093,73 +3831,6 @@
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
 					(reference "#PWR023")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 60.96 58.42 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "8e4b1094-231f-466c-a995-2e3e6e51e09e")
-		(property "Reference" "#PWR06"
-			(at 54.61 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 57.15 58.4199 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" ""
-			(at 60.96 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 60.96 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 60.96 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "751647ae-579f-49a9-a996-48a7692604d4")
-		)
-		(instances
-			(project "PowerBoard"
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR06")
 					(unit 1)
 				)
 			)
@@ -4233,35 +3904,33 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 60.96 134.62 270)
+		(lib_id "Connector:Conn_01x03_Pin")
+		(at 68.58 50.8 90)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "9b7e9952-34b5-46bb-a3ad-262b59cc5f0a")
-		(property "Reference" "#PWR09"
-			(at 54.61 134.62 0)
+		(uuid "9a1621e1-dd32-4d42-8981-987dddd5c5c3")
+		(property "Reference" "J6"
+			(at 68.58 45.72 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(hide yes)
 			)
 		)
-		(property "Value" "GND"
-			(at 57.15 134.6199 90)
+		(property "Value" "Conn_01x03_Pin"
+			(at 68.58 48.26 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Footprint" ""
-			(at 60.96 134.62 0)
+			(at 68.58 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4269,8 +3938,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" ""
-			(at 60.96 134.62 0)
+		(property "Datasheet" "~"
+			(at 68.58 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4278,8 +3947,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 60.96 134.62 0)
+		(property "Description" "Generic connector, single row, 01x03, script generated"
+			(at 68.58 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4288,12 +3957,18 @@
 			)
 		)
 		(pin "1"
-			(uuid "86296e7b-25c7-4436-ae8c-581f070cf022")
+			(uuid "0e1e4e81-9902-4046-be58-08308a2ea4c7")
+		)
+		(pin "2"
+			(uuid "ae81b78e-2581-4930-ba7f-95e0e5778f1a")
+		)
+		(pin "3"
+			(uuid "101b132e-3ce6-4d83-8642-43cf05f8d973")
 		)
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR09")
+					(reference "J6")
 					(unit 1)
 				)
 			)
@@ -4382,257 +4057,6 @@
 			(project ""
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
 					(reference "J1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x04_Pin")
-		(at 66.04 127 90)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "aff0722c-4f9e-4ebb-ab88-29e3b1f21e3e")
-		(property "Reference" "J9"
-			(at 67.31 121.92 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Conn_01x04_Pin"
-			(at 67.31 124.46 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x4"
-			(at 66.04 127 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 66.04 127 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x04, script generated"
-			(at 66.04 127 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PRPC024SAAN-RC/2775230"
-			(at 66.04 127 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost" "$0.563"
-			(at 66.04 127 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "4"
-			(uuid "094ec8c4-a713-4dfd-a4ce-3f25c44152b2")
-		)
-		(pin "1"
-			(uuid "97d178dc-ec47-43e0-b394-0a28604c7621")
-		)
-		(pin "2"
-			(uuid "589bd431-90f2-4c74-a921-ef5c7f8d92ef")
-		)
-		(pin "3"
-			(uuid "40dc367e-9cfc-44c6-a84e-82f084cf8aaa")
-		)
-		(instances
-			(project "PowerBoard"
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "J9")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 60.96 160.02 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "b7a7f26c-90b9-4c16-b699-f9d939283185")
-		(property "Reference" "#PWR010"
-			(at 54.61 160.02 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 57.15 160.0199 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" ""
-			(at 60.96 160.02 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 60.96 160.02 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 60.96 160.02 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "6ce425eb-2b5b-43c9-b9ab-16e942896c42")
-		)
-		(instances
-			(project "PowerBoard"
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR010")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x04_Pin")
-		(at 66.04 76.2 90)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "b88ab972-386b-4dfe-adcc-6bdc941d70cc")
-		(property "Reference" "J7"
-			(at 67.31 71.12 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Conn_01x04_Pin"
-			(at 67.31 73.66 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x4"
-			(at 66.04 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 66.04 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x04, script generated"
-			(at 66.04 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PRPC024SAAN-RC/2775230"
-			(at 66.04 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost" "$0.563"
-			(at 66.04 76.2 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "4"
-			(uuid "64d1c25d-26b9-4e41-a09b-d5d4f00fba4b")
-		)
-		(pin "1"
-			(uuid "97bd940d-dbe3-44c5-89c1-4e1fd1682402")
-		)
-		(pin "2"
-			(uuid "06bcbcc4-7b0f-4a3e-b90b-838b53288937")
-		)
-		(pin "3"
-			(uuid "a694d556-9eb1-4b05-bf5f-f21e62de98bf")
-		)
-		(instances
-			(project "PowerBoard"
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "J7")
 					(unit 1)
 				)
 			)
@@ -4765,6 +4189,77 @@
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
 					(reference "#PWR017")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x03_Pin")
+		(at 68.58 127 90)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d24bf573-0501-4b36-b17f-8976478e2420")
+		(property "Reference" "J9"
+			(at 68.58 121.92 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x03_Pin"
+			(at 68.58 124.46 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 68.58 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 68.58 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x03, script generated"
+			(at 68.58 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c7c679b6-7629-485e-858d-8890297502a8")
+		)
+		(pin "2"
+			(uuid "e11aaf3d-ae03-4915-b30c-9b1e1630094b")
+		)
+		(pin "3"
+			(uuid "f4aac822-2c92-4e23-9f02-b03b2b7c3e74")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
+					(reference "J9")
 					(unit 1)
 				)
 			)
@@ -5058,98 +4553,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x04_Pin")
-		(at 66.04 101.6 90)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "ec4bf326-db09-4c7c-bea5-2022b02f9c20")
-		(property "Reference" "J8"
-			(at 67.31 96.52 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Conn_01x04_Pin"
-			(at 67.31 99.06 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x4"
-			(at 66.04 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 66.04 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x04, script generated"
-			(at 66.04 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PRPC024SAAN-RC/2775230"
-			(at 66.04 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost" "$0.563"
-			(at 66.04 101.6 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "4"
-			(uuid "5d0ab7b4-37a8-43d0-a856-f23eefecae2e")
-		)
-		(pin "1"
-			(uuid "74b17b16-b6a8-46c7-bc28-687e1208d323")
-		)
-		(pin "2"
-			(uuid "97e5f647-cbeb-4330-a94f-8c8b706888f0")
-		)
-		(pin "3"
-			(uuid "67246f2b-4413-4f2c-9ff3-9640d4b1f0fc")
-		)
-		(instances
-			(project "PowerBoard"
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "J8")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
 		(at 111.76 163.83 0)
 		(unit 1)
@@ -5229,98 +4632,6 @@
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
 					(reference "H2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x04_Pin")
-		(at 66.04 50.8 90)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "fda032e6-65bb-4d38-8287-f50257390c46")
-		(property "Reference" "J6"
-			(at 67.31 45.72 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Conn_01x04_Pin"
-			(at 67.31 48.26 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x4"
-			(at 66.04 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 66.04 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x04, script generated"
-			(at 66.04 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PRPC024SAAN-RC/2775230"
-			(at 66.04 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost" "$0.563"
-			(at 66.04 50.8 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "4"
-			(uuid "d0e2cb70-5507-48c0-b3fb-f3fc3977d6bc")
-		)
-		(pin "1"
-			(uuid "c1a37208-7023-4fb9-8bad-f7950b207b14")
-		)
-		(pin "2"
-			(uuid "06e3f373-cb8e-4e16-b6df-e78659aa7f28")
-		)
-		(pin "3"
-			(uuid "14db49e4-0a73-4e20-ba15-330c84173e2c")
-		)
-		(instances
-			(project "PowerBoard"
-				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "J6")
 					(unit 1)
 				)
 			)
