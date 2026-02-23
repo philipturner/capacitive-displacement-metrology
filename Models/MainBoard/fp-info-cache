@@ -1,4 +1,4 @@
-26610310597748770
+26626307921909708
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -9065,6 +9065,27 @@ DowelPin_2.5mm
 0
 0
 Connector_Custom
+Keystone_24929
+
+
+0
+1
+1
+Connector_Custom
+Molex_MCX
+
+
+0
+5
+2
+Connector_Custom
+Multicomp_24.243
+
+
+0
+2
+2
+Connector_Custom
 NetTie_0.2mm
 
 
@@ -9072,40 +9093,61 @@ NetTie_0.2mm
 2
 2
 Connector_Custom
-PinHeader_1x2
+PinConnector_1x2
 
 
 0
 2
 2
 Connector_Custom
-PinHeader_1x3
+PinConnector_1x3
 
 
 0
 3
 3
 Connector_Custom
-PinHeader_1x24
+PinConnector_1x4
+
+
+0
+4
+4
+Connector_Custom
+PinConnector_1x8
+
+
+0
+8
+8
+Connector_Custom
+PinConnector_1x9
+
+
+0
+9
+9
+Connector_Custom
+PinConnector_1x13
+
+
+0
+13
+13
+Connector_Custom
+PinConnector_1x24
 
 
 0
 24
 24
 Connector_Custom
-PinSocket_1x2
+RFPC-SMA27-F
 
 
 0
+5
 2
-2
-Connector_Custom
-PinSocket_1x24
-
-
-0
-24
-24
 Connector_DIN
 DIN41612_B2_2x8_Female_Vertical_THT
 DIN41612 connector, type B/2, Vertical, 2 rows 16 pins wide, https://b2b.harting.com/files/livebooks/en/PRD0200000100063/downloads/livebook.pdf
@@ -61383,13 +61425,6 @@ PA95
 8
 8
 IC
-PDIP-8
-
-
-0
-8
-8
-IC
 SOIC-8
 
 
@@ -104573,6 +104608,34 @@ CAPC0805
 2
 2
 TwoTerminal
+CAPC1206_CHV
+
+
+0
+2
+2
+TwoTerminal
+CAPC2220_GRJ
+
+
+0
+2
+2
+TwoTerminal
+DO-214AA
+
+
+0
+2
+2
+TwoTerminal
+DO-214AC
+
+
+0
+2
+2
+TwoTerminal
 RESC0603
 
 
@@ -104587,6 +104650,20 @@ RESC0805
 2
 2
 TwoTerminal
+RESC1206_RCV
+
+
+0
+2
+2
+TwoTerminal
+RESC1210_TNPV
+
+
+0
+2
+2
+TwoTerminal
 SOD-123
 
 
@@ -104594,21 +104671,7 @@ SOD-123
 2
 2
 TwoTerminal
-THT_2.54mm
-
-
-0
-2
-2
-TwoTerminal
-THT_10.16mm
-
-
-0
-2
-2
-TwoTerminal
-THT_12.70mm
+SOD-123FL
 
 
 0

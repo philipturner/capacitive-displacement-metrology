@@ -2374,7 +2374,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "429245f8-848d-406f-8012-428e659282c4")
-		(property "Reference" "#PWR03"
+		(property "Reference" "#PWR02"
 			(at 147.32 133.35 0)
 			(effects
 				(font
@@ -2424,7 +2424,7 @@
 		(instances
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "#PWR03")
+					(reference "#PWR02")
 					(unit 1)
 				)
 			)
@@ -2544,7 +2544,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5a7239c3-3911-43d0-b1ae-edfca8ee6fca")
-		(property "Reference" "#PWR02"
+		(property "Reference" "#PWR03"
 			(at 143.51 45.72 0)
 			(effects
 				(font
@@ -2595,7 +2595,7 @@
 		(instances
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "#PWR02")
+					(reference "#PWR03")
 					(unit 1)
 				)
 			)

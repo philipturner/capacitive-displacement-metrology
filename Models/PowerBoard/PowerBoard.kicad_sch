@@ -2034,7 +2034,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:Molex_MCX"
 			(at 38.1 50.8 0)
 			(effects
 				(font
@@ -2104,7 +2104,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1636f86e-d859-44ba-94b0-c332e1a0e473")
-		(property "Reference" "#PWR021"
+		(property "Reference" "#PWR015"
 			(at 127 123.19 0)
 			(effects
 				(font
@@ -2154,7 +2154,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR021")
+					(reference "#PWR015")
 					(unit 1)
 				)
 			)
@@ -2236,7 +2236,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "20b18ee3-aa28-4a40-9b60-202939ec11dc")
-		(property "Reference" "#PWR012"
+		(property "Reference" "#PWR06"
 			(at 80.01 58.42 0)
 			(effects
 				(font
@@ -2287,7 +2287,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR012")
+					(reference "#PWR06")
 					(unit 1)
 				)
 			)
@@ -2303,7 +2303,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "24a6ae6d-3bd3-40f6-9dc2-5b1f0cda945c")
-		(property "Reference" "#PWR022"
+		(property "Reference" "#PWR016"
 			(at 132.08 123.19 0)
 			(effects
 				(font
@@ -2353,7 +2353,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR022")
+					(reference "#PWR016")
 					(unit 1)
 				)
 			)
@@ -2442,7 +2442,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "27af4ab1-90ff-4274-92c0-aaec867a7bb1")
-		(property "Reference" "#PWR025"
+		(property "Reference" "#PWR019"
 			(at 139.7 172.72 0)
 			(effects
 				(font
@@ -2492,7 +2492,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR025")
+					(reference "#PWR019")
 					(unit 1)
 				)
 			)
@@ -2524,7 +2524,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x3"
 			(at 68.58 76.2 0)
 			(effects
 				(font
@@ -2544,6 +2544,24 @@
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated"
 			(at 68.58 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.563"
+			(at 68.58 76.2 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PRPC024SAAN-RC/2775230"
+			(at 68.58 76.2 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2579,7 +2597,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "367837c3-e2f5-40bf-8eeb-db1719afa29b")
-		(property "Reference" "#PWR024"
+		(property "Reference" "#PWR018"
 			(at 139.7 157.48 0)
 			(effects
 				(font
@@ -2629,7 +2647,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR024")
+					(reference "#PWR018")
 					(unit 1)
 				)
 			)
@@ -2645,7 +2663,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "36fb64d3-a358-4ac2-830a-3b111d923263")
-		(property "Reference" "#PWR015"
+		(property "Reference" "#PWR09"
 			(at 80.01 134.62 0)
 			(effects
 				(font
@@ -2696,7 +2714,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR015")
+					(reference "#PWR09")
 					(unit 1)
 				)
 			)
@@ -2712,7 +2730,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "37320c79-1d4c-4406-8ef4-9f1f39fc1668")
-		(property "Reference" "#PWR014"
+		(property "Reference" "#PWR08"
 			(at 80.01 109.22 0)
 			(effects
 				(font
@@ -2763,7 +2781,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR014")
+					(reference "#PWR08")
 					(unit 1)
 				)
 			)
@@ -2861,7 +2879,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x3"
 			(at 68.58 101.6 0)
 			(effects
 				(font
@@ -2881,6 +2899,24 @@
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated"
 			(at 68.58 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.563"
+			(at 68.58 101.6 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PRPC024SAAN-RC/2775230"
+			(at 68.58 101.6 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3005,7 +3041,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x3"
 			(at 68.58 152.4 0)
 			(effects
 				(font
@@ -3025,6 +3061,24 @@
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated"
 			(at 68.58 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.563"
+			(at 68.58 152.4 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PRPC024SAAN-RC/2775230"
+			(at 68.58 152.4 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3078,7 +3132,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:Molex_MCX"
 			(at 38.1 127 0)
 			(effects
 				(font
@@ -3425,7 +3479,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7a390818-1f55-4c5c-9db8-1b58f5d6259a")
-		(property "Reference" "#PWR013"
+		(property "Reference" "#PWR07"
 			(at 80.01 83.82 0)
 			(effects
 				(font
@@ -3476,7 +3530,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR013")
+					(reference "#PWR07")
 					(unit 1)
 				)
 			)
@@ -3492,7 +3546,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7b5279ea-55bd-40e3-9fa0-995242e3468f")
-		(property "Reference" "#PWR020"
+		(property "Reference" "#PWR014"
 			(at 121.92 123.19 0)
 			(effects
 				(font
@@ -3542,7 +3596,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR020")
+					(reference "#PWR014")
 					(unit 1)
 				)
 			)
@@ -3725,7 +3779,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x3"
 			(at 68.58 25.4 0)
 			(effects
 				(font
@@ -3745,6 +3799,24 @@
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated"
 			(at 68.58 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.563"
+			(at 68.58 25.4 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PRPC024SAAN-RC/2775230"
+			(at 68.58 25.4 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3780,7 +3852,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8af62bbb-3603-4783-915f-8c1185460d43")
-		(property "Reference" "#PWR023"
+		(property "Reference" "#PWR017"
 			(at 137.16 123.19 0)
 			(effects
 				(font
@@ -3830,7 +3902,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR023")
+					(reference "#PWR017")
 					(unit 1)
 				)
 			)
@@ -3846,7 +3918,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "95f22b98-7f57-491c-aa57-93dc5e52fac3")
-		(property "Reference" "#PWR016"
+		(property "Reference" "#PWR010"
 			(at 80.01 160.02 0)
 			(effects
 				(font
@@ -3897,7 +3969,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR016")
+					(reference "#PWR010")
 					(unit 1)
 				)
 			)
@@ -3929,7 +4001,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x3"
 			(at 68.58 50.8 0)
 			(effects
 				(font
@@ -3949,6 +4021,24 @@
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated"
 			(at 68.58 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.563"
+			(at 68.58 50.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PRPC024SAAN-RC/2775230"
+			(at 68.58 50.8 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4002,7 +4092,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:Molex_MCX"
 			(at 38.1 25.4 0)
 			(effects
 				(font
@@ -4072,7 +4162,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "cb791865-fc0b-4682-98e2-3a3dbc5a5a56")
-		(property "Reference" "#PWR018"
+		(property "Reference" "#PWR012"
 			(at 111.76 172.72 0)
 			(effects
 				(font
@@ -4122,7 +4212,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR018")
+					(reference "#PWR012")
 					(unit 1)
 				)
 			)
@@ -4138,7 +4228,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ce747733-f48c-44cf-9a8b-e0808993f3d5")
-		(property "Reference" "#PWR017"
+		(property "Reference" "#PWR011"
 			(at 111.76 157.48 0)
 			(effects
 				(font
@@ -4188,7 +4278,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR017")
+					(reference "#PWR011")
 					(unit 1)
 				)
 			)
@@ -4220,7 +4310,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x3"
 			(at 68.58 127 0)
 			(effects
 				(font
@@ -4240,6 +4330,24 @@
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated"
 			(at 68.58 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.563"
+			(at 68.58 127 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PRPC024SAAN-RC/2775230"
+			(at 68.58 127 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4341,7 +4449,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "df54e9eb-d499-4f9d-8c2e-80761e13386a")
-		(property "Reference" "#PWR019"
+		(property "Reference" "#PWR013"
 			(at 116.84 123.19 0)
 			(effects
 				(font
@@ -4391,7 +4499,7 @@
 		(instances
 			(project ""
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR019")
+					(reference "#PWR013")
 					(unit 1)
 				)
 			)
@@ -4407,7 +4515,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e059f9e1-930b-4dfe-856a-9553903944e0")
-		(property "Reference" "#PWR011"
+		(property "Reference" "#PWR05"
 			(at 80.01 33.02 0)
 			(effects
 				(font
@@ -4458,7 +4566,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6"
-					(reference "#PWR011")
+					(reference "#PWR05")
 					(unit 1)
 				)
 			)
@@ -4492,7 +4600,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:Molex_MCX"
 			(at 38.1 152.4 0)
 			(effects
 				(font

@@ -2825,7 +2825,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1ddb628e-0e1b-482e-9faa-97a3708cd2a5")
-		(property "Reference" "J5"
+		(property "Reference" "J6"
 			(at 54.61 138.7231 0)
 			(effects
 				(font
@@ -2897,19 +2897,19 @@
 		(instances
 			(project ""
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/199886e6-7d04-4776-b29c-ace318fdb365"
-					(reference "J5")
+					(reference "J6")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/4ce25162-5acb-4a8d-be91-4e1f0e740ea5"
-					(reference "J7")
-					(unit 1)
-				)
-				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/af20753c-bd15-4901-8272-a2513114e228"
 					(reference "J9")
 					(unit 1)
 				)
+				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/af20753c-bd15-4901-8272-a2513114e228"
+					(reference "J12")
+					(unit 1)
+				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/bd0669b9-2ae0-4bdd-b718-c60fba51a2e0"
-					(reference "J11")
+					(reference "J15")
 					(unit 1)
 				)
 			)
@@ -3045,7 +3045,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "236e36fc-de2f-4b29-a7b6-51951aa29465")
-		(property "Reference" "#PWR013"
+		(property "Reference" "#PWR014"
 			(at 96.52 107.95 0)
 			(effects
 				(font
@@ -3095,19 +3095,19 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/199886e6-7d04-4776-b29c-ace318fdb365"
-					(reference "#PWR013")
+					(reference "#PWR014")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/4ce25162-5acb-4a8d-be91-4e1f0e740ea5"
-					(reference "#PWR020")
+					(reference "#PWR021")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/af20753c-bd15-4901-8272-a2513114e228"
-					(reference "#PWR027")
+					(reference "#PWR028")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/bd0669b9-2ae0-4bdd-b718-c60fba51a2e0"
-					(reference "#PWR034")
+					(reference "#PWR035")
 					(unit 1)
 				)
 			)
@@ -3203,7 +3203,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "26c3b3ba-c6d6-454d-9592-1c9deb03120c")
-		(property "Reference" "#PWR017"
+		(property "Reference" "#PWR018"
 			(at 191.77 76.2 0)
 			(effects
 				(font
@@ -3254,19 +3254,19 @@
 		(instances
 			(project ""
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/199886e6-7d04-4776-b29c-ace318fdb365"
-					(reference "#PWR017")
+					(reference "#PWR018")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/4ce25162-5acb-4a8d-be91-4e1f0e740ea5"
-					(reference "#PWR024")
+					(reference "#PWR025")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/af20753c-bd15-4901-8272-a2513114e228"
-					(reference "#PWR031")
+					(reference "#PWR032")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/bd0669b9-2ae0-4bdd-b718-c60fba51a2e0"
-					(reference "#PWR038")
+					(reference "#PWR039")
 					(unit 1)
 				)
 			)
@@ -3382,7 +3382,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "41139c30-f7a2-486f-bbe1-17179af1602d")
-		(property "Reference" "#PWR014"
+		(property "Reference" "#PWR015"
 			(at 114.3 158.75 0)
 			(effects
 				(font
@@ -3432,19 +3432,19 @@
 		(instances
 			(project ""
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/199886e6-7d04-4776-b29c-ace318fdb365"
-					(reference "#PWR014")
+					(reference "#PWR015")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/4ce25162-5acb-4a8d-be91-4e1f0e740ea5"
-					(reference "#PWR021")
+					(reference "#PWR022")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/af20753c-bd15-4901-8272-a2513114e228"
-					(reference "#PWR028")
+					(reference "#PWR029")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/bd0669b9-2ae0-4bdd-b718-c60fba51a2e0"
-					(reference "#PWR035")
+					(reference "#PWR036")
 					(unit 1)
 				)
 			)
@@ -3660,7 +3660,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "483fb27e-7523-4995-b88a-6f7f84dac603")
-		(property "Reference" "#PWR015"
+		(property "Reference" "#PWR016"
 			(at 127 107.95 0)
 			(effects
 				(font
@@ -3710,19 +3710,19 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/199886e6-7d04-4776-b29c-ace318fdb365"
-					(reference "#PWR015")
+					(reference "#PWR016")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/4ce25162-5acb-4a8d-be91-4e1f0e740ea5"
-					(reference "#PWR022")
+					(reference "#PWR023")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/af20753c-bd15-4901-8272-a2513114e228"
-					(reference "#PWR029")
+					(reference "#PWR030")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/bd0669b9-2ae0-4bdd-b718-c60fba51a2e0"
-					(reference "#PWR036")
+					(reference "#PWR037")
 					(unit 1)
 				)
 			)
@@ -3738,7 +3738,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4fa3cb86-7ee7-47c5-983e-71ed0525aa5b")
-		(property "Reference" "#PWR016"
+		(property "Reference" "#PWR017"
 			(at 139.7 158.75 0)
 			(effects
 				(font
@@ -3788,19 +3788,19 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/199886e6-7d04-4776-b29c-ace318fdb365"
-					(reference "#PWR016")
+					(reference "#PWR017")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/4ce25162-5acb-4a8d-be91-4e1f0e740ea5"
-					(reference "#PWR023")
+					(reference "#PWR024")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/af20753c-bd15-4901-8272-a2513114e228"
-					(reference "#PWR030")
+					(reference "#PWR031")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/bd0669b9-2ae0-4bdd-b718-c60fba51a2e0"
-					(reference "#PWR037")
+					(reference "#PWR038")
 					(unit 1)
 				)
 			)
@@ -3816,7 +3816,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6502ac41-e036-4f2d-990f-eda738dc137d")
-		(property "Reference" "J6"
+		(property "Reference" "J7"
 			(at 53.34 157.48 90)
 			(effects
 				(font
@@ -3832,7 +3832,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinConnector_1x3"
 			(at 53.34 162.56 0)
 			(effects
 				(font
@@ -3859,6 +3859,24 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.563"
+			(at 53.34 162.56 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PRPC024SAAN-RC/2775230"
+			(at 53.34 162.56 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "89097c8b-42da-4eac-a2bb-43f6243f4c7c")
 		)
@@ -3871,19 +3889,19 @@
 		(instances
 			(project ""
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/199886e6-7d04-4776-b29c-ace318fdb365"
-					(reference "J6")
+					(reference "J7")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/4ce25162-5acb-4a8d-be91-4e1f0e740ea5"
-					(reference "J8")
-					(unit 1)
-				)
-				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/af20753c-bd15-4901-8272-a2513114e228"
 					(reference "J10")
 					(unit 1)
 				)
+				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/af20753c-bd15-4901-8272-a2513114e228"
+					(reference "J13")
+					(unit 1)
+				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/bd0669b9-2ae0-4bdd-b718-c60fba51a2e0"
-					(reference "J12")
+					(reference "J16")
 					(unit 1)
 				)
 			)
@@ -3999,7 +4017,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7532ee0a-f330-4496-be1c-dae301b230a3")
-		(property "Reference" "J14"
+		(property "Reference" "J8"
 			(at 78.74 157.48 90)
 			(effects
 				(font
@@ -4042,8 +4060,17 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC031LFBN-RC/810175"
 			(at 78.74 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.310"
+			(at 78.74 162.56 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4063,15 +4090,15 @@
 		(instances
 			(project ""
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/199886e6-7d04-4776-b29c-ace318fdb365"
-					(reference "J14")
+					(reference "J8")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/4ce25162-5acb-4a8d-be91-4e1f0e740ea5"
-					(reference "J15")
+					(reference "J11")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/af20753c-bd15-4901-8272-a2513114e228"
-					(reference "J16")
+					(reference "J14")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/bd0669b9-2ae0-4bdd-b718-c60fba51a2e0"
@@ -4091,7 +4118,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8020d40f-602e-4e5d-979c-b27455aa0a5d")
-		(property "Reference" "#PWR011"
+		(property "Reference" "#PWR013"
 			(at 64.77 170.18 0)
 			(effects
 				(font
@@ -4142,19 +4169,19 @@
 		(instances
 			(project "HighVoltageBoard"
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/199886e6-7d04-4776-b29c-ace318fdb365"
-					(reference "#PWR011")
+					(reference "#PWR013")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/4ce25162-5acb-4a8d-be91-4e1f0e740ea5"
-					(reference "#PWR018")
+					(reference "#PWR020")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/af20753c-bd15-4901-8272-a2513114e228"
-					(reference "#PWR025")
+					(reference "#PWR027")
 					(unit 1)
 				)
 				(path "/c83b09c9-14ae-4b68-b7fa-4c89bba29dc5/bd0669b9-2ae0-4bdd-b718-c60fba51a2e0"
-					(reference "#PWR032")
+					(reference "#PWR034")
 					(unit 1)
 				)
 			)

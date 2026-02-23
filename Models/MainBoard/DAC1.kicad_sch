@@ -2346,7 +2346,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "05e2e2c4-6ab1-43d3-946d-7e8b01b14ab7")
-		(property "Reference" "#PWR045"
+		(property "Reference" "#PWR042"
 			(at 196.85 50.8 0)
 			(effects
 				(font
@@ -2397,7 +2397,7 @@
 		(instances
 			(project ""
 				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/e222707b-78e5-4be0-8ce1-010f54f4492e"
-					(reference "#PWR045")
+					(reference "#PWR042")
 					(unit 1)
 				)
 			)
@@ -2413,7 +2413,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0aee5e1b-d5e6-4ae6-b8f1-2ea33b2f2c6a")
-		(property "Reference" "#PWR042"
+		(property "Reference" "#PWR039"
 			(at 168.91 106.68 0)
 			(effects
 				(font
@@ -2464,7 +2464,7 @@
 		(instances
 			(project ""
 				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/e222707b-78e5-4be0-8ce1-010f54f4492e"
-					(reference "#PWR042")
+					(reference "#PWR039")
 					(unit 1)
 				)
 			)
@@ -2566,7 +2566,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "39f1f349-f341-4705-8876-6ba503d71fb8")
-		(property "Reference" "#PWR048"
+		(property "Reference" "#PWR045"
 			(at 196.85 127 0)
 			(effects
 				(font
@@ -2617,7 +2617,7 @@
 		(instances
 			(project "MainBoard"
 				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/e222707b-78e5-4be0-8ce1-010f54f4492e"
-					(reference "#PWR048")
+					(reference "#PWR045")
 					(unit 1)
 				)
 			)
@@ -3210,7 +3210,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "892235fa-e1a6-49d9-9301-e144274d15f3")
-		(property "Reference" "#PWR046"
+		(property "Reference" "#PWR043"
 			(at 196.85 76.2 0)
 			(effects
 				(font
@@ -3261,7 +3261,7 @@
 		(instances
 			(project "MainBoard"
 				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/e222707b-78e5-4be0-8ce1-010f54f4492e"
-					(reference "#PWR046")
+					(reference "#PWR043")
 					(unit 1)
 				)
 			)
@@ -3449,7 +3449,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a87f63b9-21ea-48b6-9272-a757c638c2ed")
-		(property "Reference" "#PWR043"
+		(property "Reference" "#PWR040"
 			(at 168.91 109.22 0)
 			(effects
 				(font
@@ -3500,7 +3500,7 @@
 		(instances
 			(project "MainBoard"
 				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/e222707b-78e5-4be0-8ce1-010f54f4492e"
-					(reference "#PWR043")
+					(reference "#PWR040")
 					(unit 1)
 				)
 			)
@@ -3516,7 +3516,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "af24db47-62a5-4949-856a-4ed38c65373c")
-		(property "Reference" "#PWR047"
+		(property "Reference" "#PWR044"
 			(at 196.85 101.6 0)
 			(effects
 				(font
@@ -3567,7 +3567,7 @@
 		(instances
 			(project "MainBoard"
 				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/e222707b-78e5-4be0-8ce1-010f54f4492e"
-					(reference "#PWR047")
+					(reference "#PWR044")
 					(unit 1)
 				)
 			)
@@ -3909,7 +3909,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ce9b8eff-0eae-4aa7-abaf-d29f28d26ad0")
-		(property "Reference" "#PWR041"
+		(property "Reference" "#PWR038"
 			(at 95.25 66.04 0)
 			(effects
 				(font
@@ -3960,7 +3960,7 @@
 		(instances
 			(project ""
 				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/e222707b-78e5-4be0-8ce1-010f54f4492e"
-					(reference "#PWR041")
+					(reference "#PWR038")
 					(unit 1)
 				)
 			)
@@ -3976,7 +3976,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ed1eacdf-e5c8-483f-9135-5a53fa4d9641")
-		(property "Reference" "#PWR044"
+		(property "Reference" "#PWR041"
 			(at 168.91 119.38 0)
 			(effects
 				(font
@@ -4027,7 +4027,7 @@
 		(instances
 			(project ""
 				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/e222707b-78e5-4be0-8ce1-010f54f4492e"
-					(reference "#PWR044")
+					(reference "#PWR041")
 					(unit 1)
 				)
 			)
@@ -4043,7 +4043,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f24f1e5d-efef-470e-96ab-00cedf166641")
-		(property "Reference" "#PWR040"
+		(property "Reference" "#PWR037"
 			(at 88.9 128.27 0)
 			(effects
 				(font
@@ -4093,7 +4093,7 @@
 		(instances
 			(project "MainBoard"
 				(path "/600cc1cc-74ca-4bfc-97a0-b230eb3afbcd/e222707b-78e5-4be0-8ce1-010f54f4492e"
-					(reference "#PWR040")
+					(reference "#PWR037")
 					(unit 1)
 				)
 			)
