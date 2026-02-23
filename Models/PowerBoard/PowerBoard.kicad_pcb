@@ -9900,13 +9900,13 @@
 	(footprint "Connector_Custom:DowelPin_2.5mm"
 		(layer "F.Cu")
 		(uuid "e9605b46-60e5-4f57-baf5-446442faa18a")
-		(at 179.91 51.515)
+		(at 182.45 51.515)
 		(property "Reference" "H3"
 			(at 0.16 -4.42 0)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(hide yes)
-			(uuid "51ec00c7-80fb-4c37-a16c-b5b70c312b75")
+			(uuid "782a7127-f16a-4c63-8071-43b857433ba5")
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -9918,7 +9918,7 @@
 			(at 0.16 -3.22 0)
 			(unlocked yes)
 			(layer "F.Fab")
-			(uuid "028d3b80-3001-42a3-add1-f4898c187725")
+			(uuid "dd0b1218-4fd8-4586-b62b-535cd9680897")
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -9931,7 +9931,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "b298e4ea-5777-4136-8ea6-4f692f938671")
+			(uuid "73387b9e-a60f-48f3-aaf5-3cf51f1a25fb")
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -9944,7 +9944,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "75d92110-8d8f-46c4-87ba-28fe81dc8d25")
+			(uuid "52d56690-08da-49be-9918-80918b6c6343")
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -9994,13 +9994,13 @@
 	(footprint "Connector_Custom:DowelPin_2.5mm"
 		(layer "F.Cu")
 		(uuid "eb7aa5b9-f52a-4bc6-9e50-b02c0fb08f82")
-		(at 179.91 65.485)
+		(at 182.45 65.485)
 		(property "Reference" "H5"
 			(at 0.16 -4.42 0)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(hide yes)
-			(uuid "1ed5e175-0b17-4a75-a7ac-81931a7ddd30")
+			(uuid "21514ed9-ba4d-4b14-bbcd-f7a1343cbc53")
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -10012,7 +10012,7 @@
 			(at 0.16 -3.22 0)
 			(unlocked yes)
 			(layer "F.Fab")
-			(uuid "92fd64a2-c199-408a-a9e7-9348ce91ac29")
+			(uuid "03e0be56-9a43-450b-b116-e5703c306936")
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -10025,7 +10025,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "6f2f2cce-0366-413e-8891-3f5527b39fbb")
+			(uuid "fab0852f-a77a-4c40-9e18-22c8c589220c")
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -10038,7 +10038,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "1bee625c-0c01-4019-b8fe-b5896b4a6b0b")
+			(uuid "4cb96d9a-7030-4192-8d5f-749ca5def770")
 			(effects
 				(font
 					(size 0.8 0.8)
