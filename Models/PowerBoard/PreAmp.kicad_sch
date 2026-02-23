@@ -2008,7 +2008,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "144eaf78-45bf-46fd-bc94-606d6555c731")
-		(property "Reference" "#PWR045"
+		(property "Reference" "#PWR044"
 			(at 203.2 69.85 0)
 			(effects
 				(font
@@ -2058,7 +2058,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "#PWR045")
+					(reference "#PWR044")
 					(unit 1)
 				)
 			)
@@ -2338,7 +2338,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3ae03628-493e-4e34-ae26-00e00fbecd8f")
-		(property "Reference" "#PWR037"
+		(property "Reference" "#PWR036"
 			(at 66.04 80.01 0)
 			(effects
 				(font
@@ -2388,7 +2388,7 @@
 		(instances
 			(project ""
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "#PWR037")
+					(reference "#PWR036")
 					(unit 1)
 				)
 			)
@@ -2404,7 +2404,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "40e7d3b0-2b06-40fc-b380-7ec4db98564a")
-		(property "Reference" "#PWR043"
+		(property "Reference" "#PWR042"
 			(at 129.54 105.41 0)
 			(effects
 				(font
@@ -2454,7 +2454,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "#PWR043")
+					(reference "#PWR042")
 					(unit 1)
 				)
 			)
@@ -2680,7 +2680,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "57854740-5f04-4c1e-b2a0-2ebc4a73c2bc")
-		(property "Reference" "#PWR048"
+		(property "Reference" "#PWR047"
 			(at 210.82 97.79 0)
 			(effects
 				(font
@@ -2730,7 +2730,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "#PWR048")
+					(reference "#PWR047")
 					(unit 1)
 				)
 			)
@@ -2746,7 +2746,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5ca6ca88-ea71-4f74-9bd6-b6a4651dfac1")
-		(property "Reference" "#PWR041"
+		(property "Reference" "#PWR040"
 			(at 106.68 161.29 0)
 			(effects
 				(font
@@ -2796,7 +2796,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "#PWR041")
+					(reference "#PWR040")
 					(unit 1)
 				)
 			)
@@ -2812,7 +2812,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "64c0b9e7-986b-43cd-b343-1dc0d4a1384b")
-		(property "Reference" "#PWR042"
+		(property "Reference" "#PWR041"
 			(at 114.3 80.01 0)
 			(effects
 				(font
@@ -2862,7 +2862,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "#PWR042")
+					(reference "#PWR041")
 					(unit 1)
 				)
 			)
@@ -2878,7 +2878,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6f19e5de-299b-4b70-86e0-89798e6e58b8")
-		(property "Reference" "#PWR038"
+		(property "Reference" "#PWR037"
 			(at 62.23 132.08 0)
 			(effects
 				(font
@@ -2929,7 +2929,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "#PWR038")
+					(reference "#PWR037")
 					(unit 1)
 				)
 			)
@@ -2945,7 +2945,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7e09179b-7f1d-4b22-94b7-6925a0c9e959")
-		(property "Reference" "#PWR046"
+		(property "Reference" "#PWR045"
 			(at 203.2 97.79 0)
 			(effects
 				(font
@@ -2995,7 +2995,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "#PWR046")
+					(reference "#PWR045")
 					(unit 1)
 				)
 			)
@@ -3194,7 +3194,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "90d4f222-4d40-4683-8852-dea714f26b98")
-		(property "Reference" "#PWR040"
+		(property "Reference" "#PWR039"
 			(at 106.68 105.41 0)
 			(effects
 				(font
@@ -3244,7 +3244,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "#PWR040")
+					(reference "#PWR039")
 					(unit 1)
 				)
 			)
@@ -3348,7 +3348,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b882e11a-688d-42d1-8baf-7c2729d144c7")
-		(property "Reference" "#PWR039"
+		(property "Reference" "#PWR038"
 			(at 110.49 58.42 0)
 			(effects
 				(font
@@ -3399,7 +3399,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "#PWR039")
+					(reference "#PWR038")
 					(unit 1)
 				)
 			)
@@ -3592,7 +3592,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "db6a4bfb-788b-4780-91dc-cd10b8dc1da0")
-		(property "Reference" "#PWR047"
+		(property "Reference" "#PWR046"
 			(at 210.82 69.85 0)
 			(effects
 				(font
@@ -3642,7 +3642,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "#PWR047")
+					(reference "#PWR046")
 					(unit 1)
 				)
 			)
@@ -3742,7 +3742,6 @@
 	(symbol
 		(lib_id "Device:R_Potentiometer_US")
 		(at 203.2 116.84 0)
-		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3750,7 +3749,7 @@
 		(dnp no)
 		(uuid "e5ef195e-884f-4090-ae9f-ece511e9e357")
 		(property "Reference" "RV2"
-			(at 200.66 115.5699 0)
+			(at 200.66 118.1101 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3759,7 +3758,7 @@
 			)
 		)
 		(property "Value" "1k, 10%"
-			(at 200.66 118.1099 0)
+			(at 200.66 115.5701 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3840,7 +3839,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ffc31e23-020e-4ab2-a9ba-f83e7affb283")
-		(property "Reference" "#PWR044"
+		(property "Reference" "#PWR043"
 			(at 137.16 80.01 0)
 			(effects
 				(font
@@ -3890,7 +3889,7 @@
 		(instances
 			(project "PowerBoard"
 				(path "/c19e9b7b-7f36-470c-862a-1a648d3f14f6/55f1d4dd-dd9a-4f22-90c5-bff482123087"
-					(reference "#PWR044")
+					(reference "#PWR043")
 					(unit 1)
 				)
 			)
