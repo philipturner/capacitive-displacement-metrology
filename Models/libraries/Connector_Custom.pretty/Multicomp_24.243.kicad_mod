@@ -4,7 +4,7 @@
 	(generator_version "9.0")
 	(layer "F.Cu")
 	(property "Reference" "REF**"
-		(at 0.19 -6.57 0)
+		(at -0.02 -6.07 0)
 		(unlocked yes)
 		(layer "F.SilkS")
 		(uuid "0b549243-7b51-4ad2-b5ab-98975ca7ff61")
@@ -16,7 +16,7 @@
 		)
 	)
 	(property "Value" "Multicomp_24.243"
-		(at 0.19 -5.37 0)
+		(at -0.02 -4.87 0)
 		(unlocked yes)
 		(layer "F.Fab")
 		(uuid "9c1fc8e5-04f5-495a-a018-cedb7ef9dbed")
@@ -55,59 +55,139 @@
 	)
 	(attr through_hole)
 	(fp_line
-		(start -13.06 5.96)
-		(end -13.06 -5.96)
+		(start -10.46 -5.36)
+		(end -10.46 5.96)
 		(stroke
 			(width 0.12)
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "ef4eba5d-594b-421f-97e3-263477466499")
+		(uuid "981e3076-7288-4601-b195-053a6272bea1")
 	)
 	(fp_line
-		(start 13.06 -5.96)
-		(end -13.06 -5.96)
+		(start -10.46 5.96)
+		(end 11.56 5.96)
 		(stroke
 			(width 0.12)
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "540e82f7-720f-49f9-a336-8e1bcc368001")
+		(uuid "d4ddf855-63ab-4efb-87b8-24378c42df9a")
 	)
 	(fp_line
-		(start 13.06 -5.96)
-		(end 13.06 5.96)
+		(start 11.56 -5.36)
+		(end -10.46 -5.36)
 		(stroke
 			(width 0.12)
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "69a56717-e8f7-4d9e-b3d2-8450d6a7ee09")
+		(uuid "32b7cf0c-87c1-4e97-ac3d-e8dbc7912e52")
 	)
 	(fp_line
-		(start 13.06 5.96)
-		(end -13.06 5.96)
+		(start 11.56 5.96)
+		(end 11.56 -5.36)
 		(stroke
 			(width 0.12)
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "d92b2819-0a33-4ec9-b944-d1c45d52c838")
+		(uuid "d8c1d5f2-4ce0-4b39-be86-7fd916901b52")
 	)
-	(fp_rect
-		(start -13.45 -6.35)
-		(end 13.45 6.35)
+	(fp_line
+		(start -13.45 -5.4)
+		(end -10.85 -5.4)
 		(stroke
 			(width 0.05)
 			(type default)
 		)
-		(fill no)
 		(layer "F.CrtYd")
-		(uuid "a5921534-b01d-4baa-811d-013e1bbc0b01")
+		(uuid "5fe829e7-5d79-49a4-bfba-a09cf0d16922")
+	)
+	(fp_line
+		(start -13.45 5.4)
+		(end -13.45 -5.4)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "be66b6a5-26fd-410f-8bc3-0d17638782b5")
+	)
+	(fp_line
+		(start -10.85 -5.4)
+		(end -10.85 -5.75)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "26add28b-d31b-404b-8051-2c0987bc6d0f")
+	)
+	(fp_line
+		(start -10.85 5.4)
+		(end -13.45 5.4)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "6db2a54c-7732-4bbb-9a5a-0ffb788b3756")
+	)
+	(fp_line
+		(start -10.85 6.35)
+		(end -10.85 5.4)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "64fd73c7-03d4-4da2-a33b-d8b6ba45c3a6")
+	)
+	(fp_line
+		(start -10.85 6.35)
+		(end 11.95 6.35)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "06c8bd8a-eb47-4386-9605-8a1274aa2331")
+	)
+	(fp_line
+		(start 11.95 -5.75)
+		(end -10.85 -5.75)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "b83538a2-dfa4-4367-89f4-ede1f2e5d08d")
+	)
+	(fp_line
+		(start 11.95 6.35)
+		(end 11.95 -5.75)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "547e34e0-6036-4b99-a4df-c40a677fd19f")
 	)
 	(fp_rect
-		(start -12.95 -5.85)
-		(end 12.95 5.85)
+		(start -10.35 4.9)
+		(end -12.95 -4.9)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "590bdb1d-6d62-4fd9-9b0e-0a0908b0186e")
+	)
+	(fp_rect
+		(start 11.45 5.85)
+		(end -10.35 -5.25)
 		(stroke
 			(width 0.1)
 			(type default)
@@ -117,7 +197,7 @@
 		(uuid "6db699a0-0d5a-417a-96a1-87a7dbed7a1e")
 	)
 	(fp_text user "${REFERENCE}"
-		(at 0.19 -4.17 0)
+		(at -0.02 -3.67 0)
 		(unlocked yes)
 		(layer "F.Fab")
 		(uuid "06d03657-f3d5-4b41-8d9c-70070ac988b5")
@@ -134,7 +214,7 @@
 		(drill 2.07)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
-		(uuid "4ef72450-115e-41e8-9ebe-fb2c6d41b8e1")
+		(uuid "fe563908-15ca-42aa-ace6-cef09791baba")
 	)
 	(pad "2" thru_hole circle
 		(at 7.75 0)
@@ -142,18 +222,18 @@
 		(drill 2.07)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
-		(uuid "fe563908-15ca-42aa-ace6-cef09791baba")
+		(uuid "4ef72450-115e-41e8-9ebe-fb2c6d41b8e1")
 	)
 	(embedded_fonts no)
 	(model "${KIPRJMOD}/../libraries/Connector_Custom.pretty/Multicomp_24.243.1.step"
 		(offset
-			(xyz 7.75 0 0)
+			(xyz -7.75 0 0)
 		)
 		(scale
 			(xyz 1 1 1)
 		)
 		(rotate
-			(xyz -0 -0 -90)
+			(xyz -0 -0 90)
 		)
 	)
 )

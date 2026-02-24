@@ -1792,7 +1792,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "Banana Socket, Red"
+		(property "Value" "Banana Socket, Green"
 			(at 135.89 75.5649 90)
 			(effects
 				(font
@@ -1828,7 +1828,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.newark.com/multicomp/24-243-1/pcb-socket-4mm-red/dp/80P3616"
+		(property "Purchase Link" "https://www.newark.com/multicomp/24-243-4/banana-jack-4mm-24a-th-green/dp/80P3615"
 			(at 132.08 73.66 0)
 			(effects
 				(font
@@ -1880,7 +1880,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "Banana Socket, Yellow"
+		(property "Value" "Banana Socket, Blue"
 			(at 135.89 106.0449 90)
 			(effects
 				(font
@@ -1916,7 +1916,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.newark.com/multicomp/24-243-3/test-socket-pcb-4mm-yellow/dp/80P3617"
+		(property "Purchase Link" "https://www.newark.com/multicomp/24-243-5/test-socket-32a-panel-blue/dp/80P3614"
 			(at 132.08 104.14 0)
 			(effects
 				(font
