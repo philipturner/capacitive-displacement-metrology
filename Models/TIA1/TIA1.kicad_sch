@@ -209,6 +209,339 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Connector:Conn_01x06_Socket"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x06_Socket"
+				(at 0 -10.16 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x06, script generated"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x06_Socket_1_1"
+				(polyline
+					(pts
+						(xy -1.27 5.08) (xy -0.508 5.08)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 2.54) (xy -0.508 2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 0) (xy -0.508 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -2.54) (xy -0.508 -2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -5.08) (xy -0.508 -5.08)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -7.62) (xy -0.508 -7.62)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 4.572)
+					(mid -0.5058 5.08)
+					(end 0 5.588)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 2.032)
+					(mid -0.5058 2.54)
+					(end 0 3.048)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -0.508)
+					(mid -0.5058 0)
+					(end 0 0.508)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -3.048)
+					(mid -0.5058 -2.54)
+					(end 0 -2.032)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -5.588)
+					(mid -0.5058 -5.08)
+					(end 0 -4.572)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -8.128)
+					(mid -0.5058 -7.62)
+					(end 0 -7.112)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 5.08 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 3.81)
+					(name "Pin_5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -7.62 0)
+					(length 3.81)
+					(name "Pin_6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Connector:Conn_01x08_Socket"
 			(pin_names
 				(offset 1.016)
@@ -1386,6 +1719,16 @@
 	)
 	(wire
 		(pts
+			(xy 215.9 83.82) (xy 215.9 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "30ac454d-f036-4351-bc5c-5308041d20f2")
+	)
+	(wire
+		(pts
 			(xy 157.48 43.18) (xy 157.48 45.72)
 		)
 		(stroke
@@ -1413,16 +1756,6 @@
 			(type default)
 		)
 		(uuid "493146b0-5ccb-4994-abc6-bba50d71c710")
-	)
-	(wire
-		(pts
-			(xy 220.98 76.2) (xy 220.98 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4a0ab04d-99df-4eff-a792-2bf59f20a937")
 	)
 	(wire
 		(pts
@@ -1456,16 +1789,6 @@
 	)
 	(wire
 		(pts
-			(xy 215.9 76.2) (xy 215.9 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5016d1b4-4ab3-4cb8-992e-001e5754a70f")
-	)
-	(wire
-		(pts
 			(xy 121.92 114.3) (xy 121.92 116.84)
 		)
 		(stroke
@@ -1473,6 +1796,16 @@
 			(type default)
 		)
 		(uuid "5a741053-b685-4e64-8d4e-107277ed87aa")
+	)
+	(wire
+		(pts
+			(xy 218.44 76.2) (xy 218.44 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "607546cb-9b7c-447b-b66a-ac2d29e32ea1")
 	)
 	(wire
 		(pts
@@ -1566,6 +1899,16 @@
 	)
 	(wire
 		(pts
+			(xy 210.82 76.2) (xy 210.82 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9464c7e7-d170-4d57-9a49-254ffce6caeb")
+	)
+	(wire
+		(pts
 			(xy 210.82 43.18) (xy 210.82 45.72)
 		)
 		(stroke
@@ -1583,16 +1926,6 @@
 			(type default)
 		)
 		(uuid "98c33349-610f-4bfa-8038-b03c60b192c0")
-	)
-	(wire
-		(pts
-			(xy 226.06 76.2) (xy 226.06 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a7743462-8c4a-42a1-9c7c-c2ea7eceac2d")
 	)
 	(wire
 		(pts
@@ -1636,16 +1969,6 @@
 	)
 	(wire
 		(pts
-			(xy 210.82 76.2) (xy 210.82 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c2c61450-f6a9-4a63-bb8a-c6fb4e66bc1f")
-	)
-	(wire
-		(pts
 			(xy 226.06 43.18) (xy 226.06 45.72)
 		)
 		(stroke
@@ -1683,6 +2006,16 @@
 			(type default)
 		)
 		(uuid "da8b885a-a04a-462e-9f41-ef71ff6dcf75")
+	)
+	(wire
+		(pts
+			(xy 223.52 76.2) (xy 223.52 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ea53ef9b-29bc-449d-92b6-6cc653080bf7")
 	)
 	(wire
 		(pts
@@ -1754,8 +2087,8 @@
 		)
 		(uuid "2388b263-811e-4480-9570-128a8577c5da")
 	)
-	(label "BiasVoltage"
-		(at 220.98 86.36 270)
+	(label "PostVoltage"
+		(at 218.44 83.82 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1795,17 +2128,17 @@
 		(uuid "821c3d68-5067-4a9b-998b-33dadd359bcc")
 	)
 	(label "ISO_GND"
-		(at 223.52 76.2 270)
+		(at 215.9 83.82 270)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "8f6bda41-ca65-4fce-8a03-c70a4624d5aa")
+		(uuid "83191e6d-bd02-495d-ad8e-f0c490b052ee")
 	)
-	(label "-15V"
-		(at 215.9 86.36 270)
+	(label "15V"
+		(at 223.52 83.82 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1854,18 +2187,8 @@
 		)
 		(uuid "c52af096-3926-4ae5-9ab0-3202a9100220")
 	)
-	(label "PostVoltage"
-		(at 226.06 86.36 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "d1828a1a-e6b9-4b49-8307-976e0154d96e")
-	)
-	(label "15V"
-		(at 210.82 86.36 270)
+	(label "-15V"
+		(at 210.82 83.82 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1884,16 +2207,6 @@
 		)
 		(uuid "e8caf9d6-2ccd-4f66-bd22-bb47e38de487")
 	)
-	(label "ISO_GND"
-		(at 228.6 76.2 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "ff3e4368-5de8-4901-9827-b436eb3adeda")
-	)
 	(symbol
 		(lib_id "Connector:Conn_01x08_Socket")
 		(at 218.44 38.1 90)
@@ -1904,7 +2217,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "06024991-1074-4255-9900-44912fb1f595")
-		(property "Reference" "J2"
+		(property "Reference" "J3"
 			(at 219.71 33.02 90)
 			(effects
 				(font
@@ -1992,7 +2305,7 @@
 		(instances
 			(project ""
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "J2")
+					(reference "J3")
 					(unit 1)
 				)
 			)
@@ -2431,110 +2744,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x08_Socket")
-		(at 218.44 71.12 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "56570b50-04d7-4bd6-9dc1-f00e6f6d0024")
-		(property "Reference" "J3"
-			(at 219.71 66.04 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Conn_01x08_Socket"
-			(at 219.71 68.58 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Connector_Custom:PinSocket_1x8"
-			(at 218.44 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 218.44 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x08, script generated"
-			(at 218.44 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC081LFBN-RC/810180"
-			(at 218.44 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost" "$0.530"
-			(at 218.44 71.12 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "c9904b43-9734-483c-bb59-e85bb3d76ea2")
-		)
-		(pin "1"
-			(uuid "b0c3743c-b3fa-4844-b51c-57e494216368")
-		)
-		(pin "4"
-			(uuid "a5ac3bc1-dbae-4045-ae9e-b62a6ba8ab5d")
-		)
-		(pin "3"
-			(uuid "c69dae1c-b498-4c5f-8fd1-8e2da36f80b7")
-		)
-		(pin "5"
-			(uuid "94575818-65c9-4810-ab83-5930b2ed69a0")
-		)
-		(pin "8"
-			(uuid "68adb47f-aca4-4d0e-b2bc-2bf02357e941")
-		)
-		(pin "7"
-			(uuid "c98de043-0ca0-4477-b3c8-2419ab12fdf3")
-		)
-		(pin "6"
-			(uuid "9cd98030-6013-4250-b19d-ad96f6795a19")
-		)
-		(instances
-			(project "TIA1"
-				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "J3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 149.86 45.72 270)
 		(unit 1)
@@ -2691,16 +2900,16 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 218.44 76.2 0)
+		(at 220.98 76.2 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "6bad3cf3-7b23-410e-843c-12f960d58bfa")
+		(uuid "6cfdfeaa-5d1e-4dfc-836f-2c467de7d1e1")
 		(property "Reference" "#PWR06"
-			(at 218.44 82.55 0)
+			(at 220.98 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2709,7 +2918,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 218.44 81.28 0)
+			(at 220.98 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2717,7 +2926,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 218.44 76.2 0)
+			(at 220.98 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2726,7 +2935,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 218.44 76.2 0)
+			(at 220.98 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2735,7 +2944,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 218.44 76.2 0)
+			(at 220.98 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2744,7 +2953,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "2bd16972-f883-40c7-ad60-aac1020ebeca")
+			(uuid "e5d6cd3e-0e97-4f0c-b076-66ed37d7f07b")
 		)
 		(instances
 			(project "TIA1"
@@ -2897,7 +3106,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "c437b86a-2780-4974-afbf-f5003de072f2")
+		(uuid "b7b48101-f821-4a53-bf90-a4516d9f7e91")
 		(property "Reference" "#PWR05"
 			(at 213.36 82.55 0)
 			(effects
@@ -2943,12 +3152,110 @@
 			)
 		)
 		(pin "1"
-			(uuid "42e31a6b-159e-4f89-963d-758ae0a6906e")
+			(uuid "e67f344e-c034-45cb-9694-79ff7b7590ca")
+		)
+		(instances
+			(project "TIA1"
+				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
+					(reference "#PWR05")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x06_Socket")
+		(at 215.9 71.12 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "eb3ecbce-0ce1-491a-9bc4-6efabf7d6d58")
+		(property "Reference" "J2"
+			(at 217.17 66.04 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x06_Socket"
+			(at 217.17 68.58 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_Custom:PinSocket_1x6"
+			(at 215.9 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 215.9 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x06, script generated"
+			(at 215.9 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC061LFBN-RC/810178"
+			(at 215.9 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.470"
+			(at 215.9 71.12 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e6e0973e-0791-45d1-bbbb-981a55e80394")
+		)
+		(pin "2"
+			(uuid "7c33f906-8b79-49a1-84c9-32167eff0ff2")
+		)
+		(pin "3"
+			(uuid "887f62ed-968e-4349-9496-ad8b54dc303c")
+		)
+		(pin "4"
+			(uuid "1b926e43-820f-46f2-ae78-719c451ab037")
+		)
+		(pin "5"
+			(uuid "56466505-ec10-4ce7-819b-871f9f56beeb")
+		)
+		(pin "6"
+			(uuid "ac63b7e8-6ca8-42b5-b925-6a907bd0dd4b")
 		)
 		(instances
 			(project ""
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "#PWR05")
+					(reference "J2")
 					(unit 1)
 				)
 			)
