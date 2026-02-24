@@ -1,4 +1,4 @@
-(footprint "PinConnector_1x3"
+(footprint "PinHeader_1x3"
 	(version 20241229)
 	(generator "pcbnew")
 	(generator_version "9.0")
@@ -15,7 +15,7 @@
 			)
 		)
 	)
-	(property "Value" "PinConnector_1x3"
+	(property "Value" "PinHeader_1x3"
 		(at 0.0075 -3.68 0)
 		(unlocked yes)
 		(layer "F.Fab")
@@ -125,4 +125,15 @@
 		(uuid "15029680-8034-4719-9e58-f2fd3eaabe30")
 	)
 	(embedded_fonts no)
+	(model "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step"
+		(offset
+			(xyz 0 2.54 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -0 -0)
+		)
+	)
 )

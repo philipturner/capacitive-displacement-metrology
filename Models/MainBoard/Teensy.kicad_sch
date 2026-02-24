@@ -3929,7 +3929,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x24"
+		(property "Footprint" "Connector_Custom:PinSocket_1x24"
 			(at 96.52 91.44 0)
 			(effects
 				(font
@@ -4080,7 +4080,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x24"
+		(property "Footprint" "Connector_Custom:PinSocket_1x24"
 			(at 208.28 93.98 0)
 			(effects
 				(font

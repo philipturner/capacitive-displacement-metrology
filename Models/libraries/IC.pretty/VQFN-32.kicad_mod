@@ -798,4 +798,15 @@
 		(uuid "5c361431-6422-4ca1-8a6b-ace556e41d24")
 	)
 	(embedded_fonts no)
+	(model "${KIPRJMOD}/../libraries/IC.pretty/VQFN-32.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -0 -0)
+		)
+	)
 )

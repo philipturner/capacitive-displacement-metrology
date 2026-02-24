@@ -97,4 +97,15 @@
 		(uuid "5022795f-4c3f-451f-9d9a-5bf49014727d")
 	)
 	(embedded_fonts no)
+	(model "${KIPRJMOD}/../libraries/Connector_Custom.pretty/Keystone_24929.step"
+		(offset
+			(xyz 0 0 -1.5)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 -0 -0)
+		)
+	)
 )

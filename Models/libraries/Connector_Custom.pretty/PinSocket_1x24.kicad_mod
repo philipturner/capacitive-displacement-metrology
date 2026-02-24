@@ -1,4 +1,4 @@
-(footprint "PinConnector_1x24"
+(footprint "PinSocket_1x24"
 	(version 20241229)
 	(generator "pcbnew")
 	(generator_version "9.0")
@@ -15,7 +15,7 @@
 			)
 		)
 	)
-	(property "Value" "PinConnector_1x24"
+	(property "Value" "PinSocket_1x24"
 		(at -0.025 -30.365 0)
 		(unlocked yes)
 		(layer "F.Fab")
@@ -293,4 +293,15 @@
 		(uuid "1ff24493-b9d3-4819-b800-3c95c6e48395")
 	)
 	(embedded_fonts no)
+	(model "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x24_P2.54mm_Vertical.step"
+		(offset
+			(xyz 0 29.21 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -0 -0)
+		)
+	)
 )

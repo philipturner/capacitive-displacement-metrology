@@ -291,4 +291,15 @@
 		(uuid "9b7fdc88-b117-4daa-a8a4-4c234d857a79")
 	)
 	(embedded_fonts no)
+	(model "${KIPRJMOD}/../libraries/IC.pretty/PA95.step"
+		(offset
+			(xyz 0 3.9 8)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -180 -0 -0)
+		)
+	)
 )

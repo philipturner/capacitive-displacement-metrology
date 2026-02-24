@@ -1,10 +1,10 @@
-(footprint "PinConnector_1x8"
+(footprint "PinSocket_1x13"
 	(version 20241229)
 	(generator "pcbnew")
 	(generator_version "9.0")
 	(layer "F.Cu")
 	(property "Reference" "REF**"
-		(at -0.025 -11.245 0)
+		(at -0.025 -17.595 0)
 		(unlocked yes)
 		(layer "F.SilkS")
 		(uuid "92ee7fda-850f-482f-90d6-81a8c63f1161")
@@ -15,8 +15,8 @@
 			)
 		)
 	)
-	(property "Value" "PinConnector_1x8"
-		(at -0.025 -10.045 0)
+	(property "Value" "PinSocket_1x13"
+		(at -0.025 -16.395 0)
 		(unlocked yes)
 		(layer "F.Fab")
 		(uuid "4f27b438-0102-4aa5-8454-7ebf5f3de7fc")
@@ -55,8 +55,8 @@
 	)
 	(attr through_hole)
 	(fp_rect
-		(start -1.39 -10.42)
-		(end 1.39 10.42)
+		(start -1.39 -16.77)
+		(end 1.39 16.77)
 		(stroke
 			(width 0.12)
 			(type default)
@@ -66,8 +66,8 @@
 		(uuid "9a42a809-b21d-4d81-b705-4de8eedd8c83")
 	)
 	(fp_rect
-		(start -1.78 -10.81)
-		(end 1.78 10.81)
+		(start -1.78 -17.16)
+		(end 1.78 17.16)
 		(stroke
 			(width 0.05)
 			(type default)
@@ -77,8 +77,8 @@
 		(uuid "f12f210c-b902-4b28-a9a2-b631d93ff8b6")
 	)
 	(fp_rect
-		(start -1.28 -10.31)
-		(end 1.28 10.31)
+		(start -1.28 -16.66)
+		(end 1.28 16.66)
 		(stroke
 			(width 0.1)
 			(type default)
@@ -88,7 +88,7 @@
 		(uuid "92abdf44-974d-425a-8a6c-70eee91ed1e1")
 	)
 	(fp_text user "${REFERENCE}"
-		(at -0.025 -8.845 0)
+		(at -0.025 -15.195 0)
 		(unlocked yes)
 		(layer "F.Fab")
 		(uuid "3388834e-b4ee-4b3e-ae5f-e93b4c6c11c7")
@@ -100,7 +100,7 @@
 		)
 	)
 	(pad "1" thru_hole rect
-		(at 0 -8.89)
+		(at 0 -15.24)
 		(size 1.6 1.6)
 		(drill 1.05)
 		(layers "*.Cu" "*.Mask")
@@ -109,7 +109,7 @@
 		(uuid "36a075ef-b3c1-46f3-a6fa-8ddea6b62a9a")
 	)
 	(pad "2" thru_hole circle
-		(at 0 -6.35)
+		(at 0 -12.7)
 		(size 1.6 1.6)
 		(drill 1.05)
 		(layers "*.Cu" "*.Mask")
@@ -117,7 +117,7 @@
 		(uuid "fe9dbb56-e14a-4781-9900-b6bc0485c2f2")
 	)
 	(pad "3" thru_hole circle
-		(at 0 -3.81)
+		(at 0 -10.16)
 		(size 1.6 1.6)
 		(drill 1.05)
 		(layers "*.Cu" "*.Mask")
@@ -125,7 +125,7 @@
 		(uuid "d85747a9-1088-4485-a858-4c7720549942")
 	)
 	(pad "4" thru_hole circle
-		(at 0 -1.27)
+		(at 0 -7.62)
 		(size 1.6 1.6)
 		(drill 1.05)
 		(layers "*.Cu" "*.Mask")
@@ -133,7 +133,7 @@
 		(uuid "6de348cc-bd3e-4906-b359-9d090e18a404")
 	)
 	(pad "5" thru_hole circle
-		(at 0 1.27)
+		(at 0 -5.08)
 		(size 1.6 1.6)
 		(drill 1.05)
 		(layers "*.Cu" "*.Mask")
@@ -141,7 +141,7 @@
 		(uuid "e740db1a-428d-4efe-bf2d-02174bdd6920")
 	)
 	(pad "6" thru_hole circle
-		(at 0 3.81)
+		(at 0 -2.54)
 		(size 1.6 1.6)
 		(drill 1.05)
 		(layers "*.Cu" "*.Mask")
@@ -149,7 +149,7 @@
 		(uuid "cadb35e8-fb99-41dc-aae7-285ca91c367b")
 	)
 	(pad "7" thru_hole circle
-		(at 0 6.35)
+		(at 0 0)
 		(size 1.6 1.6)
 		(drill 1.05)
 		(layers "*.Cu" "*.Mask")
@@ -157,12 +157,63 @@
 		(uuid "bfab5f26-c50d-4d59-8ae8-818ec279d212")
 	)
 	(pad "8" thru_hole circle
-		(at 0 8.89)
+		(at 0 2.54)
 		(size 1.6 1.6)
 		(drill 1.05)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
 		(uuid "9ddde6eb-c480-4438-a568-dee36c55c943")
 	)
+	(pad "9" thru_hole circle
+		(at 0 5.08)
+		(size 1.6 1.6)
+		(drill 1.05)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "eb245c47-afe8-4a1f-9c06-99cbb6f1f7bc")
+	)
+	(pad "10" thru_hole circle
+		(at 0 7.62)
+		(size 1.6 1.6)
+		(drill 1.05)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "3bbcaae6-b4b1-48de-82d1-90f1ca15badc")
+	)
+	(pad "11" thru_hole circle
+		(at 0 10.16)
+		(size 1.6 1.6)
+		(drill 1.05)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "e3b9824f-3136-4975-b733-853574f1c68a")
+	)
+	(pad "12" thru_hole circle
+		(at 0 12.7)
+		(size 1.6 1.6)
+		(drill 1.05)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "18111e0a-14cf-4680-ad98-3340b0a19842")
+	)
+	(pad "13" thru_hole circle
+		(at 0 15.24)
+		(size 1.6 1.6)
+		(drill 1.05)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "a9a30f9b-f0c7-41b5-8303-9838e8dbb7c2")
+	)
 	(embedded_fonts no)
+	(model "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x13_P2.54mm_Vertical.step"
+		(offset
+			(xyz 0 15.24 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -0 -0)
+		)
+	)
 )

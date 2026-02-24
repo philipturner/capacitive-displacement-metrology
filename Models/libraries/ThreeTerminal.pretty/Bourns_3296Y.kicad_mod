@@ -147,4 +147,15 @@
 		(uuid "cf992fd7-76e9-43cd-956c-e6b69441e209")
 	)
 	(embedded_fonts no)
+	(model "${KIPRJMOD}/../libraries/ThreeTerminal.pretty/Bourns_3296Y.step"
+		(offset
+			(xyz -2.4 -4.75 10)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -90 -0)
+		)
+	)
 )

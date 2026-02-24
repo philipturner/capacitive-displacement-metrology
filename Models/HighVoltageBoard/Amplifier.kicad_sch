@@ -3832,7 +3832,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x3"
+		(property "Footprint" "Connector_Custom:PinHeader_1x3"
 			(at 53.34 162.56 0)
 			(effects
 				(font

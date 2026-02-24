@@ -123,4 +123,15 @@
 		(uuid "c15038b0-9bac-46b1-97cd-1199784a99de")
 	)
 	(embedded_fonts no)
+	(model "${KIPRJMOD}/../libraries/TwoTerminal.pretty/CAPC2220_GRJ.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 -0 -0)
+		)
+	)
 )

@@ -123,4 +123,15 @@
 		(uuid "efeebecf-1425-4bbb-a8ac-1517a134d5da")
 	)
 	(embedded_fonts no)
+	(model "${KIPRJMOD}/../libraries/TwoTerminal.pretty/RESC1210_TNPV.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
 )

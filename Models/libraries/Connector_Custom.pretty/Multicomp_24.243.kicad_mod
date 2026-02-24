@@ -145,4 +145,15 @@
 		(uuid "fe563908-15ca-42aa-ace6-cef09791baba")
 	)
 	(embedded_fonts no)
+	(model "${KIPRJMOD}/../libraries/Connector_Custom.pretty/Multicomp_24.243.1.step"
+		(offset
+			(xyz 7.75 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -0 -90)
+		)
+	)
 )

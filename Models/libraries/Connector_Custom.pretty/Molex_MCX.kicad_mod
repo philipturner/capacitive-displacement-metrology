@@ -297,4 +297,15 @@
 		(uuid "6744b23f-6819-4388-9823-5600cef30284")
 	)
 	(embedded_fonts no)
+	(model "${KIPRJMOD}/../libraries/Connector_Custom.pretty/Molex_MCX.step"
+		(offset
+			(xyz -6.53 0 3.3)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 -0 90)
+		)
+	)
 )

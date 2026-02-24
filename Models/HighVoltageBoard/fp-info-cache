@@ -1,4 +1,4 @@
-26626307668678508
+26628086008247776
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -9076,8 +9076,8 @@ Molex_MCX
 
 
 0
-0
-0
+5
+2
 Connector_Custom
 Multicomp_24.243
 
@@ -9093,49 +9093,56 @@ NetTie_0.2mm
 2
 2
 Connector_Custom
-PinConnector_1x2
+PinHeader_1x2
 
 
 0
 2
 2
 Connector_Custom
-PinConnector_1x3
+PinHeader_1x3
 
 
 0
 3
 3
 Connector_Custom
-PinConnector_1x4
+PinHeader_1x4
 
 
 0
 4
 4
 Connector_Custom
-PinConnector_1x8
-
-
-0
-8
-8
-Connector_Custom
-PinConnector_1x9
+PinHeader_1x9
 
 
 0
 9
 9
 Connector_Custom
-PinConnector_1x13
+PinHeader_1x13
 
 
 0
 13
 13
 Connector_Custom
-PinConnector_1x24
+PinSocket_1x8
+
+
+0
+8
+8
+Connector_Custom
+PinSocket_1x13
+
+
+0
+13
+13
+Connector_Custom
+PinSocket_1x24
 
 
 0

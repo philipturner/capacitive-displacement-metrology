@@ -249,4 +249,15 @@
 		(uuid "3557380e-2499-4875-80d1-e17f853fbfaf")
 	)
 	(embedded_fonts no)
+	(model "${KIPRJMOD}/../libraries/Connector_Custom.pretty/RFPC-SMA27-F.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 -0 90)
+		)
+	)
 )

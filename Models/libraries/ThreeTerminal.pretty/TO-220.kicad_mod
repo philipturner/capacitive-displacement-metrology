@@ -145,4 +145,15 @@
 		(uuid "93bc78e8-e1b3-4a96-9730-7937d8036440")
 	)
 	(embedded_fonts no)
+	(model "${KIPRJMOD}/../libraries/ThreeTerminal.pretty/TO-220.step"
+		(offset
+			(xyz 0 2.85 15.9)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -90 -180)
+		)
+	)
 )

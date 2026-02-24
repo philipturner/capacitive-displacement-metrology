@@ -2750,7 +2750,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x3"
+		(property "Footprint" "Connector_Custom:PinHeader_1x3"
 			(at 68.58 76.2 0)
 			(effects
 				(font
@@ -3105,7 +3105,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x3"
+		(property "Footprint" "Connector_Custom:PinHeader_1x3"
 			(at 68.58 101.6 0)
 			(effects
 				(font
@@ -3267,7 +3267,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x3"
+		(property "Footprint" "Connector_Custom:PinHeader_1x3"
 			(at 68.58 152.4 0)
 			(effects
 				(font
@@ -3529,7 +3529,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x13"
+		(property "Footprint" "Connector_Custom:PinSocket_1x13"
 			(at 132.08 111.76 0)
 			(effects
 				(font
@@ -3932,7 +3932,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x3"
+		(property "Footprint" "Connector_Custom:PinHeader_1x3"
 			(at 68.58 25.4 0)
 			(effects
 				(font
@@ -4088,7 +4088,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x3"
+		(property "Footprint" "Connector_Custom:PinHeader_1x3"
 			(at 68.58 50.8 0)
 			(effects
 				(font
@@ -4397,7 +4397,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:PinConnector_1x3"
+		(property "Footprint" "Connector_Custom:PinHeader_1x3"
 			(at 68.58 127 0)
 			(effects
 				(font

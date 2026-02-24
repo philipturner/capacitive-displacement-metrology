@@ -123,4 +123,15 @@
 		(uuid "aa3f1f3c-917c-4d1c-b586-913183e89b9c")
 	)
 	(embedded_fonts no)
+	(model "${KIPRJMOD}/../libraries/TwoTerminal.pretty/CAPC1206_CHV.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
 )
