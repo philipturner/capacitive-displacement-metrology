@@ -209,339 +209,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Connector:Conn_01x06_Socket"
-			(pin_names
-				(offset 1.016)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "J"
-				(at 0 7.62 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "Conn_01x06_Socket"
-				(at 0 -10.16 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Generic connector, single row, 01x06, script generated"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_locked" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "connector"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "Connector*:*_1x??_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "Conn_01x06_Socket_1_1"
-				(polyline
-					(pts
-						(xy -1.27 5.08) (xy -0.508 5.08)
-					)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.27 2.54) (xy -0.508 2.54)
-					)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.27 0) (xy -0.508 0)
-					)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.27 -2.54) (xy -0.508 -2.54)
-					)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.27 -5.08) (xy -0.508 -5.08)
-					)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.27 -7.62) (xy -0.508 -7.62)
-					)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 0 4.572)
-					(mid -0.5058 5.08)
-					(end 0 5.588)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 0 2.032)
-					(mid -0.5058 2.54)
-					(end 0 3.048)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 0 -0.508)
-					(mid -0.5058 0)
-					(end 0 0.508)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 0 -3.048)
-					(mid -0.5058 -2.54)
-					(end 0 -2.032)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 0 -5.588)
-					(mid -0.5058 -5.08)
-					(end 0 -4.572)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 0 -8.128)
-					(mid -0.5058 -7.62)
-					(end 0 -7.112)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at -5.08 5.08 0)
-					(length 3.81)
-					(name "Pin_1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 2.54 0)
-					(length 3.81)
-					(name "Pin_2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 0 0)
-					(length 3.81)
-					(name "Pin_3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -2.54 0)
-					(length 3.81)
-					(name "Pin_4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -5.08 0)
-					(length 3.81)
-					(name "Pin_5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -7.62 0)
-					(length 3.81)
-					(name "Pin_6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Connector:Conn_01x08_Socket"
 			(pin_names
 				(offset 1.016)
@@ -1608,6 +1275,28 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "With the same board layout, try both\n100M and 330M feedback resistors."
+		(exclude_from_sim no)
+		(at 127.254 130.556 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "26c5fecc-2bd0-4713-913d-b0dd24ba95f3")
+	)
+	(text "Try one board design with keepout zone\nunder resistor, one board without it."
+		(exclude_from_sim no)
+		(at 127 104.14 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "449d92cb-1918-4a2b-83ee-53bb52ee1f02")
+	)
 	(text "DESIGN REVISION: Removed the\nV_bias + ISO_GND pair by mistake.\n\nTop tier 8-way socket is not a\nreceptable for V_bias wire.\n\nClever idea: 2-way socket for the\ntwo new receive points, able to\nuse existing PCB layout with\nminimal changes."
 		(exclude_from_sim no)
 		(at 209.804 99.568 0)
@@ -1619,9 +1308,9 @@
 		)
 		(uuid "9b2d4ca8-9a5c-484c-9efa-b99fa15e540d")
 	)
-	(text "OPA828: Already have one in stock; order two spares\n(3 total) and stock will be 4. That way, do not\nhave to worry about supply during Phase II."
+	(text "OPA828: Order enough spares to try all\ncombinations of R_f and keepout zone."
 		(exclude_from_sim no)
-		(at 141.224 57.912 0)
+		(at 145.034 59.944 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1678,9 +1367,17 @@
 		(color 0 0 0 0)
 		(uuid "efaa041f-1c7f-4389-bc27-8ac37e8b5c61")
 	)
+	(no_connect
+		(at 139.7 124.46)
+		(uuid "e348604a-9fb8-4301-9ce6-f8b3033a01fa")
+	)
+	(no_connect
+		(at 132.08 124.46)
+		(uuid "e5356491-46a2-4135-80c9-92bbfc4da8a7")
+	)
 	(wire
 		(pts
-			(xy 121.92 124.46) (xy 121.92 127)
+			(xy 50.8 137.16) (xy 50.8 139.7)
 		)
 		(stroke
 			(width 0)
@@ -1690,7 +1387,7 @@
 	)
 	(wire
 		(pts
-			(xy 147.32 114.3) (xy 147.32 116.84)
+			(xy 76.2 127) (xy 76.2 129.54)
 		)
 		(stroke
 			(width 0)
@@ -1730,13 +1427,23 @@
 	)
 	(wire
 		(pts
-			(xy 215.9 83.82) (xy 215.9 76.2)
+			(xy 228.6 76.2) (xy 228.6 83.82)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "30ac454d-f036-4351-bc5c-5308041d20f2")
+		(uuid "30813ef2-3103-4abd-917b-1405d82027e5")
+	)
+	(wire
+		(pts
+			(xy 215.9 76.2) (xy 215.9 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3361e62e-8250-4a97-b1d8-5a8ea3d5d0ec")
 	)
 	(wire
 		(pts
@@ -1770,7 +1477,7 @@
 	)
 	(wire
 		(pts
-			(xy 147.32 124.46) (xy 147.32 127)
+			(xy 76.2 137.16) (xy 76.2 139.7)
 		)
 		(stroke
 			(width 0)
@@ -1800,23 +1507,13 @@
 	)
 	(wire
 		(pts
-			(xy 121.92 114.3) (xy 121.92 116.84)
+			(xy 50.8 127) (xy 50.8 129.54)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "5a741053-b685-4e64-8d4e-107277ed87aa")
-	)
-	(wire
-		(pts
-			(xy 218.44 76.2) (xy 218.44 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "607546cb-9b7c-447b-b66a-ac2d29e32ea1")
 	)
 	(wire
 		(pts
@@ -1837,6 +1534,16 @@
 			(type default)
 		)
 		(uuid "69d6c7fb-a13b-4211-b5a1-ed744c4fe2f5")
+	)
+	(wire
+		(pts
+			(xy 220.98 76.2) (xy 220.98 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6a4ac427-93f8-4f35-93a0-509bda60b706")
 	)
 	(wire
 		(pts
@@ -1890,6 +1597,16 @@
 	)
 	(wire
 		(pts
+			(xy 223.52 76.2) (xy 223.52 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8923122b-a5e4-41d0-8bd2-07b1f0306dc4")
+	)
+	(wire
+		(pts
 			(xy 127 99.06) (xy 132.08 99.06)
 		)
 		(stroke
@@ -1937,6 +1654,16 @@
 			(type default)
 		)
 		(uuid "98c33349-610f-4bfa-8038-b03c60b192c0")
+	)
+	(wire
+		(pts
+			(xy 226.06 76.2) (xy 226.06 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a7eebb03-a00f-424a-a583-4900013e3e8b")
 	)
 	(wire
 		(pts
@@ -2020,16 +1747,6 @@
 	)
 	(wire
 		(pts
-			(xy 223.52 76.2) (xy 223.52 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ea53ef9b-29bc-449d-92b6-6cc653080bf7")
-	)
-	(wire
-		(pts
 			(xy 154.94 43.18) (xy 154.94 50.8)
 		)
 		(stroke
@@ -2078,6 +1795,16 @@
 		)
 		(uuid "f8a35f32-7e82-4ad9-92e8-e978914c9f71")
 	)
+	(label "ISO_GND"
+		(at 228.6 83.82 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "04506b4d-8ce3-46e9-a163-f2cd3ce30ce5")
+	)
 	(label "Current"
 		(at 124.46 76.2 180)
 		(effects
@@ -2099,7 +1826,7 @@
 		(uuid "2388b263-811e-4480-9570-128a8577c5da")
 	)
 	(label "PostVoltage"
-		(at 218.44 83.82 270)
+		(at 220.98 83.82 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2109,7 +1836,7 @@
 		(uuid "40a2c7ab-5ef9-4e80-91cf-f4e4e5f68426")
 	)
 	(label "-15V"
-		(at 147.32 114.3 0)
+		(at 76.2 127 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2119,7 +1846,7 @@
 		(uuid "4909cfdf-99d1-4670-8375-0c22e09c02df")
 	)
 	(label "15V"
-		(at 121.92 114.3 0)
+		(at 50.8 127 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2139,7 +1866,7 @@
 		(uuid "821c3d68-5067-4a9b-998b-33dadd359bcc")
 	)
 	(label "ISO_GND"
-		(at 215.9 83.82 270)
+		(at 223.52 83.82 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2149,7 +1876,7 @@
 		(uuid "83191e6d-bd02-495d-ad8e-f0c490b052ee")
 	)
 	(label "15V"
-		(at 223.52 83.82 270)
+		(at 215.9 83.82 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2167,6 +1894,16 @@
 			(justify right bottom)
 		)
 		(uuid "a3ad2f04-176d-4c2b-a044-1d76281ecfd6")
+	)
+	(label "BiasVoltage"
+		(at 226.06 83.82 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "ab44e4c9-3e5e-48d7-a536-692697e6d72d")
 	)
 	(label "PostVoltage"
 		(at 149.86 73.66 0)
@@ -2228,7 +1965,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "06024991-1074-4255-9900-44912fb1f595")
-		(property "Reference" "J3"
+		(property "Reference" "J2"
 			(at 219.71 33.02 90)
 			(effects
 				(font
@@ -2316,7 +2053,7 @@
 		(instances
 			(project ""
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "J3")
+					(reference "J2")
 					(unit 1)
 				)
 			)
@@ -2523,7 +2260,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "21f3ca41-cdfa-4697-b6b7-41f0ad63dc5c")
-		(property "Reference" "R2"
+		(property "Reference" "R3"
 			(at 163.83 39.37 90)
 			(effects
 				(font
@@ -2593,7 +2330,7 @@
 		(instances
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "R2")
+					(reference "R3")
 					(unit 1)
 				)
 			)
@@ -2690,7 +2427,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 147.32 127 0)
+		(at 76.2 139.7 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2699,7 +2436,7 @@
 		(fields_autoplaced yes)
 		(uuid "429245f8-848d-406f-8012-428e659282c4")
 		(property "Reference" "#PWR02"
-			(at 147.32 133.35 0)
+			(at 76.2 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2708,7 +2445,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 147.32 132.08 0)
+			(at 76.2 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2716,7 +2453,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 147.32 127 0)
+			(at 76.2 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2725,7 +2462,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 147.32 127 0)
+			(at 76.2 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2734,7 +2471,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 147.32 127 0)
+			(at 76.2 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2823,7 +2560,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 121.92 120.65 0)
+		(at 50.8 133.35 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2832,7 +2569,7 @@
 		(fields_autoplaced yes)
 		(uuid "62c0d205-a727-46e0-abd2-d87615cb6daf")
 		(property "Reference" "C1"
-			(at 125.73 119.3799 0)
+			(at 54.61 132.0799 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2841,7 +2578,7 @@
 			)
 		)
 		(property "Value" "100 nF, 0603"
-			(at 125.73 121.9199 0)
+			(at 54.61 134.6199 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2850,7 +2587,7 @@
 			)
 		)
 		(property "Footprint" "TwoTerminal:CAPC0603"
-			(at 122.8852 124.46 0)
+			(at 51.7652 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2859,7 +2596,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 121.92 120.65 0)
+			(at 50.8 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2868,7 +2605,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 121.92 120.65 0)
+			(at 50.8 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2877,7 +2614,7 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRM188R72A104KA35D/702549"
-			(at 121.92 120.65 0)
+			(at 50.8 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2886,7 +2623,7 @@
 			)
 		)
 		(property "Cost" "$0.079"
-			(at 121.92 120.65 0)
+			(at 50.8 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2911,7 +2648,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 220.98 76.2 0)
+		(at 218.44 76.2 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2920,7 +2657,7 @@
 		(fields_autoplaced yes)
 		(uuid "6cfdfeaa-5d1e-4dfc-836f-2c467de7d1e1")
 		(property "Reference" "#PWR06"
-			(at 220.98 82.55 0)
+			(at 218.44 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2929,7 +2666,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 220.98 81.28 0)
+			(at 218.44 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2937,7 +2674,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 220.98 76.2 0)
+			(at 218.44 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2946,7 +2683,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 220.98 76.2 0)
+			(at 218.44 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2955,7 +2692,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 220.98 76.2 0)
+			(at 218.44 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3044,7 +2781,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 121.92 127 0)
+		(at 50.8 139.7 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3053,7 +2790,7 @@
 		(fields_autoplaced yes)
 		(uuid "a323dfa0-51a5-415c-8d86-fe46a44782fe")
 		(property "Reference" "#PWR01"
-			(at 121.92 133.35 0)
+			(at 50.8 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3062,7 +2799,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 121.92 132.08 0)
+			(at 50.8 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3070,7 +2807,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 121.92 127 0)
+			(at 50.8 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3079,7 +2816,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 121.92 127 0)
+			(at 50.8 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3088,7 +2825,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 121.92 127 0)
+			(at 50.8 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3103,6 +2840,92 @@
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
 					(reference "#PWR01")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_US")
+		(at 135.89 124.46 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board no)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a57f3c08-a1eb-44f5-abf8-4e747d3b737d")
+		(property "Reference" "R2"
+			(at 135.89 118.11 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "330M, 5%, 0603"
+			(at 135.89 120.65 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TwoTerminal:RESC0603"
+			(at 136.144 123.444 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 135.89 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 135.89 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/CRCW0603330MJPEAHR/5072104"
+			(at 135.89 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.280"
+			(at 135.89 124.46 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d8bc2743-40a9-4db8-8171-8d926dbdf281")
+		)
+		(pin "2"
+			(uuid "4ceb6ee2-f4e1-40d3-8c28-790b3cd9c7ec")
+		)
+		(instances
+			(project "TIA1"
+				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
+					(reference "R2")
 					(unit 1)
 				)
 			)
@@ -3175,33 +2998,33 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x06_Socket")
-		(at 215.9 71.12 90)
+		(lib_id "Connector:Conn_01x08_Socket")
+		(at 218.44 71.12 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "eb3ecbce-0ce1-491a-9bc4-6efabf7d6d58")
-		(property "Reference" "J2"
-			(at 217.17 66.04 90)
+		(uuid "d891e119-9411-47f5-820b-7158ac15a692")
+		(property "Reference" "J3"
+			(at 219.71 66.04 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "Conn_01x06_Socket"
-			(at 217.17 68.58 90)
+		(property "Value" "Conn_01x08_Socket"
+			(at 219.71 68.58 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:PinSocket_1x6"
-			(at 215.9 71.12 0)
+		(property "Footprint" "Connector_Custom:PinSocket_1x8"
+			(at 218.44 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3210,7 +3033,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 215.9 71.12 0)
+			(at 218.44 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3218,8 +3041,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x06, script generated"
-			(at 215.9 71.12 0)
+		(property "Description" "Generic connector, single row, 01x08, script generated"
+			(at 218.44 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3227,8 +3050,8 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC061LFBN-RC/810178"
-			(at 215.9 71.12 0)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC081LFBN-RC/810180"
+			(at 218.44 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3236,37 +3059,43 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" "$0.470"
-			(at 215.9 71.12 90)
+		(property "Cost" "$0.530"
+			(at 218.44 71.12 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(hide yes)
 			)
-		)
-		(pin "1"
-			(uuid "e6e0973e-0791-45d1-bbbb-981a55e80394")
 		)
 		(pin "2"
-			(uuid "7c33f906-8b79-49a1-84c9-32167eff0ff2")
+			(uuid "88863fcc-5f77-438d-a54f-f28b25a11ad7")
 		)
-		(pin "3"
-			(uuid "887f62ed-968e-4349-9496-ad8b54dc303c")
+		(pin "1"
+			(uuid "6e8c9927-0601-4759-970b-dc19bf3058fc")
 		)
 		(pin "4"
-			(uuid "1b926e43-820f-46f2-ae78-719c451ab037")
+			(uuid "35ec7cf3-3e2e-42da-bcf5-22ff1053856a")
+		)
+		(pin "3"
+			(uuid "cdf0f736-24b5-4dd8-88db-7c417533477c")
 		)
 		(pin "5"
-			(uuid "56466505-ec10-4ce7-819b-871f9f56beeb")
+			(uuid "a5d1821a-7ea0-423d-a6a0-67641008c7eb")
+		)
+		(pin "8"
+			(uuid "5c5f0713-c50e-4476-b2fd-52bddf86ae1f")
+		)
+		(pin "7"
+			(uuid "85d7c96d-578f-4fd9-918b-0ff6720c5b14")
 		)
 		(pin "6"
-			(uuid "ac63b7e8-6ca8-42b5-b925-6a907bd0dd4b")
+			(uuid "4c06ba1d-8afc-4e39-ba40-25c8959cf6be")
 		)
 		(instances
-			(project ""
+			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "J2")
+					(reference "J3")
 					(unit 1)
 				)
 			)
@@ -3274,7 +3103,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 147.32 120.65 0)
+		(at 76.2 133.35 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3283,7 +3112,7 @@
 		(fields_autoplaced yes)
 		(uuid "f5703923-dd80-47b9-be79-244c906064cb")
 		(property "Reference" "C2"
-			(at 151.13 119.3799 0)
+			(at 80.01 132.0799 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3292,7 +3121,7 @@
 			)
 		)
 		(property "Value" "100 nF, 0603"
-			(at 151.13 121.9199 0)
+			(at 80.01 134.6199 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3301,7 +3130,7 @@
 			)
 		)
 		(property "Footprint" "TwoTerminal:CAPC0603"
-			(at 148.2852 124.46 0)
+			(at 77.1652 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3310,7 +3139,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 147.32 120.65 0)
+			(at 76.2 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3319,7 +3148,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 147.32 120.65 0)
+			(at 76.2 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3328,7 +3157,7 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRM188R72A104KA35D/702549"
-			(at 147.32 120.65 0)
+			(at 76.2 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3337,7 +3166,7 @@
 			)
 		)
 		(property "Cost" "$0.079"
-			(at 147.32 120.65 0)
+			(at 76.2 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)

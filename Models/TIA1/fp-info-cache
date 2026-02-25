@@ -1,4 +1,4 @@
-26629857969149799
+26631629958158357
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -9087,6 +9087,13 @@ Multicomp_24.243
 2
 Connector_Custom
 NetTie_0.2mm
+
+
+0
+2
+2
+Connector_Custom
+NetTie_0.2mm_HighVoltage
 
 
 0

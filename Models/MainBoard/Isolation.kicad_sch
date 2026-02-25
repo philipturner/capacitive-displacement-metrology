@@ -2201,7 +2201,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:NetTie_0.2mm"
+		(property "Footprint" "Connector_Custom:NetTie_0.15mm"
 			(at 198.12 137.16 0)
 			(effects
 				(font
@@ -2533,7 +2533,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:NetTie_0.2mm"
+		(property "Footprint" "Connector_Custom:NetTie_0.15mm"
 			(at 55.88 137.16 0)
 			(effects
 				(font
@@ -2945,7 +2945,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:NetTie_0.2mm"
+		(property "Footprint" "Connector_Custom:NetTie_0.15mm"
 			(at 83.82 78.74 0)
 			(effects
 				(font
@@ -3189,7 +3189,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:NetTie_0.2mm"
+		(property "Footprint" "Connector_Custom:NetTie_0.15mm"
 			(at 170.18 78.74 0)
 			(effects
 				(font
