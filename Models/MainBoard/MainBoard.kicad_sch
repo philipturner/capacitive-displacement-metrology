@@ -2866,7 +2866,7 @@
 		)
 		(uuid "24d7cb73-7c68-4917-b2ae-f3af789058d6")
 	)
-	(label "SENSENC"
+	(label "SENSEND"
 		(at 264.16 35.56 270)
 		(effects
 			(font
@@ -2956,7 +2956,7 @@
 		)
 		(uuid "56c32731-3c7f-4df0-b69e-111b60a777e5")
 	)
-	(label "OUTD"
+	(label "OUTC"
 		(at 274.32 35.56 270)
 		(effects
 			(font
@@ -2966,7 +2966,7 @@
 		)
 		(uuid "56d4ce31-9ca6-49db-8be5-ab99b9e8a946")
 	)
-	(label "OUTC"
+	(label "OUTD"
 		(at 266.7 35.56 270)
 		(effects
 			(font
@@ -3116,7 +3116,7 @@
 		)
 		(uuid "bfe030bb-64ce-4c8a-94d2-f9da8998a03e")
 	)
-	(label "SENSEND"
+	(label "SENSENC"
 		(at 271.78 35.56 270)
 		(effects
 			(font
