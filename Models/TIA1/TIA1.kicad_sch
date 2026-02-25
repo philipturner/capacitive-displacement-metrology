@@ -1608,6 +1608,17 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "DESIGN REVISION: Removed the\nV_bias + ISO_GND pair by mistake.\n\nTop tier 8-way socket is not a\nreceptable for V_bias wire.\n\nClever idea: 2-way socket for the\ntwo new receive points, able to\nuse existing PCB layout with\nminimal changes."
+		(exclude_from_sim no)
+		(at 209.804 99.568 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "9b2d4ca8-9a5c-484c-9efa-b99fa15e540d")
+	)
 	(text "OPA828: Already have one in stock; order two spares\n(3 total) and stock will be 4. That way, do not\nhave to worry about supply during Phase II."
 		(exclude_from_sim no)
 		(at 141.224 57.912 0)

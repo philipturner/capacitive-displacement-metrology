@@ -5628,6 +5628,7 @@
 		(embedded_fonts no)
 	)
 	(footprint "Connector_Custom:PinSocket_1x24"
+		(locked yes)
 		(layer "F.Cu")
 		(uuid "5ab087f3-b206-4d27-b42b-78b5cde61121")
 		(at 160.12 100.51)
@@ -8442,6 +8443,7 @@
 		(embedded_fonts no)
 	)
 	(footprint "Connector_Custom:PinSocket_1x24"
+		(locked yes)
 		(layer "F.Cu")
 		(uuid "a4402be5-c67e-400c-a1e5-494c607e0d7c")
 		(at 175.36 100.51 180)
@@ -16962,6 +16964,18 @@
 		)
 		(layer "Edge.Cuts")
 		(uuid "f8752819-bf2d-4ae2-9dc9-b76e4ef289f0")
+	)
+	(gr_text "Teensy 4.1"
+		(at 167.74 100.51 90)
+		(layer "F.SilkS")
+		(uuid "0920e84f-de88-4ce4-84a2-bbf8e5d59f58")
+		(effects
+			(font
+				(size 1.5 1.5)
+				(thickness 0.3)
+				(bold yes)
+			)
+		)
 	)
 	(gr_text "Nanofactory Project\nPhase 0.2/I/II"
 		(at 115.02 121.97 0)
