@@ -3139,7 +3139,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_Custom:NetTie_0.2mm"
+		(property "Footprint" "Connector_Custom:NetTie_0.2mm_HighVoltage"
 			(at 170.18 99.06 0)
 			(effects
 				(font
