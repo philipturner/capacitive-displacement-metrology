@@ -1275,9 +1275,9 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "With the same board layout, try both\n100M and 330M feedback resistors."
+	(text "In the future, we can experiment with omitting\nthe keepout zone and using a 330M resistor.\nPerhaps the change in capacitance will raise the\nnatural frequency, reducing the need for pole-zero\ntuning.\n\nHowever, the primary purpose of this board is to\ntest the ADC and DAC simultaneously without the\nDAC shutting down / getting damaged. The above idea\novercomplicated everything; there were issues\nwith probing via oscilloscope for high-frequency\nbehavior analysis."
 		(exclude_from_sim no)
-		(at 127.254 130.556 0)
+		(at 118.618 106.934 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1285,17 +1285,6 @@
 			(justify left top)
 		)
 		(uuid "26c5fecc-2bd0-4713-913d-b0dd24ba95f3")
-	)
-	(text "Try one board design with keepout zone\nunder resistor, one board without it."
-		(exclude_from_sim no)
-		(at 127 104.14 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "449d92cb-1918-4a2b-83ee-53bb52ee1f02")
 	)
 	(text "DESIGN REVISION: Removed the\nV_bias + ISO_GND pair by mistake.\n\nTop tier 8-way socket is not a\nreceptable for V_bias wire.\n\nClever idea: 2-way socket for the\ntwo new receive points, able to\nuse existing PCB layout with\nminimal changes."
 		(exclude_from_sim no)
@@ -1366,14 +1355,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "efaa041f-1c7f-4389-bc27-8ac37e8b5c61")
-	)
-	(no_connect
-		(at 139.7 124.46)
-		(uuid "e348604a-9fb8-4301-9ce6-f8b3033a01fa")
-	)
-	(no_connect
-		(at 132.08 124.46)
-		(uuid "e5356491-46a2-4135-80c9-92bbfc4da8a7")
 	)
 	(wire
 		(pts
@@ -2260,7 +2241,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "21f3ca41-cdfa-4697-b6b7-41f0ad63dc5c")
-		(property "Reference" "R3"
+		(property "Reference" "R2"
 			(at 163.83 39.37 90)
 			(effects
 				(font
@@ -2330,7 +2311,7 @@
 		(instances
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "R3")
+					(reference "R2")
 					(unit 1)
 				)
 			)
@@ -2840,92 +2821,6 @@
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
 					(reference "#PWR01")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_US")
-		(at 135.89 124.46 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board no)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a57f3c08-a1eb-44f5-abf8-4e747d3b737d")
-		(property "Reference" "R2"
-			(at 135.89 118.11 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "330M, 5%, 0603"
-			(at 135.89 120.65 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "TwoTerminal:RESC0603"
-			(at 136.144 123.444 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 135.89 124.46 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 135.89 124.46 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/CRCW0603330MJPEAHR/5072104"
-			(at 135.89 124.46 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost" "$0.280"
-			(at 135.89 124.46 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "d8bc2743-40a9-4db8-8171-8d926dbdf281")
-		)
-		(pin "2"
-			(uuid "4ceb6ee2-f4e1-40d3-8c28-790b3cd9c7ec")
-		)
-		(instances
-			(project "TIA1"
-				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "R2")
 					(unit 1)
 				)
 			)
