@@ -531,6 +531,17 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "2 nF and 1.3k:\nUse stock from Phase 0.1"
+		(exclude_from_sim no)
+		(at 129.794 67.818 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "774e2e49-29d3-4bda-8383-0d1b0097a369")
+	)
 	(junction
 		(at 101.6 50.8)
 		(diameter 0)
@@ -748,7 +759,7 @@
 		(at 101.6 67.31 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "35dc269d-7b1b-4a20-b21b-f7a6e21ef804")
@@ -796,7 +807,7 @@
 				)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GCM1885C1H202FA16D/16033535"
+		(property "Purchase Link" ""
 			(at 101.6 67.31 0)
 			(effects
 				(font
@@ -829,7 +840,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5b84ab0e-9dab-4949-bed2-350ca3b0c040")
-		(property "Reference" "R5"
+		(property "Reference" "R6"
 			(at 139.7 44.45 90)
 			(effects
 				(font
@@ -880,6 +891,15 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$2.390"
+			(at 139.7 50.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "eb5ef743-8d45-48c5-a83b-b43d1f75ab1b")
 		)
@@ -892,7 +912,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/d4675321-04be-4323-a412-5fd261d625ce"
-					(reference "R5")
+					(reference "R6")
 					(unit 1)
 				)
 			)
@@ -903,11 +923,11 @@
 		(at 101.6 80.01 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "67927747-2c78-421a-9bee-946528492cb0")
-		(property "Reference" "R3"
+		(property "Reference" "R4"
 			(at 104.14 78.7399 0)
 			(effects
 				(font
@@ -951,7 +971,7 @@
 				)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/CRCW06031K30FKEA/1174680"
+		(property "Purchase Link" ""
 			(at 101.6 80.01 0)
 			(effects
 				(font
@@ -969,7 +989,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/d4675321-04be-4323-a412-5fd261d625ce"
-					(reference "R3")
+					(reference "R4")
 					(unit 1)
 				)
 			)
@@ -984,7 +1004,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a3219ee6-88f0-499c-9d44-342f71fd8c81")
-		(property "Reference" "R4"
+		(property "Reference" "R5"
 			(at 104.14 91.4399 0)
 			(effects
 				(font
@@ -1037,6 +1057,15 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$2.050"
+			(at 101.6 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "869269ca-408b-4a32-a986-b6e55192d09e")
 		)
@@ -1049,7 +1078,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/d4675321-04be-4323-a412-5fd261d625ce"
-					(reference "R4")
+					(reference "R5")
 					(unit 1)
 				)
 			)

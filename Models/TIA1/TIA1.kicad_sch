@@ -1275,39 +1275,6 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "In the future, we can experiment with omitting\nthe keepout zone and using a 330M resistor.\nPerhaps the change in capacitance will raise the\nnatural frequency, reducing the need for pole-zero\ntuning.\n\nHowever, the primary purpose of this board is to\ntest the ADC and DAC simultaneously without the\nDAC shutting down / getting damaged. The above idea\novercomplicated everything; there were issues\nwith probing via oscilloscope for high-frequency\nbehavior analysis."
-		(exclude_from_sim no)
-		(at 118.618 106.934 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "26c5fecc-2bd0-4713-913d-b0dd24ba95f3")
-	)
-	(text "DESIGN REVISION: Removed the\nV_bias + ISO_GND pair by mistake.\n\nTop tier 8-way socket is not a\nreceptable for V_bias wire.\n\nClever idea: 2-way socket for the\ntwo new receive points, able to\nuse existing PCB layout with\nminimal changes."
-		(exclude_from_sim no)
-		(at 209.804 99.568 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "9b2d4ca8-9a5c-484c-9efa-b99fa15e540d")
-	)
-	(text "OPA828: Order enough spares to try all\ncombinations of R_f and keepout zone."
-		(exclude_from_sim no)
-		(at 145.034 59.944 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "e290d7a0-6859-4d6a-a0f4-9d824357e90f")
-	)
 	(junction
 		(at 228.6 45.72)
 		(diameter 0)
@@ -1358,7 +1325,7 @@
 	)
 	(wire
 		(pts
-			(xy 50.8 137.16) (xy 50.8 139.7)
+			(xy 127 137.16) (xy 127 139.7)
 		)
 		(stroke
 			(width 0)
@@ -1368,7 +1335,7 @@
 	)
 	(wire
 		(pts
-			(xy 76.2 127) (xy 76.2 129.54)
+			(xy 152.4 127) (xy 152.4 129.54)
 		)
 		(stroke
 			(width 0)
@@ -1458,7 +1425,7 @@
 	)
 	(wire
 		(pts
-			(xy 76.2 137.16) (xy 76.2 139.7)
+			(xy 152.4 137.16) (xy 152.4 139.7)
 		)
 		(stroke
 			(width 0)
@@ -1488,7 +1455,7 @@
 	)
 	(wire
 		(pts
-			(xy 50.8 127) (xy 50.8 129.54)
+			(xy 127 127) (xy 127 129.54)
 		)
 		(stroke
 			(width 0)
@@ -1817,7 +1784,7 @@
 		(uuid "40a2c7ab-5ef9-4e80-91cf-f4e4e5f68426")
 	)
 	(label "-15V"
-		(at 76.2 127 0)
+		(at 152.4 127 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1827,7 +1794,7 @@
 		(uuid "4909cfdf-99d1-4670-8375-0c22e09c02df")
 	)
 	(label "15V"
-		(at 50.8 127 0)
+		(at 127 127 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2408,7 +2375,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 76.2 139.7 0)
+		(at 152.4 139.7 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2416,8 +2383,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "429245f8-848d-406f-8012-428e659282c4")
-		(property "Reference" "#PWR02"
-			(at 76.2 146.05 0)
+		(property "Reference" "#PWR03"
+			(at 152.4 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2426,7 +2393,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 76.2 144.78 0)
+			(at 152.4 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2434,7 +2401,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 76.2 139.7 0)
+			(at 152.4 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2443,7 +2410,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 76.2 139.7 0)
+			(at 152.4 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2452,7 +2419,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 76.2 139.7 0)
+			(at 152.4 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2466,7 +2433,7 @@
 		(instances
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "#PWR02")
+					(reference "#PWR03")
 					(unit 1)
 				)
 			)
@@ -2482,7 +2449,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5a7239c3-3911-43d0-b1ae-edfca8ee6fca")
-		(property "Reference" "#PWR03"
+		(property "Reference" "#PWR02"
 			(at 143.51 45.72 0)
 			(effects
 				(font
@@ -2533,7 +2500,7 @@
 		(instances
 			(project "TIA1"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d"
-					(reference "#PWR03")
+					(reference "#PWR02")
 					(unit 1)
 				)
 			)
@@ -2541,7 +2508,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 50.8 133.35 0)
+		(at 127 133.35 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2550,7 +2517,7 @@
 		(fields_autoplaced yes)
 		(uuid "62c0d205-a727-46e0-abd2-d87615cb6daf")
 		(property "Reference" "C1"
-			(at 54.61 132.0799 0)
+			(at 130.81 132.0799 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2559,7 +2526,7 @@
 			)
 		)
 		(property "Value" "100 nF, 0603"
-			(at 54.61 134.6199 0)
+			(at 130.81 134.6199 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2568,7 +2535,7 @@
 			)
 		)
 		(property "Footprint" "TwoTerminal:CAPC0603"
-			(at 51.7652 137.16 0)
+			(at 127.9652 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2577,7 +2544,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 50.8 133.35 0)
+			(at 127 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2586,7 +2553,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 50.8 133.35 0)
+			(at 127 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2595,7 +2562,7 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRM188R72A104KA35D/702549"
-			(at 50.8 133.35 0)
+			(at 127 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2604,7 +2571,7 @@
 			)
 		)
 		(property "Cost" "$0.079"
-			(at 50.8 133.35 0)
+			(at 127 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2762,7 +2729,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 50.8 139.7 0)
+		(at 127 139.7 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2771,7 +2738,7 @@
 		(fields_autoplaced yes)
 		(uuid "a323dfa0-51a5-415c-8d86-fe46a44782fe")
 		(property "Reference" "#PWR01"
-			(at 50.8 146.05 0)
+			(at 127 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2780,7 +2747,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 50.8 144.78 0)
+			(at 127 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2788,7 +2755,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 50.8 139.7 0)
+			(at 127 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2797,7 +2764,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 50.8 139.7 0)
+			(at 127 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2806,7 +2773,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 50.8 139.7 0)
+			(at 127 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2998,7 +2965,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 76.2 133.35 0)
+		(at 152.4 133.35 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3007,7 +2974,7 @@
 		(fields_autoplaced yes)
 		(uuid "f5703923-dd80-47b9-be79-244c906064cb")
 		(property "Reference" "C2"
-			(at 80.01 132.0799 0)
+			(at 156.21 132.0799 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3016,7 +2983,7 @@
 			)
 		)
 		(property "Value" "100 nF, 0603"
-			(at 80.01 134.6199 0)
+			(at 156.21 134.6199 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3025,7 +2992,7 @@
 			)
 		)
 		(property "Footprint" "TwoTerminal:CAPC0603"
-			(at 77.1652 137.16 0)
+			(at 153.3652 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3034,7 +3001,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 76.2 133.35 0)
+			(at 152.4 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3043,7 +3010,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 76.2 133.35 0)
+			(at 152.4 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3052,7 +3019,7 @@
 			)
 		)
 		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRM188R72A104KA35D/702549"
-			(at 76.2 133.35 0)
+			(at 152.4 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3061,7 +3028,7 @@
 			)
 		)
 		(property "Cost" "$0.079"
-			(at 76.2 133.35 0)
+			(at 152.4 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)

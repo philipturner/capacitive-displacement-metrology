@@ -999,7 +999,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0603"
 			(at 102.5652 127 0)
 			(effects
 				(font
@@ -1026,7 +1026,16 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRM188R72A104KA35D/702549"
+			(at 101.6 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.079"
 			(at 101.6 123.19 0)
 			(effects
 				(font
@@ -1060,7 +1069,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7719a468-8429-4d78-9c4d-f35a9a53b63d")
-		(property "Reference" "#PWR02"
+		(property "Reference" "#PWR05"
 			(at 101.6 135.89 0)
 			(effects
 				(font
@@ -1110,7 +1119,7 @@
 		(instances
 			(project ""
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/576e9362-b988-409f-82c5-0c80cb18568a"
-					(reference "#PWR02")
+					(reference "#PWR05")
 					(unit 1)
 				)
 			)
@@ -1126,7 +1135,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7996362a-5b0c-47b0-b1d2-b1c00ccd8b44")
-		(property "Reference" "R10"
+		(property "Reference" "R2"
 			(at 97.79 95.25 90)
 			(effects
 				(font
@@ -1142,7 +1151,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:RESC0603"
 			(at 98.044 100.584 90)
 			(effects
 				(font
@@ -1169,8 +1178,17 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/CRCW06031K00FKEA/1174668"
 			(at 97.79 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.030"
+			(at 97.79 101.6 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1187,7 +1205,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/576e9362-b988-409f-82c5-0c80cb18568a"
-					(reference "R10")
+					(reference "R2")
 					(unit 1)
 				)
 			)
@@ -1203,7 +1221,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9d117b52-b169-47c1-acfb-405d9963cf8b")
-		(property "Reference" "R9"
+		(property "Reference" "R3"
 			(at 115.57 95.25 90)
 			(effects
 				(font
@@ -1219,7 +1237,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:RESC0603"
 			(at 115.824 100.584 90)
 			(effects
 				(font
@@ -1255,6 +1273,15 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.030"
+			(at 115.57 101.6 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "561c7abd-a253-45db-bde2-43e36d4d7c7a")
 		)
@@ -1264,7 +1291,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/576e9362-b988-409f-82c5-0c80cb18568a"
-					(reference "R9")
+					(reference "R3")
 					(unit 1)
 				)
 			)
@@ -1333,6 +1360,15 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$5.770"
+			(at 116.84 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "8"
 			(uuid "4d4dbdd1-69bf-4ec6-9b7e-0e10c97da1d3")
 		)
@@ -1376,7 +1412,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f218db7b-72a4-4e65-b559-70e174d6b0f9")
-		(property "Reference" "#PWR03"
+		(property "Reference" "#PWR06"
 			(at 127 135.89 0)
 			(effects
 				(font
@@ -1426,7 +1462,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/576e9362-b988-409f-82c5-0c80cb18568a"
-					(reference "#PWR03")
+					(reference "#PWR06")
 					(unit 1)
 				)
 			)
@@ -1460,7 +1496,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TwoTerminal:CAPC0603"
 			(at 127.9652 127 0)
 			(effects
 				(font
@@ -1487,7 +1523,16 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" ""
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRM188R72A104KA35D/702549"
+			(at 127 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$0.079"
 			(at 127 123.19 0)
 			(effects
 				(font

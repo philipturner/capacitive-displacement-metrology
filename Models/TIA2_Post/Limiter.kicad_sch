@@ -1385,6 +1385,17 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "Transistors and Zeners:\nUse stock from Phase 0.1"
+		(exclude_from_sim no)
+		(at 241.046 76.454 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "71d4700a-2d64-4ded-95f1-ca0c0c626882")
+	)
 	(junction
 		(at 86.36 96.52)
 		(diameter 0)
@@ -2004,12 +2015,12 @@
 		(at 213.36 80.01 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "09515543-6259-4495-904a-8c884be1baec")
-		(property "Reference" "D6"
+		(property "Reference" "D5"
 			(at 218.44 78.7399 0)
 			(effects
 				(font
@@ -2054,34 +2065,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/texas-instruments/LM4040D10IDBZR/1216503"
-			(at 213.36 80.01 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost" ""
-			(at 213.36 80.01 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "RoHS Compliant" ""
-			(at 213.36 80.01 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost (qty10)" ""
+		(property "Purchase Link" ""
 			(at 213.36 80.01 0)
 			(effects
 				(font
@@ -2102,7 +2086,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "D6")
+					(reference "D5")
 					(unit 1)
 				)
 			)
@@ -2118,7 +2102,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "22af544b-3a4d-4d1e-b406-82bb21aed794")
-		(property "Reference" "R16"
+		(property "Reference" "R11"
 			(at 215.9 55.8799 0)
 			(effects
 				(font
@@ -2172,7 +2156,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" ""
+		(property "Cost" "$0.030"
 			(at 213.36 57.15 0)
 			(effects
 				(font
@@ -2208,7 +2192,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "R16")
+					(reference "R11")
 					(unit 1)
 				)
 			)
@@ -2295,7 +2279,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" ""
+		(property "Cost" "$0.146"
 			(at 77.47 104.14 0)
 			(effects
 				(font
@@ -2343,11 +2327,11 @@
 		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "2f9981c1-e3c8-473f-a7cd-b668e46a2f5a")
-		(property "Reference" "Q1"
+		(property "Reference" "Q2"
 			(at 185.42 123.1901 0)
 			(effects
 				(font
@@ -2365,7 +2349,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "ThreeTerminal:SOT-23"
 			(at 193.04 121.92 0)
 			(effects
 				(font
@@ -2392,7 +2376,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/onsemi/MMBT2222ALT1G/919593"
+		(property "Purchase Link" ""
 			(at 193.04 121.92 0)
 			(effects
 				(font
@@ -2413,7 +2397,7 @@
 		(instances
 			(project ""
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "Q1")
+					(reference "Q2")
 					(unit 1)
 				)
 			)
@@ -2429,7 +2413,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4382c6c1-6589-4e37-992f-134721f0a60d")
-		(property "Reference" "R7"
+		(property "Reference" "R8"
 			(at 99.06 104.1399 0)
 			(effects
 				(font
@@ -2483,7 +2467,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" ""
+		(property "Cost" "$0.030"
 			(at 96.52 105.41 0)
 			(effects
 				(font
@@ -2501,7 +2485,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "R7")
+					(reference "R8")
 					(unit 1)
 				)
 			)
@@ -2517,7 +2501,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "468794a6-8168-4137-96fe-c48a2ab147df")
-		(property "Reference" "#PWR021"
+		(property "Reference" "#PWR07"
 			(at 232.41 96.52 0)
 			(effects
 				(font
@@ -2568,7 +2552,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "#PWR021")
+					(reference "#PWR07")
 					(unit 1)
 				)
 			)
@@ -2584,7 +2568,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "48a8bf1a-d458-486b-a6c0-b4914ba18646")
-		(property "Reference" "R8"
+		(property "Reference" "R7"
 			(at 99.06 86.3599 0)
 			(effects
 				(font
@@ -2638,6 +2622,15 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.030"
+			(at 96.52 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "9f6fc74f-60bf-4135-9fe6-a9418ff5ffaf")
 		)
@@ -2647,7 +2640,7 @@
 		(instances
 			(project ""
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "R8")
+					(reference "R7")
 					(unit 1)
 				)
 			)
@@ -2663,7 +2656,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4ab76530-d732-4364-b810-bbd2f270db4a")
-		(property "Reference" "R17"
+		(property "Reference" "R12"
 			(at 215.9 132.0799 0)
 			(effects
 				(font
@@ -2717,7 +2710,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" ""
+		(property "Cost" "$0.030"
 			(at 213.36 133.35 0)
 			(effects
 				(font
@@ -2753,7 +2746,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "R17")
+					(reference "R12")
 					(unit 1)
 				)
 			)
@@ -2770,7 +2763,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "69ea6368-fc0f-4256-b3c9-c567874843b8")
-		(property "Reference" "D4"
+		(property "Reference" "D3"
 			(at 181.61 44.45 0)
 			(effects
 				(font
@@ -2840,7 +2833,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" ""
+		(property "Cost" "$0.146"
 			(at 181.61 50.8 0)
 			(effects
 				(font
@@ -2876,7 +2869,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "D4")
+					(reference "D3")
 					(unit 1)
 				)
 			)
@@ -2892,7 +2885,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "74052caf-2e3f-4afa-a6bd-f56c7587e3af")
-		(property "Reference" "R15"
+		(property "Reference" "R10"
 			(at 168.91 135.89 90)
 			(effects
 				(font
@@ -2944,7 +2937,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" ""
+		(property "Cost" "$0.030"
 			(at 168.91 142.24 90)
 			(effects
 				(font
@@ -2980,7 +2973,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "R15")
+					(reference "R10")
 					(unit 1)
 				)
 			)
@@ -2996,7 +2989,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8240fdd0-099f-47a1-8855-e2c716402bb2")
-		(property "Reference" "J1"
+		(property "Reference" "J5"
 			(at 115.57 90.8049 90)
 			(effects
 				(font
@@ -3014,7 +3007,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinHeader_1x2"
 			(at 114.3 91.44 0)
 			(effects
 				(font
@@ -3041,6 +3034,24 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.563"
+			(at 114.3 91.44 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PRPC024SAAN-RC/2775230"
+			(at 114.3 91.44 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "4508cb4f-aae6-430f-9dc2-738d906dae71")
 		)
@@ -3050,7 +3061,7 @@
 		(instances
 			(project ""
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "J1")
+					(reference "J5")
 					(unit 1)
 				)
 			)
@@ -3137,25 +3148,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" ""
-			(at 77.47 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "RoHS Compliant" ""
-			(at 77.47 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost (qty10)" ""
+		(property "Cost" "$0.146"
 			(at 77.47 88.9 0)
 			(effects
 				(font
@@ -3189,7 +3182,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9dee71bd-d557-4cec-97c0-c6d50167d0d9")
-		(property "Reference" "J2"
+		(property "Reference" "J4"
 			(at 49.53 90.8049 90)
 			(effects
 				(font
@@ -3207,7 +3200,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Custom:PinHeader_1x2"
 			(at 48.26 91.44 0)
 			(effects
 				(font
@@ -3234,6 +3227,24 @@
 				(hide yes)
 			)
 		)
+		(property "Cost" "$0.563"
+			(at 48.26 91.44 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/sullins-connector-solutions/PRPC024SAAN-RC/2775230"
+			(at 48.26 91.44 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "d36e6975-ed13-45c5-95a1-5a817fb4277a")
 		)
@@ -3243,7 +3254,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "J2")
+					(reference "J4")
 					(unit 1)
 				)
 			)
@@ -3259,7 +3270,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b39addff-9ed1-42f6-9944-c38b31a13143")
-		(property "Reference" "D5"
+		(property "Reference" "D4"
 			(at 181.61 135.89 0)
 			(effects
 				(font
@@ -3329,7 +3340,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" ""
+		(property "Cost" "$0.146"
 			(at 181.61 142.24 0)
 			(effects
 				(font
@@ -3365,7 +3376,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "D5")
+					(reference "D4")
 					(unit 1)
 				)
 			)
@@ -3376,12 +3387,12 @@
 		(at 193.04 71.12 180)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "bf8bbf12-2cee-4fc0-b3cb-fb96779e266d")
-		(property "Reference" "Q3"
+		(property "Reference" "Q1"
 			(at 185.42 69.8499 0)
 			(effects
 				(font
@@ -3399,7 +3410,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "ThreeTerminal:SOT-23"
 			(at 193.04 71.12 0)
 			(effects
 				(font
@@ -3426,7 +3437,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/onsemi/MMBT2907ALT1G/919599"
+		(property "Purchase Link" ""
 			(at 193.04 71.12 0)
 			(effects
 				(font
@@ -3447,7 +3458,7 @@
 		(instances
 			(project ""
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "Q3")
+					(reference "Q1")
 					(unit 1)
 				)
 			)
@@ -3463,7 +3474,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d7d16d01-3ee7-40ec-832c-c82038b3ed53")
-		(property "Reference" "R14"
+		(property "Reference" "R9"
 			(at 168.91 44.45 90)
 			(effects
 				(font
@@ -3515,25 +3526,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" ""
-			(at 168.91 50.8 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "RoHS Compliant" ""
-			(at 168.91 50.8 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost (qty10)" ""
+		(property "Cost" "$0.030"
 			(at 168.91 50.8 90)
 			(effects
 				(font
@@ -3551,7 +3544,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "R14")
+					(reference "R9")
 					(unit 1)
 				)
 			)
@@ -3562,12 +3555,12 @@
 		(at 213.36 105.41 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e67063f2-7c06-4650-b7dc-f8cd8ba48fbc")
-		(property "Reference" "D7"
+		(property "Reference" "D6"
 			(at 218.44 104.1399 0)
 			(effects
 				(font
@@ -3612,34 +3605,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/texas-instruments/LM4040D10IDBZR/1216503"
-			(at 213.36 105.41 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost" ""
-			(at 213.36 105.41 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "RoHS Compliant" ""
-			(at 213.36 105.41 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost (qty10)" ""
+		(property "Purchase Link" ""
 			(at 213.36 105.41 0)
 			(effects
 				(font
@@ -3660,7 +3626,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "D7")
+					(reference "D6")
 					(unit 1)
 				)
 			)
