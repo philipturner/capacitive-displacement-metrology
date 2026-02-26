@@ -1645,7 +1645,7 @@
 	)
 	(text "Flip footprint of above two pin\nheaders to back side of PCB"
 		(exclude_from_sim no)
-		(at 228.854 49.53 0)
+		(at 194.818 46.482 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1664,6 +1664,17 @@
 			(justify left top)
 		)
 		(uuid "3779d128-ad00-47b0-b818-10e857541328")
+	)
+	(text "Place jumpers across each SENSEN line and GND,\nto prevent undefined behavior when high voltage\nboard is disconnected. The elevation will be\ndifferent than a mating pin socket, but there\nis nothing we can do about it."
+		(exclude_from_sim no)
+		(at 233.934 48.006 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "b2d85556-7ef6-479f-b144-6db64d533aee")
 	)
 	(text "Input:\n- 3 pF total capacitance\n- 300 μm separation\n- 13 aF/nm\n\nconversion time 109.6 ms (mode 111)\nmax excitation voltage (mode 11)\n\n10x resolution boost in software:\n - 100 samples at 9 Hz\n - 0.09 Hz measurement rate"
 		(exclude_from_sim no)
