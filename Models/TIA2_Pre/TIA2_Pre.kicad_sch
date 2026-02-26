@@ -801,6 +801,17 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "Excluded from BOM because already have 3\nspares in stock from Phase 0.1"
+		(exclude_from_sim no)
+		(at 121.92 46.228 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "c84445a5-bae4-49e9-b866-de22a0835f70")
+	)
 	(junction
 		(at 127 76.2)
 		(diameter 0)
@@ -1159,7 +1170,7 @@
 		(at 137.16 73.66 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
