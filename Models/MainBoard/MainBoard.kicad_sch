@@ -1654,7 +1654,7 @@
 		)
 		(uuid "2864ee94-7108-411d-9e70-dec965645305")
 	)
-	(text "Input:\n- 100 MΩ or 330 MΩ\n- switched by PCB swapping\n- design for 330 MΩ\n- debug with 100 MΩ\n\nsingle channel, ±12.288 V (mode 0000)"
+	(text "Input:\n- 100 MΩ or 1 GΩ\n- switched by PCB swapping\n- design for 1 GΩ\n- debug with 100 MΩ\n\nsingle channel, ±12.288 V (mode 0000)"
 		(exclude_from_sim no)
 		(at 102.616 129.54 0)
 		(effects

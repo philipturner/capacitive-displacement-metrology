@@ -1324,7 +1324,7 @@
 				)
 			)
 		)
-		(property "Value" "330M, 5%, 0603"
+		(property "Value" "1G, 5%, 0603"
 			(at 135.89 95.25 90)
 			(effects
 				(font
@@ -1359,8 +1359,17 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/CRCW0603330MJPEAHR/5072104"
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/stackpole-electronics-inc/HVCB0603JDD1G00/5801231"
 			(at 135.89 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$4.19"
+			(at 135.89 99.06 90)
 			(effects
 				(font
 					(size 1.27 1.27)
