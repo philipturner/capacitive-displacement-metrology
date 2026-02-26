@@ -2102,7 +2102,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "22af544b-3a4d-4d1e-b406-82bb21aed794")
-		(property "Reference" "R11"
+		(property "Reference" "R9"
 			(at 215.9 55.8799 0)
 			(effects
 				(font
@@ -2192,7 +2192,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "R11")
+					(reference "R9")
 					(unit 1)
 				)
 			)
@@ -2413,7 +2413,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4382c6c1-6589-4e37-992f-134721f0a60d")
-		(property "Reference" "R8"
+		(property "Reference" "R6"
 			(at 99.06 104.1399 0)
 			(effects
 				(font
@@ -2485,7 +2485,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "R8")
+					(reference "R6")
 					(unit 1)
 				)
 			)
@@ -2568,7 +2568,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "48a8bf1a-d458-486b-a6c0-b4914ba18646")
-		(property "Reference" "R7"
+		(property "Reference" "R5"
 			(at 99.06 86.3599 0)
 			(effects
 				(font
@@ -2640,7 +2640,7 @@
 		(instances
 			(project ""
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "R7")
+					(reference "R5")
 					(unit 1)
 				)
 			)
@@ -2656,7 +2656,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4ab76530-d732-4364-b810-bbd2f270db4a")
-		(property "Reference" "R12"
+		(property "Reference" "R10"
 			(at 215.9 132.0799 0)
 			(effects
 				(font
@@ -2746,7 +2746,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "R12")
+					(reference "R10")
 					(unit 1)
 				)
 			)
@@ -2885,7 +2885,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "74052caf-2e3f-4afa-a6bd-f56c7587e3af")
-		(property "Reference" "R10"
+		(property "Reference" "R8"
 			(at 168.91 135.89 90)
 			(effects
 				(font
@@ -2973,7 +2973,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "R10")
+					(reference "R8")
 					(unit 1)
 				)
 			)
@@ -3474,7 +3474,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d7d16d01-3ee7-40ec-832c-c82038b3ed53")
-		(property "Reference" "R9"
+		(property "Reference" "R7"
 			(at 168.91 44.45 90)
 			(effects
 				(font
@@ -3544,7 +3544,7 @@
 		(instances
 			(project "TIA2_Post"
 				(path "/f19129fc-f916-4692-924c-ee308c6b3e1d/26fbd804-20d9-4790-8391-a3b14d5c1dc5"
-					(reference "R9")
+					(reference "R7")
 					(unit 1)
 				)
 			)

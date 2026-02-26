@@ -4573,7 +4573,7 @@
 			(net 1 "GND")
 			(pinfunction "Ext")
 			(pintype "passive")
-			(uuid "933450bd-78c9-4f5e-94f7-f6e84346f42c")
+			(uuid "eb15b4d6-f8c5-4d0f-8f7a-11b24bdf1790")
 		)
 		(pad "2" thru_hole circle
 			(at 2.54 -2.54)
@@ -4584,7 +4584,7 @@
 			(net 1 "GND")
 			(pinfunction "Ext")
 			(pintype "passive")
-			(uuid "933450bd-78c9-4f5e-94f7-f6e84346f42c")
+			(uuid "585fa0f3-a570-4520-b8cf-6542a4b8b5b1")
 		)
 		(pad "2" thru_hole circle
 			(at 2.54 2.54)
@@ -4595,7 +4595,7 @@
 			(net 1 "GND")
 			(pinfunction "Ext")
 			(pintype "passive")
-			(uuid "933450bd-78c9-4f5e-94f7-f6e84346f42c")
+			(uuid "9db1801a-9dd3-40de-9122-d3d357cf5cb5")
 		)
 		(embedded_fonts no)
 		(model "${KIPRJMOD}/../libraries/Connector_Custom.pretty/RFPC-SMA27-F.step"
@@ -5543,7 +5543,7 @@
 			(net 1 "GND")
 			(pinfunction "Ext")
 			(pintype "passive")
-			(uuid "861fdd90-3709-41c2-b883-fe603dead9f0")
+			(uuid "a4ffc4ae-b648-44bb-a803-41f6472f3ba6")
 		)
 		(pad "2" thru_hole circle
 			(at 2.54 -2.54)
@@ -5554,7 +5554,7 @@
 			(net 1 "GND")
 			(pinfunction "Ext")
 			(pintype "passive")
-			(uuid "861fdd90-3709-41c2-b883-fe603dead9f0")
+			(uuid "8b7628e0-343e-4996-afe5-de7f730dd7b4")
 		)
 		(pad "2" thru_hole circle
 			(at 2.54 2.54)
@@ -5565,7 +5565,7 @@
 			(net 1 "GND")
 			(pinfunction "Ext")
 			(pintype "passive")
-			(uuid "861fdd90-3709-41c2-b883-fe603dead9f0")
+			(uuid "9a8f53e7-bd1d-4759-9df1-58b39b0e7d0d")
 		)
 		(embedded_fonts no)
 		(model "${KIPRJMOD}/../libraries/Connector_Custom.pretty/RFPC-SMA27-F.step"
@@ -7948,7 +7948,7 @@
 			(net 1 "GND")
 			(pinfunction "Ext")
 			(pintype "passive")
-			(uuid "0f2f72c0-dd9e-4b3e-a392-bdc0429540df")
+			(uuid "7ee4e783-8d20-48e8-93e3-b13b308ba35c")
 		)
 		(pad "2" thru_hole circle
 			(at 2.54 -2.54)
@@ -7959,7 +7959,7 @@
 			(net 1 "GND")
 			(pinfunction "Ext")
 			(pintype "passive")
-			(uuid "0f2f72c0-dd9e-4b3e-a392-bdc0429540df")
+			(uuid "a173ff01-1fe4-46c7-9174-3e5de9d72ecd")
 		)
 		(pad "2" thru_hole circle
 			(at 2.54 2.54)
@@ -7970,7 +7970,7 @@
 			(net 1 "GND")
 			(pinfunction "Ext")
 			(pintype "passive")
-			(uuid "0f2f72c0-dd9e-4b3e-a392-bdc0429540df")
+			(uuid "26b96024-f5f0-4849-8a2e-e79e136e0ada")
 		)
 		(embedded_fonts no)
 		(model "${KIPRJMOD}/../libraries/Connector_Custom.pretty/RFPC-SMA27-F.step"
@@ -11299,7 +11299,7 @@
 			(net 1 "GND")
 			(pinfunction "Ext")
 			(pintype "passive")
-			(uuid "acbe30e7-c72c-4168-8800-dba654bd5029")
+			(uuid "c49d190b-b2d8-450f-b2c9-61c87f7c3b9a")
 		)
 		(pad "2" thru_hole circle
 			(at 2.54 -2.54)
@@ -11310,7 +11310,7 @@
 			(net 1 "GND")
 			(pinfunction "Ext")
 			(pintype "passive")
-			(uuid "acbe30e7-c72c-4168-8800-dba654bd5029")
+			(uuid "c3ccab60-f7cd-434f-852f-11a11f7ec8f6")
 		)
 		(pad "2" thru_hole circle
 			(at 2.54 2.54)
@@ -11321,7 +11321,7 @@
 			(net 1 "GND")
 			(pinfunction "Ext")
 			(pintype "passive")
-			(uuid "acbe30e7-c72c-4168-8800-dba654bd5029")
+			(uuid "0c18aab0-de1b-4bff-82ad-cd26802c0a10")
 		)
 		(embedded_fonts no)
 		(model "${KIPRJMOD}/../libraries/Connector_Custom.pretty/RFPC-SMA27-F.step"
@@ -14663,14 +14663,6 @@
 		(layer "F.Cu")
 		(net 1)
 		(uuid "61ad6793-305a-46b6-a6db-e9e79dc597a6")
-	)
-	(segment
-		(start 134.62 104.14)
-		(end 150.12 104.14)
-		(width 0.2)
-		(layer "F.Cu")
-		(net 1)
-		(uuid "6fa0accb-209a-46ba-974f-f90747b519e9")
 	)
 	(segment
 		(start 125.73 80.01)

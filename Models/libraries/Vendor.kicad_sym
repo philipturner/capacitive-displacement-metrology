@@ -10,7 +10,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "U"
-			(at 20.828 9.398 0)
+			(at 11.938 7.874 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -18,7 +18,7 @@
 			)
 		)
 		(property "Value" "AD8615"
-			(at 20.828 6.858 0)
+			(at 11.938 5.334 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -73,57 +73,24 @@
 			)
 		)
 		(symbol "AD8615_0_1"
-			(rectangle
-				(start 7.62 5.08)
-				(end 33.02 -10.16)
+			(polyline
+				(pts
+					(xy 0 5.08) (xy 10.16 0) (xy 0 -5.08) (xy 0 5.08)
+				)
 				(stroke
-					(width 0)
+					(width 0.254)
 					(type default)
 				)
 				(fill
-					(type none)
+					(type background)
 				)
 			)
-			(pin output line
-				(at 0 0 0)
-				(length 7.62)
-				(name "OUT"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(number "1"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-			)
-			(pin power_in line
-				(at 0 -2.54 0)
-				(length 7.62)
-				(name "V-"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(number "2"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-			)
+		)
+		(symbol "AD8615_1_1"
 			(pin input line
-				(at 0 -5.08 0)
-				(length 7.62)
-				(name "IN+"
+				(at -2.54 2.54 0)
+				(length 2.54)
+				(name "+"
 					(effects
 						(font
 							(size 1.27 1.27)
@@ -138,9 +105,27 @@
 					)
 				)
 			)
+			(pin input line
+				(at -2.54 -2.54 0)
+				(length 2.54)
+				(name "-"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
 			(pin power_in line
-				(at 40.64 0 180)
-				(length 7.62)
+				(at 2.54 7.62 270)
+				(length 3.81)
 				(name "V+"
 					(effects
 						(font
@@ -156,17 +141,35 @@
 					)
 				)
 			)
-			(pin input line
-				(at 40.64 -5.08 180)
-				(length 7.62)
-				(name "IN-"
+			(pin power_in line
+				(at 2.54 -7.62 90)
+				(length 3.81)
+				(name "V-"
 					(effects
 						(font
 							(size 1.27 1.27)
 						)
 					)
 				)
-				(number "4"
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output line
+				(at 12.7 0 180)
+				(length 2.54)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
 					(effects
 						(font
 							(size 1.27 1.27)

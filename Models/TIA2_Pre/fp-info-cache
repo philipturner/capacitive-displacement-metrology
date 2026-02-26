@@ -1,4 +1,4 @@
-26635174113189250
+26640490482837296
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -9148,6 +9148,27 @@ PinSocket_1x2
 0
 2
 2
+Connector_Custom
+PinSocket_1x3
+
+
+0
+3
+3
+Connector_Custom
+PinSocket_1x4
+
+
+0
+4
+4
+Connector_Custom
+PinSocket_1x5
+
+
+0
+5
+5
 Connector_Custom
 PinSocket_1x6
 
