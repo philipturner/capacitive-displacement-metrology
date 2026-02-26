@@ -1211,7 +1211,7 @@
 				)
 			)
 		)
-		(property "Value" "15k, 1%"
+		(property "Value" "24k, 1%"
 			(at 115.57 97.79 90)
 			(effects
 				(font
@@ -1238,6 +1238,15 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
+			(at 115.57 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/CRCW060324K0FKEA/1174823"
 			(at 115.57 101.6 0)
 			(effects
 				(font

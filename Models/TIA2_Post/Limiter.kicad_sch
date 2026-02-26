@@ -2492,24 +2492,6 @@
 				(hide yes)
 			)
 		)
-		(property "RoHS Compliant" ""
-			(at 96.52 105.41 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Cost (qty10)" ""
-			(at 96.52 105.41 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "1"
 			(uuid "aed20809-a35f-40c4-a069-26237c0f3f93")
 		)
@@ -2611,7 +2593,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "150k, 1%"
+		(property "Value" "240k, 1%"
 			(at 99.06 88.8999 0)
 			(effects
 				(font
@@ -2647,7 +2629,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/CRCW0603150KFKEA/1174914"
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/vishay-dale/CRCW0603240KFKEA/1174937"
 			(at 96.52 87.63 0)
 			(effects
 				(font
