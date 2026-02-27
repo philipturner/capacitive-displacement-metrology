@@ -531,7 +531,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "2 nF and 1.3k:\nUse stock from Phase 0.1"
+	(text "2 nF, 1.3k, Trimpots:\nUse stock from Phase 0.1"
 		(exclude_from_sim no)
 		(at 129.794 67.818 0)
 		(effects
@@ -836,7 +836,7 @@
 		(at 139.7 50.8 270)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "5b84ab0e-9dab-4949-bed2-350ca3b0c040")
@@ -1000,7 +1000,7 @@
 		(at 101.6 92.71 180)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "a3219ee6-88f0-499c-9d44-342f71fd8c81")
