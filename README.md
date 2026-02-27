@@ -32,6 +32,7 @@ Table of Contents:
 - [February 11, 2026](#february-11-2026)
 - [February 12, 2026](#february-12-2026)
 - [February 17, 2026](#february-17-2026)
+- [February 27, 2026](#february-27-2026)
 
 ## December 15, 2025
 
@@ -831,3 +832,7 @@ Too much fear of something going wrong will scare me away from trying anything.
 ## February 17, 2026
 
 ![February 17, Part 1](./Documentation/February17_Part1.jpg)
+
+## February 27, 2026
+
+[PCB BOM (Google Sheets)](https://docs.google.com/spreadsheets/d/11hSKUabHZscKTGl4hYCjbfahWj6xOX5oWkzyZ53yTAk/edit?usp=sharing)
