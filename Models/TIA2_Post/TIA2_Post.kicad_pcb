@@ -124,9 +124,9 @@
 			(subtractmaskfromsilk no)
 			(outputformat 1)
 			(mirror no)
-			(drillshape 1)
+			(drillshape 0)
 			(scaleselection 1)
-			(outputdirectory "")
+			(outputdirectory "../Gerber/TIA2_Post/")
 		)
 	)
 	(net 0 "")
@@ -289,7 +289,7 @@
 		(path "/26fbd804-20d9-4790-8391-a3b14d5c1dc5/2e8ed4b1-699b-4e54-b492-4a1e8e1d9032")
 		(sheetname "/Limiter/")
 		(sheetfile "Limiter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -1.425 0.96)
 			(end 1.425 0.96)
@@ -574,7 +574,7 @@
 		(path "/bf7e7d66-c6ee-414f-baf7-5f1d1012dd3b")
 		(sheetname "/")
 		(sheetfile "TIA2_Post.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_rect
 			(start -1.39 -4.07)
 			(end 1.39 4.07)
@@ -900,7 +900,7 @@
 		(path "/26fbd804-20d9-4790-8391-a3b14d5c1dc5/8240fdd0-099f-47a1-8855-e2c716402bb2")
 		(sheetname "/Limiter/")
 		(sheetfile "Limiter.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_rect
 			(start -1.39 -2.8)
 			(end 1.39 2.8)
@@ -1067,7 +1067,7 @@
 		(path "/21f3ca41-cdfa-4697-b6b7-41f0ad63dc5c")
 		(sheetname "/")
 		(sheetfile "TIA2_Post.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -0.225 0.585)
 			(end 0.225 0.585)
@@ -1741,7 +1741,7 @@
 		(path "/576e9362-b988-409f-82c5-0c80cb18568a/48667c87-1231-4834-8568-a113d4d9645e")
 		(sheetname "/Amplifier/")
 		(sheetfile "Amplifier.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 0.22 -0.56)
 			(end -0.22 -0.56)
@@ -1902,7 +1902,7 @@
 		(path "/d4675321-04be-4323-a412-5fd261d625ce/a3219ee6-88f0-499c-9d44-342f71fd8c81")
 		(sheetname "/CompensationNetwork/")
 		(sheetfile "CompensationNetwork.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_rect
 			(start -2.59 -5)
 			(end 2.59 5)
@@ -2454,7 +2454,7 @@
 		(path "/26fbd804-20d9-4790-8391-a3b14d5c1dc5/b39addff-9ed1-42f6-9944-c38b31a13143")
 		(sheetname "/Limiter/")
 		(sheetfile "Limiter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -1.425 0.96)
 			(end 1.425 0.96)
@@ -3573,7 +3573,7 @@
 		(path "/26fbd804-20d9-4790-8391-a3b14d5c1dc5/69ea6368-fc0f-4256-b3c9-c567874843b8")
 		(sheetname "/Limiter/")
 		(sheetfile "Limiter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 1.425 -0.96)
 			(end -1.2975 -0.96)
@@ -3883,7 +3883,7 @@
 		(path "/26fbd804-20d9-4790-8391-a3b14d5c1dc5/74052caf-2e3f-4afa-a6bd-f56c7587e3af")
 		(sheetname "/Limiter/")
 		(sheetfile "Limiter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -0.225 0.585)
 			(end 0.225 0.585)
@@ -4231,7 +4231,7 @@
 		(path "/26fbd804-20d9-4790-8391-a3b14d5c1dc5/4ab76530-d732-4364-b810-bbd2f270db4a")
 		(sheetname "/Limiter/")
 		(sheetfile "Limiter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -0.225 0.585)
 			(end 0.225 0.585)
@@ -4474,7 +4474,7 @@
 		(path "/26fbd804-20d9-4790-8391-a3b14d5c1dc5/9dee71bd-d557-4cec-97c0-c6d50167d0d9")
 		(sheetname "/Limiter/")
 		(sheetfile "Limiter.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_rect
 			(start -1.39 -2.8)
 			(end 1.39 2.8)
@@ -5102,7 +5102,7 @@
 		(path "/d4675321-04be-4323-a412-5fd261d625ce/5b84ab0e-9dab-4949-bed2-350ca3b0c040")
 		(sheetname "/CompensationNetwork/")
 		(sheetfile "CompensationNetwork.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_rect
 			(start -2.59 -5)
 			(end 2.59 5)
@@ -5302,7 +5302,7 @@
 		(path "/576e9362-b988-409f-82c5-0c80cb18568a/f6210669-b339-4cf8-be0f-9551c876dccb")
 		(sheetname "/Amplifier/")
 		(sheetfile "Amplifier.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -0.22 0.56)
 			(end 0.22 0.56)
@@ -5489,7 +5489,7 @@
 		(path "/26fbd804-20d9-4790-8391-a3b14d5c1dc5/22af544b-3a4d-4d1e-b406-82bb21aed794")
 		(sheetname "/Limiter/")
 		(sheetfile "Limiter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 0.225 -0.585)
 			(end -0.225 -0.585)
@@ -5676,7 +5676,7 @@
 		(path "/26fbd804-20d9-4790-8391-a3b14d5c1dc5/88876936-7ee5-4b11-ae71-6e27d6d7820a")
 		(sheetname "/Limiter/")
 		(sheetfile "Limiter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 1.425 -0.96)
 			(end -1.2975 -0.96)
@@ -5960,7 +5960,7 @@
 		(path "/26fbd804-20d9-4790-8391-a3b14d5c1dc5/4382c6c1-6589-4e37-992f-134721f0a60d")
 		(sheetname "/Limiter/")
 		(sheetfile "Limiter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -0.225 0.585)
 			(end 0.225 0.585)
@@ -6147,7 +6147,7 @@
 		(path "/26fbd804-20d9-4790-8391-a3b14d5c1dc5/d7d16d01-3ee7-40ec-832c-c82038b3ed53")
 		(sheetname "/Limiter/")
 		(sheetfile "Limiter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -0.225 0.585)
 			(end 0.225 0.585)
@@ -6308,7 +6308,7 @@
 		(path "/576e9362-b988-409f-82c5-0c80cb18568a/7996362a-5b0c-47b0-b1d2-b1c00ccd8b44")
 		(sheetname "/Amplifier/")
 		(sheetfile "Amplifier.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -0.225 0.585)
 			(end 0.225 0.585)
@@ -8544,5 +8544,5 @@
 			)
 		)
 	)
-	(embedded_fonts no)
+	(embedded_fonts yes)
 )

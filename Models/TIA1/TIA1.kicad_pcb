@@ -226,7 +226,7 @@
 		(path "/62c0d205-a727-46e0-abd2-d87615cb6daf")
 		(sheetname "/")
 		(sheetfile "TIA1.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 0.22 -0.56)
 			(end -0.22 -0.56)
@@ -1204,7 +1204,7 @@
 		(path "/21f3ca41-cdfa-4697-b6b7-41f0ad63dc5c")
 		(sheetname "/")
 		(sheetfile "TIA1.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 0.225 -0.585)
 			(end -0.225 -0.585)
@@ -1366,7 +1366,7 @@
 		(path "/f5703923-dd80-47b9-be79-244c906064cb")
 		(sheetname "/")
 		(sheetfile "TIA1.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -0.22 0.56)
 			(end 0.22 0.56)
@@ -1690,7 +1690,7 @@
 		(path "/2a6fab0d-80ed-43a3-aa11-b10ed6ec809d")
 		(sheetname "/")
 		(sheetfile "TIA1.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_rect
 			(start -1.39 -4.07)
 			(end 1.39 4.07)
@@ -2725,5 +2725,5 @@
 			)
 		)
 	)
-	(embedded_fonts no)
+	(embedded_fonts yes)
 )

@@ -500,7 +500,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "../Gerber/TIA2_Post/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",

@@ -542,7 +542,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "../Gerber/HighVoltageBoard/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",

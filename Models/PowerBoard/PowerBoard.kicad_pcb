@@ -124,9 +124,9 @@
 			(subtractmaskfromsilk no)
 			(outputformat 1)
 			(mirror no)
-			(drillshape 1)
+			(drillshape 0)
 			(scaleselection 1)
-			(outputdirectory "")
+			(outputdirectory "../Gerber/PowerBoard/")
 		)
 	)
 	(net 0 "")
@@ -226,7 +226,7 @@
 		(path "/df1ba0e1-55fc-41f2-80f9-aaa8393d43d6/9592baf8-d8d5-4e45-a8de-da7834433732")
 		(sheetname "/Converter/")
 		(sheetfile "Converter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 1.425 -0.96)
 			(end -1.2975 -0.96)
@@ -1093,7 +1093,7 @@
 		(path "/55f1d4dd-dd9a-4f22-90c5-bff482123087/1262a9ca-3e8a-4bb8-b3ab-80e7416bf45e")
 		(sheetname "/PreAmp/")
 		(sheetfile "PreAmp.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start 5.38 -1.79)
 			(end -5.38 -1.79)
@@ -2229,7 +2229,7 @@
 		(path "/018e7d12-6b24-44c3-9b74-64995b8fa179/40c3872b-9e05-4e5e-a035-396d0b41499b")
 		(sheetname "/15V/")
 		(sheetfile "15V.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -0.22 0.56)
 			(end 0.22 0.56)
@@ -2390,7 +2390,7 @@
 		(path "/55f1d4dd-dd9a-4f22-90c5-bff482123087/d0f14f83-a175-45c6-9665-eebaea496d9d")
 		(sheetname "/PreAmp/")
 		(sheetfile "PreAmp.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 1.425 -0.96)
 			(end -1.2975 -0.96)
@@ -2675,7 +2675,7 @@
 		(path "/32b1b766-ada2-437e-99c4-e5fb41b54c88")
 		(sheetname "/")
 		(sheetfile "PowerBoard.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_rect
 			(start -1.39 -4.07)
 			(end 1.39 4.07)
@@ -2997,7 +2997,7 @@
 		(path "/491fe0c5-7ac6-4eb4-9edd-047e8024d9e5")
 		(sheetname "/")
 		(sheetfile "PowerBoard.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_rect
 			(start -1.39 -4.07)
 			(end 1.39 4.07)
@@ -3175,7 +3175,7 @@
 		(path "/81ae8a0c-33ff-4a2e-b61b-30a8c9e7f2f3")
 		(sheetname "/")
 		(sheetfile "PowerBoard.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_rect
 			(start -1.39 -4.07)
 			(end 1.39 4.07)
@@ -3352,7 +3352,7 @@
 		(path "/df1ba0e1-55fc-41f2-80f9-aaa8393d43d6/b390988a-b4c0-4181-bef8-1c3ed264878a")
 		(sheetname "/Converter/")
 		(sheetfile "Converter.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start 5.38 -1.79)
 			(end -5.38 -1.79)
@@ -3550,7 +3550,7 @@
 		(path "/516bc76b-afb9-4427-a0d7-b0161c788982")
 		(sheetname "/")
 		(sheetfile "PowerBoard.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_rect
 			(start -1.39 -4.07)
 			(end 1.39 4.07)
@@ -3727,7 +3727,7 @@
 		(path "/018e7d12-6b24-44c3-9b74-64995b8fa179/8de637f8-ff56-4cdd-910a-a6a6be130f62")
 		(sheetname "/15V/")
 		(sheetfile "15V.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -1.425 0.96)
 			(end 1.425 0.96)
@@ -4820,7 +4820,7 @@
 		(path "/d24bf573-0501-4b36-b17f-8976478e2420")
 		(sheetname "/")
 		(sheetfile "PowerBoard.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_rect
 			(start -1.39 -4.07)
 			(end 1.39 4.07)
@@ -4997,7 +4997,7 @@
 		(path "/55f1d4dd-dd9a-4f22-90c5-bff482123087/879cac76-4bd4-4126-8049-9ec42199cc36")
 		(sheetname "/PreAmp/")
 		(sheetfile "PreAmp.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start 5.38 -1.79)
 			(end -5.38 -1.79)
@@ -5194,7 +5194,7 @@
 		(path "/55f1d4dd-dd9a-4f22-90c5-bff482123087/24b11f4a-81f7-407c-955d-37a921f78096")
 		(sheetname "/PreAmp/")
 		(sheetfile "PreAmp.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 0.22 -0.56)
 			(end -0.22 -0.56)
@@ -5355,7 +5355,7 @@
 		(path "/55f1d4dd-dd9a-4f22-90c5-bff482123087/9c726e29-ad85-42b8-9382-6fc78308c722")
 		(sheetname "/PreAmp/")
 		(sheetfile "PreAmp.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 0.22 -0.56)
 			(end -0.22 -0.56)
@@ -5948,7 +5948,7 @@
 		(path "/55f1d4dd-dd9a-4f22-90c5-bff482123087/222ea919-a9e7-42e4-9c57-0192cf14e65b")
 		(sheetname "/PreAmp/")
 		(sheetfile "PreAmp.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -1.425 0.96)
 			(end 1.425 0.96)
@@ -6232,7 +6232,7 @@
 		(path "/df1ba0e1-55fc-41f2-80f9-aaa8393d43d6/8cc85961-425e-4437-a955-c2b888ce64cc")
 		(sheetname "/Converter/")
 		(sheetfile "Converter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -0.22 0.56)
 			(end 0.22 0.56)
@@ -6394,7 +6394,7 @@
 		(path "/9a1621e1-dd32-4d42-8981-987dddd5c5c3")
 		(sheetname "/")
 		(sheetfile "PowerBoard.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_rect
 			(start -1.39 -4.07)
 			(end 1.39 4.07)
@@ -6571,7 +6571,7 @@
 		(path "/df1ba0e1-55fc-41f2-80f9-aaa8393d43d6/d4abc488-aed6-4a95-abe7-58889da64d59")
 		(sheetname "/Converter/")
 		(sheetfile "Converter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 0.22 -0.56)
 			(end -0.22 -0.56)
@@ -6732,7 +6732,7 @@
 		(path "/55f1d4dd-dd9a-4f22-90c5-bff482123087/07527214-f490-4522-a738-0367aad68339")
 		(sheetname "/PreAmp/")
 		(sheetfile "PreAmp.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -0.22 0.56)
 			(end 0.22 0.56)
@@ -7168,7 +7168,7 @@
 		(path "/018e7d12-6b24-44c3-9b74-64995b8fa179/bf85cf3a-ee51-4e41-9fd5-d2dc2a6b6146")
 		(sheetname "/15V/")
 		(sheetfile "15V.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 0.22 -0.56)
 			(end -0.22 -0.56)
@@ -7329,7 +7329,7 @@
 		(path "/df1ba0e1-55fc-41f2-80f9-aaa8393d43d6/988f408e-f46f-4191-88db-9291708e1a54")
 		(sheetname "/Converter/")
 		(sheetfile "Converter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 1.96 -3.46)
 			(end 1.96 -1.9)
@@ -7655,7 +7655,7 @@
 		(path "/55f1d4dd-dd9a-4f22-90c5-bff482123087/34e14d0f-231f-4a55-995c-0e8d46635b57")
 		(sheetname "/PreAmp/")
 		(sheetfile "PreAmp.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 0.29 0.81)
 			(end -0.29 0.81)
@@ -8172,7 +8172,7 @@
 		(path "/df1ba0e1-55fc-41f2-80f9-aaa8393d43d6/d5e56e91-be68-465d-b92b-54dd89ed4a0a")
 		(sheetname "/Converter/")
 		(sheetfile "Converter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start -1.425 0.96)
 			(end 1.425 0.96)
@@ -8655,7 +8655,7 @@
 		(path "/018e7d12-6b24-44c3-9b74-64995b8fa179/4719917f-9d42-432b-88cf-cf11ed2c82ef")
 		(sheetname "/15V/")
 		(sheetfile "15V.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start 5.38 -1.79)
 			(end -5.38 -1.79)
@@ -9160,7 +9160,7 @@
 		(path "/018e7d12-6b24-44c3-9b74-64995b8fa179/64381ad2-deb5-426e-9894-6ccbf92412fe")
 		(sheetname "/15V/")
 		(sheetfile "15V.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 1.425 -0.96)
 			(end -1.2975 -0.96)
@@ -9643,7 +9643,7 @@
 		(path "/df1ba0e1-55fc-41f2-80f9-aaa8393d43d6/f58660bb-f243-41e3-8e8c-73f416a9435a")
 		(sheetname "/Converter/")
 		(sheetfile "Converter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 0.22 -0.56)
 			(end -0.22 -0.56)
@@ -9804,7 +9804,7 @@
 		(path "/55f1d4dd-dd9a-4f22-90c5-bff482123087/850567bf-b90b-4bb7-b703-bcf90e0202d6")
 		(sheetname "/PreAmp/")
 		(sheetfile "PreAmp.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 0.22 -0.56)
 			(end -0.22 -0.56)
@@ -10321,7 +10321,7 @@
 		(path "/df1ba0e1-55fc-41f2-80f9-aaa8393d43d6/d90c399a-74d2-48bd-8e00-a130ae6ffc32")
 		(sheetname "/Converter/")
 		(sheetfile "Converter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 0.22 -0.56)
 			(end -0.22 -0.56)
@@ -10670,7 +10670,7 @@
 		(path "/df1ba0e1-55fc-41f2-80f9-aaa8393d43d6/85cdac21-2d03-4ebe-bd8a-c2232ca90d61")
 		(sheetname "/Converter/")
 		(sheetfile "Converter.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 1.425 -0.96)
 			(end -1.2975 -0.96)
@@ -10954,7 +10954,7 @@
 		(path "/018e7d12-6b24-44c3-9b74-64995b8fa179/c4e3a35a-da35-47f1-96b8-a65dcd39ab01")
 		(sheetname "/15V/")
 		(sheetfile "15V.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 0.22 -0.56)
 			(end -0.22 -0.56)
@@ -11423,7 +11423,7 @@
 		(path "/55f1d4dd-dd9a-4f22-90c5-bff482123087/cc0cad40-0e66-40cd-a0ef-cbe88c68a3d8")
 		(sheetname "/PreAmp/")
 		(sheetfile "PreAmp.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 0.29 -0.81)
 			(end -0.29 -0.81)
@@ -11584,7 +11584,7 @@
 		(path "/018e7d12-6b24-44c3-9b74-64995b8fa179/5e88e797-bcca-4a80-bbd0-7abea2625822")
 		(sheetname "/15V/")
 		(sheetfile "15V.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start 5.38 -1.79)
 			(end -5.38 -1.79)
@@ -11781,7 +11781,7 @@
 		(path "/018e7d12-6b24-44c3-9b74-64995b8fa179/2eb25fb7-44ef-48c8-b2a4-50e9f7f84c42")
 		(sheetname "/15V/")
 		(sheetfile "15V.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_bom)
 		(fp_line
 			(start 0.22 -0.56)
 			(end -0.22 -0.56)
@@ -15268,5 +15268,5 @@
 			)
 		)
 	)
-	(embedded_fonts no)
+	(embedded_fonts yes)
 )
