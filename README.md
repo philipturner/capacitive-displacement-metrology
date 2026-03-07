@@ -1,10 +1,10 @@
 # Capacitive Displacement Metrology
 
-Phase 0.2 of the [APM Roadmap](https://github.com/philipturner/apm-roadmap)
+Phase 0.2/I/II of the [APM Roadmap](https://github.com/philipturner/apm-roadmap)
 
-Objective: Finish education in basic mechanical engineering and epoxy handling.
+Objective: Finish a project that has dragged on for 14 months.
 
-Deadline: March 31, 2026 for the first physical prototype
+Deadline: April 31, 2026 for creepless imaging of graphite
 
 Table of Contents:
 - [December 15, 2025](#december-15-2025)
