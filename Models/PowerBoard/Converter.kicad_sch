@@ -1003,6 +1003,17 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "C3 and C8 incorrectly had their\npositions swapped during PCB layout."
+		(exclude_from_sim no)
+		(at 102.108 90.932 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "10042a4c-b25f-4b04-a4fa-534bcecf7507")
+	)
 	(junction
 		(at 104.14 132.08)
 		(diameter 0)

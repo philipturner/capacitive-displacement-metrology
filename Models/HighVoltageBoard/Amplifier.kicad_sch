@@ -1910,6 +1910,17 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "This is actually 470 nF."
+		(exclude_from_sim no)
+		(at 149.606 152.908 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "3bf0a895-4f88-4a8c-982b-85bafd1a189e")
+	)
 	(text "external connection:\n(1) SMA with RG-58/U for 500V rating\n(2) pin header, covered with pin socket when\nnot in use (trim or cover leads of socket)"
 		(exclude_from_sim no)
 		(at 30.988 123.698 0)
