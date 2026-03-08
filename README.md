@@ -33,6 +33,7 @@ Table of Contents:
 - [February 12, 2026](#february-12-2026)
 - [February 17, 2026](#february-17-2026)
 - [February 27, 2026](#february-27-2026)
+- [March 8, 2026](#march-8-2026)
 
 ## December 15, 2025
 
@@ -836,3 +837,15 @@ Too much fear of something going wrong will scare me away from trying anything.
 ## February 27, 2026
 
 [PCB BOM (Google Sheets)](https://docs.google.com/spreadsheets/d/11hSKUabHZscKTGl4hYCjbfahWj6xOX5oWkzyZ53yTAk/edit?usp=sharing)
+
+## March 8, 2026
+
+![March 8, Part 1](./Documentation/March8_Part1.jpg)
+
+_Photograph of the lab setup for finding the bug._
+
+I planned to test the frequency response of my transimpedance amplifiers today. However, TIA2 had 60 Hz interference with a magnitude of 2 V. While trying to understand the cause, I found a 2 V oscillation at 110 kHz in TIA1. This oscillation prevented me from measuring the 60 Hz interference in TIA1.
+
+I have a theory about the cause. I accidentally reversed the supplies of TIA1. The regulators on the power board got extremely hot and I disconnected as soon as I noticed. Surprisingly, the op amp still worked after this event. But it could have caused unexplained degradations, just like ESD. Both the op amp and its bypass capacitors may have been affected.
+
+I will test the 100 MOhm TIA on the Phase 0.1 board. If it doesn't show a 110 kHz oscillation, I will proceed with soldering a 2nd TIA1 from spare parts. In the process, I will also examine 60 Hz interference in the 330 MOhm TIA with the oscilloscope.
