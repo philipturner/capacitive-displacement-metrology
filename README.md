@@ -858,3 +858,5 @@ I will test the 100 MΩ TIA on the Phase 0.1 board. If it doesn't show a 110 kHz
 | 330 MΩ              | 60 Hz      | 40 mV          |
 | 330 MΩ              | >1 MHz     | 30 mV          |
 | 330 MΩ (no limiter) | 180 kHz    | 30 V           |
+
+I tested turning on the ±18 V linear power supply, just to see if it induced any noise from being nearby. There was no measurable effect.
