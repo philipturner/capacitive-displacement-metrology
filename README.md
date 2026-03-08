@@ -848,4 +848,13 @@ I planned to test the frequency response of my transimpedance amplifiers today. 
 
 I have a theory about the cause. I accidentally reversed the supplies of TIA1. The regulators on the power board got extremely hot and I disconnected as soon as I noticed. Surprisingly, the op amp still worked after this event. But it could have caused unexplained degradations, just like ESD. Both the op amp and its bypass capacitors may have been affected.
 
-I will test the 100 MOhm TIA on the Phase 0.1 board. If it doesn't show a 110 kHz oscillation, I will proceed with soldering a 2nd TIA1 from spare parts. In the process, I will also examine 60 Hz interference in the 330 MOhm TIA with the oscilloscope.
+I will test the 100 MΩ TIA on the Phase 0.1 board. If it doesn't show a 110 kHz oscillation, I will proceed with soldering a 2nd TIA1 from spare parts. In the process, I will also examine 60 Hz interference in the 330 MΩ TIA with the oscilloscope.
+
+### Phase 0.1 Board
+
+| Amplifier           | Osc. Freq. | Osc. Ampl. P-P |
+| ------------------- | ---------: | -------------: |
+| 100 MΩ              | 71 kHz     | 150 mV         |
+| 330 MΩ              | 60 Hz      | 40 mV          |
+| 330 MΩ              | >1 MHz     | 30 mV          |
+| 330 MΩ (no limiter) | 180 kHz    | 30 V           |
