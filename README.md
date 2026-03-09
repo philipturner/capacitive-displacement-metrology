@@ -890,7 +890,7 @@ I'll investigate the other TIA now and see whether it isn't horribly messed up. 
 
 ---
 
-![March 9, Part 1](./Documentation/March9_Part1.jpg)
+![March 9, Part 1](./Documentation/March9/March9_Part1.jpg)
 
 _Reproduction of the setup that caused concern about 60 Hz noise with TIA2._
 
@@ -975,3 +975,11 @@ EMI after tuning frequency response:
 | TIA2 | vibration isolation table | 120 Hz | 30 mV |
 | TIA2 | vibration isolation table | 125 kHz | 80 mV |
 | TIA2 | vibration isolation table | 1.5 MHz | 80 mV |
+
+---
+
+![March 9, Part 2](./Documentation/March9/March9_Part2.jpg)
+
+I created this small enclosure for the preamp out of aluminum foil, lined with parchment paper to prevent shorts from contacting the PCB. It serves as a functioning standalone enclosure, isolating noise to 150 mV regardless of whether the vibration isolator is electrically connected.
+
+120 Hz and 1.5 MHz signals are, for the most part, annihilated. Only the 125 kHz signal remains. It was like this for the reflow oven as well (a much better shield than the vibration isolator). It is also quite interesting that the 125 kHz signal is approximately this magnitude (100&ndash;200 mV) both with and without shielding. That tells me the situation could be similar to TIA1. Not a good sign.
