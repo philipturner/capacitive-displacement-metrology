@@ -961,6 +961,8 @@ _From the dimensions of the aluminum T-slot frame, the largest aperture size in 
 
 ---
 
+[Tuning frequency response of 1 GΩ transimpedance amplifier (YouTube)](https://www.youtube.com/watch?v=ghyBSe6H7iE)
+
 EMI after tuning frequency response:
 
 | Amplifier | Shield | Osc. Freq. | Osc. Ampl. P-P |
