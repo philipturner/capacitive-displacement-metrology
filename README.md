@@ -887,3 +887,23 @@ Just by being turned on, TIA1 injects a 60 mV oscillation into the PowerBoard GN
 C<sub>in</sub> of the op amp should be ~10 pF. The ground oscillation matches the oscillation after feedback when C<sub>f</sub> is ~10 pF. This is the point where noise gain is 1. At larger feedback capacitances, the noise gain shrinks.
 
 I'll investigate the other TIA now and see whether it isn't horribly messed up. Perhaps OPA828 isn't a good chip, and the particular PCB layout choices for Phase 0.2 made it worse. I never noticed the problem much in Phase 0.1 because the 2nd-order LPF at 15 kHz greatly reduced the magnitude of the 71 kHz oscillation. However, the oscilloscope trace now will show a massive noise band of 150 mV.
+
+---
+
+![March 9, Part 1](./Documentation/March9_Part1.jpg)
+
+_Reproduction of the setup that caused concern about 60 Hz noise with TIA2._
+
+I set up TIA2 and measured interference with the setup above.
+
+| Amplifier           | Osc. Freq. | Osc. Ampl. P-P |
+| ------------------- | ---------: | -------------: |
+| TIA2                | 120 Hz     | 300 mV         |
+| TIA2                | 125 kHz    | 400 mV         |
+| TIA2                | 1.5 MHz    | 800 mV         |
+
+This time, the 125 kHz oscillation does not appear when I try to measure the PowerBoard GND compared to the oscilloscope case. However, when I disconnect the GND clip of the probe, the 125 kHz oscillation's magnitude jumps to 1.0 V. This signal dominates the noise band, making it hard to see how 120 Hz noise changes when disconnecting the GND clip.
+
+By placing a steel tray next to the boards, and bringing out a GND wire from the power board, I can decimate the magnitude of 125 kHz interference...
+
+Will experiment with doing this for TIA1.
