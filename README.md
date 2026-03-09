@@ -912,7 +912,19 @@ Will experiment with doing this for TIA1.
 
 | Amplifier | Shield | Osc. Freq. | Osc. Ampl. P-P |
 | --------- | ------ | ---------: | -------------: |
+| TIA1 | none | 125 kHz | 1.9 V, 2.8 V |
+| TIA1 | vibration isolation table | 125 kHz | 1.9 V, 2.8 V |
+| TIA1 | reflow oven | 125 kHz | 1.9 V, 2.8 V |
+| TIA2 | none |
+| TIA2 | none |
+| TIA2 | none |
 | TIA2 | vibration isolation table | 120 Hz | 20 mV |
 | TIA2 | vibration isolation table | 125 kHz | 60 mV |
 | TIA2 | vibration isolation table | 1.5 MHz | 100 mV |
 | TIA2 | reflow oven | 125 kHz | 90 mV |
+
+_Including a re-evaluation of TIA2 with no shield, to rule out the effect of some wires being shortened._
+
+The oscillation in TIA1 cannot be suppressed with shielding. I don't even know what's going so wrong, but I can do STM with only TIA2. Fixing TIA1 will probably be a waste of time.
+
+The only way to reduce noise even more, is probably a seamless shield with no hole larger than a specific wavelength. Attempts to enhance existing shielding will probably be a waste of time.
