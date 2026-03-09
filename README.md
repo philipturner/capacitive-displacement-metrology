@@ -874,6 +874,16 @@ I could not reduce the oscillation by increasing the C<sub>in</sub> capacitance 
 | Capacitance | Osc. Freq. | Osc. Ampl. P-P |
 | ----------: | ---------: | -------------: |
 | ~0.1 pF     | 125 kHz    | 1.9 V          |
+| 1 pF        | 125 kHz    | 380 mV         |
+| 2 pF        | 125 kHz    | 210 mV         |
+| 3 pF        | 125 kHz    | 150 mV         |
+| 10 pF       | 125 kHz    | 50 mV          |
 | 47 pF       | 125 kHz    | 15 mV          |
 
 The ISO\_GND node is oscillating above oscilloscope case GND by 55 mV P-P at 125 kHz. But when I connect the second probe lead to the power board's GND, the oscillation vanishes. This oscillation was interfering with measurements of very small amplitude at 47 pF.
+
+Just by being turned on, TIA1 injects a 60 mV oscillation into the PowerBoard GND, compared to the oscilloscope case GND. The oscillation doesn't happen when the power supply is turned off or TIA1 is disconnected.
+
+C<sub>in</sub> of the op amp should be ~10 pF. The ground oscillation matches the oscillation after feedback when C<sub>f</sub> is ~10 pF. This is the point where noise gain is 1. At larger feedback capacitances, the noise gain shrinks.
+
+I'll investigate the other TIA now and see whether it isn't horribly messed up. Perhaps OPA828 isn't a good chip, and the particular PCB layout choices for Phase 0.2 made it worse. I never noticed the problem much in Phase 0.1 because the 2nd-order LPF at 15 kHz greatly reduced the magnitude of the 71 kHz oscillation. However, the oscilloscope trace now will show a massive noise band of 150 mV.
