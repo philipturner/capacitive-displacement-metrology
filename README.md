@@ -961,3 +961,15 @@ _From the dimensions of the aluminum T-slot frame, the largest aperture size in 
 
 ---
 
+EMI after tuning frequency response:
+
+| Amplifier | Shield | Osc. Freq. | Osc. Ampl. P-P |
+| --------- | ------ | ---------: | -------------: |
+| TIA2 | none | combined | 600 mV |
+| TIA2 | none | 120 Hz | 200 mV |
+| TIA2 | none | 125 kHz | 200 mV |
+| TIA2 | none | 1.5 MHz | 300 mV |
+| TIA2 | vibration isolation table | combined | 150 mV |
+| TIA2 | vibration isolation table | 120 Hz | 30 mV |
+| TIA2 | vibration isolation table | 125 kHz | 80 mV |
+| TIA2 | vibration isolation table | 1.5 MHz | 80 mV |
