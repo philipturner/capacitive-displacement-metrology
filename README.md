@@ -915,9 +915,9 @@ Will experiment with doing this for TIA1.
 | TIA1 | none | 125 kHz | 1.9 V, 2.8 V |
 | TIA1 | vibration isolation table | 125 kHz | 1.9 V, 2.8 V |
 | TIA1 | reflow oven | 125 kHz | 1.9 V, 2.8 V |
-| TIA2 | none |
-| TIA2 | none |
-| TIA2 | none |
+| TIA2 | none | 120 Hz | 200&ndash;400 mV |
+| TIA2 | none | 125 kHz | 200 mV |
+| TIA2 | none | 1.5 MHz | 500 mV |
 | TIA2 | vibration isolation table | 120 Hz | 20 mV |
 | TIA2 | vibration isolation table | 125 kHz | 60 mV |
 | TIA2 | vibration isolation table | 1.5 MHz | 100 mV |
@@ -928,3 +928,36 @@ _Including a re-evaluation of TIA2 with no shield, to rule out the effect of som
 The oscillation in TIA1 cannot be suppressed with shielding. I don't even know what's going so wrong, but I can do STM with only TIA2. Fixing TIA1 will probably be a waste of time.
 
 The only way to reduce noise even more, is probably a seamless shield with no hole larger than a specific wavelength. Attempts to enhance existing shielding will probably be a waste of time.
+
+---
+
+Let's examine the frequency response and then make more decisions about shielding. I might want to repurpose some pins used for connecting PowerBoard to MainBoard, so they serve as receptacles for AWG 22 wire.
+
+---
+
+| Amplifier | Configuration | Voltage | ADC Filtered | Current |
+| --------- | ------------: | ------: | -----------: | ------: |
+| 100 MΩ | Phase 0.1     | 150 mV | 7 mV   |
+| 100 MΩ | Phase 0.2     | 2.8 V  | 40 mV  |
+| 100 MΩ | 0.95 m shield | 2.8 V  | 40 mV  |
+| 100 MΩ | 0.29 m shield | 2.8 V  | 40 mV  |
+| 330 MΩ | Phase 0.1     | 40 mV  | 40 mV  |
+| 1 GΩ   | no shield     | 500 mV | 200 mV |
+| 1 GΩ   | 0.95 m shield | 150 mV | 20 mV  |
+| 1 GΩ   | 0.29 m shield | 90 mV  | ~0 mV  |
+
+| Amplifier | Configuration | Current | ADC Filtered |
+| --------- | ------------: | ------: | -----------: |
+| 100 MΩ | Phase 0.1     | 1.5 nA | 70 pA  |
+| 100 MΩ | Phase 0.2     | 28 nA  | 400 pA |
+| 100 MΩ | 0.95 m shield | 28 nA  | 400 pA |
+| 100 MΩ | 0.29 m shield | 28 nA  | 400 pA |
+| 330 MΩ | Phase 0.1     | 120 pA | 120 pA |
+| 1 GΩ   | no shield     | 500 pA | 200 pA |
+| 1 GΩ   | 0.95 m shield | 150 pA | 20 pA  |
+| 1 GΩ   | 0.29 m shield | 90 pA  | ~0 pA  |
+
+_From the dimensions of the aluminum T-slot frame, the largest aperture size in the vibration isolator is 0.95 m. The reflow oven's largest aperture size is 0.29 m._
+
+---
+
