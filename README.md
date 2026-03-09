@@ -34,6 +34,7 @@ Table of Contents:
 - [February 17, 2026](#february-17-2026)
 - [February 27, 2026](#february-27-2026)
 - [March 8, 2026](#march-8-2026)
+- [March 9, 2026](#march-9-2026)
 
 ## December 15, 2025
 
@@ -860,3 +861,19 @@ I will test the 100 MΩ TIA on the Phase 0.1 board. If it doesn't show a 110 kHz
 | 330 MΩ (no limiter) | 180 kHz    | 30 V           |
 
 I tested turning on the ±18 V linear power supply, just to see if it induced any noise from being nearby. There was no measurable effect.
+
+## March 9, 2026
+
+| Amplifier           | Osc. Freq. | Osc. Ampl. P-P |
+| ------------------- | ---------: | -------------: |
+| TIA1 (#1)           | 125 kHz    | 1.9 V          |
+| TIA1 (#2)           | 125 kHz    | 1.9 V          |
+
+I could not reduce the oscillation by increasing the C<sub>in</sub> capacitance between the two op amp terminals. I could reduce it marginally by placing large capacitors across R<sub>f</sub>.
+
+| Capacitance | Osc. Freq. | Osc. Ampl. P-P |
+| ----------: | ---------: | -------------: |
+| ~0.1 pF     | 125 kHz    | 1.9 V          |
+| 47 pF       | 125 kHz    | 15 mV          |
+
+The ISO\_GND node is oscillating above oscilloscope case GND by 55 mV P-P at 125 kHz. But when I connect the second probe lead to the power board's GND, the oscillation vanishes. This oscillation was interfering with measurements of very small amplitude at 47 pF.
