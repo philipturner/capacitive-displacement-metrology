@@ -907,3 +907,12 @@ This time, the 125 kHz oscillation does not appear when I try to measure the Pow
 By placing a steel tray next to the boards, and bringing out a GND wire from the power board, I can decimate the magnitude of 125 kHz interference...
 
 Will experiment with doing this for TIA1.
+
+---
+
+| Amplifier | Shield | Osc. Freq. | Osc. Ampl. P-P |
+| --------- | ------ | ---------: | -------------: |
+| TIA2 | vibration isolation table | 120 Hz | 20 mV |
+| TIA2 | vibration isolation table | 125 kHz | 60 mV |
+| TIA2 | vibration isolation table | 1.5 MHz | 100 mV |
+| TIA2 | reflow oven | 125 kHz | 90 mV |
