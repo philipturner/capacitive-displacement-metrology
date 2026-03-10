@@ -1061,3 +1061,35 @@ Adding a 100 uF bypass capacitor across -15 V for OP37G:
 | TIA2 | vibration isolation table | 120 Hz | 300 mV |
 | TIA2 | vibration isolation table | 125 kHz | 200 mV |
 | TIA2 | vibration isolation table | 1.5 MHz | 50 mV |
+
+---
+
+New setup for wiring:
+
+| Amplifier | Configuration | Osc. Freq. | Osc. Ampl. P-P |
+| --------- | ------ | ---------: | -------------: |
+| TIA2 |  | combined | 600 mV |
+| TIA2 |  | 120 Hz | 200&ndash;400 mV |
+| TIA2 |  | 125 kHz | 150 mV |
+| TIA2 |  | 1.5 MHz | 300 mV |
+| TIA2 | 0.95 m shield | combined | 150 mV |
+| TIA2 | 0.95 m shield | 120 Hz | 30&ndash;60 mV |
+| TIA2 | 0.95 m shield | 125 kHz | 100 mV |
+| TIA2 | 0.95 m shield | 1.5 MHz | 50 mV |
+| TIA2 | 0.95 m shield + 100 uF | combined | 90 mV |
+| TIA2 | 0.95 m shield + 100 uF | 120 Hz | 35&ndash;70 mV |
+| TIA2 | 0.95 m shield + 100 uF | 125 kHz | 40 mV |
+| TIA2 | 0.95 m shield + 100 uF | 1.5 MHz | 60 mV |
+
+Adding the foil shield back:
+
+| Amplifier | Configuration | Osc. Freq. | Osc. Ampl. P-P |
+| --------- | ------ | ---------: | -------------: |
+| TIA2 | foil shield | combined |
+| TIA2 | foil shield | 120 Hz |
+| TIA2 | foil shield | 125 kHz |
+| TIA2 | foil shield | 1.5 MHz |
+| TIA2 | foil shield + 100 uF | combined |
+| TIA2 | foil shield + 100 uF | 120 Hz |
+| TIA2 | foil shield + 100 uF | 125 kHz |
+| TIA2 | foil shield + 100 uF | 1.5 MHz |
