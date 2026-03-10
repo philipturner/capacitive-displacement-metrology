@@ -1035,3 +1035,29 @@ Connecting the -15 V output to the Phase 0.1 board raises its output capacitance
 | electrolytic   | 200 uF | 15 mV |
 
 I should also test the behavior of the 1 GΩ or 330 MΩ transimpedance amplifiers. They are more complex, because two negative regulators could mess things up.
+
+---
+
+EMI before modifying bypass capacitors, with power lines brought out to breadboard:
+
+| Amplifier | Shield | Osc. Freq. | Osc. Ampl. P-P |
+| --------- | ------ | ---------: | -------------: |
+| TIA2 | none | combined | 2.0 V |
+| TIA2 | none | 120 Hz | 1.0 V |
+| TIA2 | none | 125 kHz | 500 mV |
+| TIA2 | none | 1.5 MHz | 500 mV |
+| TIA2 | vibration isolation table | combined | 600 mV |
+| TIA2 | vibration isolation table | 120 Hz | TBD |
+| TIA2 | vibration isolation table | 125 kHz | 400 mV |
+| TIA2 | vibration isolation table | 1.5 MHz | TBD |
+
+Adding a large bypass capacitor across the -5 V line did not help. But adding one across -15 V did. I'll measure the behavior of -15 V, then redo the wiring to reduce coupling into the preamp's power supplies.
+
+Adding a 100 uF bypass capacitor across -15 V for OP37G:
+
+| Amplifier | Shield | Osc. Freq. | Osc. Ampl. P-P |
+| --------- | ------ | ---------: | -------------: |
+| TIA2 | vibration isolation table | combined | 400 mV |
+| TIA2 | vibration isolation table | 120 Hz | 300 mV |
+| TIA2 | vibration isolation table | 125 kHz | 200 mV |
+| TIA2 | vibration isolation table | 1.5 MHz | 50 mV |
