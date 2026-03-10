@@ -991,4 +991,11 @@ TIA1 on the Phase 0.1 board shows a 125 kHz, 2.8 V oscillation when wired to the
 Next tests:
 - Isolated battery supply (again)
   - 69 kHz, 100 mV
-- Wall power supply, powering regulators from Phase 0.1 board
+- <s>Wall power supply, powering regulators from Phase 0.1 board</s>
+- Changing wall power supply from ±18 V to ±27 V
+  - ~100 kHz, 1.9 V
+- Wall power supply, powering regulators from Phase 0.1 board (±18 V)
+  - 70 kHz, 150 mV
+- Wall power supply, powering regulators from Phase 0.1 board (±26 V)
+  - 70 kHz, 150 mV
+- Batteries, powering Phase 0.2 regulators
