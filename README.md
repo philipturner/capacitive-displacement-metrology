@@ -1151,7 +1151,7 @@ As a recap, these are the P-P amplitudes of the 70&ndash;125 kHz oscillation:
 | TIA1 | vibration isolation table | 120 Hz | 0 mV |
 | TIA1 | vibration isolation table | 67 kHz | 100 mV |
 | TIA1 | vibration isolation table | 1.7 MHz | 0 mV |
-| TIA2 | foil shield | combined | 60 mV |
+| TIA2 | foil shield | combined | 80 mV |
 | TIA2 | foil shield | 120 Hz | 0 mV |
 | TIA2 | foil shield | 125 kHz | 0 mV |
 | TIA2 | foil shield | 1.5 MHz | 0 mV |
