@@ -999,3 +999,13 @@ Next tests:
 - Wall power supply, powering regulators from Phase 0.1 board (±26 V)
   - 70 kHz, 150 mV
 - Batteries, powering Phase 0.2 regulators
+  - 140 kHz, 200 mV
+- <s>Soldering 1N4007W diodes onto Phase 0.1 board</s>
+- Removing the 1N4007W diodes from Phase 0.2, -15 V and 15 V regulators
+  - 125 kHz, 1.9 V
+
+It is very hard to set the midpoint of the voltage range on the oscilloscope display. I could measure a faint, <100 mV oscillation on the -15 V supply when TIA1 is plugged in and oscillating at 1.9 V. When I disconnect TIA1, the -15 V supply doesn't show a faint, barely-detectable ripple.
+
+When I connected the oscilloscope probe between GND and -15 V in the wrong order, the oscilloscope showed weird signals and the regulators got extremely hot. I turned off the circuit immediately. This is the second instance of such an overcurrent event.
+
+I need to double check once more that wall power can make TIA1 work cleanly, using the regulators on the Phase 0.1 board. Test TIA1 on the Phase 0.1 board and bring the supply lines out to Phase 0.2 TIA1. But it's already 10:00 PM, so I'll have to pick up where I left off tomorrow.
