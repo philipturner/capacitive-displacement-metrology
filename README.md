@@ -983,3 +983,12 @@ EMI after tuning frequency response:
 I created this small enclosure for the preamp out of aluminum foil, lined with parchment paper to prevent shorts from contacting the PCB. It serves as a functioning standalone enclosure, isolating noise to 150 mV regardless of whether the vibration isolator is electrically connected.
 
 120 Hz and 1.5 MHz signals are, for the most part, annihilated. Only the 125 kHz signal remains. It was like this for the reflow oven as well (a much better shield than the vibration isolator). It is also quite interesting that the 125 kHz signal is approximately this magnitude (100&ndash;200 mV) both with and without shielding. That tells me the situation could be similar to TIA1. Not a good sign.
+
+---
+
+TIA1 on the Phase 0.1 board shows a 125 kHz, 2.8 V oscillation when wired to the wall power supply for Phase 0.2. 
+
+Next tests:
+- Isolated battery supply (again)
+  - 69 kHz, 100 mV
+- Wall power supply, powering regulators from Phase 0.1 board
