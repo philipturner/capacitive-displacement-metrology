@@ -35,6 +35,7 @@ Table of Contents:
 - [February 27, 2026](#february-27-2026)
 - [March 8, 2026](#march-8-2026)
 - [March 9, 2026](#march-9-2026)
+- [March 10, 2026](#march-10-2026)
 
 ## December 15, 2025
 
@@ -1009,3 +1010,28 @@ It is very hard to set the midpoint of the voltage range on the oscilloscope dis
 When I connected the oscilloscope probe between GND and -15 V in the wrong order, the oscilloscope showed weird signals and the regulators got extremely hot. I turned off the circuit immediately. This is the second instance of such an overcurrent event.
 
 I need to double check once more that wall power can make TIA1 work cleanly, using the regulators on the Phase 0.1 board. Test TIA1 on the Phase 0.1 board and bring the supply lines out to Phase 0.2 TIA1. Also, try once more to disconnect the power supply from case GND to rule out a ground loop. And test whether the internal short between the master and slave power channels doesn't have weird quirks. Try changing the 0.1 uF output capacitor of a 15 V regulator to 1 uF. Perhaps the recommended 2.2 uF for the negative regulator was truly needed. But it's already 10:00 PM, so I'll have to pick up where I left off tomorrow.
+
+## March 10, 2026
+
+I found a solution to the problem! Add a large electrolytic capacitor to the output of the -15 V regulator.
+
+Connecting the -15 V output to the Phase 0.1 board raises its output capacitance tremendously, from 1.1 uF to 4.1 uF. But even just an extra 1 uF ceramic capacitor on a breadboard will decimate the oscillation. For better performance, polarized electrolytics do a better job with the same capacitance. 10 uF electrolytic is very good, and 100 uF is best. Positive supply doesn't show any change in behavior when attaching more capacitors.
+
+| Capacitor Type | Capacitance | TIA1 Osc. P-P |
+| -------------- | ----------: | ------------: |
+| none           | none        | 2.8 V |
+| ceramic        | Phase 0.1 board | 100 mV |
+| ceramic        | 1 uF | 120 mV |
+| electrolytic   | 1 uF | 70 mV |
+| ceramic        | 2.2 uF | 100 mV |
+| electrolytic   | 2.2 uF | 50 mV |
+| ceramic        | 4.4 uF | 90 mV |
+| electrolytic   | 4.7 uF | 40 mV |
+| electrolytic   | 10 uF  | 35 mV |
+| electrolytic   | 20 uF  | 30 mV |
+| electrolytic   | 47 uF  | 30 mV |
+| electrolytic   | 100 uF | 20 mV |
+| mixed          | Phase 0.1 + 100 uF | 20 mV |
+| electrolytic   | 200 uF | 15 mV |
+
+I should also test the behavior of the 1 GΩ or 330 MΩ transimpedance amplifiers. They are more complex, because two negative regulators could mess things up.
