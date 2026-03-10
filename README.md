@@ -1008,4 +1008,4 @@ It is very hard to set the midpoint of the voltage range on the oscilloscope dis
 
 When I connected the oscilloscope probe between GND and -15 V in the wrong order, the oscilloscope showed weird signals and the regulators got extremely hot. I turned off the circuit immediately. This is the second instance of such an overcurrent event.
 
-I need to double check once more that wall power can make TIA1 work cleanly, using the regulators on the Phase 0.1 board. Test TIA1 on the Phase 0.1 board and bring the supply lines out to Phase 0.2 TIA1. But it's already 10:00 PM, so I'll have to pick up where I left off tomorrow.
+I need to double check once more that wall power can make TIA1 work cleanly, using the regulators on the Phase 0.1 board. Test TIA1 on the Phase 0.1 board and bring the supply lines out to Phase 0.2 TIA1. Also, try once more to disconnect the power supply from case GND to rule out a ground loop. And test whether the internal short between the master and slave power channels doesn't have weird quirks. But it's already 10:00 PM, so I'll have to pick up where I left off tomorrow.
