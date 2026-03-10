@@ -1632,6 +1632,17 @@
 		)
 		(uuid "0c0d89c2-0f77-4a65-9f4c-1d4acd67c350")
 	)
+	(text "Revision: remove pins 10 and 11,\nleaving a hole to directly connect a shield\nwith AWG 22 wire to the power board."
+		(exclude_from_sim no)
+		(at 188.468 48.514 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "0d87956e-9030-4a3a-aff5-a64157a288ac")
+	)
 	(text "Output:\n- fine X\n- fine Y\n- fine Z\n- coarse Z\n\nfour channels, ±12 V (mode 1110)"
 		(exclude_from_sim no)
 		(at 102.87 82.804 0)
@@ -1645,7 +1656,7 @@
 	)
 	(text "Flip footprint of above two pin\nheaders to back side of PCB"
 		(exclude_from_sim no)
-		(at 194.818 46.482 0)
+		(at 218.948 62.992 0)
 		(effects
 			(font
 				(size 1.27 1.27)

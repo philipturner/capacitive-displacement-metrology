@@ -985,6 +985,17 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "Hand-solder a 10 uF, 0805 capacitor on\ntop of the 1 uF output capacitor to\nminimize instabilities that cause 70-125 kHz\noscillations in TIA1 and TIA2."
+		(exclude_from_sim no)
+		(at 55.88 109.22 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "6567152c-09b0-4242-aba8-4f2845bb2aae")
+	)
 	(junction
 		(at 111.76 132.08)
 		(diameter 0)
