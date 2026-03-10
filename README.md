@@ -1155,3 +1155,26 @@ As a recap, these are the P-P amplitudes of the 70&ndash;125 kHz oscillation:
 | TIA2 | foil shield | 120 Hz | 0 mV |
 | TIA2 | foil shield | 125 kHz | 0 mV |
 | TIA2 | foil shield | 1.5 MHz | 0 mV |
+
+### Redo of Frequency Response Analysis
+
+![March 10, Part 1](./Documentation/March10/March10_Part1.png)
+
+_Oscilloscope trace of frequency response. Amplifier: TIA1, DUT: 1.7 pF, triangle wave: 15.0 V/ms rising, -11.8 V/ms falling. Bandwidth is predicted to be 10 kHz._
+
+![March 10, Part 2](./Documentation/March10/March10_Part2.png)
+
+_Oscilloscope trace of frequency response. Amplifier: TIA2, DUT: 0.4 pF, triangle wave: 4.80 V/ms rising, -3.78 V/ms falling. Bandwidth is predicted to be 45 kHz._
+
+The trace for TIA2 looks sharper than in the video because 125 kHz interference is removed. In addition, shielding against 120 Hz interference may have stopped the bottom side of the square wave from showing a random broadening of its noise band to ~0.5 V. The small oscillations that quickly decay after the voltage jump have ~200 kHz frequency.
+
+Tuned variables:
+- Pre-amplifier positive supply:
+  - 2.8 V before plugging in
+  - 2.5 V after plugging in
+- Pre-amplifier negative supply:
+  - -1.8 V before plugging in
+  - -1.5 V after plugging in
+- Post-amplifier:
+  - RV1 = 470 Ω
+  - RV2 = 78.4 kΩ
