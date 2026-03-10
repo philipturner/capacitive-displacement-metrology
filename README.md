@@ -1015,17 +1015,17 @@ I need to double check once more that wall power can make TIA1 work cleanly, usi
 
 I found a solution to the problem! Add a large electrolytic capacitor to the output of the -15 V regulator.
 
-Connecting the -15 V output to the Phase 0.1 board raises its output capacitance tremendously, from 1.1 uF to 4.1 uF. But even just an extra 1 uF ceramic capacitor on a breadboard will decimate the oscillation. For better performance, polarized electrolytics do a better job with the same capacitance. 10 uF electrolytic is very good, and 100 uF is best. Positive supply doesn't show any change in behavior when attaching more capacitors.
+Connecting the -15 V output to the Phase 0.1 board raises its output capacitance tremendously, from 1.1 uF to 4.1 uF. But even just an extra 1 uF mylar capacitor on a breadboard will decimate the oscillation. For better performance, polarized electrolytics do a better job with the same capacitance. 10 uF electrolytic is very good, and 100 uF is best. Positive supply doesn't show any change in behavior when attaching more capacitors.
 
 | Capacitor Type | Capacitance | TIA1 Osc. P-P |
 | -------------- | ----------: | ------------: |
 | none           | none        | 2.8 V |
-| ceramic        | Phase 0.1 board | 100 mV |
-| ceramic        | 1 uF | 120 mV |
+| mylar          | Phase 0.1 board | 100 mV |
+| mylar          | 1 uF | 120 mV |
 | electrolytic   | 1 uF | 70 mV |
-| ceramic        | 2.2 uF | 100 mV |
+| mylar          | 2.2 uF | 100 mV |
 | electrolytic   | 2.2 uF | 50 mV |
-| ceramic        | 4.4 uF | 90 mV |
+| mylar          | 4.4 uF | 90 mV |
 | electrolytic   | 4.7 uF | 40 mV |
 | electrolytic   | 10 uF  | 35 mV |
 | electrolytic   | 20 uF  | 30 mV |
@@ -1081,15 +1081,60 @@ New setup for wiring:
 | TIA2 | 0.95 m shield + 100 uF | 125 kHz | 40 mV |
 | TIA2 | 0.95 m shield + 100 uF | 1.5 MHz | 60 mV |
 
-Adding the foil shield back:
+Adding the foil shield back. Connecting the vibration isolator shield simultaneously does not reduce noise any further. This is a bit frustrating, as the vibration isolator shield alone has 150 mV total noise. This is less than the 300 mV total with the foil shield.
 
 | Amplifier | Configuration | Osc. Freq. | Osc. Ampl. P-P |
 | --------- | ------ | ---------: | -------------: |
-| TIA2 | foil shield | combined |
-| TIA2 | foil shield | 120 Hz |
-| TIA2 | foil shield | 125 kHz |
-| TIA2 | foil shield | 1.5 MHz |
-| TIA2 | foil shield + 100 uF | combined |
-| TIA2 | foil shield + 100 uF | 120 Hz |
-| TIA2 | foil shield + 100 uF | 125 kHz |
-| TIA2 | foil shield + 100 uF | 1.5 MHz |
+| TIA2 | foil shield | combined | 300 mV |
+| TIA2 | foil shield | 120 Hz | ~0 mV |
+| TIA2 | foil shield | 125 kHz | 250 mV |
+| TIA2 | foil shield | 1.5 MHz | ~0 mV |
+| TIA2 | foil shield + 100 uF | combined | 80 mV |
+| TIA2 | foil shield + 100 uF | 120 Hz | ~0 mV |
+| TIA2 | foil shield + 100 uF | 125 kHz | ~0 mV |
+| TIA2 | foil shield + 100 uF | 1.5 MHz | ~0 mV |
+
+So the 125 kHz signal has vanished. Next, I will investigate how total noise and 125 kHz interference scale with capacitor size. Larger ones take a long time to discharge, and I fetched a 100 kΩ bleeder resistor for it.
+
+| Amplifier | Capacitor | Osc. Freq. | Osc. Ampl. P-P |
+| --------- | -----: | ---------: | -------------: |
+| TIA2 | none | combined | 300 mV |
+| TIA2 | none | 125 kHz | 250 mV |
+| TIA2 | 10 nF mylar | combined | 300 mV |
+| TIA2 | 10 nF mylar | 125 kHz | 250 mV |
+| TIA2 | 47 nF mylar | combined | 150 mV |
+| TIA2 | 47 nF mylar | 125 kHz | 130 mV |
+| TIA2 | 100 nF mylar | combined | 90 mV |
+| TIA2 | 100 nF mylar | 125 kHz | 90 mV |
+| TIA2 | 200 nF mylar | combined | 80 mV |
+| TIA2 | 200 nF mylar | 125 kHz | 50 mV |
+| TIA2 | 1 uF mylar | combined | 70 mV |
+| TIA2 | 1 uF mylar | 125 kHz | 30 mV |
+| TIA2 | 1 uF electrolytic | combined | 80 mV |
+| TIA2 | 1 uF electrolytic | 125 kHz | 40 mV |
+| TIA2 | 4.4 uF mylar | combined | 70 mV |
+| TIA2 | 4.4 uF mylar | 125 kHz | 20 mV |
+| TIA2 | 100 uF electrolytic | combined | 90 mV |
+| TIA2 | 100 uF electrolytic | 125 kHz | 20 mV |
+
+I'm going to add a 10 uF, 0805 ceramic capacitor on top of the existing output capacitor for the -15 V regulator. I will not re-install the 1N4007W protection diodes. This choice has the least amount of effort to rework soldered parts. Then, I will test the performance of the new power board with TIA1 and TIA2.
+
+As a recap, these are the P-P amplitudes of the 70&ndash;125 kHz oscillation:
+- With 1 uF output capacitor across -15 V:
+  - TIA1: 1.9 V or 2.8 V
+  - TIA2: 150&ndash;250 mV (500 mV under rare conditions)
+- With 2.1 uF combined unpolarized capacitance:
+  - TIA1: 120 mV
+  - TIA2: 30 mV
+- With 3.1&ndash;4.1 uF from Phase 0.1 board connection:
+  - TIA1: 100&ndash;150 mV
+  - 330 MΩ: undetectable
+- With 5.5 uF unpolarized:
+  - TIA1: 90 mV
+  - TIA2: 20 mV
+- With 5.8&ndash;10.8 uF polarized:
+  - TIA1: 35&ndash;40 mV
+  - TIA2: 20 mV
+- With 100 uF polarized:
+  - TIA1: 15 mV
+  - TIA2: 20 mV
