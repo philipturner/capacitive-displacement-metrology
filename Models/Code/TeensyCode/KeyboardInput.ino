@@ -1,6 +1,6 @@
 #include "KeyboardInput.h"
 
-#include "src/ADC.h"
+#include "ADC.h"
 #include "RingBuffer.h"
 #include "TimeStatistics.h"
 
