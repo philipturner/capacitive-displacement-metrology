@@ -25,7 +25,7 @@ uint32_t ADC::transfer(ADCInput input) {
   // 18 MHz - yes
   // 19 MHz - no
   // 20 MHz - no
-  SPI.beginTransaction(SPISettings(25 * 1000000, MSBFIRST, SPI_MODE0));
+  SPI.beginTransaction(SPISettings(5 * 1000000, MSBFIRST, SPI_MODE0));
   digitalWrite(CS_ADC, 0);
   delayNanoseconds(100);
 
