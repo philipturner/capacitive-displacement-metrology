@@ -1204,3 +1204,19 @@ I will try the following solutions next:
 ---
 
 The 100 uF bypass capacitor across 3.3V did not work. Rise times are the same, cutoff frequency is still 18&ndash;19 MHz. Putting it across the 5V pin next to 3.3V and GND also does not work.
+
+<p align="center">
+&nbsp;
+  <img src="./Documentation/March12/March12_Part1.jpg" width="45.00%">
+&nbsp;&nbsp;
+  <img src="./Documentation/March12/March12_Part2.jpg" width="45.00%">
+&nbsp;
+</p>
+
+_<b>Left:</b> Trace taken at 15 MHz. SCK (yellow) has half the correct magnitude, but this is a measurement artifact. <b>Right:</b> Trace taken at 20 MHz. Have not gathered enough samples to know whether this disparity is random, or the extra bit comes from errors at 20 MHz._
+
+The low signal voltage for MISO was a false lead. All tests show 3.3V at both 15 MHz and 20 MHz. I think, after 20 MHz, an extra bit appears in the oscilloscope trace. Since it's two apart from the other bit (not zero apart), I cannot see how it would correspond to a change from 0.5 to 0.75 in binary. I also do not understand the endianness of integers for converting to `float` after shifting 14 bits.
+
+I tried to use the `adcResponsivenessDiagnosticLoop` with 15 MHz vs. 20 MHz for the SPI transactions. The ADC stops responding to range-select changes at 20 MHz.
+
+Next, I will clean up the code from debugging and test the DAC81401. Hopefully, it does not shut down randomly and break from sustained damage. Then, I can study its behavior at high SPI speeds.
