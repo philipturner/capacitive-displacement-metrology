@@ -1184,7 +1184,7 @@ Tuned variables:
 
 I am attempting to debug the problem that prevents SPI from reaching maximum rates of 40&ndash;50 MHz with the ADS8699. The Phase 0.1 board started dropping bits at 21.8 MHz. The current board drops them at 18&ndash;19 MHz.
 
-I analyzed the signals with the oscilloscope, and the clock signal starts getting very deformed at around 20 MHz. At lower speeds, it reaches a long plateau. At faster speeds, it becomes a triangle wave. The problem originates in the Teensy itself, not the SPI isolator. The Teensy's rising edge settles in 20 ns, far longer than the expected rise time.
+I analyzed the signals with the oscilloscope, and the clock signal starts getting very deformed at around 20 MHz. At lower speeds, it reaches a long plateau. At higher speeds, it becomes a triangle wave. The problem originates in the Teensy itself, not the SPI isolator. The Teensy's rising edge settles in 20 ns, far longer than the expected rise time.
 
 Supposedly, the Teensy cannot run SPI at more than 30 MHz. Some people reported flaky situations where one person did a thing at 40 MHz, but another person struggled to reproduce it at only 24&ndash;26 MHz.
 
