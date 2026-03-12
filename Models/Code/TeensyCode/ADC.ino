@@ -9,7 +9,7 @@
 // 6000 ns breathing room for ACQ
 //         write CS high
 // 6300 ns theoretical time left for other code
-uint32_t ADC::transfer(ADCInput input) {
+uint32_t ADC::transfer(ADCInput input, uint32_t speed) {
   uint8_t bytes[4];
   bytes[0] = input.command << 1;
   bytes[1] = input.registerAddress;
@@ -25,7 +25,7 @@ uint32_t ADC::transfer(ADCInput input) {
   // 18 MHz - yes
   // 19 MHz - no
   // 20 MHz - no
-  SPI.beginTransaction(SPISettings(18 * 1000000, MSBFIRST, SPI_MODE0));
+  SPI.beginTransaction(SPISettings(speed, MSBFIRST, SPI_MODE0));
   digitalWrite(CS_ADC, 0);
   delayNanoseconds(100);
 

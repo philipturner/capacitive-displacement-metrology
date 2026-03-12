@@ -50,7 +50,7 @@ struct ADCOutputConversion {
 };
 
 struct ADC {
-  static uint32_t transfer(ADCInput input);
+  static uint32_t transfer(ADCInput input, uint32_t speed = 15 * 1000000);
 
   static void nop();
 

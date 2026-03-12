@@ -24,13 +24,13 @@ void setup() {
   // Omit for ADC responsiveness loop.
   // 20 kHz when SPI rate reduced to 5 MHz
   // 50 kHz otherwise
-  timer.begin(kilohertzLoop, 50);
+  //timer.begin(kilohertzLoop, 50);
 }
 
 void loop() {
   //timeFidelityDiagnosticLoop();
-  //adcResponsivenessDiagnosticLoop();
-  oscilloscopeDiagnosticLoop();
+  adcResponsivenessDiagnosticLoop();
+  //oscilloscopeDiagnosticLoop();
 }
 
 // Function to execute reliably with a consistent time
