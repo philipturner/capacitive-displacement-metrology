@@ -1202,3 +1202,5 @@ I will try the following solutions next:
 - Study how the DAC chips behave
 
 ---
+
+The 100 uF bypass capacitor across 3.3V did not work. Rise times are the same, cutoff frequency is still 18&ndash;19 MHz. Putting it across the 5V pin next to 3.3V and GND also does not work.
