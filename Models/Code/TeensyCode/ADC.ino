@@ -9,6 +9,9 @@
 // 6000 ns breathing room for ACQ
 //         write CS high
 // 6300 ns theoretical time left for other code
+//
+// TODO: Find ways to do other work during these 6000 ns
+// waits. Also, one of the two waits might not be needed.
 uint32_t ADC::transfer(ADCInput input, uint32_t speed) {
   uint8_t bytes[4];
   bytes[0] = input.command << 1;
@@ -19,12 +22,6 @@ uint32_t ADC::transfer(ADCInput input, uint32_t speed) {
   // Guarantee that enough conversion time has passed.
   delayNanoseconds(6000);
 
-  // TODO: Get higher bit rates to work with new board.
-  // 10 MHz - yes
-  // 15 MHz - yes
-  // 18 MHz - yes
-  // 19 MHz - no
-  // 20 MHz - no
   SPI.beginTransaction(SPISettings(speed, MSBFIRST, SPI_MODE0));
   digitalWrite(CS_ADC, 0);
   delayNanoseconds(100);

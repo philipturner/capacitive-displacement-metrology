@@ -22,14 +22,14 @@ void setup() {
   oscilloscopeTimestamp = startTimestamp;
 
   // Omit for ADC responsiveness loop.
-  // 20 kHz when SPI rate reduced to 5 MHz
-  // 50 kHz otherwise
-  //timer.begin(kilohertzLoop, 50);
+  // 20 kHz (50 μs) when SPI rate reduced to 5 MHz
+  // 50 kHz (20 μs) otherwise
+  timer.begin(kilohertzLoop, 20);
 }
 
 void loop() {
   //timeFidelityDiagnosticLoop();
-  adcResponsivenessDiagnosticLoop();
+  //adcResponsivenessDiagnosticLoop();
   //oscilloscopeDiagnosticLoop();
 }
 

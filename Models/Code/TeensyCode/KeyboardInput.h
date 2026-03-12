@@ -14,8 +14,8 @@ void timeFidelityDiagnosticLoop();
 // not execute. The range select register is set to 0 before the kilohertz
 // loop starts.
 //
-// WARNING: Disable the IntervalTimer when in this mode. Otherwise, the
-// range select register will report spurious values.
+// COMMON MISTAKE: Disable the IntervalTimer (timer.begin) when in this
+// mode. Otherwise, the range select register will report spurious values.
 void adcResponsivenessDiagnosticLoop();
 
 // 'a' received - min/avg/max over 1 ms intervals, showing 1 s of history
