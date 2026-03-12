@@ -36,6 +36,7 @@ Table of Contents:
 - [March 8, 2026](#march-8-2026)
 - [March 9, 2026](#march-9-2026)
 - [March 10, 2026](#march-10-2026)
+- [March 12, 2026](#march-12-2026)
 
 ## December 15, 2025
 
@@ -1178,3 +1179,26 @@ Tuned variables:
 - Post-amplifier:
   - RV1 = 470 Ω
   - RV2 = 78.4 kΩ
+
+## March 12, 2026
+
+I am attempting to debug the problem that prevents SPI from reaching maximum rates of 40&ndash;50 MHz with the ADS8699. The Phase 0.1 board started dropping bits at 21.8 MHz. The current board drops them at 18&ndash;19 MHz.
+
+I analyzed the signals with the oscilloscope, and the clock signal starts getting very deformed at around 20 MHz. At lower speeds, it reaches a long plateau. At faster speeds, it becomes a triangle wave. The problem originates in the Teensy itself, not the SPI isolator. The Teensy's rising edge settles in 20 ns, far longer than the expected rise time.
+
+Supposedly, the Teensy cannot run SPI at more than 30 MHz. Some people reported flaky situations where one person did a thing at 40 MHz, but another person struggled to reproduce it at only 24&ndash;26 MHz.
+
+One suspected solution is adding 50&ndash;220 Ohm resistors near the Teensy's pins. Since a 50 Ohm resistor to ground would cause an insane amount of current, I must instead wire the resistor in series with the signal line.
+
+The series resistor could shape the SCK waveform. In a certain wiring configuration, the oscilloscope measures an overshoot on the SCK signal. Adding a 50 Ohm resistor made it undershoot. Larger resistors were worse. 33 Ohms was the sweet spot. But the rise time was still 10 or 20 ns.
+
+Adding 10 or 50 Ohm resistors in series with MOSI, MISO, and CS produced unexplainable results. Certain configurations reduced the maximum speed to 15&ndash;16 MHz or 17&ndash;18 MHz. Nothing increased the speed to 19 MHz or higher.
+
+I tried adding an extra 1 uF mylar capacitor across the Teensy's 3.3V and ground. It did not reduce the rise time. Even a 10 uF electrolytic capacitor did not. The Teensy's technical drawing shows many bypass capacitors, including a 4.7 uF one.
+
+I will try the following solutions next:
+- Add an extremely large bypass cap (100 uF electrolytic) and see whether SCK rise time improves
+- Study the strange instance where I measured low (1&ndash;2 V) output voltages from the MISO pin on the ADC
+- Study how the DAC chips behave
+
+---
