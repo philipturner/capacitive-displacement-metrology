@@ -3,4 +3,4 @@
 struct RingBuffer {
   float samples[50000];
 };
-RingBuffer ringBuffer;
+inline RingBuffer ringBuffer;

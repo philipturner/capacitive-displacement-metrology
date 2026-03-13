@@ -1,6 +1,6 @@
+#include "IC/ADC.h"
 #include "KeyboardInput.h"
-
-#include "ADC.h"
+#include "KilohertzLoop.h"
 #include "RingBuffer.h"
 #include "TimeStatistics.h"
 

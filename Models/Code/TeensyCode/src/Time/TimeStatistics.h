@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 struct TimeStatistics {
   uint32_t above1000000us_jumps = 0;
   uint32_t above100000us_jumps = 0;
@@ -13,12 +15,5 @@ struct TimeStatistics {
 
   void integrate(uint32_t jumpDuration);
 };
+inline TimeStatistics timeStatistics;
 
-TimeStatistics timeStatistics;
-
-// WARNING: Initialize this during setup.
-// WARNING: After 1.2 hours, the 32-bit integers will overflow.
-uint32_t startTimestamp;
-uint32_t latestTimestamp;
-uint32_t oscilloscopeTimestamp;
-bool oscilloscopeLock = false;

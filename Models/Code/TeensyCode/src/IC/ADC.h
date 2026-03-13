@@ -2,7 +2,7 @@
 
 #include <SPI.h>
 
-uint8_t CS_ADC = 10;
+inline uint8_t CS_ADC = 10;
 
 /* Input Shift Register Commands for ADS8689 */
 #define ADS8689_DEVICE_ID_REG   0x00
