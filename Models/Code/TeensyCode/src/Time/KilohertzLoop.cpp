@@ -22,7 +22,7 @@ void kilohertzLoop() {
   kilohertzLoopBody(previousTimestamp);
 }
 
-void oscilloscopeSamplingLoop(uint32_t previousTimestamp) {
+void oscilloscopeSamplingCycle(uint32_t previousTimestamp) {
   uint32_t startSlotID = (previousTimestamp - startTimestamp) / 20;
   startSlotID += 1;
   uint32_t endSlotID = (latestTimestamp - startTimestamp) / 20;

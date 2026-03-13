@@ -70,4 +70,10 @@ struct ADC {
   static void writeRangeSelect(uint8_t rangeCode);
 
   static uint32_t readRangeSelect();
+
+  // 'c' received - ADC performs a measurement
+  // 'd' received - ADC reports contents of ADS8689_RANGE_SEL_REG
+  // '0' received - ADC writes 0b0000 to ADS8689_RANGE_SEL_REG
+  // '1' received - ADC writes 0b0001 to ADS8689_RANGE_SEL_REG
+  static void responsivenessDiagnosticLoop();
 };
