@@ -118,12 +118,34 @@ void oscilloscopeGuardedCode(bool shouldDisplayLatest) {
   oscilloscopeTimestamp = latestTimestamp;
 }
 
+bool getShouldCopyLatest() {
+  if (oscilloscopeMode == 'l') {
+    return true;
+  } else if (oscilloscopeMode == 'z') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 uint32_t staticDisplayTimeNext = 0;
+bool getShouldDisplayLatest() {
+  if (!getShouldCopyLatest()) {
+    return false;
+  }
+  
+  if (oscilloscopeTimestamp < staticDisplayTimeNext) {
+    return false;
+  }
+
+  staticDisplayTimeNext = max(oscilloscopeTimestamp, staticDisplayTimeNext + 1000000);
+
+  return true;
+}
 
 void oscilloscopeDiagnosticLoop() {
   delay(20);
 
-  bool shouldDisplayLatest = false;
   if (Serial.available() > 0) {
     char incomingByte = Serial.read();
 
@@ -131,10 +153,8 @@ void oscilloscopeDiagnosticLoop() {
       oscilloscopeMode = 'a';
     } else if (incomingByte == 'l') {
       oscilloscopeMode = 'l';
-      shouldDisplayLatest = true;
     } else if (incomingByte == 'z') {
       oscilloscopeMode = 'z';
-      shouldDisplayLatest = true;
     } else if (incomingByte == '0') {
       oscilloscopeMode = '0';
     }
@@ -143,28 +163,34 @@ void oscilloscopeDiagnosticLoop() {
   // Make the guarded portion very small and do not
   // invoke 'Serial.print' here.
   oscilloscopeLock = true;
-  oscilloscopeGuardedCode(shouldDisplayLatest);
+  oscilloscopeGuardedCode(getShouldCopyLatest());
   oscilloscopeLock = false;
-  if (shouldDisplayLatest) {
-    staticDisplayTimeNext = oscilloscopeTimestamp;
-  }
 
-  // Working on fixing teleplot usage.
-  
-  if (oscilloscopeMode == 'l') {
-    for (uint32_t sampleID = 0; sampleID < 1000; ++sampleID) {
-      float sample = oscilloscopeCopiedSamples[sampleID];
-      Serial.print(">voltage:");
-      Serial.println(sample, 4);
-    }
-  } else if (oscilloscopeMode == 'z') {
-    for (uint32_t sampleID = 0; sampleID < 100; ++sampleID) {
-      float sample = oscilloscopeCopiedSamples[900 + sampleID];
-      for (uint32_t i = 0; i < 10; ++i) {
+  if (getShouldDisplayLatest()) {
+    if (oscilloscopeMode == 'l') {
+      for (uint32_t sampleID = 0; sampleID < 1000; ++sampleID) {
+        float sample = oscilloscopeCopiedSamples[sampleID];
         Serial.print(">voltage:");
+        Serial.print(sampleID);
+        Serial.print(":");
         Serial.println(sample, 4);
       }
+    } else if (oscilloscopeMode == 'z') {
+      for (uint32_t sampleID = 0; sampleID < 100; ++sampleID) {
+        float sample = oscilloscopeCopiedSamples[900 + sampleID];
+        for (uint32_t i = 0; i < 10; ++i) {
+          Serial.print(">voltage:");
+          Serial.print(sampleID * 10 + i);
+          Serial.print(":");
+          Serial.println(sample, 4);
+        }
+      }
     }
+
+    Serial.print("current timestamp: ");
+    Serial.println(oscilloscopeTimestamp);
+    Serial.print("next display timestamp: ");
+    Serial.println(staticDisplayTimeNext);
   }
   
   if (oscilloscopeMode == 'a') {
