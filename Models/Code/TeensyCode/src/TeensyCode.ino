@@ -30,7 +30,7 @@ void setup() {
 void loop() {
   //timeFidelityDiagnosticLoop();
   //adcResponsivenessDiagnosticLoop();
-  //oscilloscopeDiagnosticLoop();
+  oscilloscopeDiagnosticLoop();
 }
 
 // Function to execute reliably with a consistent time
@@ -53,13 +53,13 @@ void kilohertzLoop() {
   timeSeconds /= float(1000000);
 
   // Get the ADC data as soon as possible.
-  float voltage = ADC::readConversionCode();
-  voltage = 2 * voltage - 1;
-  voltage *= 12.288;
+  // float voltage = ADC::readConversionCode();
+  // voltage = 2 * voltage - 1;
+  // voltage *= 12.288;
   
   // 1 kHz artificial sine wave for testing.
-  //float voltage = sin(2 * M_PI * 1000 * timeSeconds);
-  //voltage *= 10;
+  float voltage = sin(2 * M_PI * 1000 * timeSeconds);
+  voltage *= 10;
 
   uint32_t jumpDuration = currentTimestamp - previousTimestamp;
   timeStatistics.integrate(jumpDuration);

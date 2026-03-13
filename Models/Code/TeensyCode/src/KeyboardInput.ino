@@ -118,23 +118,23 @@ void oscilloscopeGuardedCode(bool shouldDisplayLatest) {
   oscilloscopeTimestamp = latestTimestamp;
 }
 
+uint32_t staticDisplayTimeNext = 0;
+
 void oscilloscopeDiagnosticLoop() {
   delay(20);
-  
+
   bool shouldDisplayLatest = false;
-  bool shouldZoomIn = false;
   if (Serial.available() > 0) {
     char incomingByte = Serial.read();
 
     if (incomingByte == 'a') {
       oscilloscopeMode = 'a';
     } else if (incomingByte == 'l') {
-      oscilloscopeMode = '0';
+      oscilloscopeMode = 'l';
       shouldDisplayLatest = true;
     } else if (incomingByte == 'z') {
-      oscilloscopeMode = '0';
+      oscilloscopeMode = 'z';
       shouldDisplayLatest = true;
-      shouldZoomIn = true;
     } else if (incomingByte == '0') {
       oscilloscopeMode = '0';
     }
@@ -145,39 +145,42 @@ void oscilloscopeDiagnosticLoop() {
   oscilloscopeLock = true;
   oscilloscopeGuardedCode(shouldDisplayLatest);
   oscilloscopeLock = false;
-  
   if (shouldDisplayLatest) {
-    if (!shouldZoomIn) {
-      for (uint32_t sampleID = 0; sampleID < 1000; ++sampleID) {
-        float sample = oscilloscopeCopiedSamples[sampleID];
-        Serial.print("voltage:");
+    staticDisplayTimeNext = oscilloscopeTimestamp;
+  }
+
+  // Working on fixing teleplot usage.
+  
+  if (oscilloscopeMode == 'l') {
+    for (uint32_t sampleID = 0; sampleID < 1000; ++sampleID) {
+      float sample = oscilloscopeCopiedSamples[sampleID];
+      Serial.print(">voltage:");
+      Serial.println(sample, 4);
+    }
+  } else if (oscilloscopeMode == 'z') {
+    for (uint32_t sampleID = 0; sampleID < 100; ++sampleID) {
+      float sample = oscilloscopeCopiedSamples[900 + sampleID];
+      for (uint32_t i = 0; i < 10; ++i) {
+        Serial.print(">voltage:");
         Serial.println(sample, 4);
       }
-    } else {
-      for (uint32_t sampleID = 0; sampleID < 100; ++sampleID) {
-        float sample = oscilloscopeCopiedSamples[900 + sampleID];
-        for (uint32_t i = 0; i < 10; ++i) {
-          Serial.print("voltage:");
-          Serial.println(sample, 4);
-        }
-      }
     }
-  } else if (oscilloscopeMode == 'a') {
+  }
+  
+  if (oscilloscopeMode == 'a') {
     uint32_t groupCount = oscilloscopeAveragedGroupCount;
     for (uint32_t groupID = 0; groupID < groupCount; ++groupID) {
       float minimum = oscilloscopeCopiedSamples[groupID * 3 + 0];
       float average = oscilloscopeCopiedSamples[groupID * 3 + 1];
       float maximum = oscilloscopeCopiedSamples[groupID * 3 + 2];
 
-      Serial.print("min:");
-      Serial.print(minimum, 4);
-      Serial.print(",");
+      Serial.print(">min:");
+      Serial.println(minimum, 4);
 
-      Serial.print("avg:");
-      Serial.print(average, 4);
-      Serial.print(",");
+      Serial.print(">avg:");
+      Serial.println(average, 4);
       
-      Serial.print("max:");
+      Serial.print(">max:");
       Serial.println(maximum, 4);
     }
   }
