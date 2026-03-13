@@ -256,7 +256,7 @@ Wafers from Crystal Substrates have no special 41° rotation. They are xyt 0° i
 
 ---
 
-[PiezoelectricCoefficients2.swift](./Models/Code/PiezoelectricCoefficients2.swift)
+[PiezoelectricCoefficients2.swift](./Code/Simulation/PiezoelectricCoefficients2.swift)
 
 The actual shear constant is 80 pm/V, in a direction 32° counterclockwise from Z (0 0 0 1). The electric field is always being applied across the X-axis, regardless of the rotation of the wafer cut. If Wolkow has realized this, then the 80 nm quoted from the patent corresponds to 167 V at 6 piezo plates. Not 196 V.
 
@@ -460,7 +460,7 @@ I will just examine the Z kinematic mount for this analysis. Although it represe
 
 I just sorted out a few more interesting details about how to simulate kinetic friction. I will incorporate the notes into the Swift script.
 
-[StickSlipAction.swift](./Models/Code/StickSlipAction.swift)
+[StickSlipAction.swift](./Code/Simulation/StickSlipAction.swift)
 
 I have reproduced the piezoelectric vibration quite intricately. The first doable goal is completed. I added viscoelastic damping and smoothed out the control voltage waveforms, slightly reducing the amount of vibrational energy.
 
@@ -468,7 +468,7 @@ Task 2: add kinetic friction
 
 <s>Task 3: add gravity and vary the magnet's strength</s>
 
-[StickSlipAction2.swift](./Models/Code/StickSlipAction2.swift)
+[StickSlipAction2.swift](./Code/Simulation/StickSlipAction2.swift)
 
 The script has improved significantly. I plan on investigating gravity &times; magnet force, after studying coefficient of kinetic friction &times; kinetic velocity threshold &times; slew rate.
 
