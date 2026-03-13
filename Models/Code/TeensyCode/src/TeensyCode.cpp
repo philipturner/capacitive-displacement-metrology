@@ -12,14 +12,8 @@ void setup() {
 
   pinMode(CS_ADC, OUTPUT);
   digitalWrite(CS_ADC, 1);
-  SPI.begin(); 
- 
-  ADC::writeRangeSelect(0b0000);
-  ADC::nop(); // prepare for the first sample
+  SPI.begin();
 
-  // Omit for ADC responsiveness loop.
-  // 20 kHz (50 μs) when SPI rate reduced to 5 MHz
-  // 50 kHz (20 μs) otherwise
   startTimestamp = micros();
   latestTimestamp = startTimestamp;
   oscilloscopeTimestamp = startTimestamp;
@@ -27,7 +21,5 @@ void setup() {
 }
 
 void loop() {
-  //timeFidelityDiagnosticLoop();
-  //adcResponsivenessDiagnosticLoop();
-  oscilloscopeDiagnosticLoop();
+  timeFidelityDiagnosticLoop();
 }

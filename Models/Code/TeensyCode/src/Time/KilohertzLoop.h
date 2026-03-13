@@ -5,7 +5,7 @@
 // Function to execute reliably with a consistent time
 // base in the multiple kHz band.
 //
-// Usage:
+// ## Usage
 //
 // startTimestamp = micros();
 // latestTimestamp = startTimestamp;

@@ -1,5 +1,8 @@
 #pragma once
 
+// ## Before using this function:
+//
+// Set up kilohertzLoop
 void timeFidelityDiagnosticLoop();
 
 // Responsiveness test
@@ -30,4 +33,11 @@ void adcResponsivenessDiagnosticLoop();
 // Fixing the X-axis limits to the Arduino IDE's serial plotter:
 // https://www.open-electronics.org/how-to-adjust-x-and-y-axis-scale-in-arduino-serial-plotter-no-extra-software-needed/
 // Successfully changed it from 50 to 1000 data points
+//
+// ## Before using this function:
+//
+// Ensure SPI is set up for the ADC
+// ADC::writeRangeSelect(0b0000);
+// ADC::nop(); // prepare for the first sample
+// Set up kilohertzLoop
 void oscilloscopeDiagnosticLoop();
