@@ -2,12 +2,12 @@
 #include "Oscilloscope.h"
 #include "KilohertzLoop.h"
 
-#if USE_RING_BUFFER
 char oscilloscopeMode = '0';
 float oscilloscopeCopiedSamples[1000];
 uint32_t oscilloscopeAveragedGroupCount = 0;
+uint32_t oscilloscopeCopiedTimestamp;
 
-void oscilloscopeGuardedCode(bool shouldDisplayLatest) {
+void oscilloscopeGuardedCode(bool shouldCopyLatest) {
   uint32_t previousSlotID = (oscilloscopeTimestamp - startTimestamp) / 20;
   uint32_t currentSlotID = (latestTimestamp - startTimestamp) / 20;
 
@@ -71,37 +71,23 @@ void oscilloscopeGuardedCode(bool shouldDisplayLatest) {
     currentInProgressID - previousInProgressID;
   }
 
-  oscilloscopeTimestamp = latestTimestamp;
-}
-
-bool getShouldCopyLatest() {
-  if (oscilloscopeMode == 'l') {
-    return true;
-  } else if (oscilloscopeMode == 'z') {
-    return true;
-  } else {
-    return false;
-  }
+  oscilloscopeCopiedTimestamp = latestTimestamp;
 }
 
 uint32_t staticDisplayTimeNext = 0;
 bool getShouldDisplayLatest() {
-  if (!getShouldCopyLatest()) {
-    return false;
+  if (oscilloscopeTimestamp >= staticDisplayTimeNext) {
+    staticDisplayTimeNext = max(
+      oscilloscopeCopiedTimestamp, staticDisplayTimeNext + 1000000);
+    return true;
   }
-  
-  if (oscilloscopeTimestamp < staticDisplayTimeNext) {
-    return false;
-  }
-
-  staticDisplayTimeNext = max(oscilloscopeTimestamp, staticDisplayTimeNext + 1000000);
-
-  return true;
+  return false;
 }
 
-void oscilloscopeLoop() {
+void oscilloscopeDisplayLoop() {
   delay(20);
 
+  bool shouldCopyLatest = false;
   if (Serial.available() > 0) {
     char incomingByte = Serial.read();
 
@@ -109,8 +95,10 @@ void oscilloscopeLoop() {
       oscilloscopeMode = 'a';
     } else if (incomingByte == 'l') {
       oscilloscopeMode = 'l';
+      shouldCopyLatest = true;
     } else if (incomingByte == 'z') {
       oscilloscopeMode = 'z';
+      shouldCopyLatest = true;
     } else if (incomingByte == '0') {
       oscilloscopeMode = '0';
     }
@@ -119,10 +107,10 @@ void oscilloscopeLoop() {
   // Make the guarded portion very small and do not
   // invoke 'Serial.print' here.
   oscilloscopeLock = true;
-  oscilloscopeGuardedCode(getShouldCopyLatest());
+  oscilloscopeGuardedCode(shouldCopyLatest);
   oscilloscopeLock = false;
 
-  if (getShouldDisplayLatest()) {
+  if (shouldCopyLatest && getShouldDisplayLatest()) {
     if (oscilloscopeMode == 'l') {
       for (uint32_t sampleID = 0; sampleID < 1000; ++sampleID) {
         float sample = oscilloscopeCopiedSamples[sampleID];
@@ -144,7 +132,7 @@ void oscilloscopeLoop() {
     }
 
     Serial.print("current timestamp: ");
-    Serial.println(oscilloscopeTimestamp);
+    Serial.println(oscilloscopeCopiedTimestamp);
     Serial.print("next display timestamp: ");
     Serial.println(staticDisplayTimeNext);
   }
@@ -167,4 +155,3 @@ void oscilloscopeLoop() {
     }
   }
 }
-#endif
