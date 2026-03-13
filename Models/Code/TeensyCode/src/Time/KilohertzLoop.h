@@ -2,11 +2,14 @@
 
 #include <stdint.h>
 
-// After 1.2 hours, the 32-bit integers will overflow.
+namespace KilohertzLoop {
 inline uint32_t startTimestamp;
 inline uint32_t latestTimestamp;
-inline uint32_t oscilloscopeTimestamp;
-inline bool oscilloscopeLock = false;
+inline bool lock = false;
+};
+
+// Implement this in the top-level script.
+void kilohertzLoopBody(uint32_t previousTimestamp);
 
 // Function to execute reliably with a consistent time
 // base in the multiple kHz band.

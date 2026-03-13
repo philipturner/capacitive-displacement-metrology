@@ -1,12 +1,11 @@
 #include <Arduino.h>
-#include "../IC/ADC.h"
 #include "KilohertzLoop.h"
-#include "RingBuffer.h"
+#include "Oscilloscope.h"
 
 void oscilloscopeCycle(uint32_t previousTimestamp);
 
 void kilohertzLoop() {
-  if (oscilloscopeLock) {
+  if (kilohertzLoopLock) {
     // Never encountered this after about a minute of testing,
     // although the code guarded by the lock was very small.
     //
@@ -20,10 +19,10 @@ void kilohertzLoop() {
   uint32_t previousTimestamp = latestTimestamp;
   latestTimestamp = currentTimestamp;
   
-  oscilloscopeCycle(previousTimestamp);
+  kilohertzLoopBody(previousTimestamp);
 }
 
-void oscilloscopeCycle(uint32_t previousTimestamp) {
+void oscilloscopeSamplingLoop(uint32_t previousTimestamp) {
   uint32_t startSlotID = (previousTimestamp - startTimestamp) / 20;
   startSlotID += 1;
   uint32_t endSlotID = (latestTimestamp - startTimestamp) / 20;

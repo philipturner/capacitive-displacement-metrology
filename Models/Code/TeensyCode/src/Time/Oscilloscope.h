@@ -1,10 +1,12 @@
 #pragma once
 
-#define USE_OSCILLOSCOPE 1
+#include <stdint.h>
 
 struct RingBuffer {
   float samples[50000];
 };
+
+#define USE_OSCILLOSCOPE 1
 
 #if USE_OSCILLOSCOPE
 // Allocate 200 KB of RAM (a large chunk)
@@ -24,3 +26,5 @@ inline RingBuffer ringBuffer;
 // Set up kilohertzLoop with 20 μs period
 // Add TBD to the body of kilohertzLoop
 void oscilloscopeDisplayLoop();
+
+void oscilloscopeSamplingCycle(uint32_t previousTimestamp);
