@@ -31,6 +31,7 @@ void adcResponsivenessDiagnosticLoop() {
   }
 }
 
+#if USE_RING_BUFFER
 char oscilloscopeMode = '0';
 float oscilloscopeCopiedSamples[1000];
 uint32_t oscilloscopeAveragedGroupCount = 0;
@@ -127,7 +128,7 @@ bool getShouldDisplayLatest() {
   return true;
 }
 
-void oscilloscopeDiagnosticLoop() {
+void oscilloscopeLoop() {
   delay(20);
 
   if (Serial.available() > 0) {
@@ -195,3 +196,4 @@ void oscilloscopeDiagnosticLoop() {
     }
   }
 }
+#endif
