@@ -1,6 +1,6 @@
 {
-	"version": "2.0.0",
-	"tasks": [
+    "version": "2.0.0",
+    "tasks": [
 		{
 			"type": "PlatformIO",
 			"task": "Build",
@@ -8,7 +8,10 @@
 				"$platformio"
 			],
 			"group": "build",
-			"label": "PlatformIO: Build"
+			"label": "PlatformIO: Build",
+			"presentation": {
+				"panel": "new"
+			}
 		},
 		{
 			"type": "PlatformIO",
@@ -16,7 +19,10 @@
 			"problemMatcher": [
 				"$platformio"
 			],
-			"label": "PlatformIO: Upload"
+			"label": "PlatformIO: Upload",
+			"presentation": {
+				"panel": "new"
+			}
 		}
 	]
 }
