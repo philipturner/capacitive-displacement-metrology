@@ -2,7 +2,6 @@
 #include "../IC/ADC.h"
 #include "KilohertzLoop.h"
 #include "RingBuffer.h"
-#include "TimeStatistics.h"
 
 void kilohertzLoop() {
   if (oscilloscopeLock) {
@@ -29,10 +28,7 @@ void kilohertzLoop() {
   // 1 kHz artificial sine wave for testing.
   float voltage = sin(2 * M_PI * 1000 * timeSeconds);
   voltage *= 10;
-
-  uint32_t jumpDuration = currentTimestamp - previousTimestamp;
-  timeStatistics.integrate(jumpDuration);
-
+  
   uint32_t startSlotID = (previousTimestamp - startTimestamp) / 20;
   startSlotID += 1;
   uint32_t endSlotID = (currentTimestamp - startTimestamp) / 20;

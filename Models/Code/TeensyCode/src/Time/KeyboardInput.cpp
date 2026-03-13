@@ -2,22 +2,6 @@
 #include "KeyboardInput.h"
 #include "KilohertzLoop.h"
 #include "RingBuffer.h"
-#include "TimeStatistics.h"
-
-void timeFidelityDiagnosticLoop() {
-  delay(500);
-
-  Serial.println();
-  Serial.println(timeStatistics.above1000000us_jumps);
-  Serial.println(timeStatistics.above100000us_jumps);
-  Serial.println(timeStatistics.above10000us_jumps);
-  Serial.println(timeStatistics.above1000us_jumps);
-  Serial.println(timeStatistics.above100us_jumps);
-  Serial.println(timeStatistics.above20us_jumps);
-  Serial.println(timeStatistics.exactly20us_jumps);
-  Serial.println(timeStatistics.under20us_jumps);
-  Serial.println(timeStatistics.total_jumps);
-}
 
 void adcResponsivenessDiagnosticLoop() {
   if (Serial.available() > 0) {

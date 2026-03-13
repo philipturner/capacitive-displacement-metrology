@@ -1,10 +1,5 @@
 #pragma once
 
-// ## Before using this function:
-//
-// Set up kilohertzLoop
-void timeFidelityDiagnosticLoop();
-
 // Responsiveness test
 //
 // Keyboard events:

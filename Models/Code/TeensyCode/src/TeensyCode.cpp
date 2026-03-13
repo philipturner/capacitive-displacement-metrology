@@ -1,7 +1,6 @@
 #include "IC/ADC.h"
 #include "Time/KeyboardInput.h"
 #include "Time/KilohertzLoop.h"
-#include "Time/TimeStatistics.h"
 
 IntervalTimer timer;
 
@@ -21,5 +20,5 @@ void setup() {
 }
 
 void loop() {
-  timeFidelityDiagnosticLoop();
+  oscilloscopeDiagnosticLoop();
 }
