@@ -1,0 +1,207 @@
+(footprint "Samtec_MMCX_SMT"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0.34 -2.55 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "dd894bc3-e9d5-42bf-af51-bdd02818481f")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Value" "Samtec_MMCX_SMT"
+		(at 0.34 -1.35 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "8adb26e0-f200-48e9-978c-9a17796fe414")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7d13e18d-34eb-4bb3-be7b-dccc629a0a9a")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "bef685b5-2ba8-44fd-b28c-b1f05c9d2af2")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -1.86 -0.71)
+		(end -1.86 0.71)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "7aa717c0-86a5-4dee-9c2a-c4a75511e7ee")
+	)
+	(fp_line
+		(start 0.71 -1.86)
+		(end -0.71 -1.86)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "3108f4ae-6f08-4450-908f-33e45ba8c60d")
+	)
+	(fp_line
+		(start 0.71 1.86)
+		(end -0.71 1.86)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "5c29185d-5ec8-4339-a671-55db9bdb4083")
+	)
+	(fp_line
+		(start 1.86 -0.71)
+		(end 1.86 0.71)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "8a1babc1-c80c-4781-8fbe-4eb74915ec5d")
+	)
+	(fp_rect
+		(start -5.25 -2.25)
+		(end 2.25 2.25)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "1336cb10-a15c-4432-9ed5-427761f7a7f3")
+	)
+	(fp_line
+		(start -4.75 -1.75)
+		(end -4.75 1.75)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "52770341-021f-4c8b-9b92-418e25ea17e3")
+	)
+	(fp_line
+		(start -4.75 -1.75)
+		(end -1.75 -1.75)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "0c44f4df-8dde-4d56-938a-ba00c4905dfd")
+	)
+	(fp_line
+		(start -4.75 1.75)
+		(end -1.75 1.75)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "0ac868cd-2fdb-40da-8ae1-47ec0269a7cc")
+	)
+	(fp_rect
+		(start -1.75 -1.75)
+		(end 1.75 1.75)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "eeba542a-4080-4a64-9e0b-2d6598751553")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0.34 -0.15 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "93373085-eec1-40ea-a0c7-ed8f4f39bfc8")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(pad "1" smd circle
+		(at 0 0)
+		(size 1.15 1.15)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "a850e868-4591-476a-865b-11ecad411338")
+	)
+	(pad "2" smd roundrect
+		(at -1.27 -1.27)
+		(size 1 1)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "3de6d1c5-c259-4127-a9a7-0f98653e2bbd")
+	)
+	(pad "2" smd roundrect
+		(at -1.27 1.27)
+		(size 1 1)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "d8995644-4b56-46b6-8b53-be7fd478f6c2")
+	)
+	(pad "2" smd roundrect
+		(at 1.27 -1.27)
+		(size 1 1)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "71b93dd2-989b-456d-b881-5e698589f1d4")
+	)
+	(pad "2" smd roundrect
+		(at 1.27 1.27)
+		(size 1 1)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "7e28e520-eb26-450c-af99-6365f95d0de3")
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/../../libraries/Connector_Custom.pretty/Samtec_MMCX_SMT.step"
+		(offset
+			(xyz 0 0 2.84)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 90 -0)
+		)
+	)
+)
