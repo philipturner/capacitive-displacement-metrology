@@ -985,6 +985,17 @@
 		)
 		(uuid "2d6ba992-dc3f-4968-a155-61b50251e60e")
 	)
+	(text "May need to add bottom pads for connecting\nto shield through 3 magnets holding the board"
+		(exclude_from_sim no)
+		(at 170.434 36.322 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "33cb1eac-435f-4df2-90e4-312c9c2028e2")
+	)
 	(text "Innermost pin of MMCX connector\nrequires reflow soldering"
 		(exclude_from_sim no)
 		(at 50.8 92.71 0)
