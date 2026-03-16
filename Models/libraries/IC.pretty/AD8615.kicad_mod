@@ -270,4 +270,15 @@
 		(uuid "ce46a106-186e-4fab-87fb-43e405a09bae")
 	)
 	(embedded_fonts no)
+	(model "${KIPRJMOD}/../../libraries/IC.pretty/AD8615.step"
+		(offset
+			(xyz 0 0 0.645)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 -0 90)
+		)
+	)
 )

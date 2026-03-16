@@ -694,6 +694,113 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Mechanical:MountingHole_Pad"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(property "Reference" "H"
+				(at 0 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "MountingHole_Pad"
+				(at 0 4.445 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Mounting Hole with connection"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "mounting hole"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "MountingHole*Pad*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "MountingHole_Pad_0_1"
+				(circle
+					(center 0 1.27)
+					(radius 1.27)
+					(stroke
+						(width 1.27)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "MountingHole_Pad_1_1"
+				(pin input line
+					(at 0 -2.54 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Vendor:AD8615"
 			(pin_names
 				(offset 0.254)
@@ -985,16 +1092,16 @@
 		)
 		(uuid "2d6ba992-dc3f-4968-a155-61b50251e60e")
 	)
-	(text "May need to add bottom pads for connecting\nto shield through 3 magnets holding the board"
+	(text "Magnets on back are attached with conductive\nepoxy through 125°C, 2-hour bake. All other\ncomponents on the board are rated for 125°C."
 		(exclude_from_sim no)
-		(at 170.434 36.322 0)
+		(at 150.368 42.164 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left top)
 		)
-		(uuid "33cb1eac-435f-4df2-90e4-312c9c2028e2")
+		(uuid "a58a0145-63d0-4741-9438-fcb7f6327c15")
 	)
 	(text "Innermost pin of MMCX connector\nrequires reflow soldering"
 		(exclude_from_sim no)
@@ -1065,7 +1172,7 @@
 	)
 	(wire
 		(pts
-			(xy 132.08 119.38) (xy 132.08 121.92)
+			(xy 139.7 119.38) (xy 139.7 121.92)
 		)
 		(stroke
 			(width 0)
@@ -1135,7 +1242,7 @@
 	)
 	(wire
 		(pts
-			(xy 132.08 129.54) (xy 132.08 132.08)
+			(xy 139.7 129.54) (xy 139.7 132.08)
 		)
 		(stroke
 			(width 0)
@@ -1214,7 +1321,7 @@
 		(uuid "804b64c2-b931-43f4-940f-19b54fc06404")
 	)
 	(label "-1.5V"
-		(at 132.08 119.38 0)
+		(at 139.7 119.38 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1272,6 +1379,91 @@
 			(justify left bottom)
 		)
 		(uuid "e507c18b-f3f7-4277-90bb-5bf992a16cbf")
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 177.8 26.67 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "33ac40b7-33e0-4707-9407-4426c089bb46")
+		(property "Reference" "H2"
+			(at 180.34 24.1299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 180.34 26.6699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_Custom:KJ_D21SH"
+			(at 177.8 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 177.8 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 177.8 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.kjmagnetics.com/d21sh-neodymium-high-temp-disc-magnet"
+			(at 177.8 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.680"
+			(at 177.8 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "905d06e3-93cb-4b55-b893-45dd7c634ee9")
+		)
+		(instances
+			(project "PreAmp"
+				(path "/dc7fbe96-b0ab-456b-973d-3b7c253d81f2"
+					(reference "H2")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Vendor:AD8615")
@@ -1437,7 +1629,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4b27d90f-8768-406a-b052-c59d80a22f1e")
-		(property "Reference" "#PWR05"
+		(property "Reference" "#PWR07"
 			(at 180.34 87.63 0)
 			(effects
 				(font
@@ -1487,7 +1679,92 @@
 		(instances
 			(project "PreAmp"
 				(path "/dc7fbe96-b0ab-456b-973d-3b7c253d81f2"
-					(reference "#PWR05")
+					(reference "#PWR07")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 203.2 26.67 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4c24a56b-99b9-43a7-bdea-116ec9aeb967")
+		(property "Reference" "H3"
+			(at 205.74 24.1299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 205.74 26.6699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_Custom:KJ_D21SH"
+			(at 203.2 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 203.2 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 203.2 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.kjmagnetics.com/d21sh-neodymium-high-temp-disc-magnet"
+			(at 203.2 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.680"
+			(at 203.2 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "215a2d3b-aab1-4b15-b20e-3f378361f814")
+		)
+		(instances
+			(project "PreAmp"
+				(path "/dc7fbe96-b0ab-456b-973d-3b7c253d81f2"
+					(reference "H3")
 					(unit 1)
 				)
 			)
@@ -1574,6 +1851,72 @@
 			(project "PreAmp"
 				(path "/dc7fbe96-b0ab-456b-973d-3b7c253d81f2"
 					(reference "R1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 177.8 29.21 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "64ba70de-6fa1-463b-b97f-61a68b6ee309")
+		(property "Reference" "#PWR06"
+			(at 177.8 35.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 177.8 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 177.8 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 177.8 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 177.8 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d85a70e4-816f-4835-a04a-f154044f8420")
+		)
+		(instances
+			(project "PreAmp"
+				(path "/dc7fbe96-b0ab-456b-973d-3b7c253d81f2"
+					(reference "#PWR06")
 					(unit 1)
 				)
 			)
@@ -1824,6 +2167,72 @@
 	)
 	(symbol
 		(lib_id "power:GND")
+		(at 203.2 29.21 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "81688f6a-a66b-4f88-aedf-35ff18349490")
+		(property "Reference" "#PWR08"
+			(at 203.2 35.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 203.2 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 203.2 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 203.2 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 203.2 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1781ed16-7843-432a-96cc-cbb085c53a39")
+		)
+		(instances
+			(project "PreAmp"
+				(path "/dc7fbe96-b0ab-456b-973d-3b7c253d81f2"
+					(reference "#PWR08")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
 		(at 208.28 81.28 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -1832,7 +2241,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "839a14a6-07bd-45be-bab5-edc3b01a4356")
-		(property "Reference" "#PWR06"
+		(property "Reference" "#PWR09"
 			(at 208.28 87.63 0)
 			(effects
 				(font
@@ -1882,7 +2291,7 @@
 		(instances
 			(project "PreAmp"
 				(path "/dc7fbe96-b0ab-456b-973d-3b7c253d81f2"
-					(reference "#PWR06")
+					(reference "#PWR09")
 					(unit 1)
 				)
 			)
@@ -1890,16 +2299,16 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 132.08 125.73 0)
+		(at 139.7 125.73 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8d67ae21-275d-4e8f-b426-394bda330a0f")
 		(property "Reference" "C2"
-			(at 135.89 124.4599 0)
+			(at 143.51 124.4599 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1907,8 +2316,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1 uF, 0603"
-			(at 135.89 126.9999 0)
+		(property "Value" "1 uF, 0603, 25V, X7R"
+			(at 143.51 126.9999 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1917,7 +2326,7 @@
 			)
 		)
 		(property "Footprint" "TwoTerminal:CAPC0603"
-			(at 133.0452 129.54 0)
+			(at 140.6652 129.54 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1926,7 +2335,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 132.08 125.73 0)
+			(at 139.7 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1935,7 +2344,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 132.08 125.73 0)
+			(at 139.7 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1943,8 +2352,8 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRT188R61H105KE13D/5416752"
-			(at 132.08 125.73 0)
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRT188R71E105KE13D/10694256"
+			(at 139.7 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1952,8 +2361,8 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" "$0.078"
-			(at 132.08 125.73 0)
+		(property "Cost" "$0.13"
+			(at 139.7 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2044,17 +2453,101 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 132.08 132.08 0)
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 152.4 26.67 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
+		(uuid "ad5294ae-25fe-4fec-8b58-2c609a1fd743")
+		(property "Reference" "H1"
+			(at 154.94 24.1299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 154.94 26.6699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_Custom:KJ_D21SH"
+			(at 152.4 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 152.4 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 152.4 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Purchase Link" "https://www.kjmagnetics.com/d21sh-neodymium-high-temp-disc-magnet"
+			(at 152.4 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Cost" "$1.680"
+			(at 152.4 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "da8b164a-8eed-4857-aa77-7ab13c0e0802")
+		)
+		(instances
+			(project ""
+				(path "/dc7fbe96-b0ab-456b-973d-3b7c253d81f2"
+					(reference "H1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 139.7 132.08 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(uuid "b18198ea-0f57-4f7a-89b7-544579f9dbbe")
 		(property "Reference" "#PWR04"
-			(at 132.08 138.43 0)
+			(at 139.7 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2063,7 +2556,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 132.08 137.16 0)
+			(at 139.7 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2071,7 +2564,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 132.08 132.08 0)
+			(at 139.7 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2080,7 +2573,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 132.08 132.08 0)
+			(at 139.7 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2089,7 +2582,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 132.08 132.08 0)
+			(at 139.7 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2114,7 +2607,7 @@
 		(at 106.68 125.73 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -2128,7 +2621,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1 uF, 0603"
+		(property "Value" "1 uF, 0603, 25V, X7R"
 			(at 110.49 126.9999 0)
 			(effects
 				(font
@@ -2164,7 +2657,7 @@
 				(hide yes)
 			)
 		)
-		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRT188R61H105KE13D/5416752"
+		(property "Purchase Link" "https://www.digikey.com/en/products/detail/murata-electronics/GRT188R71E105KE13D/10694256"
 			(at 106.68 125.73 0)
 			(effects
 				(font
@@ -2173,7 +2666,7 @@
 				(hide yes)
 			)
 		)
-		(property "Cost" "$0.078"
+		(property "Cost" "$0.13"
 			(at 106.68 125.73 0)
 			(effects
 				(font
@@ -2192,6 +2685,72 @@
 			(project "PreAmp"
 				(path "/dc7fbe96-b0ab-456b-973d-3b7c253d81f2"
 					(reference "C1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 152.4 29.21 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e8277ea7-1c0f-48d2-9bf1-32ce43942d06")
+		(property "Reference" "#PWR05"
+			(at 152.4 35.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 152.4 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 152.4 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 152.4 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 152.4 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "054cc057-b841-4cf8-bd3f-82426ceaaeac")
+		)
+		(instances
+			(project ""
+				(path "/dc7fbe96-b0ab-456b-973d-3b7c253d81f2"
+					(reference "#PWR05")
 					(unit 1)
 				)
 			)

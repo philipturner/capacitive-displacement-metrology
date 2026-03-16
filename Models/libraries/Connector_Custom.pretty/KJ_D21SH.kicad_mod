@@ -1,0 +1,87 @@
+(footprint "KJ_D21SH"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at -0.04 -10.05 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "2cd6e02a-d84d-4129-81a2-b4c77eaa2592")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Value" "KJ_D21SH"
+		(at -0.04 -8.85 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "1a475912-ab05-451e-87e5-d2b7e712355f")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "74c1d674-f971-41e3-b3ab-eade1149844f")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ac64b03d-bdf8-496e-8456-f3db38a35172")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(attr smd)
+	(fp_text user "${REFERENCE}"
+		(at -0.04 -7.65 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "8683ec06-083a-4937-a86a-d1f389a7873c")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(pad "1" smd circle
+		(at 0 0)
+		(size 3.67 3.67)
+		(layers "F.Cu" "F.Mask")
+		(uuid "e9f58a5c-7be6-4fe5-b5e9-2e25ef2b1fdd")
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/../../libraries/Connector_Custom.pretty/KJ_D21SH.step"
+		(offset
+			(xyz 0 0 0.79)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 90 -0 -0)
+		)
+	)
+)
