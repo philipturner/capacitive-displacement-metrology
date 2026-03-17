@@ -1081,7 +1081,18 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "Inserted into MMCX connector:\n0.3 mm diameter, pure Pt wire"
+	(text "Tips must be W instead of Pt to maximize\neigenfrequency and thus minimize severity\nof vibrational coupling. A simple analysis\nof fine X, coarse Y, coarse Z has minimum 25 kHz.\n3.53 mm x 0.3 mm Pt wire is 10 kHz.\n\n2.53 mm: protrudes 1 mm from MMCX ring\n3.53 mm: protrudes 2 mm from MMCX ring\n\nW, 2.53 mm: 31 kHz\nW, 3.53 mm: 16 kHz\nPt, 2.53 mm: 19 kHz\nPt, 3.53 mm: 10 kHz"
+		(exclude_from_sim no)
+		(at 27.178 108.712 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "1274a98b-ee03-4a44-8f3e-d2352fd889ea")
+	)
+	(text "Inserted into MMCX connector:\n0.3 mm diameter, W wire"
 		(exclude_from_sim no)
 		(at 50.8 63.5 0)
 		(effects
