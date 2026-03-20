@@ -125,9 +125,9 @@
 			(subtractmaskfromsilk no)
 			(outputformat 1)
 			(mirror no)
-			(drillshape 1)
+			(drillshape 0)
 			(scaleselection 1)
-			(outputdirectory "")
+			(outputdirectory "../../../../../../Desktop/Gerber/")
 		)
 	)
 	(net 0 "")
@@ -1213,7 +1213,7 @@
 			(net 2 "GND")
 			(pinfunction "Ext")
 			(pintype "passive")
-			(uuid "08e5a159-823b-4f27-8156-ea46a60eb2bd")
+			(uuid "f39c7f3a-d0f7-43ef-88de-6dd340803cbc")
 		)
 		(pad "2" smd roundrect
 			(at 1.27 -1.27)
@@ -1223,7 +1223,7 @@
 			(net 2 "GND")
 			(pinfunction "Ext")
 			(pintype "passive")
-			(uuid "08e5a159-823b-4f27-8156-ea46a60eb2bd")
+			(uuid "3fc8e021-ef37-4fe5-99c0-d0a8e402534d")
 		)
 		(pad "2" smd roundrect
 			(at 1.27 1.27)
@@ -1233,7 +1233,7 @@
 			(net 2 "GND")
 			(pinfunction "Ext")
 			(pintype "passive")
-			(uuid "08e5a159-823b-4f27-8156-ea46a60eb2bd")
+			(uuid "f2d28a5d-453f-4839-8648-488d417f06e1")
 		)
 		(embedded_fonts no)
 		(model "${KIPRJMOD}/../../libraries/Connector_Custom.pretty/Samtec_MMCX_SMT.step"
