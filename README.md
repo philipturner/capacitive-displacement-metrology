@@ -37,6 +37,7 @@ Table of Contents:
 - [March 9, 2026](#march-9-2026)
 - [March 10, 2026](#march-10-2026)
 - [March 12, 2026](#march-12-2026)
+- [March 20, 2026](#march-20-2026)
 
 ## December 15, 2025
 
@@ -1220,3 +1221,7 @@ The low signal voltage for MISO was a false lead. All tests show 3.3V at both 15
 I tried to use the `adcResponsivenessDiagnosticLoop` with 15 MHz vs. 20 MHz for the SPI transactions. The ADC stops responding to range-select changes at 20 MHz.
 
 Next, I will clean up the code from debugging and test the DAC81401. Hopefully, it does not shut down randomly and break from sustained damage. Then, I can study its behavior at high SPI speeds.
+
+## March 20, 2026
+
+Link to the new BOM (plan to order tomorrow): [Next BOM (Google Sheets)](https://docs.google.com/spreadsheets/d/1qZ6N7xbDPV2qiAkH7os0ZhyjvyFWOlCQFE3YEBIGxq4/edit)
