@@ -2,12 +2,18 @@
 #include "Oscilloscope.h"
 #include "KilohertzLoop.h"
 
+
+
 void Oscilloscope::initialize() {
   ADC::writeRangeSelect(0b0000);
   ADC::nop(); // prepare for the first sample
 
   latestTimestamp = UINT32_MAX;
   staticDisplayTimeNext = 0;
+}
+
+void _oscilloscopeFastLoop() {
+
 }
 
 // MARK: - Oscilloscope Sampling Cycle

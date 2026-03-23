@@ -48,4 +48,13 @@ struct Oscilloscope {
   uint32_t staticDisplayTimeNext;
 
   void initialize();
+  void fastLoop();
+  void guardedCode();
+  bool shouldDisplayLatest();
+  void slowLoop();
+
+private:
+  static Oscilloscope *_global;
+public:
+  static void startFastLoop(Oscilloscope *global);
 };
