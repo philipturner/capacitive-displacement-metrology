@@ -17,36 +17,19 @@ void setup() {
   SPI.begin();
 
   // Set the DAC output voltage to -1 V
-  transferDAC2(0x03, 0x00, 0x84);
+  transferDAC2(0x03, 0x00, 0x84); // FSDO = 0
   transferDAC2(0x04, 0x00, 0x00);
   transferDAC2(0x09, 0xFF, 0xFE);
   transferDAC2(0x0A, 0x00, 0x05);
-  transferDAC2(0x10, 0x56, 0x66);
+  transferDAC2(0x10, 0x86, 0x66);
 
-  // Read the device ID.
-  transferDAC2(0x00, 0x00, 0x00);
+  // Read the device ID. Assert that it is 0x029C (668).
   transferDAC2(0x81, 0x00, 0x00);
   transferDAC2(0x00, 0x00, 0x00);
 
-  // Device ID = 0x029C
-  // SPI_MODE0, FSDO = 0 | 133 56 (0x8538)
-  // SPI_MODE0, FSD0 = 1 | 10 112 (0x0A70)
-  //
-  // Expected: 0x029C | 2 156
-  //
-  // 0x8538 = 1000010100111000 = 34104
-  // 0x0A70 = 0000101001110000 = 2672
-  // 0x029C = 0000001010011100 = 668
-  //
-  // SPI_MODE0, FSDO = 0 | 34104 8526
-  // SPI_MODE0, FSDO = 1 | 2672 668
-  // SPI_MODE1, FSDO = 0 | 2672 668
-  // SPI_MODE1, FSDO = 1 | 2672 668
-  // SPI_MODE2, FSDO = 0 | 2672 668 <--
-  // SPI_MODE2, FSDO = 1 | 2672 668
-  // SPI_MODE3, FSDO = 0 | 0 0
-  // SPI_MODE3, FSDO = 1 | 0 0
-
+  // Next steps:
+  // - Restructure the code to make assertions easier
+  // - Test higher SPI rates, DAC1, and operation at high speed
 }
 
 void loop() {
