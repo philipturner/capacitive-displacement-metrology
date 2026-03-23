@@ -6,9 +6,29 @@ void Oscilloscope::initialize() {
   ADC::writeRangeSelect(0b0000);
   ADC::nop(); // prepare for the first sample
 
-  latestTimestamp = UINT32_MAX;
+  copiedTimestamp = UINT32_MAX;
   staticDisplayTimeNext = 0;
 }
+
+void Oscilloscope::slowLoop() {
+  delay(20);
+
+  // Make the guarded portion very small and do not
+  // invoke 'Serial.print' here.
+  KilohertzLoop::lock = true;
+  copyData();
+  KilohertzLoop::lock = false;
+
+  if (!shouldDisplayData()) {
+    return;
+  }
+
+  for (uint32_t slotID = 0; slotID < OSCILLOSCOPE_HISTORY_SIZE; ++slotID) {
+
+  }
+}
+
+/*
 
 // MARK: - Oscilloscope Guarded Code
 
@@ -25,8 +45,8 @@ void oscilloscopeGuardedCode(bool shouldCopyLatest) {
   if (shouldDisplayLatest) {
     // WARNING: Modulo operator may have undefined behavior for
     // negative integers. Force the number to be positive.
-    int32_t endSlotID = currentSlotID;
-    int32_t startSlotID = endSlotID - 1000;
+    int32_t endSlotID = currentSlotID + 1;
+    int32_t startSlotID = currentSlotID + 1 - 1000;
     endSlotID += 50000;
     startSlotID += 50000;
     if (startSlotID < 0) {
@@ -170,3 +190,5 @@ void oscilloscopeDisplayLoop() {
     }
   }
 }
+
+*/

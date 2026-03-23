@@ -44,15 +44,16 @@ void oscilloscopeSamplingCycle(uint32_t previousTimestamp);
 struct Oscilloscope {
   float ringBuffer[OSCILLOSCOPE_HISTORY_SIZE];
   float copiedSamples[OSCILLOSCOPE_HISTORY_SIZE];
-  uint32_t latestTimestamp;
+  uint32_t copiedTimestamp;
   uint32_t staticDisplayTimeNext;
 
   void initialize();
   void fastLoop();
-  void guardedCode();
-  bool shouldDisplayLatest();
   void slowLoop();
 
+  void copyData();
+  bool shouldDisplayData();
+  
 private:
   static Oscilloscope *_global;
 public:
