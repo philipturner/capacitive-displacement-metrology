@@ -2,6 +2,41 @@
 #include "Oscilloscope.h"
 #include "KilohertzLoop.h"
 
+// MARK: - Oscilloscope Sampling Cycle
+
+void oscilloscopeSamplingCycle(uint32_t previousTimestamp) {
+  uint32_t startSlotID = (previousTimestamp - startTimestamp) / 20;
+  startSlotID += 1;
+  uint32_t endSlotID = (latestTimestamp - startTimestamp) / 20;
+  endSlotID += 1;
+  if (endSlotID - startSlotID > 100) {
+    Serial.println("Function was overloaded with work.");
+    exit(0);
+  }
+
+  #if 0
+  // Get the ADC data as soon as possible.
+  float voltage = ADC::readConversionCode();
+  voltage = 2 * voltage - 1;
+  voltage *= 12.288;
+  #else
+  float timeSeconds = float(latestTimestamp - startTimestamp);
+  timeSeconds /= float(1000000);
+
+  // 1 kHz artificial sine wave for testing.
+  float voltage = sin(2 * M_PI * 1000 * timeSeconds);
+  voltage *= 10;
+  #endif
+
+  #if USE_RING_BUFFER
+  for (uint32_t slotID = startSlotID; slotID < endSlotID; ++slotID) {
+    ringBuffer.samples[slotID % 50000] = voltage;
+  }
+  #endif
+}
+
+// MARK: - Oscilloscope Guarded Code
+
 #if USE_OSCILLOSCOPE
 char oscilloscopeMode = '0';
 float oscilloscopeCopiedSamples[1000];
@@ -85,6 +120,8 @@ bool getShouldDisplayLatest() {
   return false;
 }
 #endif // USE_OSCILLOSCOPE
+
+// MARK: - Oscilloscope Display Loop
 
 void oscilloscopeDisplayLoop() {
   delay(20);

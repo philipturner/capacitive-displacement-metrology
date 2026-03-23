@@ -28,3 +28,5 @@ inline RingBuffer ringBuffer;
 void oscilloscopeDisplayLoop();
 
 void oscilloscopeSamplingCycle(uint32_t previousTimestamp);
+
+// MARK: - Fresh Code

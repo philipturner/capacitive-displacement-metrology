@@ -12,7 +12,7 @@
 //
 // TODO: Find ways to do other work during these 6000 ns
 // waits. Also, one of the two waits might not be needed.
-uint32_t ADC::transfer(ADCInput input, uint32_t speed) {
+uint32_t ADC::transfer(ADCInput input) {
   uint8_t bytes[4];
   bytes[0] = input.command << 1;
   bytes[1] = input.registerAddress;
@@ -22,7 +22,7 @@ uint32_t ADC::transfer(ADCInput input, uint32_t speed) {
   // Guarantee that enough conversion time has passed.
   delayNanoseconds(6000);
 
-  SPI.beginTransaction(SPISettings(speed, MSBFIRST, SPI_MODE0));
+  SPI.beginTransaction(SPISettings(15 * 1000000, MSBFIRST, SPI_MODE0));
   digitalWrite(CS_ADC, 0);
   delayNanoseconds(100);
 
