@@ -28,7 +28,7 @@ void Oscilloscope::fastLoop() {
   voltage *= 10;
   #endif
 
-  for (uint32_t slotID = startSlotID; slotID < endSlotID; ++slotID) {
+  for (uint32_t slotID = startSlotID + 1; slotID <= endSlotID; ++slotID) {
     uint32_t wrappedSlotID = slotID % OSCILLOSCOPE_HISTORY_SIZE;
     ringBuffer[wrappedSlotID] = voltage;
   }
