@@ -71,3 +71,5 @@ void transferDAC2(uint8_t byte0, uint8_t byte1, uint8_t byte2) {
   Serial.print(deviceID >> 2);
   Serial.println();
 }
+
+// Investigate DAC1 next, find its SPI limits.
