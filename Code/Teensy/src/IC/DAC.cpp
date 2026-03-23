@@ -6,9 +6,6 @@ void transferDAC2(uint8_t byte0, uint8_t byte1, uint8_t byte2) {
   bytes[1] = byte1;
   bytes[2] = byte2;
 
-  // TODO: When done with this investigation, archive the valuable
-  // data in a GitHub Gist.
-
   // SPI_MODE0, FSDO = 1
   //
   // 5 Mbps - output works, input does
@@ -56,7 +53,7 @@ void transferDAC2(uint8_t byte0, uint8_t byte1, uint8_t byte2) {
   // 35 Mbps - output works, input does not
   // 36 Mbps - output works, input does not
   // 40 Mbps - output works, input does not
-  SPI.beginTransaction(SPISettings(34 * 1000000, MSBFIRST, SPI_MODE1));
+  SPI.beginTransaction(SPISettings(34 * 1000000, MSBFIRST, SPI_MODE2));
   digitalWrite(CS_DAC2, 0);
   SPI.transfer(bytes, 3);
   digitalWrite(CS_DAC2, 1);

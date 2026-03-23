@@ -50,7 +50,7 @@ struct ADCOutputConversion {
 };
 
 struct ADC {
-  static uint32_t transfer(ADCInput input, uint32_t speed = 15000000);
+  static uint32_t transfer(ADCInput input);
 
   static void nop();
 
@@ -64,11 +64,9 @@ struct ADC {
 
   // 'c' received - ADC performs a measurement
   // 'd' received - ADC reports contents of ADS8689_SDI_CTL_REG
-  // '0' received - ADC and Teensy code switch to SPI_MODE0
-  // '1' received - ADC and Teensy code switch to SPI_MODE1
-  // '2' received - ADC and Teensy code switch to SPI_MODE2
-  // '3' received - ADC and Teensy code switch to SPI_MODE3
-  static inline uint8_t spiMode = SPI_MODE0;
-  static inline uint32_t conversionSpeed = 15 * 1000000;
+  // '0' received - ADC (but not Teensy) switches to SPI_MODE0
+  // '1' received - ADC (but not Teensy) switches to SPI_MODE1
+  // '2' received - ADC (but not Teensy) switches to SPI_MODE2
+  // '3' received - ADC (but not Teensy) switches to SPI_MODE3
   static void responsivenessDiagnosticLoop();
 };

@@ -1,6 +1,6 @@
 #include "ADC.h"
 
-uint32_t ADC::transfer(ADCInput input, uint32_t speed) {
+uint32_t ADC::transfer(ADCInput input) {
   uint8_t bytes[4];
   bytes[0] = input.command << 1;
   bytes[1] = input.registerAddress;
@@ -9,7 +9,7 @@ uint32_t ADC::transfer(ADCInput input, uint32_t speed) {
   
   // Tried different SPI modes with no luck. All of them drop a bit between
   // 15 Mbps and 20 Mbps.
-  SPI.beginTransaction(SPISettings(speed, MSBFIRST, ADC::spiMode));
+  SPI.beginTransaction(SPISettings(18 * 1000000, MSBFIRST, SPI_MODE0));
   digitalWrite(CS_ADC, 0);
   SPI.transfer(bytes, 4);
   digitalWrite(CS_ADC, 1);
@@ -36,7 +36,7 @@ float ADC::readConversionCode() {
   input.command = ADS8689_NOP;
   input.registerAddress = 0;
   input.data = 0;
-  uint32_t rawData = transfer(input, ADC::conversionSpeed);
+  uint32_t rawData = transfer(input);
 
   ADCOutputConversion output(rawData);
   return output.data;
@@ -105,45 +105,26 @@ void ADC::responsivenessDiagnosticLoop() {
       Serial.println(voltage, 6); // force it to 6 decimal places
 
     } else if (incomingByte == 'd') {
-      uint32_t rangeCode = ADC::readRegister(ADS8689_SDO_CTL_REG);
+      uint32_t rangeCode = ADC::readRegister(ADS8689_SDI_CTL_REG);
       Serial.print("Contents of SDI_CTL register: ");
       Serial.println(rangeCode);
 
     } else if (incomingByte == '0') {
       Serial.println("received command '0'");
       ADC::writeRegister(ADS8689_SDI_CTL_REG, 0);
-      ADC::spiMode = SPI_MODE0;
 
     } else if (incomingByte == '1') {
       Serial.println("received command '1'");
       ADC::writeRegister(ADS8689_SDI_CTL_REG, 1);
-      ADC::spiMode = SPI_MODE1;
 
     } else if (incomingByte == '2') {
       Serial.println("received command '2'");
       ADC::writeRegister(ADS8689_SDI_CTL_REG, 2);
-      ADC::spiMode = SPI_MODE2;
 
     } else if (incomingByte == '3') {
       Serial.println("received command '3'");
       ADC::writeRegister(ADS8689_SDI_CTL_REG, 3);
-      ADC::spiMode = SPI_MODE3;
 
-    } else if (incomingByte == '5') {
-      Serial.println("received command '5'");
-      ADC::writeRegister(ADS8689_SDO_CTL_REG, 0);
-
-    } else if (incomingByte == '6') {
-      Serial.println("received command '6'");
-      ADC::writeRegister(ADS8689_SDO_CTL_REG, 3);
-
-    } else if (incomingByte == '8') {
-      Serial.println("received command '8'");
-      ADC::conversionSpeed = 15 * 1000000;
-
-    } else if (incomingByte == '9') {
-      Serial.println("received command '9'");
-      ADC::conversionSpeed = 20 * 1000000;
     }
   }
 }
