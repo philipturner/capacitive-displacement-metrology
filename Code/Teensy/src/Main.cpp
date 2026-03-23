@@ -16,12 +16,15 @@ void setup() {
   digitalWrite(CS_ADC, 1);
   SPI.begin();
 
-  // Set the DAC output voltage to -1 V
-  transferDAC2(0x03, 0x00, 0x84); // FSDO = 0
+  // 0x84 | FSDO = 0
+  // 0x86 | FSDO = 1
+  transferDAC2(0x03, 0x00, 0x86);
   transferDAC2(0x04, 0x00, 0x00);
   transferDAC2(0x09, 0xFF, 0xFE);
   transferDAC2(0x0A, 0x00, 0x05);
-  transferDAC2(0x10, 0x86, 0x66);
+
+  // Set the DAC output voltage.
+  transferDAC2(0x10, 0x66, 0x66);
 
   // Read the device ID. Assert that it is 0x029C (668).
   transferDAC2(0x81, 0x00, 0x00);

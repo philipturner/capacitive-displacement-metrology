@@ -6,7 +6,39 @@ void transferDAC2(uint8_t byte0, uint8_t byte1, uint8_t byte2) {
   bytes[1] = byte1;
   bytes[2] = byte2;
 
-  SPI.beginTransaction(SPISettings(5 * 1000000, MSBFIRST, SPI_MODE2));
+  // TODO: When done with this investigation, archive the valuable
+  // data in a GitHub Gist.
+
+  // SPI_MODE0, FSDO = 1
+
+  // SPI_MODE1, FSDO = 0
+
+  // SPI_MODE1, FSDO = 1
+
+  // SPI_MODE2, FSDO = 0
+  //
+  // 5 Mbps  - output works, input does
+  // 14 Mbps - output works, input does
+  // 15 Mbps - output works, input does
+  // 16 Mbps - output works, input does not
+  // 18 Mbps - output works, input does not
+  // 19 Mbps - output works, input does not
+  // 20 Mbps - output works, input does not
+  // 40 Mbps - output works, input does not
+  //
+  // SPI_MODE2, FSDO = 1
+  //
+  // 14 Mbps - output works, input does
+  // 16 Mbps - output works, input does
+  // 20 Mbps - output works, input does
+  // 30 Mbps - output works, input does
+  // 32 Mbps - output works, input does
+  // 33 Mbps - output works, input does
+  // 34 Mbps - output works, input does
+  // 35 Mbps - output works, input does not
+  // 36 Mbps - output works, input does not
+  // 40 Mbps - output works, input does not
+  SPI.beginTransaction(SPISettings(36 * 1000000, MSBFIRST, SPI_MODE2));
   digitalWrite(CS_DAC2, 0);
   SPI.transfer(bytes, 3);
   digitalWrite(CS_DAC2, 1);
