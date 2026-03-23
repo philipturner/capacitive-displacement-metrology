@@ -4,25 +4,25 @@
 
 inline uint8_t CS_ADC = 10;
 
-/* Input Shift Register Commands for ADS8689 */
-#define ADS8689_DEVICE_ID_REG   0x00
-#define ADS8689_RST_PWRCTL_REG  0x04
-#define ADS8689_SDI_CTL_REG     0x08
-#define ADS8689_SDO_CTL_REG     0x0C
-#define ADS8689_DATAOUT_CTL_REG 0x10
-#define ADS8689_RANGE_SEL_REG   0x14
-#define ADS8689_ALARM_REG       0x20
-#define ADS8689_ALARM_H_TH_REG  0x24
-#define ADS8689_ALARM_L_TH_REG  0x28
+// register addresses
+#define ADS8699_DEVICE_ID_REG   0x00
+#define ADS8699_RST_PWRCTL_REG  0x04
+#define ADS8699_SDI_CTL_REG     0x08
+#define ADS8699_SDO_CTL_REG     0x0C
+#define ADS8699_DATAOUT_CTL_REG 0x10
+#define ADS8699_RANGE_SEL_REG   0x14
+#define ADS8699_ALARM_REG       0x20
+#define ADS8699_ALARM_H_TH_REG  0x24
+#define ADS8699_ALARM_L_TH_REG  0x28
 
 // SPI commands
-#define ADS8689_NOP         0b0000000
-#define ADS8689_CLEAR_HWORD 0b1100000
-#define ADS8689_READ_HWORD  0b1100100
-#define ADS8689_READ        0b0100100
-#define ADS8689_WRITE_FULL  0b1101000 //write 16 bits to register
-#define ADS8689_WRITE_MS    0b1101001
-#define ADS8689_WRITE_LS    0b1101010
+#define ADS8699_NOP         0b0000000
+#define ADS8699_CLEAR_HWORD 0b1100000
+#define ADS8699_READ_HWORD  0b1100100
+#define ADS8699_READ        0b0100100
+#define ADS8699_WRITE_FULL  0b1101000 // write 16 bits to register
+#define ADS8699_WRITE_MS    0b1101001
+#define ADS8699_WRITE_LS    0b1101010
 
 struct ADCInput {
   uint8_t command;
@@ -63,7 +63,7 @@ struct ADC {
   static uint32_t readRegister(uint8_t registerAddress);
 
   // 'c' received - ADC performs a measurement
-  // 'd' received - ADC reports contents of ADS8689_SDI_CTL_REG
+  // 'd' received - ADC reports contents of ADS8699_SDI_CTL_REG
   // '0' received - ADC (but not Teensy) switches to SPI_MODE0
   // '1' received - ADC (but not Teensy) switches to SPI_MODE1
   // '2' received - ADC (but not Teensy) switches to SPI_MODE2

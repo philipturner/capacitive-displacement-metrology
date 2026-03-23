@@ -25,7 +25,7 @@ uint32_t ADC::transfer(ADCInput input) {
 
 void ADC::nop() {
   ADCInput input;
-  input.command = ADS8689_NOP;
+  input.command = ADS8699_NOP;
   input.registerAddress = 0;
   input.data = 0;
   transfer(input);
@@ -33,7 +33,7 @@ void ADC::nop() {
 
 float ADC::readConversionCode() {
   ADCInput input;
-  input.command = ADS8689_NOP;
+  input.command = ADS8699_NOP;
   input.registerAddress = 0;
   input.data = 0;
   uint32_t rawData = transfer(input);
@@ -44,7 +44,7 @@ float ADC::readConversionCode() {
 
 void ADC::writeRegister(uint8_t registerAddress, uint16_t data) {
   ADCInput input;
-  input.command = ADS8689_WRITE_FULL;
+  input.command = ADS8699_WRITE_FULL;
   input.registerAddress = registerAddress;
   input.data = uint16_t(data);
   transfer(input);
@@ -62,7 +62,7 @@ uint32_t ADC::readRegister(uint8_t registerAddress) {
   // frame 0
   {
     ADCInput input;
-    input.command = ADS8689_READ_HWORD;
+    input.command = ADS8699_READ_HWORD;
     input.registerAddress = registerAddress + 2;
     input.data = 0;
     transfer(input);
@@ -71,7 +71,7 @@ uint32_t ADC::readRegister(uint8_t registerAddress) {
   // frame 1
   {
     ADCInput input;
-    input.command = ADS8689_READ_HWORD;
+    input.command = ADS8699_READ_HWORD;
     input.registerAddress = registerAddress;
     input.data = 0;
     uint32_t rawData = transfer(input);
@@ -83,7 +83,7 @@ uint32_t ADC::readRegister(uint8_t registerAddress) {
   // frame 2
   {
     ADCInput input;
-    input.command = ADS8689_NOP;
+    input.command = ADS8699_NOP;
     input.registerAddress = 0;
     input.data = 0;
     uint32_t rawData = transfer(input);
@@ -105,25 +105,25 @@ void ADC::responsivenessDiagnosticLoop() {
       Serial.println(voltage, 6); // force it to 6 decimal places
 
     } else if (incomingByte == 'd') {
-      uint32_t rangeCode = ADC::readRegister(ADS8689_SDI_CTL_REG);
+      uint32_t rangeCode = ADC::readRegister(ADS8699_SDI_CTL_REG);
       Serial.print("Contents of SDI_CTL register: ");
       Serial.println(rangeCode);
 
     } else if (incomingByte == '0') {
       Serial.println("received command '0'");
-      ADC::writeRegister(ADS8689_SDI_CTL_REG, 0);
+      ADC::writeRegister(ADS8699_SDI_CTL_REG, 0);
 
     } else if (incomingByte == '1') {
       Serial.println("received command '1'");
-      ADC::writeRegister(ADS8689_SDI_CTL_REG, 1);
+      ADC::writeRegister(ADS8699_SDI_CTL_REG, 1);
 
     } else if (incomingByte == '2') {
       Serial.println("received command '2'");
-      ADC::writeRegister(ADS8689_SDI_CTL_REG, 2);
+      ADC::writeRegister(ADS8699_SDI_CTL_REG, 2);
 
     } else if (incomingByte == '3') {
       Serial.println("received command '3'");
-      ADC::writeRegister(ADS8689_SDI_CTL_REG, 3);
+      ADC::writeRegister(ADS8699_SDI_CTL_REG, 3);
 
     }
   }
