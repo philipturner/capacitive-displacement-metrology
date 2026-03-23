@@ -1,17 +1,5 @@
 #include "ADC.h"
 
-// 50 Ksps voltage measurement from 18-bit ADC
-//
-// 6000 ns breathing room for CONV
-//         write CS low
-//  100 ns breathing room to start SPI transfer
-// 1600 ns transfer 32 bits @ 20 Mbps
-// 6000 ns breathing room for ACQ
-//         write CS high
-// 6300 ns theoretical time left for other code
-//
-// TODO: Find ways to do other work during these 6000 ns
-// waits. Also, one of the two waits might not be needed.
 uint32_t ADC::transfer(ADCInput input) {
   uint8_t bytes[4];
   bytes[0] = input.command << 1;
@@ -19,18 +7,9 @@ uint32_t ADC::transfer(ADCInput input) {
   bytes[2] = uint8_t(input.data >> 8);
   bytes[3] = uint8_t(input.data >> 0);
   
-  // Guarantee that enough conversion time has passed.
-  delayNanoseconds(6000);
-
-  SPI.beginTransaction(SPISettings(15 * 1000000, MSBFIRST, SPI_MODE0));
+  SPI.beginTransaction(SPISettings(18 * 1000000, MSBFIRST, SPI_MODE0));
   digitalWrite(CS_ADC, 0);
-  delayNanoseconds(100);
-
-  // 32 bits at 20 MHz, 1600 ns delay
   SPI.transfer(bytes, 4);
-
-  // Minimize EMI from digital signals while analog is acquiring.
-  delayNanoseconds(6000);
   digitalWrite(CS_ADC, 1);
   SPI.endTransaction();
 
@@ -114,7 +93,7 @@ uint32_t ADC::readRangeSelect() {
   return (upperBits << 16) | lowerBits;
 }
 
-void adcResponsivenessDiagnosticLoop() {
+void ADC::responsivenessDiagnosticLoop() {
   if (Serial.available() > 0) {
     char incomingByte = Serial.read();
 
