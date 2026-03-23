@@ -3,20 +3,20 @@
 #include <stdint.h>
 
 struct KilohertzLoop {
-  static IntervalTimer timer;
-  static teensy::inplace_function<void(void), 16> loopBody;
-  static uint32_t period;
+  static inline IntervalTimer timer;
+  static inline teensy::inplace_function<void(void), 16> loopBody;
+  static inline uint32_t period;
 
   // Prevents data races when external code reads output of
   // high-frequency code, and may be interrupted by that
   // high-frequency code's interval timer.
-  static bool lock;
+  static inline bool lock;
 
   // These will roll back to zero after 71 minutes. However, if we
   // check for and handle a rollover event, the loop can run forever.
-  static uint32_t startTimestamp;
-  static uint32_t previousTimestamp;
-  static uint32_t latestTimestamp;
+  static inline uint32_t startTimestamp;
+  static inline uint32_t previousTimestamp;
+  static inline uint32_t latestTimestamp;
 
   // Function to execute reliably with a consistent time
   // base in the multiple kHz band.

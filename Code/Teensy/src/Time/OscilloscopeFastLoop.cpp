@@ -4,7 +4,7 @@
 
 void Oscilloscope::fastLoop() {
   uint32_t start = KilohertzLoop::startTimestamp;
-  uint32_t previous = KilohertzLoop::startTimestamp;
+  uint32_t previous = KilohertzLoop::previousTimestamp;
   uint32_t latest = KilohertzLoop::latestTimestamp;
   uint32_t period = KilohertzLoop::period;
 
@@ -15,7 +15,7 @@ void Oscilloscope::fastLoop() {
     exit(0);
   }
 
-  #if 0
+  #if 1
   // Get the ADC data as soon as possible.
   float voltage = ADC::readConversionCode();
   voltage = 2 * voltage - 1;

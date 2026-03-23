@@ -17,6 +17,6 @@ struct Oscilloscope {
   void copyData();
   bool shouldDisplayData();
   
-  static Oscilloscope *_global;
+  static inline Oscilloscope* _global;
   static void startFastLoop(Oscilloscope *global);
 };
