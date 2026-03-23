@@ -7,8 +7,9 @@ struct KilohertzLoop {
   static teensy::inplace_function<void(void), 16> loopBody;
   static uint32_t period;
 
-  // Prevents data races with external code that reads outputs of the
-  // high-frequency code, and may be interrupted while doing so.
+  // Prevents data races when external code reads output of
+  // high-frequency code, and may be interrupted by that
+  // high-frequency code's interval timer.
   static bool lock;
 
   // These will roll back to zero after 71 minutes. However, if we

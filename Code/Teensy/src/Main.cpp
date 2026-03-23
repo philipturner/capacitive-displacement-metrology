@@ -2,7 +2,7 @@
 #include "Time/KilohertzLoop.h"
 #include "Time/Oscilloscope.h"
 
-IntervalTimer timer;
+Oscilloscope oscilloscope;
 
 void setup() {
   Serial.begin(0);
@@ -13,16 +13,10 @@ void setup() {
   digitalWrite(CS_ADC, 1);
   SPI.begin();
 
-  startTimestamp = micros();
-  latestTimestamp = startTimestamp;
-  oscilloscopeTimestamp = startTimestamp;
-  timer.begin(kilohertzLoop, 20);
+  oscilloscope.initialize();
+  Oscilloscope::startFastLoop(&oscilloscope);
 }
 
 void loop() {
-  oscilloscopeDisplayLoop();
-}
-
-void kilohertzLoopBody(uint32_t previousTimestamp) {
-  oscilloscopeSamplingCycle(previousTimestamp);
+  oscilloscope.slowLoop();
 }

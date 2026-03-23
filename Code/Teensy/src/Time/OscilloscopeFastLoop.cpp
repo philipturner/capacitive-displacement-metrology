@@ -35,5 +35,10 @@ void Oscilloscope::fastLoop() {
 }
 
 void _oscilloscopeFastLoop() {
+  Oscilloscope::_global->fastLoop();
+}
 
+void Oscilloscope::startFastLoop(Oscilloscope* global) {
+  Oscilloscope::_global = global;
+  KilohertzLoop::initialize(_oscilloscopeFastLoop, 20);
 }
