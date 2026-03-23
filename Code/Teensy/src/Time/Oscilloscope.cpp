@@ -1,8 +1,6 @@
 #include "IC/ADC.h"
-#include "Oscilloscope.h"
 #include "KilohertzLoop.h"
-
-
+#include "Oscilloscope.h"
 
 void Oscilloscope::initialize() {
   ADC::writeRangeSelect(0b0000);
@@ -10,43 +8,6 @@ void Oscilloscope::initialize() {
 
   latestTimestamp = UINT32_MAX;
   staticDisplayTimeNext = 0;
-}
-
-void _oscilloscopeFastLoop() {
-
-}
-
-// MARK: - Oscilloscope Sampling Cycle
-
-void oscilloscopeSamplingCycle(uint32_t previousTimestamp) {
-  uint32_t startSlotID = (previousTimestamp - startTimestamp) / 20;
-  startSlotID += 1;
-  uint32_t endSlotID = (latestTimestamp - startTimestamp) / 20;
-  endSlotID += 1;
-  if (endSlotID - startSlotID > 30) {
-    Serial.println("Function was overloaded with work.");
-    exit(0);
-  }
-
-  #if 0
-  // Get the ADC data as soon as possible.
-  float voltage = ADC::readConversionCode();
-  voltage = 2 * voltage - 1;
-  voltage *= 12.288;
-  #else
-  float timeSeconds = float(latestTimestamp - startTimestamp);
-  timeSeconds /= float(1000000);
-
-  // 1 kHz artificial sine wave for testing.
-  float voltage = sin(2 * M_PI * 1000 * timeSeconds);
-  voltage *= 10;
-  #endif
-
-  #if USE_RING_BUFFER
-  for (uint32_t slotID = startSlotID; slotID < endSlotID; ++slotID) {
-    ringBuffer.samples[slotID % 50000] = voltage;
-  }
-  #endif
 }
 
 // MARK: - Oscilloscope Guarded Code
@@ -64,7 +25,7 @@ void oscilloscopeGuardedCode(bool shouldCopyLatest) {
   if (shouldDisplayLatest) {
     // WARNING: Modulo operator may have undefined behavior for
     // negative integers. Force the number to be positive.
-    int32_t endSlotID = currentSlotID + 1;
+    int32_t endSlotID = currentSlotID;
     int32_t startSlotID = endSlotID - 1000;
     endSlotID += 50000;
     startSlotID += 50000;
