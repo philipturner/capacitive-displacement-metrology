@@ -3,7 +3,7 @@
 #include "Oscilloscope.h"
 
 void Oscilloscope::initialize() {
-  ADC::writeRangeSelect(0b0000);
+  ADC::writeRegister(ADS8689_RANGE_SEL_REG, 0b0000);
   ADC::nop(); // prepare for the first sample
 
   copiedTimestamp = UINT32_MAX;

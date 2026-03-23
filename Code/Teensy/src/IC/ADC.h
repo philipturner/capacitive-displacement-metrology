@@ -55,25 +55,19 @@ struct ADC {
   static void nop();
 
   static float readConversionCode();
+  
+  // Write the 16 lowest bits of the register.
+  static void writeRegister(uint8_t registerAddress, uint16_t data);
 
-  // Legend
-  //
-  // range 0b0000 | -12.288 V to 12.288 V
-  // range 0b0001 | -10.24 V to 10.24 V
-  // range 0b0010 | -6.144 V to 6.144 V
-  // range 0b0011 | -5.12 V to 5.12 V
-  // range 0b0100 | -2.56 V to 2.56 V
-  // range 0b1000 | 0 V to 12.288 V
-  // range 0b1001 | 0 V to 10.24 V
-  // range 0b1010 | 0 V to 6.144 V
-  // range 0b1011 | 0 V to 5.12 V
-  static void writeRangeSelect(uint8_t rangeCode);
-
-  static uint32_t readRangeSelect();
+  // Read the full 32-bit register.
+  static uint32_t readRegister(uint8_t registerAddress);
 
   // 'c' received - ADC performs a measurement
-  // 'd' received - ADC reports contents of ADS8689_RANGE_SEL_REG
-  // '0' received - ADC writes 0b0000 to ADS8689_RANGE_SEL_REG
-  // '1' received - ADC writes 0b0001 to ADS8689_RANGE_SEL_REG
+  // 'd' received - ADC reports contents of ADS8689_SDI_CTL_REG
+  // '0' received - ADC and Teensy code switch to SPI_MODE0
+  // '1' received - ADC and Teensy code switch to SPI_MODE1
+  // '2' received - ADC and Teensy code switch to SPI_MODE2
+  // '3' received - ADC and Teensy code switch to SPI_MODE3
+  static inline uint8_t spiMode = SPI_MODE0;
   static void responsivenessDiagnosticLoop();
 };

@@ -7,7 +7,7 @@ uint32_t ADC::transfer(ADCInput input) {
   bytes[2] = uint8_t(input.data >> 8);
   bytes[3] = uint8_t(input.data >> 0);
   
-  SPI.beginTransaction(SPISettings(18 * 1000000, MSBFIRST, SPI_MODE0));
+  SPI.beginTransaction(SPISettings(15 * 1000000, MSBFIRST, SPI_MODE0));
   digitalWrite(CS_ADC, 0);
   SPI.transfer(bytes, 4);
   digitalWrite(CS_ADC, 1);
@@ -40,11 +40,11 @@ float ADC::readConversionCode() {
   return output.data;
 }
 
-void ADC::writeRangeSelect(uint8_t rangeCode) {
+void ADC::writeRegister(uint8_t registerAddress, uint16_t data) {
   ADCInput input;
   input.command = ADS8689_WRITE_FULL;
-  input.registerAddress = ADS8689_RANGE_SEL_REG;
-  input.data = uint16_t(rangeCode);
+  input.registerAddress = registerAddress;
+  input.data = uint16_t(data);
   transfer(input);
 }
 
@@ -53,7 +53,7 @@ void ADC::writeRangeSelect(uint8_t rangeCode) {
 // frame 0 | input read highest 16 bits | output ignored
 // frame 1 | input read lowest 16 bits  | output receive highest 16 bits
 // frame 2 | NOP                        | output receive lowest 16 bits
-uint32_t ADC::readRangeSelect() {
+uint32_t ADC::readRegister(uint8_t registerAddress) {
   uint32_t upperBits;
   uint32_t lowerBits;
 
@@ -61,7 +61,7 @@ uint32_t ADC::readRangeSelect() {
   {
     ADCInput input;
     input.command = ADS8689_READ_HWORD;
-    input.registerAddress = ADS8689_RANGE_SEL_REG + 2;
+    input.registerAddress = registerAddress + 2;
     input.data = 0;
     transfer(input);
   }
@@ -70,7 +70,7 @@ uint32_t ADC::readRangeSelect() {
   {
     ADCInput input;
     input.command = ADS8689_READ_HWORD;
-    input.registerAddress = ADS8689_RANGE_SEL_REG;
+    input.registerAddress = registerAddress;
     input.data = 0;
     uint32_t rawData = transfer(input);
 
@@ -98,25 +98,22 @@ void ADC::responsivenessDiagnosticLoop() {
     char incomingByte = Serial.read();
 
     if (incomingByte == 'c') {
-      Serial.println("received command 'c'");
-
       float voltage = ADC::readConversionCode();
       Serial.print("ADC code (fraction of full-scale): ");
       Serial.println(voltage, 6); // force it to 6 decimal places
+
     } else if (incomingByte == 'd') {
-      Serial.println("received command 'd'");
-      
-      uint32_t rangeCode = ADC::readRangeSelect();
-      Serial.print("Contents of range select register: ");
+      uint32_t rangeCode = ADC::readRegister(ADS8689_SDI_CTL_REG);
+      Serial.print("Contents of SDI_CTL register: ");
       Serial.println(rangeCode);
+
     } else if (incomingByte == '0') {
       Serial.println("received command '0'");
-      
-      ADC::writeRangeSelect(0b0000);
+      ADC::writeRegister(ADS8689_SDI_CTL_REG, 0);
+
     } else if (incomingByte == '1') {
-      Serial.println("received command '1'");
-      
-      ADC::writeRangeSelect(0b0001);
+      //Serial.println("received command '1'");
+      //ADC::writeRegister(ADS8689_SDI_CTL_REG, 1);
     }
   }
 }
