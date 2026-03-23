@@ -2,6 +2,14 @@
 #include "Oscilloscope.h"
 #include "KilohertzLoop.h"
 
+void Oscilloscope::initialize() {
+  ADC::writeRangeSelect(0b0000);
+  ADC::nop(); // prepare for the first sample
+
+  latestTimestamp = UINT32_MAX;
+  staticDisplayTimeNext = 0;
+}
+
 // MARK: - Oscilloscope Sampling Cycle
 
 void oscilloscopeSamplingCycle(uint32_t previousTimestamp) {
@@ -9,7 +17,7 @@ void oscilloscopeSamplingCycle(uint32_t previousTimestamp) {
   startSlotID += 1;
   uint32_t endSlotID = (latestTimestamp - startTimestamp) / 20;
   endSlotID += 1;
-  if (endSlotID - startSlotID > 100) {
+  if (endSlotID - startSlotID > 30) {
     Serial.println("Function was overloaded with work.");
     exit(0);
   }
@@ -61,6 +69,7 @@ void oscilloscopeGuardedCode(bool shouldCopyLatest) {
 
     for (int32_t slotID = startSlotID; slotID < endSlotID; ++slotID) {
       int32_t copiedSampleID = slotID - startSlotID;
+      // Instead of forcing to positive, just do (slotID + 100) % 100 here.
       float sample = ringBuffer.samples[slotID % 50000];
       oscilloscopeCopiedSamples[copiedSampleID] = sample;
     }

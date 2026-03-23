@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 
+/*
 struct RingBuffer {
   float samples[50000];
 };
@@ -28,5 +29,23 @@ inline RingBuffer ringBuffer;
 void oscilloscopeDisplayLoop();
 
 void oscilloscopeSamplingCycle(uint32_t previousTimestamp);
+*/
+
+
 
 // MARK: - Fresh Code
+
+// 'z' mode always active
+// 100 samples of memory at loop speed
+// void initialize() <- sets up ADC and kHz loop
+
+#define OSCILLOSCOPE_HISTORY_SIZE 100
+
+struct Oscilloscope {
+  float ringBuffer[OSCILLOSCOPE_HISTORY_SIZE];
+  float copiedSamples[OSCILLOSCOPE_HISTORY_SIZE];
+  uint32_t latestTimestamp;
+  uint32_t staticDisplayTimeNext;
+
+  void initialize();
+};
