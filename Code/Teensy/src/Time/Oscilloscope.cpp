@@ -2,6 +2,7 @@
 #include "Oscilloscope.h"
 #include "KilohertzLoop.h"
 
+#if USE_OSCILLOSCOPE
 char oscilloscopeMode = '0';
 float oscilloscopeCopiedSamples[1000];
 uint32_t oscilloscopeAveragedGroupCount = 0;
@@ -83,6 +84,7 @@ bool getShouldDisplayLatest() {
   }
   return false;
 }
+#endif // USE_OSCILLOSCOPE
 
 void oscilloscopeDisplayLoop() {
   delay(20);
