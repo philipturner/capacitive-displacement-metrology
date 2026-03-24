@@ -36,22 +36,6 @@
 
 //*****************************************************************************
 //
-// Internal variables and function prototypes
-//
-//*****************************************************************************
-
-static CRCWORD calculateCRC(const uint8_t dataBytes[], uint8_t numberBytes, CRCWORD initialValue);
-
-#ifdef CRC_LOOKUP
-    static bool initialized = false;
-    static CRCWORD crcLookupTable[256];
-    static void initTable(void);
-    static CRCWORD lookupCRC(const uint8_t dataBytes[], uint8_t numberBytes, CRCWORD initialValue);
-#endif
-
-
-//*****************************************************************************
-//
 // Functions
 //
 //*****************************************************************************
@@ -72,37 +56,6 @@ void initCRC(void)
 #ifdef CRC_LOOKUP
     initTable();
     initialized = true;
-#endif
-}
-
-
-//*****************************************************************************
-//
-//! \brief Performs CRC lookup or calculation
-//!
-//! \fn CRCWORD getCRC(const uint8_t dataBytes[], uint8_t numberBytes, CRCWORD initialValue)
-//! \param dataBytes pointer to the data array
-//! \param numberBytes number of bytes in array to process
-//! \param initialValue CRC initial seed value or partial result of previous CRC calculation
-//!
-//! To calculate the CRC of a 3-byte message call:
-//! CRCWORD crc = getCRC(data, 3, CRC_INITIAL_SEED);
-//!
-//! To test a 4-byte message with a CRC byte call:
-//! bool error = (bool) getCRC(data, 4, CRC_INITIAL_SEED);
-//!
-//! \return None.
-//
-//*****************************************************************************
-CRCWORD getCRC(const uint8_t dataBytes[], uint8_t numberBytes, CRCWORD initialValue)
-{
-#ifdef CRC_CALCULATION
-    return calculateCRC(dataBytes, numberBytes, initialValue);
-#endif
-
-#ifdef CRC_LOOKUP
-    if (!initialized) { initTable(); }
-    return lookupCRC(dataBytes, numberBytes, initialValue);
 #endif
 }
 
@@ -173,7 +126,7 @@ static CRCWORD lookupCRC(const uint8_t dataBytes[], uint8_t numberBytes, CRCWORD
 //! \return calculated CRC word of length CRCWORD
 //
 //*****************************************************************************
-static CRCWORD calculateCRC(const uint8_t dataBytes[], uint8_t numberBytes, CRCWORD initialValue)
+CRCWORD getCRC(const uint8_t dataBytes[], uint8_t numberBytes, CRCWORD initialValue)
 {
     int         bitIndex, byteIndex;
     bool        dataMSb;                        /* Most significant bit of data byte */

@@ -125,9 +125,9 @@ void ADC::responsivenessDiagnosticLoop() {
       Serial.print("ADC code (fraction of full-scale): ");
       Serial.print(result.floatValue, 6);
       Serial.print(" | ");
-      Bitset::print(result.integerValue, 18);
+      Bitset::printBinary(result.integerValue, 18);
       Serial.print(" | ");
-      Bitset::print(result.otherBits, 14);
+      Bitset::printBinary(result.otherBits, 14);
       Serial.println();
 
     } else if (incomingByte == 'd') {
