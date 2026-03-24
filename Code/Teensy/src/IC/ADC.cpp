@@ -22,10 +22,6 @@ uint32_t ADC::transfer(ADCInput input, uint32_t speed) {
   output = (output << 8) | bytes[2];
   output = (output << 8) | bytes[3];
 
-  if (speed >= 19 * 1000000) {
-    output <<= 1;
-  }
-
   return output;
 }
 
@@ -116,10 +112,12 @@ void ADC::responsivenessDiagnosticLoop() {
       Serial.print(" | ");
       Bitset::print(result.otherBits, 14);
       Serial.println();
+
+      Serial.println(result.checkParity(0b1101));
       }
 
       {
-      ADCOutputConversion result = ADC::readConversionResult(28 * 1000000);
+      ADCOutputConversion result = ADC::readConversionResult(20 * 1000000);
 
       Serial.print("ADC code (fraction of full-scale): ");
       Serial.print(result.floatValue, 6);
@@ -128,6 +126,8 @@ void ADC::responsivenessDiagnosticLoop() {
       Serial.print(" | ");
       Bitset::print(result.otherBits, 14);
       Serial.println();
+
+      Serial.println(result.checkParity(0b1101));
       }
 
     } else if (incomingByte == 'd') {
