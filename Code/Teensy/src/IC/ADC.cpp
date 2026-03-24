@@ -1,7 +1,7 @@
 #include "ADC.h"
-#include <bitset>
+#include "../Util/Bitset.h"
 
-uint32_t ADC::transfer(ADCInput input) {
+uint32_t ADC::transfer(ADCInput input, uint32_t speed) {
   uint8_t bytes[4];
   bytes[0] = input.command << 1;
   bytes[1] = input.registerAddress;
@@ -10,7 +10,7 @@ uint32_t ADC::transfer(ADCInput input) {
   
   // Tried different SPI modes with no luck. All of them drop a bit between
   // 15 Mbps and 20 Mbps.
-  SPI.beginTransaction(SPISettings(18 * 1000000, MSBFIRST, SPI_MODE0));
+  SPI.beginTransaction(SPISettings(speed, MSBFIRST, SPI_MODE0));
   digitalWrite(CS_ADC, 0);
   SPI.transfer(bytes, 4);
   digitalWrite(CS_ADC, 1);
@@ -21,6 +21,11 @@ uint32_t ADC::transfer(ADCInput input) {
   output = (output << 8) | bytes[1];
   output = (output << 8) | bytes[2];
   output = (output << 8) | bytes[3];
+
+  if (speed >= 19 * 1000000) {
+    output <<= 1;
+  }
+
   return output;
 }
 
@@ -32,12 +37,12 @@ void ADC::nop() {
   transfer(input);
 }
 
-ADCOutputConversion ADC::readConversionResult() {
+ADCOutputConversion ADC::readConversionResult(uint32_t speed) {
   ADCInput input;
   input.command = ADS8699_NOP;
   input.registerAddress = 0;
   input.data = 0;
-  uint32_t rawData = transfer(input);
+  uint32_t rawData = transfer(input, speed);
 
   ADCOutputConversion output(rawData);
   return output;
@@ -101,19 +106,30 @@ void ADC::responsivenessDiagnosticLoop() {
     char incomingByte = Serial.read();
 
     if (incomingByte == 'c') {
-      ADCOutputConversion result = ADC::readConversionResult();
-      std::bitset<18> part1(result.integerValue);
-      std::bitset<14> part2(result.otherBits);
-      std::string string1 = part1.to_string();
-      std::string string2 = part1.to_string();
+      {
+      ADCOutputConversion result = ADC::readConversionResult(18 * 1000000);
 
       Serial.print("ADC code (fraction of full-scale): ");
-      Serial.print(result.floatValue, 4);
+      Serial.print(result.floatValue, 6);
       Serial.print(" | ");
-      Serial.print(string1.c_str());
+      Bitset::print(result.integerValue, 18);
       Serial.print(" | ");
-      Serial.println(string2.c_str());
-      
+      Bitset::print(result.otherBits, 14);
+      Serial.println();
+      }
+
+      {
+      ADCOutputConversion result = ADC::readConversionResult(28 * 1000000);
+
+      Serial.print("ADC code (fraction of full-scale): ");
+      Serial.print(result.floatValue, 6);
+      Serial.print(" | ");
+      Bitset::print(result.integerValue, 18);
+      Serial.print(" | ");
+      Bitset::print(result.otherBits, 14);
+      Serial.println();
+      }
+
     } else if (incomingByte == 'd') {
       uint32_t rangeCode = ADC::readRegister(ADS8699_SDI_CTL_REG);
       Serial.print("Contents of SDI_CTL register: ");

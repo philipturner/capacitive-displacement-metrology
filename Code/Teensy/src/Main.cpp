@@ -16,13 +16,13 @@ void setup() {
   digitalWrite(CS_ADC, 1);
   SPI.begin();
 
-  ADC::writeRegister(ADS8699_DATAOUT_CTL_REG, 0b1000);
+  ADC::writeRegister(ADS8699_DATAOUT_CTL_REG, 0x4000 | 0b1000);
+  ADC::writeRegister(ADS8699_DEVICE_ID_REG + 2, 0b1101);
 
   /*
-
-  // 0x84 | FSDO = 0
-  // 0x86 | FSDO = 1
-  transferDAC2(0x03, 0x00, 0x86);
+  // CRC on  = 0b10010110
+  // CRC off = 0b10000110
+  transferDAC2(0x03, 0x00, 0b10000110);
   transferDAC2(0x04, 0x00, 0x00);
   transferDAC2(0x09, 0xFF, 0xFE);
   transferDAC2(0x0A, 0x00, 0x05);
@@ -33,7 +33,6 @@ void setup() {
   // Read the device ID. Assert that it is 0x029C (668).
   transferDAC2(0x81, 0x00, 0x00);
   transferDAC2(0x00, 0x00, 0x00);
-
   */
 }
 

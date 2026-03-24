@@ -54,11 +54,11 @@ struct ADCOutputConversion {
 };
 
 struct ADC {
-  static uint32_t transfer(ADCInput input);
+  static uint32_t transfer(ADCInput input, uint32_t speed = 18000000);
 
   static void nop();
 
-  static ADCOutputConversion readConversionResult();
+  static ADCOutputConversion readConversionResult(uint32_t speed = 18000000);
   
   // Write the 16 lowest bits of the register.
   static void writeRegister(uint8_t registerAddress, uint16_t data);
