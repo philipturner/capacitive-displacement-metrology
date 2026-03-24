@@ -68,10 +68,10 @@
 #endif
 
 // Initial seed value for CRC calculation
-#define CRC_INITIAL_SEED                        ((CRCWORD) 0x00)
+#define CRC_INITIAL_SEED                        ((CRCWORD) 0xFF)
 
 // Initial seed value for CRC calculation
-#define CRC_POLYNOMIAL                          ((CRCWORD) 0x87)
+#define CRC_POLYNOMIAL                          ((CRCWORD) 0x07)
 
 
 //*****************************************************************************
