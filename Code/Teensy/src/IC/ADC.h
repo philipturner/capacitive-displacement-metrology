@@ -50,37 +50,25 @@ struct ADCOutputConversion {
     floatValue = float(integer18Bit) / float(denominator);
     integerValue = integer18Bit;
     otherBits = rawData & 0x3FFF;
+
+    if (!checkParity(0b1101)) {
+      Serial.println("ADC MISO data was corrupted.");
+      exit(0);
+    }
   }
 
   // Requires:
   // ADC::writeRegister(ADS8699_DATAOUT_CTL_REG, 0x4000 | 0b1000);
   // ADC::writeRegister(ADS8699_DEVICE_ID_REG + 2, 0b1101);
-  bool checkParity(uint8_t deviceID) {
-    if ((otherBits >> 10) != deviceID) {
-      return false;
-    }
-
-    uint32_t codeCount = __builtin_popcount(integerValue);
-    uint32_t idCount = __builtin_popcount(uint32_t(deviceID));
-    uint32_t parity1 = codeCount + ((otherBits >> 9) & 1);
-    uint32_t parity2 = codeCount + idCount + ((otherBits >> 8) & 1);
-
-    if ((parity1 & 1) != 0) {
-      return false;
-    }
-    if ((parity2 & 1) != 0) {
-      return false;
-    }
-    return true;
-  }
+  bool checkParity(uint8_t deviceID);
 };
 
 struct ADC {
-  static uint32_t transfer(ADCInput input, uint32_t speed = 18000000);
+  static uint32_t transfer(ADCInput input);
 
   static void nop();
 
-  static ADCOutputConversion readConversionResult(uint32_t speed = 18000000);
+  static ADCOutputConversion readConversionResult();
   
   // Write the 16 lowest bits of the register.
   static void writeRegister(uint8_t registerAddress, uint16_t data);

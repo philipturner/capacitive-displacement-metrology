@@ -4,10 +4,12 @@
 #include "Time/Oscilloscope.h"
 
 void setup() {
+  // Set up USB serial.
   Serial.begin(0);
   Serial.println(); // allow easy distinction of different program runs
   Serial.println("Serial Monitor has initialized.");
 
+  // Set up SPI.
   pinMode(CS_DAC1, OUTPUT);
   pinMode(CS_DAC2, OUTPUT);
   pinMode(CS_ADC, OUTPUT);
@@ -16,6 +18,7 @@ void setup() {
   digitalWrite(CS_ADC, 1);
   SPI.begin();
 
+  // Set up ADC.
   ADC::writeRegister(ADS8699_DATAOUT_CTL_REG, 0x4000 | 0b1000);
   ADC::writeRegister(ADS8699_DEVICE_ID_REG + 2, 0b1101);
 
