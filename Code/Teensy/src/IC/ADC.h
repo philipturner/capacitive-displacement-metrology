@@ -40,12 +40,16 @@ struct ADCOutputHWORD {
 
 struct ADCOutputConversion {
   // Fractional value from 0.0 to 1.0 full-scale.
-  float data;
+  float floatValue;
+  uint32_t integerValue;
+  uint32_t otherBits;
 
   ADCOutputConversion(uint32_t rawData) {
     uint32_t integer18Bit = rawData >> 14;
     uint32_t denominator = 1 << 18;
-    data = float(integer18Bit) / float(denominator);
+    floatValue = float(integer18Bit) / float(denominator);
+    integerValue = integer18Bit;
+    otherBits = rawData & 0x3FFF;
   }
 };
 
@@ -54,7 +58,7 @@ struct ADC {
 
   static void nop();
 
-  static float readConversionCode();
+  static ADCOutputConversion readConversionResult();
   
   // Write the 16 lowest bits of the register.
   static void writeRegister(uint8_t registerAddress, uint16_t data);

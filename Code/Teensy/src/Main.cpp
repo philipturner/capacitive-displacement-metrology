@@ -16,6 +16,8 @@ void setup() {
   digitalWrite(CS_ADC, 1);
   SPI.begin();
 
+  ADC::writeRegister(ADS8699_DATAOUT_CTL_REG, 0b1000);
+
   /*
 
   // 0x84 | FSDO = 0

@@ -1,4 +1,5 @@
 #include "ADC.h"
+#include <bitset>
 
 uint32_t ADC::transfer(ADCInput input) {
   uint8_t bytes[4];
@@ -31,7 +32,7 @@ void ADC::nop() {
   transfer(input);
 }
 
-float ADC::readConversionCode() {
+ADCOutputConversion ADC::readConversionResult() {
   ADCInput input;
   input.command = ADS8699_NOP;
   input.registerAddress = 0;
@@ -39,7 +40,7 @@ float ADC::readConversionCode() {
   uint32_t rawData = transfer(input);
 
   ADCOutputConversion output(rawData);
-  return output.data;
+  return output;
 }
 
 void ADC::writeRegister(uint8_t registerAddress, uint16_t data) {
@@ -100,10 +101,19 @@ void ADC::responsivenessDiagnosticLoop() {
     char incomingByte = Serial.read();
 
     if (incomingByte == 'c') {
-      float voltage = ADC::readConversionCode();
-      Serial.print("ADC code (fraction of full-scale): ");
-      Serial.println(voltage, 6); // force it to 6 decimal places
+      ADCOutputConversion result = ADC::readConversionResult();
+      std::bitset<18> part1(result.integerValue);
+      std::bitset<14> part2(result.otherBits);
+      std::string string1 = part1.to_string();
+      std::string string2 = part1.to_string();
 
+      Serial.print("ADC code (fraction of full-scale): ");
+      Serial.print(result.floatValue, 4);
+      Serial.print(" | ");
+      Serial.print(string1.c_str());
+      Serial.print(" | ");
+      Serial.println(string2.c_str());
+      
     } else if (incomingByte == 'd') {
       uint32_t rangeCode = ADC::readRegister(ADS8699_SDI_CTL_REG);
       Serial.print("Contents of SDI_CTL register: ");
