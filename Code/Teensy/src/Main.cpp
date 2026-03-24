@@ -23,10 +23,9 @@ void setup() {
   ADC::writeRegister(ADS8699_DATAOUT_CTL_REG, 0x4000 | 0b1000);
   ADC::writeRegister(ADS8699_DEVICE_ID_REG + 2, 0b1101);
 
-  /*
   // CRC on  = 0b10010110
   // CRC off = 0b10000110
-  transferDAC2(0x03, 0x00, 0b10010110, false);
+  transferDAC2(0x03, 0x00, 0b10010110, false); // must be false, first time
   transferDAC2(0x04, 0x00, 0x00);
   transferDAC2(0x09, 0xFF, 0xFE);
   transferDAC2(0x0A, 0x00, 0x05);
@@ -36,20 +35,17 @@ void setup() {
 
   // Read the device ID. Assert that it is 0x029C (668).
   transferDAC2(0x81, 0x00, 0x00);
-  transferDAC2(0x00, 0x00, 0x00);
-  */
+  transferDAC2(0x81, 0x00, 0x00);
+  transferDAC2(0x81, 0x00, 0x00);
+  transferDAC2(0x83, 0x00, 0x00);
+  transferDAC2(0x83, 0x00, 0x00);
+  transferDAC2(0x84, 0x00, 0x00);
+  transferDAC2(0x84, 0x00, 0x00);
 
-  uint8_t bytes[3];
-  bytes[0] = 0b11001001;
-  bytes[1] = 0b11111111;
-  bytes[2] = 0b11111110;
-  uint32_t polynomial = 0x107;
-
-  uint32_t input = 0;
-  input |= bytes[0] << 24;
-  input |= bytes[1] << 16;
-  input |= bytes[2] << 8;
-  
+  // Input CRC is always enforced by the device. With incorrect CRC settings
+  // or incorrect MOSI checksums, the DAC output doesn't work. MISO checksums
+  // are only correct when the current data transfer frame is fetching data
+  // after a read operation.
 }
 
 void loop() {

@@ -7,7 +7,7 @@ void transferDAC2(uint8_t byte0, uint8_t byte1, uint8_t byte2, bool useCRC) {
   bytes[0] = byte0;
   bytes[1] = byte1;
   bytes[2] = byte2;
-  bytes[3] = getCRC(bytes, 3, CRC_INITIAL_SEED);
+  bytes[3] = CRC_calculate(bytes, 0x00);
 
   Serial.println();
 
@@ -100,7 +100,16 @@ void transferDAC2(uint8_t byte0, uint8_t byte1, uint8_t byte2, bool useCRC) {
 
   // Is the algorithm correct?
 
-  bytes[3] = getCRC(bytes, 3, CRC_INITIAL_SEED);
+  bytes[3] = CRC_calculate(bytes, bytes[3]);
+
+  Serial.print("output: ");
+  for (uint32_t i = 0; i < 4; ++i) {
+    Bitset::printBinary(bytes[i], 8);
+    Serial.print(" ");
+  }
+  Serial.println();
+
+  bytes[3] = CRC_calculate(bytes, 0);
 
   Serial.print("output: ");
   for (uint32_t i = 0; i < 4; ++i) {
