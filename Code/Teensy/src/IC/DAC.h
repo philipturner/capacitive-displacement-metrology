@@ -3,8 +3,8 @@
 #include "../Util/CRC.h"
 #include <SPI.h>
 
-inline uint8_t CS_DAC1 = 36;
-inline uint8_t CS_DAC2 = 37;
+constexpr uint8_t CS_DAC1 = 36;
+constexpr uint8_t CS_DAC2 = 37;
 
 // register addresses
 #define DAC81404_NOP       0x00
@@ -24,8 +24,33 @@ inline uint8_t CS_DAC2 = 37;
 #define DAC81404_WRITE 0
 #define DAC81404_READ  1
 
-uint16_t transferDAC2(
-  uint8_t byte0, 
-  uint8_t byte1, 
-  uint8_t byte2, 
-  CRC::Flags flags = CRC::Flags::MOSI | CRC::Flags::MISO_FLAG);
+struct DACInput {
+  uint8_t command;
+  uint8_t registerAddress;
+  uint16_t data;
+};
+
+struct DAC {
+  static uint16_t transfer(
+    uint8_t CS,
+    uint8_t byte0,
+    uint8_t byte1,
+    uint8_t byte2,
+    CRC::Flags flags);
+};
+
+struct DAC1 {
+  static uint16_t transfer(
+    uint8_t byte0, uint8_t byte1, uint8_t byte2, CRC::Flags flags
+  ) {
+    return DAC::transfer(CS_DAC1, byte0, byte1, byte2, flags);
+  }
+};
+
+struct DAC2 {
+  static uint16_t transfer(
+    uint8_t byte0, uint8_t byte1, uint8_t byte2, CRC::Flags flags
+  ) {
+    return DAC::transfer(CS_DAC2, byte0, byte1, byte2, flags);
+  }
+};

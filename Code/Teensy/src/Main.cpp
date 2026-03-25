@@ -23,21 +23,32 @@ void setup() {
   ADC::writeRegister(ADS8699_DATAOUT_CTL_REG, 0x4000 | 0b1000);
   ADC::writeRegister(ADS8699_DEVICE_ID_REG + 2, 0b1101);
 
-  // useCRC must be false the first time during a program run.
-  transferDAC2(0x03, 0x00, 0b10010110, false, false);
-  transferDAC2(0x04, 0x00, 0x00, true, false);
-  transferDAC2(0x09, 0xFF, 0xF0);
-  transferDAC2(0x0A, 0x55, 0x55);
+  DAC2::transfer(0x03, 0x00, 0b10010110, CRC::Flags::NONE);
+
+  DAC1::transfer(0x03, 0x00, 0b10010110, CRC::Flags::NONE);
+  DAC1::transfer(0x04, 0x00, 0x00, CRC::Flags::MOSI);
+  DAC1::transfer(0x09, 0xFF, 0xF0, CRC::Flags::MOSI | CRC::Flags::MISO_FLAG);
+  DAC1::transfer(0x0A, 0x55, 0x55, CRC::Flags::MOSI | CRC::Flags::MISO_FLAG);
 
   // Set the DAC output voltage.
-  transferDAC2(0x12, 0x86, 0x66);
+  DAC1::transfer(0x12, 0x86, 0x66, CRC::Flags::MOSI | CRC::Flags::MISO_FLAG);
 
   // Read the device ID. It is 0x029C for both chips.
-  transferDAC2(0x81, 0x00, 0x00);
-  transferDAC2(0x81, 0x00, 0x00);
-  transferDAC2(0x81, 0x00, 0x00);
+  DAC1::transfer(0x81, 0x00, 0x00, CRC::Flags::MOSI | CRC::Flags::MISO_FLAG);
+  uint16_t deviceID = DAC1::transfer(0x81, 0x00, 0x00, CRC::Flags::MOSI | CRC::Flags::MISO_FLAG | CRC::Flags::MISO_VALIDITY);
+  uint16_t deviceIDAgain = DAC1::transfer(0x81, 0x00, 0x00, CRC::Flags::MOSI | CRC::Flags::MISO_FLAG | CRC::Flags::MISO_VALIDITY);
+
+  Serial.print("deviceID: ");
+  Serial.print(deviceID);
+  Serial.print(" ");
+  Serial.println(deviceIDAgain);
+
+  Serial.print("expected: ");
+  Serial.print(0x029C);
+  Serial.print(" ");
+  Serial.println(0x029C);
 }
 
 void loop() {
-  ADC::responsivenessDiagnosticLoop();
+  
 }

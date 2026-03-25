@@ -2,7 +2,7 @@
 
 #include <SPI.h>
 
-inline uint8_t CS_ADC = 10;
+constexpr uint8_t CS_ADC = 10;
 
 // register addresses
 #define ADS8699_DEVICE_ID_REG   0x00

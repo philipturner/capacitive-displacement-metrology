@@ -1,6 +1,12 @@
 #include "DAC.h"
 
-uint16_t transferDAC2(uint8_t byte0, uint8_t byte1, uint8_t byte2, CRC::Flags flags) {
+uint16_t DAC::transfer(
+  uint8_t CS,
+  uint8_t byte0, 
+  uint8_t byte1, 
+  uint8_t byte2, 
+  CRC::Flags flags
+) {
   if (!CRC::isValidConfig(flags)) {
     Serial.println("Invalid CRC setup.");
     exit(0);
@@ -21,13 +27,13 @@ uint16_t transferDAC2(uint8_t byte0, uint8_t byte1, uint8_t byte2, CRC::Flags fl
   // DAC81401, SPI_MODE2, FSDO = 1 | 34-35 Mbps
   // DAC81404, SPI_MODE2, FSDO = 1 | 34-35 Mbps
   SPI.beginTransaction(SPISettings(34 * 1000000, MSBFIRST, SPI_MODE2));
-  digitalWrite(CS_DAC1, 0);
+  digitalWrite(CS, 0);
   if (uint8_t(flags & CRC::Flags::MOSI)) {
     SPI.transfer(bytes, 4);
   } else {
     SPI.transfer(bytes, 3);
   }
-  digitalWrite(CS_DAC1, 1);
+  digitalWrite(CS, 1);
   SPI.endTransaction();
 
   if (uint8_t(flags & CRC::Flags::MISO_FLAG)) {

@@ -7,7 +7,7 @@
 namespace CRC {
   // bytes: 3 bytes
   uint8_t calculate(const uint8_t bytes[], uint8_t seed = 0);
-  
+
   // Input CRC is always enforced by the device. With incorrect CRC settings
   // or incorrect MOSI checksums, the DAC output doesn't work. MISO checksums
   // are only correct when the current data transfer frame is fetching data
@@ -17,6 +17,8 @@ namespace CRC {
   // and may persist through the next program run. Even when the next program
   // run is correct.
   enum class Flags: uint8_t {
+    NONE = 0x0,
+    
     // Must be off for the first call to a chip during a program run.
     MOSI = 0x1,
 
