@@ -29,3 +29,12 @@
 #define AD7745_CAP_OFFSET    0x0D
 #define AD7745_CAP_GAIN      0x0F
 #define AD7745_VOLT_GAIN     0x11
+
+struct CDC {
+  static void check(bool transactionResult) {
+    if (!transactionResult) {
+      Serial.println("Transaction failed.");
+      exit(0);
+    }
+  }
+};

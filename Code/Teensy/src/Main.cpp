@@ -56,7 +56,7 @@ void setup() {
   master.begin(400000);
 
   uint8_t status = 0;
-  bool statusWorked = sensor.read(AD7745_STATUS, &status, true);
+  CDC::check(sensor.read(AD7745_STATUS, &status, true));
   Serial.print("contents of STATUS register: ");
   Bitset::printBinary(status, 8);
   Serial.println();
@@ -64,9 +64,9 @@ void setup() {
   uint16_t capOffset = 0;
   uint16_t capGain = 0;
   uint16_t voltGain = 0;
-  bool capOffsetWorked = sensor.read(AD7745_CAP_OFFSET, &capOffset, true);
-  bool capGainWorked = sensor.read(AD7745_CAP_GAIN, &capGain, true);
-  bool voltGainWorked = sensor.read(AD7745_VOLT_GAIN, &voltGain, true);
+  CDC::check(sensor.read(AD7745_CAP_OFFSET, &capOffset, true));
+  CDC::check(sensor.read(AD7745_CAP_GAIN, &capGain, true));
+  CDC::check(sensor.read(AD7745_VOLT_GAIN, &voltGain, true));
 
   Serial.print("contents of CAP_OFFSET register: ");
   Bitset::printBinary(capOffset, 16);
@@ -78,22 +78,6 @@ void setup() {
 
   Serial.print("contents of VOLT_GAIN register: ");
   Bitset::printBinary(voltGain, 16);
-  Serial.println();
-
-  Serial.print("statusWorked: ");
-  Serial.print(statusWorked);
-  Serial.println();
-
-  Serial.print("capOffsetWorked: ");
-  Serial.print(capOffsetWorked);
-  Serial.println();
-
-  Serial.print("capGainWorked: ");
-  Serial.print(capGainWorked);
-  Serial.println();
-
-  Serial.print("voltGainWorked: ");
-  Serial.print(voltGainWorked);
   Serial.println();
 
   #endif
