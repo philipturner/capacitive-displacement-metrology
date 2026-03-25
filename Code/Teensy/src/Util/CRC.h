@@ -7,13 +7,7 @@
 namespace CRC {
   // bytes: 3 bytes
   uint8_t calculate(const uint8_t bytes[], uint8_t seed = 0);
-
-  // MOSI must be off for the first call to a chip during a program run.
-  // MISO_FLAG should be off for the first and second calls.
-  // MISO_VALIDITY should be on when the output data is to be used.
-  //
-  // ## Context
-  //
+  
   // Input CRC is always enforced by the device. With incorrect CRC settings
   // or incorrect MOSI checksums, the DAC output doesn't work. MISO checksums
   // are only correct when the current data transfer frame is fetching data
@@ -23,18 +17,23 @@ namespace CRC {
   // and may persist through the next program run. Even when the next program
   // run is correct.
   enum class Flags: uint8_t {
-    MOSI          = 0b001,
-    MISO_FLAG     = 0b010,
-    MISO_VALIDITY = 0b100,
+    // Must be off for the first call to a chip during a program run.
+    MOSI = 0x1,
+
+    // Should be off for the first and second calls.
+    MISO_FLAG = 0x2,
+
+    // Must be on when the output data is to be used.
+    MISO_VALIDITY = 0x4,
   };
 
-  inline Flags operator| (Flags lhs, Flags rhs) {
+  inline Flags operator | (Flags lhs, Flags rhs) {
     return static_cast<Flags>(
       static_cast<uint8_t>(lhs) |
       static_cast<uint8_t>(rhs));
   };
 
-  inline Flags operator& (Flags lhs, Flags rhs) {
+  inline Flags operator & (Flags lhs, Flags rhs) {
     return static_cast<Flags>(
       static_cast<uint8_t>(lhs) &
       static_cast<uint8_t>(rhs));

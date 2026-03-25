@@ -24,7 +24,7 @@ inline uint8_t CS_DAC2 = 37;
 #define DAC81404_WRITE 0
 #define DAC81404_READ  1
 
-void transferDAC2(
+uint16_t transferDAC2(
   uint8_t byte0, 
   uint8_t byte1, 
   uint8_t byte2, 
