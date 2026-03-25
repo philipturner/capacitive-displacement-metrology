@@ -65,6 +65,9 @@ void setup() {
   CDC::check(sensor.write(AD7745_CAP_SETUP, capSetupValue, true));
   CDC::check(sensor.read(AD7745_CAP_SETUP, &capSetup2, true));
 
+  uint8_t capData[3] = { 0, 0, 0 };
+  CDC::check(sensor.read(AD7745_CAP_DATA, capData, 3, true));
+
   uint8_t excSetup1 = 0;
   uint8_t excSetupValue = 0b00001011;
   uint8_t excSetup2 = 0;
@@ -81,6 +84,17 @@ void setup() {
 
   Serial.print("contents of STATUS register: ");
   Bitset::printBinary(status, 8);
+  Serial.println();
+
+  Serial.print("contents of CAP_DATA register: ");
+  for (uint32_t byteID = 0; byteID < 3; ++byteID) {
+    Bitset::printBinary(capData[byteID], 8);
+    Serial.print(" ");
+  }
+  Serial.println();
+
+  Serial.println(uint32_t(capData[1]) * 256 + uint32_t(capData[2]));
+  Serial.print(CDC::decode(capData), 6);
   Serial.println();
 
   Serial.print("contents of CAP_SETUP register: ");
