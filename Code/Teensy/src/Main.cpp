@@ -59,7 +59,7 @@ void setup() {
   CDC::check(sensor.read(AD7745_VT_DATA, vtData, 3, true));
 
   uint8_t capSetup1 = 0;
-  uint8_t capSetupValue = 0b10000000;
+  uint8_t capSetupValue = 0b10000001;
   uint8_t capSetup2 = 0;
   CDC::check(sensor.read(AD7745_CAP_SETUP, &capSetup1, true));
   CDC::check(sensor.write(AD7745_CAP_SETUP, capSetupValue, true));
@@ -85,6 +85,13 @@ void setup() {
   CDC::check(sensor.read(AD7745_CONFIGURATION, &configuration1, true));
   CDC::check(sensor.write(AD7745_CONFIGURATION, configurationValue, true));
   CDC::check(sensor.read(AD7745_CONFIGURATION, &configuration2, true));
+
+  uint8_t capdac1 = 0;
+  uint8_t capdacValue = 0b10001010;
+  uint8_t capdac2 = 0;
+  CDC::check(sensor.read(AD7745_CAP_DAC_A, &capdac1, true));
+  CDC::check(sensor.write(AD7745_CAP_DAC_A, capdacValue, true));
+  CDC::check(sensor.read(AD7745_CAP_DAC_A, &capdac2, true));
 
   /*
   Serial.print("contents of STATUS register: ");
@@ -137,10 +144,19 @@ void setup() {
   Bitset::printBinary(configuration2, 8);
   Serial.println();
 
+  Serial.print("contents of CAP_DAC_A register: ");
+  Bitset::printBinary(capdac1, 8);
+  Serial.println();
+  
+  Serial.print("contents of CAP_DAC_A register: ");
+  Bitset::printBinary(capdac2, 8);
+  Serial.println();
+
   #endif
 }
 
 void loop() {
+  #if 1
   delay(10);
 
   uint8_t status = 0;
@@ -168,4 +184,5 @@ void loop() {
   Serial.print("capacitance: ");
   Serial.print(CDC::decodeCapacitance(capData), 6);
   Serial.println(" pF");
+  #endif
 }
