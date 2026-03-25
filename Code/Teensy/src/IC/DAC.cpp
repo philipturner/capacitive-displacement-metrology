@@ -61,35 +61,6 @@ uint16_t DAC::transfer(
   return output;
 }
 
-/*
-void ADC::nop() {
-  ADCInput input;
-  input.command = ADS8699_NOP;
-  input.registerAddress = 0;
-  input.data = 0;
-  transfer(input);
-}
-
-ADCOutputConversion ADC::readVoltage() {
-  ADCInput input;
-  input.command = ADS8699_NOP;
-  input.registerAddress = 0;
-  input.data = 0;
-  uint32_t rawData = transfer(input);
-
-  ADCOutputConversion output(rawData);
-  return output;
-}
-
-void ADC::writeRegister(uint8_t registerAddress, uint16_t data) {
-  ADCInput input;
-  input.command = ADS8699_WRITE_FULL;
-  input.registerAddress = registerAddress;
-  input.data = uint16_t(data);
-  transfer(input);
-}
-*/
-
 void DAC::writeRegister(
   uint8_t CS,
   uint8_t registerAddress, 
@@ -119,5 +90,36 @@ void DAC::writeVoltage(
 
   uint8_t registerAddress = DAC81404_DACA + channelID;
   CRC::Flags flags = CRC::Flags::MOSI | CRC::Flags::MISO_FLAG;
-  DAC::writeRegister(CS, registerAddress, integerValue, flags);
+  writeRegister(CS, registerAddress, integerValue, flags);
+}
+
+// Data transfer process:
+//
+// frame 0 | input read data | output ignored
+// frame 1 | write to NOP    | output receive data
+uint16_t DAC::readRegister(
+  uint8_t CS,
+  uint8_t registerAddress
+) {
+  // frame 0
+  {
+    DACInput input;
+    input.command = DAC81404_READ;
+    input.registerAddress = registerAddress;
+    
+    CRC::Flags flags = CRC::Flags::MOSI | CRC::Flags::MISO_FLAG;
+    transfer(CS, input, flags);
+  }
+
+  // frame 1
+  {
+    DACInput input;
+    input.command = DAC81404_WRITE;
+    input.registerAddress = DAC81404_NOP;
+    input.data = 0x0000;
+
+    CRC::Flags flags = 
+    CRC::Flags::MOSI | CRC::Flags::MISO_FLAG | CRC::Flags::MISO_VALIDITY;
+    return transfer(CS, input, flags);
+  }
 }

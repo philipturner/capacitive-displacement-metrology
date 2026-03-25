@@ -31,14 +31,7 @@ void setup() {
 
   uint16_t deviceID = DAC1::readRegister(DAC81404_DEVICEID);
   uint16_t deviceIDAgain = DAC1::readRegister(DAC81404_DEVICEID);
-
-  /*
-  // Read the device ID. It is 0x029C for both chips.
-  DAC1::transfer(0x81, 0x00, 0x00, CRC::Flags::MOSI | CRC::Flags::MISO_FLAG);
-  uint16_t deviceID = DAC1::transfer(0x81, 0x00, 0x00, CRC::Flags::MOSI | CRC::Flags::MISO_FLAG | CRC::Flags::MISO_VALIDITY);
-  uint16_t deviceIDAgain = DAC1::transfer(0x81, 0x00, 0x00, CRC::Flags::MOSI | CRC::Flags::MISO_FLAG | CRC::Flags::MISO_VALIDITY);
-  */
-
+  
   Serial.print("deviceID: ");
   Serial.print(deviceID);
   Serial.print(" ");
