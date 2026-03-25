@@ -57,27 +57,54 @@ void setup() {
 
   uint8_t status = 0;
   CDC::check(sensor.read(AD7745_STATUS, &status, true));
+  
+  uint8_t capSetup1 = 0;
+  uint8_t capSetupValue = 0b10000000;
+  uint8_t capSetup2 = 0;
+  CDC::check(sensor.read(AD7745_CAP_SETUP, &capSetup1, true));
+  CDC::check(sensor.write(AD7745_CAP_SETUP, capSetupValue, true));
+  CDC::check(sensor.read(AD7745_CAP_SETUP, &capSetup2, true));
+
+  uint8_t excSetup1 = 0;
+  uint8_t excSetupValue = 0b00001011;
+  uint8_t excSetup2 = 0;
+  CDC::check(sensor.read(AD7745_EXC_SETUP, &excSetup1, true));
+  CDC::check(sensor.write(AD7745_EXC_SETUP, excSetupValue, true));
+  CDC::check(sensor.read(AD7745_EXC_SETUP, &excSetup2, true));
+
+  uint8_t configuration1 = 0;
+  uint8_t configurationValue = 0b11111010;
+  uint8_t configuration2 = 0;
+  CDC::check(sensor.read(AD7745_CONFIGURATION, &configuration1, true));
+  CDC::check(sensor.write(AD7745_CONFIGURATION, configurationValue, true));
+  CDC::check(sensor.read(AD7745_CONFIGURATION, &configuration2, true));
+
   Serial.print("contents of STATUS register: ");
   Bitset::printBinary(status, 8);
   Serial.println();
 
-  uint16_t capOffset = 0;
-  uint16_t capGain = 0;
-  uint16_t voltGain = 0;
-  CDC::check(sensor.read(AD7745_CAP_OFFSET, &capOffset, true));
-  CDC::check(sensor.read(AD7745_CAP_GAIN, &capGain, true));
-  CDC::check(sensor.read(AD7745_VOLT_GAIN, &voltGain, true));
-
-  Serial.print("contents of CAP_OFFSET register: ");
-  Bitset::printBinary(capOffset, 16);
+  Serial.print("contents of CAP_SETUP register: ");
+  Bitset::printBinary(capSetup1, 8);
   Serial.println();
 
-  Serial.print("contents of CAP_GAIN register: ");
-  Bitset::printBinary(capGain, 16);
+  Serial.print("contents of CAP_SETUP register: ");
+  Bitset::printBinary(capSetup2, 8);
   Serial.println();
 
-  Serial.print("contents of VOLT_GAIN register: ");
-  Bitset::printBinary(voltGain, 16);
+  Serial.print("contents of EXC_SETUP register: ");
+  Bitset::printBinary(excSetup1, 8);
+  Serial.println();
+
+  Serial.print("contents of EXC_SETUP register: ");
+  Bitset::printBinary(excSetup2, 8);
+  Serial.println();
+
+  Serial.print("contents of CONFIGURATION register: ");
+  Bitset::printBinary(configuration1, 8);
+  Serial.println();
+  
+  Serial.print("contents of CONFIGURATION register: ");
+  Bitset::printBinary(configuration2, 8);
   Serial.println();
 
   #endif
