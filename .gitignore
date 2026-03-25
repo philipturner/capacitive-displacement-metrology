@@ -7,3 +7,6 @@
 /*.FCBak
 *.bak
 /*.bak
+
+*.kicad_pcb.lck
+*.kicad_sch.lck
