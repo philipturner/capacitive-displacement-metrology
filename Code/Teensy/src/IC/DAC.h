@@ -42,15 +42,15 @@ struct DAC {
     uint16_t data, 
     CRC::Flags flags);
 
-  static uint16_t readRegister(
-    uint8_t CS,
-    uint8_t registerAddress);
-
-  // Fractional value from 0.0 to 1.0 full-scale.
+  // floatValue: Fractional value from 0.0 to 1.0 full-scale.
   static void writeVoltage(
     uint8_t CS,
     uint8_t channelID,
     float floatValue);
+
+  static uint16_t readRegister(
+    uint8_t CS,
+    uint8_t registerAddress);
 };
 
 struct DAC1 {
@@ -62,12 +62,12 @@ struct DAC1 {
     DAC::writeRegister(CS_DAC1, registerAddress, data, flags);
   }
 
-  static uint16_t readRegister(uint8_t registerAddress) {
-    return DAC::readRegister(CS_DAC1, registerAddress);
-  }
-
   static void writeVoltage(uint8_t channelID, float floatValue) {
     DAC::writeVoltage(CS_DAC1, channelID, floatValue);
+  }
+
+  static uint16_t readRegister(uint8_t registerAddress) {
+    return DAC::readRegister(CS_DAC1, registerAddress);
   }
 };
 
@@ -80,11 +80,11 @@ struct DAC2 {
     DAC::writeRegister(CS_DAC2, registerAddress, data, flags);
   }
 
-  static uint16_t readRegister(uint8_t registerAddress) {
-    return DAC::readRegister(CS_DAC2, registerAddress);
-  }
-
   static void writeVoltage(uint8_t channelID, float floatValue) {
     DAC::writeVoltage(CS_DAC2, channelID, floatValue);
+  }
+
+  static uint16_t readRegister(uint8_t registerAddress) {
+    return DAC::readRegister(CS_DAC2, registerAddress);
   }
 };

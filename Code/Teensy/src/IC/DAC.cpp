@@ -60,3 +60,64 @@ uint16_t DAC::transfer(
   }
   return output;
 }
+
+/*
+void ADC::nop() {
+  ADCInput input;
+  input.command = ADS8699_NOP;
+  input.registerAddress = 0;
+  input.data = 0;
+  transfer(input);
+}
+
+ADCOutputConversion ADC::readVoltage() {
+  ADCInput input;
+  input.command = ADS8699_NOP;
+  input.registerAddress = 0;
+  input.data = 0;
+  uint32_t rawData = transfer(input);
+
+  ADCOutputConversion output(rawData);
+  return output;
+}
+
+void ADC::writeRegister(uint8_t registerAddress, uint16_t data) {
+  ADCInput input;
+  input.command = ADS8699_WRITE_FULL;
+  input.registerAddress = registerAddress;
+  input.data = uint16_t(data);
+  transfer(input);
+}
+*/
+
+void DAC::writeRegister(
+  uint8_t CS,
+  uint8_t registerAddress, 
+  uint16_t data, 
+  CRC::Flags flags
+) {
+  DACInput input;
+  input.command = DAC81404_WRITE;
+  input.registerAddress = registerAddress;
+  input.data = data;
+  transfer(CS, input, flags);
+}
+
+void DAC::writeVoltage(
+  uint8_t CS,
+  uint8_t channelID,
+  float floatValue
+) {
+  uint16_t integerValue;
+  if (floatValue <= 0) {
+    integerValue = 0;
+  } else if (floatValue >= 1) {
+    integerValue = UINT16_MAX;
+  } else {
+    integerValue = uint16_t(floatValue * float(1 << 16));
+  }
+
+  uint8_t registerAddress = DAC81404_DACA + channelID;
+  CRC::Flags flags = CRC::Flags::MOSI | CRC::Flags::MISO_FLAG;
+  DAC::writeRegister(CS, registerAddress, integerValue, flags);
+}
