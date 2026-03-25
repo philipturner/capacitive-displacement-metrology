@@ -55,18 +55,12 @@ void setup() {
   #if 1
   master.begin(400000);
 
-  uint8_t status = 0;
-  CDC::check(sensor.read(AD7745_STATUS, &status, true));
-  
   uint8_t capSetup1 = 0;
   uint8_t capSetupValue = 0b10000000;
   uint8_t capSetup2 = 0;
   CDC::check(sensor.read(AD7745_CAP_SETUP, &capSetup1, true));
   CDC::check(sensor.write(AD7745_CAP_SETUP, capSetupValue, true));
   CDC::check(sensor.read(AD7745_CAP_SETUP, &capSetup2, true));
-
-  uint8_t capData[3] = { 0, 0, 0 };
-  CDC::check(sensor.read(AD7745_CAP_DATA, capData, 3, true));
 
   uint8_t excSetup1 = 0;
   uint8_t excSetupValue = 0b00001011;
@@ -76,26 +70,11 @@ void setup() {
   CDC::check(sensor.read(AD7745_EXC_SETUP, &excSetup2, true));
 
   uint8_t configuration1 = 0;
-  uint8_t configurationValue = 0b11111010;
+  uint8_t configurationValue = 0b11111001;
   uint8_t configuration2 = 0;
   CDC::check(sensor.read(AD7745_CONFIGURATION, &configuration1, true));
   CDC::check(sensor.write(AD7745_CONFIGURATION, configurationValue, true));
   CDC::check(sensor.read(AD7745_CONFIGURATION, &configuration2, true));
-
-  Serial.print("contents of STATUS register: ");
-  Bitset::printBinary(status, 8);
-  Serial.println();
-
-  Serial.print("contents of CAP_DATA register: ");
-  for (uint32_t byteID = 0; byteID < 3; ++byteID) {
-    Bitset::printBinary(capData[byteID], 8);
-    Serial.print(" ");
-  }
-  Serial.println();
-
-  Serial.println(uint32_t(capData[1]) * 256 + uint32_t(capData[2]));
-  Serial.print(CDC::decode(capData), 6);
-  Serial.println();
 
   Serial.print("contents of CAP_SETUP register: ");
   Bitset::printBinary(capSetup1, 8);
@@ -125,5 +104,31 @@ void setup() {
 }
 
 void loop() {
-  
+  delay(10);
+
+  uint8_t status = 0;
+  CDC::check(sensor.read(AD7745_STATUS, &status, true));
+  if (status & 0b00000001) {
+    return;
+  }
+
+  uint8_t capData[3] = { 0, 0, 0 };
+  CDC::check(sensor.read(AD7745_CAP_DATA, capData, 3, true));
+
+  uint32_t timeMillis = millis();
+  float timeSeconds = float(timeMillis) / 1000;
+  Serial.println();
+  Serial.print("time: ");
+  Serial.println(timeSeconds, 3);
+
+  Serial.print("contents of CAP_DATA register: ");
+  for (uint32_t byteID = 0; byteID < 3; ++byteID) {
+    Bitset::printBinary(capData[byteID], 8);
+    Serial.print(" ");
+  }
+  Serial.println();
+
+  Serial.print("capacitance: ");
+  Serial.print(CDC::decode(capData), 6);
+  Serial.println(" pF");
 }
