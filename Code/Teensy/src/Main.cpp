@@ -5,9 +5,6 @@
 #include "Time/Oscilloscope.h"
 #include "Util/Bitset.h"
 
-I2CMaster& master = Master;
-I2CDevice sensor = I2CDevice(master, 0x48, _BIG_ENDIAN);
-
 void setup() {
   // Set up USB serial.
   Serial.begin(0);
@@ -55,12 +52,25 @@ void setup() {
   #if 1
   master.begin(400000);
 
+  uint8_t status = 0;
+  CDC::check(sensor.read(AD7745_STATUS, &status, true));
+
+  uint8_t vtData[3] = { 0, 0, 0 };
+  CDC::check(sensor.read(AD7745_VT_DATA, vtData, 3, true));
+
   uint8_t capSetup1 = 0;
   uint8_t capSetupValue = 0b10000000;
   uint8_t capSetup2 = 0;
   CDC::check(sensor.read(AD7745_CAP_SETUP, &capSetup1, true));
   CDC::check(sensor.write(AD7745_CAP_SETUP, capSetupValue, true));
   CDC::check(sensor.read(AD7745_CAP_SETUP, &capSetup2, true));
+
+  uint8_t vtSetup1 = 0;
+  uint8_t vtSetupValue = 0b00000001;
+  uint8_t vtSetup2 = 0;
+  CDC::check(sensor.read(AD7745_VT_SETUP, &vtSetup1, true));
+  CDC::check(sensor.write(AD7745_VT_SETUP, vtSetupValue, true));
+  CDC::check(sensor.read(AD7745_VT_SETUP, &vtSetup2, true));
 
   uint8_t excSetup1 = 0;
   uint8_t excSetupValue = 0b00001011;
@@ -76,12 +86,39 @@ void setup() {
   CDC::check(sensor.write(AD7745_CONFIGURATION, configurationValue, true));
   CDC::check(sensor.read(AD7745_CONFIGURATION, &configuration2, true));
 
-  Serial.print("contents of CAP_SETUP register: ");
-  Bitset::printBinary(capSetup1, 8);
+  /*
+  Serial.print("contents of STATUS register: ");
+  Bitset::printBinary(status, 8);
   Serial.println();
 
-  Serial.print("contents of CAP_SETUP register: ");
-  Bitset::printBinary(capSetup2, 8);
+  Serial.print("contents of VT_DATA register: ");
+  for (uint32_t byteID = 0; byteID < 3; ++byteID) {
+    Bitset::printBinary(vtData[byteID], 8);
+    Serial.print(" ");
+  }
+  Serial.println();
+
+  Serial.print("temperature: ");
+  Serial.print(CDC::decodeTemperature(vtData), 1);
+  Serial.println("°C");
+  
+  Serial.print("supply voltage: ");
+  Serial.print(CDC::decodeVoltage(vtData) * 5.97, 6);
+  Serial.println(" V");
+
+  uint32_t voltageCode = 0;
+  voltageCode |= uint32_t(vtData[0]) << 16;
+  voltageCode |= uint32_t(vtData[1]) << 8;
+  voltageCode |= uint32_t(vtData[2]);
+  Serial.println(voltageCode);
+  */
+
+  Serial.print("contents of VT_SETUP register: ");
+  Bitset::printBinary(vtSetup1, 8);
+  Serial.println();
+
+  Serial.print("contents of VT_SETUP register: ");
+  Bitset::printBinary(vtSetup2, 8);
   Serial.println();
 
   Serial.print("contents of EXC_SETUP register: ");
@@ -108,7 +145,7 @@ void loop() {
 
   uint8_t status = 0;
   CDC::check(sensor.read(AD7745_STATUS, &status, true));
-  if (status & 0b00000001) {
+  if (status & 0b00000100) {
     return;
   }
 
@@ -129,6 +166,6 @@ void loop() {
   Serial.println();
 
   Serial.print("capacitance: ");
-  Serial.print(CDC::decode(capData), 6);
+  Serial.print(CDC::decodeCapacitance(capData), 6);
   Serial.println(" pF");
 }

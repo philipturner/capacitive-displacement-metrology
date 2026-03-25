@@ -30,7 +30,17 @@
 #define AD7745_CAP_GAIN      0x0F
 #define AD7745_VOLT_GAIN     0x11
 
+inline I2CMaster& master = Master;
+inline I2CDevice sensor = I2CDevice(master, 0x48, _BIG_ENDIAN);
+
 struct CDC {
+  static inline I2CMaster& master2 = Master;
+  static inline I2CDevice sensor2 = I2CDevice(master2, 0x48, _BIG_ENDIAN);
+
+  // readCapacitance
+  // readTemperature <- do not correct for theoretical value of self-heating
+  // readSupplyVoltage <- scale by 5.97
+
   static void check(bool transactionResult) {
     if (!transactionResult) {
       Serial.println("Transaction failed.");
@@ -38,16 +48,17 @@ struct CDC {
     }
   }
 
-  static float decode(uint8_t bytes[3]) {
-    int32_t integerValue = 0;
-    integerValue |= uint32_t(bytes[0]) << 16;
-    integerValue |= uint32_t(bytes[1]) << 8;
-    integerValue |= uint32_t(bytes[2]);
-    integerValue -= 0x800000;
+  // Capacitance in pF.
+  static float decodeCapacitance(uint8_t bytes[3]);
 
-    float floatValue = float(integerValue);
-    floatValue /= float(0x800000);
-    floatValue *= 4.096;
-    return floatValue;
-  }
+  // Temperature in °C.
+  //
+  // Notes: chip's self-heating raises its temperature about 0.5°C above
+  // the PCB.
+  static float decodeTemperature(uint8_t bytes[3]);
+
+  // Voltage.
+  //
+  // Notes: supply voltage is attenutated by a factor of 5.97.
+  static float decodeVoltage(uint8_t bytes[3]);
 };
