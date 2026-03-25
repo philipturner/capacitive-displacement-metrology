@@ -23,8 +23,9 @@ void setup() {
   ADC::writeRegister(ADS8699_DATAOUT_CTL_REG, 0x4000 | 0b1000);
   ADC::writeRegister(ADS8699_DEVICE_ID_REG + 2, 0b1101);
 
-  transferDAC2(0x03, 0x00, 0b10010110, false); // must be false, first time
-  transferDAC2(0x04, 0x00, 0x00);
+  // useCRC must be false the first time during a program run.
+  transferDAC2(0x03, 0x00, 0b10010110, false, false);
+  transferDAC2(0x04, 0x00, 0x00, true, false);
   transferDAC2(0x09, 0xFF, 0xF0);
   transferDAC2(0x0A, 0x55, 0x55);
 

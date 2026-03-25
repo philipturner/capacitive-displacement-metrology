@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../Util/CRC.h"
 #include <SPI.h>
 
 inline uint8_t CS_DAC1 = 36;
@@ -23,4 +24,8 @@ inline uint8_t CS_DAC2 = 37;
 #define DAC81404_WRITE 0
 #define DAC81404_READ  1
 
-void transferDAC2(uint8_t byte0, uint8_t byte1, uint8_t byte2, bool useCRC = true);
+void transferDAC2(
+  uint8_t byte0, 
+  uint8_t byte1, 
+  uint8_t byte2, 
+  CRC::Flags flags = CRC::Flags::MOSI | CRC::Flags::MISO_FLAG);
