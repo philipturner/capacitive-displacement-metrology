@@ -23,20 +23,21 @@ void setup() {
   ADC::writeRegister(ADS8699_DATAOUT_CTL_REG, 0x4000 | 0b1000);
   ADC::writeRegister(ADS8699_DEVICE_ID_REG + 2, 0b1101);
 
-  DAC2::transfer(0x03, 0x00, 0b10010110, CRC::Flags::NONE);
+  DAC1::writeRegister(DAC81404_SPICONFIG, 0b10010110, CRC::Flags::NONE);
+  DAC1::writeRegister(DAC81404_GENCONFIG, 0x0000, CRC::Flags::MOSI);
+  DAC1::writeRegister(DAC81404_DACPWDWN, 0xFFF0);
+  DAC1::writeRegister(DAC81404_DACRANGE, 0x5555);
+  DAC1::writeVoltage(2, 0.35 * 10 - 5);
 
-  DAC1::transfer(0x03, 0x00, 0b10010110, CRC::Flags::NONE);
-  DAC1::transfer(0x04, 0x00, 0x00, CRC::Flags::MOSI);
-  DAC1::transfer(0x09, 0xFF, 0xF0, CRC::Flags::MOSI | CRC::Flags::MISO_FLAG);
-  DAC1::transfer(0x0A, 0x55, 0x55, CRC::Flags::MOSI | CRC::Flags::MISO_FLAG);
+  uint16_t deviceID = DAC1::readRegister(DAC81404_DEVICEID);
+  uint16_t deviceIDAgain = DAC1::readRegister(DAC81404_DEVICEID);
 
-  // Set the DAC output voltage.
-  DAC1::transfer(0x12, 0x86, 0x66, CRC::Flags::MOSI | CRC::Flags::MISO_FLAG);
-
+  /*
   // Read the device ID. It is 0x029C for both chips.
   DAC1::transfer(0x81, 0x00, 0x00, CRC::Flags::MOSI | CRC::Flags::MISO_FLAG);
   uint16_t deviceID = DAC1::transfer(0x81, 0x00, 0x00, CRC::Flags::MOSI | CRC::Flags::MISO_FLAG | CRC::Flags::MISO_VALIDITY);
   uint16_t deviceIDAgain = DAC1::transfer(0x81, 0x00, 0x00, CRC::Flags::MOSI | CRC::Flags::MISO_FLAG | CRC::Flags::MISO_VALIDITY);
+  */
 
   Serial.print("deviceID: ");
   Serial.print(deviceID);

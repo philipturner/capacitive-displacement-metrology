@@ -2,9 +2,7 @@
 
 uint16_t DAC::transfer(
   uint8_t CS,
-  uint8_t byte0, 
-  uint8_t byte1, 
-  uint8_t byte2, 
+  DACInput input,
   CRC::Flags flags
 ) {
   if (!CRC::isValidConfig(flags)) {
@@ -13,9 +11,9 @@ uint16_t DAC::transfer(
   }
 
   uint8_t bytes[4];
-  bytes[0] = byte0;
-  bytes[1] = byte1;
-  bytes[2] = byte2;
+  bytes[0] = (input.command << 7) | input.registerAddress;
+  bytes[1] = input.data >> 8;
+  bytes[2] = input.data & 0xFF;
   if (uint8_t(flags & CRC::Flags::MOSI)) {
     bytes[3] = CRC::calculate(bytes);
   }

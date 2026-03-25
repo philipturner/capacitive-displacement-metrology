@@ -17,7 +17,7 @@ void Oscilloscope::fastLoop() {
 
   #if 1
   // Get the ADC data as soon as possible.
-  ADCOutputConversion result = ADC::readConversionResult();
+  ADCOutputConversion result = ADC::readVoltage();
   float voltage = result.floatValue;
   voltage = 2 * voltage - 1;
   voltage *= 12.288;

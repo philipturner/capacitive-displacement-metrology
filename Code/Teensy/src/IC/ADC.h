@@ -68,7 +68,7 @@ struct ADC {
 
   static void nop();
 
-  static ADCOutputConversion readConversionResult();
+  static ADCOutputConversion readVoltage();
   
   // Write the 16 lowest bits of the register.
   static void writeRegister(uint8_t registerAddress, uint16_t data);

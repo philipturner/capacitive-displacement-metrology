@@ -52,7 +52,7 @@ void ADC::nop() {
   transfer(input);
 }
 
-ADCOutputConversion ADC::readConversionResult() {
+ADCOutputConversion ADC::readVoltage() {
   ADCInput input;
   input.command = ADS8699_NOP;
   input.registerAddress = 0;
@@ -121,7 +121,7 @@ void ADC::responsivenessDiagnosticLoop() {
     char incomingByte = Serial.read();
 
     if (incomingByte == 'c') {
-      ADCOutputConversion result = ADC::readConversionResult();
+      ADCOutputConversion result = ADC::readVoltage();
       Serial.print("ADC code (fraction of full-scale): ");
       Serial.print(result.floatValue, 6);
       Serial.print(" | ");
