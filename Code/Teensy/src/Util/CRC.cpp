@@ -18,9 +18,23 @@ uint8_t CRC::calculate(const uint8_t bytes[], uint8_t seed) {
     if (!inputIsOne) {
       shiftedPolynomial = 0;
     }
-    
+
     input ^= shiftedPolynomial;
   }
 
   return uint8_t(input);
+}
+
+bool CRC::isValidConfig(CRC::Flags flags) {
+  if (uint8_t(flags & CRC::Flags::MISO_VALIDITY)) {
+    if (!uint8_t(flags & CRC::Flags::MISO_FLAG)) {
+      return false;
+    }
+  }
+  if (uint8_t(flags & CRC::Flags::MISO_FLAG)) {
+    if (!uint8_t(flags & CRC::Flags::MOSI)) {
+      return false;
+    }
+  }
+  return true;
 }

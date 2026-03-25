@@ -1,5 +1,5 @@
-#include "ADC.h"
 #include "../Util/Bitset.h"
+#include "ADC.h"
 
 bool ADCOutputConversion::checkParity(uint8_t deviceID) {
   if ((otherBits >> 10) != deviceID) {

@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 
+// CRC algorithm used by DAC8140x series.
+
 namespace CRC {
   // bytes: 3 bytes
   uint8_t calculate(const uint8_t bytes[], uint8_t seed = 0);
@@ -21,9 +23,9 @@ namespace CRC {
   // and may persist through the next program run. Even when the next program
   // run is correct.
   enum class Flags: uint8_t {
-    MOSI = 1,
-    MISO_FLAG = 2,
-    MISO_VALIDITY = 4,
+    MOSI          = 0b001,
+    MISO_FLAG     = 0b010,
+    MISO_VALIDITY = 0b100,
   };
 
   inline Flags operator| (Flags lhs, Flags rhs) {
@@ -37,4 +39,6 @@ namespace CRC {
       static_cast<uint8_t>(lhs) &
       static_cast<uint8_t>(rhs));
   };
+
+  bool isValidConfig(Flags flags);
 };

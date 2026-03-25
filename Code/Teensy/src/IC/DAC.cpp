@@ -1,8 +1,11 @@
-#include "../Util/Bitset.h"
 #include "DAC.h"
 
 void transferDAC2(uint8_t byte0, uint8_t byte1, uint8_t byte2, CRC::Flags flags) {
-  
+  if (!CRC::isValidConfig(flags)) {
+    Serial.println("Invalid CRC setup.");
+    exit(0);
+  }
+
   uint8_t bytes[4];
   bytes[0] = byte0;
   bytes[1] = byte1;
@@ -28,15 +31,34 @@ void transferDAC2(uint8_t byte0, uint8_t byte1, uint8_t byte2, CRC::Flags flags)
 
   SPI.beginTransaction(SPISettings(34 * 1000000, MSBFIRST, SPI_MODE2));
   digitalWrite(CS_DAC1, 0);
-
-  if (useCRC) {
+  if (uint8_t(flags & CRC::Flags::MOSI)) {
     SPI.transfer(bytes, 4);
   } else {
     SPI.transfer(bytes, 3);
   }
-
   digitalWrite(CS_DAC1, 1);
   SPI.endTransaction();
+
+  if (uint8_t(flags & CRC::Flags::MISO_FLAG)) {
+    uint8_t errorBit = bytes[0] & 0b01000000;
+    if (errorBit) {
+      Serial.println("DAC MOSI data was corrupted.");
+      exit(0);
+    }
+  }
+
+  if (uint8_t(flags & CRC::Flags::MISO_VALIDITY)) {
+    uint8_t misoCode = bytes[3];
+    uint8_t expectedMisoCode = CRC::calculate(bytes);
+    uint8_t zeroMisoCode = CRC::calculate(bytes, misoCode);
+
+    if (expectedMisoCode != misoCode || zeroMisoCode != 0) {
+      Serial.println("DAC MISO data was corrupted.");
+      exit(0);
+    }
+  }
+  
+  uint8_t misoCode = bytes[3];
 
   Serial.print("CRC error: ");
   Serial.println(bytes[0] & 0b01000000);
@@ -64,4 +86,6 @@ void transferDAC2(uint8_t byte0, uint8_t byte1, uint8_t byte2, CRC::Flags flags)
     Serial.print(" ");
   }
   Serial.println();
+
+  // Make the output all zeroes unless MISO_VALIDITY is true.
 }
