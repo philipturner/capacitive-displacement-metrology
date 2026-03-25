@@ -1,14 +1,21 @@
 #include "IC/ADC.h"
+#include "IC/CDC.h"
 #include "IC/DAC.h"
 #include "Time/KilohertzLoop.h"
 #include "Time/Oscilloscope.h"
 #include "Util/Bitset.h"
+
+I2CMaster& master = Master;
+I2CDevice sensor = I2CDevice(master, 0x48, _BIG_ENDIAN);
 
 void setup() {
   // Set up USB serial.
   Serial.begin(0);
   Serial.println(); // allow easy distinction of different program runs
   Serial.println("Serial Monitor has initialized.");
+
+  // SPI test routine.
+  #if 0
 
   // Set up SPI.
   pinMode(CS_DAC1, OUTPUT);
@@ -31,7 +38,7 @@ void setup() {
 
   uint16_t deviceID = DAC1::readRegister(DAC81404_DEVICEID);
   uint16_t deviceIDAgain = DAC1::readRegister(DAC81404_DEVICEID);
-  
+
   Serial.print("deviceID: ");
   Serial.print(deviceID);
   Serial.print(" ");
@@ -41,6 +48,24 @@ void setup() {
   Serial.print(0x029C);
   Serial.print(" ");
   Serial.println(0x029C);
+
+  #endif
+
+  // I2C test routine.
+  #if 1
+  master.begin(400000);
+
+  uint8_t status = 0;
+  if (sensor.read(AD7745_STATUS, &status, true)) {
+    Serial.print("contents of STATUS register: ");
+    Bitset::printBinary(status, 8);
+    Serial.println();
+  } else {
+    Serial.print("ERROR: Failed to read STATUS register.");
+    exit(0);
+  }
+
+  #endif
 }
 
 void loop() {
