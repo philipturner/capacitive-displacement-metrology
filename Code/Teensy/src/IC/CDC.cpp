@@ -25,7 +25,7 @@ float CDC::decodeTemperature(uint8_t bytes[3]) {
   return floatValue;
 }
 
-float CDC::decodeVoltage(uint8_t bytes[3]) {
+float CDC::decodeSupplyVoltage(uint8_t bytes[3]) {
   int32_t integerValue = 0;
   integerValue |= uint32_t(bytes[0]) << 16;
   integerValue |= uint32_t(bytes[1]) << 8;

@@ -60,5 +60,5 @@ struct CDC {
   // Voltage.
   //
   // Notes: supply voltage is attenutated by a factor of 5.97.
-  static float decodeVoltage(uint8_t bytes[3]);
+  static float decodeSupplyVoltage(uint8_t bytes[3]);
 };

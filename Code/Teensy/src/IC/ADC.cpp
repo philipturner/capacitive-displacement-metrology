@@ -1,6 +1,20 @@
 #include "../Util/Bitset.h"
 #include "ADC.h"
 
+ADCOutputConversion::ADCOutputConversion(uint32_t rawData) {
+  integerValue = rawData >> 14;
+  otherBits = rawData & 0x3FFF;
+
+  if (!checkParity(0b1101)) {
+    Serial.println("ADC MISO data was corrupted.");
+    exit(0);
+  }
+
+  float floatValue = float(integerValue) / float(1 << 18);
+  voltage = 2 * floatValue - 1;
+  voltage *= 12.288;
+}
+
 bool ADCOutputConversion::checkParity(uint8_t deviceID) {
   if ((otherBits >> 10) != deviceID) {
     return false;
@@ -122,9 +136,9 @@ void ADC::responsivenessDiagnosticLoop() {
 
     if (incomingByte == 'c') {
       ADCOutputConversion result = ADC::readVoltage();
-      Serial.print("ADC code (fraction of full-scale): ");
-      Serial.print(result.floatValue, 6);
-      Serial.print(" | ");
+      Serial.print("ADC code: ");
+      Serial.print(result.voltage, 4);
+      Serial.print(" V | ");
       Bitset::printBinary(result.integerValue, 18);
       Serial.print(" | ");
       Bitset::printBinary(result.otherBits, 14);

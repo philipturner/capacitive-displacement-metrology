@@ -39,23 +39,12 @@ struct ADCOutputHWORD {
 };
 
 struct ADCOutputConversion {
-  // Fractional value from 0.0 to 1.0 full-scale.
-  float floatValue;
+  float voltage;
   uint32_t integerValue;
   uint32_t otherBits;
 
-  ADCOutputConversion(uint32_t rawData) {
-    uint32_t integer18Bit = rawData >> 14;
-    uint32_t denominator = 1 << 18;
-    floatValue = float(integer18Bit) / float(denominator);
-    integerValue = integer18Bit;
-    otherBits = rawData & 0x3FFF;
-
-    if (!checkParity(0b1101)) {
-      Serial.println("ADC MISO data was corrupted.");
-      exit(0);
-    }
-  }
+  // Requires that range select is 0b0000 (default value, no need to set).
+  ADCOutputConversion(uint32_t rawData);
 
   // Requires:
   // ADC::writeRegister(ADS8699_DATAOUT_CTL_REG, 0x4000 | 0b1000);

@@ -1,15 +1,10 @@
-#include "IC/ADC.h"
 #include "IC/CDC.h"
-#include "IC/DAC.h"
-#include "Time/KilohertzLoop.h"
-#include "Time/Oscilloscope.h"
+#include "Util/Application.h"
 #include "Util/Bitset.h"
 
 void setup() {
-  // Set up USB serial.
-  Serial.begin(0);
-  Serial.println(); // allow easy distinction of different program runs
-  Serial.println("Serial Monitor has initialized.");
+  Application::setupSerial();
+  
 
   // SPI test routine.
   #if 0
@@ -31,7 +26,7 @@ void setup() {
   DAC1::writeRegister(DAC81404_GENCONFIG, 0x0000, CRC::Flags::MOSI);
   DAC1::writeRegister(DAC81404_DACPWDWN, 0xFFF0);
   DAC1::writeRegister(DAC81404_DACRANGE, 0x5555);
-  DAC1::writeVoltage(2, 0.35 * 10 - 5);
+  DAC1::writeVoltage(2, (0.35 + 5) / 10);
 
   uint16_t deviceID = DAC1::readRegister(DAC81404_DEVICEID);
   uint16_t deviceIDAgain = DAC1::readRegister(DAC81404_DEVICEID);
