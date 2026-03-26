@@ -41,6 +41,11 @@ void Application::setupSPI() {
   uint16_t DAC1_ID = DAC1::readRegister(DAC81404_DEVICEID) >> 2;
   checkDeviceID(DAC1_ID, 0x029C);
 
+  DAC1::writeVoltage(0, 0.0);
+  DAC1::writeVoltage(1, 0.0);
+  DAC1::writeVoltage(2, 0.0);
+  DAC1::writeVoltage(3, 0.0);
+
   // Set up DAC2.
   DAC2::writeRegister(DAC81404_SPICONFIG, 0b10010110, CRC::Flags::NONE);
   DAC2::writeRegister(DAC81404_GENCONFIG, 0x0000, CRC::Flags::MOSI);
@@ -49,24 +54,7 @@ void Application::setupSPI() {
   uint16_t DAC2_ID = DAC2::readRegister(DAC81404_DEVICEID) >> 2;
   checkDeviceID(DAC2_ID, 0x029C);
 
-  // Prove responsiveness.
-  Serial.print("ADC_ID: ");
-  Bitset::printBinary(ADC_ID, 4);
-  Serial.println();
-
-  Serial.print("DAC1_ID: ");
-  Bitset::printHex(DAC1_ID, 4);
-  Serial.println();
-
-  Serial.print("DAC2_ID: ");
-  Bitset::printHex(DAC2_ID, 4);
-  Serial.println();
-
-  DAC1::writeVoltage(0, -11.0);
-  DAC1::writeVoltage(1, -11.1);
-  DAC1::writeVoltage(2, 11.2);
-  DAC1::writeVoltage(3, 11.3);
-  DAC2::writeVoltage(0, -11.5);
+  DAC2::writeVoltage(0, 0.0);
 }
 
 void Application::setupI2C() {

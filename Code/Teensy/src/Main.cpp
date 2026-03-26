@@ -7,6 +7,7 @@ void setup() {
   Application::setupSPI();
   Application::setupI2C();
 
+  CDC::writeCAPDAC(true, 22);
   CDC::writeConfiguration(0b001);
 }
 
