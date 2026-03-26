@@ -10,9 +10,49 @@ uint8_t CDC::readRegister(uint8_t registerAddress) {
   return value;
 }
 
-// readCapacitance
-// readTemperature <- do not correct for theoretical value of self-heating
-// readSupplyVoltage <- scale by 5.97
+float CDC::readCapacitance() {
+  uint8_t data[3] = { 0, 0, 0 };
+  check(sensor.read(AD7745_CAP_DATA, data, 3, true));
+  return decodeCapacitance(data);
+}
+
+float CDC::readTemperature() {
+  uint8_t data[3] = { 0, 0, 0 };
+  check(sensor.read(AD7745_VT_DATA, data, 3, true));
+  return decodeTemperature(data);
+}
+
+float CDC::readSupplyVoltage() {
+  uint8_t data[3] = { 0, 0, 0 };
+  check(sensor.read(AD7745_VT_DATA, data, 3, true));
+  return decodeVoltage(data) * 5.97;
+}
+
+void CDC::writeCapacitanceSetup(bool enabled) {
+  uint8_t enabledFlag = enabled ? 0x80 : 0x00;
+  uint8_t chopFlag = 0x00;
+  writeRegister(AD7745_CAP_SETUP, enabledFlag | chopFlag);
+}
+
+void CDC::writeVoltageSetup(bool enabled, uint8_t mode) {
+  uint8_t enabledFlag = enabled ? 0x80 : 0x00;
+  uint8_t modeFlag = mode << 5;
+  uint8_t chopFlag = 0x01;
+  writeRegister(AD7745_VT_SETUP, enabledFlag | modeFlag | chopFlag);
+}
+
+void CDC::writeConfiguration(uint8_t mode) {
+  uint8_t vtFilter  = 0b11000000;
+  uint8_t capFilter = 0b00111000;
+  writeRegister(AD7745_CONFIGURATION, vtFilter | capFilter | mode);
+}
+
+void CDC::writeCAPDAC(bool enabled, uint8_t code) {
+  uint8_t enabledFlag = enabled ? 0x80 : 0x00;
+  writeRegister(AD7745_CAP_DAC_A, enabledFlag | code);
+}
+
+// MARK: - Utilities
 
 void CDC::check(bool transactionResult) {
   if (!transactionResult) {

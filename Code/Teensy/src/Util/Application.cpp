@@ -68,3 +68,12 @@ void Application::setupSPI() {
   DAC1::writeVoltage(3, 11.3);
   DAC2::writeVoltage(0, -11.5);
 }
+
+void Application::setupI2C() {
+  CDC::master.begin(400000);
+
+  CDC::writeCapacitanceSetup(true);
+  CDC::writeVoltageSetup(false, 0b00);
+  CDC::writeRegister(AD7745_EXC_SETUP, 0b00001011);
+  CDC::writeConfiguration(0b000);
+}

@@ -34,8 +34,13 @@ struct CDC {
 
   // Voltage on the power pin.
   //
-  // Notes: supply voltage is attenutated by a factor of 5.97.
+  // Notes: supply voltage is attenuated by a factor of 5.97.
   static float readSupplyVoltage();
+
+  static void writeCapacitanceSetup(bool enabled);
+  static void writeVoltageSetup(bool enabled, uint8_t mode);
+  static void writeConfiguration(uint8_t mode);
+  static void writeCAPDAC(bool enabled, uint8_t code);
 
   static void check(bool transactionResult);
   static float decodeCapacitance(uint8_t bytes[3]);
