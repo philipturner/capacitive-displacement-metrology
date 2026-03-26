@@ -42,7 +42,7 @@ struct DAC {
     uint16_t data, 
     CRC::Flags flags);
 
-  // Requires that range select is 0b1110.
+  // Requires that range code is 0b1110.
   static void writeVoltage(
     uint8_t CS,
     uint8_t channelID,

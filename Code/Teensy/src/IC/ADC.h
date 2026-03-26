@@ -43,7 +43,7 @@ struct ADCOutputConversion {
   uint32_t integerValue;
   uint32_t otherBits;
 
-  // Requires that range select is 0b0000 (default value, no need to set).
+  // Requires that range code is 0b0000.
   ADCOutputConversion(uint32_t rawData);
 
   // Requires:
