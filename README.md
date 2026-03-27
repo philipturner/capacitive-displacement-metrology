@@ -38,6 +38,7 @@ Table of Contents:
 - [March 10, 2026](#march-10-2026)
 - [March 12, 2026](#march-12-2026)
 - [March 20, 2026](#march-20-2026)
+- [March 26, 2026](#march-26-2026)
 
 ## December 15, 2025
 
@@ -1225,3 +1226,7 @@ Next, I will clean up the code from debugging and test the DAC81401. Hopefully, 
 ## March 20, 2026
 
 Link to the new BOM (plan to order tomorrow): [Next BOM (Google Sheets)](https://docs.google.com/spreadsheets/d/1qZ6N7xbDPV2qiAkH7os0ZhyjvyFWOlCQFE3YEBIGxq4/edit)
+
+## March 26, 2026
+
+[Measuring a 3 picofarad capacitor to 10 attofarad precision (YouTube)](https://www.youtube.com/watch?v=1fGW8lledkQ)
