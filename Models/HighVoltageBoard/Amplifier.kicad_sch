@@ -1955,7 +1955,7 @@
 		)
 		(uuid "862b80a8-18a5-4f2f-90d6-8028077786e0")
 	)
-	(text "Revision: desolder the transistors\n\nOriginally, I noticed that I had ordered\na wrongly specced part with too much\ncapacitance (MMBFJ113, 28 pF vs MMBF4416,\n4 pF). That would most likely destabilize\nthe feedback loop.\n\nHowever, we don't even need these. The maximum\nplausible voltage is ±15 V, less than ±20 V.\nThe absence of these means the DAC may attempt\nto push SENSEN as far away from ground as\npossible (the transistors limited it to ±0.6 V).\n\nDAC81404 and DAC81401 datasheets say SENSEN\nshould never go more than 12 V above ground. We\ncan solve that either through more analog parts\nor through good programming and a little bit of\nextra testing at low voltage, prior to making the\ndecision to de-solder the transistors."
+	(text "Revision: desolder the transistors\n\nOriginally, I noticed that I had ordered\na wrongly specced part with too much\ncapacitance (MMBFJ113, 28 pF vs MMBF4416,\n4 pF). That would most likely destabilize\nthe feedback loop.\n\nHowever, we don't even need these. The maximum\nplausible voltage is ±15 V, less than ±20 V.\nThe absence of these means the DAC may attempt\nto push SENSEN as far away from ground as\npossible (the transistors limited it to ±0.6 V).\n\nDAC81404 and DAC81401 datasheets say SENSEN\nshould never go more than 12 V above ground. With\nthe SENSEN pin fully disconnected, it always floats\n0.18 V above ground and the respective output is the\nprogrammed voltage above or below 0.18 V."
 		(exclude_from_sim no)
 		(at 88.9 19.558 0)
 		(effects

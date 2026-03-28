@@ -39,6 +39,7 @@ Table of Contents:
 - [March 12, 2026](#march-12-2026)
 - [March 20, 2026](#march-20-2026)
 - [March 26, 2026](#march-26-2026)
+- [March 28, 2026](#march-28-2026)
 
 ## December 15, 2025
 
@@ -1230,3 +1231,19 @@ Link to the new BOM (plan to order tomorrow): [Next BOM (Google Sheets)](https:/
 ## March 26, 2026
 
 [Measuring a 3 picofarad capacitor to 10 attofarad precision (YouTube)](https://www.youtube.com/watch?v=1fGW8lledkQ)
+
+## March 28, 2026
+
+Important parasitic capacitances to predict PA95 op amp stability:
+
+| Trace 1 | Trace 2 | CAPDAC Code | Capacitance | True Capacitance |
+| ------- | ------- | ----------: | ----------: | ---------------: |
+| SENSENx | OUTx    | 0           | 0.5 pF      | 0.5 pF           |
+| SENSENA | GND     | 20          | 2.0 pF      | 5.3 pF           |
+| INA     | GND     | 20          | 0.8 pF      | 4.1 pF           |
+| SENSEND | GND     | 20          | 3.8 pF      | 7.1 pF           |
+| IND     | GND     | 20          | 2.4 pF      | 5.7 pF           |
+
+| Channel | C\_{in} | C\_f |
+| ------- | ------: | ---: |
+|         |         |      |
