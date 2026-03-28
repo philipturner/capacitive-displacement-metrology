@@ -1246,9 +1246,11 @@ Important parasitic capacitances to predict PA95 op amp stability:
 
 The R_f C_f pole is 318 kHz.
 
-| Channel | C_in | C_f | f_t |
-| ------- | ----: | ---: | ---:
-| A       |       |      |
-| B       |
+| Channel | C_in    | C_f    | f_t     | Phase Response |
+| ------- | ------: | -----: | ------: | -------------: |
+| A       | 9.3 pF  | 0.5 pF | 1.1 MHz | -120°          |
+| B       | 11.1 pF | 0.5 pF | 0.9 MHz | -120°          |
 
 _f\_t is the frequency where noise gain crosses over the open-loop gain. It is the gain-bandwidth product divided by the noise gain._
+
+Using C_c = 10 pF instead of 4.7 pF should slightly reduce the phase shift. Analyzing the above data, we are probably in a safe region after desoldering the transistors.
