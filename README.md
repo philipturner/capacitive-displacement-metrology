@@ -1244,6 +1244,11 @@ Important parasitic capacitances to predict PA95 op amp stability:
 | SENSEND | GND     | 20          | 3.8 pF      | 7.1 pF           |
 | IND     | GND     | 20          | 2.4 pF      | 5.7 pF           |
 
-| Channel | C\_{in} | C\_f |
-| ------- | ------: | ---: |
-|         |         |      |
+The R\_f C\_f pole is 318 kHz.
+
+| Channel | C_{in} | C_f | f\_t |
+| ------- | ----: | ---: | ---:
+| A       |       |      |
+| B       |
+
+_f\_t is the frequency where noise gain crosses over the open-loop gain. It is the gain-bandwidth product divided by the noise gain._
