@@ -1244,9 +1244,9 @@ Important parasitic capacitances to predict PA95 op amp stability:
 | SENSEND | GND     | 20          | 3.8 pF      | 7.1 pF           |
 | IND     | GND     | 20          | 2.4 pF      | 5.7 pF           |
 
-The R\_f C\_f pole is 318 kHz.
+The R_f C_f pole is 318 kHz.
 
-| Channel | C_{in} | C_f | f\_t |
+| Channel | C_in | C_f | f_t |
 | ------- | ----: | ---: | ---:
 | A       |       |      |
 | B       |
