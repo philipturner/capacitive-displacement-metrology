@@ -1,98 +1,100 @@
 #include "IC/ADC.h"
 #include "IC/CDC.h"
 #include "IC/DAC.h"
+#include "Time/KilohertzLoop.h"
 #include "Time/Oscilloscope.h"
+#include "Time/TimeStatistics.h"
 #include "Util/Application.h"
 #include "Util/Bitset.h"
+
+TimeStatistics timeStatistics;
+void kilohertzLoop();
+#define KILOHERTZ_LOOP_PERIOD 4
 
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
   Application::setupI2C();
 
-  CDC::writeCAPDAC(true, 20);
-  CDC::writeConfiguration(0b001);
-}
-
-#define TRAILING_AVERAGE_HISTORY_SIZE 27
-float history[TRAILING_AVERAGE_HISTORY_SIZE] = {};
-uint32_t sampleID = 0;
-
-#define VELOCITY_HISTORY_SIZE 27
-float lastAverages[VELOCITY_HISTORY_SIZE];
-float lastTimes[VELOCITY_HISTORY_SIZE];
-
-float dCdt(uint32_t startPos) {
-  float dC = lastAverages[VELOCITY_HISTORY_SIZE - 1];
-  dC -= lastAverages[startPos];
-  float dt = lastTimes[VELOCITY_HISTORY_SIZE - 1];
-  dt -= lastTimes[startPos];
-
-  return dC / dt;
+  KilohertzLoop::initialize(kilohertzLoop, KILOHERTZ_LOOP_PERIOD);
 }
 
 void loop() {
-  #if 1
-  delay(10);
-
-  uint8_t status = CDC::readRegister(AD7745_STATUS);
-  if (status & 0b00000100) {
-    return;
-  }
-
-  float time = float(millis()) / 1000;
-  float capacitance = CDC::readCapacitance();
-  history[sampleID % TRAILING_AVERAGE_HISTORY_SIZE] = capacitance;
-  sampleID += 1;
-
-  // Calculate the trailing average.
-  float capacitanceAverage = 0;
-  for (uint32_t i = 0; i < TRAILING_AVERAGE_HISTORY_SIZE; ++i) {
-    float sample = history[i];
-    capacitanceAverage += sample;
-  }
-  capacitanceAverage /= float(TRAILING_AVERAGE_HISTORY_SIZE);
-
-  // Store in the history for velocity.
-  for (uint32_t i = 0; i < VELOCITY_HISTORY_SIZE - 1; ++i) {
-    lastAverages[i] = lastAverages[i + 1];
-    lastTimes[i] = lastTimes[i + 1];
-  }
-  lastAverages[VELOCITY_HISTORY_SIZE - 1] = capacitanceAverage;
-  lastTimes[VELOCITY_HISTORY_SIZE - 1] = time;
-
-  // Calculate the velocity.
-  float dCdt_fast = dCdt(VELOCITY_HISTORY_SIZE - 4);
-  float dCdt_slow = dCdt(0);
+  delay(500);
 
   Serial.println();
+  Serial.println(timeStatistics.above1000000us_jumps);
+  Serial.println(timeStatistics.above100000us_jumps);
+  Serial.println(timeStatistics.above10000us_jumps);
+  Serial.println(timeStatistics.above1000us_jumps);
+  Serial.println(timeStatistics.above100us_jumps);
+  Serial.println(timeStatistics.abovePeriod_jumps);
+  Serial.println(timeStatistics.exactlyPeriod_jumps);
+  Serial.println(timeStatistics.underPeriod_jumps);
+  Serial.println(timeStatistics.total_jumps);
+}
 
-  Serial.print("time: ");
-  Serial.println(time, 3);
+float sineWave(float phaseNormalized) {
+  return sin(phaseNormalized * 2 * M_PI);
+}
 
-  Serial.print("capacitance:                ");
-  Serial.print(capacitance, 6);
-  Serial.println(" pF");
-
-  Serial.print(TRAILING_AVERAGE_HISTORY_SIZE);
-  Serial.print("-sample trailing average: ");
-  Serial.print(capacitanceAverage, 6);
-  Serial.println(" pF");
-
-  Serial.print("[ 4-point average] dC/dt: ");
-  if (dCdt_fast >= 0) {
-    Serial.print(" ");
+float squareWave(float phaseNormalized) {
+  if (phaseNormalized < 0.5) {
+    return 1.0;
+  } else {
+    return -1.0;
   }
-  Serial.print(dCdt_fast, 6);
-  Serial.println(" pF/sec");
+}
 
-  Serial.print("[");
-  Serial.print(TRAILING_AVERAGE_HISTORY_SIZE);
-  Serial.print("-point average] dC/dt: ");
-  if (dCdt_slow >= 0) {
-    Serial.print(" ");
+float triangleWave(float phaseNormalized) {
+  float progress;
+  if (phaseNormalized < 0.5) {
+    progress = 2 * phaseNormalized;
+  } else {
+    progress = 2 * (1 - phaseNormalized);
   }
-  Serial.print(dCdt_slow, 6);
-  Serial.println(" pF/sec");
-  #endif
+
+  return 2 * progress - 1;
+}
+
+void kilohertzLoop() {
+  uint32_t previous = KilohertzLoop::previousTimestamp;
+  uint32_t latest = KilohertzLoop::latestTimestamp;
+  uint32_t jumpDuration = latest - previous;
+  timeStatistics.integrate(jumpDuration, KILOHERTZ_LOOP_PERIOD);
+
+  // Calculate the period and phase, in microseconds.
+  float sineFrequency = 7000;
+  uint32_t sinePeriod = uint32_t(float(1e6) / sineFrequency);
+  uint32_t phase = latest % sinePeriod;
+
+  float phaseNormalized = float(phase) / float(sinePeriod);
+  float waveValue;
+  switch ((latest / 1000000) % 4) {
+    case 0:
+    case 1: {
+      waveValue = sineWave(phaseNormalized);
+      break;
+    }
+    case 2: {
+      waveValue = squareWave(phaseNormalized);
+      break;
+    }
+    case 3: {
+      waveValue = triangleWave(phaseNormalized);
+      break;
+    }
+  }
+
+  // Calculate the voltage.
+  float gainFactor = -35.73;
+  float offset = -4.58;
+
+  // ax + b = y
+  // ax = y - b
+  // x = (y - b) / a
+  float targetValue = 421 * waveValue;
+  float dacValue = (targetValue - offset) / gainFactor;
+
+  DAC1::writeVoltage(1, dacValue);
 }

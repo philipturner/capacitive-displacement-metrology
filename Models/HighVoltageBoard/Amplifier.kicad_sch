@@ -1932,7 +1932,7 @@
 		)
 		(uuid "3e6dae20-d3ab-4e9d-b578-e2de0ce770c6")
 	)
-	(text "0.185 W in resistor\n5.92 K temperature rise\n±1.48e-4 proportional change\n\n430 V on resistor\n-4.3e-4 proportional change\n\ntolerance on static gain: ±2e-3\nG = -35.64 (min.)\nG = -35.71 (avg.)\nG = -35.79 (max.)\n\ninput = -12.00 V\noutput = 427.7 V (min.)\noutput = 428.5 V (avg.)\noutput = 429.5 V (max.)"
+	(text "0.185 W in resistor\n5.92 K temperature rise\n±1.48e-4 proportional change\n\n430 V on resistor\n-4.3e-4 proportional change\n\ntolerance on static gain: ±2e-3\nG = -35.64 (min.)\nG = -35.71 (avg.)\nG = -35.79 (max.)\n\ninput = -12.00 V\noutput = 427.7 V (min.)\noutput = 428.5 V (avg.)\noutput = 429.5 V (max.)\n\nThere is a slight offset of approximately\n-4.5 V, which varies slightly based on\nenvironment variables. The map from input\nto output is still extremely linear, with\nGoogle Sheets registering R^2 = 1 exactly\nfor a plot with 7 data points."
 		(exclude_from_sim no)
 		(at 31.496 31.242 0)
 		(effects
@@ -1955,9 +1955,9 @@
 		)
 		(uuid "862b80a8-18a5-4f2f-90d6-8028077786e0")
 	)
-	(text "Revision: desolder the transistors\n\nOriginally, I noticed that I had ordered\na wrongly specced part with too much\ncapacitance (MMBFJ113, 28 pF vs MMBF4416,\n4 pF). That would most likely destabilize\nthe feedback loop.\n\nHowever, we don't even need these. The maximum\nplausible voltage is ±15 V, less than ±20 V.\nThe absence of these means the DAC may attempt\nto push SENSEN as far away from ground as\npossible (the transistors limited it to ±0.6 V).\n\nDAC81404 and DAC81401 datasheets say SENSEN\nshould never go more than 12 V above ground. With\nthe SENSEN pin fully disconnected, it always floats\n0.18 V above ground and the respective output is the\nprogrammed voltage above or below 0.18 V."
+	(text "Revision: desolder the transistors\n\nOriginally, I noticed that I had ordered\na wrongly specced part with too much\ncapacitance (MMBFJ113, 28 pF vs MMBF4416,\n4 pF). That would most likely destabilize\nthe feedback loop.\n\nHowever, we don't even need these. The maximum\nplausible voltage is ±15 V, less than ±20 V.\nThe absence of these means the DAC may attempt\nto push SENSEN as far away from ground as\npossible (the transistors limited it to ±0.6 V).\n\nDAC81404 and DAC81401 datasheets say SENSEN\nshould never go more than 12 V above ground. With\nthe SENSEN pin fully disconnected, it always floats\n0.18 V above ground and the respective output is the\nprogrammed voltage above or below 0.18 V.\n\nWith PA95 connected, the behavior changes. Now it's\napproximately halfway between OUTx and GND. And large\nvoltages (past ~±6 V) are clamped to the supply. When\nthe PA95 is powered, the disparity between SENSEN and\nGND vanishes."
 		(exclude_from_sim no)
-		(at 88.9 19.558 0)
+		(at 79.756 15.748 0)
 		(effects
 			(font
 				(size 1.27 1.27)
