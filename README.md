@@ -40,6 +40,7 @@ Table of Contents:
 - [March 20, 2026](#march-20-2026)
 - [March 26, 2026](#march-26-2026)
 - [March 28, 2026](#march-28-2026)
+- [March 29, 2026](#march-29-2026)
 
 ## December 15, 2025
 
@@ -1254,3 +1255,7 @@ The R_f C_f pole is 318 kHz.
 _f\_t is the frequency where noise gain crosses over the open-loop gain. It is the gain-bandwidth product divided by the noise gain._
 
 Using C_c = 10 pF instead of 4.7 pF should slightly reduce the phase shift. Analyzing the above data, we are probably in a safe region after desoldering the transistors.
+
+## March 29, 2026
+
+[Teensy 4.1 generates an 840 V, 7 kHz sine wave](https://www.youtube.com/watch?v=1Su70dZ2xz0)
