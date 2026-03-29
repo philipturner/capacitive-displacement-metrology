@@ -64,11 +64,12 @@ void kilohertzLoop() {
   timeStatistics.integrate(jumpDuration, KILOHERTZ_LOOP_PERIOD);
 
   // Calculate the period and phase, in microseconds.
-  float sineFrequency = 7000;
+  float sineFrequency = 0.167;
   uint32_t sinePeriod = uint32_t(float(1e6) / sineFrequency);
   uint32_t phase = latest % sinePeriod;
 
   float phaseNormalized = float(phase) / float(sinePeriod);
+  /*
   float waveValue;
   switch ((latest / 1000000) % 4) {
     case 0:
@@ -85,6 +86,7 @@ void kilohertzLoop() {
       break;
     }
   }
+    */
 
   // Calculate the voltage.
   float gainFactor = -35.73;
@@ -93,8 +95,17 @@ void kilohertzLoop() {
   // ax + b = y
   // ax = y - b
   // x = (y - b) / a
-  float targetValue = 421 * waveValue;
-  float dacValue = (targetValue - offset) / gainFactor;
+  //float targetValue = 421 * waveValue;
+  //float dacValue = (targetValue - offset) / gainFactor;
 
-  DAC1::writeVoltage(1, dacValue);
+  float dacValue;
+  if (phaseNormalized < 0.333) {
+    dacValue = -12;
+  } else if (phaseNormalized < 0.667) {
+    dacValue = 0;
+  } else {
+    dacValue = 12;
+  }
+
+  DAC1::writeVoltage(1, 0);
 }
