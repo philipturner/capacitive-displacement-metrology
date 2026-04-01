@@ -7,6 +7,8 @@
 #include "Util/Application.h"
 #include "Util/Bitset.h"
 
+// MARK: - Utilities
+
 // Input: progress, 0 to 1
 // Output: interpolation, 0 to 1
 float smoothstep(float progress) {
@@ -41,8 +43,51 @@ void changeVoltage(float startVoltage, float endVoltage) {
       break;
     }
   }
-
 }
+
+#define CDC_HISTORY_SIZE 27
+float capacitanceHistory[CDC_HISTORY_SIZE] = {};
+uint32_t capacitanceSampleID = 0;
+
+// CDC must be in continuous conversion mode (0b001).
+void basicCapacitanceMeasurementLoop() {
+  delay(10);
+
+  uint8_t status = CDC::readRegister(AD7745_STATUS);
+  if (status & 0b00000100) {
+    return;
+  }
+
+  float time = float(millis()) / 1000;
+  float capacitance = CDC::readCapacitance();
+  capacitanceHistory[capacitanceSampleID % CDC_HISTORY_SIZE] = capacitance;
+  capacitanceSampleID += 1;
+
+  // Calculate the trailing average.
+  float capacitanceAverage = 0;
+  for (uint32_t i = 0; i < CDC_HISTORY_SIZE; ++i) {
+    float sample = capacitanceHistory[i];
+    capacitanceAverage += sample;
+  }
+  capacitanceAverage /= float(CDC_HISTORY_SIZE);
+
+  // Display the capacitance.
+  Serial.println();
+
+  Serial.print("time: ");
+  Serial.println(time, 3);
+
+  Serial.print("capacitance:                ");
+  Serial.print(capacitance, 6);
+  Serial.println(" pF");
+
+  Serial.print(CDC_HISTORY_SIZE);
+  Serial.print("-sample trailing average: ");
+  Serial.print(capacitanceAverage, 6);
+  Serial.println(" pF");
+}
+
+// MARK: - Setup and Loop
 
 void setup() {
   Application::setupSerial();
