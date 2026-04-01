@@ -2,12 +2,15 @@
 #include "IC/CDC.h"
 #include "IC/DAC.h"
 #include "Time/KilohertzLoop.h"
-#include "Time/Oscilloscope.h"
 #include "Time/TimeStatistics.h"
 #include "Util/Application.h"
 #include "Util/Bitset.h"
 
 // MARK: - Utilities
+
+#define CDC_HISTORY_SIZE 27
+float capacitanceHistory[CDC_HISTORY_SIZE] = {};
+uint32_t infiniteLoopIndex = 0;
 
 // Input: progress, 0 to 1
 // Output: interpolation, 0 to 1
@@ -45,10 +48,6 @@ void changeVoltage(float startVoltage, float endVoltage) {
   }
 }
 
-#define CDC_HISTORY_SIZE 27
-float capacitanceHistory[CDC_HISTORY_SIZE] = {};
-uint32_t capacitanceSampleID = 0;
-
 // CDC must be in continuous conversion mode (0b001).
 void basicCapacitanceMeasurementLoop() {
   delay(10);
@@ -60,8 +59,8 @@ void basicCapacitanceMeasurementLoop() {
 
   float time = float(millis()) / 1000;
   float capacitance = CDC::readCapacitance();
-  capacitanceHistory[capacitanceSampleID % CDC_HISTORY_SIZE] = capacitance;
-  capacitanceSampleID += 1;
+  capacitanceHistory[infiniteLoopIndex % CDC_HISTORY_SIZE] = capacitance;
+  infiniteLoopIndex += 1;
 
   // Calculate the trailing average.
   float capacitanceAverage = 0;
@@ -75,16 +74,34 @@ void basicCapacitanceMeasurementLoop() {
   Serial.println();
 
   Serial.print("time: ");
-  Serial.println(time, 3);
+  Serial.print(time, 3);
+  Serial.println(" s");
 
-  Serial.print("capacitance:                ");
+  Serial.print("capacitance:                 ");
   Serial.print(capacitance, 6);
   Serial.println(" pF");
 
+  if (CDC_HISTORY_SIZE < 100) {
+    Serial.print(" ");
+  }
   Serial.print(CDC_HISTORY_SIZE);
   Serial.print("-sample trailing average: ");
   Serial.print(capacitanceAverage, 6);
   Serial.println(" pF");
+}
+
+// For checking the voltage waveform on the oscilloscope.
+void voltageWaveformTestingLoop() {
+  delay(10);
+
+  uint32_t parity = infiniteLoopIndex % 2;
+  infiniteLoopIndex += 1;
+
+  if (parity == 0) {
+    changeVoltage(-12, 12);
+  } else {
+    changeVoltage(12, -12);
+  }
 }
 
 // MARK: - Setup and Loop
@@ -94,9 +111,18 @@ void setup() {
   Application::setupSPI();
   Application::setupI2C();
 
-  
+  changeVoltage(0, -12);
+
+  for (uint32_t trialID = 0; trialID < 2; ++trialID) {
+    constexpr uint32_t sampleCount = 10;
+    for (uint32_t sampleID = 0; sampleID < sampleCount; ++sampleID) {
+
+    }
+  }
+
+  changeVoltage(12, 0);
 }
 
 void loop() {
-  // Check the voltage waveform on the oscilloscope.
+
 }
