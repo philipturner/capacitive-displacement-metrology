@@ -48,7 +48,7 @@ void changeVoltage(float startVoltage, float endVoltage) {
   }
 }
 
-// CDC must be in continuous conversion mode (0b001).
+// CDC must be in continuous conversion mode.
 void basicCapacitanceMeasurementLoop() {
   delay(10);
 
@@ -116,7 +116,20 @@ void setup() {
   for (uint32_t trialID = 0; trialID < 2; ++trialID) {
     constexpr uint32_t sampleCount = 10;
     for (uint32_t sampleID = 0; sampleID < sampleCount; ++sampleID) {
+      float capacitances[2];
+      for (uint32_t edgeID = 0; edgeID < 2; ++edgeID) {
+        float startVoltage = (edgeID == 0) ? -12 : 12;
+        float endVoltage = (edgeID == 0) ? 12 : -12;
+        changeVoltage(startVoltage, endVoltage);
 
+        uint8_t status = CDC::readRegister(AD7745_STATUS);
+        if (!(status & 0b00000100)) {
+          Serial.println("A previous measurement was queued.");
+          exit(0);
+        }
+
+        CDC::writeConfiguration(AD7745_MD_SINGLE_CONV);
+      }
     }
   }
 

@@ -16,6 +16,20 @@
 #define AD7745_CAP_GAIN      0x0F
 #define AD7745_VOLT_GAIN     0x11
 
+// voltage/temperature modes
+#define AD7745_VTMD_INTERNAL_TEMP 0b00
+#define AD7745_VTMD_EXTERNAL_TEMP 0b01
+#define AD7745_VTMD_VDD_MONITOR   0b10
+#define AD7745_VTMD_EXTERNAL_VIN  0b11
+
+// modes of operation
+#define AD7745_MD_IDLE            0b000
+#define AD7745_MD_CONTINUOUS_CONV 0b001
+#define AD7745_MD_SINGLE_CONV     0b010
+#define AD7745_MD_POWER_DOWN      0b011
+#define AD7745_MD_OFFSET_CAL      0b101
+#define AD7745_MD_GAIN_CAL        0b110
+
 struct CDC {
   static inline I2CMaster& master = Master;
   static inline I2CDevice sensor = I2CDevice(master, 0x48, _BIG_ENDIAN);
