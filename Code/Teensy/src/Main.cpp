@@ -130,9 +130,7 @@ void setup() {
     float dC_up_samples[sampleCount];
     float dC_down_samples[sampleCount];
     float dC_avg_samples[sampleCount];
-
-    // Change to use the previous capacitance value
-    // Use a 3-point averaging algorithm to cancel out systematic drift.
+    
     for (uint32_t sampleID = 0; sampleID < sampleCount; ++sampleID) {
       float capacitances[2];
       changeVoltage(-12, 12);
