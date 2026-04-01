@@ -20,7 +20,10 @@ float smoothstep(float progress) {
   } else if (progress > 1) {
     return 1;
   } else {
-    return 3 * progress * progress - 2 * progress * progress * progress;
+    float x3 = progress * progress * progress;
+    float x4 = x3 * progress;
+    float x5 = x3 * progress * progress;
+    return 6 * x5 - 15 * x4 + 10 * x3;
   }
 }
 
@@ -90,18 +93,21 @@ void basicCapacitanceMeasurementLoop() {
   Serial.println(" pF");
 }
 
-// For checking the voltage waveform on the oscilloscope.
-void voltageWaveformTestingLoop() {
-  delay(10);
-
-  uint32_t parity = infiniteLoopIndex % 2;
-  infiniteLoopIndex += 1;
-
-  if (parity == 0) {
-    changeVoltage(-12, 12);
-  } else {
-    changeVoltage(12, -12);
+float cdcSingleSample() {
+  if (!(CDC::readRegister(AD7745_STATUS) & 0b00000100)) {
+    Serial.println("A previous measurement was queued.");
+    exit(0);
   }
+
+  CDC::writeConfiguration(AD7745_MD_SINGLE_CONV);
+  delay(115);
+
+  if (CDC::readRegister(AD7745_STATUS) & 0b00000100) {
+    Serial.println("Measurement is not ready.");
+    exit(0);
+  }
+
+  return CDC::readCapacitance();
 }
 
 // MARK: - Setup and Loop
@@ -111,39 +117,28 @@ void setup() {
   Application::setupSPI();
   Application::setupI2C();
 
+  // CDC::writeConfiguration(AD7745_MD_CONTINUOUS_CONV);
+
   changeVoltage(0, -12);
+  float lastCapacitance = cdcSingleSample();
 
   for (uint32_t trialID = 0; trialID < 2; ++trialID) {
     // Separate the trials from each other.
     Serial.println();
 
     constexpr uint32_t sampleCount = 10;
-    float dC_samples[sampleCount];
+    float dC_up_samples[sampleCount];
+    float dC_down_samples[sampleCount];
+    float dC_avg_samples[sampleCount];
 
+    // Change to use the previous capacitance value
+    // Use a 3-point averaging algorithm to cancel out systematic drift.
     for (uint32_t sampleID = 0; sampleID < sampleCount; ++sampleID) {
       float capacitances[2];
-
-      for (uint32_t edgeID = 0; edgeID < 2; ++edgeID) {
-        float startVoltage = (edgeID == 0) ? -12 : 12;
-        float endVoltage = (edgeID == 0) ? 12 : -12;
-        changeVoltage(startVoltage, endVoltage);
-
-        if (!(CDC::readRegister(AD7745_STATUS) & 0b00000100)) {
-          Serial.println("A previous measurement was queued.");
-          exit(0);
-        }
-
-        CDC::writeConfiguration(AD7745_MD_SINGLE_CONV);
-        delay(115);
-
-        if (CDC::readRegister(AD7745_STATUS) & 0b00000100) {
-          Serial.println("Measurement is not ready.");
-          exit(0);
-        }
-
-        float capacitance = CDC::readCapacitance();
-        capacitances[edgeID] = capacitance;
-      }
+      changeVoltage(-12, 12);
+      capacitances[0] = cdcSingleSample();
+      changeVoltage(12, -12);
+      capacitances[1] = cdcSingleSample();
 
       // Display the sample number.
       Serial.print("sample ");
@@ -156,30 +151,48 @@ void setup() {
       Serial.print(sampleID);
       Serial.print(" | ");
 
-      // Display the absolute capacitances.
+      // Display the absolute capacitance.
       Serial.print("C = ");
+      Serial.print(lastCapacitance, 6);
+      Serial.print(" -> ");
       Serial.print(capacitances[0], 6);
       Serial.print(" -> ");
       Serial.print(capacitances[1], 6);
-      Serial.print(" | ");
 
-      // Display the difference in capacitance.
-      Serial.print("dC = ");
-      Serial.print(capacitances[1] - capacitances[0], 6);
-      Serial.println();
+      // Store the difference in capacitance.
+      float up = capacitances[0] - lastCapacitance;
+      float down = capacitances[0] - capacitances[1];
+      dC_up_samples[sampleID] = up;
+      dC_down_samples[sampleID] = down;
+      dC_avg_samples[sampleID] = (up + down) / 2;
 
-      dC_samples[sampleID] = capacitances[1] - capacitances[0];
+      lastCapacitance = capacitances[1];
     }
 
-    // Calculate the average and present it.
-    float dC_average = 0;
+    // Calculate the combined dC.
+    float dC_up = 0;
+    float dC_down = 0;
+    float dC_avg = 0;
     for (uint32_t sampleID = 0; sampleID < sampleCount; ++sampleID) {
-      dC_average += dC_samples[sampleID];
+      dC_up += dC_up_samples[sampleID];
+      dC_down += dC_down_samples[sampleID];
+      dC_avg += dC_avg_samples[sampleID];
     }
-    dC_average /= float(sampleCount);
+    dC_up /= float(sampleCount);
+    dC_down /= float(sampleCount);
+    dC_avg /= float(sampleCount);
 
-    Serial.print("average: dC = ");
-    Serial.print(dC_average, 6);
+    // Present the combined dC.
+    Serial.print("dC (up)   = ");
+    Serial.print(dC_up, 6);
+    Serial.println();
+
+    Serial.print("dC (down) = ");
+    Serial.print(dC_down, 6);
+    Serial.println();
+
+    Serial.print("dC (avg)  = ");
+    Serial.print(dC_avg, 6);
     Serial.println();
   }
 
@@ -187,5 +200,5 @@ void setup() {
 }
 
 void loop() {
-
+  // basicCapacitanceMeasurementLoop();
 }
