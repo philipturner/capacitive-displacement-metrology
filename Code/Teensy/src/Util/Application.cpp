@@ -60,10 +60,14 @@ void Application::setupSPI() {
 void Application::setupI2C() {
   CDC::master.begin(400000);
 
-  CDC::writeCapacitanceSetup(true);
+  CDC::writeCapacitanceSetup(true, true);
   CDC::writeVoltageSetup(false, 0b00);
   CDC::writeRegister(AD7745_EXC_SETUP, 0b00001011);
   CDC::writeConfiguration(0b000);
+
+  // Turn the CAPDAC on and always correct measurements with the linear
+  // regression approximation to the CAPDAC offset.
+  CDC::writeCAPDAC(true, 0);
 
   // Clear any previous measurement data.
   CDC::readCapacitance();

@@ -51,7 +51,7 @@ struct CDC {
   // Notes: supply voltage is attenuated by a factor of 5.97.
   static float readSupplyVoltage();
 
-  static void writeCapacitanceSetup(bool enabled);
+  static void writeCapacitanceSetup(bool enabled, bool chop);
   static void writeVoltageSetup(bool enabled, uint8_t mode);
   static void writeConfiguration(uint8_t mode);
   static void writeCAPDAC(bool enabled, uint8_t code);
@@ -60,4 +60,10 @@ struct CDC {
   static float decodeCapacitance(uint8_t bytes[3]);
   static float decodeTemperature(uint8_t bytes[3]);
   static float decodeVoltage(uint8_t bytes[3]);
+
+  // Offset when the CAPDAC is on. The zero-code offset is not zero, so it
+  // matters whether the CAPDAC is on or off.
+  //
+  // Error in the linear regression approximation: up to 20 fF.
+  static float capdacOffset(uint8_t code);
 };

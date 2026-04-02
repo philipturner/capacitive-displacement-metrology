@@ -8,6 +8,7 @@
 
 // MARK: - Utilities
 
+#define CDC_CAPDAC_CODE 35
 #define CDC_HISTORY_SIZE 27
 float capacitanceHistory[CDC_HISTORY_SIZE] = {};
 uint32_t infiniteLoopIndex = 0;
@@ -43,7 +44,7 @@ void changeVoltage(float startVoltage, float endVoltage) {
     float voltage = 0;
     voltage += voltageProgress * endVoltage;
     voltage += (1 - voltageProgress) * startVoltage;
-    DAC2::writeVoltage(0, voltage);
+    DAC2::writeVoltage(0, voltage * 0.25);
 
     if (elapsedTime > duration) {
       break;
@@ -62,6 +63,7 @@ void basicCapacitanceMeasurementLoop() {
 
   float time = float(millis()) / 1000;
   float capacitance = CDC::readCapacitance();
+  capacitance -= CDC::capdacOffset(CDC_CAPDAC_CODE);
   capacitanceHistory[infiniteLoopIndex % CDC_HISTORY_SIZE] = capacitance;
   infiniteLoopIndex += 1;
 
@@ -100,27 +102,29 @@ float cdcSingleSample() {
   }
 
   CDC::writeConfiguration(AD7745_MD_SINGLE_CONV);
-  delay(115);
+  delay(115 * 2);
 
   if (CDC::readRegister(AD7745_STATUS) & 0b00000100) {
     Serial.println("Measurement is not ready.");
     exit(0);
   }
 
-  return CDC::readCapacitance();
+  float capacitance = CDC::readCapacitance();
+  capacitance -= CDC::capdacOffset(CDC_CAPDAC_CODE);
+  return capacitance;
 }
 
 // MARK: - Setup and Loop
 
-#define MODE_BASIC_MEASUREMENT 1
+#define MODE_BASIC_MEASUREMENT 0
 
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
   Application::setupI2C();
+  CDC::writeCAPDAC(true, CDC_CAPDAC_CODE);
 
   #if MODE_BASIC_MEASUREMENT
-  CDC::writeCAPDAC(true, 25);
   CDC::writeConfiguration(AD7745_MD_CONTINUOUS_CONV);
 
   #else
@@ -194,25 +198,26 @@ void setup() {
 
     // Present the combined dC.
     Serial.print("dC (up)   = ");
-    Serial.print(dC_up, 6);
-    Serial.println(" pF");
+    Serial.print(dC_up * 1e6, 1);
+    Serial.println(" aF");
 
     Serial.print("dC (down) = ");
-    Serial.print(dC_down, 6);
-    Serial.println(" pF");
+    Serial.print(dC_down * 1e6, 1);
+    Serial.println(" aF");
 
     Serial.print("dC (avg)  = ");
-    Serial.print(dC_avg, 6);
-    Serial.println(" pF");
+    Serial.print(dC_avg * 1e6, 1);
+    Serial.println(" aF");
 
     Serial.print("C = ");
     Serial.print(absoluteCapacitance, 6);
     Serial.println(" pF");
 
+    
+
     // Convert to distance.
-    float offset = 0.500; // probably quite high
     float separation = 8.854e-12 * 10e-3 * 10e-3;
-    separation /= (absoluteCapacitance - offset) * 1e-12; // pF -> F
+    separation /= absoluteCapacitance * 1e-12; // pF -> F
     Serial.print("[parallel plate model] ");
     Serial.print("x = ");
     Serial.print(separation * 1e6, 1);
@@ -239,6 +244,7 @@ void setup() {
     Serial.print("dx (avg)  = ");
     Serial.print(dC_avg / dCdx, 6);
     Serial.println(" nm");
+    
   }
 
   changeVoltage(-12, 0);

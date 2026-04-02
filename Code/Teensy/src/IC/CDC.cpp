@@ -28,9 +28,9 @@ float CDC::readSupplyVoltage() {
   return decodeVoltage(data) * 5.97;
 }
 
-void CDC::writeCapacitanceSetup(bool enabled) {
+void CDC::writeCapacitanceSetup(bool enabled, bool chop) {
   uint8_t enabledFlag = enabled ? 0x80 : 0x00;
-  uint8_t chopFlag = 0x00;
+  uint8_t chopFlag = chop ? 0x01 : 0x00;
   writeRegister(AD7745_CAP_SETUP, enabledFlag | chopFlag);
 }
 
@@ -99,3 +99,8 @@ float CDC::decodeVoltage(uint8_t bytes[3]) {
   return floatValue;
 }
 
+float CDC::capdacOffset(uint8_t code) {
+  float output = -0.045;
+  output += -0.143071 * float(code);
+  return output;
+}
