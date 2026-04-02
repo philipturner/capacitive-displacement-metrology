@@ -8,8 +8,10 @@
 
 // MARK: - Utilities
 
-#define CDC_CAPDAC_CODE 35
-#define CDC_HISTORY_SIZE 27
+constexpr float BIPOLAR_DRIVE_VOLTAGE = 12;
+constexpr uint8_t CDC_CAPDAC_CODE = 35;
+
+ #define CDC_HISTORY_SIZE 27
 float capacitanceHistory[CDC_HISTORY_SIZE] = {};
 uint32_t infiniteLoopIndex = 0;
 
@@ -44,12 +46,24 @@ void changeVoltage(float startVoltage, float endVoltage) {
     float voltage = 0;
     voltage += voltageProgress * endVoltage;
     voltage += (1 - voltageProgress) * startVoltage;
-    DAC2::writeVoltage(0, voltage * 0.25);
+
+    // Correct for the PA95 transfer function.
+    float gainFactor = -35.751;
+    float offset = 0.079;
+    float dacValue = (voltage - offset) / gainFactor;
+    DAC1::writeVoltage(1, dacValue);
 
     if (elapsedTime > duration) {
       break;
     }
   }
+}
+
+void waveformTestingLoop() {
+  delay(10);
+  changeVoltage(-BIPOLAR_DRIVE_VOLTAGE, BIPOLAR_DRIVE_VOLTAGE);
+  delay(10);
+  changeVoltage(BIPOLAR_DRIVE_VOLTAGE, -BIPOLAR_DRIVE_VOLTAGE);
 }
 
 // CDC must be in continuous conversion mode.
@@ -128,7 +142,7 @@ void setup() {
   CDC::writeConfiguration(AD7745_MD_CONTINUOUS_CONV);
 
   #else
-  changeVoltage(0, -12);
+  changeVoltage(0, -BIPOLAR_DRIVE_VOLTAGE);
   float lastCapacitance = cdcSingleSample();
 
   for (uint32_t trialID = 0; trialID < 3; ++trialID) {
@@ -143,9 +157,9 @@ void setup() {
     
     for (uint32_t sampleID = 0; sampleID < sampleCount; ++sampleID) {
       float capacitances[2];
-      changeVoltage(-12, 12);
+      changeVoltage(-BIPOLAR_DRIVE_VOLTAGE, BIPOLAR_DRIVE_VOLTAGE);
       capacitances[0] = cdcSingleSample();
-      changeVoltage(12, -12);
+      changeVoltage(BIPOLAR_DRIVE_VOLTAGE, -BIPOLAR_DRIVE_VOLTAGE);
       capacitances[1] = cdcSingleSample();
 
       // Display the sample number.
@@ -247,7 +261,7 @@ void setup() {
     
   }
 
-  changeVoltage(-12, 0);
+  changeVoltage(-BIPOLAR_DRIVE_VOLTAGE, 0);
   #endif
 }
 
