@@ -8,10 +8,10 @@
 
 // MARK: - Utilities
 
-constexpr float BIPOLAR_DRIVE_VOLTAGE = 12;
+constexpr float BIPOLAR_DRIVE_VOLTAGE = 0.75;
 constexpr uint8_t CDC_CAPDAC_CODE = 35;
 
- #define CDC_HISTORY_SIZE 27
+#define CDC_HISTORY_SIZE 27
 float capacitanceHistory[CDC_HISTORY_SIZE] = {};
 uint32_t infiniteLoopIndex = 0;
 
@@ -162,6 +162,7 @@ void setup() {
       changeVoltage(BIPOLAR_DRIVE_VOLTAGE, -BIPOLAR_DRIVE_VOLTAGE);
       capacitances[1] = cdcSingleSample();
 
+      #if 0
       // Display the sample number.
       Serial.print("sample ");
       if (sampleID < 100) {
@@ -181,6 +182,7 @@ void setup() {
       Serial.print(" -> ");
       Serial.print(capacitances[1], 6);
       Serial.println();
+      #endif
 
       // Store the difference in capacitance.
       float up = capacitances[0] - lastCapacitance;
@@ -211,6 +213,7 @@ void setup() {
     absoluteCapacitance /= 2 * float(sampleCount);
 
     // Present the combined dC.
+    #if 0
     Serial.print("dC (up)   = ");
     Serial.print(dC_up * 1e6, 1);
     Serial.println(" aF");
@@ -218,6 +221,7 @@ void setup() {
     Serial.print("dC (down) = ");
     Serial.print(dC_down * 1e6, 1);
     Serial.println(" aF");
+    #endif
 
     Serial.print("dC (avg)  = ");
     Serial.print(dC_avg * 1e6, 1);
@@ -247,6 +251,7 @@ void setup() {
     Serial.println(" pF/nm");
 
     // Present the estimated dx.
+    #if 0
     Serial.print("dx (up)   = ");
     Serial.print(dC_up / dCdx, 6);
     Serial.println(" nm");
@@ -254,6 +259,7 @@ void setup() {
     Serial.print("dx (down) = ");
     Serial.print(dC_down / dCdx, 6);
     Serial.println(" nm");
+    #endif
 
     Serial.print("dx (avg)  = ");
     Serial.print(dC_avg / dCdx, 6);
