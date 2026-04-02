@@ -112,7 +112,7 @@ float cdcSingleSample() {
 
 // MARK: - Setup and Loop
 
-#define MODE_BASIC_MEASUREMENT 0
+#define MODE_BASIC_MEASUREMENT 1
 
 void setup() {
   Application::setupSerial();
@@ -120,17 +120,18 @@ void setup() {
   Application::setupI2C();
 
   #if MODE_BASIC_MEASUREMENT
+  CDC::writeCAPDAC(true, 25);
   CDC::writeConfiguration(AD7745_MD_CONTINUOUS_CONV);
 
   #else
   changeVoltage(0, -12);
   float lastCapacitance = cdcSingleSample();
 
-  for (uint32_t trialID = 0; trialID < 2; ++trialID) {
+  for (uint32_t trialID = 0; trialID < 3; ++trialID) {
     // Separate the trials from each other.
     Serial.println();
 
-    constexpr uint32_t sampleCount = 10;
+    constexpr uint32_t sampleCount = 30;
     float dC_up_samples[sampleCount];
     float dC_down_samples[sampleCount];
     float dC_avg_samples[sampleCount];
@@ -161,6 +162,7 @@ void setup() {
       Serial.print(capacitances[0], 6);
       Serial.print(" -> ");
       Serial.print(capacitances[1], 6);
+      Serial.println();
 
       // Store the difference in capacitance.
       float up = capacitances[0] - lastCapacitance;
@@ -193,28 +195,28 @@ void setup() {
     // Present the combined dC.
     Serial.print("dC (up)   = ");
     Serial.print(dC_up, 6);
-    Serial.println("pF");
+    Serial.println(" pF");
 
     Serial.print("dC (down) = ");
     Serial.print(dC_down, 6);
-    Serial.println("pF");
+    Serial.println(" pF");
 
     Serial.print("dC (avg)  = ");
     Serial.print(dC_avg, 6);
-    Serial.println("pF");
+    Serial.println(" pF");
 
     Serial.print("C = ");
     Serial.print(absoluteCapacitance, 6);
-    Serial.println("pF");
+    Serial.println(" pF");
 
     // Convert to distance.
-    float offset = 0.023;
+    float offset = 0.500; // probably quite high
     float separation = 8.854e-12 * 10e-3 * 10e-3;
     separation /= (absoluteCapacitance - offset) * 1e-12; // pF -> F
     Serial.print("[parallel plate model] ");
     Serial.print("x = ");
     Serial.print(separation * 1e6, 1);
-    Serial.println("μm");
+    Serial.println(" μm");
 
     float dCdx = -8.854e-12 * 10e-3 * 10e-3;
     dCdx /= separation * separation;
@@ -223,20 +225,20 @@ void setup() {
     Serial.print("[parallel plate model] ");
     Serial.print("dC/dx = ");
     Serial.print(dCdx, 6);
-    Serial.print("pF/nm");
+    Serial.println(" pF/nm");
 
     // Present the estimated dx.
     Serial.print("dx (up)   = ");
     Serial.print(dC_up / dCdx, 6);
-    Serial.println("nm");
+    Serial.println(" nm");
 
     Serial.print("dx (down) = ");
     Serial.print(dC_down / dCdx, 6);
-    Serial.println("nm");
+    Serial.println(" nm");
 
     Serial.print("dx (avg)  = ");
     Serial.print(dC_avg / dCdx, 6);
-    Serial.println("nm");
+    Serial.println(" nm");
   }
 
   changeVoltage(-12, 0);
