@@ -41,6 +41,7 @@ Table of Contents:
 - [March 26, 2026](#march-26-2026)
 - [March 28, 2026](#march-28-2026)
 - [March 29, 2026](#march-29-2026)
+- [April 2, 2026](#april-2-2026)
 
 ## December 15, 2025
 
@@ -1259,3 +1260,7 @@ Using C_c = 10 pF instead of 4.7 pF should slightly reduce the phase shift. Anal
 ## March 29, 2026
 
 [Teensy 4.1 generates an 840 V, 7 kHz sine wave](https://www.youtube.com/watch?v=1Su70dZ2xz0)
+
+## April 2, 2026
+
+[First Results (Google Sheets)](https://docs.google.com/spreadsheets/d/1VzDdiTFU4CgLRhZFHXjNY3yRBVk6OQX0ghWjVNZDBaY/edit?usp=sharing)
