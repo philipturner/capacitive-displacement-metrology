@@ -8,7 +8,7 @@
 
 // MARK: - Utilities
 
-constexpr float BIPOLAR_DRIVE_VOLTAGE = 0.75;
+constexpr float BIPOLAR_DRIVE_VOLTAGE = 96;
 constexpr uint8_t CDC_CAPDAC_CODE = 35;
 
 #define CDC_HISTORY_SIZE 27
@@ -213,7 +213,7 @@ void setup() {
     absoluteCapacitance /= 2 * float(sampleCount);
 
     // Present the combined dC.
-    #if 0
+    #if 1
     Serial.print("dC (up)   = ");
     Serial.print(dC_up * 1e6, 1);
     Serial.println(" aF");
@@ -251,7 +251,7 @@ void setup() {
     Serial.println(" pF/nm");
 
     // Present the estimated dx.
-    #if 0
+    #if 1
     Serial.print("dx (up)   = ");
     Serial.print(dC_up / dCdx, 6);
     Serial.println(" nm");
@@ -274,5 +274,6 @@ void setup() {
 void loop() {
   #if MODE_BASIC_MEASUREMENT
   basicCapacitanceMeasurementLoop();
+  //waveformTestingLoop();
   #endif
 }
