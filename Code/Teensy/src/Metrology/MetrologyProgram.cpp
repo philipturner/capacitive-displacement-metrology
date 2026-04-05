@@ -111,16 +111,16 @@ void Metrology::metrologyProgram() {
     // Present the estimated dx.
     if (descriptor.verboseDriftCancellation) {
       Serial.print("dx (up)   = ");
-      Serial.print(dC_up / dCdx, 6);
+      Serial.print(dC_up / dCdx, 1);
       Serial.println(" nm");
 
       Serial.print("dx (down) = ");
-      Serial.print(dC_down / dCdx, 6);
+      Serial.print(dC_down / dCdx, 1);
       Serial.println(" nm");
     }
 
     Serial.print("dx (avg)  = ");
-    Serial.print(dC_avg / dCdx, 6);
+    Serial.print(dC_avg / dCdx, 1);
     Serial.println(" nm");    
   }
 

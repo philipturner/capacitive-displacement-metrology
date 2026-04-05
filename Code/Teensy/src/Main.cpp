@@ -15,10 +15,10 @@ void setup() {
   Application::setupI2C();
 
   Metrology::Descriptor descriptor;
-  descriptor.mode = Metrology::Mode::basicMeasurement;
-  descriptor.logSingleSamples = true;
+  descriptor.mode = Metrology::Mode::waveformTesting;
+  descriptor.logSingleSamples = false;
   descriptor.verboseDriftCancellation = true;
-  descriptor.bipolarDriveVoltage = 3;
+  descriptor.bipolarDriveVoltage = 96;
 
   metrology = Metrology(descriptor);
 }

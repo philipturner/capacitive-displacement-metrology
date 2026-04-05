@@ -16,7 +16,12 @@ Metrology::~Metrology() {
 
 Metrology::Metrology(Descriptor descriptor) {
   this->descriptor = descriptor;
+
+  // Allocate and zero out the capacitance history buffer.
   this->capacitanceHistory = (float*)malloc(descriptor.samplesPerAverage);
+  for (uint32_t i = 0; i < descriptor.samplesPerAverage; ++i) {
+    capacitanceHistory[i] = 0;
+  }
 
   CDC::writeCAPDAC(true, descriptor.cdcCapdacCode);
   CDC::writeCapacitanceSetup(true, true);
