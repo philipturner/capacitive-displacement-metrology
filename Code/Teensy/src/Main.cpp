@@ -8,140 +8,13 @@
 
 // MARK: - Utilities
 
-#define MODE_BASIC_MEASUREMENT 0
-#define VERBOSE_DRIFT_CANCELLATION 1
-constexpr float BIPOLAR_DRIVE_VOLTAGE = 3;
-constexpr uint8_t CDC_CAPDAC_CODE = 35;
 
-#define CDC_HISTORY_SIZE 27
-float capacitanceHistory[CDC_HISTORY_SIZE] = {};
-uint32_t infiniteLoopIndex = 0;
 
-// Input: progress, 0 to 1
-// Output: interpolation, 0 to 1
-float smoothstep(float progress) {
-  if (progress < 0) {
-    return 0;
-  } else if (progress > 1) {
-    return 1;
-  } else {
-    float x3 = progress * progress * progress;
-    float x4 = x3 * progress;
-    float x5 = x3 * progress * progress;
-    return 6 * x5 - 15 * x4 + 10 * x3;
-  }
-}
 
-void changeVoltage(float startVoltage, float endVoltage) {
-  constexpr uint32_t stallTimeMicroseconds = 4;
-  constexpr float duration = 10e-3;
 
-  uint32_t startTime = micros();
-  while (true) {
-    delayMicroseconds(stallTimeMicroseconds);
-    uint32_t latestTime = micros();
-    float elapsedTime = float(latestTime - startTime) / float(1e6);
 
-    float timeProgress = elapsedTime / duration;
-    float voltageProgress = smoothstep(timeProgress);
 
-    float voltage = 0;
-    voltage += voltageProgress * endVoltage;
-    voltage += (1 - voltageProgress) * startVoltage;
-
-    // Correct for the PA95 transfer function.
-    float gainFactor = -35.751;
-    float offset = 0.079;
-    float dacValue = (voltage - offset) / gainFactor;
-    DAC1::writeVoltage(1, dacValue);
-
-    if (elapsedTime > duration) {
-      break;
-    }
-  }
-}
-
-void waveformTestingLoop() {
-  delay(10);
-  changeVoltage(-BIPOLAR_DRIVE_VOLTAGE, BIPOLAR_DRIVE_VOLTAGE);
-  delay(10);
-  changeVoltage(BIPOLAR_DRIVE_VOLTAGE, -BIPOLAR_DRIVE_VOLTAGE);
-}
-
-// CDC must be in continuous conversion mode.
-void basicCapacitanceMeasurementLoop() {
-  delay(10);
-
-  uint8_t status = CDC::readRegister(AD7745_STATUS);
-  if (status & 0b00000100) {
-    return;
-  }
-
-  float time = float(millis()) / 1000;
-  float capacitance = CDC::readCapacitance();
-  capacitance -= CDC::capdacOffset(CDC_CAPDAC_CODE);
-  capacitanceHistory[infiniteLoopIndex % CDC_HISTORY_SIZE] = capacitance;
-  infiniteLoopIndex += 1;
-
-  // Calculate the trailing average.
-  float capacitanceAverage = 0;
-  for (uint32_t i = 0; i < CDC_HISTORY_SIZE; ++i) {
-    float sample = capacitanceHistory[i];
-    capacitanceAverage += sample;
-  }
-  capacitanceAverage /= float(CDC_HISTORY_SIZE);
-
-  // Display the capacitance.
-  Serial.println();
-
-  Serial.print("time: ");
-  Serial.print(time, 3);
-  Serial.println(" s");
-
-  Serial.print("capacitance:                 ");
-  Serial.print(capacitance, 6);
-  Serial.println(" pF");
-
-  if (CDC_HISTORY_SIZE < 100) {
-    Serial.print(" ");
-  }
-  Serial.print(CDC_HISTORY_SIZE);
-  Serial.print("-sample trailing average: ");
-  Serial.print(capacitanceAverage, 6);
-  Serial.println(" pF");
-}
-
-float cdcSingleSample() {
-  if (!(CDC::readRegister(AD7745_STATUS) & 0b00000100)) {
-    Serial.println("A previous measurement was queued.");
-    exit(0);
-  }
-
-  CDC::writeConfiguration(AD7745_MD_SINGLE_CONV);
-  delay(115 * 2);
-
-  if (CDC::readRegister(AD7745_STATUS) & 0b00000100) {
-    Serial.println("Measurement is not ready.");
-    exit(0);
-  }
-
-  float capacitance = CDC::readCapacitance();
-  capacitance -= CDC::capdacOffset(CDC_CAPDAC_CODE);
-  return capacitance;
-}
-
-// MARK: - Setup and Loop
-
-void setup() {
-  Application::setupSerial();
-  Application::setupSPI();
-  Application::setupI2C();
-  CDC::writeCAPDAC(true, CDC_CAPDAC_CODE);
-
-  #if MODE_BASIC_MEASUREMENT
-  CDC::writeConfiguration(AD7745_MD_CONTINUOUS_CONV);
-
-  #else
+void metrologyProcedure() {
   changeVoltage(0, -BIPOLAR_DRIVE_VOLTAGE);
   float lastCapacitance = cdcSingleSample();
 
@@ -162,7 +35,7 @@ void setup() {
       changeVoltage(BIPOLAR_DRIVE_VOLTAGE, -BIPOLAR_DRIVE_VOLTAGE);
       capacitances[1] = cdcSingleSample();
 
-      #if VERBOSE_DRIFT_CANCELLATION
+      #if LOG_SINGLE_SAMPLES
       // Display the sample number.
       Serial.print("sample ");
       if (sampleID < 100) {
@@ -230,7 +103,7 @@ void setup() {
     Serial.print("C = ");
     Serial.print(absoluteCapacitance, 6);
     Serial.println(" pF");
-    
+
     // Convert to distance.
     float separation = 8.854e-12 * 10e-3 * 10e-3;
     separation /= absoluteCapacitance * 1e-12; // pF -> F
@@ -265,12 +138,31 @@ void setup() {
   }
 
   changeVoltage(-BIPOLAR_DRIVE_VOLTAGE, 0);
-  #endif
+}
+
+// MARK: - Setup and Loop
+
+void setup() {
+  Application::setupSerial();
+  Application::setupSPI();
+  Application::setupI2C();
+  CDC::writeCAPDAC(true, CDC_CAPDAC_CODE);
+
+  if (mode == Mode::basicMeasurement) {
+    CDC::writeConfiguration(AD7745_MD_CONTINUOUS_CONV);
+  }
+
+  if (mode == Mode::metrology) {
+    metrologyProcedure();
+  }
 }
 
 void loop() {
-  #if MODE_BASIC_MEASUREMENT
-  basicCapacitanceMeasurementLoop();
-  //waveformTestingLoop();
-  #endif
+  if (mode == Mode::basicMeasurement) {
+    basicCapacitanceMeasurementLoop();
+  }
+
+  if (mode == Mode::waveformTesting) {
+    waveformTestingLoop();
+  }
 }
