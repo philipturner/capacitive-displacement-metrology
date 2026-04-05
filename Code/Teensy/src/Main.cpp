@@ -8,7 +8,9 @@
 
 // MARK: - Utilities
 
-constexpr float BIPOLAR_DRIVE_VOLTAGE = 96;
+#define MODE_BASIC_MEASUREMENT 0
+#define VERBOSE_DRIFT_CANCELLATION 1
+constexpr float BIPOLAR_DRIVE_VOLTAGE = 3;
 constexpr uint8_t CDC_CAPDAC_CODE = 35;
 
 #define CDC_HISTORY_SIZE 27
@@ -130,8 +132,6 @@ float cdcSingleSample() {
 
 // MARK: - Setup and Loop
 
-#define MODE_BASIC_MEASUREMENT 0
-
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
@@ -162,7 +162,7 @@ void setup() {
       changeVoltage(BIPOLAR_DRIVE_VOLTAGE, -BIPOLAR_DRIVE_VOLTAGE);
       capacitances[1] = cdcSingleSample();
 
-      #if 0
+      #if VERBOSE_DRIFT_CANCELLATION
       // Display the sample number.
       Serial.print("sample ");
       if (sampleID < 100) {
@@ -213,7 +213,7 @@ void setup() {
     absoluteCapacitance /= 2 * float(sampleCount);
 
     // Present the combined dC.
-    #if 1
+    #if VERBOSE_DRIFT_CANCELLATION
     Serial.print("dC (up)   = ");
     Serial.print(dC_up * 1e6, 1);
     Serial.println(" aF");
@@ -230,9 +230,7 @@ void setup() {
     Serial.print("C = ");
     Serial.print(absoluteCapacitance, 6);
     Serial.println(" pF");
-
     
-
     // Convert to distance.
     float separation = 8.854e-12 * 10e-3 * 10e-3;
     separation /= absoluteCapacitance * 1e-12; // pF -> F
@@ -251,7 +249,7 @@ void setup() {
     Serial.println(" pF/nm");
 
     // Present the estimated dx.
-    #if 1
+    #if VERBOSE_DRIFT_CANCELLATION
     Serial.print("dx (up)   = ");
     Serial.print(dC_up / dCdx, 6);
     Serial.println(" nm");
@@ -263,8 +261,7 @@ void setup() {
 
     Serial.print("dx (avg)  = ");
     Serial.print(dC_avg / dCdx, 6);
-    Serial.println(" nm");
-    
+    Serial.println(" nm");    
   }
 
   changeVoltage(-BIPOLAR_DRIVE_VOLTAGE, 0);
