@@ -1,12 +1,47 @@
-#include "MetrologyUtil.h"
+#include "IC/CDC.h"
+#include "IC/DAC.h"
+#include <Arduino.h>
+#include "Metrology.h"
 
-#define CDC_HISTORY_SIZE 27
-float capacitanceHistory[CDC_HISTORY_SIZE] = {};
-uint32_t infiniteLoopIndex = 0;
+Metrology::Metrology() {
+  this->capacitanceHistory = NULL;
+}
 
-// Input: progress, 0 to 1
-// Output: interpolation, 0 to 1
-float smoothstep(float progress) {
+Metrology::Metrology(Settings settings) {
+  this->settings = settings;
+  this->capacitanceHistory = (float*)malloc(settings.samplesPerAverage);
+}
+
+Metrology::~Metrology() {
+  if (capacitanceHistory) {
+    free(capacitanceHistory);
+    capacitanceHistory = NULL;
+  }
+}
+
+void Metrology::setup() {
+  CDC::writeCAPDAC(true, settings.cdcCapdacCode);
+
+  if (settings.mode == Mode::basicMeasurement) {
+    CDC::writeConfiguration(AD7745_MD_CONTINUOUS_CONV);
+  }
+
+  if (settings.mode == Mode::metrology) {
+    metrologyProcedure();
+  }
+}
+
+void Metrology::loop() {
+  if (settings.mode == Mode::basicMeasurement) {
+    basicCapacitanceMeasurementLoop();
+  }
+
+  if (settings.mode == Mode::waveformTesting) {
+    waveformTestingLoop();
+  }
+}
+
+float Metrology::smoothstep(float progress) {
   if (progress < 0) {
     return 0;
   } else if (progress > 1) {
@@ -19,7 +54,7 @@ float smoothstep(float progress) {
   }
 }
 
-void changeVoltage(float startVoltage, float endVoltage) {
+void Metrology::changeVoltage(float startVoltage, float endVoltage) {
   constexpr uint32_t stallTimeMicroseconds = 4;
   constexpr float duration = 10e-3;
 
@@ -46,64 +81,18 @@ void changeVoltage(float startVoltage, float endVoltage) {
       break;
     }
   }
+
+  // Minimize possible interference from voltage-dependent decay times.
+  delay(5);
 }
 
-void waveformTestingLoop() {
-  delay(10);
-  changeVoltage(-BIPOLAR_DRIVE_VOLTAGE, BIPOLAR_DRIVE_VOLTAGE);
-  delay(10);
-  changeVoltage(BIPOLAR_DRIVE_VOLTAGE, -BIPOLAR_DRIVE_VOLTAGE);
-}
-
-// CDC must be in continuous conversion mode.
-void basicCapacitanceMeasurementLoop() {
-  delay(10);
-
-  uint8_t status = CDC::readRegister(AD7745_STATUS);
-  if (status & 0b00000100) {
-    return;
-  }
-
-  float time = float(millis()) / 1000;
-  float capacitance = CDC::readCapacitance();
-  capacitance -= CDC::capdacOffset(CDC_CAPDAC_CODE);
-  capacitanceHistory[infiniteLoopIndex % CDC_HISTORY_SIZE] = capacitance;
-  infiniteLoopIndex += 1;
-
-  // Calculate the trailing average.
-  float capacitanceAverage = 0;
-  for (uint32_t i = 0; i < CDC_HISTORY_SIZE; ++i) {
-    float sample = capacitanceHistory[i];
-    capacitanceAverage += sample;
-  }
-  capacitanceAverage /= float(CDC_HISTORY_SIZE);
-
-  // Display the capacitance.
-  Serial.println();
-
-  Serial.print("time: ");
-  Serial.print(time, 3);
-  Serial.println(" s");
-
-  Serial.print("capacitance:                 ");
-  Serial.print(capacitance, 6);
-  Serial.println(" pF");
-
-  if (CDC_HISTORY_SIZE < 100) {
-    Serial.print(" ");
-  }
-  Serial.print(CDC_HISTORY_SIZE);
-  Serial.print("-sample trailing average: ");
-  Serial.print(capacitanceAverage, 6);
-  Serial.println(" pF");
-}
-
-float cdcSingleSample() {
+float Metrology::cdcSingleSample() {
   if (!(CDC::readRegister(AD7745_STATUS) & 0b00000100)) {
     Serial.println("A previous measurement was queued.");
     exit(0);
   }
 
+  // Assumes CAPCHOP is enabled, otherwise the delay is more than necessary.
   CDC::writeConfiguration(AD7745_MD_SINGLE_CONV);
   delay(115 * 2);
 
@@ -113,6 +102,6 @@ float cdcSingleSample() {
   }
 
   float capacitance = CDC::readCapacitance();
-  capacitance -= CDC::capdacOffset(CDC_CAPDAC_CODE);
+  capacitance -= CDC::capdacOffset(settings.cdcCapdacCode);
   return capacitance;
 }
