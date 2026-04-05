@@ -23,8 +23,8 @@ Metrology::Metrology(Descriptor descriptor) {
     capacitanceHistory[i] = 0;
   }
 
-  CDC::writeCAPDAC(true, descriptor.cdcCapdacCode);
-  CDC::writeCapacitanceSetup(true, true);
+  // CDC::writeCAPDAC(true, descriptor.cdcCapdacCode);
+  CDC::writeCapacitanceSetup(true, false);
 
   if (descriptor.mode == Mode::basicMeasurement) {
     CDC::writeConfiguration(AD7745_MD_CONTINUOUS_CONV);

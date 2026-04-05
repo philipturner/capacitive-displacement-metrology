@@ -16,7 +16,7 @@ public:
     bool logSingleSamples = true;
     bool verboseDriftCancellation = true;
     float bipolarDriveVoltage = 3;
-    uint8_t cdcCapdacCode = 35;
+    uint8_t cdcCapdacCode = 0;
     uint32_t samplesPerAverage = 30;
   };
 
