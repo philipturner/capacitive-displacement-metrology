@@ -1,32 +1,28 @@
 #include "IC/ADC.h"
 #include "IC/CDC.h"
 #include "IC/DAC.h"
+#include "Metrology/Metrology.h"
 #include "Time/KilohertzLoop.h"
 #include "Time/TimeStatistics.h"
 #include "Util/Application.h"
 #include "Util/Bitset.h"
 
+Metrology metrology;
+
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
   Application::setupI2C();
-  CDC::writeCAPDAC(true, CDC_CAPDAC_CODE);
 
-  if (mode == Mode::basicMeasurement) {
-    CDC::writeConfiguration(AD7745_MD_CONTINUOUS_CONV);
-  }
+  Metrology::Descriptor descriptor;
+  descriptor.mode = Metrology::Mode::basicMeasurement;
+  descriptor.logSingleSamples = true;
+  descriptor.verboseDriftCancellation = true;
+  descriptor.bipolarDriveVoltage = 3;
 
-  if (mode == Mode::metrology) {
-    metrologyProcedure();
-  }
+  metrology = Metrology(descriptor);
 }
 
 void loop() {
-  if (mode == Mode::basicMeasurement) {
-    basicCapacitanceMeasurementLoop();
-  }
-
-  if (mode == Mode::waveformTesting) {
-    waveformTestingLoop();
-  }
+  metrology.loop();
 }

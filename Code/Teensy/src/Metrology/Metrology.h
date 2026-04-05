@@ -11,7 +11,7 @@ public:
     metrology = 3,
   };
 
-  struct Settings {
+  struct Descriptor {
     Mode mode;
     bool logSingleSamples = true;
     bool verboseDriftCancellation = true;
@@ -23,15 +23,15 @@ public:
   // Initializer for global variable initialization.
   Metrology();
 
-  // Procedure to call in Arduino 'setup()'.
-  Metrology(Settings settings);
-
   ~Metrology();
-  
+
+  // Procedure to call in Arduino 'setup()'.
+  Metrology(Descriptor descriptor);
+
   void loop();
 
 private:
-  Settings settings;
+  Descriptor descriptor;
   float *capacitanceHistory;
   uint32_t infiniteLoopIndex = 0;
 

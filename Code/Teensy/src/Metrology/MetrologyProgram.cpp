@@ -1,8 +1,8 @@
-#include "MetrologyProgram.h"
+#include <Arduino.h>
 #include "Metrology.h"
 
-void metrologyProcedure() {
-  changeVoltage(0, -BIPOLAR_DRIVE_VOLTAGE);
+void Metrology::metrologyProgram() {
+  changeVoltage(0, -descriptor.bipolarDriveVoltage);
   float lastCapacitance = cdcSingleSample();
 
   for (uint32_t trialID = 0; trialID < 3; ++trialID) {
@@ -17,32 +17,32 @@ void metrologyProcedure() {
     
     for (uint32_t sampleID = 0; sampleID < sampleCount; ++sampleID) {
       float capacitances[2];
-      changeVoltage(-BIPOLAR_DRIVE_VOLTAGE, BIPOLAR_DRIVE_VOLTAGE);
+      changeVoltage(-descriptor.bipolarDriveVoltage, descriptor.bipolarDriveVoltage);
       capacitances[0] = cdcSingleSample();
-      changeVoltage(BIPOLAR_DRIVE_VOLTAGE, -BIPOLAR_DRIVE_VOLTAGE);
+      changeVoltage(descriptor.bipolarDriveVoltage, -descriptor.bipolarDriveVoltage);
       capacitances[1] = cdcSingleSample();
 
-      #if LOG_SINGLE_SAMPLES
-      // Display the sample number.
-      Serial.print("sample ");
-      if (sampleID < 100) {
-        Serial.print(" ");
-      }
-      if (sampleID < 10) {
-        Serial.print(" ");
-      }
-      Serial.print(sampleID);
-      Serial.print(" | ");
+      if (descriptor.logSingleSamples) {
+        // Display the sample number.
+        Serial.print("sample ");
+        if (sampleID < 100) {
+          Serial.print(" ");
+        }
+        if (sampleID < 10) {
+          Serial.print(" ");
+        }
+        Serial.print(sampleID);
+        Serial.print(" | ");
 
-      // Display the absolute capacitance.
-      Serial.print("C = ");
-      Serial.print(lastCapacitance, 6);
-      Serial.print(" -> ");
-      Serial.print(capacitances[0], 6);
-      Serial.print(" -> ");
-      Serial.print(capacitances[1], 6);
-      Serial.println();
-      #endif
+        // Display the absolute capacitance.
+        Serial.print("C = ");
+        Serial.print(lastCapacitance, 6);
+        Serial.print(" -> ");
+        Serial.print(capacitances[0], 6);
+        Serial.print(" -> ");
+        Serial.print(capacitances[1], 6);
+        Serial.println();
+      }
 
       // Store the difference in capacitance.
       float up = capacitances[0] - lastCapacitance;
@@ -73,15 +73,15 @@ void metrologyProcedure() {
     absoluteCapacitance /= 2 * float(sampleCount);
 
     // Present the combined dC.
-    #if VERBOSE_DRIFT_CANCELLATION
-    Serial.print("dC (up)   = ");
-    Serial.print(dC_up * 1e6, 1);
-    Serial.println(" aF");
+    if (descriptor.verboseDriftCancellation) {
+      Serial.print("dC (up)   = ");
+      Serial.print(dC_up * 1e6, 1);
+      Serial.println(" aF");
 
-    Serial.print("dC (down) = ");
-    Serial.print(dC_down * 1e6, 1);
-    Serial.println(" aF");
-    #endif
+      Serial.print("dC (down) = ");
+      Serial.print(dC_down * 1e6, 1);
+      Serial.println(" aF");
+    }
 
     Serial.print("dC (avg)  = ");
     Serial.print(dC_avg * 1e6, 1);
@@ -109,20 +109,20 @@ void metrologyProcedure() {
     Serial.println(" pF/nm");
 
     // Present the estimated dx.
-    #if VERBOSE_DRIFT_CANCELLATION
-    Serial.print("dx (up)   = ");
-    Serial.print(dC_up / dCdx, 6);
-    Serial.println(" nm");
+    if (descriptor.verboseDriftCancellation) {
+      Serial.print("dx (up)   = ");
+      Serial.print(dC_up / dCdx, 6);
+      Serial.println(" nm");
 
-    Serial.print("dx (down) = ");
-    Serial.print(dC_down / dCdx, 6);
-    Serial.println(" nm");
-    #endif
+      Serial.print("dx (down) = ");
+      Serial.print(dC_down / dCdx, 6);
+      Serial.println(" nm");
+    }
 
     Serial.print("dx (avg)  = ");
     Serial.print(dC_avg / dCdx, 6);
     Serial.println(" nm");    
   }
 
-  changeVoltage(-BIPOLAR_DRIVE_VOLTAGE, 0);
+  changeVoltage(-descriptor.bipolarDriveVoltage, 0);
 }

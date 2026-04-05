@@ -1,11 +1,15 @@
-void waveformTestingLoop() {
+#include "IC/CDC.h"
+#include <Arduino.h>
+#include "Metrology.h"
+
+void Metrology::waveformTestingLoop() {
   delay(10);
-  changeVoltage(-BIPOLAR_DRIVE_VOLTAGE, BIPOLAR_DRIVE_VOLTAGE);
+  changeVoltage(-descriptor.bipolarDriveVoltage, descriptor.bipolarDriveVoltage);
   delay(10);
-  changeVoltage(BIPOLAR_DRIVE_VOLTAGE, -BIPOLAR_DRIVE_VOLTAGE);
+  changeVoltage(descriptor.bipolarDriveVoltage, -descriptor.bipolarDriveVoltage);
 }
 
-void basicCapacitanceMeasurementLoop() {
+void Metrology::basicCapacitanceMeasurementLoop() {
   delay(10);
 
   uint8_t status = CDC::readRegister(AD7745_STATUS);
@@ -15,17 +19,17 @@ void basicCapacitanceMeasurementLoop() {
 
   float time = float(millis()) / 1000;
   float capacitance = CDC::readCapacitance();
-  capacitance -= CDC::capdacOffset(CDC_CAPDAC_CODE);
-  capacitanceHistory[infiniteLoopIndex % CDC_HISTORY_SIZE] = capacitance;
+  capacitance -= CDC::capdacOffset(descriptor.cdcCapdacCode);
+  capacitanceHistory[infiniteLoopIndex % descriptor.samplesPerAverage] = capacitance;
   infiniteLoopIndex += 1;
 
   // Calculate the trailing average.
   float capacitanceAverage = 0;
-  for (uint32_t i = 0; i < CDC_HISTORY_SIZE; ++i) {
+  for (uint32_t i = 0; i < descriptor.samplesPerAverage; ++i) {
     float sample = capacitanceHistory[i];
     capacitanceAverage += sample;
   }
-  capacitanceAverage /= float(CDC_HISTORY_SIZE);
+  capacitanceAverage /= float(descriptor.samplesPerAverage);
 
   // Display the capacitance.
   Serial.println();
@@ -38,10 +42,13 @@ void basicCapacitanceMeasurementLoop() {
   Serial.print(capacitance, 6);
   Serial.println(" pF");
 
-  if (CDC_HISTORY_SIZE < 100) {
+  if (descriptor.samplesPerAverage < 100) {
     Serial.print(" ");
   }
-  Serial.print(CDC_HISTORY_SIZE);
+  if (descriptor.samplesPerAverage < 10) {
+    Serial.print(" ");
+  }
+  Serial.print(descriptor.samplesPerAverage);
   Serial.print("-sample trailing average: ");
   Serial.print(capacitanceAverage, 6);
   Serial.println(" pF");

@@ -60,7 +60,7 @@ void Application::setupSPI() {
 void Application::setupI2C() {
   CDC::master.begin(400000);
 
-  CDC::writeCapacitanceSetup(true, true);
+  CDC::writeCapacitanceSetup(true, false);
   CDC::writeVoltageSetup(false, 0b00);
   CDC::writeRegister(AD7745_EXC_SETUP, 0b00001011);
   CDC::writeConfiguration(0b000);
