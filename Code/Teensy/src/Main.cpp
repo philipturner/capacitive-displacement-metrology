@@ -15,11 +15,11 @@ void setup() {
   Application::setupI2C();
 
   Metrology::Descriptor descriptor;
-  descriptor.mode = Metrology::Mode::basicMeasurement;
+  descriptor.mode = Metrology::Mode::metrology;
   descriptor.logSingleSamples = false;
   descriptor.verboseDriftCancellation = true;
-  descriptor.bipolarDriveVoltage = 96;
-  descriptor.cdcCapdacCode = 27;
+  descriptor.bipolarDriveVoltage = 192;
+  descriptor.cdcCapdacCode = 20;
 
   metrology = Metrology(descriptor);
 }
