@@ -19,6 +19,7 @@ void setup() {
   descriptor.logSingleSamples = false;
   descriptor.verboseDriftCancellation = true;
   descriptor.bipolarDriveVoltage = 96;
+  descriptor.cdcCapdacCode = 4;
 
   metrology = Metrology(descriptor);
 

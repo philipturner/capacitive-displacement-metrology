@@ -100,12 +100,7 @@ float CDC::decodeVoltage(uint8_t bytes[3]) {
 }
 
 float CDC::capdacOffset(uint8_t code) {
-  /*
-  float output = -0.045;
-  output += -0.143071 * float(code);
+  float output = -0.052;
+  output += -0.146223 * float(code);
   return output;
-  */
-
-  // CAPDAC needs to be re-calibrated.
-  return 0;
 }
