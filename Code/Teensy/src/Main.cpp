@@ -18,7 +18,7 @@ void setup() {
   descriptor.mode = Metrology::Mode::metrology;
   descriptor.logSingleSamples = false;
   descriptor.verboseDriftCancellation = true;
-  descriptor.bipolarDriveVoltage = 192;
+  descriptor.bipolarDriveVoltage = 384;
   descriptor.cdcCapdacCode = 20;
 
   metrology = Metrology(descriptor);
