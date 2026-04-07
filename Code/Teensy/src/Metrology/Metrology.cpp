@@ -18,8 +18,8 @@ Metrology::Metrology(Descriptor descriptor) {
   this->descriptor = descriptor;
 
   // Allocate and zero out the capacitance history buffer.
-  this->capacitanceHistory = (float*)malloc(descriptor.samplesPerAverage);
-  for (uint32_t i = 0; i < descriptor.samplesPerAverage; ++i) {
+  this->capacitanceHistory = (float*)malloc(descriptor.basicMeasurementHistorySize);
+  for (uint32_t i = 0; i < descriptor.basicMeasurementHistorySize; ++i) {
     capacitanceHistory[i] = 0;
   }
 
@@ -85,8 +85,7 @@ void Metrology::changeVoltage(float startVoltage, float endVoltage) {
       break;
     }
   }
-
-  // Minimize possible interference from voltage-dependent decay times.
+  
   delay(5);
 }
 

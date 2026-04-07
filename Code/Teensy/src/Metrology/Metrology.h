@@ -17,12 +17,8 @@ public:
     bool verboseDriftCancellation = true;
     float bipolarDriveVoltage = 3;
     uint8_t cdcCapdacCode = 0;
-
-    // This only applies to capacitance averaging in basic measurement
-    // mode. The metrology function hard-coded 30-sized arrays into the
-    // source code. This wasn't taken into account when reorganizing
-    // the code.
-    uint32_t samplesPerAverage = 30;
+    uint32_t basicMeasurementHistorySize = 30;
+    float creepTime = 0.0;
   };
 
   // Initializer for global variable initialization.

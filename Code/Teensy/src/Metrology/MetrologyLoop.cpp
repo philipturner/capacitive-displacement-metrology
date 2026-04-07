@@ -20,16 +20,17 @@ void Metrology::basicCapacitanceMeasurementLoop() {
   float time = float(millis()) / 1000;
   float capacitance = CDC::readCapacitance();
   capacitance -= CDC::capdacOffset(descriptor.cdcCapdacCode);
-  capacitanceHistory[infiniteLoopIndex % descriptor.samplesPerAverage] = capacitance;
+  capacitanceHistory[
+    infiniteLoopIndex % descriptor.basicMeasurementHistorySize] = capacitance;
   infiniteLoopIndex += 1;
 
   // Calculate the trailing average.
   float capacitanceAverage = 0;
-  for (uint32_t i = 0; i < descriptor.samplesPerAverage; ++i) {
+  for (uint32_t i = 0; i < descriptor.basicMeasurementHistorySize; ++i) {
     float sample = capacitanceHistory[i];
     capacitanceAverage += sample;
   }
-  capacitanceAverage /= float(descriptor.samplesPerAverage);
+  capacitanceAverage /= float(descriptor.basicMeasurementHistorySize);
 
   // Display the capacitance.
   Serial.println();
@@ -42,13 +43,13 @@ void Metrology::basicCapacitanceMeasurementLoop() {
   Serial.print(capacitance, 6);
   Serial.println(" pF");
 
-  if (descriptor.samplesPerAverage < 100) {
+  if (descriptor.basicMeasurementHistorySize < 100) {
     Serial.print(" ");
   }
-  if (descriptor.samplesPerAverage < 10) {
+  if (descriptor.basicMeasurementHistorySize < 10) {
     Serial.print(" ");
   }
-  Serial.print(descriptor.samplesPerAverage);
+  Serial.print(descriptor.basicMeasurementHistorySize);
   Serial.print("-sample trailing average: ");
   Serial.print(capacitanceAverage, 6);
   Serial.println(" pF");
