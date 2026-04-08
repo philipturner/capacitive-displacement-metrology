@@ -28,10 +28,8 @@ Metrology::Metrology(Descriptor descriptor) {
 
   if (descriptor.mode == Mode::basicMeasurement) {
     CDC::writeConfiguration(AD7745_MD_CONTINUOUS_CONV);
-  }
-
-  if (descriptor.mode == Mode::metrology) {
-    metrologyProgram();
+  } else {
+    CDC::writeConfiguration(AD7745_MD_IDLE);
   }
 }
 

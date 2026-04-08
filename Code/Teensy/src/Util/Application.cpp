@@ -65,7 +65,7 @@ void Application::setupI2C() {
 
   // Never activate EXCB with the 2nd CDC! This could break the chip.
   CDC::writeRegister(AD7745_EXC_SETUP, 0b00001011);
-  CDC::writeConfiguration(0b000);
+  CDC::writeConfiguration(AD7745_MD_IDLE);
 
   // Turn the CAPDAC off by default, for now.
   CDC::writeCAPDAC(false, 0);

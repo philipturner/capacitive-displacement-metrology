@@ -45,11 +45,21 @@ public:
 
   float cdcSingleSample();
 
-public:
+private:
   // CDC must be in continuous conversion mode.
   void basicCapacitanceMeasurementLoop();
 
   void waveformTestingLoop();
 
-  void metrologyProgram();
+public:
+  struct ProgramResult {
+    static constexpr uint32_t trialCount = 3;
+    float dx[trialCount];
+    float dx_creep[trialCount];
+  };
+
+  ProgramResult metrologyProgram();
+
+  // Characterize the voltage-position relation of a LiNbO3 plate or stack.
+  void lithiumNiobateProgram();
 };

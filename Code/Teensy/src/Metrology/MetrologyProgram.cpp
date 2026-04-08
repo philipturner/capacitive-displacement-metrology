@@ -61,7 +61,12 @@ void creepDelay(Metrology::Descriptor descriptor) {
   delay(creepTimeInMs);
 }
 
-void Metrology::metrologyProgram() {
+Metrology::ProgramResult Metrology::metrologyProgram() {
+  if (descriptor.mode != Mode::metrology) {
+    Serial.print("Can only call this function in metrology mode.");
+    exit(0);
+  }
+
   changeVoltage(0, -descriptor.bipolarDriveVoltage);
   float lastCapacitance1 = cdcSingleSample();
 
@@ -75,7 +80,8 @@ void Metrology::metrologyProgram() {
     lastCapacitance2 = lastCapacitance1;
   }
   
-  for (uint32_t trialID = 0; trialID < 3; ++trialID) {
+  ProgramResult output;
+  for (uint32_t trialID = 0; trialID < ProgramResult::trialCount; ++trialID) {
     // Separate the trials from each other.
     Serial.println();
     float absoluteCapacitance = 0;
@@ -218,7 +224,12 @@ void Metrology::metrologyProgram() {
         dC.avg / dCdx, 
         dC_creep.avg / dCdx,
         descriptor.creepTime > 0);   
+    
+    output.dx[trialID] = dC.avg / dCdx;
+    output.dx_creep[trialID] = dC_creep.avg / dCdx;
   }
 
   changeVoltage(-descriptor.bipolarDriveVoltage, 0);
+
+  return output;
 }

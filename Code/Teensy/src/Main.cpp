@@ -7,6 +7,7 @@
 #include "Util/Application.h"
 #include "Util/Bitset.h"
 
+Metrology::Mode currentMode;
 Metrology metrology;
 
 void setup() {
@@ -15,12 +16,15 @@ void setup() {
   Application::setupI2C();
 
   Metrology::Descriptor descriptor;
-  descriptor.mode = Metrology::Mode::metrology;
-  descriptor.logSingleSamples = true;
-  descriptor.verboseDriftCancellation = false;
-  descriptor.bipolarDriveVoltage = 26.25;
+  descriptor.mode = Metrology::Mode::basicMeasurement;
+
+  /*
+  descriptor.logSingleSamples = false;
+  descriptor.verboseDriftCancellation = true;
+  descriptor.bipolarDriveVoltage = 420;
   descriptor.cdcCapdacCode = 20;
   descriptor.creepTime = 0.3;
+  */
 
   metrology = Metrology(descriptor);
 }
