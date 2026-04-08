@@ -23,13 +23,20 @@ void setup() {
 }
 
 void programBody() {
+  #if 0
   Metrology::ProgramDescriptor programDesc;
   programDesc.logSingleSamples = true;
   programDesc.verboseDriftCancellation = true;
-  programDesc.bipolarVoltage = 105;
-  programDesc.creepTime = 0;
-  
+  programDesc.bipolarVoltage = 420;
+  programDesc.creepTime = 0.3;
+
   metrology.metrologyProgram(programDesc);
+
+  #else
+
+  metrology.lithiumNiobateProgram();
+
+  #endif
 }
 
 void loop() {

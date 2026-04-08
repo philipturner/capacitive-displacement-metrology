@@ -2,7 +2,7 @@
 #include "Metrology.h"
 
 struct Trial {
-  static constexpr uint32_t sampleCount = 30;
+  static constexpr uint32_t sampleCount = 5;
   float up[sampleCount];
   float down[sampleCount];
   float avg[sampleCount];
@@ -49,7 +49,7 @@ void displayEstimatedDuration(Metrology::ProgramDescriptor programDesc) {
     sampleTime += 0.010 + 0.005 + programDesc.creepTime + 0.230;
   }
 
-  float sampleCount = float(Trial::sampleCount);
+  float sampleCount = 2 * float(Trial::sampleCount);
   sampleCount *= float(Metrology::ProgramResult::trialCount);
   sampleCount += 0.5;
 

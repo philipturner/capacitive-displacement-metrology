@@ -3,7 +3,7 @@
 
 void displayResult(Metrology::ProgramResult result, bool creepPart = false) {
   uint32_t trialCount = Metrology::ProgramResult::trialCount;
-  for (uint32_t trialID = 0; trialID < 3; ++trialID) {
+  for (uint32_t trialID = 0; trialID < trialCount; ++trialID) {
     float displacement;
     if (creepPart) {
       displacement = result.dx_creep[trialID];
@@ -12,7 +12,7 @@ void displayResult(Metrology::ProgramResult result, bool creepPart = false) {
     }
 
     Serial.print(displacement, 1);
-    Serial.print(", ")
+    Serial.print(", ");
   }
 }
 
@@ -63,7 +63,6 @@ void Metrology::lithiumNiobateProgram() {
       ProgramResult result = results[programID * rampCount + rampID];
       displayResult(result);
     }
-
     Serial.println();
   }
 
@@ -76,6 +75,7 @@ void Metrology::lithiumNiobateProgram() {
     Serial.print(", ");
 
     displayResult(result, false);
+    Serial.println();
 
     Serial.print(float(420));
     Serial.print(", ");
@@ -83,7 +83,6 @@ void Metrology::lithiumNiobateProgram() {
     Serial.print(", ");
 
     displayResult(result, true);
-
     Serial.println();
   }
 }
