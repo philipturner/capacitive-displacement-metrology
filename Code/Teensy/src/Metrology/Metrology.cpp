@@ -14,19 +14,19 @@ Metrology::~Metrology() {
   }
 }
 
-Metrology::Metrology(Descriptor descriptor) {
-  this->descriptor = descriptor;
+Metrology::Metrology(Descriptor metrologyDesc) {
+  this->metrologyDesc = metrologyDesc;
 
   // Allocate and zero out the capacitance history buffer.
-  this->capacitanceHistory = (float*)malloc(descriptor.basicMeasurementHistorySize);
-  for (uint32_t i = 0; i < descriptor.basicMeasurementHistorySize; ++i) {
+  this->capacitanceHistory = (float*)malloc(metrologyDesc.basicMeasurementHistorySize);
+  for (uint32_t i = 0; i < metrologyDesc.basicMeasurementHistorySize; ++i) {
     capacitanceHistory[i] = 0;
   }
 
-  CDC::writeCAPDAC(true, descriptor.cdcCapdacCode);
+  CDC::writeCAPDAC(true, metrologyDesc.cdcCapdacCode);
   CDC::writeCapacitanceSetup(true, true);
 
-  if (descriptor.mode == Mode::basicMeasurement) {
+  if (metrologyDesc.mode == Mode::basicMeasurement) {
     CDC::writeConfiguration(AD7745_MD_CONTINUOUS_CONV);
   } else {
     CDC::writeConfiguration(AD7745_MD_IDLE);
@@ -34,11 +34,11 @@ Metrology::Metrology(Descriptor descriptor) {
 }
 
 void Metrology::loop() {
-  if (descriptor.mode == Mode::basicMeasurement) {
+  if (metrologyDesc.mode == Mode::basicMeasurement) {
     basicCapacitanceMeasurementLoop();
   }
 
-  if (descriptor.mode == Mode::waveformTesting) {
+  if (metrologyDesc.mode == Mode::waveformTesting) {
     waveformTestingLoop();
   }
 }
@@ -103,6 +103,6 @@ float Metrology::cdcSingleSample() {
   }
 
   float capacitance = CDC::readCapacitance();
-  capacitance -= CDC::capdacOffset(descriptor.cdcCapdacCode);
+  capacitance -= CDC::capdacOffset(metrologyDesc.cdcCapdacCode);
   return capacitance;
 }

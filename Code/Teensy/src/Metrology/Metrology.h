@@ -13,12 +13,9 @@ public:
 
   struct Descriptor {
     Mode mode;
-    bool logSingleSamples = true;
-    bool verboseDriftCancellation = true;
-    float bipolarDriveVoltage = 3;
-    uint8_t cdcCapdacCode = 0;
+    float waveformBipolarVoltage = 0;
+    uint8_t cdcCapdacCode = 20;
     uint32_t basicMeasurementHistorySize = 30;
-    float creepTime = 0.0;
   };
 
   // Initializer for global variable initialization.
@@ -27,12 +24,12 @@ public:
   ~Metrology();
 
   // Procedure to call in Arduino 'setup()'.
-  Metrology(Descriptor descriptor);
+  Metrology(Descriptor metrologyDesc);
 
   void loop();
 
 private:
-  Descriptor descriptor;
+  Descriptor metrologyDesc;
   float *capacitanceHistory;
   uint32_t infiniteLoopIndex = 0;
 
@@ -52,13 +49,20 @@ private:
   void waveformTestingLoop();
 
 public:
+  struct ProgramDescriptor {
+    bool logSingleSamples = false;
+    bool verboseDriftCancellation = true;
+    float bipolarVoltage = 0;
+    float creepTime = 0.0;
+  };
+
   struct ProgramResult {
     static constexpr uint32_t trialCount = 3;
     float dx[trialCount];
     float dx_creep[trialCount];
   };
 
-  ProgramResult metrologyProgram();
+  ProgramResult metrologyProgram(ProgramDescriptor programDesc);
 
   // Characterize the voltage-position relation of a LiNbO3 plate or stack.
   void lithiumNiobateProgram();

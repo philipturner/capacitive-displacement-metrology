@@ -30,6 +30,23 @@ struct Trial {
   }
 };
 
+void displayEstimatedDuration(Metrology::ProgramDescriptor programDesc) {
+  float sampleTime = 0.010 + 0.005 + 0.230;
+  if (programDesc.creepTime > 0) {
+    sampleTime += 0.010 + 0.005 + programDesc.creepTime + 0.230;
+  }
+
+  float sampleCount = float(Trial::sampleCount);
+  sampleCount *= float(Metrology::ProgramResult::trialCount);
+  sampleCount += 0.5;
+
+  float timeSeconds = sampleCount * sampleTime;
+  float timeMinutes = timeSeconds / 60;
+  Serial.print("estimated program duration: ");
+  Serial.print(timeMinutes, 1);
+  Serial.println(" min");
+}
+
 void displayCapacitanceChange(float dC, float dC_creep, bool enableCreep) {
   Serial.print(dC * 1e6, 1);
   Serial.print(" aF");
@@ -56,25 +73,29 @@ void displayDistanceChange(float dx, float dx_creep, bool enableCreep) {
   Serial.println();
 }
 
-void creepDelay(Metrology::Descriptor descriptor) {
-  uint32_t creepTimeInMs = uint32_t(round(descriptor.creepTime * 1e3));
+void creepDelay(Metrology::ProgramDescriptor programDesc) {
+  uint32_t creepTimeInMs = uint32_t(round(programDesc.creepTime * 1e3));
   delay(creepTimeInMs);
 }
 
-Metrology::ProgramResult Metrology::metrologyProgram() {
-  if (descriptor.mode != Mode::metrology) {
+Metrology::ProgramResult Metrology::metrologyProgram(
+  Metrology::ProgramDescriptor programDesc
+) {
+  if (metrologyDesc.mode != Mode::metrology) {
     Serial.print("Can only call this function in metrology mode.");
     exit(0);
   }
 
-  changeVoltage(0, -descriptor.bipolarDriveVoltage);
+  displayEstimatedDuration(programDesc);
+
+  changeVoltage(0, -programDesc.bipolarVoltage);
   float lastCapacitance1 = cdcSingleSample();
 
   // Correct for an initial time offset that messes up the values of
   // up/down.
   float lastCapacitance2;
-  if (descriptor.creepTime > 0) {
-    creepDelay(descriptor);
+  if (programDesc.creepTime > 0) {
+    creepDelay(programDesc);
     lastCapacitance2 = cdcSingleSample();
   } else {
     lastCapacitance2 = lastCapacitance1;
@@ -91,27 +112,27 @@ Metrology::ProgramResult Metrology::metrologyProgram() {
     for (uint32_t sampleID = 0; sampleID < Trial::sampleCount; ++sampleID) {      
       float capacitances[4];
       
-      changeVoltage(-descriptor.bipolarDriveVoltage, descriptor.bipolarDriveVoltage);
+      changeVoltage(-programDesc.bipolarVoltage, programDesc.bipolarVoltage);
       capacitances[0] = cdcSingleSample();
 
-      if (descriptor.creepTime > 0) {
-        creepDelay(descriptor);
+      if (programDesc.creepTime > 0) {
+        creepDelay(programDesc);
         capacitances[1] = cdcSingleSample();
       } else {
         capacitances[1] = capacitances[0];
       }
 
-      changeVoltage(descriptor.bipolarDriveVoltage, -descriptor.bipolarDriveVoltage);
+      changeVoltage(programDesc.bipolarVoltage, -programDesc.bipolarVoltage);
       capacitances[2] = cdcSingleSample();
 
-      if (descriptor.creepTime > 0) {
-        creepDelay(descriptor);
+      if (programDesc.creepTime > 0) {
+        creepDelay(programDesc);
         capacitances[3] = cdcSingleSample();
       } else {
         capacitances[3] = capacitances[2];
       }
 
-      if (descriptor.logSingleSamples) {
+      if (programDesc.logSingleSamples) {
         // Display the sample number.
         Serial.print("sample ");
         if (sampleID < 100) {
@@ -129,13 +150,13 @@ Metrology::ProgramResult Metrology::metrologyProgram() {
 
         Serial.print(" -> ");
         Serial.print(capacitances[0], 6);
-        if (descriptor.creepTime > 0) {
+        if (programDesc.creepTime > 0) {
           Serial.print(" -> ");
           Serial.print(capacitances[1], 6);
         }
         Serial.print(" -> ");
         Serial.print(capacitances[2], 6);
-        if (descriptor.creepTime > 0) {
+        if (programDesc.creepTime > 0) {
           Serial.print(" -> ");
           Serial.print(capacitances[3], 6);
         }
@@ -169,19 +190,19 @@ Metrology::ProgramResult Metrology::metrologyProgram() {
     absoluteCapacitance /= 2 * float(Trial::sampleCount);
 
     // Present the combined dC.
-    if (descriptor.verboseDriftCancellation) {
+    if (programDesc.verboseDriftCancellation) {
       Serial.print("dC (up)   = ");
       displayCapacitanceChange(
-        dC.up, dC_creep.up, descriptor.creepTime > 0);
+        dC.up, dC_creep.up, programDesc.creepTime > 0);
 
       Serial.print("dC (down) = ");
       displayCapacitanceChange(
-        dC.down, dC_creep.down, descriptor.creepTime > 0);
+        dC.down, dC_creep.down, programDesc.creepTime > 0);
     }
 
     Serial.print("dC (avg)  = ");
     displayCapacitanceChange(
-        dC.avg, dC_creep.avg, descriptor.creepTime > 0);
+        dC.avg, dC_creep.avg, programDesc.creepTime > 0);
 
     Serial.print("C = ");
     Serial.print(absoluteCapacitance, 6);
@@ -205,31 +226,32 @@ Metrology::ProgramResult Metrology::metrologyProgram() {
     Serial.println(" pF/nm");
 
     // Present the estimated dx.
-    if (descriptor.verboseDriftCancellation) {
+    if (programDesc.verboseDriftCancellation) {
       Serial.print("dx (up)   = ");
       displayDistanceChange(
         dC.up / dCdx, 
         dC_creep.up / dCdx,
-        descriptor.creepTime > 0);
+        programDesc.creepTime > 0);
     
       Serial.print("dx (down) = ");
       displayDistanceChange(
         dC.down / dCdx, 
         dC_creep.down / dCdx,
-        descriptor.creepTime > 0);
+        programDesc.creepTime > 0);
     }
 
     Serial.print("dx (avg)  = ");
     displayDistanceChange(
         dC.avg / dCdx, 
         dC_creep.avg / dCdx,
-        descriptor.creepTime > 0);   
+        programDesc.creepTime > 0);   
     
     output.dx[trialID] = dC.avg / dCdx;
     output.dx_creep[trialID] = dC_creep.avg / dCdx;
   }
 
-  changeVoltage(-descriptor.bipolarDriveVoltage, 0);
+  changeVoltage(-programDesc.bipolarVoltage, 0);
 
   return output;
 }
+
