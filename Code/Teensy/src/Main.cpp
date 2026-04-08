@@ -15,11 +15,39 @@ void setup() {
   Application::setupSPI();
   Application::setupI2C();
 
+  currentMode = Metrology::Mode::basicMeasurement;
+
   Metrology::Descriptor descriptor;
-  descriptor.mode = Metrology::Mode::basicMeasurement;
+  descriptor.mode = currentMode;
   metrology = Metrology(descriptor);
 }
 
+void programBody() {
+  Metrology::ProgramDescriptor programDesc;
+  programDesc.logSingleSamples = true;
+  programDesc.verboseDriftCancellation = true;
+  programDesc.bipolarVoltage = 105;
+  programDesc.creepTime = 0;
+  
+  metrology.metrologyProgram(programDesc);
+}
+
 void loop() {
+  if (Serial.available() > 0) {
+    char incomingByte = Serial.read();
+
+    if (incomingByte == 'm') {
+      if (currentMode != Metrology::Mode::metrology) {
+        currentMode = Metrology::Mode::metrology;
+
+        Metrology::Descriptor descriptor;
+        descriptor.mode = currentMode;
+        metrology = Metrology(descriptor);
+
+        programBody();
+      }
+    }
+  }
+
   metrology.loop();
 }

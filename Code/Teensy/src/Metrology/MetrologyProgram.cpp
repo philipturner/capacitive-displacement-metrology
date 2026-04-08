@@ -30,6 +30,19 @@ struct Trial {
   }
 };
 
+void displayProgramHeader(Metrology::ProgramDescriptor programDesc) {
+  Serial.println();
+  Serial.println("=== Program ===");
+
+  Serial.print("bipolar voltage: ");
+  Serial.print(programDesc.bipolarVoltage, 1);
+  Serial.println();
+
+  Serial.print("creep time: ");
+  Serial.print(programDesc.creepTime, 1);
+  Serial.println();
+}
+
 void displayEstimatedDuration(Metrology::ProgramDescriptor programDesc) {
   float sampleTime = 0.010 + 0.005 + 0.230;
   if (programDesc.creepTime > 0) {
@@ -86,6 +99,7 @@ Metrology::ProgramResult Metrology::metrologyProgram(
     exit(0);
   }
 
+  displayProgramHeader(programDesc);
   displayEstimatedDuration(programDesc);
 
   changeVoltage(0, -programDesc.bipolarVoltage);

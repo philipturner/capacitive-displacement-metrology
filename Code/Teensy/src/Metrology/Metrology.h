@@ -14,7 +14,7 @@ public:
   struct Descriptor {
     Mode mode;
     float waveformBipolarVoltage = 0;
-    uint8_t cdcCapdacCode = 20;
+    uint8_t cdcCapdacCode = 25;
     uint32_t basicMeasurementHistorySize = 30;
   };
 
