@@ -59,7 +59,8 @@ void Metrology::multiRampProgram() {
     0.0, 0.0, 0.0, 0.0
   };
 
-  ProgramResult results[rampCount * programCount];
+  ProgramResult* results = (ProgramResult *)malloc(
+    rampCount * programCount * sizeof(ProgramResult));
 
   for (uint32_t rampID = 0; rampID < rampCount; ++rampID) {
     for (uint32_t programID = 0; programID < programCount; ++programID) {
@@ -94,4 +95,6 @@ void Metrology::multiRampProgram() {
       results + programID * rampCount,
       rampCount);
   }
+
+  free(results);
 }
