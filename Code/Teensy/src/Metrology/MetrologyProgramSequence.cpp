@@ -104,7 +104,7 @@ void Metrology::multiRampProgram() {
     ProgramDescriptor programDesc;
     programDesc.logSingleSamples = creepTime > 0;
     programDesc.verboseDriftCancellation = true;
-    programDesc.bipolarVoltage = voltageSequence[programID];
+    programDesc.bipolarVoltage = voltage;
     programDesc.creepTime = creepTime;
 
     displayProgram(
