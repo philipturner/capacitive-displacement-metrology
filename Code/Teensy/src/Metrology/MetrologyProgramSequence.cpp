@@ -49,15 +49,32 @@ void displayProgram(
 }
 
 void Metrology::multiRampProgram() {
-  constexpr uint32_t rampCount = 2;
+  #if 1
+
+  constexpr uint32_t rampCount = 1;
   constexpr uint32_t programCount = 4;
 
   float voltageSequence[programCount] = {
     52.5, 105, 210, 420
   };
-  float creepTimeSequence[programCount] = {
-    0.0, 0.0, 0.0, 0.0
+  float creepTimeSequence[programCount];
+  for (uint32_t i = 0; i < 4; ++i) {
+    creepTimeSequence[i] = 0.0;
+  }
+
+  #else
+
+  constexpr uint32_t rampCount = 1;
+  constexpr uint32_t programCount = 1;
+
+  float voltageSequence[programCount] = {
+    420
   };
+  float creepTimeSequence[programCount] = {
+    0.0
+  };
+
+  #endif
 
   ProgramResult* results = (ProgramResult *)malloc(
     rampCount * programCount * sizeof(ProgramResult));
@@ -70,7 +87,7 @@ void Metrology::multiRampProgram() {
       ProgramDescriptor programDesc;
       programDesc.logSingleSamples = creepTime > 0;
       programDesc.verboseDriftCancellation = true;
-      programDesc.bipolarVoltage = voltageSequence[programID];
+      programDesc.bipolarVoltage = voltage;
       programDesc.creepTime = creepTime;
 
       ProgramResult result = metrologyProgram(programDesc);
