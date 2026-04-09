@@ -1,0 +1,97 @@
+#include <Arduino.h>
+#include "Metrology.h"
+
+void displayResult(Metrology::ProgramResult result, bool creepPart = false) {
+  uint32_t trialCount = Metrology::ProgramResult::trialCount;
+  for (uint32_t trialID = 0; trialID < trialCount; ++trialID) {
+    float displacement;
+    if (creepPart) {
+      displacement = result.dx_creep[trialID];
+    } else {
+      displacement = result.dx[trialID];
+    }
+
+    Serial.print(displacement, 1);
+    Serial.print(", ");
+  }
+}
+
+void displayProgram(
+  Metrology::ProgramDescriptor programDesc,
+  Metrology::ProgramResult* rampResults, 
+  uint32_t rampCount
+) {
+  Serial.print(programDesc.bipolarVoltage);
+  Serial.print(", ");
+  Serial.print(float(0));
+  Serial.print(", ");
+  
+  for (uint32_t rampID = 0; rampID < rampCount; ++rampID) {
+    Metrology::ProgramResult result = rampResults[rampID];
+    displayResult(result);
+  }
+  Serial.println();
+
+  if (programDesc.creepTime == 0) {
+    return;
+  }
+
+  Serial.print(programDesc.bipolarVoltage);
+  Serial.print(", ");
+  Serial.print(programDesc.creepTime);
+  Serial.print(", ");
+  
+  for (uint32_t rampID = 0; rampID < rampCount; ++rampID) {
+    Metrology::ProgramResult result = rampResults[rampID];
+    displayResult(result, true);
+  }
+  Serial.println();
+}
+
+void Metrology::multiRampProgram() {
+  constexpr uint32_t rampCount = 2;
+  constexpr uint32_t programCount = 4;
+
+  float voltageSequence[programCount] = {
+    52.5, 105, 210, 420
+  };
+  float creepTimeSequence[programCount] = {
+    0.0, 0.0, 0.0, 0.0
+  };
+
+  ProgramResult results[rampCount * programCount];
+
+  for (uint32_t rampID = 0; rampID < rampCount; ++rampID) {
+    for (uint32_t programID = 0; programID < programCount; ++programID) {
+      float voltage = voltageSequence[programID];
+      float creepTime = creepTimeSequence[programID];
+      
+      ProgramDescriptor programDesc;
+      programDesc.logSingleSamples = creepTime > 0;
+      programDesc.verboseDriftCancellation = true;
+      programDesc.bipolarVoltage = voltageSequence[programID];
+      programDesc.creepTime = creepTime;
+
+      ProgramResult result = metrologyProgram(programDesc);
+      results[programID * rampCount + rampID] = result;
+    }
+  }
+
+  Serial.println();
+
+  for (uint32_t programID = 0; programID < programCount; ++programID) {
+    float voltage = voltageSequence[programID];
+    float creepTime = creepTimeSequence[programID];
+    
+    ProgramDescriptor programDesc;
+    programDesc.logSingleSamples = creepTime > 0;
+    programDesc.verboseDriftCancellation = true;
+    programDesc.bipolarVoltage = voltageSequence[programID];
+    programDesc.creepTime = creepTime;
+
+    displayProgram(
+      programDesc,
+      results + programID * rampCount,
+      rampCount);
+  }
+}

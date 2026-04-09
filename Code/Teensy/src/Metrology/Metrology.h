@@ -64,6 +64,5 @@ public:
 
   ProgramResult metrologyProgram(ProgramDescriptor programDesc);
 
-  // Characterize the voltage-position relation of a LiNbO3 plate or stack.
-  void lithiumNiobateProgram();
+  void multiRampProgram();
 };

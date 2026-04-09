@@ -23,23 +23,7 @@ void setup() {
 }
 
 void programBody() {
-  #if 1
-  constexpr uint32_t voltageCount = 4;
-
-  float voltageSequence[voltageCount] = {
-    52.5, 105, 210, 420
-  };
-
-  for (uint32_t programID = 0; programID < voltageCount; ++programID) {
-      Metrology::ProgramDescriptor programDesc;
-      programDesc.logSingleSamples = false;
-      programDesc.verboseDriftCancellation = false;
-      programDesc.bipolarVoltage = voltageSequence[programID];
-      programDesc.creepTime = 0.01;
-
-      metrology.metrologyProgram(programDesc);
-    }
-
+  #if 0
   /*
   Metrology::ProgramDescriptor programDesc;
   programDesc.logSingleSamples = true;
@@ -52,7 +36,7 @@ void programBody() {
 
   #else
 
-  metrology.lithiumNiobateProgram();
+  metrology.multiRampProgram();
 
   #endif
 }
