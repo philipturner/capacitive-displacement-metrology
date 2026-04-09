@@ -23,14 +23,32 @@ void setup() {
 }
 
 void programBody() {
-  #if 0
+  #if 1
+  constexpr uint32_t voltageCount = 4;
+
+  float voltageSequence[voltageCount] = {
+    52.5, 105, 210, 420
+  };
+
+  for (uint32_t programID = 0; programID < voltageCount; ++programID) {
+      Metrology::ProgramDescriptor programDesc;
+      programDesc.logSingleSamples = false;
+      programDesc.verboseDriftCancellation = false;
+      programDesc.bipolarVoltage = voltageSequence[programID];
+      programDesc.creepTime = 0.01;
+
+      metrology.metrologyProgram(programDesc);
+    }
+
+  /*
   Metrology::ProgramDescriptor programDesc;
   programDesc.logSingleSamples = true;
   programDesc.verboseDriftCancellation = true;
-  programDesc.bipolarVoltage = 420;
+  programDesc.bipolarVoltage = 52.5;
   programDesc.creepTime = 0.3;
 
   metrology.metrologyProgram(programDesc);
+  */
 
   #else
 
