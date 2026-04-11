@@ -2,7 +2,7 @@
 #include "Metrology.h"
 
 struct Trial {
-  static constexpr uint32_t sampleCount = 30;
+  static constexpr uint32_t sampleCount = 10;
   float up[sampleCount];
   float down[sampleCount];
   float avg[sampleCount];

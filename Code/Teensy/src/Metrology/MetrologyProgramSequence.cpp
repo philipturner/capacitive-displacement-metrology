@@ -51,7 +51,7 @@ void displayProgram(
 void Metrology::multiRampProgram() {
   #if 1
 
-  constexpr uint32_t rampCount = 2;
+  constexpr uint32_t rampCount = 1;
   constexpr uint32_t programCount = 4;
 
   // sampleCount = 10 (rampCount = 1)
@@ -65,10 +65,10 @@ void Metrology::multiRampProgram() {
   }
   //creepTimeSequence[programCount - 1] = 0.6;
 
-  #elif 0
+  #elif 1
 
   constexpr uint32_t rampCount = 1;
-  constexpr uint32_t programCount = 7;
+  constexpr uint32_t programCount = 6;
 
   // sampleCount = 10
   float voltageSequence[programCount];
@@ -76,7 +76,7 @@ void Metrology::multiRampProgram() {
     voltageSequence[i] = 420;
   };
   float creepTimeSequence[programCount] = {
-    0.01, 0.15, 0.3, 0.6, 1.2, 4.0, 0.0
+    0.01, 0.15, 0.3, 0.6, 1.2, 0.0
   };
 
   #else
@@ -88,7 +88,7 @@ void Metrology::multiRampProgram() {
     420
   };
   float creepTimeSequence[programCount] = {
-    0.6
+    4.0
   };
 
   #endif
