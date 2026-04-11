@@ -7,54 +7,84 @@
 #include "Util/Application.h"
 #include "Util/Bitset.h"
 
-Metrology::Mode currentMode;
-Metrology metrology;
+TimeStatistics timeStatistics;
+void kilohertzLoop();
+#define KILOHERTZ_LOOP_PERIOD 4
 
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
   Application::setupI2C();
 
-  currentMode = Metrology::Mode::basicMeasurement;
-
-  Metrology::Descriptor descriptor;
-  descriptor.mode = currentMode;
-  metrology = Metrology(descriptor);
-}
-
-void programBody() {
-  #if 0
-  Metrology::ProgramDescriptor programDesc;
-  programDesc.logSingleSamples = true;
-  programDesc.verboseDriftCancellation = true;
-  programDesc.bipolarVoltage = 100;
-  programDesc.creepTime = 0.0;
-
-  metrology.metrologyProgram(programDesc);
-
-  #else
-  
-  metrology.hysteresisPlot();
-
-  #endif
+  KilohertzLoop::initialize(kilohertzLoop, KILOHERTZ_LOOP_PERIOD);
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-    char incomingByte = Serial.read();
+  delay(500);
 
-    if (incomingByte == 'm') {
-      if (currentMode != Metrology::Mode::metrology) {
-        currentMode = Metrology::Mode::metrology;
+  Serial.println();
+  Serial.println(timeStatistics.above1000000us_jumps);
+  Serial.println(timeStatistics.above100000us_jumps);
+  Serial.println(timeStatistics.above10000us_jumps);
+  Serial.println(timeStatistics.above1000us_jumps);
+  Serial.println(timeStatistics.above100us_jumps);
+  Serial.println(timeStatistics.abovePeriod_jumps);
+  Serial.println(timeStatistics.exactlyPeriod_jumps);
+  Serial.println(timeStatistics.underPeriod_jumps);
+  Serial.println(timeStatistics.total_jumps);
+}
 
-        Metrology::Descriptor descriptor;
-        descriptor.mode = currentMode;
-        metrology = Metrology(descriptor);
+float sineWave(float phaseNormalized) {
+  return sin(phaseNormalized * 2 * M_PI);
+}
 
-        programBody();
-      }
-    }
+float squareWave(float phaseNormalized) {
+  if (phaseNormalized < 0.5) {
+    return 1.0;
+  } else {
+    return -1.0;
+  }
+}
+
+float triangleWave(float phaseNormalized) {
+  float progress;
+  if (phaseNormalized < 0.5) {
+    progress = 2 * phaseNormalized;
+  } else {
+    progress = 2 * (1 - phaseNormalized);
   }
 
-  metrology.loop();
+  return 2 * progress - 1;
+}
+
+void kilohertzLoop() {
+  uint32_t previous = KilohertzLoop::previousTimestamp;
+  uint32_t latest = KilohertzLoop::latestTimestamp;
+  uint32_t jumpDuration = latest - previous;
+  timeStatistics.integrate(jumpDuration, KILOHERTZ_LOOP_PERIOD);
+
+  // Calculate the period and phase, in microseconds.
+  float sineFrequency = 1000;
+  uint32_t sinePeriod = uint32_t(float(1e6) / sineFrequency);
+  uint32_t phase = latest % sinePeriod;
+
+  float phaseNormalized = float(phase) / float(sinePeriod);
+  float waveValue;
+  switch ((latest / 1000000) % 2) {
+    case 0: {
+      waveValue = sineWave(phaseNormalized);
+      break;
+    }
+    case 1: {
+      waveValue = 0;
+      break;
+    }
+  }
+  float targetValue = 420 * waveValue;
+
+  // Calculate the voltage.
+  float gainFactor = -35.751;
+  float offset = 0.079;
+  float dacValue = (targetValue - offset) / gainFactor;
+  DAC1::writeVoltage(1, dacValue);
 }
