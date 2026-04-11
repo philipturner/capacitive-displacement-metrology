@@ -65,4 +65,6 @@ public:
   ProgramResult metrologyProgram(ProgramDescriptor programDesc);
 
   void multiRampProgram();
+
+  void hysteresisPlot();
 };
