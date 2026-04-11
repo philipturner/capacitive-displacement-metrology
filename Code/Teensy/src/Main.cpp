@@ -24,15 +24,13 @@ void setup() {
 
 void programBody() {
   #if 0
-  /*
   Metrology::ProgramDescriptor programDesc;
   programDesc.logSingleSamples = true;
   programDesc.verboseDriftCancellation = true;
-  programDesc.bipolarVoltage = 52.5;
-  programDesc.creepTime = 0.3;
+  programDesc.bipolarVoltage = 100;
+  programDesc.creepTime = 0.0;
 
   metrology.metrologyProgram(programDesc);
-  */
 
   #else
   

@@ -49,49 +49,46 @@ void displayProgram(
 }
 
 void Metrology::multiRampProgram() {
-  #if 0
+  #if 1
 
   constexpr uint32_t rampCount = 2;
   constexpr uint32_t programCount = 4;
 
+  // sampleCount = 10 (rampCount = 1)
+  // sampleCount = 30 (rampCount = 2)
   float voltageSequence[programCount] = {
-    52.5, 105, 210, 420,
+    52.5, 105, 210, 420//, 420
   };
   float creepTimeSequence[programCount];
   for (uint32_t i = 0; i < programCount; ++i) {
     creepTimeSequence[i] = 0.0;
   }
+  //creepTimeSequence[programCount - 1] = 0.6;
 
   #elif 0
 
   constexpr uint32_t rampCount = 1;
-  constexpr uint32_t programCount = 20;
+  constexpr uint32_t programCount = 7;
 
-  float voltageSequence[programCount] = {
-    52.5, 105, 210, 420,
-    52.5, 105, 210, 420,
-    52.5, 105, 210, 420,
-    52.5, 105, 210, 420,
-    52.5, 105, 210, 420,
+  // sampleCount = 10
+  float voltageSequence[programCount];
+  for (uint32_t i = 0; i < programCount; ++i) {
+    voltageSequence[i] = 420;
   };
   float creepTimeSequence[programCount] = {
-    0.01, 0.01, 0.01, 0.01,
-    0.15, 0.15, 0.15, 0.15,
-    0.3, 0.3, 0.3, 0.3, 
-    0.6, 0.6, 0.6, 0.6, 
-    1.2, 1.2, 1.2, 1.2, 
+    0.01, 0.15, 0.3, 0.6, 1.2, 4.0, 0.0
   };
 
   #else
 
   constexpr uint32_t rampCount = 1;
-  constexpr uint32_t programCount = 4;
+  constexpr uint32_t programCount = 1;
 
   float voltageSequence[programCount] = {
-    52.5, 105, 210, 420
+    420
   };
   float creepTimeSequence[programCount] = {
-    4.0, 4.0, 4.0, 4.0
+    0.6
   };
 
   #endif
