@@ -106,3 +106,24 @@ float Metrology::cdcSingleSample() {
   capacitance -= CDC::capdacOffset(metrologyDesc.cdcCapdacCode);
   return capacitance;
 }
+
+float Metrology::calculate_dCdx(float capacitance) {
+  // Convert to distance.
+  float separation = 8.854e-12 * 10e-3 * 10e-3;
+  separation /= capacitance * 1e-12; // pF -> F
+  Serial.print("[parallel plate model] ");
+  Serial.print("x = ");
+  Serial.print(separation * 1e6, 1);
+  Serial.println(" μm");
+
+  float dCdx = -8.854e-12 * 10e-3 * 10e-3;
+  dCdx /= separation * separation;
+  dCdx *= 1e12; // F -> pF
+  dCdx *= 1e-9; // m^-1 -> nm^-1
+  Serial.print("[parallel plate model] ");
+  Serial.print("dC/dx = ");
+  Serial.print(dCdx, 6);
+  Serial.println(" pF/nm");
+
+  return dCdx;
+}

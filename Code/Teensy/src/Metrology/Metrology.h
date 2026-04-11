@@ -48,6 +48,10 @@ private:
 
   void waveformTestingLoop();
 
+  // Input: capacitance, in pF
+  // Output: sensitivity, in pF/nm
+  static float calculate_dCdx(float capacitance);
+
 public:
   struct ProgramDescriptor {
     bool logSingleSamples = false;
