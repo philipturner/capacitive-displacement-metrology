@@ -31,36 +31,74 @@ void Metrology::hysteresisPlot() {
   Trial signalTrials[trialCount];
   Trial noiseTrials[trialCount];
 
-  for (uint32_t trialID = 0; trialID < trialCount * 2; ++trialID) {
-    TrialType trialType = static_cast<TrialType>(trialID % 2);
-    Trial trial;
+  for (uint32_t trialID = 0; trialID < trialCount; ++trialID) {
+    Serial.print("trial ");
+    Serial.print(trialID);
+    Serial.println();
+    
+    for (uint32_t i = 0; i < 2; ++i) {
+      TrialType trialType = static_cast<TrialType>(i);
+      Trial trial;
 
-    for (uint32_t intervalID = 0; intervalID <= Trial::intervalCount; ++intervalID) {
-      float capacitance = cdcSingleSample();
-      float time = float(millis()) / 1000;
+      for (uint32_t intervalID = 0; intervalID <= Trial::intervalCount; ++intervalID) {
+        float capacitance = cdcSingleSample();
+        float time = float(millis()) / 1000;
 
-      float dC = capacitance - startingCapacitance;
-      float dx = dC / dCdx;
+        float dC = capacitance - startingCapacitance;
+        float dx = dC / dCdx;
+        float dt = time - startingTime;
 
-      trial.displacements[intervalID] = dx;
-      trial.times[intervalID] = time;
+        trial.displacements[intervalID] = dx;
+        trial.times[intervalID] = dt;
 
-      if (intervalID == Trial::intervalCount) {
-        break;
+        if (intervalID == Trial::intervalCount) {
+          break;
+        }
+
+        if (trialType == TrialType::signal) {
+          changeVoltage(
+            Trial::voltages[intervalID], 
+            Trial::voltages[intervalID + 1]);
+        } else {
+          changeVoltage(-420, -420);
+        }
       }
 
       if (trialType == TrialType::signal) {
-        changeVoltage(
-          Trial::voltages[intervalID], 
-          Trial::voltages[intervalID + 1]);
+        signalTrials[trialID] = trial;
       } else {
-        changeVoltage(-420, -420);
+        noiseTrials[trialID] = trial;
       }
     }
-
-
-    //for (uint8_)
   }
 
   changeVoltage(-420, 0);
+
+  for (uint32_t i = 0; i < 2; ++i) {
+    TrialType trialType = static_cast<TrialType>(i);
+    Serial.println();
+
+    for (uint32_t trialID = 0; trialID < trialCount; ++trialID) {
+      Trial trial;
+      if (trialType == TrialType::signal) {
+        trial = signalTrials[trialID];
+      } else {
+        trial = noiseTrials[trialID];
+      }
+      
+      for (uint32_t intervalID = 0; intervalID <= Trial::intervalCount; ++intervalID) {
+        float voltage = Trial::voltages[intervalID];
+        Serial.print(voltage, 1);
+        Serial.print(", ");
+        
+        float displacement = trial.displacements[intervalID];
+        Serial.print(displacement, 1);
+        Serial.print(", ");
+
+        float time = trial.times[intervalID];
+        Serial.print(time, 3);
+        Serial.println();
+      }
+    }
+  }
 }
