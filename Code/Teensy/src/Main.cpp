@@ -15,17 +15,58 @@ void setup() {
   Application::setupSerial();
   Application::setupSPI();
   Application::setupI2C();
+}
 
-  for (uint32_t i = 0; i < 50; ++i) {
+void programBody() {
+  delay(2000);
+  for (uint32_t i = 0; i < 4; ++i) {
     piezoTone(1000, 900);
     delay(100);
     piezoTone(250, 900);
     delay(100);
   }
+
+  for (uint32_t thisNote = 0; thisNote < notes * 2; thisNote = thisNote + 2) {
+    float divider = float(melody[thisNote + 1]);
+    float noteDuration = 0;
+    if (divider > 0) {
+      noteDuration = float(wholenote) / divider;
+    } else if (divider < 0) {
+      noteDuration = float(wholenote) / (-divider);
+      noteDuration *= 1.5;
+    }
+
+    // Jouer la note
+    float frequency = float(melody[thisNote]);
+    piezoTone(frequency, noteDuration * 0.9);
+    delay(noteDuration * 0.1);
+  }
 }
 
 void loop() {
+  delay(500);
 
+  float time = float(millis()) / 1000;
+  Serial.print("time: ");
+  Serial.print(time, 2);
+  Serial.print(" seconds");
+  Serial.println();
+
+  if (Serial.available() > 0) {
+    char incomingByte = Serial.read();
+
+    if (incomingByte == 'm') {
+      programBody();
+    }
+  }
+}
+
+float squareWave(float phaseNormalized) {
+  if (phaseNormalized < 0.5) {
+    return 1.0;
+  } else {
+    return -1.0;
+  }
 }
 
 void kilohertzLoop() {
@@ -41,7 +82,7 @@ void kilohertzLoop() {
   uint32_t phase = latest % sinePeriod;
 
   float phaseNormalized = float(phase) / float(sinePeriod);
-  float waveValue = sin(phaseNormalized * 2 * M_PI);
+  float waveValue = squareWave(phaseNormalized);
   float targetValue = 420 * waveValue;
 
   // Calculate the voltage.
