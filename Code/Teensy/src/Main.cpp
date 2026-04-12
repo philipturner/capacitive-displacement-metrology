@@ -20,8 +20,8 @@ void setup() {
 
 void programBody() {
   toneDiagnostics = true;
-  delay(2000);
-  for (uint32_t i = 0; i < 4; ++i) {
+  delay(1000);
+  for (uint32_t i = 0; i < 5; ++i) {
     piezoTone(1000, 900);
     delay(100);
     piezoTone(250, 900);
@@ -89,7 +89,7 @@ void kilohertzLoop() {
   uint32_t phase = latest % sinePeriod;
 
   float phaseNormalized = float(phase) / float(sinePeriod);
-  float waveValue = sineWave(phaseNormalized);
+  float waveValue = triangleWave(phaseNormalized);
   float targetValue = 420 * waveValue;
 
   // Calculate the voltage.
