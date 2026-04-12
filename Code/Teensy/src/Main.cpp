@@ -8,8 +8,8 @@
 #include "Util/Bitset.h"
 
 float toneFrequency = -1;
-float toneBipolarAmplitude = 200;
-float toneSlewRate = 5e6;
+float toneBipolarAmplitude = 420;
+float toneSlewRate = 30e6;
 bool toneDiagnostics = true;
 void piezoTone(float frequency, uint32_t duration);
 
@@ -21,7 +21,7 @@ void setup() {
 
 void programBody() {
   DAC1::writeVoltage(1, 0);
-  piezoTone(300, 20 * 1000);
+  piezoTone(300, 60 * 1000);
 
   // for (uint32_t i = 0; i < 5; ++i) {
   //   piezoTone(1000, 900);
@@ -162,4 +162,9 @@ void piezoTone(float frequency, uint32_t duration) {
 
   KilohertzLoop::timer.end();
   toneFrequency = -1;
+
+  // Debug the strange behavior where the Teensy stops responding.
+  if (toneDiagnostics) {
+    Serial.println("tone stopped");
+  }
 }
