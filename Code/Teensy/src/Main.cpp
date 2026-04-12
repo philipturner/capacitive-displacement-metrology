@@ -6,9 +6,10 @@
 #include "Time/TimeStatistics.h"
 #include "Util/Application.h"
 #include "Util/Bitset.h"
-#include "Util/Rickroll.h"
 
-float sineFrequency = -1;
+float toneFrequency = -1;
+float toneBipolarAmplitude = 200;
+float toneSlewRate = 5e6;
 bool toneDiagnostics = true;
 void piezoTone(float frequency, uint32_t duration);
 
@@ -19,20 +20,17 @@ void setup() {
 }
 
 void programBody() {
-  toneDiagnostics = true;
-  delay(1000);
-  for (uint32_t i = 0; i < 5; ++i) {
-    piezoTone(1000, 900);
-    delay(100);
-    piezoTone(250, 900);
-    delay(100);
-  }
+  DAC1::writeVoltage(1, 0);
+  piezoTone(300, 20 * 1000);
 
-  toneDiagnostics = false;
-  RickrollState state;
-  while (true) {
-    rickroll_play(state);
-  }
+  // for (uint32_t i = 0; i < 5; ++i) {
+  //   piezoTone(1000, 900);
+  //   delay(100);
+  //   piezoTone(250, 900);
+  //   delay(100);
+  // }
+
+  DAC1::writeVoltage(1, 0);
 }
 
 void loop() {
@@ -76,8 +74,47 @@ float triangleWave(float phaseNormalized) {
   return 2 * progress - 1;
 }
 
+// Piecewise function where 1/3 of the trajectory is a parabola, 2/3 is a line,
+// and the regions cross with no discontinuity in velocity.
+float piecewiseFunction(float x) {
+  float x3 = 3 * x;
+  float output;
+  if (x3 < 1) {
+    output = x3 * x3;
+  } else {
+    output = 1 + 2 * (x3 - 1);
+  }
+  return output / 5;
+}
+
+// Phase needs to be in microseconds to accurately model the slew rate.
+float sawtoothWave(uint32_t phase, uint32_t period) {
+  uint32_t halfPeriod = period / 2;
+
+  float waveValue;
+  if (phase < halfPeriod) {
+    float x = float(phase) / float(halfPeriod);
+    waveValue = piecewiseFunction(x);
+  } else {
+    // Waveform starts distorting at around 16 V/μs.
+    float simpleSlewDuration = 2 * toneBipolarAmplitude / toneSlewRate;
+    float shortenedSlewDuration = 0.8 * simpleSlewDuration;
+
+    float timeSeconds = float(phase - halfPeriod) / 1e6;
+    float x = timeSeconds / shortenedSlewDuration;
+    x *= float(2) / float(3);
+    if (x >= 1) {
+      waveValue = 0;
+    } else {
+      waveValue = piecewiseFunction(1 - x);
+    }
+  }
+  waveValue = 2 * waveValue - 1;
+  return waveValue;
+}
+
 void kilohertzLoop() {
-  if (sineFrequency <= 0) {
+  if (toneFrequency <= 0) {
     Serial.println("Invalid arguments.");
     exit(0);
   }
@@ -85,12 +122,13 @@ void kilohertzLoop() {
   uint32_t latest = KilohertzLoop::latestTimestamp;
 
   // Calculate the period and phase, in microseconds.
-  uint32_t sinePeriod = uint32_t(float(1e6) / sineFrequency);
+  uint32_t sinePeriod = uint32_t(float(1e6) / toneFrequency);
   uint32_t phase = latest % sinePeriod;
 
-  float phaseNormalized = float(phase) / float(sinePeriod);
-  float waveValue = triangleWave(phaseNormalized);
-  float targetValue = 420 * waveValue;
+  // float phaseNormalized = float(phase) / float(sinePeriod);
+  // float waveValue = triangleWave(phaseNormalized);
+  float waveValue = sawtoothWave(phase, sinePeriod);
+  float targetValue = toneBipolarAmplitude * waveValue;
 
   // Calculate the voltage.
   float gainFactor = -35.751;
@@ -117,11 +155,11 @@ void piezoTone(float frequency, uint32_t duration) {
     Serial.println();
   }
 
-  sineFrequency = frequency;
+  toneFrequency = frequency;
   KilohertzLoop::initialize(kilohertzLoop, 4);
 
   delay(duration);
 
   KilohertzLoop::timer.end();
-  sineFrequency = -1;
+  toneFrequency = -1;
 }
