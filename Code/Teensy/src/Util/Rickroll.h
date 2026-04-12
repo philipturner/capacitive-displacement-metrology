@@ -35,11 +35,11 @@ void piezoTone(float frequency, uint32_t duration);
 volatile int beatlength = 100; // determines tempo
 float beatseparationconstant = 0.3;
 
-int threshold;
-
-int a; // part index
-int b; // song index
-int c; // lyric index
+struct RickrollState {
+  int a = 4; // part index
+  int b = 0; // song index
+  int c = 0; // lyric index
+};
 
 // Parts 1 and 2 (Intro)
 
@@ -111,55 +111,54 @@ const char* lyrics_chorus[] =
   "Never ", "", "gonna ", "", "tell ", "a ", "lie ", "", "", "and ", "hurt ", "you\r\n"
 };
 
-bool play() {
-  int notelength;
-  if (a == 1 || a == 2) {
+void rickroll_play(RickrollState &state) {
+  int notelength = 0;
+  if (state.a == 1 || state.a == 2) {
     // intro
-    notelength = beatlength * song1_intro_rhythmn[b];
-    if (song1_intro_melody[b] > 0) {
-      piezoTone(song1_intro_melody[b], notelength);
+    notelength = beatlength * song1_intro_rhythmn[state.b];
+    if (song1_intro_melody[state.b] > 0) {
+      piezoTone(song1_intro_melody[state.b], notelength);
     }
-    b++;
-    if (b >= sizeof(song1_intro_melody) / sizeof(int)) {
-      a++;
-      b = 0;
-      c = 0;
+    state.b++;
+    if (state.b >= sizeof(song1_intro_melody) / sizeof(int)) {
+      state.a++;
+      state.b = 0;
+      state.c = 0;
     }
   }
-  else if (a == 3 || a == 5) {
+  else if (state.a == 3 || state.a == 5) {
     // verse
-    notelength = beatlength * 2 * song1_verse1_rhythmn[b];
-    if (song1_verse1_melody[b] > 0) {
-      Serial.print(lyrics_verse1[c]);
-      piezoTone(song1_verse1_melody[b], notelength);
-      c++;
+    notelength = beatlength * 2 * song1_verse1_rhythmn[state.b];
+    if (song1_verse1_melody[state.b] > 0) {
+      Serial.print(lyrics_verse1[state.c]);
+      piezoTone(song1_verse1_melody[state.b], notelength);
+      state.c++;
     }
-    b++;
-    if (b >= sizeof(song1_verse1_melody) / sizeof(int)) {
-      a++;
-      b = 0;
-      c = 0;
+    state.b++;
+    if (state.b >= sizeof(song1_verse1_melody) / sizeof(int)) {
+      state.a++;
+      state.b = 0;
+      state.c = 0;
     }
   }
-  else if (a == 4 || a == 6) {
+  else if (state.a == 4 || state.a == 6) {
     // chorus
-    notelength = beatlength * song1_chorus_rhythmn[b];
-    if (song1_chorus_melody[b] > 0) {
-      Serial.print(lyrics_chorus[c]);
-      piezoTone(song1_chorus_melody[b], notelength);
-      c++;
+    notelength = beatlength * song1_chorus_rhythmn[state.b];
+    if (song1_chorus_melody[state.b] > 0) {
+      Serial.print(lyrics_chorus[state.c]);
+      piezoTone(song1_chorus_melody[state.b], notelength);
+      state.c++;
     }
-    b++;
-    if (b >= sizeof(song1_chorus_melody) / sizeof(int)) {
+    state.b++;
+    if (state.b >= sizeof(song1_chorus_melody) / sizeof(int)) {
       Serial.println("");
-      a++;
-      b = 0;
-      c = 0;
+      state.a++;
+      state.b = 0;
+      state.c = 0;
     }
   }
   delay(notelength * beatseparationconstant);
-  if (a == 7) { // loop back around to beginning of song
-    return false;
+  if (state.a == 7) { // loop back around to beginning of song
+    state.a = 1;
   }
-  return true;
 }

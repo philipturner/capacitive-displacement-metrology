@@ -9,6 +9,7 @@
 #include "Util/Rickroll.h"
 
 float sineFrequency = -1;
+bool toneDiagnostics = true;
 void piezoTone(float frequency, uint32_t duration);
 
 void setup() {
@@ -18,6 +19,7 @@ void setup() {
 }
 
 void programBody() {
+  toneDiagnostics = true;
   delay(2000);
   for (uint32_t i = 0; i < 4; ++i) {
     piezoTone(1000, 900);
@@ -26,20 +28,10 @@ void programBody() {
     delay(100);
   }
 
-  for (uint32_t thisNote = 0; thisNote < notes * 2; thisNote = thisNote + 2) {
-    float divider = float(melody[thisNote + 1]);
-    float noteDuration = 0;
-    if (divider > 0) {
-      noteDuration = float(wholenote) / divider;
-    } else if (divider < 0) {
-      noteDuration = float(wholenote) / (-divider);
-      noteDuration *= 1.5;
-    }
-
-    // Jouer la note
-    float frequency = float(melody[thisNote]);
-    piezoTone(frequency, noteDuration * 0.9);
-    delay(noteDuration * 0.1);
+  toneDiagnostics = false;
+  RickrollState state;
+  while (true) {
+    rickroll_play(state);
   }
 }
 
@@ -61,12 +53,27 @@ void loop() {
   }
 }
 
+float sineWave(float phaseNormalized) {
+  return sin(phaseNormalized * 2 * M_PI);
+}
+
 float squareWave(float phaseNormalized) {
   if (phaseNormalized < 0.5) {
     return 1.0;
   } else {
     return -1.0;
   }
+}
+
+float triangleWave(float phaseNormalized) {
+  float progress;
+  if (phaseNormalized < 0.5) {
+    progress = 2 * phaseNormalized;
+  } else {
+    progress = 2 * (1 - phaseNormalized);
+  }
+
+  return 2 * progress - 1;
 }
 
 void kilohertzLoop() {
@@ -82,7 +89,7 @@ void kilohertzLoop() {
   uint32_t phase = latest % sinePeriod;
 
   float phaseNormalized = float(phase) / float(sinePeriod);
-  float waveValue = squareWave(phaseNormalized);
+  float waveValue = sineWave(phaseNormalized);
   float targetValue = 420 * waveValue;
 
   // Calculate the voltage.
@@ -100,13 +107,15 @@ void piezoTone(float frequency, uint32_t duration) {
     exit(0);
   }
 
-  float time = float(millis()) / 1000;
-  Serial.print("tone ");
-  Serial.print(uint32_t(frequency));
-  Serial.print(" Hz started at ");
-  Serial.print(time, 2);
-  Serial.print(" seconds");
-  Serial.println();
+  if (toneDiagnostics) {
+    float time = float(millis()) / 1000;
+    Serial.print("tone ");
+    Serial.print(uint32_t(frequency));
+    Serial.print(" Hz started at ");
+    Serial.print(time, 2);
+    Serial.print(" seconds");
+    Serial.println();
+  }
 
   sineFrequency = frequency;
   KilohertzLoop::initialize(kilohertzLoop, 4);
