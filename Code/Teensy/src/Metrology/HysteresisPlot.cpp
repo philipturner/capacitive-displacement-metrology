@@ -2,10 +2,13 @@
 #include "Metrology.h"
 
 struct Trial {
-  static constexpr uint32_t intervalCount = 8;
+  static constexpr uint32_t intervalCount = 14;
   static constexpr float voltages[intervalCount + 1] = {
-    -420, -210, 0, 210,
-    420, 210, 0, -210, -420
+    //-420, -210, 0, 210,
+    //420, 210, 0, -210, -420
+    -420,
+    420, 420, 420, 420, 420, 420, 420,
+    -420, -420, -420, -420, -420, -420, -420,
   };
   float displacements[intervalCount + 1];
   float times[intervalCount + 1];

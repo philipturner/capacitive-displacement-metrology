@@ -52,18 +52,18 @@ void Metrology::multiRampProgram() {
   #if 1
 
   constexpr uint32_t rampCount = 1;
-  constexpr uint32_t programCount = 4;
+  constexpr uint32_t programCount = 5;
 
   // sampleCount = 10 (rampCount = 1)
   // sampleCount = 30 (rampCount = 2)
   float voltageSequence[programCount] = {
-    52.5, 105, 210, 420//, 420
+    52.5, 105, 210, 420, 420
   };
   float creepTimeSequence[programCount];
   for (uint32_t i = 0; i < programCount; ++i) {
     creepTimeSequence[i] = 0.0;
   }
-  //creepTimeSequence[programCount - 1] = 0.6;
+  creepTimeSequence[programCount - 1] = 0.6;
 
   #elif 1
 
