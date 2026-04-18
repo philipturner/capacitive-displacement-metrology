@@ -65,7 +65,7 @@ void Metrology::multiRampProgram() {
   }
   creepTimeSequence[programCount - 1] = 0.6;
 
-  #elif 1
+  #elif 0
 
   constexpr uint32_t rampCount = 1;
   constexpr uint32_t programCount = 6;
@@ -88,7 +88,7 @@ void Metrology::multiRampProgram() {
     420
   };
   float creepTimeSequence[programCount] = {
-    4.0
+    0.6
   };
 
   #endif
