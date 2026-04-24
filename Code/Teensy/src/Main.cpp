@@ -7,65 +7,25 @@
 #include "Util/Application.h"
 #include "Util/Bitset.h"
 
-Metrology::Mode currentMode;
-Metrology metrology;
-void resetToMeasurement();
-
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
   Application::setupI2C();
-
-  resetToMeasurement();
 }
 
-void resetToMeasurement() {
-  currentMode = Metrology::Mode::basicMeasurement;
-
-  Metrology::Descriptor descriptor;
-  descriptor.mode = currentMode;
-  metrology = Metrology(descriptor);
-}
-
-void programBody() {
-  #if 0
-  Metrology::ProgramDescriptor programDesc;
-  programDesc.logSingleSamples = true;
-  programDesc.verboseDriftCancellation = true;
-  programDesc.bipolarVoltage = 100;
-  programDesc.creepTime = 0.0;
-
-  metrology.metrologyProgram(programDesc);
-
-  #else
-  
-  metrology.multiRampProgram();
-
-  #endif
-}
+uint32_t periodID = 0;
 
 void loop() {
-  if (Serial.available() > 0) {
-    char incomingByte = Serial.read();
+  delay(3000);
 
-    if (incomingByte == 'm') {
-      if (currentMode != Metrology::Mode::metrology) {
-        currentMode = Metrology::Mode::metrology;
+  float voltages[7] = {
+    10, 5, 2.5, 0, -2.5, -5, -10
+  };
 
-        Metrology::Descriptor descriptor;
-        descriptor.mode = currentMode;
-        metrology = Metrology(descriptor);
+  float dacVoltage = voltages[periodID % 7];
+  DAC1::writeVoltage(1, dacVoltage);
+  DAC1::writeVoltage(3, dacVoltage);
+  DAC1::writeVoltage(2, dacVoltage);
 
-        programBody();
-      }
-    }
-
-    if (incomingByte == 'b') {
-      if (currentMode == Metrology::Mode::metrology) {
-        resetToMeasurement();
-      }
-    }
-  }
-
-  metrology.loop();
+  periodID += 1;
 }
