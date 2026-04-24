@@ -1,6 +1,7 @@
 #include "IC/ADC.h"
 #include "IC/CDC.h"
 #include "IC/DAC.h"
+#include "IC/PA95.h"
 #include "Metrology/Metrology.h"
 #include "Time/KilohertzLoop.h"
 #include "Time/TimeStatistics.h"
@@ -18,6 +19,7 @@ uint32_t periodID = 0;
 void loop() {
   delay(3000);
 
+  /*
   float voltages[7] = {
     10, 5, 2.5, 0, -2.5, -5, -10
   };
@@ -26,6 +28,14 @@ void loop() {
   DAC1::writeVoltage(1, dacVoltage);
   DAC1::writeVoltage(3, dacVoltage);
   DAC1::writeVoltage(2, dacVoltage);
+  */
+
+  float voltages[7] = {
+    -400, -200, -100, 0, 100, 200, 400
+  };
+  
+  float voltage = voltages[periodID % 7];
+  PA95::writeVoltage(3, voltage);
 
   periodID += 1;
 }
