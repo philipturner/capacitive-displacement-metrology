@@ -8,7 +8,8 @@
 #include "Util/Application.h"
 #include "Util/Bitset.h"
 
-float positiveDriveVoltage = 50;
+float bipolarDriveVoltage = 420;
+float positiveDriveVoltage = 0;
 
 void setup() {
   Application::setupSerial();
@@ -16,9 +17,11 @@ void setup() {
   Application::setupI2C();
 }
 
-void voltageRamp(float startVoltage, float endVoltage) {
-  constexpr float duration = 1e-3;
-
+void voltageRamp(
+  float startVoltage, 
+  float endVoltage, 
+  float duration = 500e-6
+) {
   uint32_t startTime = micros();
   while (true) {
     uint32_t latestTime = micros();
@@ -40,16 +43,40 @@ void voltageRamp(float startVoltage, float endVoltage) {
 }
 
 void programBody() {
+  delay(1000);
+
   voltageRamp(0, -positiveDriveVoltage);
 
-  uint32_t stepCount = 3000;
+  uint32_t stepCount = 12000;
   for (uint32_t i = 0; i < stepCount; ++i) {
     voltageRamp(-positiveDriveVoltage, positiveDriveVoltage);
+
+    #if false
     PA95::writeVoltage(1, -positiveDriveVoltage);
-    delayMicroseconds(1000);
+    #else
+    voltageRamp(positiveDriveVoltage, -positiveDriveVoltage, 60e-6);
+    #endif
+
+    delayMicroseconds(100);
   }
-  
+
   voltageRamp(-positiveDriveVoltage, 0);
+}
+
+// Workaround for problem where the Teensy program won't upload.
+void processInput(char incomingByte) {
+  float _positiveDriveVoltage;
+  if (incomingByte == 'u') {
+    _positiveDriveVoltage = bipolarDriveVoltage;
+  } else if (incomingByte == 'd') {
+    _positiveDriveVoltage = -bipolarDriveVoltage;
+  } else {
+    return;
+  }
+
+  positiveDriveVoltage =  _positiveDriveVoltage;
+  programBody();
+  positiveDriveVoltage = 0;
 }
 
 void loop() {
@@ -64,9 +91,7 @@ void loop() {
   if (Serial.available() > 0) {
     char incomingByte = Serial.read();
 
-    if (incomingByte == 's') {
-      programBody();
-    }
+    processInput(incomingByte);
   }
 }
 
