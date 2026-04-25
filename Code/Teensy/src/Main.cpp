@@ -32,15 +32,21 @@ void loop() {
   if (Serial.available() > 0) {
     char incomingByte = Serial.read();
 
-    if (incomingByte == 'b') {
-      channelID = 1;
-      piezoTone(1000, 3 * 1000);
-    } else if (incomingByte == 'c') {
-      channelID = 2;
-      piezoTone(1000, 3 * 1000);
-    } else if (incomingByte == 'd') {
-      channelID = 3;
-      piezoTone(1000, 3 * 1000);
+    if (incomingByte == 'm') {
+      for (uint32_t trialID = 0; trialID < 5; ++trialID) {
+        for (uint8_t i = 0; i < 4; ++i) {
+          uint32_t toneTimeMilliseconds = 3 * 1000;
+          
+          if (i == 0) {
+            delay(toneTimeMilliseconds);
+          } else {
+            channelID = i;
+            piezoTone(1000, toneTimeMilliseconds);
+          }
+
+          delay(500);
+        }
+      }
     }
   }
 }
