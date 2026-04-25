@@ -9,20 +9,40 @@
 #include "Util/Bitset.h"
 
 float toneFrequency = 300;
-float toneBipolarAmplitude = 360;
-uint8_t channelID = 3;
-void kilohertzLoop();
+float toneBipolarAmplitude = 50;
+uint8_t channelID = 0;
+bool toneDiagnostics = true;
+void piezoTone(float frequency, uint32_t duration);
 
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
   Application::setupI2C();
-
-  KilohertzLoop::initialize(kilohertzLoop, 4);
 }
 
 void loop() {
+  delay(500);
 
+  float time = float(millis()) / 1000;
+  Serial.print("time: ");
+  Serial.print(time, 2);
+  Serial.print(" seconds");
+  Serial.println();
+
+  if (Serial.available() > 0) {
+    char incomingByte = Serial.read();
+
+    if (incomingByte == 'b') {
+      channelID = 1;
+      piezoTone(1000, 3 * 1000);
+    } else if (incomingByte == 'c') {
+      channelID = 2;
+      piezoTone(1000, 3 * 1000);
+    } else if (incomingByte == 'd') {
+      channelID = 3;
+      piezoTone(1000, 3 * 1000);
+    }
+  }
 }
 
 float squareWave(float phaseNormalized) {
@@ -50,4 +70,36 @@ void kilohertzLoop() {
   waveValue *= toneBipolarAmplitude;
 
   PA95::writeVoltage(channelID, waveValue);
+}
+
+// frequency: frequency of the tone, in hertz
+// duration: time to play the note, in milliseconds
+void piezoTone(float frequency, uint32_t duration) {
+  if (frequency <= 0) {
+    Serial.println("Invalid arguments.");
+    exit(0);
+  }
+
+  if (toneDiagnostics) {
+    float time = float(millis()) / 1000;
+    Serial.print("tone ");
+    Serial.print(uint32_t(frequency));
+    Serial.print(" Hz started at ");
+    Serial.print(time, 2);
+    Serial.print(" seconds");
+    Serial.println();
+  }
+
+  toneFrequency = frequency;
+  KilohertzLoop::initialize(kilohertzLoop, 4);
+
+  delay(duration);
+
+  KilohertzLoop::timer.end();
+  toneFrequency = -1;
+
+  // Debug the strange behavior where the Teensy stops responding.
+  if (toneDiagnostics) {
+    Serial.println("tone stopped");
+  }
 }
