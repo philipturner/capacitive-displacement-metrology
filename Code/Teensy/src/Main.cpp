@@ -8,7 +8,8 @@
 #include "Util/Application.h"
 #include "Util/Bitset.h"
 
-float bipolarDriveVoltage = 420;
+uint32_t stepCount = 5000;
+float bipolarDriveVoltage = 100;
 float positiveDriveVoltage = 0;
 
 void setup() {
@@ -20,7 +21,7 @@ void setup() {
 void voltageRamp(
   float startVoltage, 
   float endVoltage, 
-  float duration = 400e-6
+  float duration = 600e-6
 ) {
   uint32_t startTime = micros();
   while (true) {
@@ -34,7 +35,7 @@ void voltageRamp(
     voltage += progress * endVoltage;
     voltage += (1 - progress) * startVoltage;
 
-    PA95::writeVoltage(1, voltage);
+    PA95::writeVoltage(3, voltage);
 
     if (elapsedTime > duration) {
       break;
@@ -43,21 +44,18 @@ void voltageRamp(
 }
 
 void programBody() {
-  delay(1000);
-
   voltageRamp(0, -positiveDriveVoltage);
 
-  uint32_t stepCount = 6000;
   for (uint32_t i = 0; i < stepCount; ++i) {
     voltageRamp(-positiveDriveVoltage, positiveDriveVoltage);
 
     #if true
-    PA95::writeVoltage(1, -positiveDriveVoltage);
+    PA95::writeVoltage(3, -positiveDriveVoltage);
     #else
     voltageRamp(positiveDriveVoltage, -positiveDriveVoltage, 22.5e-6);
     #endif
 
-    delayMicroseconds(250);
+    //delayMicroseconds(25);
   }
 
   voltageRamp(-positiveDriveVoltage, 0);
@@ -90,8 +88,15 @@ void loop() {
 
   if (Serial.available() > 0) {
     char incomingByte = Serial.read();
-
+    
     processInput(incomingByte);
+
+    // Prevent accidents from multiple key presses.
+    while (Serial.available() > 0) {
+      char byte = Serial.read();
+      Serial.print("ignored input: ");
+      Serial.print(byte);
+      Serial.println();
+    }
   }
 }
-
