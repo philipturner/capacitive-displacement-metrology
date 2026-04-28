@@ -8,8 +8,8 @@
 #include "Util/Application.h"
 #include "Util/Bitset.h"
 
-uint32_t stepCount = 5000;
-float bipolarDriveVoltage = 100;
+uint32_t stepCount = 4000;
+float bipolarDriveVoltage = 120;
 float positiveDriveVoltage = 0;
 
 void setup() {
@@ -55,7 +55,7 @@ void programBody() {
     voltageRamp(positiveDriveVoltage, -positiveDriveVoltage, 22.5e-6);
     #endif
 
-    //delayMicroseconds(25);
+    delayMicroseconds(600);
   }
 
   voltageRamp(-positiveDriveVoltage, 0);
