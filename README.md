@@ -42,6 +42,7 @@ Table of Contents:
 - [March 28, 2026](#march-28-2026)
 - [March 29, 2026](#march-29-2026)
 - [April 2, 2026](#april-2-2026)
+- [April 27, 2026](#april-27-2026)
 
 ## December 15, 2025
 
@@ -1264,3 +1265,7 @@ Using C_c = 10 pF instead of 4.7 pF should slightly reduce the phase shift. Anal
 ## April 2, 2026
 
 [First Results (Google Sheets)](https://docs.google.com/spreadsheets/d/1VzDdiTFU4CgLRhZFHXjNY3yRBVk6OQX0ghWjVNZDBaY/edit?usp=sharing)
+
+## April 27, 2026
+
+[Second Results (Google Sheets)](https://docs.google.com/spreadsheets/d/1Do84VAlAGQZ97CIQE4hozCyVhDGok7tUiJL7-F-olmg/edit?usp=sharing)

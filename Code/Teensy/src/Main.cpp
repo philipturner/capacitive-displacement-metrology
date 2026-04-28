@@ -20,7 +20,7 @@ void setup() {
 void voltageRamp(
   float startVoltage, 
   float endVoltage, 
-  float duration = 500e-6
+  float duration = 400e-6
 ) {
   uint32_t startTime = micros();
   while (true) {
@@ -47,17 +47,17 @@ void programBody() {
 
   voltageRamp(0, -positiveDriveVoltage);
 
-  uint32_t stepCount = 12000;
+  uint32_t stepCount = 6000;
   for (uint32_t i = 0; i < stepCount; ++i) {
     voltageRamp(-positiveDriveVoltage, positiveDriveVoltage);
 
-    #if false
+    #if true
     PA95::writeVoltage(1, -positiveDriveVoltage);
     #else
-    voltageRamp(positiveDriveVoltage, -positiveDriveVoltage, 60e-6);
+    voltageRamp(positiveDriveVoltage, -positiveDriveVoltage, 22.5e-6);
     #endif
 
-    delayMicroseconds(100);
+    delayMicroseconds(250);
   }
 
   voltageRamp(-positiveDriveVoltage, 0);
