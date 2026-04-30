@@ -12,7 +12,6 @@
 float toneVoltageBias = 1.25;
 float toneVoltagePiezo = 420;
 float toneFrequency = 1000;
-uint32_t toneDuration = 10 * 1000;
 
 // Global variables used by the code
 uint32_t toneChannelID = UINT32_MAX;
@@ -25,10 +24,15 @@ void setup() {
 
 // MARK: - Process Input
 
-void playTone(uint32_t duration);
+void playTone();
 
 // Workaround for problem where the Teensy program won't upload.
 void processInput(char incomingByte) {
+  if (incomingByte == 'e') {
+    KilohertzLoop::timer.end();
+    return;
+  }
+
   toneChannelID = UINT32_MAX;
   switch (incomingByte) {
     case '1': {
@@ -52,23 +56,7 @@ void processInput(char incomingByte) {
     }
   }
 
-  if (incomingByte == '1') {
-
-  } else if (incomingByte == '2') {
-
-  } else if 
-
-  if (incomingByte == 'u') {
-    _positiveDriveVoltage = bipolarDriveVoltage;
-  } else if (incomingByte == 'd') {
-    _positiveDriveVoltage = -bipolarDriveVoltage;
-  } else {
-    return;
-  }
-
-  positiveDriveVoltage =  _positiveDriveVoltage;
-  programBody();
-  positiveDriveVoltage = 0;
+  playTone();
 }
 
 void loop() {
@@ -142,25 +130,7 @@ void kilohertzLoop() {
   DAC1::writeVoltage(1, dacValue);
 }
 
-void playTone(uint32_t duration) {
-  if (true) {
-    float time = float(millis()) / 1000;
-    Serial.print("tone ");
-    Serial.print(uint32_t(toneFrequency));
-    Serial.print(" Hz started at ");
-    Serial.print(time, 2);
-    Serial.print(" seconds");
-    Serial.println();
-  }
-
-  KilohertzLoop::initialize(kilohertzLoop, 4);
-
-  delay(duration);
-
+void playTone() {
   KilohertzLoop::timer.end();
-
-  // Debug the strange behavior where the Teensy stops responding.
-  if (true) {
-    Serial.println("tone stopped");
-  }
+  KilohertzLoop::initialize(kilohertzLoop, 4);
 }
