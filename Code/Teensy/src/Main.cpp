@@ -8,9 +8,14 @@
 #include "Util/Application.h"
 #include "Util/Bitset.h"
 
-uint32_t stepCount = 15000;
-float bipolarDriveVoltage = 15;
-float positiveDriveVoltage = 0;
+// Constants to define script behavior
+float toneVoltageBias = 1.25;
+float toneVoltagePiezo = 420;
+float toneFrequency = 1000;
+uint32_t toneDuration = 10 * 1000;
+
+// Global variables used by the code
+uint32_t toneChannelID = UINT32_MAX;
 
 void setup() {
   Application::setupSerial();
@@ -18,52 +23,41 @@ void setup() {
   Application::setupI2C();
 }
 
-void voltageRamp(
-  float startVoltage, 
-  float endVoltage, 
-  float duration = 600e-6
-) {
-  uint32_t startTime = micros();
-  while (true) {
-    uint32_t latestTime = micros();
-    float elapsedTime = float(latestTime - startTime) / float(1e6);
-    float progress = elapsedTime / duration;
-    progress = min(progress, 1);
-    progress = max(progress, 0);
+// MARK: - Process Input
 
-    float voltage = 0;
-    voltage += progress * endVoltage;
-    voltage += (1 - progress) * startVoltage;
-
-    PA95::writeVoltage(3, voltage);
-
-    if (elapsedTime > duration) {
-      break;
-    }
-  }
-}
-
-void programBody() {
-  voltageRamp(0, -positiveDriveVoltage);
-
-  for (uint32_t i = 0; i < stepCount; ++i) {
-    voltageRamp(-positiveDriveVoltage, positiveDriveVoltage);
-
-    #if true
-    PA95::writeVoltage(3, -positiveDriveVoltage);
-    #else
-    voltageRamp(positiveDriveVoltage, -positiveDriveVoltage, 22.5e-6);
-    #endif
-
-    // delayMicroseconds(600);
-  }
-
-  voltageRamp(-positiveDriveVoltage, 0);
-}
+void playTone(uint32_t duration);
 
 // Workaround for problem where the Teensy program won't upload.
 void processInput(char incomingByte) {
-  float _positiveDriveVoltage;
+  toneChannelID = UINT32_MAX;
+  switch (incomingByte) {
+    case '1': {
+      toneChannelID = 1;
+      break;
+    }
+    case '2': {
+      toneChannelID = 2;
+      break;
+    }
+    case '3': {
+      toneChannelID = 3;
+      break;
+    }
+    case '4': {
+      toneChannelID = 4;
+      break;
+    }
+    default: {
+      return;
+    }
+  }
+
+  if (incomingByte == '1') {
+
+  } else if (incomingByte == '2') {
+
+  } else if 
+
   if (incomingByte == 'u') {
     _positiveDriveVoltage = bipolarDriveVoltage;
   } else if (incomingByte == 'd') {
@@ -98,5 +92,75 @@ void loop() {
       Serial.print(byte);
       Serial.println();
     }
+  }
+}
+
+// MARK: - Play Tone
+
+float sineWave(float phaseNormalized) {
+  return sin(phaseNormalized * 2 * M_PI);
+}
+
+float squareWave(float phaseNormalized) {
+  if (phaseNormalized < 0.5) {
+    return 1.0;
+  } else {
+    return -1.0;
+  }
+}
+
+float triangleWave(float phaseNormalized) {
+  float progress;
+  if (phaseNormalized < 0.5) {
+    progress = 2 * phaseNormalized;
+  } else {
+    progress = 2 * (1 - phaseNormalized);
+  }
+
+  return 2 * progress - 1;
+}
+
+void kilohertzLoop() {
+  if (toneFrequency <= 0) {
+    Serial.println("Invalid arguments.");
+    exit(0);
+  }
+
+  uint32_t latest = KilohertzLoop::latestTimestamp;
+
+  // Calculate the period and phase, in microseconds.
+  uint32_t sinePeriod = uint32_t(float(1e6) / toneFrequency);
+  uint32_t phase = latest % sinePeriod;
+
+  float phaseNormalized = float(phase) / float(sinePeriod);
+  float waveValue = triangleWave(phaseNormalized);
+
+  // Calculate the voltage.
+  float gainFactor = -35.751;
+  float offset = 0.079;
+  float dacValue = (targetValue - offset) / gainFactor;
+  DAC1::writeVoltage(1, dacValue);
+}
+
+void playTone(uint32_t duration) {
+  if (true) {
+    float time = float(millis()) / 1000;
+    Serial.print("tone ");
+    Serial.print(uint32_t(toneFrequency));
+    Serial.print(" Hz started at ");
+    Serial.print(time, 2);
+    Serial.print(" seconds");
+    Serial.println();
+  }
+
+  KilohertzLoop::initialize(kilohertzLoop, 4);
+
+  delay(duration);
+
+  KilohertzLoop::timer.end();
+
+  // Debug the strange behavior where the Teensy stops responding.
+  if (true) {
+    Serial.println("tone stopped");
   }
 }
