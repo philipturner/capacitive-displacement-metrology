@@ -15,8 +15,8 @@ enum class WaveType: uint32_t {
 };
 
 // Constants to define script behavior
-float toneVoltageBias = 1.25;
-float toneVoltagePiezo = 1.25;
+float toneVoltageBias = 10;
+float toneVoltagePiezo = 10;
 float toneFrequency = 1000;
 
 // Global variables used by the code
@@ -33,6 +33,7 @@ void setup() {
 
 void endTone();
 void playTone();
+void forceAll(float value);
 
 // Workaround for problem where the Teensy program won't upload.
 void processInput(char incomingByte) {
@@ -51,6 +52,15 @@ void processInput(char incomingByte) {
 
   if (incomingByte == 'e') {
     endTone();
+    return;
+  }
+
+  if (incomingByte == '+') {
+    forceAll(12.0);
+    return;
+  }
+  if (incomingByte == '-') {
+    forceAll(-12.0);
     return;
   }
 
@@ -183,5 +193,16 @@ void endTone() {
 
 void playTone() {
   endTone();
-  KilohertzLoop::initialize(kilohertzLoop, 4);
+  KilohertzLoop::initialize(kilohertzLoop, 12);
+}
+
+void forceAll(float value) {
+  endTone();
+
+  DAC1::writeVoltage(0, value);
+  DAC1::writeVoltage(1, value);
+  DAC1::writeVoltage(2, value);
+  DAC1::writeVoltage(3, value);
+
+  DAC2::writeVoltage(0, value);
 }
