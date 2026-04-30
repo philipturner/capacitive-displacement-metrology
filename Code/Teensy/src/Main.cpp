@@ -8,12 +8,19 @@
 #include "Util/Application.h"
 #include "Util/Bitset.h"
 
+enum class WaveType: uint32_t {
+  sineWave = 0,
+  triangleWave = 1,
+  squareWave = 2,
+};
+
 // Constants to define script behavior
 float toneVoltageBias = 1.25;
-float toneVoltagePiezo = 420;
+float toneVoltagePiezo = 1.25;
 float toneFrequency = 1000;
 
 // Global variables used by the code
+WaveType waveType = WaveType::sineWave;
 uint32_t toneChannelID = UINT32_MAX;
 
 void setup() {
@@ -29,6 +36,19 @@ void playTone();
 
 // Workaround for problem where the Teensy program won't upload.
 void processInput(char incomingByte) {
+  if (incomingByte == 's') {
+    waveType = WaveType::sineWave;
+    return;
+  }
+  if (incomingByte == 't') {
+    waveType = WaveType::triangleWave;
+    return;
+  }
+  if (incomingByte == 'q') {
+    waveType = WaveType::squareWave;
+    return;
+  }
+
   if (incomingByte == 'e') {
     endTone();
     return;
@@ -122,7 +142,21 @@ void kilohertzLoop() {
   uint32_t phase = latest % sinePeriod;
 
   float phaseNormalized = float(phase) / float(sinePeriod);
-  float waveValueNormalized = triangleWave(phaseNormalized);
+  float waveValueNormalized = 0;
+  switch (waveType) {
+    case WaveType::sineWave: {
+      waveValueNormalized = sineWave(phaseNormalized);
+      break;
+    }
+    case WaveType::triangleWave: {
+      waveValueNormalized = triangleWave(phaseNormalized);
+      break;
+    }
+    case WaveType::squareWave: {
+      waveValueNormalized = squareWave(phaseNormalized);
+      break;
+    }
+  }
 
   if (toneChannelID >= 1 && toneChannelID <= 3) {
     float voltage = toneVoltagePiezo * waveValueNormalized;
