@@ -24,12 +24,13 @@ void setup() {
 
 // MARK: - Process Input
 
+void endTone();
 void playTone();
 
 // Workaround for problem where the Teensy program won't upload.
 void processInput(char incomingByte) {
   if (incomingByte == 'e') {
-    KilohertzLoop::timer.end();
+    endTone();
     return;
   }
 
@@ -121,16 +122,32 @@ void kilohertzLoop() {
   uint32_t phase = latest % sinePeriod;
 
   float phaseNormalized = float(phase) / float(sinePeriod);
-  float waveValue = triangleWave(phaseNormalized);
+  float waveValueNormalized = triangleWave(phaseNormalized);
 
-  // Calculate the voltage.
-  float gainFactor = -35.751;
-  float offset = 0.079;
-  float dacValue = (targetValue - offset) / gainFactor;
-  DAC1::writeVoltage(1, dacValue);
+  if (toneChannelID >= 1 && toneChannelID <= 3) {
+    float voltage = toneVoltagePiezo * waveValueNormalized;
+    PA95::writeVoltage(toneChannelID, voltage);
+  } else if (toneChannelID == 4) {
+    float voltage = toneVoltageBias * waveValueNormalized;
+    DAC2::writeVoltage(0, voltage);
+  } else {
+    Serial.println("Invalid channel ID.");
+    exit(0);
+  }
+}
+
+void endTone() {
+  KilohertzLoop::timer.end();
+
+  DAC1::writeVoltage(0, 0.0);
+  DAC1::writeVoltage(1, 0.0);
+  DAC1::writeVoltage(2, 0.0);
+  DAC1::writeVoltage(3, 0.0);
+
+  DAC2::writeVoltage(0, 0.0);
 }
 
 void playTone() {
-  KilohertzLoop::timer.end();
+  endTone();
   KilohertzLoop::initialize(kilohertzLoop, 4);
 }
