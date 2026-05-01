@@ -16,7 +16,7 @@ enum class WaveType: uint32_t {
 
 // Constants to define script behavior
 float toneVoltageBias = 10;
-float toneVoltagePiezo = 10;
+float toneVoltagePiezo = 420;
 float toneFrequency = 1000;
 
 // Global variables used by the code
@@ -193,7 +193,7 @@ void endTone() {
 
 void playTone() {
   endTone();
-  KilohertzLoop::initialize(kilohertzLoop, 12);
+  KilohertzLoop::initialize(kilohertzLoop, 4);
 }
 
 void forceAll(float value) {
