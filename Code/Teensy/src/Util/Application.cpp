@@ -2,7 +2,6 @@
 #include "IC/CDC.h"
 #include "IC/DAC.h"
 #include "Application.h"
-#include "Bitset.h"
 
 void Application::setupSerial() {
   Serial.begin(0);

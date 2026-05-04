@@ -75,12 +75,4 @@ struct ADC {
 
   // Read the full 32-bit register.
   static uint32_t readRegister(uint8_t registerAddress);
-
-  // 'c' received - ADC performs a measurement
-  // 'd' received - ADC reports contents of ADS8699_SDI_CTL_REG
-  // '0' received - ADC (but not Teensy) switches to SPI_MODE0
-  // '1' received - ADC (but not Teensy) switches to SPI_MODE1
-  // '2' received - ADC (but not Teensy) switches to SPI_MODE2
-  // '3' received - ADC (but not Teensy) switches to SPI_MODE3
-  static void responsivenessDiagnosticLoop();
 };

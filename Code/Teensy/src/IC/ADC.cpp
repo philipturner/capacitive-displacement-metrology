@@ -1,4 +1,3 @@
-#include "../Util/Bitset.h"
 #include "ADC.h"
 
 ADCOutputConversion::ADCOutputConversion(uint32_t rawData) {
@@ -128,43 +127,4 @@ uint32_t ADC::readRegister(uint8_t registerAddress) {
   }
 
   return (upperBits << 16) | lowerBits;
-}
-
-void ADC::responsivenessDiagnosticLoop() {
-  if (Serial.available() > 0) {
-    char incomingByte = Serial.read();
-
-    if (incomingByte == 'c') {
-      ADCOutputConversion result = ADC::readVoltage();
-      Serial.print("ADC code: ");
-      Serial.print(result.voltage, 4);
-      Serial.print(" V | ");
-      Bitset::printBinary(result.integerValue, 18);
-      Serial.print(" | ");
-      Bitset::printBinary(result.otherBits, 14);
-      Serial.println();
-
-    } else if (incomingByte == 'd') {
-      uint32_t rangeCode = ADC::readRegister(ADS8699_SDI_CTL_REG);
-      Serial.print("Contents of SDI_CTL register: ");
-      Serial.println(rangeCode);
-
-    } else if (incomingByte == '0') {
-      Serial.println("received command '0'");
-      ADC::writeRegister(ADS8699_SDI_CTL_REG, 0);
-
-    } else if (incomingByte == '1') {
-      Serial.println("received command '1'");
-      ADC::writeRegister(ADS8699_SDI_CTL_REG, 1);
-
-    } else if (incomingByte == '2') {
-      Serial.println("received command '2'");
-      ADC::writeRegister(ADS8699_SDI_CTL_REG, 2);
-
-    } else if (incomingByte == '3') {
-      Serial.println("received command '3'");
-      ADC::writeRegister(ADS8699_SDI_CTL_REG, 3);
-
-    }
-  }
 }
