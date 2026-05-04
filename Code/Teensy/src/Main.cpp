@@ -17,11 +17,11 @@ enum class WaveType: uint32_t {
 // Constants to define script behavior
 float toneVoltageBias = 10;
 float toneVoltagePiezo = 420;
-float toneFrequency = 1000;
+uint32_t toneChannelID = 4;
 
 // Global variables used by the code
 WaveType waveType = WaveType::sineWave;
-uint32_t toneChannelID = UINT32_MAX;
+float toneFrequency = 1000;
 
 void setup() {
   Application::setupSerial();
@@ -33,10 +33,19 @@ void setup() {
 
 void endTone();
 void playTone();
-void forceAll(float value);
+
+bool isDigit(char byte) {
+  return (byte >= '0') && (byte <= '9');
+}
+
+uint32_t getDigit(char byte) {
+  return byte - '0';
+}
 
 // Workaround for problem where the Teensy program won't upload.
-void processInput(char incomingByte) {
+void processInput() {
+  char incomingByte = Serial.read();
+
   if (incomingByte == 's') {
     waveType = WaveType::sineWave;
     return;
@@ -50,44 +59,35 @@ void processInput(char incomingByte) {
     return;
   }
 
+  if (incomingByte == 'p') {
+    playTone();
+    return;
+  }
   if (incomingByte == 'e') {
     endTone();
     return;
   }
 
-  if (incomingByte == '+') {
-    forceAll(12.0);
-    return;
-  }
-  if (incomingByte == '-') {
-    forceAll(-12.0);
+  if (!isDigit(incomingByte)) {
     return;
   }
 
-  toneChannelID = UINT32_MAX;
-  switch (incomingByte) {
-    case '1': {
-      toneChannelID = 1;
-      break;
+  uint32_t frequency = getDigit(incomingByte);
+  while (Serial.available() > 0) {
+    char incomingByte = Serial.read();
+    if (!isDigit(incomingByte)) {
+      Serial.println("Invalid number entered.");
+      exit(0);
     }
-    case '2': {
-      toneChannelID = 2;
-      break;
-    }
-    case '3': {
-      toneChannelID = 3;
-      break;
-    }
-    case '4': {
-      toneChannelID = 4;
-      break;
-    }
-    default: {
-      return;
-    }
-  }
 
-  playTone();
+    uint32_t digit = getDigit(incomingByte);
+    frequency = frequency * 10 + digit;
+  }
+  Serial.print("Changed frequency to: ");
+  Serial.print(frequency, 1);
+  Serial.println();
+
+  toneFrequency = float(frequency);
 }
 
 void loop() {
@@ -100,9 +100,7 @@ void loop() {
   Serial.println();
 
   if (Serial.available() > 0) {
-    char incomingByte = Serial.read();
-    
-    processInput(incomingByte);
+    processInput();
 
     // Prevent accidents from multiple key presses.
     while (Serial.available() > 0) {
@@ -194,15 +192,4 @@ void endTone() {
 void playTone() {
   endTone();
   KilohertzLoop::initialize(kilohertzLoop, 4);
-}
-
-void forceAll(float value) {
-  endTone();
-
-  DAC1::writeVoltage(0, value);
-  DAC1::writeVoltage(1, value);
-  DAC1::writeVoltage(2, value);
-  DAC1::writeVoltage(3, value);
-
-  DAC2::writeVoltage(0, value);
 }

@@ -43,6 +43,7 @@ Table of Contents:
 - [March 29, 2026](#march-29-2026)
 - [April 2, 2026](#april-2-2026)
 - [April 27, 2026](#april-27-2026)
+- [May 4, 2026](#may-4-2026)
 
 ## December 15, 2025
 
@@ -1269,3 +1270,11 @@ Using C_c = 10 pF instead of 4.7 pF should slightly reduce the phase shift. Anal
 ## April 27, 2026
 
 [Second Results (Google Sheets)](https://docs.google.com/spreadsheets/d/1Do84VAlAGQZ97CIQE4hozCyVhDGok7tUiJL7-F-olmg/edit?usp=sharing)
+
+## May 4, 2026
+
+I should note that much of the commentary/results for this phase has occurred on Twitter (https://x.com/philipturnerar). The README is getting much more sparse than previous repositories, but it does not mean progress is slowing down.
+
+Quite the opposite. In fact, we are just about to set up the synthetic chemistry lab for tripods. I initiated the first of two $4200 transfers to ChimiaDAO for my contribution to the lab costs. The tripod synthesis effort has not been publicly documented as much, mostly because there isn't much to show. We have been planning for what to synthesize, and where to synthesize it.
+
+I have sent off some emails to prepare for the second design iteration of the STM (targeting coarse XY nanopositioning). But I have not been allocating serious attention to it. Even if the lead time for sputtered LiNbO3 wafers is 4-5 weeks, the focus right now is not on that time bottleneck. Perhaps my mindset, timelines, and cost concerns will radically change after the $2 million raise in the middle of Phase II.
