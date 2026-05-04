@@ -2,6 +2,7 @@
 #include "KilohertzLoop.h"
 
 void _kilohertzLoopBody() {
+  // Will remove this.
   if (KilohertzLoop::lock) {
     // Never encountered this after about a minute of testing,
     // although the code guarded by the lock was very small.
