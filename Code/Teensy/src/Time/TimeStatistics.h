@@ -1,37 +1,63 @@
 #pragma once
 
 #include <stdint.h>
+#include <Arduino.h>
 
 struct TimeStatistics {
-  uint32_t above1000000us_jumps = 0;
-  uint32_t above100000us_jumps = 0;
-  uint32_t above10000us_jumps = 0;
-  uint32_t above1000us_jumps = 0;
-  uint32_t above100us_jumps = 0;
-  uint32_t abovePeriod_jumps = 0;
-  uint32_t exactlyPeriod_jumps = 0;
-  uint32_t underPeriod_jumps = 0;
-  uint32_t total_jumps = 0;
+  static constexpr uint32_t binCount = 100;
+  uint32_t bins[binCount]; // may cause program to fail to upload
+  uint32_t largeJumpCount = 0;
+  uint32_t totalJumpCount = 0;
 
-  // period - must be less than 100 microseconds
-  void integrate(uint32_t jumpDuration, uint32_t period) {
-    if (jumpDuration > 1000000) {
-      this->above1000000us_jumps += 1;
-    } else if (jumpDuration > 100000) {
-      this->above100000us_jumps += 1;
-    } else if (jumpDuration > 10000) {
-      this->above10000us_jumps += 1;
-    } else if (jumpDuration > 1000) {
-      this->above1000us_jumps += 1;
-    } else if (jumpDuration > 100) {
-      this->above100us_jumps += 1;
-    } else if (jumpDuration > period) {
-      this->abovePeriod_jumps += 1;
-    } else if (jumpDuration == period) {
-      this->exactlyPeriod_jumps += 1;
-    } else if (jumpDuration < period) {
-      this->underPeriod_jumps += 1;
+  TimeStatistics() {
+    for (uint32_t binID = 0; binID < binCount; ++binID) {
+      bins[binID] = 0;
     }
-    this->total_jumps += 1;
+  }
+
+  void integrate(uint32_t jumpDuration, uint32_t period) {
+    totalJumpCount += 1;
+    if (totalJumpCount == 1) {
+      return;
+    }
+
+    if (jumpDuration < binCount) {
+      bins[jumpDuration] += 1;
+    } else {
+      largeJumpCount += 1;
+    }
+  }
+
+  // Display the results.
+  void display() {
+    for (uint32_t binID = 0; binID < binCount; ++binID) {
+      uint32_t jumpCount = bins[binID];
+      if (jumpCount == 0) {
+        continue;
+      }
+
+      if (binID < 10) {
+        Serial.print(" ");
+      }
+      if (binID < 100) {
+        Serial.print(" ");
+      }
+      Serial.print(binID);
+      Serial.print(" μs: ");
+      Serial.print(jumpCount);
+      Serial.println();
+    }
+
+    if (largeJumpCount > 0) {
+      Serial.print("over ");
+      Serial.print(binCount);
+      Serial.print(" μs: ");
+      Serial.print(largeJumpCount);
+      Serial.println();
+    }
+
+    Serial.print("total: ");
+    Serial.print(totalJumpCount);
+    Serial.println();
   }
 };
