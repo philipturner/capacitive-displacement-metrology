@@ -48,9 +48,12 @@ void KilohertzLoop::initialize(
   KilohertzLoop::period = period;
 
   uint32_t timestamp = micros();
-  KilohertzLoop::startTimestamp = timestamp;
-  KilohertzLoop::previousTimestamp = timestamp;
-  KilohertzLoop::latestTimestamp = timestamp;
+  startTimestamp = timestamp;
+  previousTimestamp = timestamp;
+  latestTimestamp = timestamp;
 
-  KilohertzLoop::timer.begin(_kilohertzLoopBodyOuter, period);
+  integrationStartTimestamp = 0;
+  iterationID = 0;
+
+  timer.begin(_kilohertzLoopBodyOuter, period);
 }

@@ -16,7 +16,9 @@ void kilohertzLoop();
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
+}
 
+void runProgram() {
   for (uint32_t i = 0; i < historyLength; ++i) {
     dataStream1[i] = 0;
     dataStream2[i] = 0;
@@ -25,12 +27,52 @@ void setup() {
   KilohertzLoop::initialize(kilohertzLoop, loopPeriod);
   delay((programTimeMicroseconds + 999) / 1000);
   KilohertzLoop::timer.end();
+
+  for (uint32_t i = 0; i < historyLength; ++i) {
+    uint32_t timeMicros = i * (loopPeriod * 2);
+    
+    // Don't display the large spike at the beginning.
+    if (timeMicros < 200) {
+      continue;
+    }
+
+    float timeSeconds = float(timeMicros) / 1e6;
+
+    // This graphing has too poor of quality and customizability.
+    // Try using PySerial and Matplotlib tomorrow, creating a GUI
+    // application that steals the serial port and supports inputting
+    // characters to the Arduino.
+    //
+    // Ideally, it accepts characters from a command-line terminal and
+    // opens a Matplotlib window that updates in real-time. The graph
+    // window should not override the keyboard's focus on the terminal.
+    // It should not involve any GUI programming.
+    Serial.print(">stimulus,widget1:");
+    Serial.print(timeSeconds, 6);
+    Serial.print(":");
+    Serial.print(dataStream1[i] * 30, 4);
+    Serial.print("|xy");
+    Serial.println();
+
+    Serial.print(">current,widget1:");
+    Serial.print(timeSeconds, 6);
+    Serial.print(":");
+    Serial.print(dataStream2[i] * 1000, 4);
+    Serial.print("§pA");
+    Serial.print("|xy");
+    Serial.println();
+  }
 }
 
 // MARK: - Process Input
 
 void processInput() {
   char incomingByte = Serial.read();
+
+  if (incomingByte == 'r') {
+    delay(5000);
+    runProgram();
+  }
 }
 
 void loop() {
