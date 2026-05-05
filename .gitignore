@@ -10,3 +10,33 @@
 
 *.kicad_pcb.lck
 *.kicad_sch.lck
+
+# This should do it!
+
+/.build
+/Packages
+xcuserdata/
+DerivedData/
+.swiftpm/xcode
+Package.resolved
+/.vscode
+
+*/.build
+*/Packages
+*xcuserdata/
+*DerivedData/
+*.swiftpm/xcode
+*Package.resolved
+*/.vscode
+
+/*/.build
+/*/Packages
+/*xcuserdata/
+/*DerivedData/
+/*.swiftpm/xcode
+/*Package.resolved
+/*/.vscode
+
+/*.build
+/*Packages
+/*.vscode
