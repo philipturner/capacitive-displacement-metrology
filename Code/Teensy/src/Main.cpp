@@ -28,45 +28,38 @@ void runProgram() {
   delay((programTimeMicroseconds + 999) / 1000);
   KilohertzLoop::timer.end();
 
-  Serial.print("id:start");
-  Serial.print(">time (s),stimulus (a.u.),current (pA)");
+  Serial.print(">");
+  Serial.print("id:start,");
+  Serial.print("time (μs),stimulus (a.u.),current (pA),");
+  Serial.print("<");
+  Serial.println();
 
   for (uint32_t i = 0; i < historyLength; ++i) {
     uint32_t timeMicros = i * (loopPeriod * 2);
 
     // Identifier to debug serial acquisition.
+    Serial.print(">");
     Serial.print("id:");
     Serial.print(i);
-    Serial.println();
+    Serial.print(",");
     
-    // Don't display the large spike at the beginning.
-    if (timeMicros < 200) {
-      continue;
-    }
+    Serial.print(float(timeMicros), 1);
+    Serial.print(",");
 
-    float timeSeconds = float(timeMicros) / 1e6;
-
-    // This graphing has too poor of quality and customizability.
-    // Try using PySerial and Matplotlib tomorrow, creating a GUI
-    // application that steals the serial port and supports inputting
-    // characters to the Arduino.
-    //
-    // Ideally, it accepts characters from a command-line terminal and
-    // opens a Matplotlib window that updates in real-time. The graph
-    // window should not override the keyboard's focus on the terminal.
-    // It should not involve any GUI programming.
-    Serial.print(">stimulus (a.u.):");
-    Serial.print(timeSeconds, 6);
-    Serial.print(":");
     Serial.print(dataStream1[i] * 30, 4);
-    Serial.println();
-
-    Serial.print(">current (pA):");
-    Serial.print(timeSeconds, 6);
-    Serial.print(":");
+    Serial.print(",");
+    
     Serial.print(dataStream2[i] * 1000, 4);
+    Serial.print(",");
+
+    Serial.print("<");
     Serial.println();
   }
+
+  Serial.print(">");
+  Serial.print("id:end,");
+  Serial.print("<");
+  Serial.println();
 }
 
 // MARK: - Process Input
@@ -80,14 +73,13 @@ void processInput() {
 }
 
 void loop() {
-  delay(500);
+  delay(50);
 
   float time = float(millis()) / 1000;
   Serial.println();
   Serial.print("time: ");
   Serial.print(time, 2);
   Serial.print(" seconds");
-
   Serial.println();
 
   if (Serial.available() > 0) {

@@ -10,36 +10,84 @@ print("opened serial port")
 
 let byte = Character("r").asciiValue!
 _ = try await serial.writeBytes([byte])
-usleep(100_000)
+usleep(60_000)
 
-let data = try await serial.readBytesBlocking(count: 1_000_000, timeout: 1.0)
+let data = try await serial.readBytesBlocking(count: 1_000_000, timeout: 0.001)
+let string = String(data: data, encoding: .utf8)!
+let lines = string.split(separator: "\r\n").map(String.init)
 
-/*
-var receivedData = Data()
-while true {
-  let fragmentSize = 1000
-  let fragment = try await serial.readBytesBlocking(count: 1000, timeout: 1.0)
-  print("received fragment of size", fragment.count)
-  
-  guard let string = String(data: fragment, encoding: .utf8) else {
-    fatalError("Could not decode data.")
+struct Entry {
+  enum ID {
+    case start
+    case end
+    case number(Int)
   }
-  print()
-  print(string)
-  print()
+  var id: ID
+  var values: [String]
   
-  receivedData += fragment
-  if fragment.count < fragmentSize {
-    break
+  init?(decoding string: String) {
+    let hasStart = (string.first! == ">")
+    let hasEnd = (string.last! == "<")
+    print(string, hasStart, hasEnd)
+    switch (hasStart, hasEnd) {
+    case (true, true):
+      break
+    case (false, false):
+      return nil
+    default:
+      fatalError("Malformatted string: \(string)")
+    }
+    
+    var shortenedString = string
+    shortenedString.removeFirst()
+    shortenedString.removeLast()
+    
+    let substrings = shortenedString
+      .split(separator: ",", omittingEmptySubsequences: true)
+      .map(String.init)
+    guard substrings.count > 0 else {
+      fatalError("There were no substrings.")
+    }
+    
+    self.id = Entry.decodeID(substrings[0])
+    self.values = Array(substrings[1...])
+  }
+  
+  static func decodeID(_ string: String) -> ID {
+    guard string.starts(with: "id:") else {
+      fatalError("ID was malformatted.")
+    }
+    
+    var shortenedString = string
+    shortenedString.removeFirst(3)
+    
+    if shortenedString == "start" {
+      return ID.start
+    } else if shortenedString == "end" {
+      return ID.end
+    }
+    
+    if let integerValue = Int(shortenedString) {
+      return ID.number(integerValue)
+    }
+    
+    fatalError("No matching ID type.")
   }
 }
 
-guard let string = String(data: receivedData, encoding: .utf8) else {
-  fatalError("Could not decode data.")
+var entries: [Entry] = []
+for line in lines {
+  if let entry = Entry(decoding: line) {
+    entries.append(entry)
+  }
 }
-print()
-print(string)
-print()
- */
+
+guard entries.count > 0 else {
+  fatalError("There were no entries.")
+}
+
+for entry in entries {
+  print(entry.id, entry.values)
+}
 
 await serial.close()
