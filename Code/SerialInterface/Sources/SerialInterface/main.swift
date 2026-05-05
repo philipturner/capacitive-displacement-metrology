@@ -1,30 +1,45 @@
-import IOKit
-import IOKit.serial
+import Foundation
+import SwiftSerial
 
-func findSerialPorts() -> [String] {
-    var portPaths: [String] = []
-    
-    // Create a dictionary to match against serial devices
-    let classesToMatch = IOServiceMatching(kIOSerialBSDServiceValue)
-    
-    var matchingServices: io_iterator_t = 0
-    let kernResult = IOServiceGetMatchingServices(kIOMasterPortDefault, classesToMatch, &matchingServices)
-    
-    if kernResult == KERN_SUCCESS {
-        // Iterate through all found services
-        while case let service = IOIteratorNext(matchingServices), service != 0 {
-            // Get the BSD path (e.g., /dev/cu.usbserial-123)
-          if let bsdPath = IORegistryEntryCreateCFProperty(service, ("IOCalloutDevice" as! CFString), kCFAllocatorDefault, 0)
-                .takeUnretainedValue() as? String {
-                portPaths.append(bsdPath)
-            }
-            IOObjectRelease(service)
-        }
-        IOObjectRelease(matchingServices)
-    }
-    return portPaths
+let serial = SerialPort(path: "/dev/cu.usbmodem182280901")
+
+try await serial.open(
+  receiveRate: .baud115200,
+  transmitRate: .baud115200)
+print("opened serial port")
+
+let byte = Character("r").asciiValue!
+_ = try await serial.writeBytes([byte])
+usleep(100_000)
+
+let data = try await serial.readBytesBlocking(count: 1_000_000, timeout: 1.0)
+
+/*
+var receivedData = Data()
+while true {
+  let fragmentSize = 1000
+  let fragment = try await serial.readBytesBlocking(count: 1000, timeout: 1.0)
+  print("received fragment of size", fragment.count)
+  
+  guard let string = String(data: fragment, encoding: .utf8) else {
+    fatalError("Could not decode data.")
+  }
+  print()
+  print(string)
+  print()
+  
+  receivedData += fragment
+  if fragment.count < fragmentSize {
+    break
+  }
 }
 
-// Usage
-let ports = findSerialPorts()
-print(ports)
+guard let string = String(data: receivedData, encoding: .utf8) else {
+  fatalError("Could not decode data.")
+}
+print()
+print(string)
+print()
+ */
+
+await serial.close()

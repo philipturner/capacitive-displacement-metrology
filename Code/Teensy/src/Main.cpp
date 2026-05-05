@@ -28,8 +28,16 @@ void runProgram() {
   delay((programTimeMicroseconds + 999) / 1000);
   KilohertzLoop::timer.end();
 
+  Serial.print("id:start");
+  Serial.print(">time (s),stimulus (a.u.),current (pA)");
+
   for (uint32_t i = 0; i < historyLength; ++i) {
     uint32_t timeMicros = i * (loopPeriod * 2);
+
+    // Identifier to debug serial acquisition.
+    Serial.print("id:");
+    Serial.print(i);
+    Serial.println();
     
     // Don't display the large spike at the beginning.
     if (timeMicros < 200) {
@@ -47,19 +55,16 @@ void runProgram() {
     // opens a Matplotlib window that updates in real-time. The graph
     // window should not override the keyboard's focus on the terminal.
     // It should not involve any GUI programming.
-    Serial.print(">stimulus,widget1:");
+    Serial.print(">stimulus (a.u.):");
     Serial.print(timeSeconds, 6);
     Serial.print(":");
     Serial.print(dataStream1[i] * 30, 4);
-    Serial.print("|xy");
     Serial.println();
 
-    Serial.print(">current,widget1:");
+    Serial.print(">current (pA):");
     Serial.print(timeSeconds, 6);
     Serial.print(":");
     Serial.print(dataStream2[i] * 1000, 4);
-    Serial.print("§pA");
-    Serial.print("|xy");
     Serial.println();
   }
 }
@@ -70,7 +75,6 @@ void processInput() {
   char incomingByte = Serial.read();
 
   if (incomingByte == 'r') {
-    delay(5000);
     runProgram();
   }
 }
