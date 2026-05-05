@@ -9,6 +9,9 @@ let package = Package(
     ],
     dependencies: [
       .package(
+        url: "https://github.com/pvieito/PythonKit",
+        branch: "master"),
+      .package(
         url: "https://github.com/christophhagen/SwiftSerial",
         branch: "master"),
     ],
@@ -16,7 +19,8 @@ let package = Package(
       .executableTarget(
         name: "SerialInterface",
         dependencies: [
-          .product(name: "SwiftSerial", package: "SwiftSerial"),
+          "PythonKit",
+          "SwiftSerial",
         ]
       ),
     ]
