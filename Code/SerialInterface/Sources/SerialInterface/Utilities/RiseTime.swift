@@ -1,10 +1,12 @@
 enum RiseTime {
+  static let halfPeriodMicroseconds: Float = 2500
+  
   // Find the average in each section.
   static func createSectionAverages(streams: [Stream]) -> [Float] {
     var sectionAverages: [Float] = []
     for sectionID in 0..<6 {
-      let startTime = Float(sectionID) * 500 + 150
-      let endTime = Float(sectionID) * 500 + 450
+      let startTime = (Float(sectionID) + 0.3) * halfPeriodMicroseconds
+      let endTime = (Float(sectionID) + 0.9) * halfPeriodMicroseconds
       
       var accumulator: Float = .zero
       var sampleSize: Int = .zero
@@ -45,7 +47,7 @@ enum RiseTime {
       var below90Sample: SIMD2<Float>?
       var above90Sample: SIMD2<Float>?
       
-      let searchStartTime = Float(sectionID) * 500 + 500
+      let searchStartTime = (Float(sectionID) + 1) * halfPeriodMicroseconds
       for entryID in streams[0].data.indices {
         let time = streams[0].data[entryID]
         guard time >= searchStartTime else {

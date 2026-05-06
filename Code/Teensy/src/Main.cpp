@@ -5,15 +5,17 @@
 #include "Time/TimeStatistics.h"
 #include "Util/Application.h"
 
-// MARK: - Constants
+// MARK: - Global Variables
 
+constexpr float lowpassFrequency = 3000;
+constexpr float biasVoltageAmplitude = 10;
+constexpr uint32_t biasHalfPeriod = 2500;
 constexpr uint32_t loopPeriod = 6;
 constexpr uint32_t bufferTimeMicroseconds = 50000;
 constexpr uint32_t bufferLength = bufferTimeMicroseconds / loopPeriod / 2;
 float dataStream1[bufferLength];
 float dataStream2[bufferLength];
-
-// MARK: - Mode
+float lowpassVoltage = 0;
 
 enum class Mode {
   riseTime = 0,
@@ -21,9 +23,11 @@ enum class Mode {
 };
 Mode mode = Mode::riseTime;
 
+// MARK: - Utilities
+
 uint32_t getProgramTimeMicroseconds(Mode mode) {
   if (mode == Mode::riseTime) {
-    return 3000;
+    return biasHalfPeriod * 6;
   } else {
     return 50000;
   }
@@ -32,6 +36,12 @@ uint32_t getProgramTimeMicroseconds(Mode mode) {
 uint32_t getHistoryLength(Mode mode) {
   uint32_t programTimeMicroseconds = getProgramTimeMicroseconds(mode);
   return programTimeMicroseconds / loopPeriod / 2;
+}
+
+float getLowpassAlpha() {
+  float sampleTimeSeconds = float(1e-6) * float(loopPeriod * 2);
+  float timeConstant = 1 / (2 * M_PI * lowpassFrequency);
+  return sampleTimeSeconds / (timeConstant + sampleTimeSeconds);
 }
 
 // MARK: - Program
@@ -48,6 +58,15 @@ void runProgram() {
     dataStream1[i] = 0;
     dataStream2[i] = 0;
   }
+  lowpassVoltage = 0;
+
+  if (mode == Mode::riseTime) {
+    DAC2::writeVoltage(0, -biasVoltageAmplitude);
+  } else {
+    DAC2::writeVoltage(0, 0.0);
+  }
+  delay(30);
+  ADC::readVoltage();
 
   KilohertzLoop::initialize(kilohertzLoop, loopPeriod);
   delay((getProgramTimeMicroseconds(mode) + 999) / 1000);
@@ -71,11 +90,7 @@ void runProgram() {
     Serial.print(float(timeMicros), 1);
     Serial.print(",");
 
-    if (mode == Mode::riseTime) {
-      Serial.print(dataStream1[i] * 30, 4);
-    } else {
-      Serial.print(dataStream1[i], 4);
-    }
+    Serial.print(dataStream1[i], 4);
     Serial.print(",");
     
     Serial.print(dataStream2[i] * 1000, 4);
@@ -155,18 +170,18 @@ float triangleWave(float phaseNormalized) {
 
 void kilohertzLoop() {
   uint32_t elapsedTime = KilohertzLoop::latestTimestamp - KilohertzLoop::startTimestamp;
-  uint32_t sinePeriod = 1000; // in microseconds
+  uint32_t sinePeriod = biasHalfPeriod * 2; // in microseconds
   uint32_t phase = elapsedTime % sinePeriod;
 
   float biasVoltage;
   if (mode == Mode::riseTime) {
     float phaseNormalized = float(phase) / float(sinePeriod);
     float waveValueNormalized = triangleWave(phaseNormalized);
-    biasVoltage = 10 * waveValueNormalized;
+    biasVoltage = biasVoltageAmplitude * waveValueNormalized;
     DAC2::writeVoltage(0, biasVoltage);
   } else {
     biasVoltage = 0;
-    
+
     // Don't write to the DAC when characterizing the preamp's noise. It shifts
     // the average current by 0.2 pA in either direction.
     delayMicroseconds(2);
@@ -175,6 +190,9 @@ void kilohertzLoop() {
   if (KilohertzLoop::iterationID % 2 == 0) {
     auto conversion = ADC::readVoltage();
     float tiaVoltage = conversion.voltage;
+
+    float alpha = getLowpassAlpha();
+    lowpassVoltage = alpha * tiaVoltage + (1 - alpha) * lowpassVoltage;
 
     uint32_t historyIndex = KilohertzLoop::iterationID / 2;
     if (historyIndex < getHistoryLength(mode)) {

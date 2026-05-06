@@ -8,11 +8,26 @@ let ticker = Python.import("matplotlib.ticker")
 
 // Mode
 
+guard CommandLine.arguments.count == 2 else {
+  fatalError("Invalid command line arguments: \(CommandLine.arguments)")
+}
+
 enum Mode {
   case riseTime
   case noise
 }
-let mode: Mode = .noise
+func getMode() -> Mode {
+  let arguments = CommandLine.arguments
+  let input = arguments[1]
+  if input == "r" {
+    return .riseTime
+  } else if input == "n" {
+    return .noise
+  } else {
+    fatalError("Invalid mode.")
+  }
+}
+let mode = getMode()
 
 // Access the serial port.
 
@@ -35,7 +50,7 @@ do {
 }
 
 _ = try await serial.writeBytes([Character("e").asciiValue!])
-usleep(60_000 + 50_000)
+usleep(60_000 + 50_000 + 30_000)
 
 let data = try await serial.readBytesBlocking(count: 1_000_000, timeout: 0.015)
 let string = String(data: data, encoding: .utf8)!
@@ -65,7 +80,16 @@ fig.set_size_inches(12, 6)
 
 // Plot on the first subplot.
 let streams = Stream.createStreams(entries)
-axes[0].plot(streams[0].data, streams[1].data, label: streams[1].title)
+if mode == .riseTime {
+  let sectionAverages = RiseTime.createSectionAverages(streams: streams)
+  let scaleFactor = sectionAverages[0] / 10
+  
+  var data = streams[1].data
+  for i in data.indices {
+    data[i] *= scaleFactor * 1.5
+  }
+  axes[0].plot(streams[0].data, data, label: streams[1].title)
+}
 axes[0].plot(streams[0].data, streams[2].data, label: streams[2].title)
 
 // Run the calculation of the property of interest.
@@ -85,8 +109,9 @@ if mode == .riseTime {
 // Format the subplot.
 axes[0].set_xlabel(streams[0].title)
 if mode == .riseTime {
-  axes[0].xaxis.set_major_locator(ticker.MultipleLocator(500))
-  axes[0].xaxis.set_minor_locator(ticker.MultipleLocator(100))
+  let majorTick = RiseTime.halfPeriodMicroseconds
+  axes[0].xaxis.set_major_locator(ticker.MultipleLocator(majorTick))
+  axes[0].xaxis.set_minor_locator(ticker.MultipleLocator(majorTick / 5))
 }
 axes[0].grid(true)
 if mode == .riseTime {
