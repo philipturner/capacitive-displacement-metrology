@@ -68,12 +68,18 @@ let streams = Stream.createStreams(entries)
 axes[0].plot(streams[0].data, streams[1].data, label: streams[1].title)
 axes[0].plot(streams[0].data, streams[2].data, label: streams[2].title)
 
+// Run the calculation of the property of interest.
 if mode == .riseTime {
   let riseTimeStreams = RiseTime.createRiseTimeStreams(streams: streams)
+  
+  // Display indicators graphically to check correctness of the calculation.
   axes[0].scatter(
     riseTimeStreams.x.data,
     riseTimeStreams.y.data,
     label: riseTimeStreams.y.title)
+} else {
+  let statistics = PopulationStatistics(data: streams[2].data)
+  statistics.display()
 }
 
 // Format the subplot.

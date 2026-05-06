@@ -5,27 +5,52 @@
 #include "Time/TimeStatistics.h"
 #include "Util/Application.h"
 
-constexpr uint32_t loopPeriod = 6;
-constexpr uint32_t programTimeMicroseconds = 3000;
-constexpr uint32_t historyLength = programTimeMicroseconds / loopPeriod / 2;
-float dataStream1[historyLength];
-float dataStream2[historyLength];
+// MARK: - Constants
 
-void kilohertzLoop();
+constexpr uint32_t loopPeriod = 6;
+constexpr uint32_t bufferTimeMicroseconds = 50000;
+constexpr uint32_t bufferLength = bufferTimeMicroseconds / loopPeriod / 2;
+float dataStream1[bufferLength];
+float dataStream2[bufferLength];
+
+// MARK: - Mode
+
+enum class Mode {
+  riseTime = 0,
+  noise = 1,
+};
+Mode mode = Mode::riseTime;
+
+uint32_t getProgramTimeMicroseconds(Mode mode) {
+  if (mode == Mode::riseTime) {
+    return 3000;
+  } else {
+    return 50000;
+  }
+}
+
+uint32_t getHistoryLength(Mode mode) {
+  uint32_t programTimeMicroseconds = getProgramTimeMicroseconds(mode);
+  return programTimeMicroseconds / loopPeriod / 2;
+}
+
+// MARK: - Program
 
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
 }
 
+void kilohertzLoop();
+
 void runProgram() {
-  for (uint32_t i = 0; i < historyLength; ++i) {
+  for (uint32_t i = 0; i < bufferLength; ++i) {
     dataStream1[i] = 0;
     dataStream2[i] = 0;
   }
 
   KilohertzLoop::initialize(kilohertzLoop, loopPeriod);
-  delay((programTimeMicroseconds + 999) / 1000);
+  delay((getProgramTimeMicroseconds(mode) + 999) / 1000);
   KilohertzLoop::timer.end();
 
   Serial.print(">");
@@ -34,7 +59,7 @@ void runProgram() {
   Serial.print("<");
   Serial.println();
 
-  for (uint32_t i = 0; i < historyLength; ++i) {
+  for (uint32_t i = 0; i < getHistoryLength(mode); ++i) {
     uint32_t timeMicros = i * (loopPeriod * 2);
 
     // Identifier to debug serial acquisition.
@@ -46,7 +71,11 @@ void runProgram() {
     Serial.print(float(timeMicros), 1);
     Serial.print(",");
 
-    Serial.print(dataStream1[i] * 30, 4);
+    if (mode == Mode::riseTime) {
+      Serial.print(dataStream1[i] * 30, 4);
+    } else {
+      Serial.print(dataStream1[i], 4);
+    }
     Serial.print(",");
     
     Serial.print(dataStream2[i] * 1000, 4);
@@ -67,8 +96,12 @@ void runProgram() {
 void processInput() {
   char incomingByte = Serial.read();
 
-  if (incomingByte == 'r') {
+  if (incomingByte == 'e') {
     runProgram();
+  } else if (incomingByte == 'r') {
+    mode = Mode::riseTime;
+  } else if (incomingByte == 'n') {
+    mode = Mode::noise;
   }
 }
 
@@ -125,17 +158,26 @@ void kilohertzLoop() {
   uint32_t sinePeriod = 1000; // in microseconds
   uint32_t phase = elapsedTime % sinePeriod;
 
-  float phaseNormalized = float(phase) / float(sinePeriod);
-  float waveValueNormalized = triangleWave(phaseNormalized);
-  float biasVoltage = 10 * waveValueNormalized;
-  DAC2::writeVoltage(0, biasVoltage);
-
+  float biasVoltage;
+  if (mode == Mode::riseTime) {
+    float phaseNormalized = float(phase) / float(sinePeriod);
+    float waveValueNormalized = triangleWave(phaseNormalized);
+    biasVoltage = 10 * waveValueNormalized;
+    DAC2::writeVoltage(0, biasVoltage);
+  } else {
+    biasVoltage = 0;
+    
+    // Don't write to the DAC when characterizing the preamp's noise. It shifts
+    // the average current by 0.2 pA in either direction.
+    delayMicroseconds(2);
+  }
+  
   if (KilohertzLoop::iterationID % 2 == 0) {
     auto conversion = ADC::readVoltage();
     float tiaVoltage = conversion.voltage;
 
     uint32_t historyIndex = KilohertzLoop::iterationID / 2;
-    if (historyIndex < historyLength) {
+    if (historyIndex < getHistoryLength(mode)) {
       dataStream1[historyIndex] = biasVoltage;
       dataStream2[historyIndex] = tiaVoltage;
     }
