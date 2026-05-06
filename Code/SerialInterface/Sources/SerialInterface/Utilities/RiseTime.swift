@@ -1,5 +1,5 @@
 enum RiseTime {
-  static let halfPeriodMicroseconds: Float = 2500
+  static let halfPeriodMicroseconds: Float = 500
   
   // Find the average in each section.
   static func createSectionAverages(streams: [Stream]) -> [Float] {

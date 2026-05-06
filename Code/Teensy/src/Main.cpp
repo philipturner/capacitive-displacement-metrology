@@ -7,9 +7,9 @@
 
 // MARK: - Global Variables
 
-constexpr float lowpassFrequency = 3000;
+constexpr float lowpassFrequency = 10000;
 constexpr float biasVoltageAmplitude = 10;
-constexpr uint32_t biasHalfPeriod = 2500;
+constexpr uint32_t biasHalfPeriod = 500;
 constexpr uint32_t loopPeriod = 6;
 constexpr uint32_t bufferTimeMicroseconds = 50000;
 constexpr uint32_t bufferLength = bufferTimeMicroseconds / loopPeriod / 2;
@@ -197,7 +197,7 @@ void kilohertzLoop() {
     uint32_t historyIndex = KilohertzLoop::iterationID / 2;
     if (historyIndex < getHistoryLength(mode)) {
       dataStream1[historyIndex] = biasVoltage;
-      dataStream2[historyIndex] = tiaVoltage;
+      dataStream2[historyIndex] = lowpassVoltage;
     }
   }
 }
