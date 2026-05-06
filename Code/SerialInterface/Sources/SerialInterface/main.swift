@@ -2,9 +2,11 @@ import Foundation
 import PythonKit
 import SwiftSerial
 
-// Import Python libraries.
 PythonLibrary.useLibrary(at: "/Users/philipturner/miniforge3/bin/python")
 let plt = Python.import("matplotlib.pyplot")
+let ticker = Python.import("matplotlib.ticker")
+
+// Access the serial port.
 
 let serial = SerialPort(path: "/dev/cu.usbmodem182280901")
 
@@ -20,6 +22,8 @@ usleep(60_000)
 let data = try await serial.readBytesBlocking(count: 1_000_000, timeout: 0.001)
 let string = String(data: data, encoding: .utf8)!
 let lines = string.split(separator: "\r\n").map(String.init)
+
+// Decode the serial data.
 
 struct Entry {
   enum ID {
@@ -90,45 +94,82 @@ guard entries.count > 0 else {
   fatalError("There were no entries.")
 }
 
-let sampleEntries = [entries[0], entries[1], entries.last!]
-for entry in sampleEntries {
-  print(entry.id, entry.values)
+// Organize into streams.
+
+struct Stream {
+  var title: String
+  var data: [Float] = []
 }
 
-// Python graphing
+func checkStartAndEnd(_ entries: [Entry]) {
+  guard case .start = entries[0].id,
+        case .end = entries.last!.id else {
+    fatalError("Malformatted entries.")
+  }
+}
+
+func createStreams(_ entries: [Entry]) -> [Stream] {
+  var streams: [Stream] = []
+  do {
+    let startEntry = entries[0]
+    for title in startEntry.values {
+      let stream = Stream(title: title)
+      streams.append(stream)
+    }
+  }
+  
+  var dataEntries = entries
+  dataEntries.removeFirst()
+  dataEntries.removeLast()
+  
+  for i in dataEntries.indices {
+    let entry = dataEntries[i]
+    guard case .number(let entryID) = entry.id else {
+      fatalError("Malformatted entry.")
+    }
+    guard entryID == i else {
+      fatalError("Invalid entry ID.")
+    }
+    guard entry.values.count == streams.count else {
+      fatalError("Incorrect number of values.")
+    }
+    
+    for j in entry.values.indices {
+      let valueString = entry.values[j]
+      guard let value = Float(valueString) else {
+        fatalError("Could not decode value.")
+      }
+      streams[j].data.append(value)
+    }
+  }
+  
+  return streams
+}
+
+checkStartAndEnd(entries)
+let streams = createStreams(entries)
 
 // Graph with Matplotlib.
+
 do {
   // Retrieve the figure and axes.
-  let (fig, axes) = plt.subplots(2, 1).tuple2
-  let ax1 = axes[0]
-  let ax2 = axes[1]
+  let (fig, axis) = plt.subplots().tuple2
+  let axes = [axis]
   
   // Set the size of the figure.
-  fig.set_size_inches(6.4, 8.0)
+   fig.set_size_inches(12, 6)
   
   // Plot on the first subplot.
-  ax1.semilogx(plot1.frequencyArray, plot1.amplitudeArray, label: "AD8615")
-  ax1.semilogx(plot2.frequencyArray, plot2.amplitudeArray, label: "OP37G")
-  ax1.semilogx(plot3.frequencyArray, plot3.amplitudeArray, label: "LTC6090-5")
-  ax1.set_xlabel("Frequency (Hz)")
-  ax1.set_ylabel("Amplitude (dB)")
-  ax1.set_ylim([-50, 150])
-  ax1.grid(true)
+  axes[0].plot(streams[0].data, streams[1].data, label: streams[1].title)
+  axes[0].plot(streams[0].data, streams[2].data, label: streams[2].title)
+  axes[0].set_xlabel(streams[0].title)
   
-  // Plot on the second subplot.
-  ax2.semilogx(plot1.frequencyArray, plot1.phaseArray, label: "AD8615")
-  ax2.semilogx(plot2.frequencyArray, plot2.phaseArray, label: "OP37G")
-  ax2.semilogx(plot3.frequencyArray, plot3.phaseArray, label: "LTC6090-5")
-  ax2.set_xlabel("Frequency (Hz)")
-  ax2.set_ylabel("Phase (°)")
-  ax2.grid(true)
+  axes[0].xaxis.set_major_locator(ticker.MultipleLocator(500))
+  axes[0].xaxis.set_minor_locator(ticker.MultipleLocator(100))
   
-  // 'tight_layout' is needed to prevent axis labels from overlapping other
-  // graphs.
-  plt.legend()
-  plt.tight_layout()
+  axes[0].grid(true)
+  axes[0].grid(visible: true, which: "minor", axis: "x")
+  
+  fig.legend(loc: "outside upper left")
   plt.show()
 }
-
-
