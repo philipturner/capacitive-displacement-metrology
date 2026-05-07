@@ -7,8 +7,40 @@
 
 // MARK: - Global Variables
 
-constexpr uint32_t loopPeriod = 6;
-constexpr uint32_t logPeriod = 6 * 5; // must be divisible by loopPeriod
+/*
+Points where serial freezes permanently
+
+logPeriod = 49 * 4
+
+permanent freeze
+>pnbbcaaaiepdoidmcdddddamlnpajeaelnpajeae<
+>aobbcaaaiiobpidmpicmfbbmlnpajeaelnpajeae<
+>bobbcaaala
+
+5-second freeze
+>icahiaaaipampidmiebokbbmlnpajeaelnpajeae<
+>jcahiaaaamaonideacfilopllnpajeaelnpajeae<
+>kcahiaaaja
+
+logPeriod = 28
+
+>hooaaaaagcnkoidmgbokheamlnpajeaelnpajeae<
+>iooaaaaamchcpidmfbokhiamlnpajeaelnpajeae<
+>jooaaa
+
+>mjkeocaamiapmideekahndamlnpajeaelnpajeae<
+>njkeocaaijfpnideacfilopllnpajeaelnpajeae<
+>ojkeocaanhkknideapbfidpllnpajeaeln
+
+program crashes and sometimes auto-restarts after this
+>bnfjdaaackcipidmmhebomamlnpajeaelnpajeae<
+>cnfjdaaadecfbidmgilobpamlnpajeaelnpajeae<
+>dnfjdaaacepljidmiebokabmlnpajeaelnpajeae<
+Differe
+*/
+
+constexpr uint32_t loopPeriod = 12;
+constexpr uint32_t logPeriod = 48; // must be divisible by loopPeriod
 constexpr uint32_t logSize = 7000;
 float ringBuffer1[logSize];
 float ringBuffer2[logSize];
@@ -16,6 +48,7 @@ float ringBuffer3[logSize];
 float ringBuffer4[logSize];
 uint32_t transmittedLogID = 0;
 uint32_t unsafeBufferedLogID = 0; // constantly overwritten by interrupt
+uint32_t logErrorCode = 0;
 
 float biasVoltage = 0;
 
@@ -46,28 +79,29 @@ void setup() {
 // MARK: - Serial Loop
 
 void processLog() {
-  uint32_t bufferedLogID = unsafeBufferedLogID;
-
-  // This does not catch all conditions where the fast loop outpaces the slow
-  // loop.
-  if (bufferedLogID - transmittedLogID >= logSize / 2) {
-    Serial.println("Unable to process the log.");
-    transmittedLogID = bufferedLogID;
+  if (logErrorCode != 0) {
     return;
   }
 
-  uint32_t startMicros = micros();
+  uint32_t bufferedLogID = unsafeBufferedLogID;
 
-  for (uint32_t i = transmittedLogID; i < bufferedLogID; ++i) {
+  if (bufferedLogID - transmittedLogID >= logSize - 100) {
+    uint32_t difference = bufferedLogID - transmittedLogID;
+    logErrorCode = 1 * 1000 * 1000 + difference;
+    return;
+  }
+
+  uint32_t newTransmittedLogID = transmittedLogID;
+  while (newTransmittedLogID < bufferedLogID) {
     // 2231 μs for 1670 lines
     float bufferValues[4];
-    bufferValues[0] = ringBuffer1[i % logSize];
-    bufferValues[1] = ringBuffer2[i % logSize];
-    bufferValues[2] = ringBuffer3[i % logSize];
-    bufferValues[3] = ringBuffer4[i % logSize];
+    bufferValues[0] = ringBuffer1[newTransmittedLogID % logSize];
+    bufferValues[1] = ringBuffer2[newTransmittedLogID % logSize];
+    bufferValues[2] = ringBuffer3[newTransmittedLogID % logSize];
+    bufferValues[3] = ringBuffer4[newTransmittedLogID % logSize];
 
     uint32_t numbers[5];
-    numbers[0] = i;
+    numbers[0] = newTransmittedLogID;
     memcpy(numbers + 1, bufferValues, 16);
 
     char cString[45];
@@ -89,21 +123,16 @@ void processLog() {
     }
 
     Serial.print(cString);
+
+    newTransmittedLogID += 1;
   }
-
-  uint32_t endMicros = micros();
-
-  Serial.print("time: ");
-  Serial.print(endMicros - startMicros);
-  Serial.println();
 
   // Check that the transmitted data was valid.
   if (unsafeBufferedLogID - transmittedLogID >= logSize) {
-    Serial.println("Unable to process the log.");
-    KilohertzLoop::throwError(4000);
+    logErrorCode = 2 * 1000 * 1000;
     return;
   }
-  transmittedLogID = bufferedLogID;
+  transmittedLogID = newTransmittedLogID;
 }
 
 void processInput() {
@@ -113,6 +142,9 @@ void processInput() {
     mode = Mode::noise;
   } else if (incomingByte == 'r') {
     mode = Mode::riseTime;
+  } else if (incomingByte == 'c') {
+    logErrorCode = 0;
+    transmittedLogID = unsafeBufferedLogID;
   }
 }
 
@@ -123,12 +155,14 @@ void loop() {
     Serial.print("KilohertzLoop failed with error code: ");
     Serial.print(KilohertzLoop::errorCode);
     Serial.println();
-    return;
+  } else if (logErrorCode != 0) {
+    Serial.print("log failed with error code: ");
+    Serial.print(logErrorCode);
+    Serial.println();
   } else {
     Serial.println("Something is happening.");
+    processLog();
   }
-
-  processLog();
 
   if (Serial.available() > 0) {
     processInput();
@@ -186,23 +220,19 @@ void kilohertzLoop() {
     float phaseNormalized = float(phase) / float(sinePeriod);
     float waveValueNormalized = triangleWave(phaseNormalized);
     biasVoltage = 10 * waveValueNormalized;
-    DAC2::writeVoltage(0, biasVoltage);
+  } else if (mode == Mode::noise) {
+    biasVoltage = 0;
   }
+  DAC2::writeVoltage(0, biasVoltage);
   
-  if (KilohertzLoop::iterationID % 2 == 0) {
+  {
     auto conversion = ADC::readVoltage();
     float tiaVoltage = conversion.voltage;
 
     float alpha = getLowpassAlpha();
     lowpassVoltage = alpha * tiaVoltage + (1 - alpha) * lowpassVoltage;
-  } else {
-    // Should have a more principled way to handle state transitions.
-    if (mode == Mode::noise && biasVoltage != 0) {
-      biasVoltage = 0;
-      DAC2::writeVoltage(0, biasVoltage);
-    }
   }
-
+  
   uint32_t iterationsPerLog = logPeriod / loopPeriod;
   if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
     uint32_t ringBufferIndex = unsafeBufferedLogID % logSize;

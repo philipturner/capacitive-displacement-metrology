@@ -4,19 +4,45 @@
 void KilohertzLoop::_kilohertzLoopBodyInner() {
   previousTimestamp = latestTimestamp;
   latestTimestamp = micros();
+
+  // Failures from constantly stopping and restarting the serial connection,
+  // while logging about 45 bytes every 100 us.
+
+  // timer.priority(0)
+  // 20 us: fail with -4 error
+  // 10 us: fail with -2 error
+  // 9 us: fail with -5 error
+  // 8 us: fail with +1 error
+  // 7 us: fail with -5 error
+  // 6 us: fail with -5 error
+
+  // no priority
+  // 20 us: fail with +23 error
+  // 6 us: fail with +14 error
   
   if (iterationID == 0) {
     integrationStartTimestamp = latestTimestamp;
   } else {
     int32_t interval = latestTimestamp - previousTimestamp;
     if (interval < 0) {
+      Serial.print(startTimestamp);
+      Serial.print(previousTimestamp);
+      Serial.print(latestTimestamp);
       Serial.println("Microseconds counter overflowed.");
-      throwError(1000);
+
+      uint32_t errorCode = 1000;
+      if (latestTimestamp > previousTimestamp) {
+        errorCode += 10;
+      }
+      if (latestTimestamp > startTimestamp) {
+        errorCode += 1;
+      }
+      throwError(1000 + errorCode);
       return;
     }
 
     int32_t differentialError = interval - period;
-    if (abs(differentialError) >= period) {
+    if (abs(differentialError) > 5) {
       Serial.println("Differential error was too large.");
       throwError(2000 + interval);
       return;
@@ -26,8 +52,15 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
     uint32_t expectedIntegrated = (iterationID - 1) * period;
     expectedIntegrated += period;
 
+    uint32_t allowedIntegralError;
+    if (iterationID >= 3) {
+      allowedIntegralError = 6;
+    } else {
+      allowedIntegralError = 5;
+    }
+
     int32_t integralError = actualIntegrated - expectedIntegrated;
-    if (abs(integralError) >= period) {
+    if (abs(integralError) > allowedIntegralError) {
       Serial.println("Integral error was too large.");
       throwError(3000 + integralError);
       return;
