@@ -23,7 +23,7 @@ enum class Mode {
   noise = 0,
   riseTime = 1,
 };
-Mode mode = Mode::noise;
+Mode mode = Mode::riseTime;
 
 // MARK: - Program
 
@@ -50,9 +50,9 @@ void processLog() {
 
   // This does not catch all conditions where the fast loop outpaces the slow
   // loop.
-  if (bufferedLogID - transmittedLogID >= logSize) {
+  if (bufferedLogID - transmittedLogID >= logSize / 2) {
     Serial.println("Unable to process the log.");
-    KilohertzLoop::throwError(4000);
+    transmittedLogID = bufferedLogID;
     return;
   }
 
@@ -89,33 +89,6 @@ void processLog() {
     }
 
     Serial.print(cString);
-
-    // 80000 μs for 5000 lines
-    /*
-    // Identifier to debug serial acquisition.
-    Serial.print(">");
-    Serial.print("id:");
-    Serial.print(i);
-    Serial.print(",");
-    
-    Serial.printf("%f", ringBuffer1[i % logSize]);
-    Serial.print(",");
-
-    Serial.printf("%f", ringBuffer2[i % logSize]);
-    Serial.print(",");
-
-    Serial.printf("%f", ringBuffer3[i % logSize]);
-    Serial.print(",");
-
-    Serial.printf("%f", ringBuffer4[i % logSize]);
-    Serial.print(",");
-    
-    Serial.print("<");
-    Serial.println();
-    */
-
-    // 2500 μs for 1670 lines
-    // >id:19762,-0.800607,0.000000,3.141593,3.141593,<
   }
 
   uint32_t endMicros = micros();
@@ -126,11 +99,8 @@ void processLog() {
 
   // Check that the transmitted data was valid.
   if (unsafeBufferedLogID - transmittedLogID >= logSize) {
-    Serial.println(transmittedLogID);
-    Serial.println(bufferedLogID);
-    Serial.println(unsafeBufferedLogID);
     Serial.println("Unable to process the log.");
-    KilohertzLoop::throwError(5000);
+    KilohertzLoop::throwError(4000);
     return;
   }
   transmittedLogID = bufferedLogID;
