@@ -11,13 +11,15 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
     int32_t interval = latestTimestamp - previousTimestamp;
     if (interval < 0) {
       Serial.println("Microseconds counter overflowed.");
-      exit(0);
+      throwError(1000);
+      return;
     }
 
     int32_t differentialError = interval - period;
-    if (abs(differentialError) > 1) {
+    if (abs(differentialError) > period - 1) {
       Serial.println("Differential error was too large.");
-      exit(0);
+      throwError(2000 + interval);
+      return;
     }
     
     uint32_t actualIntegrated = latestTimestamp - integrationStartTimestamp;
@@ -25,9 +27,10 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
     expectedIntegrated += period;
 
     int32_t integralError = actualIntegrated - expectedIntegrated;
-    if (abs(integralError) > 1) {
+    if (abs(integralError) > period - 1) {
       Serial.println("Integral error was too large.");
-      exit(0);
+      throwError(3000 + integralError);
+      return;
     }
   }
 
@@ -55,5 +58,11 @@ void KilohertzLoop::initialize(
   integrationStartTimestamp = 0;
   iterationID = 0;
 
+  timer.priority(0);
   timer.begin(_kilohertzLoopBodyOuter, period);
+}
+
+void KilohertzLoop::throwError(uint32_t inputCode) {
+  errorCode = inputCode;
+  timer.end();
 }

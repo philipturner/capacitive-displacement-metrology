@@ -8,7 +8,7 @@
 // MARK: - Global Variables
 
 constexpr uint32_t loopPeriod = 6;
-constexpr uint32_t logPeriod = 30; // must be divisible by loopPeriod
+constexpr uint32_t logPeriod = 6 * 5; // must be divisible by loopPeriod
 constexpr uint32_t logSize = 7000;
 float ringBuffer1[logSize];
 float ringBuffer2[logSize];
@@ -52,36 +52,86 @@ void processLog() {
   // loop.
   if (bufferedLogID - transmittedLogID >= logSize) {
     Serial.println("Unable to process the log.");
-    exit(0);
+    KilohertzLoop::throwError(4000);
+    return;
   }
 
+  uint32_t startMicros = micros();
+
   for (uint32_t i = transmittedLogID; i < bufferedLogID; ++i) {
+    // 2231 μs for 1670 lines
+    float bufferValues[4];
+    bufferValues[0] = ringBuffer1[i % logSize];
+    bufferValues[1] = ringBuffer2[i % logSize];
+    bufferValues[2] = ringBuffer3[i % logSize];
+    bufferValues[3] = ringBuffer4[i % logSize];
+
+    uint32_t numbers[5];
+    numbers[0] = i;
+    memcpy(numbers + 1, bufferValues, 16);
+
+    char cString[45];
+    cString[0] = '>';
+    cString[41] = '<';
+    cString[42] = '\r';
+    cString[43] = '\n';
+    cString[44] = 0;
+
+    for (uint32_t numberID = 0; numberID < 5; ++numberID) {
+      uint32_t number = numbers[numberID];
+      for (uint32_t charID = 0; charID < 8; ++charID) {
+        uint32_t leftShiftAmount = 4 * charID;
+        uint32_t fourBits = (number >> leftShiftAmount) & 0b1111;
+
+        uint32_t indexInString = 1 + 8 * numberID + charID;
+        cString[indexInString] = 'a' + char(fourBits);
+      }
+    }
+
+    Serial.print(cString);
+
+    // 80000 μs for 5000 lines
+    /*
     // Identifier to debug serial acquisition.
     Serial.print(">");
     Serial.print("id:");
     Serial.print(i);
     Serial.print(",");
     
-    Serial.print(ringBuffer1[i % logSize]);
+    Serial.printf("%f", ringBuffer1[i % logSize]);
     Serial.print(",");
 
-    Serial.print(ringBuffer2[i % logSize]);
+    Serial.printf("%f", ringBuffer2[i % logSize]);
     Serial.print(",");
 
-    Serial.print(ringBuffer3[i % logSize]);
+    Serial.printf("%f", ringBuffer3[i % logSize]);
     Serial.print(",");
 
-    Serial.print(ringBuffer4[i % logSize]);
+    Serial.printf("%f", ringBuffer4[i % logSize]);
     Serial.print(",");
     
     Serial.print("<");
     Serial.println();
+    */
+
+    // 2500 μs for 1670 lines
+    // >id:19762,-0.800607,0.000000,3.141593,3.141593,<
   }
+
+  uint32_t endMicros = micros();
+
+  Serial.print("time: ");
+  Serial.print(endMicros - startMicros);
+  Serial.println();
 
   // Check that the transmitted data was valid.
   if (unsafeBufferedLogID - transmittedLogID >= logSize) {
+    Serial.println(transmittedLogID);
+    Serial.println(bufferedLogID);
+    Serial.println(unsafeBufferedLogID);
     Serial.println("Unable to process the log.");
-    exit(0);
+    KilohertzLoop::throwError(5000);
+    return;
   }
   transmittedLogID = bufferedLogID;
 }
@@ -98,6 +148,15 @@ void processInput() {
 
 void loop() {
   delay(50);
+
+  if (KilohertzLoop::errorCode != 0) {
+    Serial.print("KilohertzLoop failed with error code: ");
+    Serial.print(KilohertzLoop::errorCode);
+    Serial.println();
+    return;
+  } else {
+    Serial.println("Something is happening.");
+  }
 
   processLog();
 
@@ -177,7 +236,7 @@ void kilohertzLoop() {
   uint32_t iterationsPerLog = logPeriod / loopPeriod;
   if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
     uint32_t ringBufferIndex = unsafeBufferedLogID % logSize;
-    ringBuffer1[ringBufferIndex] = lowpassVoltage;
+    ringBuffer1[ringBufferIndex] = -1000 * lowpassVoltage;
     ringBuffer2[ringBufferIndex] = biasVoltage;
     ringBuffer3[ringBufferIndex] = M_PI;
     ringBuffer4[ringBufferIndex] = M_PI;
