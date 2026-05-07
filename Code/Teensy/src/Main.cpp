@@ -7,128 +7,99 @@
 
 // MARK: - Global Variables
 
-constexpr float lowpassFrequency = 10000;
-constexpr float biasVoltageAmplitude = 10;
-constexpr uint32_t biasHalfPeriod = 500;
 constexpr uint32_t loopPeriod = 6;
-constexpr uint32_t bufferTimeMicroseconds = 50000;
-constexpr uint32_t bufferLength = bufferTimeMicroseconds / loopPeriod / 2;
-float dataStream1[bufferLength];
-float dataStream2[bufferLength];
-float lowpassVoltage = 0;
+constexpr uint32_t logPeriod = 30; // must be divisible by loopPeriod
+constexpr uint32_t logSize = 7000;
+float ringBuffer1[logSize];
+float ringBuffer2[logSize];
+float ringBuffer3[logSize];
+float ringBuffer4[logSize];
+uint32_t transmittedLogID = 0;
+uint32_t unsafeBufferedLogID = 0; // constantly overwritten by interrupt
+
+float biasVoltage = 0;
 
 enum class Mode {
-  riseTime = 0,
-  noise = 1,
+  noise = 0,
+  riseTime = 1,
 };
-Mode mode = Mode::riseTime;
-
-// MARK: - Utilities
-
-uint32_t getProgramTimeMicroseconds(Mode mode) {
-  if (mode == Mode::riseTime) {
-    return biasHalfPeriod * 6;
-  } else {
-    return 50000;
-  }
-}
-
-uint32_t getHistoryLength(Mode mode) {
-  uint32_t programTimeMicroseconds = getProgramTimeMicroseconds(mode);
-  return programTimeMicroseconds / loopPeriod / 2;
-}
-
-float getLowpassAlpha() {
-  float sampleTimeSeconds = float(1e-6) * float(loopPeriod * 2);
-  float timeConstant = 1 / (2 * M_PI * lowpassFrequency);
-  return sampleTimeSeconds / (timeConstant + sampleTimeSeconds);
-}
+Mode mode = Mode::noise;
 
 // MARK: - Program
+
+void kilohertzLoop();
 
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
-}
 
-void kilohertzLoop();
-
-void runProgram() {
-  for (uint32_t i = 0; i < bufferLength; ++i) {
-    dataStream1[i] = 0;
-    dataStream2[i] = 0;
+  for (uint32_t i = 0; i < logSize; ++i) {
+    ringBuffer1[i] = 0;
+    ringBuffer2[i] = 0;
+    ringBuffer3[i] = 0;
+    ringBuffer4[i] = 0;
   }
-  lowpassVoltage = 0;
-
-  if (mode == Mode::riseTime) {
-    DAC2::writeVoltage(0, -biasVoltageAmplitude);
-  } else {
-    DAC2::writeVoltage(0, 0.0);
-  }
-  delay(30);
-  ADC::readVoltage();
 
   KilohertzLoop::initialize(kilohertzLoop, loopPeriod);
-  delay((getProgramTimeMicroseconds(mode) + 999) / 1000);
-  KilohertzLoop::timer.end();
+}
 
-  Serial.print(">");
-  Serial.print("id:start,");
-  Serial.print("time (μs),stimulus (a.u.),current (pA),");
-  Serial.print("<");
-  Serial.println();
+// MARK: - Serial Loop
 
-  for (uint32_t i = 0; i < getHistoryLength(mode); ++i) {
-    uint32_t timeMicros = i * (loopPeriod * 2);
+void processLog() {
+  uint32_t bufferedLogID = unsafeBufferedLogID;
 
+  // This does not catch all conditions where the fast loop outpaces the slow
+  // loop.
+  if (bufferedLogID - transmittedLogID >= logSize) {
+    Serial.println("Unable to process the log.");
+    exit(0);
+  }
+
+  for (uint32_t i = transmittedLogID; i < bufferedLogID; ++i) {
     // Identifier to debug serial acquisition.
     Serial.print(">");
     Serial.print("id:");
     Serial.print(i);
     Serial.print(",");
     
-    Serial.print(float(timeMicros), 1);
+    Serial.print(ringBuffer1[i % logSize]);
     Serial.print(",");
 
-    Serial.print(dataStream1[i], 4);
+    Serial.print(ringBuffer2[i % logSize]);
+    Serial.print(",");
+
+    Serial.print(ringBuffer3[i % logSize]);
+    Serial.print(",");
+
+    Serial.print(ringBuffer4[i % logSize]);
     Serial.print(",");
     
-    Serial.print(dataStream2[i] * 1000, 4);
-    Serial.print(",");
-
     Serial.print("<");
     Serial.println();
   }
 
-  Serial.print(">");
-  Serial.print("id:end,");
-  Serial.print("<");
-  Serial.println();
+  // Check that the transmitted data was valid.
+  if (unsafeBufferedLogID - transmittedLogID >= logSize) {
+    Serial.println("Unable to process the log.");
+    exit(0);
+  }
+  transmittedLogID = bufferedLogID;
 }
-
-// MARK: - Process Input
 
 void processInput() {
   char incomingByte = Serial.read();
 
-  if (incomingByte == 'e') {
-    runProgram();
+  if (incomingByte == 'n') {
+    mode = Mode::noise;
   } else if (incomingByte == 'r') {
     mode = Mode::riseTime;
-  } else if (incomingByte == 'n') {
-    mode = Mode::noise;
   }
 }
 
 void loop() {
   delay(50);
 
-  float time = float(millis()) / 1000;
-  Serial.println();
-  Serial.print("time: ");
-  Serial.print(time, 2);
-  Serial.print(" seconds");
-  Serial.println();
+  processLog();
 
   if (Serial.available() > 0) {
     processInput();
@@ -168,23 +139,25 @@ float triangleWave(float phaseNormalized) {
   return 2 * progress - 1;
 }
 
+constexpr float lowpassFrequency = 10000;
+float lowpassVoltage = 0;
+
+float getLowpassAlpha() {
+  float sampleTimeSeconds = float(1e-6) * float(loopPeriod * 2);
+  float timeConstant = 1 / (2 * M_PI * lowpassFrequency);
+  return sampleTimeSeconds / (timeConstant + sampleTimeSeconds);
+}
+
 void kilohertzLoop() {
   uint32_t elapsedTime = KilohertzLoop::latestTimestamp - KilohertzLoop::startTimestamp;
-  uint32_t sinePeriod = biasHalfPeriod * 2; // in microseconds
+  uint32_t sinePeriod = 1000; // in microseconds
   uint32_t phase = elapsedTime % sinePeriod;
 
-  float biasVoltage;
   if (mode == Mode::riseTime) {
     float phaseNormalized = float(phase) / float(sinePeriod);
     float waveValueNormalized = triangleWave(phaseNormalized);
-    biasVoltage = biasVoltageAmplitude * waveValueNormalized;
+    biasVoltage = 10 * waveValueNormalized;
     DAC2::writeVoltage(0, biasVoltage);
-  } else {
-    biasVoltage = 0;
-
-    // Don't write to the DAC when characterizing the preamp's noise. It shifts
-    // the average current by 0.2 pA in either direction.
-    delayMicroseconds(2);
   }
   
   if (KilohertzLoop::iterationID % 2 == 0) {
@@ -193,11 +166,21 @@ void kilohertzLoop() {
 
     float alpha = getLowpassAlpha();
     lowpassVoltage = alpha * tiaVoltage + (1 - alpha) * lowpassVoltage;
-
-    uint32_t historyIndex = KilohertzLoop::iterationID / 2;
-    if (historyIndex < getHistoryLength(mode)) {
-      dataStream1[historyIndex] = biasVoltage;
-      dataStream2[historyIndex] = lowpassVoltage;
+  } else {
+    // Should have a more principled way to handle state transitions.
+    if (mode == Mode::noise && biasVoltage != 0) {
+      biasVoltage = 0;
+      DAC2::writeVoltage(0, biasVoltage);
     }
+  }
+
+  uint32_t iterationsPerLog = logPeriod / loopPeriod;
+  if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
+    uint32_t ringBufferIndex = unsafeBufferedLogID % logSize;
+    ringBuffer1[ringBufferIndex] = lowpassVoltage;
+    ringBuffer2[ringBufferIndex] = biasVoltage;
+    ringBuffer3[ringBufferIndex] = M_PI;
+    ringBuffer4[ringBufferIndex] = M_PI;
+    unsafeBufferedLogID += 1;
   }
 }
