@@ -2,11 +2,13 @@ struct Entry {
   var id: Int
   var values: [Float]
   
+  static let messageLength: Int = 8
+  
   init(decoding pointer: UnsafeBufferPointer<UInt8>) {
     guard pointer.count % 8 == 0 else {
       fatalError("String had invalid length.")
     }
-    guard pointer.count == 40 else {
+    guard pointer.count == Entry.messageLength else {
       fatalError("Failed second check for invalid length.")
     }
     

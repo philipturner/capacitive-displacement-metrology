@@ -141,7 +141,7 @@ while true {
         return false
       }
       
-      let nextCursor = cursor + 1 + 40
+      let nextCursor = cursor + 1 + Entry.messageLength
       guard pointer[nextCursor] == endCode else {
         print("[cursor = \(nextCursor)] Unexpected end code: \(pointer[nextCursor])")
         return false
@@ -151,14 +151,14 @@ while true {
     }
     
     var cursor = firstStartID
-    while cursor + 41 < pointer.count {
-      if pointer[cursor + 41] == 0 {
+    while cursor + Entry.messageLength + 1 < pointer.count {
+      if pointer[cursor + Entry.messageLength + 1] == 0 {
         break
       }
       
       var attemptCount = 0
-      while cursor + 41 < pointer.count {
-        if pointer[cursor + 41] == 0 {
+      while cursor + Entry.messageLength + 1 < pointer.count {
+        if pointer[cursor + Entry.messageLength + 1] == 0 {
           break
         }
         
@@ -176,7 +176,7 @@ while true {
         
         let stringPointer = UnsafeBufferPointer<UInt8>(
           start: pointer.baseAddress! + cursor,
-          count: 40)
+          count: Entry.messageLength)
         let entry = Entry(decoding: stringPointer)
         
         if let lastEntryID = DataLossState.lastEntryID {
@@ -196,10 +196,17 @@ while true {
             print(entry.values)
             print()
             
-            
             // === Failure Rate (threshold: 100 consecutive losses) ===
             //
+            // Entry.messageLength = 40
+            //
             // logPeriod = 24 μs
+            // lost: 171 / 149912 (0.11%)
+            // lost: 281 / 242275 (0.12%)
+            // lost: 34 / 27986 (0.12%) <-- freeze instead of crash
+            // lost: 225 / 196948 (0.11%) <-- resumed after 20s freeze
+            // lost: 75 / 58382 (0.13%)
+            // lost: 106 / 90037 (0.12%) <-- 51s freeze at t = 2s
             //
             // logPeriod = 48 μs
             // lost: 204 / 123353 (0.17%)
@@ -209,6 +216,8 @@ while true {
             // lost: 255 / 155445 (0.16%)
             // lost: 485 / 289827 (0.17%)
             // lost: 150 / 93215 (0.16%)
+            // lost: 36 / 20822 (0.17%)
+            // lost: 1002 / 593964 (0.17%)
             //
             // logPeriod = 96 μs
             // lost: 524 / 265756 (0.20%)
@@ -219,6 +228,24 @@ while true {
             // lost: 1425 / 740719 (0.19%)
             //
             // logPeriod = 192 μs
+            // lost: 677 / 177738 (0.38%) <-- freeze instead of crash
+            // lost: 3753 / 981032 (0.38%) <-- has not failed yet
+            // lost: 2824 / 739661 (0.38%) <-- has not failed yet
+            // lost: 2329 / 610495 (0.38%)
+            // lost: 359 / 94454 (0.38%)
+            // lost: 3954 / 1035781 (0.38%)
+            // lost: 40 / 10555 (0.38%)
+            // lost: 653 / 171033 (0.38%) <-- 86s freeze at t = 33s
+            //
+            // Entry.messageLength = 8
+            //
+            // logPeriod = 24 μs
+            // lost: 1 / 356616 (0.00%)
+            // lost: 0 / 670431 (0.00%)
+            // lost: 11 / 4178214 (0.00%) <-- has not failed yet
+            // lost: 12 / 4011623 (0.00%)
+            // lost: 5 / 2235178 (0.00%) <-- long freeze at t = 54s
+            // lost: 3 / 1932280 (0.00%)
             fatalError("Too large of a loss.")
           }
         }
@@ -230,7 +257,7 @@ while true {
         DataLossState.totalEntryCount += 1
         
         entries.append(entry)
-        cursor += 40
+        cursor += Entry.messageLength
         cursor += 1 // <
         cursor += 1 // \r
         cursor += 1 // \n
