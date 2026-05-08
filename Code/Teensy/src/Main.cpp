@@ -7,41 +7,32 @@
 
 // MARK: - Global Variables
 
-/*
-Points where serial freezes permanently
+// loopPeriod = 12, buffer time = 10 ms, 45 bytes/line
+//
+// logPeriod = 48  | froze permanently
+// logPeriod = 120 | froze permanently
+// logPeriod = 480 |
 
-logPeriod = 49 * 4
+// loopPeriod = 12, buffer time = 50 ms, 45 bytes/line
+//
+// logPeriod = 48  | unstable, can freeze at 10s or 40s
+// logPeriod = 72  | 15s hiccup at 60s, froze at 150s, resumed ~1 min later
+// logPeriod = 120 | spotted two hiccups, but stable for >4 min, froze for 1-2 min on another attempt and was still breaking down
+// logPeriod = 240 | stable (>2 min)
+// logPeriod = 480 | stable (>2 min)
 
-permanent freeze
->pnbbcaaaiepdoidmcdddddamlnpajeaelnpajeae<
->aobbcaaaiiobpidmpicmfbbmlnpajeaelnpajeae<
->bobbcaaala
+// loopPeriod = 12, buffer time = 200 ms, 45 bytes/line
+//
+// logPeriod = 48  | froze for ~20s
+// logPeriod = 120 |
+// logPeriod = 480 |
 
-5-second freeze
->icahiaaaipampidmiebokbbmlnpajeaelnpajeae<
->jcahiaaaamaonideacfilopllnpajeaelnpajeae<
->kcahiaaaja
-
-logPeriod = 28
-
->hooaaaaagcnkoidmgbokheamlnpajeaelnpajeae<
->iooaaaaamchcpidmfbokhiamlnpajeaelnpajeae<
->jooaaa
-
->mjkeocaamiapmideekahndamlnpajeaelnpajeae<
->njkeocaaijfpnideacfilopllnpajeaelnpajeae<
->ojkeocaanhkknideapbfidpllnpajeaeln
-
-program crashes and sometimes auto-restarts after this
->bnfjdaaackcipidmmhebomamlnpajeaelnpajeae<
->cnfjdaaadecfbidmgilobpamlnpajeaelnpajeae<
->dnfjdaaacepljidmiebokabmlnpajeaelnpajeae<
-Differe
-*/
+// The in-memory history is fine, but we cannot constantly stream data to the
+// PC. Data needs to be sent only on request.
 
 constexpr uint32_t loopPeriod = 12;
-constexpr uint32_t logPeriod = 48; // must be divisible by loopPeriod
-constexpr uint32_t logSize = 7000;
+constexpr uint32_t logPeriod = 24; // must be divisible by loopPeriod
+constexpr uint32_t logSize = 12000;
 float ringBuffer1[logSize];
 float ringBuffer2[logSize];
 float ringBuffer3[logSize];
@@ -91,27 +82,32 @@ void processLog() {
     return;
   }
 
-  uint32_t newTransmittedLogID = transmittedLogID;
-  while (newTransmittedLogID < bufferedLogID) {
+  for (uint32_t i = transmittedLogID; i < bufferedLogID; ++i) {
+    if (i % 20 != 0) {
+      continue;
+    }
+
     // 2231 μs for 1670 lines
     float bufferValues[4];
-    bufferValues[0] = ringBuffer1[newTransmittedLogID % logSize];
-    bufferValues[1] = ringBuffer2[newTransmittedLogID % logSize];
-    bufferValues[2] = ringBuffer3[newTransmittedLogID % logSize];
-    bufferValues[3] = ringBuffer4[newTransmittedLogID % logSize];
+    bufferValues[0] = ringBuffer1[i % logSize];
+    bufferValues[1] = ringBuffer2[i % logSize];
+    bufferValues[2] = ringBuffer3[i % logSize];
+    bufferValues[3] = ringBuffer4[i % logSize];
 
-    uint32_t numbers[5];
-    numbers[0] = newTransmittedLogID;
+    constexpr uint32_t channelCount = 5;
+
+    uint32_t numbers[channelCount];
+    numbers[0] = i;
     memcpy(numbers + 1, bufferValues, 16);
 
-    char cString[45];
+    char cString[channelCount * 8 + 5];
     cString[0] = '>';
-    cString[41] = '<';
-    cString[42] = '\r';
-    cString[43] = '\n';
-    cString[44] = 0;
+    cString[channelCount * 8 + 1] = '<';
+    cString[channelCount * 8 + 2] = '\r';
+    cString[channelCount * 8 + 3] = '\n';
+    cString[channelCount * 8 + 4] = 0;
 
-    for (uint32_t numberID = 0; numberID < 5; ++numberID) {
+    for (uint32_t numberID = 0; numberID < channelCount; ++numberID) {
       uint32_t number = numbers[numberID];
       for (uint32_t charID = 0; charID < 8; ++charID) {
         uint32_t leftShiftAmount = 4 * charID;
@@ -123,8 +119,6 @@ void processLog() {
     }
 
     Serial.print(cString);
-
-    newTransmittedLogID += 1;
   }
 
   // Check that the transmitted data was valid.
@@ -132,7 +126,7 @@ void processLog() {
     logErrorCode = 2 * 1000 * 1000;
     return;
   }
-  transmittedLogID = newTransmittedLogID;
+  transmittedLogID = bufferedLogID;
 }
 
 void processInput() {
@@ -232,7 +226,7 @@ void kilohertzLoop() {
     float alpha = getLowpassAlpha();
     lowpassVoltage = alpha * tiaVoltage + (1 - alpha) * lowpassVoltage;
   }
-  
+
   uint32_t iterationsPerLog = logPeriod / loopPeriod;
   if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
     uint32_t ringBufferIndex = unsafeBufferedLogID % logSize;

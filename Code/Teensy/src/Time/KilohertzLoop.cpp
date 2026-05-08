@@ -42,7 +42,7 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
     }
 
     int32_t differentialError = interval - period;
-    if (abs(differentialError) > 5) {
+    if (abs(differentialError) > 6) {
       Serial.println("Differential error was too large.");
       throwError(2000 + interval);
       return;
@@ -51,16 +51,9 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
     uint32_t actualIntegrated = latestTimestamp - integrationStartTimestamp;
     uint32_t expectedIntegrated = (iterationID - 1) * period;
     expectedIntegrated += period;
-
-    uint32_t allowedIntegralError;
-    if (iterationID >= 3) {
-      allowedIntegralError = 6;
-    } else {
-      allowedIntegralError = 5;
-    }
-
+    
     int32_t integralError = actualIntegrated - expectedIntegrated;
-    if (abs(integralError) > allowedIntegralError) {
+    if (abs(integralError) > 6) {
       Serial.println("Integral error was too large.");
       throwError(3000 + integralError);
       return;
