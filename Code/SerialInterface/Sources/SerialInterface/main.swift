@@ -54,75 +54,192 @@ do {
 }
  */
 
+struct DataLossState {
+  nonisolated(unsafe)
+  static var firstEntryID: Int?
+  nonisolated(unsafe)
+  static var lastEntryID: Int?
+  nonisolated(unsafe)
+  static var totalEntryCount: Int = 0
+  
+  var decodedEntries: Int
+  var expectedEntries: Int
+  
+  init() {
+    if let firstEntryID = Self.firstEntryID,
+       let lastEntryID = Self.lastEntryID {
+      self.decodedEntries = Self.totalEntryCount
+      self.expectedEntries = (lastEntryID - firstEntryID) + 1
+    } else {
+      self.decodedEntries = 0
+      self.expectedEntries = 0
+    }
+  }
+  
+  func display() {
+    let lostEntries = expectedEntries - decodedEntries
+    let lostProportion = Float(lostEntries) / Float(expectedEntries)
+    print("lost:", terminator: " ")
+    print("\(lostEntries) / \(expectedEntries)", terminator: " ")
+    
+    let percentString = String(format: "%.2f", lostProportion * 100)
+    print("(\(percentString)%)")
+  }
+}
+
 let startTime = Date().timeIntervalSince1970
 
 while true {
   usleep(10_000)
   
-  do {
-    let currentTime = Date().timeIntervalSince1970
-    let elapsedTime = currentTime - startTime
-    let formattedString = String(format: "%.3f", elapsedTime)
-    print("polling at t = \(formattedString) s")
-  }
-  
   let readStartTime = Date().timeIntervalSince1970
   let data = try await serial.readBytesBlocking(count: 1_000_000, timeout: 0.001)
   let readEndTime = Date().timeIntervalSince1970
   
+  do {
+    let currentTime = Date().timeIntervalSince1970
+    let elapsedTime = currentTime - startTime
+    let formattedString = String(format: "%.3f", elapsedTime)
+    print()
+    print("polling at t = \(formattedString) s")
+    
+    // Easy way to avoid large data loss.
+    if (elapsedTime < 0.100) {
+      continue
+    }
+  }
+  
   let decodeStartTime = Date().timeIntervalSince1970
-  var lineCount: Int = 0
+  let startState = DataLossState()
+  var entries: [Entry] = []
   data.withContiguousStorageIfAvailable { pointer in
     let startCode = Character(">").asciiValue!
     let endCode = Character("<").asciiValue!
     
-    var lastStartID: Int?
-    var lastEndID: Int?
-    var byteID = 0
-    while byteID < pointer.count {
-      let byte = pointer[byteID]
-      if byte == startCode {
-        guard lastStartID == nil else {
-          fatalError("Unexpected partial entry situation.")
+    func findFirstStartCode() -> Int? {
+      var cursor = 0
+      var firstStartID: Int?
+      while cursor < pointer.count {
+        let byte = pointer[cursor]
+        if byte == startCode {
+          firstStartID = cursor
+          break
         }
-        lastStartID = byteID
-        
-        byteID = pointer.count
-        continue
+        cursor += 1
       }
-      
-      if byte == endCode {
-        if let lastStartID {
-          let stringStart = lastStartID + 1
-          let stringEnd = byteID
-          
-          let baseAddress = pointer.baseAddress! + stringStart
-          let newBufferPointer = UnsafeBufferPointer(
-            start: baseAddress, count: stringEnd - stringStart)
-          
-          //let entry = Entry(decoding: newBufferPointer)
-          //print(entry.id)
-          //print(newBufferPointer.count)
-          lineCount += 1
-        } else {
-          guard lastEndID == nil else {
-            fatalError("Unexpected partial entry situation.")
-          }
-          print("Partial entry (end type) of length ~\(byteID).")
-        }
-        
-        lastStartID = nil
-        lastEndID = byteID
-      }
-      
-      byteID += 1
+      return firstStartID
+    }
+    let firstStartID = findFirstStartCode()
+    guard let firstStartID else {
+      return
     }
     
-    if let lastStartID {
-      let length = pointer.count - lastStartID
-      print("Partial entry (start type) of length ~\(length).")
+    // Whether no errors were detected in transmission.
+    func passesValidation(cursor: Int) -> Bool {
+      guard pointer[cursor] == startCode else {
+        print("[cursor = \(cursor)] Unexpected start code: \(pointer[cursor])")
+        return false
+      }
+      
+      let nextCursor = cursor + 1 + 40
+      guard pointer[nextCursor] == endCode else {
+        print("[cursor = \(nextCursor)] Unexpected end code: \(pointer[nextCursor])")
+        return false
+      }
+      
+      return true
+    }
+    
+    var cursor = firstStartID
+    while cursor + 41 < pointer.count {
+      if pointer[cursor + 41] == 0 {
+        break
+      }
+      
+      var attemptCount = 0
+      while cursor + 41 < pointer.count {
+        if pointer[cursor + 41] == 0 {
+          break
+        }
+        
+        if !passesValidation(cursor: cursor) {
+          cursor += 1
+          attemptCount += 1
+          continue
+        }
+        
+        if attemptCount > 0 {
+          print("Validation succeeded after \(attemptCount) attempts.")
+        }
+        
+        cursor += 1 // <
+        
+        let stringPointer = UnsafeBufferPointer<UInt8>(
+          start: pointer.baseAddress! + cursor,
+          count: 40)
+        let entry = Entry(decoding: stringPointer)
+        
+        if let lastEntryID = DataLossState.lastEntryID {
+          guard entry.id > lastEntryID else {
+            fatalError("Corrupted entry ID.")
+          }
+          if Int(entry.id) - lastEntryID > 100 {
+            print()
+            print("massive jump:")
+            print(DataLossState.firstEntryID ?? "nil")
+            print(DataLossState.lastEntryID ?? "nil")
+            print(entry.id)
+            print(Int(entry.id) - lastEntryID)
+            print()
+            print(DataLossState.totalEntryCount)
+            print(entries.count)
+            print(entry.values)
+            print()
+            
+            
+            // === Failure Rate (threshold: 100 consecutive losses) ===
+            //
+            // logPeriod = 24 μs
+            //
+            // logPeriod = 48 μs
+            // lost: 204 / 123353 (0.17%)
+            // lost: 248 / 144311 (0.17%)
+            // lost: 479 / 287789 (0.17%)
+            // lost: 389 / 235246 (0.17%)
+            // lost: 255 / 155445 (0.16%)
+            // lost: 485 / 289827 (0.17%)
+            // lost: 150 / 93215 (0.16%)
+            //
+            // logPeriod = 96 μs
+            // lost: 524 / 265756 (0.20%)
+            // lost: 251 / 130861 (0.19%)
+            // lost: 104 / 53872 (0.19%)
+            // lost: 1778 / 923840 (0.19%) <-- has not failed yet
+            // lost: 561 / 294490 (0.19%)
+            // lost: 1425 / 740719 (0.19%)
+            //
+            // logPeriod = 192 μs
+            fatalError("Too large of a loss.")
+          }
+        }
+        
+        if DataLossState.firstEntryID == nil {
+          DataLossState.firstEntryID = Int(entry.id)
+        }
+        DataLossState.lastEntryID = Int(entry.id)
+        DataLossState.totalEntryCount += 1
+        
+        entries.append(entry)
+        cursor += 40
+        cursor += 1 // <
+        cursor += 1 // \r
+        cursor += 1 // \n
+        
+        break
+      }
     }
   }
+  let endState = DataLossState()
   let decodeEndTime = Date().timeIntervalSince1970
   
   do {
@@ -130,14 +247,33 @@ while true {
     let formattedString = String(format: "%.3f", readElapsedTime * 1000)
     print("read took \(formattedString) ms")
   }
-  
   do {
     let decodeElapsedTime = decodeEndTime - decodeStartTime
     let formattedString = String(format: "%.3f", decodeElapsedTime * 1000)
     print("decoding took \(formattedString) ms")
   }
+  do {
+    let timePerLine = Float(decodeEndTime - readStartTime) / Float(entries.count)
+    let formattedString = String(format: "%.1f", timePerLine * 1e6)
+    print("log period: \(formattedString) μs/line")
+  }
+  do {
+    let timePerLine = Float(decodeEndTime - decodeStartTime) / Float(entries.count)
+    let formattedString = String(format: "%.1f", timePerLine * 1e6)
+    print("decoding time: \(formattedString) μs/line")
+  }
+  print("processed \(entries.count) lines")
   
-  print("processed \(lineCount) lines")
+  
+  
+  var batchState = endState
+  batchState.decodedEntries -= startState.decodedEntries
+  batchState.expectedEntries -= startState.expectedEntries
+  
+  print("[batch stats]")
+  batchState.display()
+  print("[total stats]")
+  endState.display()
 }
 
 /*

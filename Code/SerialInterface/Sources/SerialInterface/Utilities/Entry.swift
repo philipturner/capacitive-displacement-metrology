@@ -1,5 +1,5 @@
 struct Entry {
-  var id: UInt32
+  var id: Int
   var values: [Float]
   
   init(decoding pointer: UnsafeBufferPointer<UInt8>) {
@@ -15,6 +15,9 @@ struct Entry {
     for charID in pointer.indices {
       let character = pointer[charID]
       let hexDigit = UInt8(truncatingIfNeeded: character) &- zeroCode
+      guard hexDigit < 16 else {
+        fatalError("Malformatted digit.")
+      }
       hexDigits.append(hexDigit)
     }
     
@@ -35,7 +38,7 @@ struct Entry {
     guard numberCount >= 1 else {
       fatalError("Not enough numbers to establish an ID.")
     }
-    self.id = bitPatterns[0]
+    self.id = Int(bitPatterns[0])
     self.values = []
     
     for bitPattern in bitPatterns[1...] {

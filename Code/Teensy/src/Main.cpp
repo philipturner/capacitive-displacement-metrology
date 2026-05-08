@@ -31,7 +31,7 @@
 // PC. Data needs to be sent only on request.
 
 constexpr uint32_t loopPeriod = 12;
-constexpr uint32_t logPeriod = 480; // must be divisible by loopPeriod
+constexpr uint32_t logPeriod = 96; // must be divisible by loopPeriod
 constexpr uint32_t logSize = 12000;
 float ringBuffer1[logSize];
 float ringBuffer2[logSize];
@@ -150,7 +150,6 @@ void loop() {
     Serial.print(logErrorCode);
     Serial.println();
   } else {
-    Serial.println("Something is happening.");
     processLog();
   }
 
