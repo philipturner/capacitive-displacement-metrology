@@ -2,7 +2,7 @@ struct Entry {
   var id: Int
   var values: [Float]
   
-  static let messageLength: Int = 8
+  static let messageLength: Int = 40
   
   init(decoding pointer: UnsafeBufferPointer<UInt8>) {
     guard pointer.count % 8 == 0 else {

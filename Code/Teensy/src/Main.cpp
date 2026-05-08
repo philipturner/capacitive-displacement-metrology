@@ -31,7 +31,7 @@
 // PC. Data needs to be sent only on request.
 
 constexpr uint32_t loopPeriod = 12;
-constexpr uint32_t logPeriod = 24; // must be divisible by loopPeriod
+constexpr uint32_t logPeriod = 96; // must be divisible by loopPeriod
 constexpr uint32_t logSize = 12000;
 float ringBuffer1[logSize];
 float ringBuffer2[logSize];
@@ -90,11 +90,11 @@ void processLog() {
     bufferValues[2] = ringBuffer3[i % logSize];
     bufferValues[3] = ringBuffer4[i % logSize];
 
-    constexpr uint32_t channelCount = 1;
+    constexpr uint32_t channelCount = 5;
 
     uint32_t numbers[channelCount];
     numbers[0] = i;
-    //memcpy(numbers + 1, bufferValues, 4 * sizeof(float));
+    memcpy(numbers + 1, bufferValues, 4 * sizeof(float));
 
     char cString[channelCount * 8 + 5];
     cString[0] = '>';
