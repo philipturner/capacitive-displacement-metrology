@@ -70,25 +70,57 @@ while true {
   let data = try await serial.readBytesBlocking(count: 1_000_000, timeout: 0.001)
   let readEndTime = Date().timeIntervalSince1970
   
-  let splitStartTime = Date().timeIntervalSince1970
-  let string = String(data: data, encoding: .utf8)!
-  let lines = string.split(separator: "\r\n").map(String.init)
-  let splitEndTime = Date().timeIntervalSince1970
-  
-  // 20 ms for 1000 lines?
   let decodeStartTime = Date().timeIntervalSince1970
-  for line in lines {
-    let hasStart = (line.first! == ">")
-    let hasEnd = (line.last! == "<")
-    if hasStart && hasEnd {
-      guard let entry = Entry(decoding: line) else {
-        fatalError("Line failed Entry decoding: \(line)")
+  var lineCount: Int = 0
+  data.withContiguousStorageIfAvailable { pointer in
+    let startCode = Character(">").asciiValue!
+    let endCode = Character("<").asciiValue!
+    
+    var lastStartID: Int?
+    var lastEndID: Int?
+    var byteID = 0
+    while byteID < pointer.count {
+      let byte = pointer[byteID]
+      if byte == startCode {
+        guard lastStartID == nil else {
+          fatalError("Unexpected partial entry situation.")
+        }
+        lastStartID = byteID
+        
+        byteID = pointer.count
+        continue
       }
-      print("id:", entry.id, "values:", entry.values)
-    } else if hasStart || hasEnd {
-      print("Not yet handling partial entries:", line)
-    } else {
-      print(line)
+      
+      if byte == endCode {
+        if let lastStartID {
+          let stringStart = lastStartID + 1
+          let stringEnd = byteID
+          
+          let baseAddress = pointer.baseAddress! + stringStart
+          let newBufferPointer = UnsafeBufferPointer(
+            start: baseAddress, count: stringEnd - stringStart)
+          
+          //let entry = Entry(decoding: newBufferPointer)
+          //print(entry.id)
+          //print(newBufferPointer.count)
+          lineCount += 1
+        } else {
+          guard lastEndID == nil else {
+            fatalError("Unexpected partial entry situation.")
+          }
+          print("Partial entry (end type) of length ~\(byteID).")
+        }
+        
+        lastStartID = nil
+        lastEndID = byteID
+      }
+      
+      byteID += 1
+    }
+    
+    if let lastStartID {
+      let length = pointer.count - lastStartID
+      print("Partial entry (start type) of length ~\(length).")
     }
   }
   let decodeEndTime = Date().timeIntervalSince1970
@@ -100,18 +132,12 @@ while true {
   }
   
   do {
-    let splitElapsedTime = splitEndTime - splitStartTime
-    let formattedString = String(format: "%.3f", splitElapsedTime * 1000)
-    print("split took \(formattedString) ms")
-  }
-  
-  do {
     let decodeElapsedTime = decodeEndTime - decodeStartTime
     let formattedString = String(format: "%.3f", decodeElapsedTime * 1000)
     print("decoding took \(formattedString) ms")
   }
   
-  print("processed \(lines.count) lines")
+  print("processed \(lineCount) lines")
 }
 
 /*
@@ -130,4 +156,6 @@ while true {
  split took 21 ms -> 99 μs/line
  decoding took 19 ms -> 89 μs/line
  processed 212 lines
+ 
+ switching to -Xswiftc -Ounchecked: ~16 ms for each operation, over 100 lines
  */

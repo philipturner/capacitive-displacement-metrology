@@ -2,44 +2,20 @@ struct Entry {
   var id: UInt32
   var values: [Float]
   
-  init?(decoding string: String) {
-    let hasStart = (string.first! == ">")
-    let hasEnd = (string.last! == "<")
-    guard hasStart, hasEnd else {
-      fatalError("Malformatted entry: \(string)")
+  init(decoding pointer: UnsafeBufferPointer<UInt8>) {
+    guard pointer.count % 8 == 0 else {
+      fatalError("String had invalid length.")
     }
-    
-    var shortenedString = string
-    shortenedString.removeFirst()
-    shortenedString.removeLast()
-    guard shortenedString.count % 8 == 0 else {
-      print("""
-        String was not hex encoded 32-bit values.
-        \(string)
-        \(shortenedString)
-        \(hasStart)
-        \(hasEnd)
-        \(shortenedString.count)
-        """)
-      return nil
+    guard pointer.count == 40 else {
+      fatalError("Failed second check for invalid length.")
     }
     
     var hexDigits: [UInt8] = []
     let zeroCode = Character("a").asciiValue!
-    let utf8CString = shortenedString.utf8CString
-    for charID in 0..<shortenedString.count {
-      let character = utf8CString[charID]
+    for charID in pointer.indices {
+      let character = pointer[charID]
       let hexDigit = UInt8(truncatingIfNeeded: character) &- zeroCode
       hexDigits.append(hexDigit)
-    }
-    guard hexDigits.count == shortenedString.count else {
-      fatalError("""
-        Malformatted string.
-        \(hexDigits)
-        \(shortenedString)
-        \(hexDigits.count)
-        \(shortenedString.count)
-        """)
     }
     
     let numberCount = hexDigits.count / 8
