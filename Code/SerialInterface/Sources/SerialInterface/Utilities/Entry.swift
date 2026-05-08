@@ -2,7 +2,7 @@ struct Entry {
   var id: UInt32
   var values: [Float]
   
-  init(decoding string: String) {
+  init?(decoding string: String) {
     let hasStart = (string.first! == ">")
     let hasEnd = (string.last! == "<")
     guard hasStart, hasEnd else {
@@ -13,17 +13,33 @@ struct Entry {
     shortenedString.removeFirst()
     shortenedString.removeLast()
     guard shortenedString.count % 8 == 0 else {
-      fatalError("String was not hex encoded 32-bit values.")
+      print("""
+        String was not hex encoded 32-bit values.
+        \(string)
+        \(shortenedString)
+        \(hasStart)
+        \(hasEnd)
+        \(shortenedString.count)
+        """)
+      return nil
     }
     
     var hexDigits: [UInt8] = []
     let zeroCode = Character("a").asciiValue!
-    for character in shortenedString.utf8CString {
+    let utf8CString = shortenedString.utf8CString
+    for charID in 0..<shortenedString.count {
+      let character = utf8CString[charID]
       let hexDigit = UInt8(truncatingIfNeeded: character) &- zeroCode
       hexDigits.append(hexDigit)
     }
     guard hexDigits.count == shortenedString.count else {
-      fatalError("Malformatted string.")
+      fatalError("""
+        Malformatted string.
+        \(hexDigits)
+        \(shortenedString)
+        \(hexDigits.count)
+        \(shortenedString.count)
+        """)
     }
     
     let numberCount = hexDigits.count / 8
