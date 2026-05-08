@@ -1,3 +1,4 @@
+#if false
 struct Stream {
   var title: String
   var data: [Float] = []
@@ -49,3 +50,4 @@ struct Stream {
     return streams
   }
 }
+#endif

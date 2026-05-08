@@ -1,3 +1,4 @@
+#if false
 struct PopulationStatistics {
   var sampleSize: Int
   var average: Float
@@ -41,3 +42,4 @@ struct PopulationStatistics {
     print("- 3σ:", 3 * standardDeviation)
   }
 }
+#endif

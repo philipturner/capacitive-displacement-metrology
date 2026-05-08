@@ -8,10 +8,11 @@ let ticker = Python.import("matplotlib.ticker")
 
 // Mode
 
-guard CommandLine.arguments.count == 2 else {
+guard CommandLine.arguments.count == 1 else {
   fatalError("Invalid command line arguments: \(CommandLine.arguments)")
 }
 
+/*
 enum Mode {
   case riseTime
   case noise
@@ -28,6 +29,7 @@ func getMode() -> Mode {
   }
 }
 let mode = getMode()
+ */
 
 // Access the serial port.
 
@@ -38,6 +40,9 @@ try await serial.open(
   transmitRate: .baud115200)
 print("opened serial port")
 
+// Make a background thread that polls for command-line input, once we are
+// displaying data to Matplotlib instead of the console.
+/*
 do {
   var character: Character
   switch mode {
@@ -46,78 +51,26 @@ do {
   }
   
   _ = try await serial.writeBytes([character.asciiValue!])
-  usleep(60_000)
 }
+ */
 
-_ = try await serial.writeBytes([Character("e").asciiValue!])
-usleep(60_000 + 50_000 + 30_000)
-
-let data = try await serial.readBytesBlocking(count: 1_000_000, timeout: 0.015)
-let string = String(data: data, encoding: .utf8)!
-let lines = string.split(separator: "\r\n").map(String.init)
-
-// Decode the serial data.
-
-var entries: [Entry] = []
-for line in lines {
-  if let entry = Entry(decoding: line) {
-    entries.append(entry)
+while true {
+  usleep(10_000)
+  
+  let data = try await serial.readBytesBlocking(count: 1_000_000, timeout: 0.001)
+  let string = String(data: data, encoding: .utf8)!
+  let lines = string.split(separator: "\r\n").map(String.init)
+  
+  for line in lines {
+    let hasStart = (line.first! == ">")
+    let hasEnd = (line.last! == "<")
+    if hasStart && hasEnd {
+      let entry = Entry(decoding: line)
+      print("id:", entry.id, "values:", entry.values)
+    } else if hasStart || hasEnd {
+      print("Not yet handling partial entries:", line)
+    } else {
+      print(line)
+    }
   }
 }
-
-guard entries.count > 0 else {
-  fatalError("There were no entries.")
-}
-
-// Graph with Matplotlib.
-
-// Retrieve the figure and axes.
-let (fig, axis) = plt.subplots().tuple2
-let axes = [axis]
-
-// Set the size of the figure.
-fig.set_size_inches(12, 6)
-
-// Plot on the first subplot.
-let streams = Stream.createStreams(entries)
-if mode == .riseTime {
-  let sectionAverages = RiseTime.createSectionAverages(streams: streams)
-  let scaleFactor = sectionAverages[0] / 10
-  
-  var data = streams[1].data
-  for i in data.indices {
-    data[i] *= scaleFactor * 1.5
-  }
-  axes[0].plot(streams[0].data, data, label: streams[1].title)
-}
-axes[0].plot(streams[0].data, streams[2].data, label: streams[2].title)
-
-// Run the calculation of the property of interest.
-if mode == .riseTime {
-  let riseTimeStreams = RiseTime.createRiseTimeStreams(streams: streams)
-  
-  // Display indicators graphically to check correctness of the calculation.
-  axes[0].scatter(
-    riseTimeStreams.x.data,
-    riseTimeStreams.y.data,
-    label: riseTimeStreams.y.title)
-} else {
-  let statistics = PopulationStatistics(data: streams[2].data)
-  statistics.display()
-}
-
-// Format the subplot.
-axes[0].set_xlabel(streams[0].title)
-if mode == .riseTime {
-  let majorTick = RiseTime.halfPeriodMicroseconds
-  axes[0].xaxis.set_major_locator(ticker.MultipleLocator(majorTick))
-  axes[0].xaxis.set_minor_locator(ticker.MultipleLocator(majorTick / 5))
-}
-axes[0].grid(true)
-if mode == .riseTime {
-  axes[0].grid(visible: true, which: "minor", axis: "x")
-}
-
-fig.legend(loc: "outside upper left")
-plt.show()
-

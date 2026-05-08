@@ -1,3 +1,4 @@
+#if false
 enum RiseTime {
   static let halfPeriodMicroseconds: Float = 500
   
@@ -132,3 +133,4 @@ enum RiseTime {
     return (x: streamX, y: streamY)
   }
 }
+#endif
