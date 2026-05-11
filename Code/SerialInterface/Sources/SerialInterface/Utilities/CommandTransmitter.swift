@@ -1,5 +1,4 @@
 import Foundation
-import SwiftSerial
 
 actor CommandTransmitter {
   static let global = CommandTransmitter()
