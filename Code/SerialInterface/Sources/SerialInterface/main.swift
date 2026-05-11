@@ -15,19 +15,42 @@ try await serial.open(
   transmitRate: .baud115200)
 print("opened serial port")
 
-// Make a background thread that polls for command-line input, once we are
-// displaying data to Matplotlib instead of the console.
-/*
-do {
-  var character: Character
-  switch mode {
-  case .riseTime: character = "r"
-  case .noise: character = "n"
+// Launch the background thread for collecting user input.
+
+actor CommandTransmitter {
+  private var characterQueue: String = ""
+  
+  func addCharacters(_ input: String) {
+    characterQueue += input
   }
   
-  _ = try await serial.writeBytes([character.asciiValue!])
+  func extractCharacters() -> String {
+    let output = characterQueue
+    characterQueue = ""
+    return output
+  }
 }
- */
+let transmitter = CommandTransmitter()
+
+Task.detached {
+  while true {
+    usleep(50_000)
+    
+    let userInput = readLine()
+    if let userInput {
+      await transmitter.addCharacters(userInput)
+    }
+  }
+}
+
+func transmitSerialInput() async {
+  let input = await transmitter.extractCharacters()
+  guard input.count > 0 else {
+    return
+  }
+  
+  
+}
 
 // Split the data stream into entries.
 
@@ -51,6 +74,8 @@ var loopIterationID: Int = .zero
 while true {
   usleep(10_000)
   
+  await transmitSerialInput()
+  
   let readStartTime = Date().timeIntervalSince1970
   let data = try await serial.readBytesBlocking(count: 1_000_000, timeout: 0.001)
   let validBytes = validBytes(data: data)
@@ -63,9 +88,9 @@ while true {
     let currentTime = Date().timeIntervalSince1970
     let elapsedTime = currentTime - startTime
     let formattedString = String(format: "%.3f", elapsedTime)
-    print()
-    print("polling at t = \(formattedString) s")
-    print("loop iteration ID: \(loopIterationID)")
+    // print()
+    // print("polling at t = \(formattedString) s")
+    // print("loop iteration ID: \(loopIterationID)")
   }
   defer {
     loopIterationID += 1
@@ -120,18 +145,18 @@ while true {
   do {
     let readElapsedTime = readEndTime - readStartTime
     let formattedString = String(format: "%.3f", readElapsedTime * 1000)
-    print("read took \(formattedString) ms")
+    // print("read took \(formattedString) ms")
   }
   do {
     let decodeElapsedTime = decodeEndTime - decodeStartTime
     let formattedString = String(format: "%.3f", decodeElapsedTime * 1000)
-    print("decoding took \(formattedString) ms")
+    // print("decoding took \(formattedString) ms")
   }
   do {
     let timePerLine = Float(decodeEndTime - decodeStartTime) / Float(entries.count)
     let formattedString = String(format: "%.1f", timePerLine * 1e6)
-    print("decoding time: \(formattedString) μs/line")
+    // print("decoding time: \(formattedString) μs/line")
   }
-  print("processed \(entries.count) lines")
-  print("total so far: \(totalLineCount) lines")
+  // print("processed \(entries.count) lines")
+  // print("total so far: \(totalLineCount) lines")
 }
