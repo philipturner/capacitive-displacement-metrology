@@ -6,12 +6,6 @@ PythonLibrary.useLibrary(at: "/Users/philipturner/miniforge3/bin/python")
 let plt = Python.import("matplotlib.pyplot")
 let ticker = Python.import("matplotlib.ticker")
 
-// Mode
-
-guard CommandLine.arguments.count == 1 else {
-  fatalError("Invalid command line arguments: \(CommandLine.arguments)")
-}
-
 // Access the serial port.
 
 let serial = SerialPort(path: "/dev/cu.usbmodem182280901")
@@ -49,8 +43,6 @@ func validBytes(data: Data) -> [UInt8] {
   return output
 }
 
-
-
 let startTime = Date().timeIntervalSince1970
 var previousEntryID: Int?
 var totalLineCount: Int = .zero
@@ -74,18 +66,32 @@ while true {
     print()
     print("polling at t = \(formattedString) s")
     print("loop iteration ID: \(loopIterationID)")
-    
-//    if loopIterationID == 0 {
-//      print("discarding data due to expected corruption")
-//      loopIterationID += 1
-//      continue
-//    } else {
-//      loopIterationID += 1
-//    }
+  }
+  defer {
+    loopIterationID += 1
+  }
+  
+  func createEntries() -> [Entry] {
+    do {
+      let entries = try Entry.decodeEntries(data: validBytes)
+      return entries
+    } catch let error as Entry.StartCodeCorruptionError {
+      print(error.description)
+      
+      if loopIterationID == 0 {
+        let data = error.uncorruptedData
+        let entries = try! Entry.decodeEntries(data: data)
+        return entries
+      } else {
+        fatalError("This should not happen on later loop iterations.")
+      }
+    } catch {
+      fatalError("Unexpected error type.")
+    }
   }
   
   let decodeStartTime = Date().timeIntervalSince1970
-  let entries = decodeEntries(data: validBytes)
+  let entries = createEntries()
   if entries.count > 0 {
     if let previousEntryID {
       let firstEntryID = entries[0].id
@@ -122,11 +128,6 @@ while true {
     print("decoding took \(formattedString) ms")
   }
   do {
-    let timePerLine = Float(decodeEndTime - readStartTime) / Float(entries.count)
-    let formattedString = String(format: "%.1f", timePerLine * 1e6)
-    print("log period: \(formattedString) μs/line")
-  }
-  do {
     let timePerLine = Float(decodeEndTime - decodeStartTime) / Float(entries.count)
     let formattedString = String(format: "%.1f", timePerLine * 1e6)
     print("decoding time: \(formattedString) μs/line")
@@ -134,23 +135,3 @@ while true {
   print("processed \(entries.count) lines")
   print("total so far: \(totalLineCount) lines")
 }
-
-/*
- this happens every 50 ms on the PC, with 48 μs log period
- 9280 lines/s, expected 20833 lines/s
- 
- read took 1.054 ms
- split took 21.111 ms -> 46 μs/line
- decoding took 26.504 ms -> 57 μs/line
- processed 464 lines
- 
- this happens every 100 ms on the PC, with 480 μs log period
- 2120 lines/s, expected 2083 lines/s
- 
- read took 43 ms
- split took 21 ms -> 99 μs/line
- decoding took 19 ms -> 89 μs/line
- processed 212 lines
- 
- switching to -Xswiftc -Ounchecked: ~16 ms for each operation, over 100 lines
- */
