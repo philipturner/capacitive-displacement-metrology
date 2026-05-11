@@ -1,51 +1,85 @@
 struct Entry {
   var id: Int
-  var values: [Float]
+  var values: SIMD4<Float>
   
-  static let messageLength: Int = 40
+  static let messageLength: Int = 23
   
-  init(decoding pointer: UnsafeBufferPointer<UInt8>) {
-    guard pointer.count % 8 == 0 else {
-      fatalError("String had invalid length.")
-    }
-    guard pointer.count == Entry.messageLength else {
-      fatalError("Failed second check for invalid length.")
+  init(decoding buffer: UnsafePointer<UInt8>) {
+    let codeGreaterThan: UInt8 = Character(">").asciiValue!
+    guard buffer[0] == codeGreaterThan else {
+      fatalError("Invalid message.")
     }
     
-    var hexDigits: [UInt8] = []
-    let zeroCode = Character("a").asciiValue!
-    for charID in pointer.indices {
-      let character = pointer[charID]
-      let hexDigit = UInt8(truncatingIfNeeded: character) &- zeroCode
-      guard hexDigit < 16 else {
-        fatalError("Malformatted digit.")
+    var numbers: [UInt32]
+    do {
+      numbers = [
+        try Self.base64Decode(buffer + 1, encodedLength: 6),
+        try Self.base64Decode(buffer + 7, encodedLength: 4),
+        try Self.base64Decode(buffer + 11, encodedLength: 4),
+        try Self.base64Decode(buffer + 15, encodedLength: 4),
+        try Self.base64Decode(buffer + 19, encodedLength: 4),
+      ]
+    } catch {
+      var string: String = ""
+      for i in 0..<23 {
+        let code = buffer[i]
+        let character = Character(Unicode.Scalar(code))
+        string.append(character)
       }
-      hexDigits.append(hexDigit)
+      fatalError("Failed to decode. Contents of buffer: \(string)")
     }
     
-    let numberCount = hexDigits.count / 8
-    var bitPatterns: [UInt32] = []
-    for numberID in 0..<numberCount {
-      var bitPattern: UInt32 = .zero
-      for charID in 0..<8 {
-        let rightShiftAmount = 4 * charID
-        let indexInDigits = 8 * numberID + charID
-        
-        let fourBits = UInt32(hexDigits[indexInDigits])
-        bitPattern |= fourBits << rightShiftAmount
-      }
-      bitPatterns.append(bitPattern)
-    }
+    self.id = Int(numbers[0])
+    self.values = .zero
     
-    guard numberCount >= 1 else {
-      fatalError("Not enough numbers to establish an ID.")
-    }
-    self.id = Int(bitPatterns[0])
-    self.values = []
-    
-    for bitPattern in bitPatterns[1...] {
+    for laneID in 0..<4 {
+      var bitPattern = numbers[1 + laneID]
+      bitPattern <<= 8
       let floatValue = Float(bitPattern: bitPattern)
-      self.values.append(floatValue)
+      values[laneID] = floatValue
     }
   }
+  
+  private static let codeUpperA: UInt8 = Character("A").asciiValue!
+  private static let codeLowerA: UInt8 = Character("a").asciiValue!
+  private static let codeZero: UInt8 = Character("0").asciiValue!
+  private static let codePlus: UInt8 = Character("+").asciiValue!
+  private static let codeForwardSlash: UInt8 = Character("/").asciiValue!
+  
+  static func base64Decode(
+    _ buffer: UnsafePointer<UInt8>,
+    encodedLength: Int
+  ) throws -> UInt32 {
+    var value: UInt32 = .zero
+    for i in 0..<encodedLength {
+      let character = buffer[i]
+      
+      var sixBits: UInt8
+      if character >= codeUpperA,
+         character < codeUpperA + 26 {
+        sixBits = character - codeUpperA
+        
+      } else if character >= codeLowerA,
+                character < codeLowerA + 26 {
+        sixBits = (character - codeLowerA) + 26
+        
+      } else if character >= codeZero,
+                character < codeZero + 9 {
+        sixBits = (character - codeZero) + 52
+        
+      } else if character == codePlus {
+        sixBits = 62
+      } else if character == codeForwardSlash {
+        sixBits = 63
+      } else {
+        throw DecodeError()
+      }
+      
+      let leftShiftAmount = UInt32(6 * i)
+      value |= UInt32(sixBits) << leftShiftAmount
+    }
+    return value
+  }
+  
+  struct DecodeError: Error { }
 }
