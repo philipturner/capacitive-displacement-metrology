@@ -3,10 +3,10 @@ struct Entry {
   var values: SIMD4<Float>
   
   static let messageLength: Int = 23
+  static let messageStartCode: UInt8 = Character(">").asciiValue!
   
   init(decoding buffer: UnsafePointer<UInt8>) {
-    let codeGreaterThan: UInt8 = Character(">").asciiValue!
-    guard buffer[0] == codeGreaterThan else {
+    guard buffer[0] == Entry.messageStartCode else {
       fatalError("Invalid message.")
     }
     
@@ -20,12 +20,7 @@ struct Entry {
         try Self.base64Decode(buffer + 19, encodedLength: 4),
       ]
     } catch {
-      var string: String = ""
-      for i in 0..<23 {
-        let code = buffer[i]
-        let character = Character(Unicode.Scalar(code))
-        string.append(character)
-      }
+      let string = Entry.display(buffer)
       fatalError("Failed to decode. Contents of buffer: \(string)")
     }
     
@@ -82,4 +77,17 @@ struct Entry {
   }
   
   struct DecodeError: Error { }
+  
+  static func display(
+    _ buffer: UnsafePointer<UInt8>,
+    length: Int = Entry.messageLength
+  ) -> String {
+    var string: String = ""
+    for i in 0..<23 {
+      let code = buffer[i]
+      let character = Character(Unicode.Scalar(code))
+      string.append(character)
+    }
+    return string
+  }
 }

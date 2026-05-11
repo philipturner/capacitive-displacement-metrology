@@ -7,29 +7,6 @@
 
 // MARK: - Global Variables
 
-// loopPeriod = 12, buffer time = 10 ms, 45 bytes/line
-//
-// logPeriod = 48  | froze permanently
-// logPeriod = 120 | froze permanently
-// logPeriod = 480 |
-
-// loopPeriod = 12, buffer time = 50 ms, 45 bytes/line
-//
-// logPeriod = 48  | unstable, can freeze at 10s or 40s
-// logPeriod = 72  | 15s hiccup at 60s, froze at 150s, resumed ~1 min later
-// logPeriod = 120 | spotted two hiccups, but stable for >4 min, froze for 1-2 min on another attempt and was still breaking down
-// logPeriod = 240 | stable (>2 min)
-// logPeriod = 480 | stable (>2 min)
-
-// loopPeriod = 12, buffer time = 200 ms, 45 bytes/line
-//
-// logPeriod = 48  | froze for ~20s
-// logPeriod = 120 |
-// logPeriod = 480 |
-
-// The in-memory history is fine, but we cannot constantly stream data to the
-// PC. Data needs to be sent only on request.
-
 constexpr uint32_t loopPeriod = 12;
 constexpr uint32_t logPeriod = 96; // must be divisible by loopPeriod
 constexpr uint32_t logSize = 4000;
