@@ -3,7 +3,27 @@
 #include "IC/DAC.h"
 #include "Application.h"
 
+extern "C" void usb_init();
+
 void Application::setupSerial() {
+  // More robust solution:
+  //
+  // https://community.platformio.org/t/how-to-modify-teensy-core-files/7425/5
+  // Change USB speed from 480 to 12 Mbps by uncommenting the line in:
+  // https://github.com/PaulStoffregen/cores/blob/master/teensy4/usb.c
+  // Needs to be reimplemented after updating the Teensy PlatformIO package.
+  //
+  // More elegant solution here only works with external program polling Serial.
+  // It locks up PlatformIO's serial implementation for some reason. Use the
+  // `#if` macro to disable the patch for tests that don't stress IO bandwidth.
+  #if 0
+  USB1_USBCMD = 0; // turn off USB controller
+  USB1_USBCMD = 2; // begin USB controller reset
+  delay(250);
+  usb_init();
+  USB1_PORTSC1 |= USB_PORTSC1_PFSC; // force 12 Mbit/sec
+  #endif
+  
   Serial.begin(0);
   Serial.println(); // allow easy distinction of different program runs
   Serial.println("Serial Monitor has initialized.");

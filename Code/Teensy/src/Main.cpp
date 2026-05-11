@@ -32,7 +32,7 @@
 
 constexpr uint32_t loopPeriod = 12;
 constexpr uint32_t logPeriod = 96; // must be divisible by loopPeriod
-constexpr uint32_t logSize = 12000;
+constexpr uint32_t logSize = 4000;
 float ringBuffer1[logSize];
 float ringBuffer2[logSize];
 float ringBuffer3[logSize];
@@ -69,6 +69,30 @@ void setup() {
 
 // MARK: - Serial Loop
 
+void base64Encode(uint32_t value, char* buffer, uint32_t encodedLength) {
+  for (uint32_t i = 0; i < encodedLength; ++i) {
+    uint32_t rightShiftAmount = 6 * i;
+    uint32_t sixBits = (value >> rightShiftAmount) & 0b111111;
+
+    char character;
+    if (sixBits < 26) {
+      character = 'A' + sixBits;
+    } else if (sixBits < 52) {
+      character = 'a' + (sixBits - 26);
+    } else if (sixBits < 62) {
+      character = '0'  + (sixBits - 52);
+    } else if (sixBits == 62) {
+      character = '+';
+    } else if (sixBits == 63) {
+      character = '/';
+    } else {
+      character = 0;
+    }
+
+    buffer[i] = character;
+  }
+}
+
 void processLog() {
   if (logErrorCode != 0) {
     return;
@@ -83,36 +107,28 @@ void processLog() {
   }
 
   for (uint32_t i = transmittedLogID; i < bufferedLogID; ++i) {
-    // 2231 μs for 1670 lines
     float bufferValues[4];
     bufferValues[0] = ringBuffer1[i % logSize];
     bufferValues[1] = ringBuffer2[i % logSize];
     bufferValues[2] = ringBuffer3[i % logSize];
     bufferValues[3] = ringBuffer4[i % logSize];
 
-    constexpr uint32_t channelCount = 5;
-
-    uint32_t numbers[channelCount];
+    uint32_t numbers[5];
     numbers[0] = i;
     memcpy(numbers + 1, bufferValues, 4 * sizeof(float));
+    numbers[1] >>= 8;
+    numbers[2] >>= 8;
+    numbers[3] >>= 8;
+    numbers[4] >>= 8;
 
-    char cString[channelCount * 8 + 5];
+    char cString[23 + 1];
     cString[0] = '>';
-    cString[channelCount * 8 + 1] = '<';
-    cString[channelCount * 8 + 2] = '\r';
-    cString[channelCount * 8 + 3] = '\n';
-    cString[channelCount * 8 + 4] = 0;
-
-    for (uint32_t numberID = 0; numberID < channelCount; ++numberID) {
-      uint32_t number = numbers[numberID];
-      for (uint32_t charID = 0; charID < 8; ++charID) {
-        uint32_t leftShiftAmount = 4 * charID;
-        uint32_t fourBits = (number >> leftShiftAmount) & 0b1111;
-
-        uint32_t indexInString = 1 + 8 * numberID + charID;
-        cString[indexInString] = 'a' + char(fourBits);
-      }
-    }
+    base64Encode(numbers[0], cString + 1, 6);
+    base64Encode(numbers[1], cString + 7, 4);
+    base64Encode(numbers[2], cString + 11, 4);
+    base64Encode(numbers[3], cString + 15, 4);
+    base64Encode(numbers[4], cString + 19, 4);
+    cString[23] = 0;
 
     Serial.print(cString);
   }
