@@ -8,8 +8,8 @@
 // MARK: - Global Variables
 
 constexpr uint32_t loopPeriod = 12;
-constexpr uint32_t logPeriod = 96; // must be divisible by loopPeriod
-constexpr uint32_t logSize = 4000;
+constexpr uint32_t logPeriod = 48; // must be divisible by loopPeriod
+constexpr uint32_t logSize = 12000;
 float ringBuffer1[logSize];
 float ringBuffer2[logSize];
 float ringBuffer3[logSize];
@@ -77,7 +77,7 @@ void processLog() {
 
   uint32_t bufferedLogID = unsafeBufferedLogID;
 
-  if (bufferedLogID - transmittedLogID >= logSize - 100) {
+  if (bufferedLogID - transmittedLogID >= logSize / 2) {
     uint32_t difference = bufferedLogID - transmittedLogID;
     logErrorCode = 1 * 1000 * 1000 + difference;
     return;

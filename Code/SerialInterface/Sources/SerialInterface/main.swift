@@ -35,74 +35,36 @@ do {
 }
  */
 
+// Split the data stream into entries.
+
+func validBytes(data: Data) -> [UInt8] {
+  var output: [UInt8] = []
+  for byte in data {
+    // Terminate the data at the first zero code.
+    if byte == 0 {
+      break
+    }
+    output.append(byte)
+  }
+  return output
+}
+
+
+
 let startTime = Date().timeIntervalSince1970
 var previousEntryID: Int?
-var previousPendingBytes: [UInt8] = []
-var totalLineCount: Int
-
-@MainActor
-func decodeEntries(data: Data) -> [Entry] {
-  let dataArray = previousPendingBytes + [UInt8](data)
-  func findFirstIndex() -> Int? {
-    for i in dataArray.indices {
-      let code = dataArray[i]
-      if code == Entry.messageStartCode {
-        return i
-      }
-    }
-    return nil
-  }
-  if previousPendingBytes.count > 0 {
-    let firstIndex = findFirstIndex()
-    guard let firstIndex, firstIndex == 0 else {
-      fatalError("This should never happen.")
-    }
-  }
-  previousPendingBytes = []
-  
-  var entries: [Entry] = []
-  if let firstIndex = findFirstIndex() {
-    var cursor = firstIndex
-    while true {
-      let nextCursor = cursor + Entry.messageLength
-      guard nextCursor < dataArray.count else {
-        let partialMessage = Array(dataArray[cursor...])
-        previousPendingBytes = partialMessage
-        break
-      }
-      
-      let currentMessageStart = dataArray[cursor]
-      let nextMessageStart = dataArray[nextCursor]
-      guard currentMessageStart == Entry.messageStartCode,
-            nextMessageStart == Entry.messageStartCode else {
-        dataArray.withUnsafeBufferPointer { bufferPointer in
-          let buffer = bufferPointer.baseAddress!
-          let string1 = Entry.display(buffer + cursor)
-          
-          var message2Length = dataArray.count - nextCursor
-          message2Length = min(message2Length, Entry.messageLength)
-          let string2 = Entry.display(
-            buffer + nextCursor,
-            length: message2Length)
-          
-          fatalError("""
-            Unexpected start codes for two consecutive messages.
-            message 1: \(string1)
-            message 2: \(string2)
-            """)
-        }
-      }
-      
-      
-    }
-  }
-}
+var totalLineCount: Int = .zero
+var loopIterationID: Int = .zero
 
 while true {
   usleep(10_000)
   
   let readStartTime = Date().timeIntervalSince1970
   let data = try await serial.readBytesBlocking(count: 1_000_000, timeout: 0.001)
+  let validBytes = validBytes(data: data)
+  if validBytes.count == 0 {
+    continue
+  }
   let readEndTime = Date().timeIntervalSince1970
   
   do {
@@ -111,15 +73,41 @@ while true {
     let formattedString = String(format: "%.3f", elapsedTime)
     print()
     print("polling at t = \(formattedString) s")
+    print("loop iteration ID: \(loopIterationID)")
     
-    // Easy way to avoid large data loss.
-//    if (elapsedTime < 0.100) {
+//    if loopIterationID == 0 {
+//      print("discarding data due to expected corruption")
+//      loopIterationID += 1
 //      continue
+//    } else {
+//      loopIterationID += 1
 //    }
   }
   
   let decodeStartTime = Date().timeIntervalSince1970
-  
+  let entries = decodeEntries(data: validBytes)
+  if entries.count > 0 {
+    if let previousEntryID {
+      let firstEntryID = entries[0].id
+      guard firstEntryID == previousEntryID + 1 else {
+        fatalError("""
+          Skipped entries: \(previousEntryID) -> \(firstEntryID)
+          """)
+      }
+    }
+    
+    for i in 1..<entries.count {
+      let firstEntryID = entries[i - 1].id
+      let secondEntryID = entries[i].id
+      guard secondEntryID == firstEntryID + 1 else {
+        fatalError("""
+          Skipped entries: \(firstEntryID) -> \(secondEntryID)
+          """)
+      }
+    }
+    previousEntryID = entries.last!.id
+  }
+  totalLineCount += entries.count
   
   let decodeEndTime = Date().timeIntervalSince1970
   
