@@ -7,8 +7,8 @@
 
 // MARK: - Global Variables
 
-constexpr uint32_t loopPeriod = 12;
-constexpr uint32_t logPeriod = 48; // must be divisible by loopPeriod
+constexpr uint32_t loopPeriod = 7;
+constexpr uint32_t logPeriod = 50; // must be divisible by loopPeriod
 constexpr uint32_t logSize = 12000;
 float ringBuffer1[logSize];
 float ringBuffer2[logSize];
@@ -151,10 +151,7 @@ void loop() {
 
     // Prevent accidents from multiple key presses.
     while (Serial.available() > 0) {
-      char byte = Serial.read();
-      Serial.print("ignored input: ");
-      Serial.print(byte);
-      Serial.println();
+      Serial.read();
     }
   }
 }
@@ -184,34 +181,37 @@ float triangleWave(float phaseNormalized) {
   return 2 * progress - 1;
 }
 
-constexpr float lowpassFrequency = 10000;
+
 float lowpassVoltage = 0;
 
-float getLowpassAlpha() {
-  float sampleTimeSeconds = float(1e-6) * float(loopPeriod * 2);
-  float timeConstant = 1 / (2 * M_PI * lowpassFrequency);
+float getLowpassAlpha(float frequency, uint32_t loopPeriodMicros) {
+  float sampleTimeSeconds = float(1e-6) * float(loopPeriodMicros);
+  float timeConstant = 1 / (2 * M_PI * frequency);
   return sampleTimeSeconds / (timeConstant + sampleTimeSeconds);
 }
 
 void kilohertzLoop() {
-  uint32_t elapsedTime = KilohertzLoop::latestTimestamp - KilohertzLoop::startTimestamp;
-  uint32_t sinePeriod = 1000; // in microseconds
-  uint32_t phase = elapsedTime % sinePeriod;
+  // Waveform should correct for the small timing jitter (<1 period) while
+  // starting precisely at the beginning of a specific loop iteration.
+  uint32_t elapsedTimeMicros = KilohertzLoop::iterationID * loopPeriod;
+  uint32_t sinePeriodMicros = 1000;
+  uint32_t phaseMicros = elapsedTimeMicros % sinePeriodMicros;
 
   if (mode == Mode::riseTime) {
-    float phaseNormalized = float(phase) / float(sinePeriod);
+    float phaseNormalized = float(phaseMicros) / float(sinePeriodMicros);
     float waveValueNormalized = triangleWave(phaseNormalized);
     biasVoltage = 10 * waveValueNormalized;
   } else if (mode == Mode::noise) {
     biasVoltage = 0;
   }
   DAC2::writeVoltage(0, biasVoltage);
-  
-  {
+
+  if (KilohertzLoop::iterationID % 2 == 0)  {
     auto conversion = ADC::readVoltage();
     float tiaVoltage = conversion.voltage;
 
-    float alpha = getLowpassAlpha();
+    constexpr float frequency = 10000;
+    float alpha = getLowpassAlpha(frequency, loopPeriod * 2);
     lowpassVoltage = alpha * tiaVoltage + (1 - alpha) * lowpassVoltage;
   }
 

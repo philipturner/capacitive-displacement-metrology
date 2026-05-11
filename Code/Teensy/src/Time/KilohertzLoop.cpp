@@ -1,6 +1,19 @@
 #include "KilohertzLoop.h"
 #include <Arduino.h>
 
+// Timing limits:
+//
+// 4 us - DAC
+//
+// 5 us - DAC (2x)
+// 6 us - DAC, ADC
+//
+// 7 us - DAC (3x)
+// 8 us - DAC (2x), ADC
+//
+// 9 us - DAC (4x)
+// 11 us - DAC (5x)
+
 void KilohertzLoop::_kilohertzLoopBodyInner() {
   previousTimestamp = latestTimestamp;
   latestTimestamp = micros();
@@ -15,6 +28,11 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
   // 8 us: fail with +1 error
   // 7 us: fail with -5 error
   // 6 us: fail with -5 error
+  //
+  // with recent changes to code:
+  // 12 us: fail with -7 error
+  // 7 us: fail with -7 error
+  // 6 us: fail with -11 error
 
   // no priority
   // 20 us: fail with +23 error
@@ -41,8 +59,10 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
       return;
     }
 
+    int32_t maxError = 7;
+
     int32_t differentialError = interval - period;
-    if (abs(differentialError) > 7) {
+    if (abs(differentialError) > maxError) {
       Serial.println("Differential error was too large.");
       throwError(2000 + interval);
       return;
@@ -53,7 +73,7 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
     expectedIntegrated += period;
     
     int32_t integralError = actualIntegrated - expectedIntegrated;
-    if (abs(integralError) > 7) {
+    if (abs(integralError) > maxError) {
       Serial.println("Integral error was too large.");
       throwError(3000 + integralError);
       return;

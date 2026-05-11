@@ -49,7 +49,22 @@ func transmitSerialInput() async {
     return
   }
   
+  var asciiValues: [UInt8] = []
+  for character in input {
+    guard let asciiValue = character.asciiValue else {
+      fatalError("Input character was not ASCII: \(character)")
+    }
+    asciiValues.append(asciiValue)
+  }
+  guard asciiValues.last! != 0 else {
+    fatalError("Unexpected null termination.")
+  }
   
+  let bytesWritten = try! await serial.writeBytes(asciiValues)
+  guard bytesWritten == asciiValues.count else {
+    fatalError("Did not write the number of expected bytes.")
+  }
+  print("Wrote serial input: \(input)")
 }
 
 // Split the data stream into entries.
@@ -66,7 +81,6 @@ func validBytes(data: Data) -> [UInt8] {
   return output
 }
 
-let startTime = Date().timeIntervalSince1970
 var previousEntryID: Int?
 var totalLineCount: Int = .zero
 var loopIterationID: Int = .zero
@@ -76,22 +90,13 @@ while true {
   
   await transmitSerialInput()
   
-  let readStartTime = Date().timeIntervalSince1970
-  let data = try await serial.readBytesBlocking(count: 1_000_000, timeout: 0.001)
+  let data = try await serial.readBytesBlocking(
+    count: 1_000_000, timeout: 0.001)
   let validBytes = validBytes(data: data)
   if validBytes.count == 0 {
     continue
   }
-  let readEndTime = Date().timeIntervalSince1970
   
-  do {
-    let currentTime = Date().timeIntervalSince1970
-    let elapsedTime = currentTime - startTime
-    let formattedString = String(format: "%.3f", elapsedTime)
-    // print()
-    // print("polling at t = \(formattedString) s")
-    // print("loop iteration ID: \(loopIterationID)")
-  }
   defer {
     loopIterationID += 1
   }
@@ -140,23 +145,10 @@ while true {
   }
   totalLineCount += entries.count
   
-  let decodeEndTime = Date().timeIntervalSince1970
-  
-  do {
-    let readElapsedTime = readEndTime - readStartTime
-    let formattedString = String(format: "%.3f", readElapsedTime * 1000)
-    // print("read took \(formattedString) ms")
+  if totalLineCount == 0, validBytes.count > 0 {
+    var cString = validBytes
+    cString.append(0)
+    let string = String(cString: cString)
+    print("Teensy is responding: \(string)")
   }
-  do {
-    let decodeElapsedTime = decodeEndTime - decodeStartTime
-    let formattedString = String(format: "%.3f", decodeElapsedTime * 1000)
-    // print("decoding took \(formattedString) ms")
-  }
-  do {
-    let timePerLine = Float(decodeEndTime - decodeStartTime) / Float(entries.count)
-    let formattedString = String(format: "%.1f", timePerLine * 1e6)
-    // print("decoding time: \(formattedString) μs/line")
-  }
-  // print("processed \(entries.count) lines")
-  // print("total so far: \(totalLineCount) lines")
 }
