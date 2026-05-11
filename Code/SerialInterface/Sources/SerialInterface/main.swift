@@ -6,66 +6,7 @@ PythonLibrary.useLibrary(at: "/Users/philipturner/miniforge3/bin/python")
 let plt = Python.import("matplotlib.pyplot")
 let ticker = Python.import("matplotlib.ticker")
 
-// Access the serial port.
-
-let serial = SerialPort(path: "/dev/cu.usbmodem182280901")
-
-try await serial.open(
-  receiveRate: .baud115200,
-  transmitRate: .baud115200)
-print("opened serial port")
-
-// Launch the background thread for collecting user input.
-
-actor CommandTransmitter {
-  private var characterQueue: String = ""
-  
-  func addCharacters(_ input: String) {
-    characterQueue += input
-  }
-  
-  func extractCharacters() -> String {
-    let output = characterQueue
-    characterQueue = ""
-    return output
-  }
-}
-let transmitter = CommandTransmitter()
-
-Task.detached {
-  while true {
-    usleep(50_000)
-    
-    let userInput = readLine()
-    if let userInput {
-      await transmitter.addCharacters(userInput)
-    }
-  }
-}
-
-func transmitSerialInput() async {
-  let input = await transmitter.extractCharacters()
-  guard input.count > 0 else {
-    return
-  }
-  
-  var asciiValues: [UInt8] = []
-  for character in input {
-    guard let asciiValue = character.asciiValue else {
-      fatalError("Input character was not ASCII: \(character)")
-    }
-    asciiValues.append(asciiValue)
-  }
-  guard asciiValues.last! != 0 else {
-    fatalError("Unexpected null termination.")
-  }
-  
-  let bytesWritten = try! await serial.writeBytes(asciiValues)
-  guard bytesWritten == asciiValues.count else {
-    fatalError("Did not write the number of expected bytes.")
-  }
-  print("Wrote serial input: \(input)")
-}
+await Application.global.initialize()
 
 // Split the data stream into entries.
 
@@ -88,8 +29,9 @@ var loopIterationID: Int = .zero
 while true {
   usleep(10_000)
   
-  await transmitSerialInput()
+  await CommandTransmitter.transmitSerialInput()
   
+  let serial = Application.global.serial
   let data = try await serial.readBytesBlocking(
     count: 1_000_000, timeout: 0.001)
   let validBytes = validBytes(data: data)
@@ -120,7 +62,6 @@ while true {
     }
   }
   
-  let decodeStartTime = Date().timeIntervalSince1970
   let entries = createEntries()
   if entries.count > 0 {
     if let previousEntryID {
@@ -146,9 +87,7 @@ while true {
   totalLineCount += entries.count
   
   if totalLineCount == 0, validBytes.count > 0 {
-    var cString = validBytes
-    cString.append(0)
-    let string = String(cString: cString)
+    let string = String(decoding: validBytes, as: UTF8.self)
     print("Teensy is responding: \(string)")
   }
 }
