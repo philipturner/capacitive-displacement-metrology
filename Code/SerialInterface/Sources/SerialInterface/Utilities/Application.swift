@@ -8,6 +8,8 @@ class Application {
   // let serial: SerialPort
   // var lineParser = LineParser()
   let history = History()
+  
+  // TODO: See whether this is no longer an issue with PyQtGraph
   let serialQueue = DispatchQueue(label: "swiftconcurrencycausesbugswithpython")
   
   private init() {
