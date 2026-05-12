@@ -9,7 +9,6 @@ class Application {
   // var lineParser = LineParser()
   let history = History()
   
-  
   private init() {
     // self.serial = SerialPort(path: "/dev/cu.usbmodem182280901")
   }
@@ -66,6 +65,8 @@ class Application {
         let elapsedMicros = Int(elapsedTime * 1e6)
         let elapsedLogPeriods = elapsedMicros / 49
         
+        let decodeStart = Date().timeIntervalSince1970
+        
         var entries: [Entry] = []
         for i in previousEntryID..<elapsedLogPeriods {
           let elapsedTimeMicros = i * 49
@@ -86,6 +87,10 @@ class Application {
         previousEntryID = elapsedLogPeriods
         
         await Application.global.history.addEntries(entries)
+        
+        let decodeEnd = Date().timeIntervalSince1970
+        let decodeMicros = Int((decodeEnd - decodeStart) * 1e6)
+//        print("decode: \(decodeMicros)")
       }
     }
   }

@@ -109,6 +109,8 @@ actor History {
     averagesBuffer[ringIndex] = average
     averageCursor += 1
     latestAverage = average
+    
+    samplesForNextAverage.removeAll()
   }
   
   func sampleHistory(time historyTime: Double) -> [TimedSample] {
