@@ -81,8 +81,8 @@ class Application {
           var entry = Entry(id: i, values: .zero)
           entry.values[0] = current
           entry.values[1] = dacVoltage
-          entry.values[2] = 0
-          entry.values[3] = 0
+          entry.values[2] = Float.random(in: 0..<0.001)
+          entry.values[3] = Float.pi
           entries.append(entry)
         }
         previousEntryID = elapsedLogPeriods

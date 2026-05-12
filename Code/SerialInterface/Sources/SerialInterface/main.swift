@@ -3,23 +3,24 @@ import PythonKit
 import SwiftSerial
 
 PythonLibrary.useLibrary(at: "/Users/philipturner/miniforge3/bin/python")
+let np = Python.import("numpy")
 let pg = Python.import("pyqtgraph")
 let QtWidgets = Python.import("PyQt5.QtWidgets")
 let QtCore = Python.import("PyQt5.QtCore")
 
 await Application.global.initialize()
 
+pg.setConfigOptions(useOpenGL: true)
+pg.setConfigOptions(antialias: true)
 let app = QtWidgets.QApplication([String]())
 let win = pg.GraphicsLayoutWidget(show: true)
-win.resize(1200, 900)
-//win.setWindowTitle("Live Data")
 
-win.ci.layout.setColumnMaximumWidth(0, 580)
-win.ci.layout.setColumnMaximumWidth(1, 580)
-
-//let layout = win.ci.layout
-//layout.setColumnStretchFactor(0, 1)
-//layout.setColumnStretchFactor(1, 1)
+do {
+  let columnWidth: Int = 500
+  win.resize(2 * columnWidth + 80 + 80, 900)
+  win.ci.layout.setColumnMaximumWidth(0, columnWidth + 80)
+  win.ci.layout.setColumnMaximumWidth(1, columnWidth)
+}
 
 var plots: [[PythonObject]] = []
 var curves: [[PythonObject]] = []
@@ -40,6 +41,10 @@ for row in 0..<4 {
     if col != 0 {
       yAxis.setStyle(showValues: false)
     }
+    if col == 0 {
+      yAxis.setWidth(80)
+    }
+    plot.disableAutoRange()
     
     // Create persistent curves
     let emptyArray = [Float]()
@@ -67,13 +72,30 @@ for row in 1..<4 {
   plots[row][1].setYLink(plots[row][0])
 }
 
+var windowIsClosed = false
+win.closeEvent = PythonFunction { args in
+  windowIsClosed = true
+  return Python.None
+}.pythonObject
+
+// MARK: - Run Loop
+
+var lastDrawShortTime: Double = -1
+@MainActor
+func getShouldDrawShort(latestSampleTime: Double) -> Bool {
+  let dt = latestSampleTime.rounded(.down) - lastDrawShortTime
+  if dt >= 1 {
+    lastDrawShortTime = latestSampleTime.rounded(.down)
+    return true
+  } else {
+    return false
+  }
+}
 
 let startTime = Date().timeIntervalSince1970
-
-// TODO: End loop when window is closed.
-while true {
-  let frameRate: Int = 2
-  usleep(UInt32(1_000_000 / frameRate))
+while !windowIsClosed {
+  let maxFrameRate: Int = 60
+  usleep(UInt32(1_000_000 / maxFrameRate))
   
   do {
     let currentTime = Date().timeIntervalSince1970
@@ -101,21 +123,30 @@ while true {
       output.short = history.sampleHistory(time: shortTimeLength)
       output.long =  history.averageHistory(time: longTimeLength)
     }
+    guard output.short.count > 0,
+          output.long.count > 0 else {
+      fatalError("No data to graph.")
+    }
     return output
   }
   
   let dataStreams = createDataStreams()
   let shortTimeData = dataStreams.short
   let longTimeData = dataStreams.long
-  guard shortTimeData.count > 0,
-        longTimeData.count > 0 else {
-    fatalError("No data to graph.")
-  }
+  
+  let shouldDrawShort = getShouldDrawShort(
+    latestSampleTime: shortTimeData.last!.time)
   
   let time2 = Date().timeIntervalSince1970
   
   for rowID in 0..<4 {
     for columnID in 0..<2 {
+      if columnID == 0 {
+        if !shouldDrawShort {
+          continue
+        }
+      }
+      
       let plot = plots[rowID][columnID]
       if columnID == 0 {
         let maxTime = shortTimeData.last!.time
@@ -130,36 +161,22 @@ while true {
       let timeTick = (columnID == 0) ? shortTimeTick : longTimeTick
       let xAxis = plot.getAxis("bottom")
       xAxis.setTickSpacing(timeTick, timeTick / 5)
-      
-      /*
-      axes[subplotIndex].grid(
-        visible: true,
-        which: "major",
-        axis: "x",
-        color: "0.7")
-      axes[subplotIndex].grid(
-        visible: true,
-        which: "minor",
-        axis: "x",
-        color: "0.9")
-      axes[subplotIndex].grid(
-        visible: true,
-        which: "major",
-        axis: "y",
-        color: "0.9")
-       */
     }
   }
   
-  for rowID in 0..<4 {
-    var x: [Double] = []
-    var y: [Float] = []
-    for sample in shortTimeData {
-      x.append(sample.time)
-      y.append(sample.values[rowID])
+  if shouldDrawShort {
+    for rowID in 0..<4 {
+      var x: [Double] = []
+      var y: [Float] = []
+      for sample in shortTimeData {
+        x.append(sample.time)
+        y.append(sample.values[rowID])
+      }
+      
+      curves[rowID][0].setData(
+        np.array(x),
+        np.array(y))
     }
-    
-    curves[rowID][0].setData(x, y)
   }
   
   for rowID in 0..<4 {
@@ -175,35 +192,38 @@ while true {
       maximumPoints.append(sample.maximum[rowID])
     }
     
+    let xArray = np.array(x)
     let curveSet = curves[rowID][1]
-    curveSet[0].setData(x, minimumPoints)
-    curveSet[1].setData(x, averagePoints)
-    curveSet[2].setData(x, maximumPoints)
+    curveSet[0].setData(xArray, np.array(minimumPoints))
+    curveSet[1].setData(xArray, np.array(averagePoints))
+    curveSet[2].setData(xArray, np.array(maximumPoints))
   }
   
-  for rowID in 0..<4 {
-    var minimum: Float = .greatestFiniteMagnitude
-    var maximum: Float = -.greatestFiniteMagnitude
-    for sample in longTimeData {
-      let sampleMin = sample.minimum[rowID]
-      let sampleMax = sample.maximum[rowID]
-      if sampleMin < minimum {
-        minimum = sampleMin
+  if shouldDrawShort {
+    for rowID in 0..<4 {
+      var minimum: Float = .greatestFiniteMagnitude
+      var maximum: Float = -.greatestFiniteMagnitude
+      for sample in longTimeData {
+        let sampleMin = sample.minimum[rowID]
+        let sampleMax = sample.maximum[rowID]
+        if sampleMin < minimum {
+          minimum = sampleMin
+        }
+        if sampleMax > maximum {
+          maximum = sampleMax
+        }
       }
-      if sampleMax > maximum {
-        maximum = sampleMax
-      }
+      
+      let center = (minimum + maximum) / 2
+      let halfRange = maximum - center
+      let rangeMin = center - halfRange * 1.1
+      let rangeMax = center + halfRange * 1.1
+      
+      let plotLeft = plots[rowID][0]
+      let plotRight = plots[rowID][1]
+      plotLeft.setYRange(rangeMin, rangeMax, padding: 0)
+      plotRight.setYRange(rangeMin, rangeMax, padding: 0)
     }
-    
-    let center = (minimum + maximum) / 2
-    let halfRange = maximum - center
-    let rangeMin = center - halfRange * 1.1
-    let rangeMax = center + halfRange * 1.1
-    
-    let plotLeft = plots[rowID][0]
-    let plotRight = plots[rowID][1]
-    plotLeft.setYRange(rangeMin, rangeMax, padding: 0)
-    plotRight.setYRange(rangeMin, rangeMax, padding: 0)
   }
   
   let time3 = Date().timeIntervalSince1970
