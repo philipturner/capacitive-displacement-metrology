@@ -5,6 +5,11 @@ struct Entry {
   static let messageLength: Int = 23
   static let messageStartCode: UInt8 = Character(">").asciiValue!
   
+  init(id: Int, values: SIMD4<Float>) {
+    self.id = id
+    self.values = values
+  }
+  
   init(decoding buffer: UnsafePointer<UInt8>) {
     guard buffer[0] == Entry.messageStartCode else {
       fatalError("Invalid message.")

@@ -11,5 +11,4 @@ await Application.global.initialize()
 while true {
   let frameRate: Int = 30
   usleep(UInt32(1_000_000 / frameRate))
-  print("b")
 }
