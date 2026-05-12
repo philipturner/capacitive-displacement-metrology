@@ -12,8 +12,14 @@ await Application.global.initialize()
 let app = QtWidgets.QApplication([String]())
 let win = pg.GraphicsLayoutWidget(show: true)
 win.resize(1200, 900)
-win.setWindowTitle("Live Data")
-//pg.setConfigOptions(useOpenGL: true)
+//win.setWindowTitle("Live Data")
+
+win.ci.layout.setColumnMaximumWidth(0, 580)
+win.ci.layout.setColumnMaximumWidth(1, 580)
+
+//let layout = win.ci.layout
+//layout.setColumnStretchFactor(0, 1)
+//layout.setColumnStretchFactor(1, 1)
 
 var plots: [[PythonObject]] = []
 var curves: [[PythonObject]] = []
@@ -24,15 +30,15 @@ for row in 0..<4 {
 
   for col in 0..<2 {
     let plot = win.addPlot(row: row, col: col)
-
+    let xAxis = plot.getAxis("bottom")
+    let yAxis = plot.getAxis("left")
+    
     plot.showGrid(x: true, y: true)
-
     if row != 3 {
-      plot.hideAxis("bottom")
+      xAxis.setStyle(showValues: false)
     }
-
     if col != 0 {
-      plot.hideAxis("left")
+      yAxis.setStyle(showValues: false)
     }
     
     // Create persistent curves
@@ -55,11 +61,18 @@ for row in 0..<4 {
   curves.append(curveRow)
 }
 
+for row in 1..<4 {
+  plots[row][0].setXLink(plots[0][0])
+  plots[row][1].setXLink(plots[0][1])
+  plots[row][1].setYLink(plots[row][0])
+}
+
+
 let startTime = Date().timeIntervalSince1970
 
 // TODO: End loop when window is closed.
 while true {
-  let frameRate: Int = 6
+  let frameRate: Int = 2
   usleep(UInt32(1_000_000 / frameRate))
   
   do {
@@ -114,18 +127,11 @@ while true {
         plot.setXRange(minTime, maxTime, padding: 0)
       }
       
-      /*
       let timeTick = (columnID == 0) ? shortTimeTick : longTimeTick
-      let majorLocator = ticker.MultipleLocator(timeTick)
-      let minorLocator = ticker.MultipleLocator(timeTick / 5)
-      axes[subplotIndex].xaxis.set_major_locator(majorLocator)
-      axes[subplotIndex].xaxis.set_minor_locator(minorLocator)
+      let xAxis = plot.getAxis("bottom")
+      xAxis.setTickSpacing(timeTick, timeTick / 5)
       
-      if columnID == 0 {
-        let majorFormatter = ticker.FormatStrFormatter("%.3f")
-        axes[subplotIndex].xaxis.set_major_formatter(majorFormatter)
-      }
-      
+      /*
       axes[subplotIndex].grid(
         visible: true,
         which: "major",
