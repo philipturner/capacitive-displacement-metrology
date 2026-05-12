@@ -1,6 +1,6 @@
 import Foundation
 
-actor History {
+class History {
   static let logPeriodMicros: Int = 49
   static let historyLengthSeconds: Int = 30
   static let maxEntryCount: Int = {

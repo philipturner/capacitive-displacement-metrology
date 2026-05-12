@@ -8,27 +8,62 @@ let ticker = Python.import("matplotlib.ticker")
 
 await Application.global.initialize()
 
-do {
+plt.ion()
+var (fig, axes) = plt.subplots(4, 2, layout: "constrained").tuple2
+
+while Bool(plt.fignum_exists(fig.number))! {
+  print("hellooooo")
+  print("hellooooo01")
   let frameRate: Int = 1
   usleep(UInt32(1_000_000 / frameRate))
+  print("hellooooo02")
+  
+//  do {
+//    let exists = Bool(plt.fignum_exists(fig.number))!
+//    if !exists {
+//      (fig, axes) = plt.subplots(4, 2, layout: "constrained").tuple2
+//    }
+//  }
   
   let shortTimeLength: Double = 0.003
   let shortTimeTick: Double = 0.001
   let longTimeLength: Double = 10.0
   let longTimeTick: Double = 1.0
   
-  let history = Application.global.history
-  let shortTimeData = await history.sampleHistory(time: shortTimeLength)
-  let longTimeData = await history.averageHistory(time: longTimeLength)
+  struct DataStreams {
+    var short: [History.TimedSample] = []
+    var long: [History.TimedAverage] = []
+  }
+  func createDataStreams() -> DataStreams {
+    var output = DataStreams()
+    Application.global.serialQueue.sync {
+      let history = Application.global.history
+      output.short = history.sampleHistory(time: shortTimeLength)
+      output.long =  history.averageHistory(time: longTimeLength)
+    }
+    return output
+  }
+  
+  //let history = Application.global.history
+  //print("hellooooo03")
+  //let shortTimeData = await history.sampleHistory(time: shortTimeLength)
+  //print("hellooooo04")
+  //let longTimeData = await history.averageHistory(time: longTimeLength)
+  //print("hellooooo05")
+  let dataStreams = createDataStreams()
+  let shortTimeData = dataStreams.short
+  let longTimeData = dataStreams.long
   guard shortTimeData.count > 0,
         longTimeData.count > 0 else {
     fatalError("No data to graph.")
   }
   
-  let (fig, axes) = plt.subplots(4, 2, layout: "constrained").tuple2
+  print("hellooooo2")
+  
   for rowID in 0..<4 {
     for columnID in 0..<2 {
       let subplotIndex = PythonObject(tupleOf: rowID, columnID)
+      axes[subplotIndex].clear()
       
       if columnID == 0 {
         let maxTime = shortTimeData.last!.time
@@ -70,9 +105,15 @@ do {
       if rowID != 3 {
         axes[subplotIndex].tick_params(labelbottom: false)
       }
+      if columnID != 0 {
+        axes[subplotIndex].tick_params(labelleft: false)
+      }
     }
   }
-  fig.set_size_inches(12, 10)
+  
+  print("hellooooo3")
+  fig.set_size_inches(10, 10)
+  print("hellooooo4")
   
   for rowID in 0..<4 {
     var x: [Double] = []
@@ -103,7 +144,34 @@ do {
     axes[rowID, 1].plot(x, maximumPoints, color: "red")
   }
   
+  for rowID in 0..<4 {
+    var minimum: Float = .greatestFiniteMagnitude
+    var maximum: Float = -.greatestFiniteMagnitude
+    for sample in longTimeData {
+      let sampleMin = sample.minimum[rowID]
+      let sampleMax = sample.maximum[rowID]
+      if sampleMin < minimum {
+        minimum = sampleMin
+      }
+      if sampleMax > maximum {
+        maximum = sampleMax
+      }
+    }
+    
+    let center = (minimum + maximum) / 2
+    let halfRange = maximum - center
+    let rangeMin = center - halfRange * 1.1
+    let rangeMax = center + halfRange * 1.1
+    axes[rowID, 0].set_ylim(rangeMin, rangeMax)
+    axes[rowID, 1].set_ylim(rangeMin, rangeMax)
+  }
+  
   print("started showing the plot")
-  plt.show()
+//  plt.show()
+//  plt.pause(0.25)
+//  plt.show()
+//  plt.pause(0.1)
+  fig.canvas.draw_idle()
+  fig.canvas.flush_events()
   print("finished showing the plot")
 }

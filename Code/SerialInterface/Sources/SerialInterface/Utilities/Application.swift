@@ -8,6 +8,7 @@ class Application {
   // let serial: SerialPort
   // var lineParser = LineParser()
   let history = History()
+  let serialQueue = DispatchQueue(label: "swiftconcurrencycausesbugswithpython")
   
   private init() {
     // self.serial = SerialPort(path: "/dev/cu.usbmodem182280901")
@@ -84,7 +85,9 @@ class Application {
         }
         previousEntryID = elapsedLogPeriods
         
-        await Application.global.history.addEntries(entries)
+        Application.global.serialQueue.sync {
+          Application.global.history.addEntries(entries)
+        }
       }
     }
   }
