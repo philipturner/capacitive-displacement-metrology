@@ -5,20 +5,22 @@ class Application {
   nonisolated(unsafe)
   static let global = Application()
   
-  let serial: SerialPort
-  var lineParser = LineParser()
+  // let serial: SerialPort
+  // var lineParser = LineParser()
   let history = History()
   
   private init() {
-    self.serial = SerialPort(path: "/dev/cu.usbmodem182280901")
+    // self.serial = SerialPort(path: "/dev/cu.usbmodem182280901")
   }
   
   func initialize() async {
+    /*
     try! await serial.open(
       receiveRate: .baud115200,
       transmitRate: .baud115200)
     
     CommandTransmitter.launchPollingTask()
+     */
     
     Application.launchLineExtractionTask()
   }
@@ -27,10 +29,16 @@ class Application {
     Task.detached {
       while true {
         usleep(10_000)
-        await CommandTransmitter.transmitSerialInput()
+        print("a")
         
-        let entries = await Application.global.lineParser.extractEntries()
-        await Application.global.history.addEntries(entries)
+        /*
+         await CommandTransmitter.transmitSerialInput()
+        
+         let entries = await Application.global.lineParser.extractEntries()
+         await Application.global.history.addEntries(entries)
+         */
+        
+        // Test and profile the UI code with fake entries.
       }
     }
   }

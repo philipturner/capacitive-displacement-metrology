@@ -1,5 +1,6 @@
 import Foundation
 
+/*
 struct LineParser {
   var previousEntryID: Int?
   var totalLineCount: Int = .zero
@@ -82,3 +83,4 @@ struct LineParser {
     return output
   }
 }
+*/
