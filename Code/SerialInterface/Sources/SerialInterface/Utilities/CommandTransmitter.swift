@@ -1,6 +1,5 @@
 import Foundation
 
-/*
 actor CommandTransmitter {
   static let global = CommandTransmitter()
   
@@ -54,4 +53,3 @@ actor CommandTransmitter {
     print("Wrote serial input: \(input)")
   }
 }
-*/

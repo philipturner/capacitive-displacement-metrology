@@ -5,8 +5,9 @@ import SwiftSerial
 PythonLibrary.useLibrary(at: "/Users/philipturner/miniforge3/bin/python")
 let np = Python.import("numpy")
 let pg = Python.import("pyqtgraph")
-let QtWidgets = Python.import("PyQt5.QtWidgets")
 let QtCore = Python.import("PyQt5.QtCore")
+let QtGui = Python.import("PyQt5.QtGui")
+let QtWidgets = Python.import("PyQt5.QtWidgets")
 
 await Application.global.initialize()
 
@@ -15,17 +16,39 @@ pg.setConfigOptions(antialias: true)
 let app = QtWidgets.QApplication([String]())
 let win = pg.GraphicsLayoutWidget(show: true)
 
+let shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+W"), win)
+shortcut.activated.connect(win.close)
+
+let rowCount: Int = 3
+
 do {
+  let rowHeight: Int = 200
   let columnWidth: Int = 500
-  win.resize(2 * columnWidth + 80 + 80, 900)
+  win.resize(80 + 2 * columnWidth + 80, rowHeight * rowCount)
   win.ci.layout.setColumnMaximumWidth(0, columnWidth + 80)
   win.ci.layout.setColumnMaximumWidth(1, columnWidth)
+  
+  // Set the window position on the screen.
+  let screen = app.primaryScreen()
+  let screenSize = screen.size()
+  let screenDimensions = SIMD2<Float>(
+    Float(screenSize.width())!,
+    Float(screenSize.height())!)
+  let windowDimensions = SIMD2<Float>(
+    Float(win.width())!,
+    Float(win.height())!)
+  
+  let screenMiddle = screenDimensions / 2
+  let upperLeft = screenMiddle - windowDimensions / 2
+  win.move(
+    Int(upperLeft.x),
+    Int(20))
 }
 
 var plots: [[PythonObject]] = []
 var curves: [[PythonObject]] = []
 
-for row in 0..<4 {
+for row in 0..<rowCount {
   var plotRow: [PythonObject] = []
   var curveRow: [PythonObject] = []
 
@@ -35,7 +58,7 @@ for row in 0..<4 {
     let yAxis = plot.getAxis("left")
     
     plot.showGrid(x: true, y: true)
-    if row != 3 {
+    if row != rowCount - 1 {
       xAxis.setStyle(showValues: false)
     }
     if col != 0 {
@@ -49,7 +72,8 @@ for row in 0..<4 {
     // Create persistent curves
     let emptyArray = [Float]()
     if col == 0 {
-      let curve = plot.plot(emptyArray, emptyArray, pen: pg.mkPen("blue"))
+      let pen = pg.mkPen("#2e7ec9", width: 2)
+      let curve = plot.plot(emptyArray, emptyArray, pen: pen)
       curveRow.append(curve)
     } else {
       let minCurve = plot.plot(emptyArray, emptyArray, pen: pg.mkPen("#1fb864"))
@@ -66,10 +90,14 @@ for row in 0..<4 {
   curves.append(curveRow)
 }
 
-for row in 1..<4 {
+// If multiple graphs share a dimension, only set the bounds of one graph
+// and have PyQtGraph make the rest follow it.
+for row in 0..<rowCount {
+  plots[row][1].setYLink(plots[row][0])
+}
+for row in 1..<rowCount {
   plots[row][0].setXLink(plots[0][0])
   plots[row][1].setXLink(plots[0][1])
-  plots[row][1].setYLink(plots[row][0])
 }
 
 var windowIsClosed = false
@@ -92,25 +120,14 @@ func getShouldDrawShort(latestSampleTime: Double) -> Bool {
   }
 }
 
-let startTime = Date().timeIntervalSince1970
 while !windowIsClosed {
   let maxFrameRate: Int = 60
   usleep(UInt32(1_000_000 / maxFrameRate))
-  
-  do {
-    let currentTime = Date().timeIntervalSince1970
-    let elapsedTime = currentTime - startTime
-    let formattedTime = String(format: "%.3f", elapsedTime)
-    print()
-    print("time: \(formattedTime) s")
-  }
   
   let shortTimeLength: Double = 0.003
   let shortTimeTick: Double = 0.001
   let longTimeLength: Double = 10.0
   let longTimeTick: Double = 1.0
-  
-  let time1 = Date().timeIntervalSince1970
   
   struct DataStreams {
     var short: [History.TimedSample] = []
@@ -137,9 +154,7 @@ while !windowIsClosed {
   let shouldDrawShort = getShouldDrawShort(
     latestSampleTime: shortTimeData.last!.time)
   
-  let time2 = Date().timeIntervalSince1970
-  
-  for rowID in 0..<4 {
+  for rowID in 0..<rowCount {
     for columnID in 0..<2 {
       if columnID == 0 {
         if !shouldDrawShort {
@@ -148,14 +163,16 @@ while !windowIsClosed {
       }
       
       let plot = plots[rowID][columnID]
-      if columnID == 0 {
-        let maxTime = shortTimeData.last!.time
-        let minTime = maxTime - shortTimeLength
-        plot.setXRange(minTime, maxTime, padding: 0)
-      } else {
-        let maxTime = longTimeData.last!.time
-        let minTime = maxTime - longTimeLength
-        plot.setXRange(minTime, maxTime, padding: 0)
+      if rowID == 0 {
+        if columnID == 0 {
+          let maxTime = shortTimeData.last!.time
+          let minTime = maxTime - shortTimeLength
+          plot.setXRange(minTime, maxTime, padding: 0)
+        } else {
+          let maxTime = longTimeData.last!.time
+          let minTime = maxTime - longTimeLength
+          plot.setXRange(minTime, maxTime, padding: 0)
+        }
       }
       
       let timeTick = (columnID == 0) ? shortTimeTick : longTimeTick
@@ -165,7 +182,7 @@ while !windowIsClosed {
   }
   
   if shouldDrawShort {
-    for rowID in 0..<4 {
+    for rowID in 0..<rowCount {
       var x: [Double] = []
       var y: [Float] = []
       for sample in shortTimeData {
@@ -179,7 +196,7 @@ while !windowIsClosed {
     }
   }
   
-  for rowID in 0..<4 {
+  for rowID in 0..<rowCount {
     var x: [Double] = []
     var minimumPoints: [Float] = []
     var averagePoints: [Float] = []
@@ -200,7 +217,7 @@ while !windowIsClosed {
   }
   
   if shouldDrawShort {
-    for rowID in 0..<4 {
+    for rowID in 0..<rowCount {
       var minimum: Float = .greatestFiniteMagnitude
       var maximum: Float = -.greatestFiniteMagnitude
       for sample in longTimeData {
@@ -220,24 +237,9 @@ while !windowIsClosed {
       let rangeMax = center + halfRange * 1.1
       
       let plotLeft = plots[rowID][0]
-      let plotRight = plots[rowID][1]
       plotLeft.setYRange(rangeMin, rangeMax, padding: 0)
-      plotRight.setYRange(rangeMin, rangeMax, padding: 0)
     }
   }
   
-  let time3 = Date().timeIntervalSince1970
-  
   app.processEvents()
-  
-  let time4 = Date().timeIntervalSince1970
-  
-  func display(_ start: Double, _ end: Double) {
-    let dt = end - start
-    let formatted = String(format: "%.3f", dt)
-    print("- \(formatted) s")
-  }
-  display(time1, time2)
-  display(time2, time3)
-  display(time3, time4)
 }

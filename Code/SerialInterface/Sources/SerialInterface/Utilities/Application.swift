@@ -5,26 +5,29 @@ class Application {
   nonisolated(unsafe)
   static let global = Application()
   
-  // let serial: SerialPort
-  // var lineParser = LineParser()
+  let serial: SerialPort
+  var lineParser = LineParser()
   let history = History()
   
-  // TODO: See whether this is no longer an issue with PyQtGraph
+  // This caused crash with both Matplotlib and PyQtGraph. I have given up on
+  // trying to use conventional Swift concurrency with these open. Thankfully,
+  // it appears legal to have other 'await' and 'Task' in the same application,
+  // as long as it doesn't touch the data accessed by Python.
   let serialQueue = DispatchQueue(label: "swiftconcurrencycausesbugswithpython")
   
   private init() {
     // self.serial = SerialPort(path: "/dev/cu.usbmodem182280901")
+    self.serial = SerialPort(path: "/dev/cu.debug-console")
   }
   
   func initialize() async {
-    /*
+    
     try! await serial.open(
       receiveRate: .baud115200,
       transmitRate: .baud115200)
     
     CommandTransmitter.launchPollingTask()
-     */
-    
+     
     Application.launchLineExtractionTask()
   }
   
@@ -50,19 +53,7 @@ class Application {
     Task.detached {
       let startTime = Date().timeIntervalSince1970
       var previousEntryID: Int = .zero
-      
-      while true {
-        usleep(10_000)
-        
-        /*
-         await CommandTransmitter.transmitSerialInput()
-        
-         let entries = await Application.global.lineParser.extractEntries()
-         await Application.global.history.addEntries(entries)
-         */
-        
-        // Test and profile the UI code with fake entries.
-        
+      func createTestEntries() -> [Entry] {
         let currentTime = Date().timeIntervalSince1970
         let elapsedTime = currentTime - startTime
         let elapsedMicros = Int(elapsedTime * 1e6)
@@ -87,6 +78,16 @@ class Application {
         }
         previousEntryID = elapsedLogPeriods
         
+        return entries
+      }
+      
+      while true {
+        usleep(10_000)
+        
+        await CommandTransmitter.transmitSerialInput()
+        
+        // let entries = await Application.global.lineParser.extractEntries()
+        let entries = createTestEntries()
         Application.global.serialQueue.sync {
           Application.global.history.addEntries(entries)
         }
