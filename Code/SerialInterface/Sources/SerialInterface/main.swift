@@ -3,6 +3,8 @@ import PythonKit
 import SwiftSerial
 
 PythonLibrary.useLibrary(at: "/Users/philipturner/miniforge3/bin/python")
+//let matplotlib = Python.import("matplotlib")
+//Python.import("matplotlib").use("Qt5Agg")
 let plt = Python.import("matplotlib.pyplot")
 let ticker = Python.import("matplotlib.ticker")
 
@@ -10,25 +12,29 @@ await Application.global.initialize()
 
 plt.ion()
 var (fig, axes) = plt.subplots(4, 2, layout: "constrained").tuple2
+fig.set_size_inches(8, 10)
+//fig.canvas.manager.window.move(500, 500)
+
+let startTime = Date().timeIntervalSince1970
 
 while Bool(plt.fignum_exists(fig.number))! {
-  print("hellooooo")
-  print("hellooooo01")
-  let frameRate: Int = 1
+  let frameRate: Int = 6
   usleep(UInt32(1_000_000 / frameRate))
-  print("hellooooo02")
   
-//  do {
-//    let exists = Bool(plt.fignum_exists(fig.number))!
-//    if !exists {
-//      (fig, axes) = plt.subplots(4, 2, layout: "constrained").tuple2
-//    }
-//  }
+  do {
+    let currentTime = Date().timeIntervalSince1970
+    let elapsedTime = currentTime - startTime
+    let formattedTime = String(format: "%.3f", elapsedTime)
+    print()
+    print("time: \(formattedTime) s")
+  }
   
   let shortTimeLength: Double = 0.003
   let shortTimeTick: Double = 0.001
   let longTimeLength: Double = 10.0
   let longTimeTick: Double = 1.0
+  
+  let time1 = Date().timeIntervalSince1970
   
   struct DataStreams {
     var short: [History.TimedSample] = []
@@ -44,12 +50,6 @@ while Bool(plt.fignum_exists(fig.number))! {
     return output
   }
   
-  //let history = Application.global.history
-  //print("hellooooo03")
-  //let shortTimeData = await history.sampleHistory(time: shortTimeLength)
-  //print("hellooooo04")
-  //let longTimeData = await history.averageHistory(time: longTimeLength)
-  //print("hellooooo05")
   let dataStreams = createDataStreams()
   let shortTimeData = dataStreams.short
   let longTimeData = dataStreams.long
@@ -58,7 +58,7 @@ while Bool(plt.fignum_exists(fig.number))! {
     fatalError("No data to graph.")
   }
   
-  print("hellooooo2")
+  let time2 = Date().timeIntervalSince1970
   
   for rowID in 0..<4 {
     for columnID in 0..<2 {
@@ -111,10 +111,6 @@ while Bool(plt.fignum_exists(fig.number))! {
     }
   }
   
-  print("hellooooo3")
-  fig.set_size_inches(10, 10)
-  print("hellooooo4")
-  
   for rowID in 0..<4 {
     var x: [Double] = []
     var y: [Float] = []
@@ -166,12 +162,25 @@ while Bool(plt.fignum_exists(fig.number))! {
     axes[rowID, 1].set_ylim(rangeMin, rangeMax)
   }
   
-  print("started showing the plot")
-//  plt.show()
-//  plt.pause(0.25)
-//  plt.show()
-//  plt.pause(0.1)
+  let time3 = Date().timeIntervalSince1970
+  
   fig.canvas.draw_idle()
-  fig.canvas.flush_events()
-  print("finished showing the plot")
+  
+  
+  let time4 = Date().timeIntervalSince1970
+  
+//  fig.canvas.flush_events()
+  plt.pause(0.001)
+  
+  let time5 = Date().timeIntervalSince1970
+  
+  func display(_ start: Double, _ end: Double) {
+    let dt = end - start
+    let formatted = String(format: "%.3f", dt)
+    print("- \(formatted) s")
+  }
+  display(time1, time2)
+  display(time2, time3)
+  display(time3, time4)
+  display(time4, time5)
 }
