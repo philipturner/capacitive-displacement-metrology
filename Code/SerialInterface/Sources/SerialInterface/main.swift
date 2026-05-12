@@ -8,51 +8,102 @@ let ticker = Python.import("matplotlib.ticker")
 
 await Application.global.initialize()
 
-let startTime = Date().timeIntervalSince1970
-
-while true {
-  let frameRate: Int = 30
+do {
+  let frameRate: Int = 1
   usleep(UInt32(1_000_000 / frameRate))
   
-  let currentTime = Date().timeIntervalSince1970
-  
-  let fetchStart = Date().timeIntervalSince1970
+  let shortTimeLength: Double = 0.003
+  let shortTimeTick: Double = 0.001
+  let longTimeLength: Double = 10.0
+  let longTimeTick: Double = 1.0
   
   let history = Application.global.history
-  let shortTimeData = await history.sampleHistory(time: 0.005)
-  let longTimeData = await history.averageHistory(time: 10.0)
-  guard shortTimeData.count > 6,
-        longTimeData.count > 6 else {
-    fatalError("Cannot process this data.")
+  let shortTimeData = await history.sampleHistory(time: shortTimeLength)
+  let longTimeData = await history.averageHistory(time: longTimeLength)
+  guard shortTimeData.count > 0,
+        longTimeData.count > 0 else {
+    fatalError("No data to graph.")
   }
   
-  let elapsedTime = currentTime - startTime
-  let elapsedTimeFormatted = String(format: "%.3f", elapsedTime)
+  let (fig, axes) = plt.subplots(4, 2, layout: "constrained").tuple2
+  for rowID in 0..<4 {
+    for columnID in 0..<2 {
+      let subplotIndex = PythonObject(tupleOf: rowID, columnID)
+      
+      if columnID == 0 {
+        let maxTime = shortTimeData.last!.time
+        let minTime = maxTime - shortTimeLength
+        axes[subplotIndex].set_xlim(minTime, maxTime)
+      } else {
+        let maxTime = longTimeData.last!.time
+        let minTime = maxTime - longTimeLength
+        axes[subplotIndex].set_xlim(minTime, maxTime)
+      }
+      
+      let timeTick = (columnID == 0) ? shortTimeTick : longTimeTick
+      let majorLocator = ticker.MultipleLocator(timeTick)
+      let minorLocator = ticker.MultipleLocator(timeTick / 5)
+      axes[subplotIndex].xaxis.set_major_locator(majorLocator)
+      axes[subplotIndex].xaxis.set_minor_locator(minorLocator)
+      
+      if columnID == 0 {
+        let majorFormatter = ticker.FormatStrFormatter("%.3f")
+        axes[subplotIndex].xaxis.set_major_formatter(majorFormatter)
+      }
+      
+      axes[subplotIndex].grid(
+        visible: true,
+        which: "major",
+        axis: "x",
+        color: "0.7")
+      axes[subplotIndex].grid(
+        visible: true,
+        which: "minor",
+        axis: "x",
+        color: "0.9")
+      axes[subplotIndex].grid(
+        visible: true,
+        which: "major",
+        axis: "y",
+        color: "0.9")
+      
+      if rowID != 3 {
+        axes[subplotIndex].tick_params(labelbottom: false)
+      }
+    }
+  }
+  fig.set_size_inches(12, 10)
   
-//  print()
-//  print("t = \(elapsedTimeFormatted) s")
-//  print("shortTimeData:")
-//  
-//  let shortCount = shortTimeData.count
-//  print("- \(shortTimeData.count) points")
-//  print("- start + 0: \(shortTimeData[0])")
-//  print("- start + 1: \(shortTimeData[1])")
-//  print("- start + 2: \(shortTimeData[2])")
-//  print("- end - 3:   \(shortTimeData[shortCount - 3])")
-//  print("- end - 2:   \(shortTimeData[shortCount - 2])")
-//  print("- end - 1:   \(shortTimeData[shortCount - 1])")
-//  
-//  let longCount = longTimeData.count
-//  print("longTimeData:")
-//  print("- \(longTimeData.count) points")
-//  print("- start + 0: \(longTimeData[0])")
-//  print("- start + 1: \(longTimeData[1])")
-//  print("- start + 2: \(longTimeData[2])")
-//  print("- end - 3:   \(longTimeData[longCount - 3])")
-//  print("- end - 2:   \(longTimeData[longCount - 2])")
-//  print("- end - 1:   \(longTimeData[longCount - 1])")
+  for rowID in 0..<4 {
+    var x: [Double] = []
+    var y: [Float] = []
+    for sample in shortTimeData {
+      x.append(sample.time)
+      y.append(sample.values[rowID])
+    }
+    
+    axes[rowID, 0].plot(x, y)
+  }
   
-  let fetchEnd = Date().timeIntervalSince1970
-  let fetchMicros = Int((fetchEnd - fetchStart) * 1e6)
-  print("fetch: \(fetchMicros) - \(shortTimeData.count) - \(longTimeData.count)")
+  for rowID in 0..<4 {
+    var x: [Double] = []
+    var minimumPoints: [Float] = []
+    var averagePoints: [Float] = []
+    var maximumPoints: [Float] = []
+    
+    for sample in longTimeData {
+      x.append(sample.time)
+      minimumPoints.append(sample.minimum[rowID])
+      averagePoints.append(sample.average[rowID])
+      maximumPoints.append(sample.maximum[rowID])
+    }
+    
+    axes[rowID, 1].plot(x, minimumPoints, color: "#1fb864")
+    axes[rowID, 1].plot(x, averagePoints, color: "orange")
+    axes[rowID, 1].plot(x, maximumPoints, color: "red")
+  }
+  
+  print("started showing the plot")
+  plt.show()
+  print("finished showing the plot")
 }

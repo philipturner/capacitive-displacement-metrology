@@ -65,8 +65,6 @@ class Application {
         let elapsedMicros = Int(elapsedTime * 1e6)
         let elapsedLogPeriods = elapsedMicros / 49
         
-        let decodeStart = Date().timeIntervalSince1970
-        
         var entries: [Entry] = []
         for i in previousEntryID..<elapsedLogPeriods {
           let elapsedTimeMicros = i * 49
@@ -80,17 +78,13 @@ class Application {
           var entry = Entry(id: i, values: .zero)
           entry.values[0] = current
           entry.values[1] = dacVoltage
-          entry.values[2] = Float.pi
-          entry.values[3] = Float.pi
+          entry.values[2] = 0
+          entry.values[3] = 0
           entries.append(entry)
         }
         previousEntryID = elapsedLogPeriods
         
         await Application.global.history.addEntries(entries)
-        
-        let decodeEnd = Date().timeIntervalSince1970
-        let decodeMicros = Int((decodeEnd - decodeStart) * 1e6)
-//        print("decode: \(decodeMicros)")
       }
     }
   }
