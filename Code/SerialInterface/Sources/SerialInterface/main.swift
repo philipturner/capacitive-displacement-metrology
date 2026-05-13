@@ -20,6 +20,16 @@ while !Application.global.ui.isClosed {
   let maxFrameRate: Int = 60
   usleep(UInt32(1_000_000 / maxFrameRate))
   
+  // TODO: Optionally trigger the short-time acquisition on certain conditions,
+  // center the data stream on this point, even if the data set is incomplete.
+  // Use a time basis relative to the trigger point, not absolute time (except
+  // when trigger is absent).
+  //
+  // For efficiency, check for the trigger condition while acquiring samples.
+  // Then, you know the latest point in time for retrieving in the UI loop.
+  //
+  // Also, create dedicated functionality for the slow 1-second update mode
+  // that reports in absolute time and shows the last n samples.
   var shortTimeDesc = UI.TimeAxisDescriptor()
   shortTimeDesc.length = 0.003
   shortTimeDesc.majorTick = 0.001
