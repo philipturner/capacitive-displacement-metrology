@@ -2,13 +2,12 @@ import Foundation
 import PythonKit
 import SwiftSerial
 
+Application.global.initialize()
 let ui = UI()
-let application = Application.global
-await Application.global.initialize()
 
 // Set the trigger type.
 Application.global.serialQueue.sync {
-  let history = application.history
+  let history = Application.global.history
   _ = history.trigger
 }
 
@@ -16,17 +15,6 @@ let startTime = Date().timeIntervalSince1970
 while !ui.isClosed {
   let maxFrameRate: Int = 60
   usleep(UInt32(1_000_000 / maxFrameRate))
-  
-  // TODO: Optionally trigger the short-time acquisition on certain conditions,
-  // center the data stream on this point, even if the data set is incomplete.
-  // Use a time basis relative to the trigger point (0 = center) for certain
-  // types of triggers.
-  //
-  // For efficiency, check for the trigger condition while acquiring samples.
-  // Then, you know the latest point in time for retrieving in the UI loop.
-  //
-  // Also, create dedicated functionality for the slow 1-second update mode
-  // that reports in absolute time and shows the last n samples.
   
   let shortTimeLength: Double = 0.003
   let shortTimeMajorTick: Double = 0.001
@@ -99,6 +87,10 @@ while !ui.isClosed {
       print("No event trace..")
     }
   }
+  
+//  updateShortTimeForHistory()
+//  ui.updateShortPlots(data: shortTimeData)
+  ui.updateYRange(data: longTimeData)
   
   ui.app.processEvents()
 }

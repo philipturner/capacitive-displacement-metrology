@@ -13,11 +13,6 @@ class Application {
   // trying to use conventional Swift concurrency with these open. Thankfully,
   // it appears legal to have other 'await' and 'Task' in the same application,
   // as long as it doesn't touch the data accessed by Python.
-  //
-  // When using a Python-heavy UI, the program freezes in the event loop
-  // right when 'app.processEvents()' is called. I narrowed down the cause to
-  // where the UI is initialized. It cannot happen during the lazy static
-  // initializer, or during the 'initialize() async' function of this class.
   let serialQueue = DispatchQueue(label: "swiftconcurrencycausesbugswithpython")
   
   private init() {
@@ -25,10 +20,12 @@ class Application {
     self.serial = SerialPort(path: "/dev/cu.debug-console")
   }
   
-  func initialize() async {
-    try! await serial.open(
-      receiveRate: .baud115200,
-      transmitRate: .baud115200)
+  func initialize() {
+    Task { [serial] in
+      try! await serial.open(
+        receiveRate: .baud115200,
+        transmitRate: .baud115200)
+    }
     
     CommandTransmitter.launchPollingTask()
      

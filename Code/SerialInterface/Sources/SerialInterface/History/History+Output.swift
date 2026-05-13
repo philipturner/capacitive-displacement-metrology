@@ -56,6 +56,6 @@ extension History {
   func triggerEventTrace(bipolarHistoryTime: Double) -> (
     data: [TimedSample], timeInterval: SIMD2<Double>
   )? {
-    fatalError("Not implemented.")
+    return nil
   }
 }

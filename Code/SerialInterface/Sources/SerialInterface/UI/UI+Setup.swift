@@ -69,7 +69,7 @@ extension UI {
       for col in 0..<2 {
         let plot = win.addPlot(row: row, col: col)
         plot.showGrid(x: true, y: true)
-//        plot.disableAutoRange()
+        plot.disableAutoRange()
         
         let xAxis = plot.getAxis("bottom")
         if row == UI.rowCount - 1 {
