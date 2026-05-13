@@ -168,7 +168,7 @@ do {
   let labelTextList: [String] = [
     "current (pA)",
     "bias voltage (V)",
-    "test channel (a.u.)"
+    "coarse Z (nm)"
   ]
   
   for labelID in labelTextList.indices {
@@ -184,25 +184,9 @@ do {
     var y: Int = -250
     y += rowHeight / 2
     y += labelID * (rowHeight + rowSpacing)
+    y += 12
     label.move(x, y)
   }
-  
-  /*
-  let label1 = VerticalLabel("F", win)
-  let label2 = VerticalLabel("S", win)
-  
-  label1.setStyleSheet("font-size: 20px;")
-  label1.setFixedSize(500, 500)  //# Ensure it has a width/height based on text
-  label1.raise_()      // # Bring to the absolute front of the stack
-  label1.show()        // # Force visibility if parent is already shown
-  label1.move(-250 + yAxisWidth - 30, -250 + 100)   //# Position it
-  
-  label2.setStyleSheet("font-size: 20px;")
-  label2.setFixedSize(500, 500)  //# Ensure it has a width/height based on text
-  label2.raise_()      // # Bring to the absolute front of the stack
-  label2.show()        // # Force visibility if parent is already shown
-  label2.move(-250 + yAxisWidth - 30, -250 + 200 + 100)   //# Position it
-   */
 }
 
 var windowIsClosed = false
@@ -234,28 +218,14 @@ while !windowIsClosed {
   let longTimeLength: Double = 10.0
   let longTimeTick: Double = 1.0
   
-  struct DataStreams {
-    var short: [History.TimedSample] = []
-    var long: [History.TimedAverage] = []
+  let shortTimeData = Application.global.serialQueue.sync {
+    let history = Application.global.history
+    return history.sampleHistory(time: shortTimeLength)
   }
-  func createDataStreams() -> DataStreams {
-    var output = DataStreams()
-    Application.global.serialQueue.sync {
-      let history = Application.global.history
-      output.short = history.sampleHistory(time: shortTimeLength)
-      output.long =  history.averageHistory(time: longTimeLength)
-    }
-    guard output.short.count > 0,
-          output.long.count > 0 else {
-      fatalError("No data to graph.")
-    }
-    return output
+  let longTimeData = Application.global.serialQueue.sync {
+    let history = Application.global.history
+    return history.averageHistory(time: longTimeLength)
   }
-  
-  let dataStreams = createDataStreams()
-  let shortTimeData = dataStreams.short
-  let longTimeData = dataStreams.long
-  
   let shouldDrawShort = getShouldDrawShort(
     latestSampleTime: shortTimeData.last!.time)
   
