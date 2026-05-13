@@ -2,7 +2,7 @@ import Foundation
 import PythonKit
 import SwiftSerial
 
-Application.global.initialize()
+await Application.global.initialize()
 let ui = UI()
 
 // Set the trigger type.
@@ -20,6 +20,7 @@ while !ui.isClosed {
   let shortTimeMajorTick: Double = 0.001
   let longTimeLength: Double = 10.0
   let longTimeMajorTick: Double = 1.0
+  
   let shortTimeData = Application.global.serialQueue.sync {
     let history = Application.global.history
     return history.sampleHistory(time: shortTimeLength)
@@ -78,6 +79,7 @@ while !ui.isClosed {
   
   updateLongTime()
   ui.updateLongPlots(data: longTimeData)
+  ui.updateYRange(data: longTimeData)
   
   let currentTime = Date().timeIntervalSince1970
   if currentTime - startTime < 1 {
@@ -87,10 +89,6 @@ while !ui.isClosed {
       print("No event trace..")
     }
   }
-  
-//  updateShortTimeForHistory()
-//  ui.updateShortPlots(data: shortTimeData)
-  ui.updateYRange(data: longTimeData)
   
   ui.app.processEvents()
 }
