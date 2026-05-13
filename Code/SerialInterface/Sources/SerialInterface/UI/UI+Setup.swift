@@ -1,11 +1,20 @@
 import PythonKit
 
+#if true // Mac
 private let rowHeight: Int = 180
 private let rowSpacing: Int = 20
 private let columnWidth: Int = 500
 private let columnSpacing: Int = 20
 private let xAxisHeight: Int = 40
 private let yAxisWidth: Int = 100
+#else // iPad
+private let rowHeight: Int = 150
+private let rowSpacing: Int = 20
+private let columnWidth: Int = 250
+private let columnSpacing: Int = 20
+private let xAxisHeight: Int = 40
+private let yAxisWidth: Int = 100
+#endif
 
 extension UI {
   func connectShortcut() {
@@ -45,6 +54,7 @@ extension UI {
   
   // Set the window position on the screen.
   func setWindowPosition() {
+    #if true // Mac
     let screen = app.primaryScreen()
     let screenSize = screen.size()
     let screenDimensions = SIMD2<Float>(
@@ -59,6 +69,13 @@ extension UI {
     win.move(
       Int(upperLeft.x),
       Int(20))
+    
+    #else // iPad
+    win.move(
+      Int(50),
+      Int(0))
+    
+    #endif
   }
   
   func createPlots() {

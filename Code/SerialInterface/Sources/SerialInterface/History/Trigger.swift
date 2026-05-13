@@ -20,10 +20,11 @@ struct Trigger {
   var polarity: TriggerPolarity = .signAgnostic
   var channel: Int = 0
   
+  // If true, returns the center time.
   func check(
     before: History.TimedSample,
     after: History.TimedSample
-  ) -> Bool {
+  ) -> Double? {
     let valueBefore = before.values[channel]
     let valueAfter = after.values[channel]
     
@@ -35,16 +36,16 @@ struct Trigger {
       times.round(.down)
       
       if times[0] == times[1] - 1 {
-        return true
+        return times[1]
       } else if times[0] == times[1] {
-        return false
+        return nil
       } else {
         fatalError("This should never happen.")
       }
       
     case .level(let threshold):
       if valueBefore == valueAfter {
-        return false
+        return nil
       }
       
       func didCrossThreshold() -> Bool {
@@ -60,23 +61,34 @@ struct Trigger {
         return false
       }
       if !didCrossThreshold() {
-        return false
+        return nil
       }
+      
+      func createCenterTime() -> Double {
+        let progress = Double(
+          (threshold - valueBefore) / (valueAfter - valueBefore))
+        
+        var output: Double = .zero
+        output += (1 - progress) * before.time
+        output += progress * after.time
+        return output
+      }
+      let centerTime = createCenterTime()
       
       let dx = valueAfter - valueBefore
       switch polarity {
       case .positive:
         if dx > 0 {
-          return true
+          return centerTime
         }
       case .negative:
         if dx < 0 {
-          return true
+          return centerTime
         }
       case .signAgnostic:
-        return true
+        return centerTime
       }
-      return false
+      return nil
       
     case .derivative(let dx_target, let dt_target):
       guard dx_target > 0 else {
@@ -91,22 +103,22 @@ struct Trigger {
       let dt = Float(after.time - before.time)
       let slope = dx / dt
       if abs(slope) < targetSlope {
-        return false
+        return nil
       }
       
       switch polarity {
       case .positive:
         if slope > 0 {
-          return true
+          return before.time
         }
       case .negative:
         if slope < 0 {
-          return true
+          return before.time
         }
       case .signAgnostic:
-        return true
+        return before.time
       }
-      return false
+      return nil
     }
   }
 }

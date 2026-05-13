@@ -53,9 +53,60 @@ extension History {
     return output
   }
   
-  func triggerEventTrace(bipolarHistoryTime: Double) -> (
+  func triggerEventTrace(
+    bipolarHistoryTime: Double
+  ) -> (
     data: [TimedSample], timeInterval: SIMD2<Double>
   )? {
-    return nil
+    guard triggerEvents.count > 0 else {
+      return nil
+    }
+    
+    func getBestEvent() -> (cursor: Int, centerTime: Double) {
+      guard let latestSample else {
+        fatalError("This should never happen.")
+      }
+      let maximumTime = latestSample.time - bipolarHistoryTime
+      for i in triggerEvents.indices.reversed() {
+        let event = triggerEvents[i]
+        if event.centerTime <= maximumTime {
+          return event
+        }
+      }
+      
+      print("Returning the first event, could not find any matching events.")
+      return triggerEvents.first!
+    }
+    
+    let (latestTriggerCursor, centerTime) = getBestEvent()
+    let samplePeriod = Double(Self.logPeriodMicros) * 1e-6
+    let bipolarSampleCount = Int(bipolarHistoryTime / samplePeriod)
+    
+    var minimumCursor = latestTriggerCursor - bipolarSampleCount
+    minimumCursor = max(minimumCursor, sampleCursor - Self.maxEntryCount)
+    minimumCursor = max(minimumCursor, 0)
+    
+    var maximumCursor = latestTriggerCursor + bipolarSampleCount
+    maximumCursor = min(maximumCursor, sampleCursor)
+    
+    // Some assertions.
+    if latestTriggerCursor < sampleCursor - Self.maxEntryCount {
+      fatalError("Does this case ever happen?")
+    }
+    if maximumCursor - minimumCursor < 3 {
+      fatalError("Another edge case: \(minimumCursor), \(maximumCursor).")
+    }
+    
+    var output: [TimedSample] = []
+    for sampleID in minimumCursor..<maximumCursor {
+      let ringIndex = sampleID % Self.maxEntryCount
+      let sample = samplesBuffer[ringIndex]
+      output.append(sample)
+    }
+    
+    var outputInterval: SIMD2<Double> = .zero
+    outputInterval[0] = centerTime - bipolarHistoryTime
+    outputInterval[1] = centerTime + bipolarHistoryTime
+    return (output, outputInterval)
   }
 }

@@ -9,10 +9,11 @@ class History {
     return output
   }()
   
-  static let pointsPerAverage: Int = 100
+  static let pointsPerAverage: Int = 5000 / logPeriodMicros
   static let maxAverageCount: Int = {
     History.maxEntryCount / History.pointsPerAverage
   }()
+  static let triggerEventCacheSize: Int = 100
   
   struct TimedSample {
     // Time is in seconds.
@@ -39,7 +40,7 @@ class History {
   private(set) var latestAverage: TimedAverage?
   
   var trigger: Trigger
-  var latestTriggerEvent: (TimedSample, TimedSample)?
+  var triggerEvents: [(cursor: Int, centerTime: Double)] = []
   
   init() {
     let emptySample = TimedSample(
@@ -62,6 +63,10 @@ class History {
   }
   
   func addEntries(_ input: [Entry]) {
+    guard triggerEvents.count <= Self.triggerEventCacheSize else {
+      fatalError("This should never happen.")
+    }
+    
     for entry in input {
       let logPeriodSeconds = Double(1e-6) * Double(Self.logPeriodMicros)
       var time = Double(entry.id) * logPeriodSeconds
@@ -71,7 +76,14 @@ class History {
       time -= firstTime!
       
       let sample = TimedSample(time: time, values: entry.values)
-      // run the trigger query
+      if let latestSample {
+        let centerTime = trigger.check(
+          before: latestSample, after: sample)
+        if let centerTime {
+          let event = (cursor: sampleCursor, centerTime: centerTime)
+          triggerEvents.append(event)
+        }
+      }
       
       let ringIndex = sampleCursor % Self.maxEntryCount
       samplesBuffer[ringIndex] = sample
@@ -80,6 +92,11 @@ class History {
       
       samplesForNextAverage.append(sample)
       incorporateAveragePoint()
+    }
+    
+    if triggerEvents.count > Self.triggerEventCacheSize {
+      let elementsToRemove = triggerEvents.count - Self.triggerEventCacheSize
+      triggerEvents.removeFirst(elementsToRemove)
     }
   }
   

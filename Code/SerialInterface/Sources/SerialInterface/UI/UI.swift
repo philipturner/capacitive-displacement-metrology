@@ -11,7 +11,7 @@ class UI {
   let win: PythonObject
   var isClosed = false
   
-  static let rowCount: Int = 3
+  static let rowCount: Int = 4
   var plots: [[PythonObject]] = []
   var curves: [[PythonObject]] = []
   
@@ -35,8 +35,9 @@ class UI {
     
     let labelTextList: [String] = [
       "current (pA)",
+      "coarse Z (nm)",
       "sample bias (V)",
-      "coarse Z (nm)"
+      "capacitance (fF)",
     ]
     createPlots()
     linkPlots()

@@ -7,11 +7,12 @@ let ui = UI()
 
 // Set the trigger type.
 Application.global.serialQueue.sync {
-  let history = Application.global.history
-  _ = history.trigger
+//  let history = Application.global.history
+//  history.trigger.type = .derivative(dx: 100, dt: 100e-6)
+//  history.trigger.polarity = .positive
+//  history.trigger.channel = 0
 }
 
-let startTime = Date().timeIntervalSince1970
 while !ui.isClosed {
   let maxFrameRate: Int = 60
   usleep(UInt32(1_000_000 / maxFrameRate))
@@ -19,7 +20,7 @@ while !ui.isClosed {
   let shortTimeLength: Double = 0.003
   let shortTimeMajorTick: Double = 0.001
   let longTimeLength: Double = 10.0
-  let longTimeMajorTick: Double = 1.0
+  let longTimeMajorTick: Double = 2.0
   
   let shortTimeData = Application.global.serialQueue.sync {
     let history = Application.global.history
@@ -81,13 +82,16 @@ while !ui.isClosed {
   ui.updateLongPlots(data: longTimeData)
   ui.updateYRange(data: longTimeData)
   
-  let currentTime = Date().timeIntervalSince1970
-  if currentTime - startTime < 1 {
-    if let triggerEventTrace {
-      print("Did get the trigger event trace.")
-    } else {
-      print("No event trace..")
-    }
+  if let triggerEventTrace {
+    updateShortTimeForTrigger(
+      data: triggerEventTrace.data,
+      timeInterval: triggerEventTrace.timeInterval)
+    ui.updateShortPlots(
+      data: triggerEventTrace.data)
+  } else {
+    print("[\(Date())] No trigger event trace.")
+    updateShortTimeForHistory()
+    ui.updateShortPlots(data: shortTimeData)
   }
   
   ui.app.processEvents()
