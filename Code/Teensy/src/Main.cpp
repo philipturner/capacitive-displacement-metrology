@@ -8,7 +8,9 @@
 
 // MARK: - Global Variables
 
-uint32_t loopPeriod = 7;
+constexpr uint32_t loopPeriod = 7;
+constexpr uint32_t capacitanceWavePeriod = 700;
+constexpr uint32_t capacitanceWaveCount = 2; // 4
 
 float lowpassFilteredCurrent = 0;
 float biasVoltage = 0;
@@ -86,12 +88,61 @@ void loop() {
 
 // MARK: - Kilohertz Loop
 
+Mode mode = getDefaultMode();
+uint32_t startIterationID = 0;
+uint32_t startTrueTime = 0;
+
+void updateMode() {
+  Mode nextMode = latestInputMode;
+  if (mode != nextMode) {
+    startIterationID = KilohertzLoop::iterationID;
+    startTrueTime = micros();
+  }
+  mode = nextMode;
+}
+
+void updateCapacitance() {
+  uint32_t iterationsPerMeasurement = capacitanceWaveCount;
+  iterationsPerMeasurement *= capacitanceWavePeriod / loopPeriod;
+
+  uint32_t iterationDelta = KilohertzLoop::iterationID;
+  iterationDelta -= startIterationID;
+
+  if (iterationDelta % iterationsPerMeasurement == 0) {
+    if (iterationDelta > 0) {
+      if (rmsCurrentSampleCount != iterationsPerMeasurement / 2) {
+        Serial.println("Unexpected behavior in capacitance measurement");
+        Serial.println(rmsCurrentSampleCount);
+        Serial.println(iterationsPerMeasurement);
+        exit(0);
+      }
+    }
+
+    rmsCurrentAccumulator = 0;
+    rmsCurrentSampleCount = 0;
+  }
+}
+
 void kilohertzLoop() {
-  // Waveform should correct for the small timing jitter (<1 period) while
-  // starting precisely at the beginning of a specific loop iteration.
-  //
-  // We definitely want this for maximum fidelity when generating
-  // smooth capacitive bias voltage waveforms @ 143 kHz.
+  updateMode();
+  if (mode == Mode::capacitance) {
+    updateCapacitance();
+  }
+
+  if (mode == Mode::noise) {
+    biasVoltage = 0;
+  } else if (mode == Mode::riseTime) {
+    uint32_t wavePeriodMicros = 1000;
+    uint32_t elapsedTime = micros() - startTrueTime;
+    uint32_t phase = elapsedTime % wavePeriodMicros;
+
+    float phaseNormalized = float(phase) / float(wavePeriodMicros);
+    float amplitude = FilterUtil::triangleWave(phaseNormalized);
+    biasVoltage = 10 * amplitude;
+  } else if (mode == Mode::capacitance) {
+
+  }
+
   uint32_t elapsedTimeMicros = KilohertzLoop::iterationID * loopPeriod;
   uint32_t sinePeriodMicros = 1000;
   uint32_t phaseMicros = elapsedTimeMicros % sinePeriodMicros;
