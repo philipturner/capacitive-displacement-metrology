@@ -2,9 +2,9 @@ import Foundation
 import PythonKit
 import SwiftSerial
 
+let ui = UI()
 let application = Application.global
 await Application.global.initialize()
-application.ui = UI() // concurrency <-> Python bug
 
 // Set the trigger type.
 Application.global.serialQueue.sync {
@@ -12,7 +12,8 @@ Application.global.serialQueue.sync {
   _ = history.trigger
 }
 
-while !Application.global.ui.isClosed {
+let startTime = Date().timeIntervalSince1970
+while !ui.isClosed {
   let maxFrameRate: Int = 60
   usleep(UInt32(1_000_000 / maxFrameRate))
   
@@ -39,8 +40,13 @@ while !Application.global.ui.isClosed {
     let history = Application.global.history
     return history.averageHistory(time: longTimeLength)
   }
+  let triggerEventTrace = Application.global.serialQueue.sync {
+    let history = Application.global.history
+    let time = shortTimeLength / 2
+    return history.triggerEventTrace(bipolarHistoryTime: time)
+  }
   guard shortTimeData.count > 0, longTimeData.count > 0 else {
-    fatalError("No support for graphing zero-sized data.")
+    fatalError("No serial data was received.")
   }
   
   func updateShortTimeForHistory() {
@@ -72,7 +78,7 @@ while !Application.global.ui.isClosed {
     
     let history = Application.global.history
     let triggerType = history.trigger.type
-    if case .timeInterval(let period, let offset) = triggerType {
+    if case .timeInterval(_, let offset) = triggerType {
       shortTimeDesc.offset = offset
     } else {
       let offset = (timeInterval[0] + timeInterval[1]) / 2
@@ -82,24 +88,17 @@ while !Application.global.ui.isClosed {
     ui.updateTime(columnID: 0, descriptor: shortTimeDesc)
   }
   
-  let ui = Application.global.ui!
-  
-  
-  
-  let triggerEventTrace = Application.global.serialQueue.sync {
-    let history = Application.global.history
-    let time = shortTimeLength / 2
-    return history.triggerEventTrace(bipolarHistoryTime: time)
-  }
-  
-  if let triggerEventTrace {
-    fatalError("Did get the trigger event trace.")
-  } else {
-    fatalError("No event trace..")
-  }
-  
   updateLongTime()
   ui.updateLongPlots(data: longTimeData)
+  
+  let currentTime = Date().timeIntervalSince1970
+  if currentTime - startTime < 1 {
+    if let triggerEventTrace {
+      print("Did get the trigger event trace.")
+    } else {
+      print("No event trace..")
+    }
+  }
   
   ui.app.processEvents()
 }

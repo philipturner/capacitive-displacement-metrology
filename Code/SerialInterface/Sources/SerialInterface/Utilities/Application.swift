@@ -8,12 +8,16 @@ class Application {
   let serial: SerialPort
   var lineParser = LineParser()
   let history = History()
-  var ui: UI!
   
   // This caused crash with both Matplotlib and PyQtGraph. I have given up on
   // trying to use conventional Swift concurrency with these open. Thankfully,
   // it appears legal to have other 'await' and 'Task' in the same application,
   // as long as it doesn't touch the data accessed by Python.
+  //
+  // When using a Python-heavy UI, the program freezes in the event loop
+  // right when 'app.processEvents()' is called. I narrowed down the cause to
+  // where the UI is initialized. It cannot happen during the lazy static
+  // initializer, or during the 'initialize() async' function of this class.
   let serialQueue = DispatchQueue(label: "swiftconcurrencycausesbugswithpython")
   
   private init() {
