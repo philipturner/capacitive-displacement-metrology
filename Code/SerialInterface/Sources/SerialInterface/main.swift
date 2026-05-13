@@ -46,73 +46,75 @@ do {
 }
 
 /*
-let HelloException = PythonClass(
-            "HelloException",
-            superclasses: [Python.Exception],
-            members: [
-                "str_prefix": "HelloException-prefix ",
+ class VerticalLabel(QLabel):
 
-                "__init__": PythonInstanceMethod { args in
-                    let `self` = args[0]
-                    let message = "hello \(args[1])"
-                    helloOutput = String(message)
+     def __init__(self, *args):
+         QLabel.__init__(self, *args)
 
-                    // Conventional `super` syntax does not work; use this instead.
-                    Python.Exception.__init__(`self`, message)
-                    return Python.None
-                },
+     def paintEvent(self, event):
+         QLabel.paintEvent(self, event)
+         painter = QPainter (self)
+         painter.translate(0, self.height()-1)
+         painter.rotate(-90)
+         self.setGeometry(self.x(), self.y(), self.height(), self.width())
+         QLabel.render(self, painter)
 
-                // Example of function using the `self` convention instead of `args`.
-                "__str__": PythonInstanceMethod { (`self`: PythonObject) in
-                    return `self`.str_prefix + Python.repr(`self`)
-                }
-            ]
-        ).pythonObject
+     def minimumSizeHint(self):
+         size = QLabel.minimumSizeHint(self)
+         return QSize(size.height(), size.width())
+
+     def sizeHint(self):
+         size = QLabel.sizeHint(self)
+         return QSize(size.height(), size.width())
  */
 
-/*
- import pyqtgraph as pg
- from pyqtgraph.Qt import QtCore, QtWidgets
-
- class CustomAxis(pg.AxisItem):
-     def resizeEvent(self, ev=None):
-         # Allow default behavior to run first
-         super().resizeEvent(ev)
-         
-         # Define exact manual position (x, y)
-         # Position is relative to the AxisItem's coordinate system
-         new_pos = QtCore.QPointF(50, 10)
-         self.label.setPos(new_pos)
-
- # Usage
- app = QtWidgets.QApplication([])
- win = pg.PlotWidget(axisItems={'bottom': CustomAxis(orientation='bottom')})
- win.setLabel('bottom', 'My Custom Position Label')
- win.show()
- app.exec_()
- */
-
-func labelClass(position: SIMD2<Float>, className: String) -> PythonObject {
-  let pythonClass = PythonClass(
-    className,
-    superclasses: [pg.AxisItem],
-    members: [
-      "resizeEvent": PythonInstanceMethod { args in
-        let `self` = args[0]
-        let ev = args[1]
-        
-        // Conventional `super` syntax does not work; use this instead.
-        //pg.AxisItem.resizeEvent(`self`, ev)
-        
-        let label = `self`.label
-        label.setPos(-20, `self`.size().height() / 2)
-        
-        return Python.None
+let VerticalLabel = PythonClass(
+  "VerticalLabel",
+  superclasses: [QtWidgets.QLabel],
+  members: [
+    "__init__": PythonInstanceMethod { args in
+      let `self` = args[0]
+      guard args.count == 3 else {
+        fatalError("Was expecting just the text as an argument.")
       }
-    ]
-  ).pythonObject
-  return pythonClass
-}
+      QtWidgets.QLabel.__init__(`self`, args[1], args[2])
+      
+      return Python.None
+    },
+    
+    "paintEvent": PythonInstanceMethod { args in
+      let `self` = args[0]
+      guard args.count == 2 else {
+        fatalError("Was expecting just the event as an argument.")
+      }
+      let event = args[1]
+      
+      let painter = QtGui.QPainter(`self`)
+      `self`.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+      
+      painter.translate(`self`.rect().center())
+      painter.rotate(-90)
+      painter.translate(-`self`.rect().center())
+      painter.drawText(`self`.rect(), QtCore.Qt.AlignCenter, `self`.text())
+      
+      return Python.None
+    },
+    
+    "minimumSizeHint": PythonInstanceMethod { args in
+      let `self` = args[0]
+      let size = QtWidgets.QLabel.minimumSizeHint(`self`)
+      return QtCore.QSize(size.height(), size.width())
+    },
+    
+    "sizeHint": PythonInstanceMethod { args in
+      let `self` = args[0]
+      let size = QtWidgets.QLabel.sizeHint(`self`)
+      return QtCore.QSize(size.height(), size.width())
+    }
+  ]
+).pythonObject
+
+
 
 var plots: [[PythonObject]] = []
 var curves: [[PythonObject]] = []
@@ -122,35 +124,7 @@ for row in 0..<rowCount {
   var curveRow: [PythonObject] = []
 
   for col in 0..<2 {
-    /*
-     # 1. Create your custom AxisItem (e.g., for Date/Time or Categories)
-     # Here we use DateAxisItem as an example
-     date_axis = pg.DateAxisItem(orientation='bottom')
-
-     # 2. Add the plot, passing axisItems={ 'position': ItemInstance }
-     plot = win.addPlot(axisItems={'bottom': date_axis})
-
-     */
-    func createAxisItems() -> [String: PythonObject] {
-      if row == 0, col == 0 {
-        let position = SIMD2<Float>(100, 20)
-        let className = "CustomAxis00"
-        let pythonClass = labelClass(position: position, className: className)
-        let axis = pythonClass(orientation: "left")
-        return ["left:": axis]
-      } else if row == 1, col == 0 {
-        let position = SIMD2<Float>(50, 10)
-        let className = "CustomAxis10"
-        let pythonClass = labelClass(position: position, className: className)
-        let axis = pythonClass(orientation: "left")
-        return ["left:": axis]
-      } else {
-        return [:]
-      }
-    }
-    let axisItems = createAxisItems()
-    
-    let plot = win.addPlot(row: row, col: col, axisItems: axisItems)
+    let plot = win.addPlot(row: row, col: col)
     let xAxis = plot.getAxis("bottom")
     let yAxis = plot.getAxis("left")
     
@@ -187,7 +161,6 @@ for row in 0..<rowCount {
   curves.append(curveRow)
 }
 
-
 // If multiple graphs share a dimension, only set the bounds of one graph
 // and have PyQtGraph make the rest follow it.
 for row in 0..<rowCount {
@@ -198,15 +171,23 @@ for row in 1..<rowCount {
   plots[row][1].setXLink(plots[0][1])
 }
 
-/*
-plots[0][0].setLabel(
-  "left",
-  "<span style=\"font-size: 18px\">current (pA)</span>")
-plots[1][0].setLabel(
-  "left",
-  "<span style=\"font-size: 18px\">bias voltage (V)</span>")
-*/
- 
+do {
+  let label1 = VerticalLabel("First piece of text", win)
+  let label2 = VerticalLabel("Second piece of text", win)
+  
+  label1.setStyleSheet("font-size: 10px;")
+  label1.setFixedSize(500, 500)  //# Ensure it has a width/height based on text
+  label1.raise_()      // # Bring to the absolute front of the stack
+  label1.show()        // # Force visibility if parent is already shown
+  label1.move(-250 + 50, -200)   //# Position it
+  
+  label2.setStyleSheet("font-size: 20px;")
+  label2.setFixedSize(500, 500)  //# Ensure it has a width/height based on text
+  label2.raise_()      // # Bring to the absolute front of the stack
+  label2.show()        // # Force visibility if parent is already shown
+  label2.move(-250 + 50, 50)   //# Position it
+}
+
 var windowIsClosed = false
 win.closeEvent = PythonFunction { args in
   windowIsClosed = true
