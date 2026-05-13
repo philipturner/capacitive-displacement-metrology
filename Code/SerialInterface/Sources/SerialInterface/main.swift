@@ -20,13 +20,26 @@ let shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+W"), win)
 shortcut.activated.connect(win.close)
 
 let rowCount: Int = 3
+let rowHeight: Int = 180
+let rowSpacing: Int = 20
+let columnWidth: Int = 500
+let columnSpacing: Int = 20
+let xAxisHeight: Int = 40
+let yAxisWidth: Int = 100
 
 do {
-  let rowHeight: Int = 200
-  let columnWidth: Int = 500
-  win.resize(80 + 2 * columnWidth + 80, rowHeight * rowCount)
-  win.ci.layout.setColumnMaximumWidth(0, columnWidth + 80)
+  let x = yAxisWidth + 2 * columnWidth + columnSpacing + 40
+  var y = rowCount * rowHeight + (rowCount - 1) * rowSpacing
+  y += xAxisHeight + 10
+  win.resize(x, y)
+  win.ci.layout.setColumnMaximumWidth(0, columnWidth + yAxisWidth)
   win.ci.layout.setColumnMaximumWidth(1, columnWidth)
+  
+  for rowID in 0..<rowCount {
+    win.ci.layout.setRowSpacing(rowID, rowSpacing)
+  }
+  win.ci.layout.setColumnSpacing(0, columnSpacing)
+  win.ci.layout.setColumnSpacing(1, columnSpacing)
   
   // Set the window position on the screen.
   let screen = app.primaryScreen()
@@ -45,28 +58,65 @@ do {
     Int(20))
 }
 
-/*
- class VerticalLabel(QLabel):
+var plots: [[PythonObject]] = []
+var curves: [[PythonObject]] = []
 
-     def __init__(self, *args):
-         QLabel.__init__(self, *args)
+for row in 0..<rowCount {
+  var plotRow: [PythonObject] = []
+  var curveRow: [PythonObject] = []
 
-     def paintEvent(self, event):
-         QLabel.paintEvent(self, event)
-         painter = QPainter (self)
-         painter.translate(0, self.height()-1)
-         painter.rotate(-90)
-         self.setGeometry(self.x(), self.y(), self.height(), self.width())
-         QLabel.render(self, painter)
+  for col in 0..<2 {
+    let plot = win.addPlot(row: row, col: col)
+    plot.showGrid(x: true, y: true)
+    plot.disableAutoRange()
+    
+    let xAxis = plot.getAxis("bottom")
+    if row == rowCount - 1 {
+      plot.setFixedHeight(rowHeight + xAxisHeight)
+      xAxis.setHeight(xAxisHeight)
+    } else {
+      plot.setFixedHeight(rowHeight)
+      xAxis.setStyle(showValues: false)
+    }
+    
+    let yAxis = plot.getAxis("left")
+    if col == 0 {
+      yAxis.setWidth(yAxisWidth)
+    } else {
+      yAxis.setStyle(showValues: false)
+    }
+    
+    
+    // Create persistent curves
+    let emptyArray = [Float]()
+    if col == 0 {
+      let pen = pg.mkPen("#2e7ec9", width: 2)
+      let curve = plot.plot(emptyArray, emptyArray, pen: pen)
+      curveRow.append(curve)
+    } else {
+      let minCurve = plot.plot(emptyArray, emptyArray, pen: pg.mkPen("#1fb864"))
+      let avgCurve = plot.plot(emptyArray, emptyArray, pen: pg.mkPen("orange"))
+      let maxCurve = plot.plot(emptyArray, emptyArray, pen: pg.mkPen("red"))
+      
+      curveRow.append(PythonObject([minCurve, avgCurve, maxCurve]))
+    }
 
-     def minimumSizeHint(self):
-         size = QLabel.minimumSizeHint(self)
-         return QSize(size.height(), size.width())
+    plotRow.append(plot)
+  }
 
-     def sizeHint(self):
-         size = QLabel.sizeHint(self)
-         return QSize(size.height(), size.width())
- */
+  plots.append(plotRow)
+  curves.append(curveRow)
+}
+
+// If multiple graphs share a dimension, only set the bounds of one graph
+// and have PyQtGraph make the rest follow it.
+for row in 0..<rowCount {
+  plots[row][1].setYLink(plots[row][0])
+}
+for row in 1..<rowCount {
+  plots[row][0].setXLink(plots[0][0])
+  plots[row][1].setXLink(plots[0][1])
+}
 
 let VerticalLabel = PythonClass(
   "VerticalLabel",
@@ -114,78 +164,45 @@ let VerticalLabel = PythonClass(
   ]
 ).pythonObject
 
-
-
-var plots: [[PythonObject]] = []
-var curves: [[PythonObject]] = []
-
-for row in 0..<rowCount {
-  var plotRow: [PythonObject] = []
-  var curveRow: [PythonObject] = []
-
-  for col in 0..<2 {
-    let plot = win.addPlot(row: row, col: col)
-    let xAxis = plot.getAxis("bottom")
-    let yAxis = plot.getAxis("left")
-    
-    plot.showGrid(x: true, y: true)
-    if row != rowCount - 1 {
-      xAxis.setStyle(showValues: false)
-    }
-    if col != 0 {
-      yAxis.setStyle(showValues: false)
-    }
-    if col == 0 {
-      yAxis.setWidth(80)
-    }
-    plot.disableAutoRange()
-    
-    // Create persistent curves
-    let emptyArray = [Float]()
-    if col == 0 {
-      let pen = pg.mkPen("#2e7ec9", width: 2)
-      let curve = plot.plot(emptyArray, emptyArray, pen: pen)
-      curveRow.append(curve)
-    } else {
-      let minCurve = plot.plot(emptyArray, emptyArray, pen: pg.mkPen("#1fb864"))
-      let avgCurve = plot.plot(emptyArray, emptyArray, pen: pg.mkPen("orange"))
-      let maxCurve = plot.plot(emptyArray, emptyArray, pen: pg.mkPen("red"))
-      
-      curveRow.append(PythonObject([minCurve, avgCurve, maxCurve]))
-    }
-
-    plotRow.append(plot)
-  }
-
-  plots.append(plotRow)
-  curves.append(curveRow)
-}
-
-// If multiple graphs share a dimension, only set the bounds of one graph
-// and have PyQtGraph make the rest follow it.
-for row in 0..<rowCount {
-  plots[row][1].setYLink(plots[row][0])
-}
-for row in 1..<rowCount {
-  plots[row][0].setXLink(plots[0][0])
-  plots[row][1].setXLink(plots[0][1])
-}
-
 do {
-  let label1 = VerticalLabel("First piece of text", win)
-  let label2 = VerticalLabel("Second piece of text", win)
+  let labelTextList: [String] = [
+    "current (pA)",
+    "bias voltage (V)",
+    "test channel (a.u.)"
+  ]
   
-  label1.setStyleSheet("font-size: 10px;")
+  for labelID in labelTextList.indices {
+    let text = labelTextList[labelID]
+    let label = VerticalLabel(text, win)
+    
+    label.setStyleSheet("font-size: 20px;")
+    label.setFixedSize(500, 500)
+    label.raise_()
+    label.show()
+    
+    let x: Int = -250 + yAxisWidth - 70
+    var y: Int = -250
+    y += rowHeight / 2
+    y += labelID * (rowHeight + rowSpacing)
+    label.move(x, y)
+  }
+  
+  /*
+  let label1 = VerticalLabel("F", win)
+  let label2 = VerticalLabel("S", win)
+  
+  label1.setStyleSheet("font-size: 20px;")
   label1.setFixedSize(500, 500)  //# Ensure it has a width/height based on text
   label1.raise_()      // # Bring to the absolute front of the stack
   label1.show()        // # Force visibility if parent is already shown
-  label1.move(-250 + 50, -200)   //# Position it
+  label1.move(-250 + yAxisWidth - 30, -250 + 100)   //# Position it
   
   label2.setStyleSheet("font-size: 20px;")
   label2.setFixedSize(500, 500)  //# Ensure it has a width/height based on text
   label2.raise_()      // # Bring to the absolute front of the stack
   label2.show()        // # Force visibility if parent is already shown
-  label2.move(-250 + 50, 50)   //# Position it
+  label2.move(-250 + yAxisWidth - 30, -250 + 200 + 100)   //# Position it
+   */
 }
 
 var windowIsClosed = false
