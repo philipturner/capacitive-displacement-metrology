@@ -11,6 +11,7 @@
 constexpr uint32_t loopPeriod = 7;
 constexpr uint32_t capacitanceWavePeriod = 700;
 constexpr uint32_t capacitanceWaveCount = 2; // 4
+constexpr float capacitanceStimulusAmplitude = 12;
 
 float lowpassFilteredCurrent = 0;
 float biasVoltage = 0;
@@ -19,14 +20,6 @@ float capacitance = 0;
 
 float rmsCurrentAccumulator = 0;
 uint32_t rmsCurrentSampleCount = 0;
-
-// TODO: Procedures for transitioning between modes in the fast loop.
-// Copy the slow loop's mode to the fast loop's mode and detect changes
-// that way, without data races.
-//
-// Also, there can be dedicated amounts of time for transitioning between
-// modes in the fast loop, to let voltage spikes settle. But we don't
-// need that for this demonstration.
 
 enum class Mode {
   noise = 0,
@@ -109,13 +102,23 @@ void updateCapacitance() {
   iterationDelta -= startIterationID;
 
   if (iterationDelta % iterationsPerMeasurement == 0) {
-    if (iterationDelta > 0) {
+    uint32_t timeSinceSpike = micros() - startTrueTime;
+    if (iterationDelta > 0 && timeSinceSpike > 0) {
       if (rmsCurrentSampleCount != iterationsPerMeasurement / 2) {
         Serial.println("Unexpected behavior in capacitance measurement");
         Serial.println(rmsCurrentSampleCount);
         Serial.println(iterationsPerMeasurement);
         exit(0);
       }
+
+      float accumulator = rmsCurrentAccumulator;
+      float sampleCount = float(rmsCurrentSampleCount);
+      rmsCurrent = sqrt(accumulator / sampleCount);
+
+      float frequency = float(1e6) / float(capacitanceWavePeriod);
+      float rmsVoltage = M_SQRT1_2 * capacitanceStimulusAmplitude;
+      float rmsSlewRate = rmsVoltage * 2 * M_PI * frequency;
+      capacitance = rmsCurrent / rmsSlewRate;
     }
 
     rmsCurrentAccumulator = 0;
@@ -140,38 +143,37 @@ void kilohertzLoop() {
     float amplitude = FilterUtil::triangleWave(phaseNormalized);
     biasVoltage = 10 * amplitude;
   } else if (mode == Mode::capacitance) {
+    uint32_t elapsedTime = micros() - startTrueTime;
+    uint32_t phase = elapsedTime % capacitanceWavePeriod;
 
-  }
-
-  uint32_t elapsedTimeMicros = KilohertzLoop::iterationID * loopPeriod;
-  uint32_t sinePeriodMicros = 1000;
-  uint32_t phaseMicros = elapsedTimeMicros % sinePeriodMicros;
-
-  if (mode == Mode::riseTime) {
-    float phaseNormalized = float(phaseMicros) / float(sinePeriodMicros);
-    float waveValueNormalized = FilterUtil::triangleWave(phaseNormalized);
-    biasVoltage = 10 * waveValueNormalized;
-  } else if (mode == Mode::noise) {
-    biasVoltage = 0;
+    float phaseNormalized = float(phase) / float(capacitanceWavePeriod);
+    float amplitude = FilterUtil::sineWave(phaseNormalized);
+    biasVoltage = capacitanceStimulusAmplitude * amplitude;
   }
   DAC2::writeVoltage(0, biasVoltage);
 
   if (KilohertzLoop::iterationID % 2 == 0)  {
     auto conversion = ADC::readVoltage();
     float tiaVoltage = conversion.voltage;
+    float current = -1000 * tiaVoltage;
 
     constexpr float frequency = 10000;
     float alpha = FilterUtil::getLowpassAlpha(frequency, loopPeriod * 2);
-    lowpassVoltage = alpha * tiaVoltage + (1 - alpha) * lowpassVoltage;
+    lowpassFilteredCurrent *= 1 - alpha;
+    lowpassFilteredCurrent += alpha * current;
+  }
+  if (mode == Mode::capacitance) {
+    rmsCurrentAccumulator += lowpassFilteredCurrent * lowpassFilteredCurrent;
+    rmsCurrentSampleCount += 1;
   }
 
-  uint32_t iterationsPerLog = logPeriod / loopPeriod;
+  uint32_t iterationsPerLog = Log::targetLogPeriod / loopPeriod;
   if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
-    uint32_t ringBufferIndex = unsafeBufferedLogID % logSize;
-    ringBuffer1[ringBufferIndex] = -1000 * lowpassVoltage;
-    ringBuffer2[ringBufferIndex] = biasVoltage;
-    ringBuffer3[ringBufferIndex] = M_PI;
-    ringBuffer4[ringBufferIndex] = M_PI;
-    unsafeBufferedLogID += 1;
+    uint32_t ringIndex = Log::unsafeBufferedLogID % Log::logSize;
+    Log::ringBuffers[0][ringIndex] = lowpassFilteredCurrent / 1e-12;
+    Log::ringBuffers[1][ringIndex] = rmsCurrent / 1e-12;
+    Log::ringBuffers[2][ringIndex] = biasVoltage;
+    Log::ringBuffers[3][ringIndex] = capacitance / 1e-15;
+    Log::unsafeBufferedLogID += 1;
   }
 }
