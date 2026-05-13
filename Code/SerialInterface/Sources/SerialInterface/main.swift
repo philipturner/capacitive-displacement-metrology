@@ -45,6 +45,75 @@ do {
     Int(20))
 }
 
+/*
+let HelloException = PythonClass(
+            "HelloException",
+            superclasses: [Python.Exception],
+            members: [
+                "str_prefix": "HelloException-prefix ",
+
+                "__init__": PythonInstanceMethod { args in
+                    let `self` = args[0]
+                    let message = "hello \(args[1])"
+                    helloOutput = String(message)
+
+                    // Conventional `super` syntax does not work; use this instead.
+                    Python.Exception.__init__(`self`, message)
+                    return Python.None
+                },
+
+                // Example of function using the `self` convention instead of `args`.
+                "__str__": PythonInstanceMethod { (`self`: PythonObject) in
+                    return `self`.str_prefix + Python.repr(`self`)
+                }
+            ]
+        ).pythonObject
+ */
+
+/*
+ import pyqtgraph as pg
+ from pyqtgraph.Qt import QtCore, QtWidgets
+
+ class CustomAxis(pg.AxisItem):
+     def resizeEvent(self, ev=None):
+         # Allow default behavior to run first
+         super().resizeEvent(ev)
+         
+         # Define exact manual position (x, y)
+         # Position is relative to the AxisItem's coordinate system
+         new_pos = QtCore.QPointF(50, 10)
+         self.label.setPos(new_pos)
+
+ # Usage
+ app = QtWidgets.QApplication([])
+ win = pg.PlotWidget(axisItems={'bottom': CustomAxis(orientation='bottom')})
+ win.setLabel('bottom', 'My Custom Position Label')
+ win.show()
+ app.exec_()
+ */
+
+func labelClass(position: SIMD2<Float>, className: String) -> PythonObject {
+  let pythonClass = PythonClass(
+    className,
+    superclasses: [pg.AxisItem],
+    members: [
+      "resizeEvent": PythonInstanceMethod { args in
+        let `self` = args[0]
+        let ev = args[1]
+        
+        // Conventional `super` syntax does not work; use this instead.
+        //pg.AxisItem.resizeEvent(`self`, ev)
+        
+        let label = `self`.label
+        label.setPos(-20, `self`.size().height() / 2)
+        
+        return Python.None
+      }
+    ]
+  ).pythonObject
+  return pythonClass
+}
+
 var plots: [[PythonObject]] = []
 var curves: [[PythonObject]] = []
 
@@ -53,7 +122,35 @@ for row in 0..<rowCount {
   var curveRow: [PythonObject] = []
 
   for col in 0..<2 {
-    let plot = win.addPlot(row: row, col: col)
+    /*
+     # 1. Create your custom AxisItem (e.g., for Date/Time or Categories)
+     # Here we use DateAxisItem as an example
+     date_axis = pg.DateAxisItem(orientation='bottom')
+
+     # 2. Add the plot, passing axisItems={ 'position': ItemInstance }
+     plot = win.addPlot(axisItems={'bottom': date_axis})
+
+     */
+    func createAxisItems() -> [String: PythonObject] {
+      if row == 0, col == 0 {
+        let position = SIMD2<Float>(100, 20)
+        let className = "CustomAxis00"
+        let pythonClass = labelClass(position: position, className: className)
+        let axis = pythonClass(orientation: "left")
+        return ["left:": axis]
+      } else if row == 1, col == 0 {
+        let position = SIMD2<Float>(50, 10)
+        let className = "CustomAxis10"
+        let pythonClass = labelClass(position: position, className: className)
+        let axis = pythonClass(orientation: "left")
+        return ["left:": axis]
+      } else {
+        return [:]
+      }
+    }
+    let axisItems = createAxisItems()
+    
+    let plot = win.addPlot(row: row, col: col, axisItems: axisItems)
     let xAxis = plot.getAxis("bottom")
     let yAxis = plot.getAxis("left")
     
@@ -90,6 +187,7 @@ for row in 0..<rowCount {
   curves.append(curveRow)
 }
 
+
 // If multiple graphs share a dimension, only set the bounds of one graph
 // and have PyQtGraph make the rest follow it.
 for row in 0..<rowCount {
@@ -100,6 +198,15 @@ for row in 1..<rowCount {
   plots[row][1].setXLink(plots[0][1])
 }
 
+/*
+plots[0][0].setLabel(
+  "left",
+  "<span style=\"font-size: 18px\">current (pA)</span>")
+plots[1][0].setLabel(
+  "left",
+  "<span style=\"font-size: 18px\">bias voltage (V)</span>")
+*/
+ 
 var windowIsClosed = false
 win.closeEvent = PythonFunction { args in
   windowIsClosed = true

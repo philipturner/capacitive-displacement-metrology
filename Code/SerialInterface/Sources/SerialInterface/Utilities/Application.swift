@@ -16,12 +16,11 @@ class Application {
   let serialQueue = DispatchQueue(label: "swiftconcurrencycausesbugswithpython")
   
   private init() {
-    // self.serial = SerialPort(path: "/dev/cu.usbmodem182280901")
-    self.serial = SerialPort(path: "/dev/cu.debug-console")
+    self.serial = SerialPort(path: "/dev/cu.usbmodem182280901")
+    // self.serial = SerialPort(path: "/dev/cu.debug-console")
   }
   
   func initialize() async {
-    
     try! await serial.open(
       receiveRate: .baud115200,
       transmitRate: .baud115200)
@@ -86,8 +85,7 @@ class Application {
         
         await CommandTransmitter.transmitSerialInput()
         
-        // let entries = await Application.global.lineParser.extractEntries()
-        let entries = createTestEntries()
+        let entries = await Application.global.lineParser.extractEntries()
         Application.global.serialQueue.sync {
           Application.global.history.addEntries(entries)
         }
