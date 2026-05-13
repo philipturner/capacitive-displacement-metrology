@@ -4,6 +4,9 @@ enum TriggerType {
   
   // Detect when the absolute magnitude of the slope exceeds dx / dt.
   case derivative(dx: Float, dt: Float)
+  
+  // Report at a repeating time interval.
+  case timeInterval(period: Double, offset: Double = .zero)
 }
 
 enum TriggerPolarity {
@@ -13,13 +16,14 @@ enum TriggerPolarity {
 }
 
 struct Trigger {
-  var type: TriggerType = .level(0)
+  var type: TriggerType = .timeInterval(period: 1)
   var polarity: TriggerPolarity = .signAgnostic
   var channel: Int = 0
-}
-
-extension History {
-  func processTrigger(before: TimedSample, after: TimedSample) {
-    
+  
+  func check(
+    before: History.TimedSample,
+    after: History.TimedSample
+  ) -> Bool {
+    fatalError("Not implemented.")
   }
 }

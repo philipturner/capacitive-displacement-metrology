@@ -38,7 +38,7 @@ class History {
   private(set) var averagesBuffer: [TimedAverage]
   private(set) var latestAverage: TimedAverage?
   
-  var trigger: Trigger?
+  var trigger: Trigger
   var latestTriggerEvent: (TimedSample, TimedSample)?
   
   init() {
@@ -57,6 +57,8 @@ class History {
     averagesBuffer = Array(
       repeating: emptyAverage,
       count: Self.maxAverageCount)
+    
+    trigger = Trigger()
   }
   
   func addEntries(_ input: [Entry]) {

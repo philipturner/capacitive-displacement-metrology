@@ -25,6 +25,9 @@ extension History {
     }
     output.reverse()
     
+    // Time interval should be:
+    // triggerPair.average - historyTime / 2
+    // triggerPair.average + historyTime / 2
     let timeInterval = SIMD2(earliestTime, latestSample.time)
     return (data: output, timeInterval: timeInterval)
   }

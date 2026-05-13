@@ -24,8 +24,8 @@ while !Application.global.ui.isClosed {
   
   // TODO: Optionally trigger the short-time acquisition on certain conditions,
   // center the data stream on this point, even if the data set is incomplete.
-  // Use a time basis relative to the trigger point, not absolute time (except
-  // when trigger is absent).
+  // Use a time basis relative to the trigger point (0 = center) for certain
+  // types of triggers.
   //
   // For efficiency, check for the trigger condition while acquiring samples.
   // Then, you know the latest point in time for retrieving in the UI loop.
@@ -52,8 +52,15 @@ while !Application.global.ui.isClosed {
     shortTimeDesc.minimum = shortTimeData.timeInterval[0]
     shortTimeDesc.maximum = shortTimeData.timeInterval[1]
     shortTimeDesc.majorTick = 0.001
-    if Application.global.history.trigger != nil {
-      shortTimeDesc.offset = 0 // center of oscilloscope trace
+    
+    let history = Application.global.history
+    let triggerType = history.trigger.type
+    if case .timeInterval(let period, let offset) = triggerType {
+      shortTimeDesc.offset = offset
+    } else {
+      let interval = shortTimeData.timeInterval
+      let offset = (interval[0] + interval[1]) / 2
+      shortTimeDesc.offset = offset
     }
     
     ui.updateTime(columnID: 0, descriptor: shortTimeDesc)
