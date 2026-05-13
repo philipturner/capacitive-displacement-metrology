@@ -35,7 +35,7 @@ class UI {
     
     let labelTextList: [String] = [
       "current (pA)",
-      "coarse Z (nm)",
+      "RMS current (pA)",
       "sample bias (V)",
       "capacitance (fF)",
     ]

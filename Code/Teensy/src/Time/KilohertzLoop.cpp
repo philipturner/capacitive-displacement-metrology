@@ -100,7 +100,6 @@ void KilohertzLoop::initialize(
   startTimestamp = timestamp;
   previousTimestamp = timestamp;
   latestTimestamp = timestamp;
-
   integrationStartTimestamp = 0;
   iterationID = 0;
 
