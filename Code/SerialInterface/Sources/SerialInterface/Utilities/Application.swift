@@ -8,7 +8,7 @@ class Application {
   let serial: SerialPort
   var lineParser = LineParser()
   let history = History()
-  let ui: UI
+  var ui: UI!
   
   // This caused crash with both Matplotlib and PyQtGraph. I have given up on
   // trying to use conventional Swift concurrency with these open. Thankfully,
@@ -19,7 +19,6 @@ class Application {
   private init() {
     // self.serial = SerialPort(path: "/dev/cu.usbmodem182280901")
     self.serial = SerialPort(path: "/dev/cu.debug-console")
-    self.ui = UI()
   }
   
   func initialize() async {

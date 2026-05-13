@@ -69,7 +69,7 @@ extension UI {
       for col in 0..<2 {
         let plot = win.addPlot(row: row, col: col)
         plot.showGrid(x: true, y: true)
-        plot.disableAutoRange()
+//        plot.disableAutoRange()
         
         let xAxis = plot.getAxis("bottom")
         if row == UI.rowCount - 1 {
@@ -111,10 +111,10 @@ extension UI {
   func linkPlots() {
     // If multiple graphs share a dimension, only set the bounds of one graph
     // and have PyQtGraph make the rest follow it.
-    for row in 0..<rowCount {
+    for row in 0..<UI.rowCount {
       plots[row][1].setYLink(plots[row][0])
     }
-    for row in 1..<rowCount {
+    for row in 1..<UI.rowCount {
       plots[row][0].setXLink(plots[0][0])
       plots[row][1].setXLink(plots[0][1])
     }
@@ -140,7 +140,6 @@ extension UI {
           guard args.count == 2 else {
             fatalError("Was expecting just the event as an argument.")
           }
-          let event = args[1]
           
           let painter = QtGui.QPainter(`self`)
           `self`.setAttribute(QtCore.Qt.WA_TranslucentBackground)

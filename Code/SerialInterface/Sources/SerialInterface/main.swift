@@ -2,7 +2,9 @@ import Foundation
 import PythonKit
 import SwiftSerial
 
+let application = Application.global
 await Application.global.initialize()
+application.ui = UI() // concurrency <-> Python bug
 
 var lastDrawShortTime: Double = -1
 @MainActor
@@ -52,7 +54,7 @@ while !Application.global.ui.isClosed {
   shortTimeDesc.maximum = shortTimeData.last!.time
   longTimeDesc.maximum = longTimeData.last!.time
   
-  let ui = Application.global.ui
+  let ui = Application.global.ui!
   let shouldDrawShort = getShouldDrawShort(
     latestSampleTime: shortTimeDesc.maximum!)
   
