@@ -3,7 +3,6 @@
 #include "IC/PA95.h"
 #include "Time/KilohertzLoop.h"
 #include "Time/Log.h"
-#include "Time/TimeStatistics.h"
 #include "Util/Application.h"
 #include "Util/FilterUtil.h"
 
@@ -13,6 +12,9 @@ uint32_t loopPeriod = 7;
 
 float lowpassFilteredCurrent = 0;
 float biasVoltage = 0;
+float rmsCurrent = 0;
+float capacitance = 0;
+
 float rmsCurrentAccumulator = 0;
 uint32_t rmsCurrentSampleCount = 0;
 
@@ -23,14 +25,18 @@ uint32_t rmsCurrentSampleCount = 0;
 // Also, there can be dedicated amounts of time for transitioning between
 // modes in the fast loop, to let voltage spikes settle. But we don't
 // need that for this demonstration.
+
 enum class Mode {
   noise = 0,
   riseTime = 1,
   capacitance = 2,
 };
-Mode mode = Mode::riseTime;
+Mode getDefaultMode() {
+  return Mode::riseTime;
+}
+Mode latestInputMode = getDefaultMode();
 
-// MARK: - Program
+// MARK: - Setup and Loop
 
 void kilohertzLoop();
 
@@ -41,17 +47,15 @@ void setup() {
   KilohertzLoop::initialize(kilohertzLoop, loopPeriod);
 }
 
-// MARK: - Serial Loop
-
-
-
 void processInput() {
   char incomingByte = Serial.read();
 
   if (incomingByte == 'n') {
-    mode = Mode::noise;
+    latestInputMode = Mode::noise;
   } else if (incomingByte == 'r') {
-    mode = Mode::riseTime;
+    latestInputMode = Mode::riseTime;
+  } else if (incomingByte == 'c') {
+    latestInputMode = Mode::capacitance;
   }
 }
 
