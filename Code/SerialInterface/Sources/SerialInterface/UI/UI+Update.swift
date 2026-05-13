@@ -1,34 +1,47 @@
+import PythonKit
+
 extension UI {
   struct TimeAxisDescriptor {
-    /// The amount of elapsed time.
-    var length: Double = .zero
+    /// Required. The start of the time interval.
+    var minimum: Double?
     
-    /// Spacing for major ticks.
-    var majorTick: Double = .zero
+    /// Required. The end of the time interval.
+    var maximum: Double?
+    
+    /// Required. Spacing for major ticks.
+    var majorTick: Double?
     
     /// Optional. Custom spacing for minor ticks.
     var minorTick: Double?
     
-    /// Required.
-    var maximum: Double?
+    /// Optional. Origin for ticks.
+    var offset: Double?
   }
   
   func updateTime(columnID: Int, descriptor: TimeAxisDescriptor) {
-    guard let maxTime = descriptor.maximum else {
+    guard let minimum = descriptor.minimum,
+          let maximum = descriptor.maximum,
+          let majorTick = descriptor.majorTick else {
       fatalError("Descriptor was incomplete.")
     }
     
     for rowID in 0..<UI.rowCount {
       let plot = plots[rowID][columnID]
       if rowID == 0 {
-        let minTime = maxTime - descriptor.length
-        plot.setXRange(minTime, maxTime, padding: 0)
+        plot.setXRange(minimum, maximum, padding: 0)
       }
       
-      let majorTick = descriptor.majorTick
-      let minorTick = descriptor.minorTick ?? majorTick / 5
       let xAxis = plot.getAxis("bottom")
-      xAxis.setTickSpacing(majorTick, minorTick)
+      let minorTick = descriptor.minorTick ?? majorTick / 5
+      if let offset = descriptor.offset {
+        let levels: [PythonObject] = [
+          PythonObject(tupleOf: majorTick, offset),
+          PythonObject(tupleOf: minorTick, offset),
+        ]
+        xAxis.setTickSpacing(levels: levels)
+      } else {
+        xAxis.setTickSpacing(majorTick, minorTick)
+      }
     }
   }
   

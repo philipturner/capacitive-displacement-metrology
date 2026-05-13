@@ -30,13 +30,16 @@ class History {
   
   var firstTime: Double?
   var sampleCursor: Int = .zero
-  private var samplesBuffer: [TimedSample]
-  private var latestSample: TimedSample?
+  private(set) var samplesBuffer: [TimedSample]
+  private(set) var latestSample: TimedSample?
   
   var averageCursor: Int = .zero
   private var samplesForNextAverage: [TimedSample] = []
-  private var averagesBuffer: [TimedAverage]
-  private var latestAverage: TimedAverage?
+  private(set) var averagesBuffer: [TimedAverage]
+  private(set) var latestAverage: TimedAverage?
+  
+  var trigger: Trigger?
+  var latestTriggerEvent: (TimedSample, TimedSample)?
   
   init() {
     let emptySample = TimedSample(
@@ -66,6 +69,8 @@ class History {
       time -= firstTime!
       
       let sample = TimedSample(time: time, values: entry.values)
+      // run the trigger query
+      
       let ringIndex = sampleCursor % Self.maxEntryCount
       samplesBuffer[ringIndex] = sample
       sampleCursor += 1
@@ -111,59 +116,5 @@ class History {
     latestAverage = average
     
     samplesForNextAverage.removeAll()
-  }
-  
-  func sampleHistory(time historyTime: Double) -> [TimedSample] {
-    guard historyTime >= 0 else {
-      fatalError("Invalid time.")
-    }
-    guard let latestSample else {
-      return []
-    }
-    let earliestTime = latestSample.time - historyTime
-    
-    var output: [TimedSample] = []
-    let endIndex = max(0, sampleCursor - 1)
-    let startIndex = max(0, sampleCursor - Self.maxEntryCount)
-    for i in (startIndex...endIndex).reversed() {
-      let ringIndex = i % Self.maxEntryCount
-      let sample = samplesBuffer[ringIndex]
-      
-      if sample.time >= earliestTime {
-        output.append(sample)
-      } else {
-        break
-      }
-    }
-    
-    output.reverse()
-    return output
-  }
-  
-  func averageHistory(time historyTime: Double) -> [TimedAverage] {
-    guard historyTime >= 0 else {
-      fatalError("Invalid time.")
-    }
-    guard let latestAverage else {
-      return []
-    }
-    let earliestTime = latestAverage.time - historyTime
-    
-    var output: [TimedAverage] = []
-    let endIndex = max(0, averageCursor - 1)
-    let startIndex = max(0, averageCursor - Self.maxAverageCount)
-    for i in (startIndex...endIndex).reversed() {
-      let ringIndex = i % Self.maxAverageCount
-      let average = averagesBuffer[ringIndex]
-      
-      if average.time >= earliestTime {
-        output.append(average)
-      } else {
-        break
-      }
-    }
-    
-    output.reverse()
-    return output
   }
 }

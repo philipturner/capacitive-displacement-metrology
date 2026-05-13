@@ -32,43 +32,52 @@ while !Application.global.ui.isClosed {
   //
   // Also, create dedicated functionality for the slow 1-second update mode
   // that reports in absolute time and shows the last n samples.
-  var shortTimeDesc = UI.TimeAxisDescriptor()
-  shortTimeDesc.length = 0.003
-  shortTimeDesc.majorTick = 0.001
+  
+  let shortTimeLength: Double = 0.003
+  let longTimeLength: Double = 10.0
   let shortTimeData = Application.global.serialQueue.sync {
     let history = Application.global.history
-    return history.sampleHistory(time: shortTimeDesc.length)
+    return history.sampleHistory(time: shortTimeLength)
   }
-  
-  var longTimeDesc = UI.TimeAxisDescriptor()
-  longTimeDesc.length = 10.0
-  longTimeDesc.majorTick = 1.0
   let longTimeData = Application.global.serialQueue.sync {
     let history = Application.global.history
-    return history.averageHistory(time: longTimeDesc.length)
+    return history.averageHistory(time: longTimeLength)
   }
-  
-  guard shortTimeData.count > 0, longTimeData.count > 0 else {
+  guard shortTimeData.data.count > 0, longTimeData.count > 0 else {
     fatalError("No support for graphing zero-sized data.")
   }
-  shortTimeDesc.maximum = shortTimeData.last!.time
-  longTimeDesc.maximum = longTimeData.last!.time
+  
+  func updateShortTime() {
+    var shortTimeDesc = UI.TimeAxisDescriptor()
+    shortTimeDesc.minimum = shortTimeData.timeInterval[0]
+    shortTimeDesc.maximum = shortTimeData.timeInterval[1]
+    shortTimeDesc.majorTick = 0.001
+    if Application.global.history.trigger != nil {
+      shortTimeDesc.offset = 0 // center of oscilloscope trace
+    }
+    
+    ui.updateTime(columnID: 0, descriptor: shortTimeDesc)
+  }
+  func updateLongTime() {
+    let maximum = longTimeData.last!.time
+    
+    var longTimeDesc = UI.TimeAxisDescriptor()
+    longTimeDesc.minimum = maximum - longTimeLength
+    longTimeDesc.maximum = maximum
+    longTimeDesc.majorTick = 1.0
+    ui.updateTime(columnID: 1, descriptor: longTimeDesc)
+  }
   
   let ui = Application.global.ui!
   let shouldDrawShort = getShouldDrawShort(
-    latestSampleTime: shortTimeDesc.maximum!)
+    latestSampleTime: shortTimeData.timeInterval[1])
   
-  if shouldDrawShort {
-    ui.updateTime(columnID: 0, descriptor: shortTimeDesc)
-  }
-  ui.updateTime(columnID: 1, descriptor: longTimeDesc)
-  
-  if shouldDrawShort {
-    ui.updateShortPlots(data: shortTimeData)
-  }
+  updateLongTime()
   ui.updateLongPlots(data: longTimeData)
   
   if shouldDrawShort {
+    updateShortTime()
+    ui.updateShortPlots(data: shortTimeData.data)
     ui.updateYRange(data: longTimeData)
   }
   
