@@ -6,16 +6,10 @@ let application = Application.global
 await Application.global.initialize()
 application.ui = UI() // concurrency <-> Python bug
 
-var lastDrawShortTime: Double = -1
-@MainActor
-func getShouldDrawShort(latestSampleTime: Double) -> Bool {
-  let dt = latestSampleTime.rounded(.down) - lastDrawShortTime
-  if dt >= 1 {
-    lastDrawShortTime = latestSampleTime.rounded(.down)
-    return true
-  } else {
-    return false
-  }
+// Set the trigger type.
+Application.global.serialQueue.sync {
+  let history = application.history
+  _ = history.trigger
 }
 
 while !Application.global.ui.isClosed {
@@ -34,7 +28,9 @@ while !Application.global.ui.isClosed {
   // that reports in absolute time and shows the last n samples.
   
   let shortTimeLength: Double = 0.003
+  let shortTimeMajorTick: Double = 0.001
   let longTimeLength: Double = 10.0
+  let longTimeMajorTick: Double = 1.0
   let shortTimeData = Application.global.serialQueue.sync {
     let history = Application.global.history
     return history.sampleHistory(time: shortTimeLength)
@@ -43,26 +39,17 @@ while !Application.global.ui.isClosed {
     let history = Application.global.history
     return history.averageHistory(time: longTimeLength)
   }
-  guard shortTimeData.data.count > 0, longTimeData.count > 0 else {
+  guard shortTimeData.count > 0, longTimeData.count > 0 else {
     fatalError("No support for graphing zero-sized data.")
   }
   
-  func updateShortTime() {
+  func updateShortTimeForHistory() {
+    let maximum = shortTimeData.last!.time
+    
     var shortTimeDesc = UI.TimeAxisDescriptor()
-    shortTimeDesc.minimum = shortTimeData.timeInterval[0]
-    shortTimeDesc.maximum = shortTimeData.timeInterval[1]
-    shortTimeDesc.majorTick = 0.001
-    
-    let history = Application.global.history
-    let triggerType = history.trigger.type
-    if case .timeInterval(let period, let offset) = triggerType {
-      shortTimeDesc.offset = offset
-    } else {
-      let interval = shortTimeData.timeInterval
-      let offset = (interval[0] + interval[1]) / 2
-      shortTimeDesc.offset = offset
-    }
-    
+    shortTimeDesc.minimum = maximum - shortTimeLength
+    shortTimeDesc.maximum = maximum
+    shortTimeDesc.majorTick = shortTimeMajorTick
     ui.updateTime(columnID: 0, descriptor: shortTimeDesc)
   }
   func updateLongTime() {
@@ -71,22 +58,48 @@ while !Application.global.ui.isClosed {
     var longTimeDesc = UI.TimeAxisDescriptor()
     longTimeDesc.minimum = maximum - longTimeLength
     longTimeDesc.maximum = maximum
-    longTimeDesc.majorTick = 1.0
+    longTimeDesc.majorTick = longTimeMajorTick
     ui.updateTime(columnID: 1, descriptor: longTimeDesc)
+  }
+  func updateShortTimeForTrigger(
+    data: [History.TimedSample],
+    timeInterval: SIMD2<Double>
+  ) {
+    var shortTimeDesc = UI.TimeAxisDescriptor()
+    shortTimeDesc.minimum = timeInterval[0]
+    shortTimeDesc.maximum = timeInterval[1]
+    shortTimeDesc.majorTick = shortTimeMajorTick
+    
+    let history = Application.global.history
+    let triggerType = history.trigger.type
+    if case .timeInterval(let period, let offset) = triggerType {
+      shortTimeDesc.offset = offset
+    } else {
+      let offset = (timeInterval[0] + timeInterval[1]) / 2
+      shortTimeDesc.offset = offset
+    }
+    
+    ui.updateTime(columnID: 0, descriptor: shortTimeDesc)
   }
   
   let ui = Application.global.ui!
-  let shouldDrawShort = getShouldDrawShort(
-    latestSampleTime: shortTimeData.timeInterval[1])
+  
+  
+  
+  let triggerEventTrace = Application.global.serialQueue.sync {
+    let history = Application.global.history
+    let time = shortTimeLength / 2
+    return history.triggerEventTrace(bipolarHistoryTime: time)
+  }
+  
+  if let triggerEventTrace {
+    fatalError("Did get the trigger event trace.")
+  } else {
+    fatalError("No event trace..")
+  }
   
   updateLongTime()
   ui.updateLongPlots(data: longTimeData)
-  
-  if shouldDrawShort {
-    updateShortTime()
-    ui.updateShortPlots(data: shortTimeData.data)
-    ui.updateYRange(data: longTimeData)
-  }
   
   ui.app.processEvents()
 }

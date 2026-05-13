@@ -1,12 +1,10 @@
 extension History {
-  func sampleHistory(time historyTime: Double) -> (
-    data: [TimedSample], timeInterval: SIMD2<Double>
-  ) {
+  func sampleHistory(time historyTime: Double) -> [TimedSample] {
     guard historyTime >= 0 else {
       fatalError("Invalid time.")
     }
     guard let latestSample else {
-      return (data: [], timeInterval: .zero)
+      return []
     }
     let earliestTime = latestSample.time - historyTime
     
@@ -23,13 +21,9 @@ extension History {
         break
       }
     }
-    output.reverse()
     
-    // Time interval should be:
-    // triggerPair.average - historyTime / 2
-    // triggerPair.average + historyTime / 2
-    let timeInterval = SIMD2(earliestTime, latestSample.time)
-    return (data: output, timeInterval: timeInterval)
+    output.reverse()
+    return output
   }
   
   func averageHistory(time historyTime: Double) -> [TimedAverage] {
@@ -57,5 +51,11 @@ extension History {
     
     output.reverse()
     return output
+  }
+  
+  func triggerEventTrace(bipolarHistoryTime: Double) -> (
+    data: [TimedSample], timeInterval: SIMD2<Double>
+  )? {
+    fatalError("Not implemented.")
   }
 }
