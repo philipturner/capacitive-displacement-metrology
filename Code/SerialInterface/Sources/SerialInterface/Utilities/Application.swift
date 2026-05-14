@@ -1,31 +1,33 @@
 import Foundation
 import SwiftSerial
 
-class Application {
+class Application: @unchecked Sendable {
   static let serialEmulation: Bool = true
   static let queue = DispatchQueue(
     label: "avoiding.bugs.from.swift.concurrency")
   
-  let port: SerialPort
   let ui: UI
+  let port: SerialPort
+  let commandTransmitter: CommandTransmitter
   var lineParser: LineParser
   var history: History
   
   init() {
+    self.ui = UI()
     if Self.serialEmulation {
       self.port = SerialPort(path: "/dev/cu.debug-console")
     } else {
       self.port = SerialPort(path: "/dev/cu.usbmodem182280901")
     }
-    self.ui = UI()
+    self.commandTransmitter = CommandTransmitter()
+    self.lineParser = LineParser()
+    self.history = History()
     
     try! port.open(
       receiveRate: .baud115200,
       transmitRate: .baud115200)
-    
-    CommandTransmitter.startPollingThread()
-     
-    Application.startLineExtractionThread()
+    commandTransmitter.startPollingThread()
+    startLineExtractionThread()
   }
   
   private static func squareWave(_ phaseNormalized: Float) -> Float {
@@ -50,6 +52,7 @@ class Application {
     DispatchQueue.global().async {
       let startTime = Date().timeIntervalSince1970
       var previousEntryID: Int = .zero
+      
       func createTestEntries() -> [Entry] {
         let currentTime = Date().timeIntervalSince1970
         let elapsedTime = currentTime - startTime
@@ -63,8 +66,8 @@ class Application {
           let phaseMicros = elapsedTimeMicros % sinePeriodMicros
           
           let phaseNormalized = Float(phaseMicros) / Float(sinePeriodMicros)
-          let dacVoltage = 10 * triangleWave(phaseNormalized)
-          let current = 200 * squareWave(phaseNormalized)
+          let dacVoltage = 10 * Self.triangleWave(phaseNormalized)
+          let current = 200 * Self.squareWave(phaseNormalized)
           
           var entry = Entry(id: i, values: .zero)
           entry.values[0] = current
@@ -81,17 +84,19 @@ class Application {
       while true {
         usleep(10_000)
         
-        await CommandTransmitter.transmitSerialInput()
+        self.commandTransmitter.transmitSerialInput(
+          port: self.port)
         
         var entries: [Entry] = []
         if Self.serialEmulation {
           entries = createTestEntries()
         } else {
-          entries = Application.global.lineParser.extractEntries()
+          entries = self.lineParser.extractEntries(
+            port: self.port)
         }
         
         Application.queue.sync {
-          Application.global.history.addEntries(entries)
+          self.history.addEntries(entries)
         }
       }
     }

@@ -18,7 +18,7 @@ class CommandTransmitter: @unchecked Sendable {
     return output
   }
   
-  func launchPollingTask() {
+  func startPollingThread() {
     DispatchQueue.global().async {
       while true {
         usleep(50_000)
