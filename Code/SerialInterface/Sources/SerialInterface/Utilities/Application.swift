@@ -1,6 +1,15 @@
 import Foundation
 import SwiftSerial
 
+struct ApplicationDescriptor {
+  /// Optional. The trigger for the history.
+  var trigger: Trigger?
+  
+  init() {
+    
+  }
+}
+
 class Application: @unchecked Sendable {
   static let serialEmulation: Bool = true
   static let queue = DispatchQueue(
@@ -12,7 +21,7 @@ class Application: @unchecked Sendable {
   var lineParser: LineParser
   var history: History
   
-  init() {
+  init(descriptor: ApplicationDescriptor) {
     self.ui = UI()
     if Self.serialEmulation {
       self.port = SerialPort(path: "/dev/cu.debug-console")
@@ -22,6 +31,12 @@ class Application: @unchecked Sendable {
     self.commandTransmitter = CommandTransmitter()
     self.lineParser = LineParser()
     self.history = History()
+    
+    // Assign the trigger before the line extraction loop, so the trigger type
+    // doesn't change after the history has already started.
+    if let trigger = descriptor.trigger {
+      history.trigger = trigger
+    }
     
     try! port.open(
       receiveRate: .baud115200,

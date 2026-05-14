@@ -1,4 +1,23 @@
 extension History {
+  struct Output {
+    var shortTimeData: [TimedSample] = []
+    var longTimeData: [TimedAverage] = []
+    var trace: (data: [TimedSample], timeInterval: SIMD2<Double>)?
+  }
+  
+  func output(
+    shortInterval: Double,
+    longInterval: Double
+  ) -> Output {
+    var output = Output()
+    output.shortTimeData = sampleHistory(time: shortInterval)
+    output.longTimeData = averageHistory(time: longInterval)
+    
+    let trace = triggerEventTrace(bipolarHistoryTime: shortInterval / 2)
+    output.trace = trace
+    return output
+  }
+  
   func sampleHistory(time historyTime: Double) -> [TimedSample] {
     guard historyTime >= 0 else {
       fatalError("Invalid time.")
