@@ -123,18 +123,7 @@ void kilohertzLoop() {
     lowpassFilteredCurrent += alpha * current;
 
     if (mode == Mode::capacitance) {
-      float current = lowpassFilteredCurrent;
-      float sineMixed = referenceSine * current;
-      float cosineMixed = referenceCosine * current;
-      sineSquaredAccumulator += sineMixed * sineMixed;
-      cosineSquaredAccumulator += cosineMixed * cosineMixed;
-      rmsCurrentSampleCount += 1;
-
-      if (previousFilteredCurrent < 0 && lowpassFilteredCurrent > 0) {
-        if (zeroCrossingIterationID == -1) {
-          zeroCrossingIterationID = KilohertzLoop::iterationID;
-        }
-      }
+      capTracker.integrate(current);
     }
   }
   
@@ -145,14 +134,21 @@ void kilohertzLoop() {
     Log::ringBuffers[1][ringIndex] = biasVoltage;
     Log::ringBuffers[2][ringIndex] = capacitance / 1e-15;
 
-    // Use phase shift to show the state of the tracker.
-    //        -90 = waiting
-    //          0 = measuring
-    // true phase = finished
-    //
-    // Change the host PC code to trigger on phase shift crossing -45.
-    Log::ringBuffers[3][ringIndex] = phaseShift;
-
+    if (mode == Mode::capacitance) {
+      // Use phase shift to show the state of the tracker.
+      auto state = capTracker.getCurrentState();
+      if (state == CapacitanceTracker::State::waiting) {
+        Log::ringBuffers[3][ringIndex] = phaseShift;
+      } else if (state == CapacitanceTracker::State::measuring) {
+        Log::ringBuffers[3][ringIndex] = 0;
+      } else {
+        Serial.println("This should never happen.");
+        exit(0);
+      }
+    } else {
+      Log::ringBuffers[3][ringIndex] = phaseShift;
+    }
+    
     Log::unsafeBufferedLogID += 1;
   }
 }
