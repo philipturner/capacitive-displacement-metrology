@@ -11,9 +11,12 @@ var applicationDesc = ApplicationDescriptor()
 applicationDesc.trigger = trigger
 let application = Application(descriptor: applicationDesc)
 
+Watchdog.initialize(trackedThreads: 2)
+
 while !application.ui.isClosed {
   let maxFrameRate: Int = 60
   usleep(UInt32(1_000_000 / maxFrameRate))
+  Watchdog.notify(threadID: 0)
   
   let shortTimeLength: Double = 0.003
   let shortTimeMajorTick: Double = 0.001

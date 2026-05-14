@@ -18,7 +18,9 @@ extension History {
     return output
   }
   
-  func sampleHistory(time historyTime: Double) -> [TimedSample] {
+  private func sampleHistory(
+    time historyTime: Double
+  ) -> [TimedSample] {
     guard historyTime >= 0 else {
       fatalError("Invalid time.")
     }
@@ -45,7 +47,9 @@ extension History {
     return output
   }
   
-  func averageHistory(time historyTime: Double) -> [TimedAverage] {
+  private func averageHistory(
+    time historyTime: Double
+  ) -> [TimedAverage] {
     guard historyTime >= 0 else {
       fatalError("Invalid time.")
     }
@@ -72,11 +76,9 @@ extension History {
     return output
   }
   
-  func triggerEventTrace(
+  private func triggerEventTrace(
     bipolarHistoryTime: Double
-  ) -> (
-    data: [TimedSample], timeInterval: SIMD2<Double>
-  )? {
+  ) -> (data: [TimedSample], timeInterval: SIMD2<Double>)? {
     guard triggerEvents.count > 0 else {
       return nil
     }

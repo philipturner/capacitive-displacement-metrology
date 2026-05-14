@@ -98,6 +98,7 @@ class Application: @unchecked Sendable {
       
       while true {
         usleep(10_000)
+        Watchdog.notify(threadID: 1)
         
         self.commandTransmitter.transmitSerialInput(
           port: self.port)

@@ -25,6 +25,7 @@ class CommandTransmitter: @unchecked Sendable {
         
         let userInput = readLine()
         if let userInput {
+          print("Detected serial input: \(userInput)")
           Application.queue.sync {
             self.addCharacters(userInput)
           }
@@ -58,6 +59,6 @@ class CommandTransmitter: @unchecked Sendable {
     guard bytesWritten == asciiValues.count else {
       fatalError("Did not write the number of expected bytes.")
     }
-    print("Wrote serial input: \(input)")
+    print("Transmitted serial input: \(input)")
   }
 }

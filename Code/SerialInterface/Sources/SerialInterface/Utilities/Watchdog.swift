@@ -21,7 +21,7 @@ struct Watchdog {
     }
     
     startTime = Date().timeIntervalSince1970
-    nextReportTime = startTime + okReportFrequency
+    nextReportTime = startTime + okReportInterval
     
     threadLatestTimes = Array(
       repeating: startTime, count: trackedThreads)
