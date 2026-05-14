@@ -8,17 +8,20 @@
 
 // MARK: - Global Variables
 
-constexpr uint32_t loopPeriod = 7;
-constexpr uint32_t capacitanceWavePeriod = 700;
-constexpr uint32_t capacitanceWaveCount = 2; // 4
+constexpr uint32_t loopPeriod = 12;
+constexpr uint32_t capacitanceWavePeriod = 1008;
+constexpr uint32_t capacitanceWaveCount = 100;
 constexpr float capacitanceStimulusAmplitude = 12;
 
 float lowpassFilteredCurrent = 0;
 float biasVoltage = 0;
-float rmsCurrent = 0;
+float phaseShift = 0;
 float capacitance = 0;
 
-float rmsCurrentAccumulator = 0;
+int32_t zeroCrossingTrackerIterationID = 0;
+int32_t zeroCrossingIterationID = -1;
+float sineSquaredAccumulator = 0;
+float cosineSquaredAccumulator = 0;
 uint32_t rmsCurrentSampleCount = 0;
 
 enum class Mode {
@@ -104,24 +107,48 @@ void updateCapacitance() {
   if (iterationDelta % iterationsPerMeasurement == 0) {
     uint32_t timeSinceSpike = micros() - startTrueTime;
     if (iterationDelta > 0 && timeSinceSpike > 0) {
-      if (rmsCurrentSampleCount != iterationsPerMeasurement / 2) {
+      if (rmsCurrentSampleCount != iterationsPerMeasurement / 1) {
         Serial.println("Unexpected behavior in capacitance measurement");
         Serial.println(rmsCurrentSampleCount);
         Serial.println(iterationsPerMeasurement);
         exit(0);
       }
 
-      float accumulator = rmsCurrentAccumulator;
-      float sampleCount = float(rmsCurrentSampleCount);
-      rmsCurrent = sqrt(accumulator / sampleCount);
+      float n = float(rmsCurrentSampleCount);
+      float sineSquaredMixed = sineSquaredAccumulator / n;
+      float cosineSquaredMixed = cosineSquaredAccumulator / n;
+      float signalMax = sqrt(sineSquaredMixed + cosineSquaredMixed) * 2;
 
       float frequency = float(1e6) / float(capacitanceWavePeriod);
-      float rmsVoltage = M_SQRT1_2 * capacitanceStimulusAmplitude;
-      float rmsSlewRate = rmsVoltage * 2 * M_PI * frequency;
-      capacitance = rmsCurrent / rmsSlewRate;
+      float stimulus = capacitanceStimulusAmplitude;
+      float slewRateMax = stimulus * 2 * M_PI * frequency;
+      capacitance = signalMax / slewRateMax;
+
+      // This is a confirmed error. I tested it with a simulated waveform
+      // from 7.00 fF capacitance and the bias voltage, but the measured
+      // capacitance was 9.91 fF (a factor of 1.416 higher).
+      capacitance *= M_SQRT1_2;
+      
+      int32_t iterations = zeroCrossingIterationID;
+      iterations -= zeroCrossingTrackerIterationID;
+      float timeLag = float(iterations) * float(loopPeriod);
+      timeLag -= float(capacitanceWavePeriod);
+
+      float servoLoopLag = 0;
+      servoLoopLag += 2.4; // DAC
+      servoLoopLag += 10; // ADC 100 kSPS sampling
+      servoLoopLag += 29; // 3 poles (10 kHz, 24 kHz, 24 kHz)
+      servoLoopLag += float(loopPeriod);
+      timeLag -= servoLoopLag;
+
+      float relativeTimeLag = timeLag / float(capacitanceWavePeriod);
+      phaseShift = -relativeTimeLag * 360;
     }
 
-    rmsCurrentAccumulator = 0;
+    zeroCrossingTrackerIterationID = KilohertzLoop::iterationID;
+    zeroCrossingIterationID = -1;
+    sineSquaredAccumulator = 0;
+    cosineSquaredAccumulator = 0;
     rmsCurrentSampleCount = 0;
   }
 }
@@ -132,6 +159,8 @@ void kilohertzLoop() {
     updateCapacitance();
   }
 
+  float referenceSine = 0;
+  float referenceCosine = 0;
   if (mode == Mode::noise) {
     biasVoltage = 0;
   } else if (mode == Mode::riseTime) {
@@ -147,33 +176,47 @@ void kilohertzLoop() {
     uint32_t phase = elapsedTime % capacitanceWavePeriod;
 
     float phaseNormalized = float(phase) / float(capacitanceWavePeriod);
-    float amplitude = FilterUtil::sineWave(phaseNormalized);
-    biasVoltage = capacitanceStimulusAmplitude * amplitude;
+    referenceSine = sin(phaseNormalized * 2 * M_PI);
+    referenceCosine = cos(phaseNormalized * 2 * M_PI);
+    biasVoltage = capacitanceStimulusAmplitude * referenceSine;
   }
   DAC2::writeVoltage(0, biasVoltage);
 
-  if (KilohertzLoop::iterationID % 2 == 0)  {
+  if (KilohertzLoop::iterationID % 1 == 0)  {
     auto conversion = ADC::readVoltage();
     float tiaVoltage = conversion.voltage;
-    float current = -1000 * tiaVoltage;
+    float current = tiaVoltage / -1e9;
+    float previousFilteredCurrent = lowpassFilteredCurrent;
 
     constexpr float frequency = 10000;
     float alpha = FilterUtil::getLowpassAlpha(frequency, loopPeriod * 2);
     lowpassFilteredCurrent *= 1 - alpha;
     lowpassFilteredCurrent += alpha * current;
-  }
-  if (mode == Mode::capacitance) {
-    rmsCurrentAccumulator += lowpassFilteredCurrent * lowpassFilteredCurrent;
-    rmsCurrentSampleCount += 1;
-  }
 
+    if (mode == Mode::capacitance) {
+      float current = lowpassFilteredCurrent;
+      float sineMixed = referenceSine * current;
+      float cosineMixed = referenceCosine * current;
+      sineSquaredAccumulator += sineMixed * sineMixed;
+      cosineSquaredAccumulator += cosineMixed * cosineMixed;
+      rmsCurrentSampleCount += 1;
+
+      if (previousFilteredCurrent < 0 && lowpassFilteredCurrent > 0) {
+        if (zeroCrossingIterationID == -1) {
+          zeroCrossingIterationID = KilohertzLoop::iterationID;
+        }
+      }
+    }
+  }
+  
   uint32_t iterationsPerLog = Log::targetLogPeriod / loopPeriod;
   if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
     uint32_t ringIndex = Log::unsafeBufferedLogID % Log::logSize;
     Log::ringBuffers[0][ringIndex] = lowpassFilteredCurrent / 1e-12;
-    Log::ringBuffers[1][ringIndex] = rmsCurrent / 1e-12;
-    Log::ringBuffers[2][ringIndex] = biasVoltage;
-    Log::ringBuffers[3][ringIndex] = capacitance / 1e-15;
+    Log::ringBuffers[1][ringIndex] = biasVoltage;
+    Log::ringBuffers[2][ringIndex] = capacitance / 1e-15;
+    Log::ringBuffers[3][ringIndex] = phaseShift;
+
     Log::unsafeBufferedLogID += 1;
   }
 }

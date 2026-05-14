@@ -1,3 +1,5 @@
+import func Foundation.atan2
+
 struct Entry {
   var id: Int
   var values: SIMD4<Float>

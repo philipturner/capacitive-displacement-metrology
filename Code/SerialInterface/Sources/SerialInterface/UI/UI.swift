@@ -35,9 +35,9 @@ class UI {
     
     let labelTextList: [String] = [
       "current (pA)",
-      "RMS current (pA)",
       "sample bias (V)",
       "capacitance (fF)",
+      "phase shift (°)",
     ]
     createPlots()
     linkPlots()

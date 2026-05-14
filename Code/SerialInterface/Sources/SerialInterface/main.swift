@@ -7,10 +7,10 @@ let ui = UI()
 
 // Set the trigger type.
 Application.global.serialQueue.sync {
-//  let history = Application.global.history
-//  history.trigger.type = .derivative(dx: 100, dt: 100e-6)
-//  history.trigger.polarity = .positive
-//  history.trigger.channel = 0
+  let history = Application.global.history
+  history.trigger.type = .level(0)
+  history.trigger.polarity = .positive
+  history.trigger.channel = 1
 }
 
 while !ui.isClosed {
@@ -19,8 +19,8 @@ while !ui.isClosed {
   
   let shortTimeLength: Double = 0.003
   let shortTimeMajorTick: Double = 0.001
-  let longTimeLength: Double = 10.0
-  let longTimeMajorTick: Double = 2.0
+  let longTimeLength: Double = 1.0
+  let longTimeMajorTick: Double = 0.2
   
   let shortTimeData = Application.global.serialQueue.sync {
     let history = Application.global.history

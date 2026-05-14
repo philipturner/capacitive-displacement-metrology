@@ -12,8 +12,8 @@ let package = Package(
         url: "https://github.com/pvieito/PythonKit",
         branch: "master"),
       .package(
-        url: "https://github.com/christophhagen/SwiftSerial",
-        branch: "master"),
+        url: "https://github.com/philipturner/SwiftSerial",
+        branch: "no-concurrency"),
     ],
     targets: [
       .executableTarget(

@@ -59,7 +59,7 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
       return;
     }
 
-    int32_t maxError = 7;
+    int32_t maxError = 10;
 
     int32_t differentialError = interval - period;
     if (abs(differentialError) > maxError) {

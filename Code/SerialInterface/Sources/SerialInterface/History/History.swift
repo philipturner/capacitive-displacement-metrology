@@ -1,7 +1,7 @@
 import Foundation
 
 class History {
-  static let logPeriodMicros: Int = 49
+  static let logPeriodMicros: Int = 48
   static let historyLengthSeconds: Int = 30
   static let maxEntryCount: Int = {
     var output = History.historyLengthSeconds
