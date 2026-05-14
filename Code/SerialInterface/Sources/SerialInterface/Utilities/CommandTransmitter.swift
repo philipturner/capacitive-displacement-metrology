@@ -46,7 +46,7 @@ actor CommandTransmitter {
     }
     
     let serial = Application.global.serial
-    let bytesWritten = try! await serial.writeBytes(asciiValues)
+    let bytesWritten = try! serial.writeBytes(asciiValues)
     guard bytesWritten == asciiValues.count else {
       fatalError("Did not write the number of expected bytes.")
     }

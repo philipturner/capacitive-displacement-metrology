@@ -2,7 +2,7 @@ import Foundation
 import PythonKit
 import SwiftSerial
 
-await Application.global.initialize()
+Application.global.initialize()
 let ui = UI()
 
 // Set the trigger type.

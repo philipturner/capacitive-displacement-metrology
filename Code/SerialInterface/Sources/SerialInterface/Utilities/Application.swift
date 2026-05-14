@@ -4,6 +4,7 @@ import SwiftSerial
 class Application {
   nonisolated(unsafe)
   static let global = Application()
+  static let serialEmulation: Bool = true
   
   let serial: SerialPort
   var lineParser = LineParser()
@@ -23,12 +24,15 @@ class Application {
   let serialQueue = DispatchQueue(label: "swiftconcurrencycausesbugswithpython")
   
   private init() {
-    self.serial = SerialPort(path: "/dev/cu.usbmodem182280901")
-    // self.serial = SerialPort(path: "/dev/cu.debug-console")
+    if Self.serialEmulation {
+      self.serial = SerialPort(path: "/dev/cu.debug-console")
+    } else {
+      self.serial = SerialPort(path: "/dev/cu.usbmodem182280901")
+    }
   }
   
-  func initialize() async {
-    try! await serial.open(
+  func initialize() {
+    try! serial.open(
       receiveRate: .baud115200,
       transmitRate: .baud115200)
     
@@ -77,8 +81,8 @@ class Application {
           
           var entry = Entry(id: i, values: .zero)
           entry.values[0] = current
-          entry.values[1] = Float.random(in: -0.001..<0.001)
-          entry.values[2] = dacVoltage
+          entry.values[1] = dacVoltage
+          entry.values[2] = Float.random(in: -0.001..<0.001)
           entry.values[3] = Float.pi
           entries.append(entry)
         }
@@ -92,8 +96,13 @@ class Application {
         
         await CommandTransmitter.transmitSerialInput()
         
-        let entries = await Application.global.lineParser.extractEntries()
-        // let entries = createTestEntries()
+        var entries: [Entry] = []
+        if Self.serialEmulation {
+          entries = createTestEntries()
+        } else {
+          entries = Application.global.lineParser.extractEntries()
+        }
+        
         Application.global.serialQueue.sync {
           Application.global.history.addEntries(entries)
         }

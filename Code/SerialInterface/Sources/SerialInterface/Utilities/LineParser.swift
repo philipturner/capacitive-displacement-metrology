@@ -5,9 +5,9 @@ struct LineParser {
   var totalLineCount: Int = .zero
   var loopIterationID: Int = .zero
   
-  mutating func extractEntries() async -> [Entry] {
+  mutating func extractEntries() -> [Entry] {
     let serial = Application.global.serial
-    let data = try! await serial.readBytesBlocking(
+    let data = try! serial.readBytesBlocking(
       count: 1_000_000, timeout: 0.001)
     let validBytes = Self.validBytes(data: data)
     if validBytes.count == 0 {
