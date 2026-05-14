@@ -107,8 +107,24 @@ class Application: @unchecked Sendable {
         if Self.serialEmulation {
           entries = createTestEntries()
         } else {
-          entries = self.lineParser.extractEntries(
+          entries = self.lineParser.startExtraction(
             port: self.port)
+        }
+        
+        guard entries.count > 0 else {
+          fatalError("This simulation does not work.")
+        }
+        if Float.random(in: 0..<1) < 0.005 {
+          let randomIndex = Int.random(in: entries.indices)
+          entries.remove(at: randomIndex)
+        }
+        
+        do {
+          try self.lineParser.finishExtraction(entries: entries)
+        } catch let error as LineParser.NonContiguousError {
+          fatalError(error.description)
+        } catch {
+          fatalError("Unexpected error type.")
         }
         
         Application.queue.sync {

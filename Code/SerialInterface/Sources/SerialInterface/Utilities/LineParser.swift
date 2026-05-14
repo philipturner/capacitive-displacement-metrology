@@ -2,11 +2,11 @@ import Foundation
 import SwiftSerial
 
 struct LineParser {
-  var previousEntryID: Int?
-  var totalLineCount: Int = .zero
   var loopIterationID: Int = .zero
+  var totalLineCount: Int = .zero
+  var previousEntryID: Int?
   
-  mutating func extractEntries(port: SerialPort) -> [Entry] {
+  mutating func startExtraction(port: SerialPort) -> [Entry] {
     let data = Application.queue.sync {
       try! port.readBytesBlocking(
         count: 1_000_000, timeout: 0.001)
@@ -41,44 +41,11 @@ struct LineParser {
     }
     let entries = createEntries()
     
-    // Check that the entries have contiguous IDs.
-    if entries.count > 0 {
-      // TODO: Gracefully handle the skipped entries error by resetting the
-      // line parser and history. Separate the process of creating the entries
-      // from the process of incorporating them into the parser's state tracker.
-      //
-      // How to simulate the error: if Float.random(in: 0..<1) < 5%, drop one
-      // random entry from the list above.
-      //
-      // Hopefully we can make it possible to replace 'entries' at the above
-      // execution point with simulated test entries.
-      if let previousEntryID {
-        let firstEntryID = entries[0].id
-        guard firstEntryID == previousEntryID + 1 else {
-          fatalError("""
-            Skipped entries: \(previousEntryID) -> \(firstEntryID)
-            Error happened between serial port accesses.
-            """)
-        }
-      }
-      
-      for i in 1..<entries.count {
-        let firstEntryID = entries[i - 1].id
-        let secondEntryID = entries[i].id
-        guard secondEntryID == firstEntryID + 1 else {
-          fatalError("""
-            Skipped entries: \(firstEntryID) -> \(secondEntryID)
-            Error happened contiguously to one serial port access.
-            """)
-        }
-      }
-      previousEntryID = entries.last!.id
-    }
-    totalLineCount += entries.count
-    
     // Handle a case where no start codes are detected, and the above code
     // gracefully generates no entries.
-    if totalLineCount == 0 {
+    if totalLineCount == 0,
+       entries.count == 0,
+       validBytes.count > 0 {
       // This happens when Teensy is reporting an error message.
       let string = String(decoding: validBytes, as: UTF8.self)
       print("Teensy is responding: \(string)")
@@ -97,5 +64,52 @@ struct LineParser {
       output.append(byte)
     }
     return output
+  }
+}
+
+extension LineParser {
+  struct NonContiguousError: Error {
+    var description: String
+    var uncorruptedEntries: [Entry]
+  }
+  
+  mutating func finishExtraction(entries: [Entry]) throws {
+    // Check that the entries have contiguous IDs.
+    if entries.count > 0 {
+      // TODO: Gracefully handle the skipped entries error by resetting the
+      // line parser and history.
+      if let previousEntryID {
+        let firstEntryID = entries[0].id
+        guard firstEntryID == previousEntryID + 1 else {
+          let description = """
+            Skipped entries: \(previousEntryID) -> \(firstEntryID)
+            Error happened between serial port accesses.
+            """
+          let uncorruptedEntries = Array(entries[0...])
+          
+          throw NonContiguousError(
+            description: description,
+            uncorruptedEntries: uncorruptedEntries)
+        }
+      }
+      
+      for i in 1..<entries.count {
+        let firstEntryID = entries[i - 1].id
+        let secondEntryID = entries[i].id
+        guard secondEntryID == firstEntryID + 1 else {
+          let description = """
+            Skipped entries: \(firstEntryID) -> \(secondEntryID)
+            Error happened contiguously to one serial port access.
+            """
+          let uncorruptedEntries = Array(entries[i...])
+          
+          throw NonContiguousError(
+            description: description,
+            uncorruptedEntries: uncorruptedEntries)
+        }
+      }
+      previousEntryID = entries.last!.id
+    }
+    totalLineCount += entries.count
   }
 }
