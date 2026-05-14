@@ -2,9 +2,15 @@ import Foundation
 import SwiftSerial
 
 struct LineParser {
-  var loopIterationID: Int = .zero
-  var totalLineCount: Int = .zero
+  var loopIterationID: Int
+  var totalLineCount: Int
   var previousEntryID: Int?
+  
+  init() {
+    self.loopIterationID = 0
+    self.totalLineCount = 0
+    self.previousEntryID = nil
+  }
   
   mutating func startExtraction(port: SerialPort) -> [Entry] {
     let data = Application.queue.sync {
@@ -73,11 +79,26 @@ extension LineParser {
     var uncorruptedEntries: [Entry]
   }
   
+  init(recoveringFrom error: NonContiguousError) {
+    self.loopIterationID = 1
+    self.totalLineCount = 0
+    self.previousEntryID = nil
+    
+    do {
+      try finishExtraction(entries: error.uncorruptedEntries)
+    } catch let secondError as LineParser.NonContiguousError {
+      fatalError("""
+        Failed to recover from initial error.
+        \(secondError.description)
+        """)
+    } catch {
+      fatalError("Unexpected error type.")
+    }
+  }
+  
   mutating func finishExtraction(entries: [Entry]) throws {
     // Check that the entries have contiguous IDs.
     if entries.count > 0 {
-      // TODO: Gracefully handle the skipped entries error by resetting the
-      // line parser and history.
       if let previousEntryID {
         let firstEntryID = entries[0].id
         guard firstEntryID == previousEntryID + 1 else {
@@ -110,6 +131,8 @@ extension LineParser {
       }
       previousEntryID = entries.last!.id
     }
+    
+    // Update the total line count.
     totalLineCount += entries.count
   }
 }

@@ -39,7 +39,6 @@ struct History {
   private(set) var averagesBuffer: [TimedAverage]
   private(set) var latestAverage: TimedAverage?
   
-  // When resetting history: copy over the trigger to the new one.
   var trigger: Trigger
   var triggerEvents: [(cursor: Int, centerTime: Double)] = []
   

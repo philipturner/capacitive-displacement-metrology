@@ -10,13 +10,13 @@
 
 constexpr uint32_t loopPeriod = 12;
 constexpr uint32_t capacitanceWavePeriod = 1008;
-constexpr uint32_t capacitanceWaveCount = 100;
+constexpr uint32_t capacitanceWaveCount = 10;
 constexpr float capacitanceStimulusAmplitude = 12;
 
 float lowpassFilteredCurrent = 0;
 float biasVoltage = 0;
-float phaseShift = 0;
 float capacitance = 0;
+float phaseShift = 0;
 
 int32_t zeroCrossingTrackerIterationID = 0;
 int32_t zeroCrossingIterationID = -1;
@@ -107,7 +107,7 @@ void updateCapacitance() {
   if (iterationDelta % iterationsPerMeasurement == 0) {
     uint32_t timeSinceSpike = micros() - startTrueTime;
     if (iterationDelta > 0 && timeSinceSpike > 0) {
-      if (rmsCurrentSampleCount != iterationsPerMeasurement / 1) {
+      if (rmsCurrentSampleCount != iterationsPerMeasurement) {
         Serial.println("Unexpected behavior in capacitance measurement");
         Serial.println(rmsCurrentSampleCount);
         Serial.println(iterationsPerMeasurement);
@@ -138,11 +138,13 @@ void updateCapacitance() {
       servoLoopLag += 2.4; // DAC
       servoLoopLag += 10; // ADC 100 kSPS sampling
       servoLoopLag += 29; // 3 poles (10 kHz, 24 kHz, 24 kHz)
-      servoLoopLag += float(loopPeriod);
       timeLag -= servoLoopLag;
 
       float relativeTimeLag = timeLag / float(capacitanceWavePeriod);
       phaseShift = -relativeTimeLag * 360;
+      if (phaseShift > 180) {
+        phaseShift -= 360;
+      }
     }
 
     zeroCrossingTrackerIterationID = KilohertzLoop::iterationID;
@@ -182,7 +184,7 @@ void kilohertzLoop() {
   }
   DAC2::writeVoltage(0, biasVoltage);
 
-  if (KilohertzLoop::iterationID % 1 == 0)  {
+  {
     auto conversion = ADC::readVoltage();
     float tiaVoltage = conversion.voltage;
     float current = tiaVoltage / -1e9;
