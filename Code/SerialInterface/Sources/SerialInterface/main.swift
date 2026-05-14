@@ -2,18 +2,16 @@ import Foundation
 import PythonKit
 import SwiftSerial
 
-Application.global.initialize()
-let ui = UI()
-
-// Set the trigger type.
-Application.global.serialQueue.sync {
-  let history = Application.global.history
-  history.trigger.type = .level(0)
-  history.trigger.polarity = .positive
-  history.trigger.channel = 1
+let application = Application()
+Application.queue.sync {
+  var trigger = Trigger()
+  trigger.type = .level(0)
+  trigger.polarity = .positive
+  trigger.channel = 1
+  application.history.trigger = trigger
 }
 
-while !ui.isClosed {
+while !application.ui.isClosed {
   let maxFrameRate: Int = 60
   usleep(UInt32(1_000_000 / maxFrameRate))
   
@@ -22,18 +20,16 @@ while !ui.isClosed {
   let longTimeLength: Double = 1.0
   let longTimeMajorTick: Double = 0.2
   
-  let shortTimeData = Application.global.serialQueue.sync {
-    let history = Application.global.history
-    return history.sampleHistory(time: shortTimeLength)
+  let shortTimeData = Application.queue.sync {
+    application.history.sampleHistory(time: shortTimeLength)
   }
-  let longTimeData = Application.global.serialQueue.sync {
-    let history = Application.global.history
-    return history.averageHistory(time: longTimeLength)
+  let longTimeData = Application.queue.sync {
+    application.history.averageHistory(time: longTimeLength)
   }
-  let triggerEventTrace = Application.global.serialQueue.sync {
-    let history = Application.global.history
+  let triggerEventTrace = Application.queue.sync {
     let time = shortTimeLength / 2
-    return history.triggerEventTrace(bipolarHistoryTime: time)
+    return application.history.triggerEventTrace(
+      bipolarHistoryTime: time)
   }
   guard shortTimeData.count > 0, longTimeData.count > 0 else {
     fatalError("No serial data was received.")
@@ -46,7 +42,7 @@ while !ui.isClosed {
     shortTimeDesc.minimum = maximum - shortTimeLength
     shortTimeDesc.maximum = maximum
     shortTimeDesc.majorTick = shortTimeMajorTick
-    ui.updateTime(columnID: 0, descriptor: shortTimeDesc)
+    application.ui.updateTime(columnID: 0, descriptor: shortTimeDesc)
   }
   func updateLongTime() {
     let maximum = longTimeData.last!.time
@@ -55,7 +51,7 @@ while !ui.isClosed {
     longTimeDesc.minimum = maximum - longTimeLength
     longTimeDesc.maximum = maximum
     longTimeDesc.majorTick = longTimeMajorTick
-    ui.updateTime(columnID: 1, descriptor: longTimeDesc)
+    application.ui.updateTime(columnID: 1, descriptor: longTimeDesc)
   }
   func updateShortTimeForTrigger(
     data: [History.TimedSample],
@@ -66,8 +62,7 @@ while !ui.isClosed {
     shortTimeDesc.maximum = timeInterval[1]
     shortTimeDesc.majorTick = shortTimeMajorTick
     
-    let history = Application.global.history
-    let triggerType = history.trigger.type
+    let triggerType = application.history.trigger.type
     if case .timeInterval(_, let offset) = triggerType {
       shortTimeDesc.offset = offset
     } else {
@@ -75,24 +70,24 @@ while !ui.isClosed {
       shortTimeDesc.offset = offset
     }
     
-    ui.updateTime(columnID: 0, descriptor: shortTimeDesc)
+    application.ui.updateTime(columnID: 0, descriptor: shortTimeDesc)
   }
   
   updateLongTime()
-  ui.updateLongPlots(data: longTimeData)
-  ui.updateYRange(data: longTimeData)
+  application.ui.updateLongPlots(data: longTimeData)
+  application.ui.updateYRange(data: longTimeData)
   
   if let triggerEventTrace {
     updateShortTimeForTrigger(
       data: triggerEventTrace.data,
       timeInterval: triggerEventTrace.timeInterval)
-    ui.updateShortPlots(
+    application.ui.updateShortPlots(
       data: triggerEventTrace.data)
   } else {
     print("[\(Date())] No trigger event trace.")
     updateShortTimeForHistory()
-    ui.updateShortPlots(data: shortTimeData)
+    application.ui.updateShortPlots(data: shortTimeData)
   }
   
-  ui.app.processEvents()
+  application.ui.app.processEvents()
 }

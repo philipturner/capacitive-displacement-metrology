@@ -1,6 +1,6 @@
 import Foundation
 
-class History {
+struct History {
   static let logPeriodMicros: Int = 48
   static let historyLengthSeconds: Int = 30
   static let maxEntryCount: Int = {
@@ -39,6 +39,7 @@ class History {
   private(set) var averagesBuffer: [TimedAverage]
   private(set) var latestAverage: TimedAverage?
   
+  // When resetting history: copy over the trigger to the new one.
   var trigger: Trigger
   var triggerEvents: [(cursor: Int, centerTime: Double)] = []
   
@@ -62,7 +63,7 @@ class History {
     trigger = Trigger()
   }
   
-  func addEntries(_ input: [Entry]) {
+  mutating func addEntries(_ input: [Entry]) {
     guard triggerEvents.count <= Self.triggerEventCacheSize else {
       fatalError("This should never happen.")
     }
@@ -100,7 +101,7 @@ class History {
     }
   }
   
-  private func incorporateAveragePoint() {
+  private mutating func incorporateAveragePoint() {
     guard samplesForNextAverage.count >= Self.pointsPerAverage else {
       return
     }

@@ -1,9 +1,12 @@
 import Foundation
+import SwiftSerial
 
-actor CommandTransmitter {
-  static let global = CommandTransmitter()
-  
+class CommandTransmitter: @unchecked Sendable {
   private var characterQueue: String = ""
+  
+  init() {
+    
+  }
   
   func addCharacters(_ input: String) {
     characterQueue += input
@@ -15,21 +18,25 @@ actor CommandTransmitter {
     return output
   }
   
-  static func launchPollingTask() {
-    Task.detached {
+  func launchPollingTask() {
+    DispatchQueue.global().async {
       while true {
         usleep(50_000)
         
         let userInput = readLine()
         if let userInput {
-          await CommandTransmitter.global.addCharacters(userInput)
+          Application.queue.sync {
+            self.addCharacters(userInput)
+          }
         }
       }
     }
   }
   
-  static func transmitSerialInput() async {
-    let input = await CommandTransmitter.global.extractCharacters()
+  func transmitSerialInput(port: SerialPort) {
+    let input = Application.queue.sync {
+      self.extractCharacters()
+    }
     guard input.count > 0 else {
       return
     }
@@ -45,8 +52,9 @@ actor CommandTransmitter {
       fatalError("Unexpected null termination.")
     }
     
-    let serial = Application.global.serial
-    let bytesWritten = try! serial.writeBytes(asciiValues)
+    let bytesWritten = Application.queue.sync {
+      try! port.writeBytes(asciiValues)
+    }
     guard bytesWritten == asciiValues.count else {
       fatalError("Did not write the number of expected bytes.")
     }
