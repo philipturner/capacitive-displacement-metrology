@@ -1,28 +1,22 @@
+#include "Diagnostics/Log.h"
+#include "Diagnostics/CapacitanceTracker.h"
 #include "IC/ADC.h"
 #include "IC/DAC.h"
 #include "IC/PA95.h"
 #include "Time/KilohertzLoop.h"
-#include "Time/Log.h"
 #include "Util/Application.h"
 #include "Util/FilterUtil.h"
 
 // MARK: - Global Variables
 
 constexpr uint32_t loopPeriod = 12;
-constexpr uint32_t capacitanceWavePeriod = 1008;
-constexpr uint32_t capacitanceWaveCount = 10;
-constexpr float capacitanceStimulusAmplitude = 12;
 
-float lowpassFilteredCurrent = 0;
+float current = 0;
 float biasVoltage = 0;
 float capacitance = 0;
 float phaseShift = 0;
 
-int32_t zeroCrossingTrackerIterationID = 0;
-int32_t zeroCrossingIterationID = -1;
-float sineSquaredAccumulator = 0;
-float cosineSquaredAccumulator = 0;
-uint32_t rmsCurrentSampleCount = 0;
+float lowpassFilteredCurrent = 0;
 
 enum class Mode {
   noise = 0,
@@ -85,14 +79,16 @@ void loop() {
 // MARK: - Kilohertz Loop
 
 Mode mode = getDefaultMode();
-uint32_t startIterationID = 0;
-uint32_t startTrueTime = 0;
+CapacitanceTracker capTracker;
+uint32_t _startTrueTime; // avoid mistakes when refactoring code
 
 void updateMode() {
   Mode nextMode = latestInputMode;
   if (mode != nextMode) {
-    startIterationID = KilohertzLoop::iterationID;
-    startTrueTime = micros();
+    if (nextMode == Mode::capacitance) {
+      capTracker = CapacitanceTracker(true);
+    }
+    _startTrueTime = micros();
   }
   mode = nextMode;
 }
@@ -174,6 +170,7 @@ void kilohertzLoop() {
     float amplitude = FilterUtil::triangleWave(phaseNormalized);
     biasVoltage = 10 * amplitude;
   } else if (mode == Mode::capacitance) {
+    // Use internal 'startTrueTime' to generate waveform.
     uint32_t elapsedTime = micros() - startTrueTime;
     uint32_t phase = elapsedTime % capacitanceWavePeriod;
 
@@ -217,8 +214,15 @@ void kilohertzLoop() {
     Log::ringBuffers[0][ringIndex] = lowpassFilteredCurrent / 1e-12;
     Log::ringBuffers[1][ringIndex] = biasVoltage;
     Log::ringBuffers[2][ringIndex] = capacitance / 1e-15;
-    Log::ringBuffers[3][ringIndex] = phaseShift;
 
+    // Use phase shift to show the state of the tracker.
+    //        -90 = waiting
+    //          0 = measuring
+    // true phase = finished
+    //
+    // Change the host PC code to trigger on phase shift crossing -45.
+    Log::ringBuffers[3][ringIndex] = phaseShift;
+    
     Log::unsafeBufferedLogID += 1;
   }
 }

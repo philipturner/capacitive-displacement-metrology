@@ -1,11 +1,20 @@
 #include <stdint.h>
 
-class CapacitanceTracker {
+struct CapacitanceTracker {
+  enum class State {
+    waiting = 0,
+    measuring = 1,
+    finished = 2,
+  };
+
   static constexpr uint32_t wavePeriod = 1008;
-  static constexpr uint32_t waveCount = 10;
+  static constexpr uint32_t waveCountPre = 1;
+  static constexpr uint32_t waveCountPost = 10;
   static constexpr float stimulusAmplitude = 12;
 
   CapacitanceTracker();
+  CapacitanceTracker(bool notDefaultConstructor);
+  State getState(uint32_t iterationID);
   void update(float &capacitance, float &phaseShift);
 
 private:
@@ -17,4 +26,6 @@ private:
   float sineSquaredAccumulator;
   float cosineSquaredAccumulator;
   uint32_t rmsCurrentSampleCount;
+
+  void resetIntegrationVariables();
 };
