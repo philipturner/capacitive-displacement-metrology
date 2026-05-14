@@ -15,17 +15,26 @@ struct CapacitanceTracker {
   CapacitanceTracker();
   CapacitanceTracker(bool notDefaultConstructor);
   State getState(uint32_t iterationID);
+  State getCurrentState() const;
   void update(float &capacitance, float &phaseShift);
+
+  float getBiasVoltage() const;
+  void integrate(float current);
 
 private:
   uint32_t startIterationID;
   uint32_t startTrueTime;
+  State previousState;
+  State currentState;
 
+  float referenceSine;
+  float referenceCosine;
+  void updateReferenceSignals();
+
+  float previousCurrent = 0;
   int32_t zeroCrossingStartID;
-  int32_t zeroCrossingEndID;
-  float sineSquaredAccumulator;
-  float cosineSquaredAccumulator;
-  uint32_t rmsCurrentSampleCount;
-
-  void resetIntegrationVariables();
+  int32_t zeroCrossingEndID = -1;
+  float sineSquaredAccumulator = 0;
+  float cosineSquaredAccumulator = 0;
+  uint32_t lockInSampleCount = 0;
 };

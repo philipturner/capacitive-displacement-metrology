@@ -11,12 +11,10 @@
 
 constexpr uint32_t loopPeriod = 12;
 
-float current = 0;
+float lowpassFilteredCurrent = 0;
 float biasVoltage = 0;
 float capacitance = 0;
 float phaseShift = 0;
-
-float lowpassFilteredCurrent = 0;
 
 enum class Mode {
   noise = 0,
@@ -80,7 +78,6 @@ void loop() {
 
 Mode mode = getDefaultMode();
 CapacitanceTracker capTracker;
-uint32_t _startTrueTime; // avoid mistakes when refactoring code
 
 void updateMode() {
   Mode nextMode = latestInputMode;
@@ -88,107 +85,40 @@ void updateMode() {
     if (nextMode == Mode::capacitance) {
       capTracker = CapacitanceTracker(true);
     }
-    _startTrueTime = micros();
   }
   mode = nextMode;
-}
-
-void updateCapacitance() {
-  uint32_t iterationsPerMeasurement = capacitanceWaveCount;
-  iterationsPerMeasurement *= capacitanceWavePeriod / loopPeriod;
-
-  uint32_t iterationDelta = KilohertzLoop::iterationID;
-  iterationDelta -= startIterationID;
-
-  if (iterationDelta % iterationsPerMeasurement == 0) {
-    uint32_t timeSinceSpike = micros() - startTrueTime;
-    if (iterationDelta > 0 && timeSinceSpike > 0) {
-      if (rmsCurrentSampleCount != iterationsPerMeasurement) {
-        Serial.println("Unexpected behavior in capacitance measurement");
-        Serial.println(rmsCurrentSampleCount);
-        Serial.println(iterationsPerMeasurement);
-        exit(0);
-      }
-
-      float n = float(rmsCurrentSampleCount);
-      float sineSquaredMixed = sineSquaredAccumulator / n;
-      float cosineSquaredMixed = cosineSquaredAccumulator / n;
-      float signalMax = sqrt(sineSquaredMixed + cosineSquaredMixed) * 2;
-
-      float frequency = float(1e6) / float(capacitanceWavePeriod);
-      float stimulus = capacitanceStimulusAmplitude;
-      float slewRateMax = stimulus * 2 * M_PI * frequency;
-      capacitance = signalMax / slewRateMax;
-
-      // This is a confirmed error. I tested it with a simulated waveform
-      // from 7.00 fF capacitance and the bias voltage, but the measured
-      // capacitance was 9.91 fF (a factor of 1.416 higher).
-      capacitance *= M_SQRT1_2;
-      
-      int32_t iterations = zeroCrossingIterationID;
-      iterations -= zeroCrossingTrackerIterationID;
-      float timeLag = float(iterations) * float(loopPeriod);
-      timeLag -= float(capacitanceWavePeriod);
-
-      float servoLoopLag = 0;
-      servoLoopLag += 2.4; // DAC
-      servoLoopLag += 10; // ADC 100 kSPS sampling
-      servoLoopLag += 29; // 3 poles (10 kHz, 24 kHz, 24 kHz)
-      timeLag -= servoLoopLag;
-
-      float relativeTimeLag = timeLag / float(capacitanceWavePeriod);
-      phaseShift = -relativeTimeLag * 360;
-      if (phaseShift > 180) {
-        phaseShift -= 360;
-      }
-    }
-
-    zeroCrossingTrackerIterationID = KilohertzLoop::iterationID;
-    zeroCrossingIterationID = -1;
-    sineSquaredAccumulator = 0;
-    cosineSquaredAccumulator = 0;
-    rmsCurrentSampleCount = 0;
-  }
 }
 
 void kilohertzLoop() {
   updateMode();
   if (mode == Mode::capacitance) {
-    updateCapacitance();
+    capTracker.update(capacitance, phaseShift);
+
+    auto state = capTracker.getCurrentState();
+    if (state == CapacitanceTracker::State::finished) {
+      capTracker = CapacitanceTracker(true);
+    }
   }
 
-  float referenceSine = 0;
-  float referenceCosine = 0;
   if (mode == Mode::noise) {
     biasVoltage = 0;
   } else if (mode == Mode::riseTime) {
     uint32_t wavePeriodMicros = 1000;
-    uint32_t elapsedTime = micros() - startTrueTime;
-    uint32_t phase = elapsedTime % wavePeriodMicros;
+    uint32_t trueTime = micros(); // doesn't have to be aligned to a start
+    uint32_t phase = trueTime % wavePeriodMicros;
 
     float phaseNormalized = float(phase) / float(wavePeriodMicros);
     float amplitude = FilterUtil::triangleWave(phaseNormalized);
     biasVoltage = 10 * amplitude;
   } else if (mode == Mode::capacitance) {
-    // Use internal 'startTrueTime' to generate waveform.
-    uint32_t elapsedTime = micros() - startTrueTime;
-    uint32_t phase = elapsedTime % capacitanceWavePeriod;
-
-    float phaseNormalized = float(phase) / float(capacitanceWavePeriod);
-    referenceSine = sin(phaseNormalized * 2 * M_PI);
-    referenceCosine = cos(phaseNormalized * 2 * M_PI);
-    biasVoltage = capacitanceStimulusAmplitude * referenceSine;
+    biasVoltage = capTracker.getBiasVoltage();
   }
   DAC2::writeVoltage(0, biasVoltage);
 
   {
     auto conversion = ADC::readVoltage();
-    float tiaVoltage = conversion.voltage;
-    float current = tiaVoltage / -1e9;
-    float previousFilteredCurrent = lowpassFilteredCurrent;
-
-    constexpr float frequency = 10000;
-    float alpha = FilterUtil::getLowpassAlpha(frequency, loopPeriod * 2);
+    float current = -conversion.voltage / 1e9;
+    float alpha = FilterUtil::getLowpassAlpha(10000, loopPeriod);
     lowpassFilteredCurrent *= 1 - alpha;
     lowpassFilteredCurrent += alpha * current;
 
@@ -222,7 +152,7 @@ void kilohertzLoop() {
     //
     // Change the host PC code to trigger on phase shift crossing -45.
     Log::ringBuffers[3][ringIndex] = phaseShift;
-    
+
     Log::unsafeBufferedLogID += 1;
   }
 }
