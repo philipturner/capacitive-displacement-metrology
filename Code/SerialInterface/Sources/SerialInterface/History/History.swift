@@ -68,20 +68,20 @@ struct History {
     self.triggers = triggers
   }
   
-  mutating func addEntries(_ input: [Entry]) {
+  mutating func addLines(_ input: [LineParser.Line]) {
     guard triggerEvents.count <= Self.triggerEventCacheSize else {
       fatalError("This should never happen.")
     }
     
-    for entry in input {
+    for line in input {
       let logPeriodSeconds = Double(1e-6) * Double(Self.logPeriodMicros)
-      var time = Double(entry.id) * logPeriodSeconds
+      var time = Double(line.id) * logPeriodSeconds
       if firstTime == nil {
         firstTime = time
       }
       time -= firstTime!
       
-      let sample = TimedSample(time: time, values: entry.values)
+      let sample = TimedSample(time: time, values: line.values)
       if let latestSample {
         for trigger in triggers {
           let centerTime = trigger.check(

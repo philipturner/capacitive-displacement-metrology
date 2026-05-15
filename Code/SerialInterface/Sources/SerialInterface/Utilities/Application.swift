@@ -57,6 +57,59 @@ class Application: @unchecked Sendable {
     return 2 * progress - 1
   }
   
+  private func createLines(bytes: [UInt8]) -> [LineParser.Line] {
+    func reset(error: LocalizedError) {
+      print("Resetting lineParser and history.")
+      if let description = error.errorDescription {
+        print("error description:")
+        print(description)
+      }
+      
+      lineParser = LineParser()
+      
+    }
+    
+    var lines: [LineParser.Line] = []
+    var resetHistory = false
+    
+    do {
+      lines = try lineParser.decodeLines(data: bytes)
+    } catch let error as LineParser.StartCodeCorruptionError {
+      let bytes = error.uncorruptedData
+      print(error.description)
+      
+      lineParser = LineParser()
+      resetHistory = true
+      entries = try! Entry.decodeEntries(data: bytes)
+    } else {
+      fatalError("Unexpected error type.")
+    }
+    
+    do {
+      try self.lineParser.finishExtraction(entries: entries)
+    } catch let error as LineParser.NonContiguousError {
+      entries = error.uncorruptedEntries
+      print(error.description)
+      
+      lineParser = LineParser()
+      resetHistory = true
+      try! lineParser.finishExtraction(
+        entries: error.uncorruptedEntries)
+    } catch {
+      fatalError("Unexpected error type.")
+    }
+    
+    if resetHistory {
+      Application.queue.sync {
+        if resetHistory {
+          let triggers = self.history.triggers
+          self.history = History(triggers: triggers)
+        }
+        self.history.addEntries(entries)
+      }
+    }
+  }
+  
   func startLineExtractionThread() {
     DispatchQueue.global().async {
       let startTime = Date().timeIntervalSince1970
@@ -99,12 +152,21 @@ class Application: @unchecked Sendable {
           port: self.port)
         Watchdog.notify(threadID: 1, code: 2)
         
-        var entries: [Entry] = []
+        var lines: [Line] = []
+        var resetHistory = false
         if Self.serialEmulation {
           entries = createTestEntries()
         } else {
-          entries = self.lineParser.startExtraction(
-            port: self.port)
+          do {
+            let bytes = lineParser.getValidBytes(port: port)
+            entries = try Entry.decodeEntries(data: bytes)
+          } catch let error as Entry.StartCodeCorruptionError {
+            let bytes = error.uncorruptedData
+            print(error.description)
+            
+            lineParser = LineParser()
+            entries = try! Entry.decodeEntries(data: bytes)
+          }
         }
         Watchdog.notify(threadID: 1, code: 5)
         
@@ -114,12 +176,9 @@ class Application: @unchecked Sendable {
           entries = error.uncorruptedEntries
           print(error.description)
           
-          Application.queue.sync {
-            self.lineParser = LineParser(recoveringFrom: error)
-            
-            let triggers = self.history.triggers
-            self.history = History(triggers: triggers)
-          }
+          lineParser = LineParser()
+          try! lineParser.finishExtraction(
+            entries: error.uncorruptedEntries)
         } catch {
           fatalError("Unexpected error type.")
         }

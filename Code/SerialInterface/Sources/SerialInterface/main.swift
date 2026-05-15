@@ -53,6 +53,7 @@ while !application.ui.isClosed {
   guard output.shortTimeData.count > 0,
         output.longTimeData.count > 0 else {
     print("[\(Date())] No data to graph.")
+    usleep(20_000)
     continue
   }
   let time3 = Date().timeIntervalSince1970
