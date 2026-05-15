@@ -33,12 +33,21 @@ class UI {
     setupLayout()
     setWindowPosition()
     
+    #if true
     let labelTextList: [String] = [
       "current (pA)",
       "sample bias (V)",
       "capacitance (fF)",
       "phase shift (°)",
     ]
+    #else
+    let labelTextList: [String] = [
+      "signal 0",
+      "signal 1",
+      "signal 2",
+      "signal 3",
+    ]
+    #endif
     createPlots()
     linkPlots()
     createPlotLabels(labelTextList)
