@@ -29,6 +29,12 @@ struct History {
     var maximum: SIMD4<Float>
   }
   
+  struct TriggerEvent {
+    var cursor: Int
+    var centerTime: Double
+    var trigger: Trigger
+  }
+  
   var firstTime: Double?
   var sampleCursor: Int = .zero
   private(set) var samplesBuffer: [TimedSample]
@@ -39,14 +45,14 @@ struct History {
   private(set) var averagesBuffer: [TimedAverage]
   private(set) var latestAverage: TimedAverage?
   
-  var trigger: Trigger
-  var triggerEvents: [(cursor: Int, centerTime: Double)] = []
+  private(set) var triggers: [Trigger]
+  var triggerEvents: [TriggerEvent] = []
   
-  init() {
+  init(triggers: [Trigger]) {
     let emptySample = TimedSample(
       time: .nan,
       values: SIMD4<Float>(repeating: .nan))
-    samplesBuffer = Array(
+    self.samplesBuffer = Array(
       repeating: emptySample,
       count: Self.maxEntryCount)
     
@@ -55,11 +61,11 @@ struct History {
       minimum: SIMD4<Float>(repeating: .nan),
       average: SIMD4<Float>(repeating: .nan),
       maximum: SIMD4<Float>(repeating: .nan))
-    averagesBuffer = Array(
+    self.averagesBuffer = Array(
       repeating: emptyAverage,
       count: Self.maxAverageCount)
     
-    trigger = Trigger()
+    self.triggers = triggers
   }
   
   mutating func addEntries(_ input: [Entry]) {
@@ -77,11 +83,16 @@ struct History {
       
       let sample = TimedSample(time: time, values: entry.values)
       if let latestSample {
-        let centerTime = trigger.check(
-          before: latestSample, after: sample)
-        if let centerTime {
-          let event = (cursor: sampleCursor, centerTime: centerTime)
-          triggerEvents.append(event)
+        for trigger in triggers {
+          let centerTime = trigger.check(
+            before: latestSample, after: sample)
+          if let centerTime {
+            let event = TriggerEvent(
+              cursor: sampleCursor,
+              centerTime: centerTime,
+              trigger: trigger)
+            triggerEvents.append(event)
+          }
         }
       }
       

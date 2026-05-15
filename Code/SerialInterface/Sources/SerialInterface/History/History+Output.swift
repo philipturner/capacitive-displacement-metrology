@@ -2,7 +2,13 @@ extension History {
   struct Output {
     var shortTimeData: [TimedSample] = []
     var longTimeData: [TimedAverage] = []
-    var trace: (data: [TimedSample], timeInterval: SIMD2<Double>)?
+    var trace: TriggerEventTrace?
+  }
+  
+  struct TriggerEventTrace {
+    var data: [TimedSample]
+    var timeInterval: SIMD2<Double>
+    var trigger: Trigger
   }
   
   func output(
@@ -78,12 +84,12 @@ extension History {
   
   private func triggerEventTrace(
     bipolarHistoryTime: Double
-  ) -> (data: [TimedSample], timeInterval: SIMD2<Double>)? {
+  ) -> TriggerEventTrace? {
     guard triggerEvents.count > 0 else {
       return nil
     }
     
-    func getBestEvent() -> (cursor: Int, centerTime: Double) {
+    func getBestEvent() -> TriggerEvent {
       guard let latestSample else {
         fatalError("This should never happen.")
       }
@@ -99,35 +105,39 @@ extension History {
       return triggerEvents.first!
     }
     
-    let (latestTriggerCursor, centerTime) = getBestEvent()
+    let bestEvent = getBestEvent()
     let samplePeriod = Double(Self.logPeriodMicros) * 1e-6
     let bipolarSampleCount = Int(bipolarHistoryTime / samplePeriod)
     
-    var minimumCursor = latestTriggerCursor - bipolarSampleCount
+    var minimumCursor = bestEvent.cursor - bipolarSampleCount
     minimumCursor = max(minimumCursor, sampleCursor - Self.maxEntryCount)
     minimumCursor = max(minimumCursor, 0)
     
-    var maximumCursor = latestTriggerCursor + bipolarSampleCount
+    var maximumCursor = bestEvent.cursor + bipolarSampleCount
     maximumCursor = min(maximumCursor, sampleCursor)
     
     // Some assertions.
-    if latestTriggerCursor < sampleCursor - Self.maxEntryCount {
+    if bestEvent.cursor < sampleCursor - Self.maxEntryCount {
       fatalError("Does this case ever happen?")
     }
     if maximumCursor - minimumCursor < 3 {
       fatalError("Another edge case: \(minimumCursor), \(maximumCursor).")
     }
     
-    var output: [TimedSample] = []
+    var outputData: [TimedSample] = []
     for sampleID in minimumCursor..<maximumCursor {
       let ringIndex = sampleID % Self.maxEntryCount
       let sample = samplesBuffer[ringIndex]
-      output.append(sample)
+      outputData.append(sample)
     }
     
     var outputInterval: SIMD2<Double> = .zero
-    outputInterval[0] = centerTime - bipolarHistoryTime
-    outputInterval[1] = centerTime + bipolarHistoryTime
-    return (output, outputInterval)
+    outputInterval[0] = bestEvent.centerTime - bipolarHistoryTime
+    outputInterval[1] = bestEvent.centerTime + bipolarHistoryTime
+    
+    return TriggerEventTrace(
+      data: outputData,
+      timeInterval: outputInterval,
+      trigger: bestEvent.trigger)
   }
 }

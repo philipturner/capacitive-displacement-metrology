@@ -2,8 +2,8 @@ import Foundation
 import SwiftSerial
 
 struct ApplicationDescriptor {
-  /// Optional. The trigger for the history.
-  var trigger: Trigger?
+  /// Optional. The triggers for the history.
+  var triggers: [Trigger] = []
   
   init() {
     
@@ -30,13 +30,7 @@ class Application: @unchecked Sendable {
     }
     self.commandTransmitter = CommandTransmitter()
     self.lineParser = LineParser()
-    self.history = History()
-    
-    // Assign the trigger before the line extraction loop, so the trigger type
-    // doesn't change after the history has already started.
-    if let trigger = descriptor.trigger {
-      history.trigger = trigger
-    }
+    self.history = History(triggers: descriptor.triggers)
     
     try! port.open(
       receiveRate: .baud115200,
@@ -123,9 +117,8 @@ class Application: @unchecked Sendable {
           Application.queue.sync {
             self.lineParser = LineParser(recoveringFrom: error)
             
-            let trigger = self.history.trigger
-            self.history = History()
-            self.history.trigger = trigger
+            let triggers = self.history.triggers
+            self.history = History(triggers: triggers)
           }
         } catch {
           fatalError("Unexpected error type.")

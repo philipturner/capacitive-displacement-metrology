@@ -2,42 +2,52 @@ import Foundation
 import PythonKit
 import SwiftSerial
 
+#if true
 var trigger = Trigger()
 trigger.type = .level(0)
 trigger.polarity = .positive
 trigger.channel = 1
 
+#else
+var trigger1 = Trigger()
+trigger1.type = .level(700)
+trigger1.polarity = .positive
+trigger1.channel = 0
+
+var trigger2 = Trigger()
+trigger2.type = .level(-700)
+trigger2.polarity = .negative
+trigger2.channel = 0
+#endif
+
 var applicationDesc = ApplicationDescriptor()
-applicationDesc.trigger = trigger
+applicationDesc.triggers = [trigger]
 let application = Application(descriptor: applicationDesc)
 
 Watchdog.initialize(trackedThreads: 2)
 
 while !application.ui.isClosed {
-  let time0 = Date().timeIntervalSince1970
-  
-  Watchdog.notify(threadID: 0, code: 0)
-  usleep(10_000)
-  Watchdog.notify(threadID: 0, code: 1)
-  
-  let time1 = Date().timeIntervalSince1970
-  
   let shortTimeLength: Double = 0.003
   let shortTimeMajorTick: Double = 0.001
   let longTimeLength: Double = 1.0
   let longTimeMajorTick: Double = 0.2
   
+  let time0 = Date().timeIntervalSince1970
+  var time1: Double = .zero
   var time2: Double = .zero
-  var time3: Double = .zero
+  Watchdog.notify(threadID: 0, code: 0)
   
   let output = Application.queue.sync {
-    time2 = Date().timeIntervalSince1970
-    Watchdog.notify(threadID: 0, code: 2)
+    time1 = Date().timeIntervalSince1970
+    Watchdog.notify(threadID: 0, code: 1)
+    
     let output = application.history.output(
       shortInterval: shortTimeLength,
       longInterval: longTimeLength)
-    Watchdog.notify(threadID: 0, code: 3)
-    time3 = Date().timeIntervalSince1970
+    
+    time2 = Date().timeIntervalSince1970
+    Watchdog.notify(threadID: 0, code: 2)
+    
     return output
   }
   guard output.shortTimeData.count > 0,
@@ -45,9 +55,17 @@ while !application.ui.isClosed {
     print("[\(Date())] No data to graph.")
     continue
   }
-  Watchdog.notify(threadID: 0, code: 4)
+  let time3 = Date().timeIntervalSince1970
+  Watchdog.notify(threadID: 0, code: 3)
   
+  do {
+    let dt = time2 - time0
+    if dt < 10e-3 {
+      usleep(5_000)
+    }
+  }
   let time4 = Date().timeIntervalSince1970
+  Watchdog.notify(threadID: 0, code: 4)
   
   func updateShortTimeForHistory() {
     let maximum = output.shortTimeData.last!.time
@@ -68,18 +86,17 @@ while !application.ui.isClosed {
     application.ui.updateTime(columnID: 1, descriptor: longTimeDesc)
   }
   func updateShortTimeForTrigger(
-    timeInterval: SIMD2<Double>
+    trace: History.TriggerEventTrace
   ) {
     var shortTimeDesc = UI.TimeAxisDescriptor()
-    shortTimeDesc.minimum = timeInterval[0]
-    shortTimeDesc.maximum = timeInterval[1]
+    shortTimeDesc.minimum = trace.timeInterval[0]
+    shortTimeDesc.maximum = trace.timeInterval[1]
     shortTimeDesc.majorTick = shortTimeMajorTick
     
-    let triggerType = application.history.trigger.type
-    if case .timeInterval(_, let offset) = triggerType {
+    if case .timeInterval(_, let offset) = trace.trigger.type {
       shortTimeDesc.offset = offset
     } else {
-      let offset = (timeInterval[0] + timeInterval[1]) / 2
+      let offset = (trace.timeInterval[0] + trace.timeInterval[1]) / 2
       shortTimeDesc.offset = offset
     }
     
@@ -91,11 +108,12 @@ while !application.ui.isClosed {
     data: output.longTimeData)
   application.ui.updateYRange(
     data: output.longTimeData)
+  let time5 = Date().timeIntervalSince1970
   Watchdog.notify(threadID: 0, code: 5)
   
   if let trace = output.trace {
     updateShortTimeForTrigger(
-      timeInterval: trace.timeInterval)
+      trace: trace)
     application.ui.updateShortPlots(
       data: trace.data)
   } else {
@@ -104,14 +122,12 @@ while !application.ui.isClosed {
     application.ui.updateShortPlots(
       data: output.shortTimeData)
   }
+  let time6 = Date().timeIntervalSince1970
   Watchdog.notify(threadID: 0, code: 6)
   
-  let time5 = Date().timeIntervalSince1970
-  
   application.ui.app.processEvents()
+  let time7 = Date().timeIntervalSince1970
   Watchdog.notify(threadID: 0, code: 7)
-  
-  let time6 = Date().timeIntervalSince1970
   
   func display(start: Double, end: Double) {
     let timeInMs = (end - start) * 1000
@@ -126,6 +142,7 @@ while !application.ui.isClosed {
   display(start: time3, end: time4)
   display(start: time4, end: time5)
   display(start: time5, end: time6)
+  display(start: time6, end: time7)
   print("overall:")
-  display(start: time0, end: time6)
+  display(start: time0, end: time7)
 }
