@@ -166,6 +166,7 @@ void kilohertzLoop() {
     auto state = capTracker.getCurrentState();
     if (state == CapacitanceTracker::State::finished) {
       capTracker = CapacitanceTracker(true);
+      capTracker.update(capacitance, phaseShift);
     }
   }
 
@@ -253,21 +254,7 @@ void kilohertzLoop() {
       Log::ringBuffers[0][ringIndex] = filteredCurrent / 1e-12;
       Log::ringBuffers[1][ringIndex] = biasVoltage;
       Log::ringBuffers[2][ringIndex] = capacitance / 1e-15;
-
-      if (mode == Mode::capacitance) {
-        // Use phase shift to show the state of the tracker.
-        auto state = capTracker.getCurrentState();
-        if (state == CapacitanceTracker::State::waiting) {
-          Log::ringBuffers[3][ringIndex] = phaseShift;
-        } else if (state == CapacitanceTracker::State::measuring) {
-          Log::ringBuffers[3][ringIndex] = 0;
-        } else {
-          Serial.println("This should never happen.");
-          exit(0);
-        }
-      } else {
-        Log::ringBuffers[3][ringIndex] = phaseShift;
-      }
+      Log::ringBuffers[3][ringIndex] = phaseShift;
     }
 
     Log::unsafeBufferedLogID += 1;

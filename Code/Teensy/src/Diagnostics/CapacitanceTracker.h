@@ -33,8 +33,12 @@ private:
 
   float previousCurrent = 0;
   int32_t zeroCrossingStartID;
-  int32_t zeroCrossingEndID = -1;
+  float zeroCrossingIterations;
   float sineSquaredAccumulator = 0;
   float cosineSquaredAccumulator = 0;
   uint32_t lockInSampleCount = 0;
+
+  bool zeroCrossingFailed = false;
+  float zeroCrossingAccumulator = 0;
+  uint32_t zeroCrossingSampleCount = 0;
 };

@@ -36,15 +36,15 @@ struct LineParser {
 extension LineParser {
   struct StartCodeCorruptionError: LocalizedError {
     var errorDescription: String?
-    var uncorruptedData: [UInt8]
+    var uncorruptedBytes: [UInt8]
   }
   
-  mutating func decodeLines(data: [UInt8]) throws -> [Line] {
-    let dataArray = previousPendingBytes + data
+  mutating func decode(bytes inputBytes: [UInt8]) throws -> [Line] {
+    let bytes = previousPendingBytes + inputBytes
     
     func findFirstIndex() -> Int? {
-      for i in dataArray.indices {
-        let code = dataArray[i]
+      for i in bytes.indices {
+        let code = bytes[i]
         if code == Line.messageStartCode {
           return i
         }
@@ -65,21 +65,21 @@ extension LineParser {
       var cursor = firstIndex
       while true {
         let nextCursor = cursor + Line.messageLength
-        guard nextCursor < dataArray.count else {
-          let partialMessage = Array(dataArray[cursor...])
+        guard nextCursor < bytes.count else {
+          let partialMessage = Array(bytes[cursor...])
           previousPendingBytes = partialMessage
           break
         }
         
-        let currentMessageStart = dataArray[cursor]
-        let nextMessageStart = dataArray[nextCursor]
+        let currentMessageStart = bytes[cursor]
+        let nextMessageStart = bytes[nextCursor]
         guard currentMessageStart == Line.messageStartCode,
               nextMessageStart == Line.messageStartCode else {
-          try dataArray.withUnsafeBufferPointer { bufferPointer in
+          try bytes.withUnsafeBufferPointer { bufferPointer in
             let buffer = bufferPointer.baseAddress!
             let string1 = Line.display(buffer + cursor)
             
-            var message2Length = dataArray.count - nextCursor
+            var message2Length = bytes.count - nextCursor
             message2Length = min(message2Length, Line.messageLength)
             let string2 = Line.display(
               buffer + nextCursor,
@@ -91,18 +91,18 @@ extension LineParser {
               message 2: \(string2)
               cursor 1: \(cursor)
               cursor 2: \(nextCursor)
-              array length: \(dataArray.count)
+              array length: \(bytes.count)
               """
-            let uncorruptedData = Array(dataArray[nextCursor...])
+            let uncorruptedBytes = Array(bytes[nextCursor...])
             
             throw StartCodeCorruptionError(
               errorDescription: description,
-              uncorruptedData: uncorruptedData)
+              uncorruptedBytes: uncorruptedBytes)
           }
           fatalError("Execution should not reach this point.")
         }
         
-        dataArray.withUnsafeBufferPointer { bufferPointer in
+        bytes.withUnsafeBufferPointer { bufferPointer in
           let buffer = bufferPointer.baseAddress!
           let line = Line(decoding: buffer + cursor)
           lines.append(line)
@@ -120,7 +120,7 @@ extension LineParser {
     var uncorruptedLines: [Line]
   }
   
-  mutating func finishExtraction(lines: [Line]) throws {
+  mutating func count(lines: [Line]) throws {
     // Check that the lines have contiguous IDs.
     if lines.count > 0 {
       if let previousLineID {

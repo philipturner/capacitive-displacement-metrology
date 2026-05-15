@@ -113,8 +113,7 @@ while !application.ui.isClosed {
   Watchdog.notify(threadID: 0, code: 5)
   
   if let trace = output.trace {
-    updateShortTimeForTrigger(
-      trace: trace)
+    updateShortTimeForTrigger(trace: trace)
     application.ui.updateShortPlots(
       data: trace.data)
   } else {
@@ -132,7 +131,7 @@ while !application.ui.isClosed {
   
   func display(start: Double, end: Double) {
     let timeInMs = (end - start) * 1000
-    let formattedTime = String(format: "%.1f", timeInMs)
+    let formattedTime = String(format: "%.3f", timeInMs)
     print(formattedTime, "ms")
   }
   

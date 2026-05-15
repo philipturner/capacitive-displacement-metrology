@@ -66,63 +66,47 @@ class Application: @unchecked Sendable {
       }
       
       lineParser = LineParser()
-      
+      Application.queue.sync {
+        let triggers = self.history.triggers
+        self.history = History(triggers: triggers)
+      }
     }
     
-    var lines: [LineParser.Line] = []
-    var resetHistory = false
-    
+    var lines: [LineParser.Line]
     do {
-      lines = try lineParser.decodeLines(data: bytes)
+      lines = try lineParser.decode(bytes: bytes)
     } catch let error as LineParser.StartCodeCorruptionError {
-      let bytes = error.uncorruptedData
-      print(error.description)
-      
-      lineParser = LineParser()
-      resetHistory = true
-      entries = try! Entry.decodeEntries(data: bytes)
-    } else {
-      fatalError("Unexpected error type.")
-    }
-    
-    do {
-      try self.lineParser.finishExtraction(entries: entries)
-    } catch let error as LineParser.NonContiguousError {
-      entries = error.uncorruptedEntries
-      print(error.description)
-      
-      lineParser = LineParser()
-      resetHistory = true
-      try! lineParser.finishExtraction(
-        entries: error.uncorruptedEntries)
+      reset(error: error)
+      lines = try! lineParser.decode(bytes: error.uncorruptedBytes)
     } catch {
       fatalError("Unexpected error type.")
     }
     
-    if resetHistory {
-      Application.queue.sync {
-        if resetHistory {
-          let triggers = self.history.triggers
-          self.history = History(triggers: triggers)
-        }
-        self.history.addEntries(entries)
-      }
+    do {
+      try lineParser.count(lines: lines)
+    } catch let error as LineParser.NonContiguousError {
+      reset(error: error)
+      try! lineParser.count(lines: error.uncorruptedLines)
+      lines = error.uncorruptedLines
+    } catch {
+      fatalError("Unexpected error type.")
     }
+    return lines
   }
   
   func startLineExtractionThread() {
-    DispatchQueue.global().async {
+    DispatchQueue.global().async { [self] in
       let startTime = Date().timeIntervalSince1970
-      var previousEntryID: Int = .zero
+      var previousLineID: Int = .zero
       
-      func createTestEntries() -> [Entry] {
+      func createTestLines() -> [LineParser.Line] {
         let currentTime = Date().timeIntervalSince1970
         let elapsedTime = currentTime - startTime
         let elapsedMicros = Int(elapsedTime * 1e6)
         let elapsedLogPeriods = elapsedMicros / 49
         
-        var entries: [Entry] = []
-        for i in previousEntryID..<elapsedLogPeriods {
+        var lines: [LineParser.Line] = []
+        for i in previousLineID..<elapsedLogPeriods {
           let elapsedTimeMicros = i * 49
           let sinePeriodMicros = 1000
           let phaseMicros = elapsedTimeMicros % sinePeriodMicros
@@ -131,16 +115,16 @@ class Application: @unchecked Sendable {
           let dacVoltage = 10 * Self.triangleWave(phaseNormalized)
           let current = 200 * Self.squareWave(phaseNormalized)
           
-          var entry = Entry(id: i, values: .zero)
-          entry.values[0] = current
-          entry.values[1] = dacVoltage
-          entry.values[2] = Float.random(in: -0.001..<0.001)
-          entry.values[3] = Float.pi
-          entries.append(entry)
+          var line = LineParser.Line(id: i, values: .zero)
+          line.values[0] = current
+          line.values[1] = dacVoltage
+          line.values[2] = Float.random(in: -0.001..<0.001)
+          line.values[3] = Float.pi
+          lines.append(line)
         }
-        previousEntryID = elapsedLogPeriods
+        previousLineID = elapsedLogPeriods
         
-        return entries
+        return lines
       }
       
       while true {
@@ -148,46 +132,22 @@ class Application: @unchecked Sendable {
         usleep(10_000)
         Watchdog.notify(threadID: 1, code: 1)
         
-        self.commandTransmitter.transmitSerialInput(
-          port: self.port)
+        commandTransmitter.transmitSerialInput(port: port)
         Watchdog.notify(threadID: 1, code: 2)
         
-        var lines: [Line] = []
-        var resetHistory = false
+        var lines: [LineParser.Line]
         if Self.serialEmulation {
-          entries = createTestEntries()
+          lines = createTestLines()
         } else {
-          do {
-            let bytes = lineParser.getValidBytes(port: port)
-            entries = try Entry.decodeEntries(data: bytes)
-          } catch let error as Entry.StartCodeCorruptionError {
-            let bytes = error.uncorruptedData
-            print(error.description)
-            
-            lineParser = LineParser()
-            entries = try! Entry.decodeEntries(data: bytes)
-          }
+          let bytes = LineParser.getValidBytes(port: port)
+          lines = createLines(bytes: bytes)
         }
         Watchdog.notify(threadID: 1, code: 5)
         
-        do {
-          try self.lineParser.finishExtraction(entries: entries)
-        } catch let error as LineParser.NonContiguousError {
-          entries = error.uncorruptedEntries
-          print(error.description)
-          
-          lineParser = LineParser()
-          try! lineParser.finishExtraction(
-            entries: error.uncorruptedEntries)
-        } catch {
-          fatalError("Unexpected error type.")
+        Application.queue.sync {
+          self.history.addLines(lines)
         }
         Watchdog.notify(threadID: 1, code: 6)
-        
-        Application.queue.sync {
-          self.history.addEntries(entries)
-        }
-        Watchdog.notify(threadID: 1, code: 7)
       }
     }
   }

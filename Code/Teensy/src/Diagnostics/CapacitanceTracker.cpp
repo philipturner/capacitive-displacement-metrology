@@ -51,8 +51,26 @@ void CapacitanceTracker::update(
 
   if (previousState == State::waiting && currentState == State::measuring) {
     zeroCrossingStartID = KilohertzLoop::iterationID;
+    zeroCrossingIterations = -2;
   }
 
+  if (previousState == State::measuring) {
+    uint32_t itersPerWave = wavePeriod / KilohertzLoop::period;
+    uint32_t nextStartID = zeroCrossingStartID + itersPerWave;
+    if (KilohertzLoop::iterationID == nextStartID) {
+      if (zeroCrossingIterations == -2) {
+        // This should never happen, but theoretically a spurious signal
+        // could disrupt the amplifier. Handle this error gracefully.
+        zeroCrossingFailed = true;
+      } else {
+        zeroCrossingAccumulator += zeroCrossingIterations;
+        zeroCrossingSampleCount += 1;
+      }
+      zeroCrossingStartID = nextStartID;
+      zeroCrossingIterations = -2;
+    }
+  }
+  
   if (previousState == State::measuring && currentState == State::finished) {
     uint32_t itersPerWave = wavePeriod / KilohertzLoop::period;
     uint32_t itersPerMeasurement = waveCountPost * itersPerWave;
@@ -79,12 +97,18 @@ void CapacitanceTracker::update(
     // capacitance was 9.91 fF (a factor of 1.416 higher).
     capacitance *= M_SQRT1_2;
 
-    if (zeroCrossingEndID < zeroCrossingStartID) {
-      // This should never happen, but theoretically a spurious signal could
-      // disrupt the amplifier. Handle this error gracefully.
+    if (zeroCrossingFailed) {
       phaseShift = -1000;
     } else {
-      float timeLag = float(zeroCrossingEndID - zeroCrossingStartID);
+      if (zeroCrossingSampleCount != waveCountPost) {
+        Serial.println("Unexpected behavior in phase measurement");
+        Serial.println(zeroCrossingSampleCount);
+        Serial.println(waveCountPost);
+        exit(0);
+      }
+
+      float timeLag = zeroCrossingAccumulator;
+      timeLag /= float(zeroCrossingSampleCount);
       timeLag *= float(KilohertzLoop::period);
       timeLag -= float(wavePeriod);
 
@@ -122,8 +146,13 @@ void CapacitanceTracker::integrate(float current) {
     // current is established, the existing algorithm cannot correctly compute
     // the phase.
     if (previousCurrent < 0 && current > 0) {
-      if (zeroCrossingEndID == -1) {
-        zeroCrossingEndID = KilohertzLoop::iterationID;
+      if (zeroCrossingIterations == -2) {
+        uint32_t iterationID = KilohertzLoop::iterationID;
+        zeroCrossingIterations = float(iterationID - zeroCrossingStartID);
+
+        float progress = (0 - previousCurrent) / (current - previousCurrent);
+        float correction = -1 * (1 - progress) + 0 * progress;
+        zeroCrossingIterations += correction;
       }
     }
 
