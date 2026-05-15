@@ -33,7 +33,7 @@ class UI {
     setupLayout()
     setWindowPosition()
     
-    #if true
+    #if false
     let labelTextList: [String] = [
       "current (pA)",
       "sample bias (V)",

@@ -12,10 +12,22 @@ applicationDesc.triggers = [trigger]
 let application = Application(descriptor: applicationDesc)
 Watchdog.initialize(trackedThreads: 2)
 
+func display(start: Double, end: Double) {
+  let timeInMs = (end - start) * 1000
+  let formattedTime = String(format: "%.3f", timeInMs)
+  print(formattedTime, "ms")
+}
+
 var nextLoopTime = Date().timeIntervalSince1970
+var previousLoopTime = nextLoopTime
 while !application.ui.isClosed {
   let currentTime = Date().timeIntervalSince1970
   if currentTime > nextLoopTime {
+    print()
+    print("time since last previous loop start:")
+    display(start: previousLoopTime, end: currentTime)
+    
+    previousLoopTime = currentTime
     while currentTime > nextLoopTime {
       nextLoopTime += 16.666e-3
     }
@@ -25,8 +37,10 @@ while !application.ui.isClosed {
   }
   Watchdog.notify(threadID: 0, code: 0)
   
-  let shortTimeLength: Double = 0.003
-  let shortTimeMajorTick: Double = 0.001
+  let time0 = Date().timeIntervalSince1970
+  
+  let shortTimeLength: Double = 0.001
+  let shortTimeMajorTick: Double = 0.001 * 0.1
   let longTimeLength: Double = 1.0
   let longTimeMajorTick: Double = 0.2
   
@@ -37,7 +51,7 @@ while !application.ui.isClosed {
   }
   guard output.shortTimeData.count > 0,
         output.longTimeData.count > 0 else {
-    print("[\(Date())] No data to graph.")
+     print("[\(Date())] No data to graph.")
     continue
   }
   
@@ -77,22 +91,34 @@ while !application.ui.isClosed {
     application.ui.updateTime(columnID: 0, descriptor: shortTimeDesc)
   }
   
+  let time1 = Date().timeIntervalSince1970
+  
   updateLongTime()
   application.ui.updateLongPlots(
     data: output.longTimeData)
   application.ui.updateYRange(
     data: output.longTimeData)
   
+  print(output.shortTimeData.last!.values[3])
+  
   if let trace = output.trace {
     updateShortTimeForTrigger(trace: trace)
     application.ui.updateShortPlots(
       data: trace.data)
   } else {
-    print("[\(Date())] No trigger event trace.")
     updateShortTimeForHistory()
     application.ui.updateShortPlots(
       data: output.shortTimeData)
   }
   
+  let time2 = Date().timeIntervalSince1970
+  
   application.ui.app.processEvents()
+  
+  let time3 = Date().timeIntervalSince1970
+  
+  print("segments:")
+  display(start: time0, end: time1)
+  display(start: time1, end: time2)
+  display(start: time2, end: time3)
 }

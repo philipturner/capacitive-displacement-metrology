@@ -2,7 +2,7 @@ import Foundation
 
 struct History {
   static let logPeriodMicros: Int = 48
-  static let historyLengthSeconds: Int = 30
+  static let historyLengthSeconds: Int = 5
   static let maxEntryCount: Int = {
     var output = History.historyLengthSeconds
     output *= 1_000_000 / History.logPeriodMicros
@@ -35,7 +35,6 @@ struct History {
     var trigger: Trigger
   }
   
-  var firstTime: Double?
   var sampleCursor: Int = .zero
   private(set) var samplesBuffer: [TimedSample]
   private(set) var latestSample: TimedSample?
@@ -75,11 +74,7 @@ struct History {
     
     for line in input {
       let logPeriodSeconds = Double(1e-6) * Double(Self.logPeriodMicros)
-      var time = Double(line.id) * logPeriodSeconds
-      if firstTime == nil {
-        firstTime = time
-      }
-      time -= firstTime!
+      let time = Double(line.id) * logPeriodSeconds
       
       let sample = TimedSample(time: time, values: line.values)
       if let latestSample {
