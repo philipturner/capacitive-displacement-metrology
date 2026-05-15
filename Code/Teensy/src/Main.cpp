@@ -10,16 +10,19 @@
 // MARK: - Global Variables
 
 constexpr uint32_t loopPeriod = 12;
+uint32_t scanWavePeriod = 0;
 
-float lowpassFilteredCurrent = 0;
-float biasVoltage = 0;
-float capacitance = 0;
-float phaseShift = 0;
+float lowpassFilteredCurrent = 0; // units: A
+float biasVoltage = 0; // units: V
+float capacitance = 0; // units: F
+float phaseShift = 0; // units: °
 
 enum class Mode {
   noise = 0,
   riseTime = 1,
   capacitance = 2,
+  scanX = 3,
+  scanY = 4,
 };
 Mode getDefaultMode() {
   return Mode::riseTime;
@@ -46,6 +49,19 @@ void processInput() {
     latestInputMode = Mode::riseTime;
   } else if (incomingByte == 'c') {
     latestInputMode = Mode::capacitance;
+  } else if (incomingByte == 'x' || incomingByte == 'y') {
+    uint32_t period = 0;
+    while (Serial.available() > 0) {
+      // decode the text into a period (in microseconds)
+    }
+
+    if (period == 0 || (period % loopPeriod != 0)) {
+      Serial.print("Invalid period: ");
+      Serial.print(period);
+      Serial.println();
+      exit(0);
+    }
+    scanWavePeriod = period;
   }
 }
 
@@ -148,7 +164,7 @@ void kilohertzLoop() {
     } else {
       Log::ringBuffers[3][ringIndex] = phaseShift;
     }
-    
+
     Log::unsafeBufferedLogID += 1;
   }
 }
