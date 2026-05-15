@@ -85,7 +85,15 @@ extension History {
   private func triggerEventTrace(
     bipolarHistoryTime: Double
   ) -> TriggerEventTrace? {
-    guard triggerEvents.count > 0 else {
+    func isValid(event: TriggerEvent) -> Bool {
+      let minimumStartPoint = sampleCursor - Self.maxEntryCount + 3
+      if event.cursor < minimumStartPoint {
+        return false
+      }
+      return true
+    }
+    let validEvents = triggerEvents.filter(isValid(event:))
+    guard validEvents.count > 0 else {
       return nil
     }
     
@@ -94,38 +102,44 @@ extension History {
         fatalError("This should never happen.")
       }
       let maximumTime = latestSample.time - bipolarHistoryTime
-      for i in triggerEvents.indices.reversed() {
-        let event = triggerEvents[i]
+      
+      for i in validEvents.indices.reversed() {
+        let event = validEvents[i]
         if event.centerTime <= maximumTime {
           return event
         }
       }
       
       print("Returning the first event, could not find any matching events.")
-      return triggerEvents.first!
+      return validEvents.first!
     }
-    
     let bestEvent = getBestEvent()
-    let samplePeriod = Double(Self.logPeriodMicros) * 1e-6
-    let bipolarSampleCount = Int(bipolarHistoryTime / samplePeriod)
     
-    var minimumCursor = bestEvent.cursor - bipolarSampleCount
-    minimumCursor = max(minimumCursor, sampleCursor - Self.maxEntryCount)
-    minimumCursor = max(minimumCursor, 0)
-    
-    var maximumCursor = bestEvent.cursor + bipolarSampleCount
-    maximumCursor = min(maximumCursor, sampleCursor)
-    
-    // Some assertions.
-    if bestEvent.cursor < sampleCursor - Self.maxEntryCount {
-      fatalError("Does this case ever happen?")
+    func getCursorRange() -> Range<Int>? {
+      let samplePeriod = Double(Self.logPeriodMicros) * 1e-6
+      let bipolarSampleCount = Int(bipolarHistoryTime / samplePeriod)
+      
+      var minimumCursor = bestEvent.cursor - bipolarSampleCount
+      minimumCursor = max(minimumCursor, sampleCursor - Self.maxEntryCount)
+      minimumCursor = max(minimumCursor, 0)
+      
+      var maximumCursor = bestEvent.cursor + bipolarSampleCount
+      maximumCursor = min(maximumCursor, sampleCursor)
+      
+      guard maximumCursor - minimumCursor > 3 else {
+        print("Cursor range was too small.")
+        print(minimumCursor)
+        print(maximumCursor)
+        return nil
+      }
+      return minimumCursor..<maximumCursor
     }
-    if maximumCursor - minimumCursor < 3 {
-      fatalError("Another edge case: \(minimumCursor), \(maximumCursor).")
+    guard let cursorRange = getCursorRange() else {
+      return nil
     }
     
     var outputData: [TimedSample] = []
-    for sampleID in minimumCursor..<maximumCursor {
+    for sampleID in cursorRange {
       let ringIndex = sampleID % Self.maxEntryCount
       let sample = samplesBuffer[ringIndex]
       outputData.append(sample)

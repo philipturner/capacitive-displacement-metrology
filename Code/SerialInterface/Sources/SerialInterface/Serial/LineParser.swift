@@ -14,11 +14,8 @@ struct LineParser {
   
   static func getValidBytes(port: SerialPort) -> [UInt8] {
     let data = Application.queue.sync {
-      Watchdog.notify(threadID: 1, code: 3)
-      let output = try! port.readBytesBlocking(
+      return try! port.readBytesBlocking(
         count: 500_000, timeout: 0.001)
-      Watchdog.notify(threadID: 1, code: 4)
-      return output
     }
     
     var output: [UInt8] = []

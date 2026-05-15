@@ -128,12 +128,10 @@ class Application: @unchecked Sendable {
       }
       
       while true {
-        Watchdog.notify(threadID: 1, code: 0)
         usleep(10_000)
-        Watchdog.notify(threadID: 1, code: 1)
+        Watchdog.notify(threadID: 1, code: 0)
         
         commandTransmitter.transmitSerialInput(port: port)
-        Watchdog.notify(threadID: 1, code: 2)
         
         var lines: [LineParser.Line]
         if Self.serialEmulation {
@@ -142,12 +140,10 @@ class Application: @unchecked Sendable {
           let bytes = LineParser.getValidBytes(port: port)
           lines = createLines(bytes: bytes)
         }
-        Watchdog.notify(threadID: 1, code: 5)
         
         Application.queue.sync {
           self.history.addLines(lines)
         }
-        Watchdog.notify(threadID: 1, code: 6)
       }
     }
   }

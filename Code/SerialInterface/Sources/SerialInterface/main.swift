@@ -2,44 +2,20 @@ import Foundation
 import PythonKit
 import SwiftSerial
 
-#if true
 var trigger = Trigger()
 trigger.type = .level(0)
 trigger.polarity = .positive
 trigger.channel = 1
 
-#else
-var trigger1 = Trigger()
-trigger1.type = .level(700)
-trigger1.polarity = .positive
-trigger1.channel = 0
-
-var trigger2 = Trigger()
-trigger2.type = .level(-700)
-trigger2.polarity = .negative
-trigger2.channel = 0
-#endif
-
 var applicationDesc = ApplicationDescriptor()
 applicationDesc.triggers = [trigger]
 let application = Application(descriptor: applicationDesc)
-
 Watchdog.initialize(trackedThreads: 2)
 
-let startTime = Date().timeIntervalSince1970
-var previousLoopTime = startTime
-var nextLoopTime = startTime
-
+var nextLoopTime = Date().timeIntervalSince1970
 while !application.ui.isClosed {
   let currentTime = Date().timeIntervalSince1970
   if currentTime > nextLoopTime {
-    let timeInMs = (currentTime - previousLoopTime) * 1000
-    let formattedTime = String(format: "%.3f", timeInMs)
-    print()
-    print("since previous loop's start:")
-    print(formattedTime, "ms")
-    
-    previousLoopTime = currentTime
     while currentTime > nextLoopTime {
       nextLoopTime += 16.666e-3
     }
@@ -47,37 +23,23 @@ while !application.ui.isClosed {
     usleep(1_000)
     continue
   }
+  Watchdog.notify(threadID: 0, code: 0)
   
   let shortTimeLength: Double = 0.003
   let shortTimeMajorTick: Double = 0.001
   let longTimeLength: Double = 1.0
   let longTimeMajorTick: Double = 0.2
   
-  let time0 = Date().timeIntervalSince1970
-  var time1: Double = .zero
-  var time2: Double = .zero
-  Watchdog.notify(threadID: 0, code: 0)
-  
   let output = Application.queue.sync {
-    time1 = Date().timeIntervalSince1970
-    Watchdog.notify(threadID: 0, code: 1)
-    
-    let output = application.history.output(
+    return application.history.output(
       shortInterval: shortTimeLength,
       longInterval: longTimeLength)
-    
-    time2 = Date().timeIntervalSince1970
-    Watchdog.notify(threadID: 0, code: 2)
-    
-    return output
   }
   guard output.shortTimeData.count > 0,
         output.longTimeData.count > 0 else {
     print("[\(Date())] No data to graph.")
     continue
   }
-  let time3 = Date().timeIntervalSince1970
-  Watchdog.notify(threadID: 0, code: 3)
   
   func updateShortTimeForHistory() {
     let maximum = output.shortTimeData.last!.time
@@ -120,8 +82,6 @@ while !application.ui.isClosed {
     data: output.longTimeData)
   application.ui.updateYRange(
     data: output.longTimeData)
-  let time4 = Date().timeIntervalSince1970
-  Watchdog.notify(threadID: 0, code: 4)
   
   if let trace = output.trace {
     updateShortTimeForTrigger(trace: trace)
@@ -133,26 +93,6 @@ while !application.ui.isClosed {
     application.ui.updateShortPlots(
       data: output.shortTimeData)
   }
-  let time5 = Date().timeIntervalSince1970
-  Watchdog.notify(threadID: 0, code: 5)
   
   application.ui.app.processEvents()
-  let time6 = Date().timeIntervalSince1970
-  Watchdog.notify(threadID: 0, code: 6)
-  
-  func display(start: Double, end: Double) {
-    let timeInMs = (end - start) * 1000
-    let formattedTime = String(format: "%.3f", timeInMs)
-    print(formattedTime, "ms")
-  }
-  
-  print("sections:")
-  display(start: time0, end: time1)
-  display(start: time1, end: time2)
-  display(start: time2, end: time3)
-  display(start: time3, end: time4)
-  display(start: time4, end: time5)
-  display(start: time5, end: time6)
-  print("overall:")
-  display(start: time0, end: time6)
 }
