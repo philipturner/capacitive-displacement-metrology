@@ -23,7 +23,6 @@ struct CapacitanceTracker {
 
 private:
   uint32_t startIterationID;
-  uint32_t startTrueTime;
   State previousState;
   State currentState;
 

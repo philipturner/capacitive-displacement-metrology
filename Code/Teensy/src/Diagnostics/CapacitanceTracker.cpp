@@ -9,7 +9,6 @@ CapacitanceTracker::CapacitanceTracker() {
 
 CapacitanceTracker::CapacitanceTracker(bool notDefaultConstructor) {
   startIterationID = KilohertzLoop::iterationID;
-  startTrueTime = micros();
   previousState = State::waiting;
   currentState = State::waiting;
 }
@@ -70,7 +69,7 @@ void CapacitanceTracker::update(
       zeroCrossingIterations = -2;
     }
   }
-  
+
   if (previousState == State::measuring && currentState == State::finished) {
     uint32_t itersPerWave = wavePeriod / KilohertzLoop::period;
     uint32_t itersPerMeasurement = waveCountPost * itersPerWave;
@@ -128,8 +127,9 @@ void CapacitanceTracker::update(
 }
 
 void CapacitanceTracker::updateReferenceSignals() {
-  uint32_t elapsedTime = micros() - startTrueTime;
-  uint32_t phase = elapsedTime % wavePeriod;
+  uint32_t deltaIters = KilohertzLoop::iterationID - startIterationID;
+  uint32_t deltaMicros = deltaIters * KilohertzLoop::period;
+  uint32_t phase = deltaMicros % wavePeriod;
 
   float phaseNormalized = float(phase) / float(wavePeriod);
   referenceSine = sin(phaseNormalized * 2 * M_PI);

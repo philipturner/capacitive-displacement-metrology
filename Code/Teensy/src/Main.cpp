@@ -10,7 +10,6 @@
 // MARK: - Global Variables
 
 constexpr uint32_t loopPeriod = 12;
-uint32_t scanWavePeriod = 0;
 
 float current = 0; // units: A
 float filteredCurrent = 0; // units: A
@@ -22,6 +21,7 @@ float fineXVoltage = 0; // units: V
 float fineYVoltage = 0; // units: V
 float filteredFineXVoltage = 0; // units: V
 float filteredFineYVoltage = 0; // units: V
+float scanFilterTimeLag = 0;
 
 enum class Mode {
   noise = 0,
@@ -34,6 +34,7 @@ Mode getDefaultMode() {
   return Mode::riseTime;
 }
 Mode latestInputMode = getDefaultMode();
+uint32_t latestScanWavePeriod = 0;
 
 // MARK: - Setup and Loop
 
@@ -59,7 +60,7 @@ void processInput() {
     // decode the text into a period (in microseconds)
     uint32_t period = 0;
     while (Serial.available() > 0) {
-      char digit = Serial.available();
+      char digit = Serial.read();
       if (digit >= '0' && digit <= '9') {
         uint32_t numberValue = uint32_t(digit - '0');
         period = period * 10 + numberValue;
@@ -78,7 +79,7 @@ void processInput() {
     // prevent undefined behavior while the scan wave period is written
     latestInputMode = Mode::noise;
 
-    scanWavePeriod = period;
+    latestScanWavePeriod = period;
 
     // safe to write the mode *after* the scan wave period is written
     if (incomingByte == 'x') {
@@ -117,17 +118,36 @@ void loop() {
 // MARK: - Kilohertz Loop
 
 Mode mode = getDefaultMode();
+uint32_t scanWavePeriod = 0;
+
 CapacitanceTracker capTracker;
 bool resetBias = false;
 bool resetFineX = false;
 bool resetFineY = false;
+
+uint32_t scanStartIterID;
+uint32_t zeroCrossingStartID;
+float zeroCrossingIterations;
+float zeroCrossingPreviousValue = 0;
+
+bool getModeDidChange() {
+  if (mode != latestInputMode) {
+    return true;
+  }
+  if (mode == Mode::scanX || mode == Mode::scanY) {
+    if (scanWavePeriod != latestScanWavePeriod) {
+      return true;
+    }
+  }
+  return false;
+}
 
 void updateMode() {
   resetBias = false;
   resetFineX = false;
   resetFineY = false;
 
-  if (mode != latestInputMode) {
+  if (getModeDidChange()) {
     // Cleanup operations for previous mode.
     if (mode == Mode::noise) {
       
@@ -145,17 +165,44 @@ void updateMode() {
     if (latestInputMode == Mode::capacitance) {
       capTracker = CapacitanceTracker(true);
     }
+    if (latestInputMode == Mode::scanX ||
+        latestInputMode == Mode::scanY) {
+      scanStartIterID = KilohertzLoop::iterationID;
+      zeroCrossingStartID = KilohertzLoop::iterationID;
+      zeroCrossingIterations = -2;
+    }
   }
+
+  // It should be safe to copy the state over in this way, because nothing
+  // interrupts the interrupt routine.
   mode = latestInputMode;
+  scanWavePeriod = latestScanWavePeriod;
 }
 
 float getScanVoltage() {
-  uint32_t trueTime = micros();
-  uint32_t phase = trueTime % scanWavePeriod;
+  uint32_t deltaIters = KilohertzLoop::iterationID - scanStartIterID;
+  uint32_t deltaMicros = deltaIters * KilohertzLoop::period;
+  uint32_t phase = deltaMicros % scanWavePeriod;
 
   float phaseNormalized = float(phase) / float(scanWavePeriod);
   float amplitude = FilterUtil::sineWave(phaseNormalized);
-  return amplitude;
+  return 50 * amplitude;
+}
+
+void trackZeroCrossing(float value) {
+  float previousValue = zeroCrossingPreviousValue;
+  if (previousValue < 0 && value > 0) {
+    if (zeroCrossingIterations == -2) {
+      uint32_t iterationID = KilohertzLoop::iterationID;
+      zeroCrossingIterations = float(iterationID - zeroCrossingStartID);
+
+      float progress = (0 - previousValue) / (value - previousValue);
+      float correction = -1 * (1 - progress) + 0 * progress;
+      zeroCrossingIterations += correction;
+    }
+  }
+
+  zeroCrossingPreviousValue = value;
 }
 
 void kilohertzLoop() {
@@ -169,13 +216,35 @@ void kilohertzLoop() {
       capTracker.update(capacitance, phaseShift);
     }
   }
+  if (mode == Mode::scanX || mode == Mode::scanY) {
+    uint32_t itersPerWave = scanWavePeriod / KilohertzLoop::period;
+    uint32_t nextStartID = zeroCrossingStartID + itersPerWave;
+    if (KilohertzLoop::iterationID == nextStartID) {
+      if (zeroCrossingIterations == -2) {
+        scanFilterTimeLag = 0;
+      } else {
+        scanFilterTimeLag = zeroCrossingIterations;
+        scanFilterTimeLag *= float(KilohertzLoop::period);
+      }
+
+      zeroCrossingStartID = nextStartID;
+      zeroCrossingIterations = -2;
+    } else if (KilohertzLoop::iterationID > nextStartID) {
+      Serial.println("Unexpected behavior:");
+      Serial.println(KilohertzLoop::iterationID);
+      Serial.println(nextStartID);
+      exit(0);
+    }
+  }
 
   // MARK: - Bias Voltage
 
   if (mode == Mode::riseTime) {
-    uint32_t wavePeriodMicros = 1000;
-    uint32_t trueTime = micros(); // doesn't have to be aligned to a start
-    uint32_t phase = trueTime % wavePeriodMicros;
+    uint32_t wavePeriodMicros = 1008;
+
+    uint32_t deltaIters = KilohertzLoop::iterationID;
+    uint32_t deltaMicros = deltaIters * KilohertzLoop::period;
+    uint32_t phase = deltaMicros % wavePeriodMicros;
 
     float phaseNormalized = float(phase) / float(wavePeriodMicros);
     float amplitude = FilterUtil::triangleWave(phaseNormalized);
@@ -198,9 +267,12 @@ void kilohertzLoop() {
   }
 
   {
-    float alpha = FilterUtil::getLowpassAlpha(1542, loopPeriod);
+    float alpha = FilterUtil::getLowpassAlpha(1500, loopPeriod);
     filteredFineXVoltage *= 1 - alpha;
     filteredFineXVoltage += alpha * fineXVoltage;
+    if (mode == Mode::scanX) {
+      trackZeroCrossing(filteredFineXVoltage);
+    }
   }
 
   // MARK: - Fine Y Voltage
@@ -214,9 +286,12 @@ void kilohertzLoop() {
   }
 
   {
-    float alpha = FilterUtil::getLowpassAlpha(1542, loopPeriod);
+    float alpha = FilterUtil::getLowpassAlpha(1500, loopPeriod);
     filteredFineYVoltage *= 1 - alpha;
     filteredFineYVoltage += alpha * fineYVoltage;
+    if (mode == Mode::scanY) {
+      trackZeroCrossing(filteredFineYVoltage);
+    }
   }
   
   // MARK: - Current
@@ -239,17 +314,17 @@ void kilohertzLoop() {
     uint32_t ringIndex = Log::unsafeBufferedLogID % Log::logSize;
 
     if (mode == Mode::scanX || mode == Mode::scanY) {
-      // Alternative setup: fineX, filteredX, fineY, filteredY
       Log::ringBuffers[0][ringIndex] = filteredCurrent / 1e-12;
-      Log::ringBuffers[1][ringIndex] = biasVoltage;
 
       if (mode == Mode::scanX) {
-        Log::ringBuffers[2][ringIndex] = fineXVoltage;
-        Log::ringBuffers[3][ringIndex] = filteredFineXVoltage;
+        Log::ringBuffers[1][ringIndex] = fineXVoltage;
+        Log::ringBuffers[2][ringIndex] = filteredFineXVoltage;
       } else if (mode == Mode::scanY) {
-        Log::ringBuffers[2][ringIndex] = fineYVoltage;
-        Log::ringBuffers[3][ringIndex] = filteredFineYVoltage;
+        Log::ringBuffers[1][ringIndex] = fineYVoltage;
+        Log::ringBuffers[2][ringIndex] = filteredFineYVoltage;
       }
+
+      Log::ringBuffers[3][ringIndex] = scanFilterTimeLag;
     } else {
       Log::ringBuffers[0][ringIndex] = filteredCurrent / 1e-12;
       Log::ringBuffers[1][ringIndex] = biasVoltage;
