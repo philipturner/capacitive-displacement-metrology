@@ -11,7 +11,7 @@ struct ApplicationDescriptor {
 }
 
 class Application: @unchecked Sendable {
-  static let serialEmulation: Bool = true
+  static let serialEmulation: Bool = false
   static let queue = DispatchQueue(
     label: "avoiding.bugs.from.swift.concurrency")
   
@@ -97,11 +97,13 @@ class Application: @unchecked Sendable {
       }
       
       while true {
+        Watchdog.notify(threadID: 1, code: 0)
         usleep(10_000)
-        Watchdog.notify(threadID: 1)
+        Watchdog.notify(threadID: 1, code: 1)
         
         self.commandTransmitter.transmitSerialInput(
           port: self.port)
+        Watchdog.notify(threadID: 1, code: 2)
         
         var entries: [Entry] = []
         if Self.serialEmulation {
@@ -110,6 +112,7 @@ class Application: @unchecked Sendable {
           entries = self.lineParser.startExtraction(
             port: self.port)
         }
+        Watchdog.notify(threadID: 1, code: 5)
         
         do {
           try self.lineParser.finishExtraction(entries: entries)
@@ -127,10 +130,12 @@ class Application: @unchecked Sendable {
         } catch {
           fatalError("Unexpected error type.")
         }
+        Watchdog.notify(threadID: 1, code: 6)
         
         Application.queue.sync {
           self.history.addEntries(entries)
         }
+        Watchdog.notify(threadID: 1, code: 7)
       }
     }
   }

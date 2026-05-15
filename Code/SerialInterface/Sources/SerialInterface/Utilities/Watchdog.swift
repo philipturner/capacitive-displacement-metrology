@@ -11,6 +11,8 @@ struct Watchdog {
   static var nextReportTime: Double = -1
   nonisolated(unsafe)
   static var threadLatestTimes: [Double] = []
+  nonisolated(unsafe)
+  static var threadLatestCodes: [Int] = []
   
   static func initialize(trackedThreads: Int) {
     guard threadLatestTimes.count == 0 else {
@@ -25,10 +27,12 @@ struct Watchdog {
     
     threadLatestTimes = Array(
       repeating: startTime, count: trackedThreads)
+    threadLatestCodes = Array(
+      repeating: 0, count: trackedThreads)
     startReportingThread()
   }
   
-  static func notify(threadID: Int) {
+  static func notify(threadID: Int, code: Int) {
     Watchdog.queue.sync {
       guard threadID >= 0,
             threadID < threadLatestTimes.count else {
@@ -37,6 +41,7 @@ struct Watchdog {
       
       let time = Date().timeIntervalSince1970
       threadLatestTimes[threadID] = time
+      threadLatestCodes[threadID] = code
     }
   }
   
@@ -79,7 +84,10 @@ struct Watchdog {
               
               let hangTime = threadHangTimes[threadID]
               let formattedTime = String(format: "%.3f", hangTime)
-              print("\(formattedTime) s")
+              print("\(formattedTime) s", terminator: ", ")
+              
+              let code = threadLatestCodes[threadID]
+              print("code:", code)
             }
           } else if shouldReportOK {
             print("[\(currentDate)] Watchdog report: OK")

@@ -117,20 +117,22 @@ float CapacitanceTracker::getBiasVoltage() const {
 }
 
 void CapacitanceTracker::integrate(float current) {
-  // This relies on the fact that average current is zero. When the tunneling
-  // current is established, the existing algorithm cannot correctly compute
-  // the phase.
-  if (previousCurrent < 0 && current > 0) {
-    if (zeroCrossingEndID == -1) {
-      zeroCrossingEndID = KilohertzLoop::iterationID;
+  if (currentState == State::measuring) {
+    // This relies on the fact that average current is zero. When the tunneling
+    // current is established, the existing algorithm cannot correctly compute
+    // the phase.
+    if (previousCurrent < 0 && current > 0) {
+      if (zeroCrossingEndID == -1) {
+        zeroCrossingEndID = KilohertzLoop::iterationID;
+      }
     }
-  }
 
-  float sineMixed = referenceSine * current;
-  float cosineMixed = referenceCosine * current;
-  sineSquaredAccumulator += sineMixed * sineMixed;
-  cosineSquaredAccumulator += cosineMixed * cosineMixed;
-  lockInSampleCount += 1;
+    float sineMixed = referenceSine * current;
+    float cosineMixed = referenceCosine * current;
+    sineSquaredAccumulator += sineMixed * sineMixed;
+    cosineSquaredAccumulator += cosineMixed * cosineMixed;
+    lockInSampleCount += 1;
+  }
 
   previousCurrent = current;
 }

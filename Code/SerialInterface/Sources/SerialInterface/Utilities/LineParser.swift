@@ -14,8 +14,11 @@ struct LineParser {
   
   mutating func startExtraction(port: SerialPort) -> [Entry] {
     let data = Application.queue.sync {
-      try! port.readBytesBlocking(
+      Watchdog.notify(threadID: 1, code: 3)
+      let output = try! port.readBytesBlocking(
         count: 1_000_000, timeout: 0.001)
+      Watchdog.notify(threadID: 1, code: 4)
+      return output
     }
     let validBytes = Self.validBytes(data: data)
     if validBytes.count == 0 {
