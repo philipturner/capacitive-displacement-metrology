@@ -1,17 +1,23 @@
 import Foundation
 
-let resonanceFrequency: Float = 8700
+// Filter parameters
+let resonanceFrequency: Float = 8700 // Hz
 let Q: Float = 200
+let lowpassCutoff: Float = 1500 // Hz
 
+// Signal parameters
+let dacResolution: Int = 12 // μs
 let signalAmplitude: Float = 100
-let signalFrequency: Float = 1000
-let riseTime: Int = 100
+let riseTime: Int = 100 // μs
 
-// Using digital form of 2nd-order LPF with Q-factor to simulate the mechanical
-// response to non-sinewave signals.
-//
-// https://www.ti.com/lit/an/slaa447/slaa447.pdf
-// https://en.wikipedia.org/wiki/Digital_biquad_filter
+enum StepType {
+  case immediate
+  case firstOrderSmooth
+  case secondOrderSmooth
+}
+let stepType: StepType = .immediate
+
+// MARK: - Filters
 
 struct BiquadFilterDescriptor {
   var resonanceFrequency: Float?
@@ -19,6 +25,11 @@ struct BiquadFilterDescriptor {
   var Q: Float?
 }
 
+// Using digital form of 2nd-order LPF with Q-factor to simulate the mechanical
+// response to non-sinewave signals.
+//
+// https://www.ti.com/lit/an/slaa447/slaa447.pdf
+// https://en.wikipedia.org/wiki/Digital_biquad_filter
 struct BiquadFilter {
   var b: SIMD3<Float>
   var a: SIMD3<Float>
@@ -69,11 +80,54 @@ struct BiquadFilter {
   }
 }
 
-var filterDesc = BiquadFilterDescriptor()
-filterDesc.resonanceFrequency = resonanceFrequency
-filterDesc.samplingFrequency = 1_000_000
-filterDesc.Q = Q
-var filter = BiquadFilter(descriptor: filterDesc)
+struct FirstOrderFilterDescriptor {
+  var cutoffFrequency: Float?
+  var samplingFrequency: Float?
+}
+
+struct FirstOrderFilter {
+  var a: Float
+  
+  var y1: Float = .zero
+  
+  init(descriptor: FirstOrderFilterDescriptor) {
+    guard let cutoffFrequency = descriptor.cutoffFrequency,
+          let samplingFrequency = descriptor.samplingFrequency else {
+      fatalError("Descriptor was incomplete.")
+    }
+    
+    let sampleTime = 1 / samplingFrequency
+    let timeConstant = 1 / (2 * Float.pi * cutoffFrequency)
+    self.a = sampleTime / (timeConstant + sampleTime)
+  }
+  
+  mutating func update(input: Float) -> Float {
+    var output: Float = .zero
+    output += a * input
+    output += (1 - a) * y1
+    
+    y1 = output
+    
+    return output
+  }
+}
+
+func createBiquadFilter() -> BiquadFilter {
+  var filterDesc = BiquadFilterDescriptor()
+  filterDesc.resonanceFrequency = resonanceFrequency
+  filterDesc.samplingFrequency = 1_000_000
+  filterDesc.Q = Q
+  return BiquadFilter(descriptor: filterDesc)
+}
+var biquadFilter = createBiquadFilter()
+
+func createFirstOrderFilter() -> FirstOrderFilter {
+  var filterDesc = FirstOrderFilterDescriptor()
+  filterDesc.cutoffFrequency  = lowpassCutoff
+  filterDesc.samplingFrequency = 1_000_000
+  return FirstOrderFilter(descriptor: filterDesc)
+}
+var firstOrderFilter = createFirstOrderFilter()
 
 // Perfect impulse: 67 ms for +100 nm -> +/-10 pm (initial overshoot to 200 nm)
 // Sine waves have +/-100 nm amplitude
@@ -91,9 +145,6 @@ var filter = BiquadFilter(descriptor: filterDesc)
 // Smoothstep, 2nd order: 3000 μs -> initial overshoot to 5 pm
 // Smoothstep, 2nd order: 4000 μs -> initial overshoot to 5 pm
 // Smoothstep, 2nd order: 5000 μs -> initial overshoot to 5 pm
-// 100 Hz sine wave
-// 1000 Hz sine wave
-// 8700 Hz sine wave
 //
 // Steppy DAC waveform (12 μs)
 // Smoothstep, 1st order: 100 μs -> initial overshoot to 141 nm
@@ -108,10 +159,7 @@ var filter = BiquadFilter(descriptor: filterDesc)
 // Smoothstep, 2nd order: 3000 μs -> initial overshoot to
 // Smoothstep, 2nd order: 4000 μs -> initial overshoot to
 // Smoothstep, 2nd order: 5000 μs -> initial overshoot to
-// 100 Hz sine wave
-// 1000 Hz sine wave
-// 8700 Hz sine wave
-//
+
 func smoothstep(progress: Float) -> Float {
   if progress <= 0 {
     return 0
@@ -121,27 +169,27 @@ func smoothstep(progress: Float) -> Float {
     let x2 = progress * progress
     let x3 = x2 * progress
     let x4 = x3 * progress
-    let x5 = x3 * progress * progress
-    #if true
-    return 3 * x2 - 2 * x3
-    #else
-    return 6 * x5 - 15 * x4 + 10 * x3
-    #endif
+    let x5 = x4 * progress
+    
+    switch stepType {
+    case .immediate:
+      return 1
+    case .firstOrderSmooth:
+      return 3 * x2 - 2 * x3
+    case .secondOrderSmooth:
+      return 6 * x5 - 15 * x4 + 10 * x3
+    }
   }
 }
 
-for t in 0..<(riseTime + 230) {
-  /*
-  let signalPeriod = Int(Float(1e6) / signalFrequency)
-  let phase = t % signalPeriod
-  
-  let phaseNormalized = Float(phase) / Float(signalPeriod)
-  let signal = signalAmplitude * sin(2 * Float.pi * phaseNormalized)
-   */
-  
-  let progress = Float(t - (t % 12)) / Float(riseTime)
+// MARK: - Simulation
+
+for t in 0..<1_000 {
+  let steppedTime = t - (t % dacResolution)
+  let progress = Float(steppedTime) / Float(riseTime)
   let signal = signalAmplitude * smoothstep(progress: progress)
-  let filteredSignal = filter.update(input: signal)
+  let filtered = biquadFilter.update(input: signal)
+  let filtered2 = firstOrderFilter.update(input: filtered)
   
   func format(_ number: Float) -> String {
     var output = String(format: "%.3f", number)
@@ -156,7 +204,8 @@ for t in 0..<(riseTime + 230) {
   if t % 1 == 0 {
     print("t = \(t) μs", terminator: " | ")
     print("signal = \(format(signal))", terminator: " | ")
-    print("filtered = \(format(filteredSignal))", terminator: " | ")
+    print("filtered = \(format(filtered))", terminator: " | ")
+    print("filtered2 = \(format(filtered2))", terminator: " | ")
     print()
   }
 }
