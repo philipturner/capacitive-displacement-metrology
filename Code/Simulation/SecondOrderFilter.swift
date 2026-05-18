@@ -138,10 +138,13 @@ enum StepType {
   case immediate
   case firstOrderSmooth
   case secondOrderSmooth
+  case thirdOrderSmooth
+  case fourthOrderSmooth // FP32 rounding error: 30 ppm
+  case fifthOrderSmooth // FP32 rounding error: 240 ppm
 }
-let stepType: StepType = .firstOrderSmooth
+let stepType: StepType = .fourthOrderSmooth
 
-func smoothstep(progress: Double) -> Double {
+func smoothstep(progress: Float) -> Float {
   if progress <= 0 {
     return 0
   } else if progress >= 1 {
@@ -151,6 +154,12 @@ func smoothstep(progress: Double) -> Double {
     let x3 = x2 * progress
     let x4 = x3 * progress
     let x5 = x4 * progress
+    let x6 = x5 * progress
+    let x7 = x6 * progress
+    let x8 = x7 * progress
+    let x9 = x8 * progress
+    let x10 = x9 * progress
+    let x11 = x10 * progress
     
     switch stepType {
     case .immediate:
@@ -159,20 +168,36 @@ func smoothstep(progress: Double) -> Double {
       return 3 * x2 - 2 * x3
     case .secondOrderSmooth:
       return 6 * x5 - 15 * x4 + 10 * x3
+    case .thirdOrderSmooth:
+      return -20 * x7 + 70 * x6 - 84 * x5 + 35 * x4
+    case .fourthOrderSmooth:
+      return 70 * x9 - 315 * x8 + 540 * x7 - 420 * x6 + 126 * x5
+    case .fifthOrderSmooth:
+      return -252 * x11 + 1386 * x10 - 3080 * x9 + 3465 * x8 - 1980 * x7 + 462 * x6
     }
   }
 }
 
-// unit: μs
-let dacResolution: Int = 12
+func createRiseTimes() -> [Int] {
+  var output: [Int] = []
+  for i in 0...30 {
+    let decades = Float(i) / 10
+    
+    var value = pow(10, decades)
+    value *= 30
+    value.round(.toNearestOrEven)
+    output.append(Int(value))
+  }
+  return output
+}
 
 // unit: μs
-// TODO: Auto-generate a smooth logarithmic spectrum from 30 μs to 30 ms
-let riseTimes: [Int] = [
-  100, //1000, 5000,
-]
+let dacResolution: Int = 12 // limiter for infinitely smooth curves
 
-let amplitudeMultiplier: Double = 0.3
+// unit: μs
+let riseTimes: [Int] = createRiseTimes()
+
+let amplitudeMultiplier: Double = 1
 
 // MARK: - Simulation
 
@@ -182,6 +207,8 @@ struct TrialResults {
   var settlingTime3Decade = SIMD3<UInt64>(repeating: .max) // μs
   var settlingTime4Decade = SIMD3<UInt64>(repeating: .max) // μs
 }
+
+let start = Date().timeIntervalSince1970
 
 var trialResults: [TrialResults] = []
 for trialID in riseTimes.indices {
@@ -211,8 +238,8 @@ for trialID in riseTimes.indices {
   var results = TrialResults()
   for t in 0..<createSimulationTime() {
     let dacApparentTime = t - (t % dacResolution)
-    let progress = Double(dacApparentTime) / Double(riseTime)
-    let signal = amplitudeMultiplier * smoothstep(progress: progress)
+    let progress = Float(dacApparentTime) / Float(riseTime)
+    let signal = amplitudeMultiplier * Double(smoothstep(progress: progress))
     
     let filtered = biquadFilter.update(input: signal)
     let filtered38 = lowpassFilter38.update(input: filtered)
@@ -274,6 +301,8 @@ for trialID in riseTimes.indices {
   trialResults.append(results)
 }
 
+let end = Date().timeIntervalSince1970
+
 print()
 for trialID in riseTimes.indices {
   let riseTime = riseTimes[trialID]
@@ -298,3 +327,6 @@ for trialID in riseTimes.indices {
   
   print()
 }
+
+print()
+print(Float(end - start))
