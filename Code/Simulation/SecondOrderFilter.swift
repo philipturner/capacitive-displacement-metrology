@@ -2,13 +2,13 @@ import Foundation
 
 // MARK: - Filters
 
-let resonanceFrequency: Float = 8700
-let Q: Float = 200
+let resonanceFrequency: Double = 8700
+let Q: Double = 200
 
 struct BiquadFilterDescriptor {
-  var resonanceFrequency: Float?
-  var samplingFrequency: Float?
-  var Q: Float?
+  var resonanceFrequency: Double?
+  var samplingFrequency: Double?
+  var Q: Double?
 }
 
 // Using digital form of 2nd-order LPF with Q-factor to simulate the mechanical
@@ -17,13 +17,13 @@ struct BiquadFilterDescriptor {
 // https://www.ti.com/lit/an/slaa447/slaa447.pdf
 // https://en.wikipedia.org/wiki/Digital_biquad_filter
 struct BiquadFilter {
-  var b: SIMD3<Float>
-  var a: SIMD3<Float>
+  var b: SIMD3<Double>
+  var a: SIMD3<Double>
   
-  var x2: Float = .zero
-  var x1: Float = .zero
-  var y2: Float = .zero
-  var y1: Float = .zero
+  var x2: Double = .zero
+  var x1: Double = .zero
+  var y2: Double = .zero
+  var y1: Double = .zero
   
   init(descriptor: BiquadFilterDescriptor) {
     guard let resonanceFrequency = descriptor.resonanceFrequency,
@@ -32,7 +32,7 @@ struct BiquadFilter {
       fatalError("Descriptor was incomplete.")
     }
     
-    let ω0 = 2 * Float.pi * resonanceFrequency / samplingFrequency
+    let ω0 = 2 * Double.pi * resonanceFrequency / samplingFrequency
     let α = sin(ω0) / (2 * Q)
     
     let b0 = (1 - cos(ω0)) / 2
@@ -51,8 +51,8 @@ struct BiquadFilter {
     a[0] = 1
   }
   
-  mutating func update(input: Float) -> Float {
-    var output: Float = .zero
+  mutating func update(input: Double) -> Double {
+    var output: Double = .zero
     output += b[0] * input + b[1] * x1 + b[2] * x2
     output -= a[1] * y1 + a[2] * y2
     
@@ -67,14 +67,14 @@ struct BiquadFilter {
 }
 
 struct FirstOrderFilterDescriptor {
-  var cutoffFrequency: Float?
-  var samplingFrequency: Float?
+  var cutoffFrequency: Double?
+  var samplingFrequency: Double?
 }
 
 struct FirstOrderFilter {
-  var a: Float
+  var a: Double
   
-  var y1: Float = .zero
+  var y1: Double = .zero
   
   init(descriptor: FirstOrderFilterDescriptor) {
     guard let cutoffFrequency = descriptor.cutoffFrequency,
@@ -83,12 +83,12 @@ struct FirstOrderFilter {
     }
     
     let sampleTime = 1 / samplingFrequency
-    let timeConstant = 1 / (2 * Float.pi * cutoffFrequency)
+    let timeConstant = 1 / (2 * Double.pi * cutoffFrequency)
     self.a = sampleTime / (timeConstant + sampleTime)
   }
   
-  mutating func update(input: Float) -> Float {
-    var output: Float = .zero
+  mutating func update(input: Double) -> Double {
+    var output: Double = .zero
     output += a * input
     output += (1 - a) * y1
     
@@ -106,7 +106,7 @@ func createBiquadFilter() -> BiquadFilter {
   return BiquadFilter(descriptor: filterDesc)
 }
 
-func createFirstOrderFilter(cutoff: Float) -> FirstOrderFilter {
+func createFirstOrderFilter(cutoff: Double) -> FirstOrderFilter {
   var filterDesc = FirstOrderFilterDescriptor()
   filterDesc.cutoffFrequency = cutoff
   filterDesc.samplingFrequency = 1_000_000
@@ -141,7 +141,7 @@ enum StepType {
 }
 let stepType: StepType = .firstOrderSmooth
 
-func smoothstep(progress: Float) -> Float {
+func smoothstep(progress: Double) -> Double {
   if progress <= 0 {
     return 0
   } else if progress >= 1 {
@@ -167,47 +167,59 @@ func smoothstep(progress: Float) -> Float {
 let dacResolution: Int = 12
 
 // unit: μs
+// TODO: Auto-generate a smooth logarithmic spectrum from 30 μs to 30 ms
 let riseTimes: [Int] = [
-  100, 1000, 5000,
-//  1000
+  100, //1000, 5000,
 ]
+
+let amplitudeMultiplier: Double = 0.3
 
 // MARK: - Simulation
 
-var trialResults: [SIMD3<Float>] = []
+struct TrialResults {
+  var overshoot: SIMD3<Double> = .zero
+  var settlingTime2Decade = SIMD3<UInt64>(repeating: .max) // μs
+  var settlingTime3Decade = SIMD3<UInt64>(repeating: .max) // μs
+  var settlingTime4Decade = SIMD3<UInt64>(repeating: .max) // μs
+}
+
+var trialResults: [TrialResults] = []
 for trialID in riseTimes.indices {
   var biquadFilter = createBiquadFilter()
   var lowpassFilter38 = createFirstOrderFilter(cutoff: 3800)
   var lowpassFilter15 = createFirstOrderFilter(cutoff: 1500)
   
   let riseTime = riseTimes[trialID]
-  
   func createSimulationTime() -> Int {
-    var output: Int = .zero
-    output += dacResolution
+    var settlingTimeReciprocalE = 1e6 / resonanceFrequency * Q / Double.pi
+    settlingTimeReciprocalE += (1e6 / 1500) / (2 * Double.pi)
+    let settlingTimeSixDecades = settlingTimeReciprocalE * 13.82
+    
+    var output = Int(settlingTimeSixDecades)
     if stepType != .immediate {
       output += riseTime
     }
-    output += 2 * (1_000_000 / 1500)
-    output += 3 * Int(1e6 / resonanceFrequency)
     return output
   }
+
+  // Approximate time span of one resonant vibration, in μs.
+  let resonancePeriod = Int(1e6 / resonanceFrequency)
+  let historyLength: Int = 3 * resonancePeriod
+  var history = [SIMD3<Double>](
+    repeating: .zero, count: historyLength)
   
-  var maxAmplitudes: SIMD3<Float> = .zero
+  var results = TrialResults()
   for t in 0..<createSimulationTime() {
     let dacApparentTime = t - (t % dacResolution)
-    let progress = Float(dacApparentTime) / Float(riseTime)
-    let signal = 1 * smoothstep(progress: progress)
+    let progress = Double(dacApparentTime) / Double(riseTime)
+    let signal = amplitudeMultiplier * smoothstep(progress: progress)
     
     let filtered = biquadFilter.update(input: signal)
     let filtered38 = lowpassFilter38.update(input: filtered)
     let filtered15 = lowpassFilter15.update(input: filtered)
-    let amplitudes = SIMD3(filtered, filtered38, filtered15)
-    maxAmplitudes.replace(
-      with: amplitudes,
-      where: amplitudes .> maxAmplitudes)
     
-    func format(_ number: Float) -> String {
+    #if false
+    func format(_ number: Double) -> String {
       var output = String(format: "%.5f", number)
       
       let exampleString = "-X.XXXXX"
@@ -225,20 +237,64 @@ for trialID in riseTimes.indices {
       print("1.5k = \(format(filtered15))", terminator: " | ")
       print()
     }
+    #endif
+    
+    let error = SIMD3(filtered, filtered38, filtered15) - amplitudeMultiplier
+    history[t % historyLength] = error
+    results.overshoot.replace(
+      with: error, where: error .> results.overshoot)
+    
+    if t >= historyLength, t % resonancePeriod == 0 {
+      func createMinimumTime(threshold: Double) -> SIMD3<UInt64> {
+        var output = SIMD3<UInt64>(
+          repeating: UInt64(t - historyLength))
+        let failure = SIMD3<UInt64>(repeating: .max)
+        
+        for error in history {
+          output.replace(
+            with: failure, where: error .> threshold)
+          output.replace(
+            with: failure, where: error .< -threshold)
+        }
+        return output
+      }
+      
+      let time2Decade = createMinimumTime(threshold: amplitudeMultiplier * 1e-2)
+      let time3Decade = createMinimumTime(threshold: amplitudeMultiplier * 1e-3)
+      let time4Decade = createMinimumTime(threshold: amplitudeMultiplier * 1e-4)
+      results.settlingTime2Decade.replace(
+        with: time2Decade, where: time2Decade .< results.settlingTime2Decade)
+      results.settlingTime3Decade.replace(
+        with: time3Decade, where: time3Decade .< results.settlingTime3Decade)
+      results.settlingTime4Decade.replace(
+        with: time4Decade, where: time4Decade .< results.settlingTime4Decade)
+    }
   }
   
-  let overshootProportions = maxAmplitudes - 1
-  trialResults.append(overshootProportions)
+  trialResults.append(results)
 }
 
 print()
 for trialID in riseTimes.indices {
   let riseTime = riseTimes[trialID]
-  let overshootProportions = trialResults[trialID]
+  let results = trialResults[trialID]
   
   print(riseTime, terminator: ", ")
-  print(overshootProportions[0], terminator: ", ")
-  print(overshootProportions[1], terminator: ", ")
-  print(overshootProportions[2], terminator: ", ")
+  print(Float(results.overshoot[0]), terminator: ", ")
+  print(Float(results.overshoot[1]), terminator: ", ")
+  print(Float(results.overshoot[2]), terminator: ", ")
+  
+  func printVector(_ time: SIMD3<UInt64>) {
+    func format(_ microseconds: UInt64) -> String {
+      let milliseconds = Double(microseconds) / 1000
+      return String(format: "%.3f", milliseconds)
+    }
+    
+    print(format(time[0]), terminator: ", ")
+    print(format(time[1]), terminator: ", ")
+    print(format(time[2]), terminator: ", ")
+  }
+  printVector(results.settlingTime4Decade)
+  
   print()
 }
