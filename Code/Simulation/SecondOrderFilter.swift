@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - Filters
 
-let resonanceFrequency: Double = 8700
+let resonanceFrequency: Double = 47000
 let Q: Double = 200
 
 struct BiquadFilterDescriptor {
@@ -134,7 +134,7 @@ func createFirstOrderFilter(cutoff: Double) -> FirstOrderFilter {
 // Steppy DAC waveform (12 μs)
 // Smoothstep, 1st order: 100 μs -> initial overshoot to 141 nm
 
-enum StepType {
+enum StepType: CaseIterable {
   case immediate
   case firstOrderSmooth
   case secondOrderSmooth
@@ -142,191 +142,191 @@ enum StepType {
   case fourthOrderSmooth // FP32 rounding error: 30 ppm
   case fifthOrderSmooth // FP32 rounding error: 240 ppm
 }
-let stepType: StepType = .fourthOrderSmooth
 
-func smoothstep(progress: Float) -> Float {
-  if progress <= 0 {
-    return 0
-  } else if progress >= 1 {
-    return 1
-  } else {
-    let x2 = progress * progress
-    let x3 = x2 * progress
-    let x4 = x3 * progress
-    let x5 = x4 * progress
-    let x6 = x5 * progress
-    let x7 = x6 * progress
-    let x8 = x7 * progress
-    let x9 = x8 * progress
-    let x10 = x9 * progress
-    let x11 = x10 * progress
-    
-    switch stepType {
-    case .immediate:
+for stepType in StepType.allCases {
+  func smoothstep(progress: Float) -> Float {
+    if progress <= 0 {
+      return 0
+    } else if progress >= 1 {
       return 1
-    case .firstOrderSmooth:
-      return 3 * x2 - 2 * x3
-    case .secondOrderSmooth:
-      return 6 * x5 - 15 * x4 + 10 * x3
-    case .thirdOrderSmooth:
-      return -20 * x7 + 70 * x6 - 84 * x5 + 35 * x4
-    case .fourthOrderSmooth:
-      return 70 * x9 - 315 * x8 + 540 * x7 - 420 * x6 + 126 * x5
-    case .fifthOrderSmooth:
-      return -252 * x11 + 1386 * x10 - 3080 * x9 + 3465 * x8 - 1980 * x7 + 462 * x6
+    } else {
+      let x2 = progress * progress
+      let x3 = x2 * progress
+      let x4 = x3 * progress
+      let x5 = x4 * progress
+      let x6 = x5 * progress
+      let x7 = x6 * progress
+      let x8 = x7 * progress
+      let x9 = x8 * progress
+      let x10 = x9 * progress
+      let x11 = x10 * progress
+      
+      switch stepType {
+      case .immediate:
+        return 1
+      case .firstOrderSmooth:
+        return 3 * x2 - 2 * x3
+      case .secondOrderSmooth:
+        return 6 * x5 - 15 * x4 + 10 * x3
+      case .thirdOrderSmooth:
+        return -20 * x7 + 70 * x6 - 84 * x5 + 35 * x4
+      case .fourthOrderSmooth:
+        return 70 * x9 - 315 * x8 + 540 * x7 - 420 * x6 + 126 * x5
+      case .fifthOrderSmooth:
+        return -252 * x11 + 1386 * x10 - 3080 * x9 + 3465 * x8 - 1980 * x7 + 462 * x6
+      }
     }
   }
-}
-
-func createRiseTimes() -> [Int] {
-  var output: [Int] = []
-  for i in 0...30 {
-    let decades = Float(i) / 10
-    
-    var value = pow(10, decades)
-    value *= 30
-    value.round(.toNearestOrEven)
-    output.append(Int(value))
-  }
-  return output
-}
-
-// unit: μs
-let dacResolution: Int = 12 // limiter for infinitely smooth curves
-
-// unit: μs
-let riseTimes: [Int] = createRiseTimes()
-
-let amplitudeMultiplier: Double = 1
-
-// MARK: - Simulation
-
-struct TrialResults {
-  var overshoot: SIMD3<Double> = .zero
-  var settlingTime2Decade = SIMD3<UInt64>(repeating: .max) // μs
-  var settlingTime3Decade = SIMD3<UInt64>(repeating: .max) // μs
-  var settlingTime4Decade = SIMD3<UInt64>(repeating: .max) // μs
-}
-
-let start = Date().timeIntervalSince1970
-
-var trialResults: [TrialResults] = []
-for trialID in riseTimes.indices {
-  var biquadFilter = createBiquadFilter()
-  var lowpassFilter38 = createFirstOrderFilter(cutoff: 3800)
-  var lowpassFilter15 = createFirstOrderFilter(cutoff: 1500)
   
-  let riseTime = riseTimes[trialID]
-  func createSimulationTime() -> Int {
-    var settlingTimeReciprocalE = 1e6 / resonanceFrequency * Q / Double.pi
-    settlingTimeReciprocalE += (1e6 / 1500) / (2 * Double.pi)
-    let settlingTimeSixDecades = settlingTimeReciprocalE * 13.82
+  func createRiseTimes() -> [Int] {
+    if stepType == .immediate {
+      return [30]
+    }
     
-    var output = Int(settlingTimeSixDecades)
-    if stepType != .immediate {
-      output += riseTime
+    var output: [Int] = []
+    for i in 0...30 {
+      let decades = Float(i) / 10
+      
+      var value = pow(10, decades)
+      value *= 30
+      value.round(.toNearestOrEven)
+      output.append(Int(value))
     }
     return output
   }
-
-  // Approximate time span of one resonant vibration, in μs.
-  let resonancePeriod = Int(1e6 / resonanceFrequency)
-  let historyLength: Int = 3 * resonancePeriod
-  var history = [SIMD3<Double>](
-    repeating: .zero, count: historyLength)
   
-  var results = TrialResults()
-  for t in 0..<createSimulationTime() {
-    let dacApparentTime = t - (t % dacResolution)
-    let progress = Float(dacApparentTime) / Float(riseTime)
-    let signal = amplitudeMultiplier * Double(smoothstep(progress: progress))
+  // unit: μs
+  let dacResolution: Int = 18 // limiter for infinitely smooth curves
+  
+  // unit: μs
+  let riseTimes: [Int] = createRiseTimes()
+  
+  let amplitudeMultiplier: Double = 1
+  
+  // MARK: - Simulation
+  
+  struct TrialResults {
+    var overshoot: SIMD3<Double> = .zero
+    var settlingTime2Decade = SIMD3<UInt64>(repeating: .max) // μs
+    var settlingTime3Decade = SIMD3<UInt64>(repeating: .max) // μs
+    var settlingTime4Decade = SIMD3<UInt64>(repeating: .max) // μs
+  }
+  
+  var trialResults: [TrialResults] = []
+  for trialID in riseTimes.indices {
+    var biquadFilter = createBiquadFilter()
+    var lowpassFilter38 = createFirstOrderFilter(cutoff: 3800)
+    var lowpassFilter15 = createFirstOrderFilter(cutoff: 1500)
     
-    let filtered = biquadFilter.update(input: signal)
-    let filtered38 = lowpassFilter38.update(input: filtered)
-    let filtered15 = lowpassFilter15.update(input: filtered)
-    
-    #if false
-    func format(_ number: Double) -> String {
-      var output = String(format: "%.5f", number)
+    let riseTime = riseTimes[trialID]
+    func createSimulationTime() -> Int {
+      var settlingTimeReciprocalE = 1e6 / resonanceFrequency * Q / Double.pi
+      settlingTimeReciprocalE += (1e6 / 1500) / (2 * Double.pi)
+      let settlingTimeSixDecades = settlingTimeReciprocalE * 13.82
       
-      let exampleString = "-X.XXXXX"
-      while output.count < exampleString.count {
-        output = " " + output
+      var output = Int(settlingTimeSixDecades)
+      if stepType != .immediate {
+        output += riseTime
       }
       return output
     }
     
-    if t % 1 == 0 {
-      print("t = \(t) μs", terminator: " | ")
-      print("signal = \(format(signal))", terminator: " | ")
-      print("biquad = \(format(filtered))", terminator: " | ")
-      print("3.8k = \(format(filtered38))", terminator: " | ")
-      print("1.5k = \(format(filtered15))", terminator: " | ")
-      print()
-    }
-    #endif
+    // Approximate time span of one resonant vibration, in μs.
+    let resonancePeriod = Int(1e6 / resonanceFrequency)
+    let historyLength: Int = 3 * resonancePeriod
+    var history = [SIMD3<Double>](
+      repeating: .zero, count: historyLength)
     
-    let error = SIMD3(filtered, filtered38, filtered15) - amplitudeMultiplier
-    history[t % historyLength] = error
-    results.overshoot.replace(
-      with: error, where: error .> results.overshoot)
-    
-    if t >= historyLength, t % resonancePeriod == 0 {
-      func createMinimumTime(threshold: Double) -> SIMD3<UInt64> {
-        var output = SIMD3<UInt64>(
-          repeating: UInt64(t - historyLength))
-        let failure = SIMD3<UInt64>(repeating: .max)
+    var results = TrialResults()
+    for t in 0..<createSimulationTime() {
+      let dacApparentTime = t - (t % dacResolution)
+      let progress = Float(dacApparentTime) / Float(riseTime)
+      let signal = amplitudeMultiplier * Double(smoothstep(progress: progress))
+      
+      let filtered = biquadFilter.update(input: signal)
+      let filtered38 = lowpassFilter38.update(input: filtered)
+      let filtered15 = lowpassFilter15.update(input: filtered)
+      
+#if false
+      func format(_ number: Double) -> String {
+        var output = String(format: "%.5f", number)
         
-        for error in history {
-          output.replace(
-            with: failure, where: error .> threshold)
-          output.replace(
-            with: failure, where: error .< -threshold)
+        let exampleString = "-X.XXXXX"
+        while output.count < exampleString.count {
+          output = " " + output
         }
         return output
       }
       
-      let time2Decade = createMinimumTime(threshold: amplitudeMultiplier * 1e-2)
-      let time3Decade = createMinimumTime(threshold: amplitudeMultiplier * 1e-3)
-      let time4Decade = createMinimumTime(threshold: amplitudeMultiplier * 1e-4)
-      results.settlingTime2Decade.replace(
-        with: time2Decade, where: time2Decade .< results.settlingTime2Decade)
-      results.settlingTime3Decade.replace(
-        with: time3Decade, where: time3Decade .< results.settlingTime3Decade)
-      results.settlingTime4Decade.replace(
-        with: time4Decade, where: time4Decade .< results.settlingTime4Decade)
-    }
-  }
-  
-  trialResults.append(results)
-}
-
-let end = Date().timeIntervalSince1970
-
-print()
-for trialID in riseTimes.indices {
-  let riseTime = riseTimes[trialID]
-  let results = trialResults[trialID]
-  
-  print(riseTime, terminator: ", ")
-  print(Float(results.overshoot[0]), terminator: ", ")
-  print(Float(results.overshoot[1]), terminator: ", ")
-  print(Float(results.overshoot[2]), terminator: ", ")
-  
-  func printVector(_ time: SIMD3<UInt64>) {
-    func format(_ microseconds: UInt64) -> String {
-      let milliseconds = Double(microseconds) / 1000
-      return String(format: "%.3f", milliseconds)
+      if t % 1 == 0 {
+        print("t = \(t) μs", terminator: " | ")
+        print("signal = \(format(signal))", terminator: " | ")
+        print("biquad = \(format(filtered))", terminator: " | ")
+        print("3.8k = \(format(filtered38))", terminator: " | ")
+        print("1.5k = \(format(filtered15))", terminator: " | ")
+        print()
+      }
+#endif
+      
+      let error = SIMD3(filtered, filtered38, filtered15) - amplitudeMultiplier
+      history[t % historyLength] = error
+      results.overshoot.replace(
+        with: error, where: error .> results.overshoot)
+      
+      if t >= historyLength, t % resonancePeriod == 0 {
+        func createMinimumTime(threshold: Double) -> SIMD3<UInt64> {
+          var output = SIMD3<UInt64>(
+            repeating: UInt64(t - historyLength))
+          let failure = SIMD3<UInt64>(repeating: .max)
+          
+          for error in history {
+            output.replace(
+              with: failure, where: error .> threshold)
+            output.replace(
+              with: failure, where: error .< -threshold)
+          }
+          return output
+        }
+        
+        let time2Decade = createMinimumTime(threshold: amplitudeMultiplier * 1e-2)
+        let time3Decade = createMinimumTime(threshold: amplitudeMultiplier * 1e-3)
+        let time4Decade = createMinimumTime(threshold: amplitudeMultiplier * 1e-4)
+        results.settlingTime2Decade.replace(
+          with: time2Decade, where: time2Decade .< results.settlingTime2Decade)
+        results.settlingTime3Decade.replace(
+          with: time3Decade, where: time3Decade .< results.settlingTime3Decade)
+        results.settlingTime4Decade.replace(
+          with: time4Decade, where: time4Decade .< results.settlingTime4Decade)
+      }
     }
     
-    print(format(time[0]), terminator: ", ")
-    print(format(time[1]), terminator: ", ")
-    print(format(time[2]), terminator: ", ")
+    trialResults.append(results)
   }
-  printVector(results.settlingTime4Decade)
   
   print()
+  for trialID in riseTimes.indices {
+    let riseTime = riseTimes[trialID]
+    let results = trialResults[trialID]
+    
+    print(riseTime, terminator: ", ")
+    print(Float(results.overshoot[0]), terminator: ", ")
+    print(Float(results.overshoot[1]), terminator: ", ")
+    print(Float(results.overshoot[2]), terminator: ", ")
+    
+    func printVector(_ time: SIMD3<UInt64>) {
+      func format(_ microseconds: UInt64) -> String {
+        let milliseconds = Double(microseconds) / 1000
+        return String(format: "%.3f", milliseconds)
+      }
+      
+      print(format(time[0]), terminator: ", ")
+      print(format(time[1]), terminator: ", ")
+      print(format(time[2]), terminator: ", ")
+    }
+    printVector(results.settlingTime2Decade)
+    printVector(results.settlingTime3Decade)
+    printVector(results.settlingTime4Decade)
+    
+    print()
+  }
 }
-
-print()
-print(Float(end - start))
