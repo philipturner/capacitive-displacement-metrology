@@ -140,7 +140,7 @@ enum StepType: CaseIterable {
   case secondOrderSmooth
   case thirdOrderSmooth
   case fourthOrderSmooth // FP32 rounding error: 30 ppm
-  case fifthOrderSmooth // FP32 rounding error: 240 ppm
+  // case fifthOrderSmooth // FP32 rounding error: 240 ppm
 }
 
 for stepType in StepType.allCases {
@@ -158,8 +158,8 @@ for stepType in StepType.allCases {
       let x7 = x6 * progress
       let x8 = x7 * progress
       let x9 = x8 * progress
-      let x10 = x9 * progress
-      let x11 = x10 * progress
+      // let x10 = x9 * progress
+      // let x11 = x10 * progress
       
       switch stepType {
       case .immediate:
@@ -172,23 +172,23 @@ for stepType in StepType.allCases {
         return -20 * x7 + 70 * x6 - 84 * x5 + 35 * x4
       case .fourthOrderSmooth:
         return 70 * x9 - 315 * x8 + 540 * x7 - 420 * x6 + 126 * x5
-      case .fifthOrderSmooth:
-        return -252 * x11 + 1386 * x10 - 3080 * x9 + 3465 * x8 - 1980 * x7 + 462 * x6
+      // case .fifthOrderSmooth:
+      //   return -252 * x11 + 1386 * x10 - 3080 * x9 + 3465 * x8 - 1980 * x7 + 462 * x6
       }
     }
   }
   
   func createRiseTimes() -> [Int] {
     if stepType == .immediate {
-      return [30]
+      return [100]
     }
     
     var output: [Int] = []
-    for i in 0...30 {
+    for i in 0...20 {
       let decades = Float(i) / 10
       
       var value = pow(10, decades)
-      value *= 30
+      value *= 100
       value.round(.toNearestOrEven)
       output.append(Int(value))
     }
@@ -196,7 +196,7 @@ for stepType in StepType.allCases {
   }
   
   // unit: μs
-  let dacResolution: Int = 18 // limiter for infinitely smooth curves
+  let dacResolution: Int = 1 // limiter for infinitely smooth curves
   
   // unit: μs
   let riseTimes: [Int] = createRiseTimes()
@@ -310,8 +310,8 @@ for stepType in StepType.allCases {
     
     print(riseTime, terminator: ", ")
     print(Float(results.overshoot[0]), terminator: ", ")
-    print(Float(results.overshoot[1]), terminator: ", ")
-    print(Float(results.overshoot[2]), terminator: ", ")
+    // print(Float(results.overshoot[1]), terminator: ", ")
+    // print(Float(results.overshoot[2]), terminator: ", ")
     
     func printVector(_ time: SIMD3<UInt64>) {
       func format(_ microseconds: UInt64) -> String {
@@ -320,8 +320,8 @@ for stepType in StepType.allCases {
       }
       
       print(format(time[0]), terminator: ", ")
-      print(format(time[1]), terminator: ", ")
-      print(format(time[2]), terminator: ", ")
+      // print(format(time[1]), terminator: ", ")
+      // print(format(time[2]), terminator: ", ")
     }
     printVector(results.settlingTime2Decade)
     printVector(results.settlingTime3Decade)
