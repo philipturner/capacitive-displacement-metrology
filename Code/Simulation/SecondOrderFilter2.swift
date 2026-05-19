@@ -237,118 +237,166 @@ struct TrialResults {
   var minimumAC: Double = .greatestFiniteMagnitude
 }
 
-let waveType: WaveType = .sine
+let waveTypes: [WaveType] = [
+  .triangle,
+  .polynomial(includeOutskirts: false),
+  .polynomial(includeOutskirts: true),
+  .sine,
+]
 
-var resultsList: [TrialResults] = []
-let targetFrequencies = createTargetFrequencies()
-for targetFrequency in targetFrequencies {
-  let sinePeriod = createPeriod(targetFrequency: targetFrequency)
-  let targetDuration = createTargetDuration()
-  let waveCount = max(10, targetDuration / sinePeriod)
-  let duration = sinePeriod * waveCount + sinePeriod + 1_000
-  
-  var biquadFilter = createBiquadFilter()
-  var results = TrialResults()
-  for t in 0..<duration {
-    let dacApparentTime = t - (t % dacResolution)
-    let phase = dacApparentTime % sinePeriod
-    let phaseNormalized = Float(phase) / Float(sinePeriod)
-    let waveID = t / sinePeriod
+for waveType in waveTypes {
+  var resultsList: [TrialResults] = []
+  let targetFrequencies = createTargetFrequencies()
+  for targetFrequency in targetFrequencies {
+    let sinePeriod = createPeriod(targetFrequency: targetFrequency)
+    let targetDuration = createTargetDuration()
+    let waveCount = max(10, targetDuration / sinePeriod)
+    let duration = sinePeriod * waveCount + sinePeriod + 1_000
     
-    func createSignal() -> Float {
-      if waveID < 0 || waveID >= waveCount {
-        return 0
-      }
+    var biquadFilter = createBiquadFilter()
+    var results = TrialResults()
+    for t in 0..<duration {
+      let dacApparentTime = t - (t % dacResolution)
+      let phase = dacApparentTime % sinePeriod
+      let phaseNormalized = Float(phase) / Float(sinePeriod)
+      let waveID = t / sinePeriod
       
-      switch waveType {
-      case .triangle:
-        return triangleWave(phaseNormalized: phaseNormalized)
-      case .polynomial(let includeOutskirts):
-        let hasStartOutskirt = includeOutskirts && (waveID == 0)
-        let hasEndOutskirt = includeOutskirts && (waveID == waveCount - 1)
-        
-        let x = 6 * phaseNormalized
-        let waveValue = polynomialWave(
-          x: x,
-          hasStartOutskirt: hasStartOutskirt,
-          hasEndOutskirt: hasEndOutskirt)
-        
-        var y = waveValue * 0.5 / polynomialWaveAmplitude
-        if !includeOutskirts {
-          y += 0.5
+      func createSignal() -> Float {
+        if waveID < 0 || waveID >= waveCount {
+          return 0
         }
-        return y
-      case .sine:
-        return sineWave(phaseNormalized: phaseNormalized)
+        
+        switch waveType {
+        case .triangle:
+          return triangleWave(phaseNormalized: phaseNormalized)
+        case .polynomial(let includeOutskirts):
+          let hasStartOutskirt = includeOutskirts && (waveID == 0)
+          let hasEndOutskirt = includeOutskirts && (waveID == waveCount - 1)
+          
+          let x = 6 * phaseNormalized
+          let waveValue = polynomialWave(
+            x: x,
+            hasStartOutskirt: hasStartOutskirt,
+            hasEndOutskirt: hasEndOutskirt)
+          
+          var y = waveValue * 0.5 / polynomialWaveAmplitude
+          if !includeOutskirts {
+            y += 0.5
+          }
+          return y
+        case .sine:
+          return sineWave(phaseNormalized: phaseNormalized)
+        }
       }
-    }
-    
-    let signal = Double(createSignal())
-    let filtered = biquadFilter.update(input: signal)
-    let error = filtered - signal
-    
+      
+      let signal = Double(createSignal())
+      let filtered = biquadFilter.update(input: signal)
+      let error = filtered - signal
+      
 #if false
-    func format(_ number: Double) -> String {
-      var output = String(format: "%.5f", number)
-      
-      let exampleString = "-X.XXXXX"
-      while output.count < exampleString.count {
-        output = " " + output
+      func format(_ number: Double) -> String {
+        var output = String(format: "%.5f", number)
+        
+        let exampleString = "-X.XXXXX"
+        while output.count < exampleString.count {
+          output = " " + output
+        }
+        return output
       }
-      return output
-    }
-    
-    if t % 20 == 0 {
-      print("t = \(t) μs", terminator: " | ")
-      print("signal = \(format(signal))", terminator: " | ")
-      print("biquad = \(format(filtered))", terminator: " | ")
-      print("error = \(format(error))", terminator: " | ")
-      print()
-    }
+      
+      if t % 20 == 0 {
+        print("t = \(t) μs", terminator: " | ")
+        print("signal = \(format(signal))", terminator: " | ")
+        print("biquad = \(format(filtered))", terminator: " | ")
+        print("error = \(format(error))", terminator: " | ")
+        print()
+      }
 #endif
-    
-    func accumulateError(into accumulator: inout Double) {
-      let errorMagnitude = error.magnitude
-      if errorMagnitude > accumulator {
-        accumulator = errorMagnitude
-      }
-    }
-    
-    if waveID == 0 {
-      accumulateError(into: &results.errorStart)
-    } else if waveID > waveCount - 1 {
-      accumulateError(into: &results.errorEnd)
-    } else if waveID < waveCount - 1 {
-      accumulateError(into: &results.errorAC)
       
-      var shifted = filtered
-      if case .polynomial(true) = waveType {
-        shifted += 0.5
+      func accumulateError(into accumulator: inout Double) {
+        let errorMagnitude = error.magnitude
+        if errorMagnitude > accumulator {
+          accumulator = errorMagnitude
+        }
       }
       
-      if shifted > results.maximumAC {
-        results.maximumAC = shifted
+      /*
+       case .polynomial(true) = waveType
+       
+       // waveID > waveCount - 1
+       10.0, 0.00012584918, 0.00012583056, 1.6808663e-08, 1.948787e-06, 1.9974384e-06,
+       12.6, 0.00015692633, 0.00015799269, 1.9989903e-08, 3.0998792e-06, 3.2865637e-06,
+       15.8, 0.00019706487, 0.00019784819, 3.0382665e-08, 4.98324e-06, 4.653742e-06,
+       20.0, 0.0002471953, 0.0002475722, 1.245334e-07, 7.70972e-06, 7.694512e-06,
+       25.1, 0.00031265596, 0.0003126989, 3.3362187e-07, 1.2483052e-05, 1.2694755e-05,
+       
+       // waveID > waveCount - 2
+       10.0, 0.00012584918, 0.00012583056, 0.00012583056, 1.948787e-06, 1.9974384e-06,
+       12.6, 0.00015692633, 0.00015799269, 0.00015799236, 3.0998792e-06, 3.2865637e-06,
+       15.8, 0.00019706487, 0.00019784819, 0.00019784819, 4.98324e-06, 4.653742e-06,
+       20.0, 0.0002471953, 0.0002475722, 0.0002475722, 7.70972e-06, 7.694512e-06,
+       25.1, 0.00031265596, 0.0003126989, 0.0003126989, 1.2483052e-05, 1.2694755e-05,
+       
+       // accurate heuristic
+       10.0, 0.00012584918, 0.00012583056, 1.6251711e-07, 1.948787e-06, 1.9974384e-06,
+       12.6, 0.00015692633, 0.00015799269, 1.2254813e-07, 3.0998792e-06, 3.2865637e-06,
+       15.8, 0.00019706487, 0.00019784819, 1.2783094e-07, 4.98324e-06, 4.653742e-06,
+       20.0, 0.0002471953, 0.0002475722, 3.913039e-07, 7.70972e-06, 7.694512e-06,
+       25.1, 0.00031265596, 0.0003126989, 8.2286334e-07, 1.2483052e-05, 1.2694755e-05,
+       */
+      
+      func isEnd() -> Bool {
+        if case .polynomial(true) = waveType {
+          if waveID > waveCount - 1 {
+            return true
+          } else if waveID == waveCount - 1 {
+            let x = 6 * phaseNormalized
+            return (x > 5)
+          } else {
+            return false
+          }
+        } else {
+          return waveID > waveCount - 1
+        }
       }
-      if shifted < results.minimumAC {
-        results.minimumAC = shifted
+      
+      
+      if waveID == 0 {
+        accumulateError(into: &results.errorStart)
+      } else if isEnd() {
+        accumulateError(into: &results.errorEnd)
+      } else if waveID < waveCount - 1 {
+        accumulateError(into: &results.errorAC)
+        
+        var shifted = filtered
+        if case .polynomial(true) = waveType {
+          shifted += 0.5
+        }
+        
+        if shifted > results.maximumAC {
+          results.maximumAC = shifted
+        }
+        if shifted < results.minimumAC {
+          results.minimumAC = shifted
+        }
       }
     }
+    resultsList.append(results)
   }
-  resultsList.append(results)
-}
-
-print()
-for resultsID in resultsList.indices {
-  let targetFrequency = targetFrequencies[resultsID]
-  let sinePeriod = createPeriod(targetFrequency: targetFrequency)
-  let actualFrequency = 1e6 / Float(sinePeriod)
-  print(String(format: "%.1f", actualFrequency), terminator: ", ")
   
-  let results = resultsList[resultsID]
-  print(Float(results.errorStart), terminator: ", ")
-  print(Float(results.errorAC), terminator: ", ")
-  print(Float(results.errorEnd), terminator: ", ")
-  print(Float(results.maximumAC - 1), terminator: ", ")
-  print(Float(-results.minimumAC), terminator: ", ")
   print()
+  for resultsID in resultsList.indices {
+    let targetFrequency = targetFrequencies[resultsID]
+    let sinePeriod = createPeriod(targetFrequency: targetFrequency)
+    let actualFrequency = 1e6 / Float(sinePeriod)
+    print(String(format: "%.1f", actualFrequency), terminator: ", ")
+    
+    let results = resultsList[resultsID]
+    print(Float(results.errorStart), terminator: ", ")
+    print(Float(results.errorAC), terminator: ", ")
+    print(Float(results.errorEnd), terminator: ", ")
+    print(Float(results.maximumAC - 1), terminator: ", ")
+    print(Float(-results.minimumAC), terminator: ", ")
+    print()
+  }
 }
