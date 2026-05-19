@@ -1,3 +1,5 @@
+#pragma once
+
 struct Application {
   static void setupSerial();
 
