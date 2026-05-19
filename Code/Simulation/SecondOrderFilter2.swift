@@ -197,44 +197,34 @@ func createPolynomialWaveAmplitude() -> Float {
 }
 let polynomialWaveAmplitude = createPolynomialWaveAmplitude()
 
-for i in 0..<200 {
-  let phaseNormalized = Float(i) / 200
-  
-  #if false
-  let x = 6 * phaseNormalized
-  let waveValue = polynomialWave(
-    x: x, hasStartOutskirt: false, hasEndOutskirt: true)
-  let y = waveValue * 0.5 / polynomialWaveAmplitude
-  #else
-  let y = sineWave(phaseNormalized: phaseNormalized) - 0.5
-  #endif
-  
-  print(String(format: "%.5f", phaseNormalized), terminator: ", ")
-  print(String(format: "%.5f", y), terminator: ", ")
-  print()
-}
-
-exit(0)
-
 // MARK: - Simulation
 
-let waveType: WaveType = .triangle
+let waveType: WaveType = .sine
 let includeOutskirts: Bool = true
 
 let sinePeriod = createPeriod(targetFrequency: 300)
-let targetDuration: Int = 7_000
+let targetDuration: Int = 70_000
 let waveCount = targetDuration / sinePeriod
 let duration = sinePeriod * waveCount + 1_000
 
 var biquadFilter = createBiquadFilter()
 
+struct TrialResults {
+  var errorStart: Double = .zero
+  var errorAC: Double = .zero
+  var errorEnd: Double = .zero
+  var maximumAC: Double = -.greatestFiniteMagnitude
+  var minimumAC: Double = .greatestFiniteMagnitude
+}
+
+var results = TrialResults()
 for t in 0..<duration {
   let dacApparentTime = t - (t % dacResolution)
   let phase = dacApparentTime % sinePeriod
   let phaseNormalized = Float(phase) / Float(sinePeriod)
+  let waveID = t / sinePeriod
   
   func createSignal() -> Float {
-    let waveID = t / sinePeriod
     if waveID < 0 || waveID >= waveCount {
       return 0
     }
@@ -276,11 +266,47 @@ for t in 0..<duration {
     return output
   }
   
-  if t % 4 == 0 {
+  if t % 20 == 0 {
     print("t = \(t) μs", terminator: " | ")
     print("signal = \(format(signal))", terminator: " | ")
     print("biquad = \(format(filtered))", terminator: " | ")
     print("error = \(format(error))", terminator: " | ")
     print()
   }
+  
+  func accumulateError(into accumulator: inout Double) {
+    let errorMagnitude = error.magnitude
+    if errorMagnitude > accumulator {
+      accumulator = error
+    }
+  }
+  
+  if waveID == 0 {
+    accumulateError(into: &results.errorStart)
+  } else if waveID >= waveCount - 1 {
+    accumulateError(into: &results.errorEnd)
+  } else {
+    accumulateError(into: &results.errorAC)
+    
+    var shifted = filtered
+    if waveType == .polynomial && includeOutskirts {
+      shifted += 0.5
+    }
+    
+    if shifted > results.maximumAC {
+      results.maximumAC = shifted
+    }
+    if shifted < results.minimumAC {
+      results.minimumAC = shifted
+    }
+  }
 }
+
+let actualFrequency = 1e6 / Float(sinePeriod)
+print(String(format: "%.1f", actualFrequency), terminator: ", ")
+print(Float(results.errorStart), terminator: ", ")
+print(Float(results.errorAC), terminator: ", ")
+print(Float(results.errorEnd), terminator: ", ")
+print(Float(results.maximumAC - 1), terminator: ", ")
+print(Float(-results.minimumAC), terminator: ", ")
+print()
