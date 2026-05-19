@@ -19,9 +19,6 @@ float phaseShift = 0; // units: °
 
 float fineXVoltage = 0; // units: V
 float fineYVoltage = 0; // units: V
-float filteredFineXVoltage = 0; // units: V
-float filteredFineYVoltage = 0; // units: V
-float scanFilterTimeLag = 0;
 
 enum class Mode {
   noise = 0,

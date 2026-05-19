@@ -112,9 +112,12 @@ void CapacitanceTracker::update(
       timeLag -= float(wavePeriod);
 
       float servoLoopLag = 0;
-      servoLoopLag += 2.4; // DAC
-      servoLoopLag += 10; // ADC 100 kSPS sampling
-      servoLoopLag += 29; // 3 poles (10 kHz, 24 kHz, 24 kHz)
+      servoLoopLag += 2.4; // DAC sequential update wait time
+      servoLoopLag += 3.5; // TIA, 45 kHz pole
+      servoLoopLag += 13.3; // ADC suspected 24 kHz, Q = 0.500
+      servoLoopLag += 5.0; // ADC conversion time
+      servoLoopLag += 5.0; // ADC acquisition time
+      servoLoopLag += 15.9; // digital 10 kHz LPF
       timeLag -= servoLoopLag;
 
       float relativeTimeLag = timeLag / float(wavePeriod);

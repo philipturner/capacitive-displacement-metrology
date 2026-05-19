@@ -33,3 +33,42 @@ float FilterUtil::getLowpassAlpha(
   float timeConstant = 1 / (2 * M_PI * frequency);
   return sampleTimeSeconds / (timeConstant + sampleTimeSeconds);
 }
+
+float FilterUtil::thirdOrderSmoothstep(float x) {
+  if (x < 0) {
+    return 0;
+  }
+  if (x > 1) {
+    return 1;
+  }
+
+  float x2 = x * x;
+  float x3 = x2 * x;
+  float x4 = x2 * x2;
+
+  float output = -20 * x3 + 70 * x2 - 84 * x + 35;
+  output *= x4;
+  return output;
+}
+
+float FilterUtil::polynomialWaveOutskirt(float x) {
+  float x2 = x * x;
+  float x3 = x2 * x;
+  float x5 = x2 * x2 * x;
+  
+  float output = -2.5 * x3 + 10 * x2 - 14 * x + 7;
+  output *= x5;
+  return output;
+}
+
+float FilterUtil::polynomialWaveBend(float x) {
+  float x2 = x * x;
+  float x3 = x2 * x;
+  float x5 = x2 * x2 * x;
+  
+  float output = -2.5 * x3 + 10 * x2 - 14 * x + 7;
+  output *= 2;
+  output *= x5;
+  output += -x + 0.5;
+  return output;
+}
