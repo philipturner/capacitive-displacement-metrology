@@ -360,7 +360,8 @@ for waveType in waveTypes {
         }
       }
       
-      
+      // if t % dacResolution == dacResolution - 1
+      // this condition only multiplies the maximum error by a factor of 0.90
       if waveID == 0 {
         accumulateError(into: &results.errorStart)
       } else if isEnd() {
