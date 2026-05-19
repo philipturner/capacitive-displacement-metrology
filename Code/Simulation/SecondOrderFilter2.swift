@@ -86,6 +86,8 @@ func createPeriod(targetFrequency: Float) -> Int {
   return Int(output)
 }
 
+
+
 func triangleWave(phaseNormalized: Float) -> Float {
   if phaseNormalized < 0.5 {
     return 2 * phaseNormalized
@@ -94,14 +96,83 @@ func triangleWave(phaseNormalized: Float) -> Float {
   }
 }
 
-// TODO: Finish this investigation tomorrow.
+// Polynomial curve equations:
 // https://www.desmos.com/calculator/q7j7b9lqkx
-func polynomialWaveOutskirts(progress: Float) -> Float {
+
+// x = 0   -> y = 0.000, y' = 0
+// x = 0.5 -> y = 0.068
+// x = 1   -> y = 0.500, y' = 1
+func polynomialWaveOutskirt(x: Float) -> Float {
+  let x2 = x * x
+  let x3 = x2 * x
+  let x5 = x2 * x2 * x
   
+  var output = -2.5 * x3 + 10 * x2 - 14 * x + 7
+  output *= x5
+  return output
 }
 
-func polynomialWave(phaseNormalized: Float) -> Float {
-  fatalError("Not implemented.")
+// x = 0   -> y = 0.500, y' = -1
+// x = 0.5 -> y = 0.137, y' = 0
+// x = 1   -> y = 0.500, y' = 1
+func polynomialWaveBend(x: Float) -> Float {
+  let x2 = x * x
+  let x3 = x2 * x
+  let x5 = x2 * x2 * x
+  
+  var output = -2.5 * x3 + 10 * x2 - 14 * x + 7
+  output *= 2
+  output *= x5
+  output += -x + 0.5
+  return output
+}
+
+// x = 0.0 to 0.5 -> bend, y: -1.363 to -1.0
+// x = 0.5 to 2.5 -> straight line, y: -1.0 to 1.0
+// x = 2.5 to 3.5 -> bend, y: 1.0 to 1.363
+// x = 3.5 to 5.5 -> straight line, y: 1.0 to -1.0
+// x = 5.5 to 6.0 -> bend, y: -1.0 to -1.363
+//
+// with outskirts:
+// x = 0.0 to 1.0 -> flat, y: 0.0
+// x = 1.0 to 2.0 -> outskirt, y: 0.0 to 0.5
+// x = 4.0 to 5.0 -> outskirt, y: 0.5 to 0.0
+// x = 5.0 to 6.0 -> flat, y: 0.0
+func polynomialWave(
+  x: Float,
+  hasStartOutskirt: Bool,
+  hasEndOutskirt: Bool
+) -> Float {
+  if x < 0.0 || x > 6.0 {
+    fatalError("x was out of range: \(x)")
+  }
+  
+  if hasStartOutskirt {
+    if x < 1.0 {
+      return 0
+    } else if x < 2.0 {
+      return polynomialWaveOutskirt(x: x - 1.0)
+    }
+  }
+  if hasEndOutskirt {
+    if x > 5.0 {
+      return 0
+    } else if x > 4.0 {
+      return polynomialWaveOutskirt(x: 5.0 - x)
+    }
+  }
+  
+  if x < 0.5 {
+    return polynomialWaveBend(x: x + 0.5) - 1.5
+  } else if x < 2.5 {
+    return x - 1.5
+  } else if x < 3.5 {
+    return 1.5 - polynomialWaveBend(x: x - 2.5)
+  } else if x < 5.5 {
+    return 4.5 - x
+  } else {
+    return polynomialWaveBend(x: x - 5.5) - 1.5
+  }
 }
 
 func sineWave(phaseNormalized: Float) -> Float {
@@ -109,22 +180,89 @@ func sineWave(phaseNormalized: Float) -> Float {
   return (1 - cosinePart) / 2
 }
 
+enum WaveType {
+  case triangle
+  case polynomial
+  case sine
+}
+
+func createPolynomialWaveAmplitude() -> Float {
+  var output: Float = .zero
+  output += -5 / 256
+  output += 20 / 128
+  output += -28 / 64
+  output += 14 / 32
+  
+  return 1.5 - output
+}
+let polynomialWaveAmplitude = createPolynomialWaveAmplitude()
+
+for i in 0..<200 {
+  let phaseNormalized = Float(i) / 200
+  
+  #if false
+  let x = 6 * phaseNormalized
+  let waveValue = polynomialWave(
+    x: x, hasStartOutskirt: false, hasEndOutskirt: true)
+  let y = waveValue * 0.5 / polynomialWaveAmplitude
+  #else
+  let y = sineWave(phaseNormalized: phaseNormalized) - 0.5
+  #endif
+  
+  print(String(format: "%.5f", phaseNormalized), terminator: ", ")
+  print(String(format: "%.5f", y), terminator: ", ")
+  print()
+}
+
+exit(0)
+
 // MARK: - Simulation
 
+let waveType: WaveType = .triangle
+let includeOutskirts: Bool = true
+
 let sinePeriod = createPeriod(targetFrequency: 300)
+let targetDuration: Int = 7_000
+let waveCount = targetDuration / sinePeriod
+let duration = sinePeriod * waveCount + 1_000
+
 var biquadFilter = createBiquadFilter()
-for t in 0..<sinePeriod {
+
+for t in 0..<duration {
   let dacApparentTime = t - (t % dacResolution)
   let phase = dacApparentTime % sinePeriod
   let phaseNormalized = Float(phase) / Float(sinePeriod)
   
-  var signal: Double
-  if dacApparentTime / sinePeriod < 3 {
-    signal = Double(triangleWave(phaseNormalized: phaseNormalized))
-  } else {
-    signal = 0
+  func createSignal() -> Float {
+    let waveID = t / sinePeriod
+    if waveID < 0 || waveID >= waveCount {
+      return 0
+    }
+    
+    let hasStartOutskirt = includeOutskirts && (waveID == 0)
+    let hasEndOutskirt = includeOutskirts && (waveID == waveCount - 1)
+    
+    switch waveType {
+    case .triangle:
+      return triangleWave(phaseNormalized: phaseNormalized)
+    case .polynomial:
+      let x = 6 * phaseNormalized
+      let waveValue = polynomialWave(
+        x: x,
+        hasStartOutskirt: hasStartOutskirt,
+        hasEndOutskirt: hasEndOutskirt)
+      
+      var y = waveValue * 0.5 / polynomialWaveAmplitude
+      if !includeOutskirts {
+        y += 0.5
+      }
+      return y
+    case .sine:
+      return sineWave(phaseNormalized: phaseNormalized)
+    }
   }
   
+  let signal = Double(createSignal())
   let filtered = biquadFilter.update(input: signal)
   let error = filtered - signal
   
