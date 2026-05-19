@@ -4,7 +4,7 @@ import Foundation
 
 let resonanceFrequency: Double = 8700
 let Q: Double = 200
-let dacResolution: Int = 1
+let dacResolution: Int = 12
 
 struct BiquadFilterDescriptor {
   var resonanceFrequency: Double?
@@ -180,12 +180,6 @@ func sineWave(phaseNormalized: Float) -> Float {
   return (1 - cosinePart) / 2
 }
 
-enum WaveType {
-  case triangle
-  case polynomial
-  case sine
-}
-
 func createPolynomialWaveAmplitude() -> Float {
   var output: Float = .zero
   output += -5 / 256
@@ -197,15 +191,32 @@ func createPolynomialWaveAmplitude() -> Float {
 }
 let polynomialWaveAmplitude = createPolynomialWaveAmplitude()
 
+enum WaveType {
+  case triangle
+  case polynomial(includeOutskirts: Bool)
+  case sine
+}
+
 // MARK: - Simulation
 
+// dacResolution = 1
+// 299.8, 0.030572401,  0.10237548,    0.09177834,    0.088686444,   0.088685155,
+// 299.8, 0.0033599513, 0.0027202333,  0.001727616,   0.0017382766,  0.0017383934,
+// 299.8, 0.0018198132, 0.001905912,   0.00018583612, 0.0017953466,  0.0018012689,
+// 299.8, 0.0011890095, 0.00097353716, 0.0005939361,  0.00059436227, 0.00059435616,
+
+// dacResolution = 12
+// 299.8, 0.03423165,   0.105896935,  0.09342409,    0.09052499,    0.090524025,
+// 299.8, 0.005575105,  0.0049367407, 0.0017042201,  0.0017057727,  0.0017055453,
+// 299.8, 0.0039054018, 0.004009853,  0.00018291663, 0.0017618802,  0.0017685278,
+// 299.8, 0.0058272784, 0.005625855,  0.00058265077, 0.00058323867, 0.0005831024,
+
 let waveType: WaveType = .sine
-let includeOutskirts: Bool = true
 
 let sinePeriod = createPeriod(targetFrequency: 300)
 let targetDuration: Int = 70_000
-let waveCount = targetDuration / sinePeriod
-let duration = sinePeriod * waveCount + 1_000
+let waveCount = max(10, targetDuration / sinePeriod)
+let duration = sinePeriod * waveCount + sinePeriod + 1_000
 
 var biquadFilter = createBiquadFilter()
 
@@ -229,13 +240,13 @@ for t in 0..<duration {
       return 0
     }
     
-    let hasStartOutskirt = includeOutskirts && (waveID == 0)
-    let hasEndOutskirt = includeOutskirts && (waveID == waveCount - 1)
-    
     switch waveType {
     case .triangle:
       return triangleWave(phaseNormalized: phaseNormalized)
-    case .polynomial:
+    case .polynomial(let includeOutskirts):
+      let hasStartOutskirt = includeOutskirts && (waveID == 0)
+      let hasEndOutskirt = includeOutskirts && (waveID == waveCount - 1)
+      
       let x = 6 * phaseNormalized
       let waveValue = polynomialWave(
         x: x,
@@ -277,19 +288,19 @@ for t in 0..<duration {
   func accumulateError(into accumulator: inout Double) {
     let errorMagnitude = error.magnitude
     if errorMagnitude > accumulator {
-      accumulator = error
+      accumulator = errorMagnitude
     }
   }
   
   if waveID == 0 {
     accumulateError(into: &results.errorStart)
-  } else if waveID >= waveCount - 1 {
+  } else if waveID > waveCount - 1 {
     accumulateError(into: &results.errorEnd)
-  } else {
+  } else if waveID < waveCount - 1 {
     accumulateError(into: &results.errorAC)
     
     var shifted = filtered
-    if waveType == .polynomial && includeOutskirts {
+    if case .polynomial(true) = waveType {
       shifted += 0.5
     }
     
