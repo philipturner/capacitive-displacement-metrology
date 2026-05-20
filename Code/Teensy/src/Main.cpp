@@ -37,6 +37,7 @@ void kilohertzLoop() {
   PA95::writeVoltage(2, 0.0);
   PA95::writeVoltage(3, 0.0);
 
+  // Update current.
   {
     auto conversion = ADC::readVoltage();
     Application::state.current = -conversion.voltage / 1e9;
@@ -46,6 +47,10 @@ void kilohertzLoop() {
     Application::state.filteredCurrent += alpha * Application::state.current;
   }
 
+  // Send data to the real-time monitor.
+  if (ErrorMessage::hasError()) {
+    return;
+  }
   uint32_t iterationsPerLog = Log::targetLogPeriod / KilohertzLoop::period;
   if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
     uint32_t ringIndex = Log::unsafeBufferedLogID % Log::logSize;

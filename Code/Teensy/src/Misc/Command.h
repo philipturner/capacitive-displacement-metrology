@@ -38,4 +38,8 @@ struct CommandTracker {
   static Command latestCommand;
 
   static void processSerialInput();
+
+  static void throwError(
+    const char *buffer, 
+    const char *reason);
 };

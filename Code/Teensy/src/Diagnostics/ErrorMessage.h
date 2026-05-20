@@ -6,6 +6,7 @@ struct ErrorMessage {
   enum class Type {
     none = 0,
     fatal = 1,
+    recoverable = 2,
   };
 
   static inline Type errorType = Type::none;
