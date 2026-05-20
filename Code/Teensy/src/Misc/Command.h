@@ -13,7 +13,7 @@ struct Command {
     
     // uXXXX - step up XXXX times
     // dXXXX - step down XXXX times
-    // cXXXX,YYYY - step up until capacitance > XXXX fF, YYYY steps per check
+    // cXXXX,YYYY - step up until capacitance > XXX.X fF, YYYY steps per check
     //
     // There is an anti-spam mechanism to prevent this from activating until
     // the mode has been set to idle.
@@ -41,5 +41,7 @@ struct CommandTracker {
 
   static void throwError(
     const char *buffer, 
-    const char *reason);
+    const char *reason,
+    int32_t number1 = 0,
+    int32_t number2 = 0);
 };
