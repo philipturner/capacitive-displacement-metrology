@@ -5,7 +5,7 @@
 struct State {
   float current = 0; // units: A
   float filteredCurrent = 0; // units: A
-  float capacitance = 0; // units: F
+  float capacitance = 0; // units: pF
   float phaseShift = 0; // units: °
 
   float biasVoltage = 0; // units: V

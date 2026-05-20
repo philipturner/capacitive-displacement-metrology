@@ -3,6 +3,7 @@
 #include "IC/ADC.h"
 #include "IC/CDC.h"
 #include "IC/DAC.h"
+#include "IC/PA95.h"
 #include "Time/KilohertzLoop.h"
 #include "Util/FilterUtil.h"
 
@@ -103,4 +104,14 @@ void Application::updateCurrent() {
   float alpha = FilterUtil::getLowpassAlpha(10000, KilohertzLoop::period);
   Application::state.filteredCurrent *= 1 - alpha;
   Application::state.filteredCurrent += alpha * Application::state.current;
+}
+
+void Application::updatePiezoZVoltage(float voltage) {
+  Application::state.piezoZVoltage = voltage;
+  PA95::writeVoltage(3, voltage);
+}
+
+void Application::updateBiasVoltage(float voltage) {
+  Application::state.biasVoltage = voltage;
+  DAC2::writeVoltage(0, voltage);
 }

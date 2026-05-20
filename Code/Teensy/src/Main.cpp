@@ -1,8 +1,5 @@
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
-#include "IC/ADC.h"
-#include "IC/DAC.h"
-#include "IC/PA95.h"
 #include "Misc/Application.h"
 #include "Misc/Command.h"
 #include "Time/KilohertzLoop.h"
@@ -38,18 +35,63 @@ void loop() {
   }
 }
 
-Command previousCommand;
+enum class BlindSteppingMode {
+  up = 0,
+  down = 1,
+  capacitance = 2,
+};
+BlindSteppingMode getBlindSteppingMode(uint32_t code) {
+  char character = char(code);
+  if (character == 'u') {
+    return BlindSteppingMode::up;
+  } else if (character == 'd') {
+    return BlindSteppingMode::down;
+  } else if (character == 'c') {
+    return BlindSteppingMode::capacitance;
+  } else {
+    Serial.println("This should never happen.");
+    exit(0);
+  }
+}
+
+Command::Mode mode;
+BlindSteppingMode blindSteppingMode;
+float capacitanceThreshold; // units: pF
+uint32_t stepsPerCheck;
+
+// Allocate one loop iteration of buffer time between command changes.
+Command nextCommand;
+bool resettingForModeChange = false;
 
 void kilohertzLoop() {
-  Command nextCommand;
-  if (CommandTracker::nextCommand(nextCommand)) {
-    // TODO: process the change in commands
-    previousCommand = nextCommand;
+  if (resettingForModeChange) {
+    resettingForModeChange = false;
+
+    mode = nextCommand.mode;
+    if (mode == Command::Mode::blindStepping) {
+      blindSteppingMode = getBlindSteppingMode(nextCommand.attributes[0]);
+      if (blindSteppingMode == BlindSteppingMode::up ||
+          blindSteppingMode == BlindSteppingMode::down) {
+        stepsPerCheck = nextCommand.attributes[1];
+      } else if (blindSteppingMode == BlindSteppingMode::capacitance) {
+        capacitanceThreshold = float(nextCommand.attributes[1]) / 10000;
+        stepsPerCheck = nextCommand.attributes[2];
+      }
+    }
+  } else {
+    if (CommandTracker::nextCommand(nextCommand)) {
+      resettingForModeChange = true;
+    }
   }
 
-  PA95::writeVoltage(1, 0.0);
-  PA95::writeVoltage(2, 0.0);
-  PA95::writeVoltage(3, 0.0);
+  if (resettingForModeChange) {
+    // Can only write to up to 3 DAC lines without exceeding the loop time.
+    // For now, all commands touch the same number of DAC lines.
+    Application::updatePiezoZVoltage(0);
+    Application::updateBiasVoltage(0);
+  } else {
+
+  }
 
   Application::updateCurrent();
 

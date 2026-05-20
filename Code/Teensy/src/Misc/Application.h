@@ -12,4 +12,8 @@ struct Application {
   static void setupI2C();
 
   static void updateCurrent();
+
+  static void updatePiezoZVoltage(float voltage);
+
+  static void updateBiasVoltage(float voltage);
 };
