@@ -1,3 +1,4 @@
+#include "Diagnostics/CapacitanceTracker.h"
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
 #include "Misc/Application.h"
@@ -63,6 +64,16 @@ uint32_t stepsPerCheck;
 Command nextCommand;
 bool resettingForModeChange = false;
 
+uint32_t waveStartIteration = 0;
+CapacitanceTracker capTracker;
+void initializeVariablesForMode() {
+  waveStartIteration = KilohertzLoop::iterationID;
+  if (mode == Command::Mode::capacitanceReporting ||
+      mode == Command::Mode::blindStepping) {
+    capTracker = CapacitanceTracker(true);
+  }
+}
+
 void kilohertzLoop() {
   if (resettingForModeChange) {
     resettingForModeChange = false;
@@ -78,6 +89,8 @@ void kilohertzLoop() {
         stepsPerCheck = nextCommand.attributes[2];
       }
     }
+
+    initializeVariablesForMode();
   } else {
     if (CommandTracker::nextCommand(nextCommand)) {
       resettingForModeChange = true;
@@ -103,10 +116,18 @@ void kilohertzLoop() {
   if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
     uint32_t ringIndex = Log::unsafeBufferedLogID % Log::logSize;
 
-    Log::ringBuffers[0][ringIndex] = Application::state.filteredCurrent;
-    Log::ringBuffers[1][ringIndex] = Application::state.piezoXVoltage;
-    Log::ringBuffers[2][ringIndex] = Application::state.piezoYVoltage;
-    Log::ringBuffers[3][ringIndex] = Application::state.piezoZVoltage;
+    if (mode == Command::Mode::blindStepping || 
+        mode == Command::Mode::tipApproach) {
+      Log::ringBuffers[0][ringIndex] = Application::state.filteredCurrent;
+      Log::ringBuffers[1][ringIndex] = Application::state.piezoZVoltage;
+      Log::ringBuffers[2][ringIndex] = Application::state.capacitance;
+      Log::ringBuffers[3][ringIndex] = Application::state.phaseShift;
+    } else {
+      Log::ringBuffers[0][ringIndex] = Application::state.filteredCurrent;
+      Log::ringBuffers[1][ringIndex] = Application::state.biasVoltage;
+      Log::ringBuffers[2][ringIndex] = Application::state.capacitance;
+      Log::ringBuffers[3][ringIndex] = Application::state.phaseShift;
+    }
 
     Log::unsafeBufferedLogID += 1;
   }
