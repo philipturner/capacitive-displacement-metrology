@@ -3,11 +3,9 @@
 #include <stdint.h>
 
 struct ErrorMessage {
-  // TODO: Migrate the 'errorCode' mechanisms in KilohertzLoop and Log to this.
   enum class Type {
     none = 0,
     fatal = 1,
-    recoverable = 2,
   };
 
   static inline Type errorType = Type::none;

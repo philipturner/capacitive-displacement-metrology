@@ -9,9 +9,14 @@ struct Log {
 
   static inline uint32_t transmittedLogID;
   static inline uint32_t unsafeBufferedLogID;
-  static inline uint32_t errorCode;
 
   static void initialize();
 
   static void transmitBufferedSamples();
+
+  static void throwError(
+    const char *cString, 
+    int32_t number1,
+    int32_t number2,
+    int32_t number3);
 };

@@ -3,9 +3,9 @@ import PythonKit
 import SwiftSerial
 
 var trigger = Trigger()
-trigger.type = .level(0)
-trigger.polarity = .positive
-trigger.channel = 1
+//trigger.type = .level(0)
+//trigger.polarity = .positive
+//trigger.channel = 1
 
 var applicationDesc = ApplicationDescriptor()
 applicationDesc.triggers = [trigger]
@@ -39,8 +39,8 @@ while !application.ui.isClosed {
   
   let time0 = Date().timeIntervalSince1970
   
-  let shortTimeLength: Double = 0.001
-  let shortTimeMajorTick: Double = 0.001 * 0.1
+  let shortTimeLength: Double = 0.003
+  let shortTimeMajorTick: Double = 0.001
   let longTimeLength: Double = 1.0
   let longTimeMajorTick: Double = 0.2
   

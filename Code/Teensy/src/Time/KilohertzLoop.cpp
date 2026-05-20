@@ -17,6 +17,10 @@
 // 11 us - DAC (5x)
 
 void KilohertzLoop::_kilohertzLoopBodyInner() {
+  // During a fatal error condition, code in the fast loop should be prevented
+  // from being called. We achieve this by ending the kilohertz loop. However,
+  // we cannot guarantee that calling 'end()' prevents the subsequent loop
+  // iteration from being invoked.
   if (ErrorMessage::errorType == ErrorMessage::Type::fatal) {
     return;
   }

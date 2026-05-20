@@ -1,11 +1,11 @@
 #include "Log.h"
 
+#include "ErrorMessage.h"
 #include <Arduino.h>
 
 void Log::initialize() {
   transmittedLogID = 0;
   unsafeBufferedLogID = 0;
-  errorCode = 0;
   
   for (uint32_t i = 0; i < logSize; ++i) {
     ringBuffers[0][i] = 0;
@@ -40,15 +40,14 @@ void base64Encode(uint32_t value, char* buffer, uint32_t encodedLength) {
 }
 
 void Log::transmitBufferedSamples() {
-  if (errorCode != 0) {
-    return;
-  }
-
   uint32_t bufferedLogID = unsafeBufferedLogID;
-
   if (bufferedLogID - transmittedLogID >= logSize / 2) {
     uint32_t difference = bufferedLogID - transmittedLogID;
-    errorCode = 1 * 1000 * 1000 + difference;
+    throwError(
+      "First part of transmitBufferedSamples",
+      transmittedLogID,
+      bufferedLogID,
+      difference);
     return;
   }
 
@@ -81,8 +80,39 @@ void Log::transmitBufferedSamples() {
 
   // Check that the transmitted data was valid.
   if (unsafeBufferedLogID - transmittedLogID >= logSize) {
-    errorCode = 2 * 1000 * 1000;
+    uint32_t difference = unsafeBufferedLogID - transmittedLogID;
+    throwError(
+      "Second part of transmitBufferedSamples",
+      transmittedLogID,
+      unsafeBufferedLogID,
+      difference);
     return;
   }
   transmittedLogID = bufferedLogID;
+}
+
+void Log::throwError(
+  const char *cString, 
+  int32_t number1,
+  int32_t number2,
+  int32_t number3
+) {
+  if (ErrorMessage::errorType == ErrorMessage::Type::fatal) {
+    return;
+  }
+
+  ErrorMessage::reset();
+  ErrorMessage::errorType = ErrorMessage::Type::fatal;
+
+  ErrorMessage::addString("Log failed.");
+  ErrorMessage::addNewline();
+  ErrorMessage::addString(cString);
+  ErrorMessage::addNewline();
+
+  ErrorMessage::addInteger(number1);
+  ErrorMessage::addNewline();
+  ErrorMessage::addInteger(number2);
+  ErrorMessage::addNewline();
+  ErrorMessage::addInteger(number3);
+  ErrorMessage::addNewline();
 }
