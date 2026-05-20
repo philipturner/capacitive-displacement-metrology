@@ -11,7 +11,7 @@ void ErrorMessage::nullTerminate() {
   buffer[cursor] = 0;
 }
 
-void ErrorMessage::addNewLine() {
+void ErrorMessage::addNewline() {
   addString("\n");
 }
 
@@ -35,7 +35,7 @@ void ErrorMessage::addString(const char* cString) {
   cursor += inputLength;
 }
 
-void ErrorMessage::addInteger(uint32_t x) {
+void ErrorMessage::addInteger(int32_t x) {
   char buffer[20];
   int32_t returnValue = snprintf(buffer, sizeof(buffer), "%d", x);
   if (returnValue < 0) {
