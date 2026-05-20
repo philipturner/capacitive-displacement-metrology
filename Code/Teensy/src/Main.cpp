@@ -1,39 +1,50 @@
+#include "Diagnostics/ErrorMessage.h"
+#include "Diagnostics/Log.h"
+#include "IC/ADC.h"
+#include "IC/DAC.h"
+#include "IC/PA95.h"
 #include "Misc/Application.h"
-#include "Misc/ErrorMessage.h"
+#include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
-// First thing to do: test error message construction.
+float latestADCVoltage = 0;
+
+void kilohertzLoop();
 
 void setup() {
   Application::setupSerial();
-
-  for (uint32_t i = 0; i < 2; ++i) {
-    ErrorMessage::errorExists = true;
-    ErrorMessage::addString("a string: ");
-    ErrorMessage::addInteger(-42);
-    ErrorMessage::addNewline();
-    ErrorMessage::addString("another s");
-    ErrorMessage::addString("tring: ");
-    ErrorMessage::addFloat(5.9e-9);
-    ErrorMessage::addString(" ");
-    ErrorMessage::addFloat(float(micros()) / 1000);
-
-    if (ErrorMessage::errorExists) {
-      ErrorMessage::nullTerminate();
-      Serial.println("error message:");
-      Serial.println(ErrorMessage::buffer);
-    }
-
-    ErrorMessage::reset();
-
-    if (ErrorMessage::errorExists) {
-      ErrorMessage::nullTerminate();
-      Serial.println("error message:");
-      Serial.println(ErrorMessage::buffer);
-    }
-  }
+  Application::setupSPI();
+  Log::initialize();
+  KilohertzLoop::initialize(kilohertzLoop, 12);
 }
 
 void loop() {
+  delay(50);
 
+  if (ErrorMessage::hasError()) {
+    ErrorMessage::nullTerminate();
+
+    Serial.println();
+    Serial.println("error message:");
+    Serial.println(ErrorMessage::buffer);
+    return;
+  }
+
+  float t = float(micros()) / 1e6;
+  Serial.print("t = ");
+  Serial.print(t, 3);
+  Serial.print(" s");
+
+  Serial.print(" | ADC voltage = ");
+  Serial.print(latestADCVoltage, 4);
+  Serial.println();
+}
+
+void kilohertzLoop() {
+  PA95::writeVoltage(1, 0.0);
+  PA95::writeVoltage(2, 0.0);
+  PA95::writeVoltage(3, 0.0);
+
+  auto conversion = ADC::readVoltage();
+  latestADCVoltage = conversion.voltage;
 }

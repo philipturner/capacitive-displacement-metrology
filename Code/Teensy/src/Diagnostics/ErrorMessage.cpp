@@ -2,8 +2,12 @@
 
 #include <Arduino.h>
 
+bool ErrorMessage::hasError() {
+  return (errorType != Type::none);
+}
+
 void ErrorMessage::reset() {
-  errorExists = false;
+  errorType = Type::none;
   cursor = 0;
 }
 
@@ -37,7 +41,7 @@ void ErrorMessage::addString(const char* cString) {
 
 void ErrorMessage::addInteger(int32_t x) {
   char buffer[20];
-  int32_t returnValue = snprintf(buffer, sizeof(buffer), "%d", x);
+  int32_t returnValue = snprintf(buffer, sizeof(buffer), "%i", int(x));
   if (returnValue < 0) {
     Serial.println("snprintf failed to encode integer with error code:");
     Serial.println(returnValue);
@@ -51,7 +55,7 @@ void ErrorMessage::addInteger(int32_t x) {
 // https://forum.pjrc.com/index.php?threads/using-double-precision-numbers-in-serial-teensy-3-2-and-4-0.62234/post-248310
 void ErrorMessage::addFloat(float x) {
   char buffer[20];
-  int32_t returnValue = snprintf(buffer, sizeof(buffer), "%f", x);
+  int32_t returnValue = snprintf(buffer, sizeof(buffer), "%e", x);
   if (returnValue < 0) {
     Serial.println("snprintf failed to encode float with error code:");
     Serial.println(returnValue);

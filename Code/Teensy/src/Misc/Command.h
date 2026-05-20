@@ -4,10 +4,12 @@
 
 struct Command {
   enum class Mode {
+    // Set all DAC lines to zero and do nothing.
     idle = 0,
-    error = 1, // spam error message and wait for new command
-    biasTriangleWave = 2,
-    capacitanceReporting = 3,
+
+    biasTriangleWave = 1,
+    
+    capacitanceReporting = 2,
     
     // uXXXX - step up XXXX times
     // dXXXX - step down XXXX times
@@ -15,11 +17,11 @@ struct Command {
     //
     // There is an anti-spam mechanism to prevent this from activating until
     // the mode has been set to idle.
-    blindStepping = 4,
+    blindStepping = 3,
 
     // Approach the surface with woodpecker algorithm. For now, immediately
     // retract and step backward after detecting tunneling current.
-    tipApproach = 5,
+    tipApproach = 4,
   };
   Mode mode = Mode::idle;
   uint32_t attributes[10];

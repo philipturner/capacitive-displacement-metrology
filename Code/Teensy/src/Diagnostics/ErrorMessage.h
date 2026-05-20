@@ -3,9 +3,18 @@
 #include <stdint.h>
 
 struct ErrorMessage {
-  static inline bool errorExists = false;
+  // TODO: Migrate the 'errorCode' mechanisms in KilohertzLoop and Log to this.
+  enum class Type {
+    none = 0,
+    fatal = 1,
+    recoverable = 2,
+  };
+
+  static inline Type errorType = Type::none;
   static inline char buffer[512]; // not guaranteed to be null terminated
   static inline uint32_t cursor = 0;
+
+  static bool hasError();
 
   static void reset();
 

@@ -1,4 +1,6 @@
 #include "KilohertzLoop.h"
+
+#include "../Diagnostics/ErrorMessage.h"
 #include <Arduino.h>
 
 // Timing limits:
@@ -15,6 +17,10 @@
 // 11 us - DAC (5x)
 
 void KilohertzLoop::_kilohertzLoopBodyInner() {
+  if (ErrorMessage::errorType == ErrorMessage::Type::fatal) {
+    return;
+  }
+
   previousTimestamp = latestTimestamp;
   latestTimestamp = micros();
 
@@ -43,19 +49,11 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
   } else {
     int32_t interval = latestTimestamp - previousTimestamp;
     if (interval < 0) {
-      Serial.print(startTimestamp);
-      Serial.print(previousTimestamp);
-      Serial.print(latestTimestamp);
-      Serial.println("Microseconds counter overflowed.");
-
-      uint32_t errorCode = 1000;
-      if (latestTimestamp > previousTimestamp) {
-        errorCode += 10;
-      }
-      if (latestTimestamp > startTimestamp) {
-        errorCode += 1;
-      }
-      throwError(1000 + errorCode);
+      throwError(
+        "Microseconds counter overflowed.",
+        startTimestamp,
+        previousTimestamp,
+        latestTimestamp);
       return;
     }
 
@@ -63,8 +61,11 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
 
     int32_t differentialError = interval - period;
     if (abs(differentialError) > maxError) {
-      Serial.println("Differential error was too large.");
-      throwError(2000 + interval);
+      throwError(
+        "Differential error was too large.",
+        period,
+        interval,
+        differentialError);
       return;
     }
     
@@ -74,8 +75,11 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
     
     int32_t integralError = actualIntegrated - expectedIntegrated;
     if (abs(integralError) > maxError) {
-      Serial.println("Integral error was too large.");
-      throwError(3000 + integralError);
+      throwError(
+        "Integral error was too large.",
+        expectedIntegrated,
+        actualIntegrated,
+        integralError);
       return;
     }
   }
@@ -107,7 +111,30 @@ void KilohertzLoop::initialize(
   timer.begin(_kilohertzLoopBodyOuter, period);
 }
 
-void KilohertzLoop::throwError(uint32_t inputCode) {
-  errorCode = inputCode;
+void KilohertzLoop::throwError(
+  const char *cString, 
+  int32_t number1,
+  int32_t number2,
+  int32_t number3
+) {
   timer.end();
+
+  if (ErrorMessage::errorType == ErrorMessage::Type::fatal) {
+    return;
+  }
+
+  ErrorMessage::reset();
+  ErrorMessage::errorType = ErrorMessage::Type::fatal;
+
+  ErrorMessage::addString("KilohertzLoop failed.");
+  ErrorMessage::addNewline();
+  ErrorMessage::addString(cString);
+  ErrorMessage::addNewline();
+
+  ErrorMessage::addInteger(number1);
+  ErrorMessage::addNewline();
+  ErrorMessage::addInteger(number2);
+  ErrorMessage::addNewline();
+  ErrorMessage::addInteger(number3);
+  ErrorMessage::addNewline();
 }
