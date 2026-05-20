@@ -18,9 +18,11 @@ struct CapacitanceTracker {
   CapacitanceTracker(bool notDefaultConstructor);
   State getState(uint32_t iterationID);
   State getCurrentState() const;
+
   void update(float &capacitance, float &phaseShift);
 
   float getBiasVoltage() const;
+
   void integrate(float current);
 
 private:

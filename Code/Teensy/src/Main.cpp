@@ -2,6 +2,7 @@
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
 #include "Misc/Application.h"
+#include "Misc/BlindStepper.h"
 #include "Misc/Command.h"
 #include "Time/KilohertzLoop.h"
 #include "Util/FilterUtil.h"
@@ -36,61 +37,24 @@ void loop() {
   }
 }
 
-enum class BlindSteppingMode {
-  up = 0,
-  down = 1,
-  capacitance = 2,
-};
-BlindSteppingMode getBlindSteppingMode(uint32_t code) {
-  char character = char(code);
-  if (character == 'u') {
-    return BlindSteppingMode::up;
-  } else if (character == 'd') {
-    return BlindSteppingMode::down;
-  } else if (character == 'c') {
-    return BlindSteppingMode::capacitance;
-  } else {
-    Serial.println("This should never happen.");
-    exit(0);
-  }
-}
-
 Command::Mode mode;
-BlindSteppingMode blindSteppingMode;
-float capacitanceThreshold; // units: pF
-uint32_t stepsPerCheck;
+BlindStepper blindStepper;
 
 // Allocate one loop iteration of buffer time between command changes.
 Command nextCommand;
 bool resettingForModeChange = false;
-
-uint32_t waveStartIteration = 0;
-CapacitanceTracker capTracker;
-void initializeVariablesForMode() {
-  waveStartIteration = KilohertzLoop::iterationID;
-  if (mode == Command::Mode::capacitanceReporting ||
-      mode == Command::Mode::blindStepping) {
-    capTracker = CapacitanceTracker(true);
-  }
-}
 
 void kilohertzLoop() {
   if (resettingForModeChange) {
     resettingForModeChange = false;
 
     mode = nextCommand.mode;
-    if (mode == Command::Mode::blindStepping) {
-      blindSteppingMode = getBlindSteppingMode(nextCommand.attributes[0]);
-      if (blindSteppingMode == BlindSteppingMode::up ||
-          blindSteppingMode == BlindSteppingMode::down) {
-        stepsPerCheck = nextCommand.attributes[1];
-      } else if (blindSteppingMode == BlindSteppingMode::capacitance) {
-        capacitanceThreshold = float(nextCommand.attributes[1]) / 10000;
-        stepsPerCheck = nextCommand.attributes[2];
-      }
+    if (mode == Command::Mode::capacitanceReporting) {
+      Application::capTracker = CapacitanceTracker(true);
     }
-
-    initializeVariablesForMode();
+    if (mode == Command::Mode::blindStepping) {
+      blindStepper = BlindStepper(nextCommand.attributes);
+    }
   } else {
     if (CommandTracker::nextCommand(nextCommand)) {
       resettingForModeChange = true;
@@ -103,7 +67,9 @@ void kilohertzLoop() {
     Application::updatePiezoZVoltage(0);
     Application::updateBiasVoltage(0);
   } else {
-
+    if (mode == Command::Mode::capacitanceReporting) {
+      Application::updateCapacitanceTracker(/*regenerate=*/true);
+    }
   }
 
   Application::updateCurrent();

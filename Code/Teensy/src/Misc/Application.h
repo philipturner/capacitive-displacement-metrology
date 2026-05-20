@@ -1,9 +1,11 @@
 #pragma once
 
-#include "State.h"
+#include "Diagnostics/CapacitanceTracker.h"
+#include "Misc/State.h"
 
 struct Application {
   static inline State state;
+  static inline CapacitanceTracker capTracker;
 
   static void setupSerial();
 
@@ -16,4 +18,6 @@ struct Application {
   static void updatePiezoZVoltage(float voltage);
 
   static void updateBiasVoltage(float voltage);
+
+  static void updateCapacitanceTracker(bool regenerate);
 };

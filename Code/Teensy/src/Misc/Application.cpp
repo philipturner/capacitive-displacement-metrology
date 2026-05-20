@@ -115,3 +115,29 @@ void Application::updateBiasVoltage(float voltage) {
   Application::state.biasVoltage = voltage;
   DAC2::writeVoltage(0, voltage);
 }
+
+void Application::updateCapacitanceTracker(bool regenerate) {
+  // This only writes to capacitance and phaseShift if the mode is
+  // transitioning from 'measuring' to 'finished'.
+  capTracker.update(
+    Application::state.capacitance,
+    Application::state.phaseShift);
+  
+  auto state = capTracker.getCurrentState();
+  if (state == CapacitanceTracker::State::finished) {
+    if (!regenerate) {
+      return;
+    }
+
+    capTracker = CapacitanceTracker(true);
+    capTracker.update(
+      Application::state.capacitance,
+      Application::state.phaseShift);
+  }
+
+  float biasVoltage = capTracker.getBiasVoltage();
+  Application::updateBiasVoltage(biasVoltage);
+
+  float filteredCurrent = Application::state.filteredCurrent;
+  capTracker.integrate(filteredCurrent);
+}
