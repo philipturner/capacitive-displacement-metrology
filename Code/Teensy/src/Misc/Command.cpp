@@ -25,18 +25,17 @@ bool isDigit(char x) {
   }
 }
 
-// Returns either the number of attributes or an error code.
-int32_t decodeAttributes(
+bool decodeAttributes(
   const char *stringBuffer,
   uint32_t stringLength,
-  uint32_t *attributes
+  uint32_t *attributes,
+  uint32_t &numAttributes
 ) {
-  uint32_t attributeID = 0;
   uint32_t accumulator = 0;
   for (uint32_t i = 0; i < stringLength; ++i) {
     if (stringBuffer[i] == ',' || i == stringLength - 1) {
-      attributes[attributeID] = accumulator;
-      attributeID += 1;
+      attributes[numAttributes] = accumulator;
+      numAttributes += 1;
       accumulator = 0;
       continue;
     }
@@ -46,12 +45,13 @@ int32_t decodeAttributes(
         stringBuffer, 
         "Character at index is not a digit", 
         i);
-      return -1;
+      return false;
     }
 
     uint8_t digit = uint8_t(stringBuffer[i] - '0');
+    accumulator = accumulator * 10 + digit;
   }
-  return attributeID;
+  return true;
 }
 
 bool checkBlindSteppingAttributes(
@@ -82,6 +82,13 @@ bool checkBlindSteppingAttributes(
     return false;
   }
   return true;
+}
+
+bool CommandTracker::registerCommand(Command command) {
+  // Throw a soft error if the previous command was not acknowledged yet.
+  if (latestCommandID != acknowledgedCommandID) {
+
+  }
 }
 
 void CommandTracker::processSerialInput() {
@@ -128,11 +135,13 @@ void CommandTracker::processSerialInput() {
       return;
     }
 
-    int32_t numAttributes = decodeAttributes(
+    uint32_t numAttributes;
+    bool decodeAttributesWorked = decodeAttributes(
       buffer + 2, 
       length - 2, 
-      command.attributes + 1);
-    if (numAttributes < 0) {
+      command.attributes + 1,
+      numAttributes);
+    if (!decodeAttributesWorked) {
       return;
     }
     if (!checkBlindSteppingAttributes(buffer, command, numAttributes)) {
@@ -145,7 +154,12 @@ void CommandTracker::processSerialInput() {
     }
   }
 
-  // Throw a soft error if the previous command was not acknowledged yet.
+  lock = true;
+  bool registerCommandWorked = registerCommand(command);
+  lock = false;
+  if (!registerCommandWorked) {
+    return;
+  }
 }
 
 void CommandTracker::throwError(

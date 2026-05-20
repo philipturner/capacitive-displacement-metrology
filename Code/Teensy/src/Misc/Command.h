@@ -39,6 +39,10 @@ struct CommandTracker {
 
   static void processSerialInput();
 
+private:
+  static bool registerCommand(Command command);
+
+public:
   static void throwError(
     const char *buffer, 
     const char *reason,
