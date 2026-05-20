@@ -3,7 +3,7 @@
 #include "../Diagnostics/ErrorMessage.h"
 #include <Arduino.h>
 
-void extractInput(char *buffer, uint32_t& length) {
+void extractInput(uint32_t& length) {
   length = 0;
   for (uint32_t i = 0; i < 50; ++i) {
     if (Serial.available() <= 0) {
@@ -11,10 +11,27 @@ void extractInput(char *buffer, uint32_t& length) {
     }
 
     char incomingByte = Serial.read();
-    buffer[i] = incomingByte;
+    CommandTracker::buffer[i] = incomingByte;
     length = i + 1;
   }
-  buffer[length] = 0; // null-terminate
+  CommandTracker::buffer[length] = 0; // null-terminate
+}
+
+bool isRecoverCommand(uint32_t length) {
+  if (length != 7) {
+    return false;
+  }
+
+  const char *expectedString = "recover";
+  for (uint32_t i = 0; i < 7; ++i) {
+    char actual = CommandTracker::buffer[i];
+    char expected = expectedString[i];
+    if (actual != expected) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 bool isDigit(char x) {
@@ -31,6 +48,8 @@ bool decodeAttributes(
   uint32_t *attributes,
   uint32_t &numAttributes
 ) {
+  numAttributes = 0;
+
   uint32_t accumulator = 0;
   for (uint32_t i = 0; i < stringLength; ++i) {
     if (stringBuffer[i] == ',' || i == stringLength - 1) {
@@ -42,8 +61,7 @@ bool decodeAttributes(
 
     if (!isDigit(stringBuffer[i])) {
       CommandTracker::throwError(
-        stringBuffer, 
-        "Character at index is not a digit", 
+        "While decoding attributes, a character was not a digit.", 
         i);
       return false;
     }
@@ -51,11 +69,11 @@ bool decodeAttributes(
     uint8_t digit = uint8_t(stringBuffer[i] - '0');
     accumulator = accumulator * 10 + digit;
   }
+
   return true;
 }
 
 bool checkBlindSteppingAttributes(
-  const char *stringBuffer,
   Command command, 
   uint32_t numAttributes
 ) {
@@ -75,7 +93,6 @@ bool checkBlindSteppingAttributes(
 
   if (numAttributes != expectedNumAttributes) {
     CommandTracker::throwError(
-      stringBuffer, 
       "Unexpected number of attributes.",
       expectedNumAttributes,
       numAttributes);
@@ -84,35 +101,38 @@ bool checkBlindSteppingAttributes(
   return true;
 }
 
-bool CommandTracker::registerCommand(Command command) {
-  // Throw a soft error if the previous command was not acknowledged yet.
-  if (latestCommandID != acknowledgedCommandID) {
 
-  }
-}
 
 void CommandTracker::processSerialInput() {
-  char buffer[50];
   uint32_t length = 0;
-  extractInput(buffer, length);
+  extractInput(length);
   if (length >= 50) {
     Serial.println("Command tracker was overloaded with input commands.");
     exit(0);
   }
-  Command command;
-  
-  // Decode the mode.
   if (length == 0) {
     return;
   }
+  Command command;
+
+  // Check for the recover command.
+  if (ErrorMessage::hasError()) {
+    if (isRecoverCommand(length)) {
+      if (ErrorMessage::errorType == ErrorMessage::Type::recoverable) {
+        ErrorMessage::reset();
+      }
+      return;
+    }
+  }
+  
+  // Decode the mode.
   if (!isDigit(buffer[0])) {
-    CommandTracker::throwError(buffer, "First character not digit.");
+    throwError("First character not digit.");
     return;
   }
-
   uint8_t modeCode = uint8_t(buffer[0] - '0');
   if (modeCode > 4) {
-    CommandTracker::throwError(buffer, "Invalid mode code.");
+    throwError("Invalid mode code.");
     return;
   }
   command.mode = Command::Mode(modeCode);
@@ -120,8 +140,7 @@ void CommandTracker::processSerialInput() {
   // Decode the attributes.
   if (command.mode == Command::Mode::blindStepping) {
     if (length < 2) {
-      CommandTracker::throwError(
-        buffer, "Not enough characters to decode the alphabetic code.");
+      throwError("Not enough characters to decode the alphabetic code.");
       return;
     }
 
@@ -130,8 +149,7 @@ void CommandTracker::processSerialInput() {
         buffer[1] == 'c') {
       command.attributes[0] = uint32_t(buffer[1]);
     } else {
-      CommandTracker::throwError(
-        buffer, "Invalid character for alphabetic code.");
+      throwError("Invalid character for alphabetic code.");
       return;
     }
 
@@ -144,12 +162,12 @@ void CommandTracker::processSerialInput() {
     if (!decodeAttributesWorked) {
       return;
     }
-    if (!checkBlindSteppingAttributes(buffer, command, numAttributes)) {
+    if (!checkBlindSteppingAttributes(command, numAttributes)) {
       return;
     }
   } else {
     if (length != 1) {
-      CommandTracker::throwError(buffer, "Should be no attributes.");
+      CommandTracker::throwError("There should be no attributes.");
       return;
     }
   }
@@ -162,8 +180,22 @@ void CommandTracker::processSerialInput() {
   }
 }
 
+bool CommandTracker::registerCommand(Command command) {
+  // Throw a soft error if the previous command was not acknowledged yet.
+  if (latestCommandID != acknowledgedCommandID) {
+    throwError(
+      "Previous command was not acknowledged.",
+      latestCommandID,
+      acknowledgedCommandID);
+    return false;
+  }
+
+  latestCommandID += 1;
+  latestCommand = command;
+  return true;
+}
+
 void CommandTracker::throwError(
-  const char *buffer, 
   const char *reason,
   int32_t number1,
   int32_t number2
@@ -177,6 +209,9 @@ void CommandTracker::throwError(
 
   ErrorMessage::addString("Invalid command.");
   ErrorMessage::addNewline();
+
+  // Ensure there's a valid, null-terminated C string here.
+  buffer[50] = 0;
   ErrorMessage::addString(buffer);
   ErrorMessage::addNewline();
   ErrorMessage::addString(reason);

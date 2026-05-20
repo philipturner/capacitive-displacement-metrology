@@ -4,6 +4,7 @@
 #include "IC/DAC.h"
 #include "IC/PA95.h"
 #include "Misc/Application.h"
+#include "Misc/Command.h"
 #include "Time/KilohertzLoop.h"
 #include "Util/FilterUtil.h"
 #include <Arduino.h>
@@ -26,13 +27,39 @@ void loop() {
     Serial.println();
     Serial.println("error message:");
     Serial.println(ErrorMessage::buffer);
-    return;
   }
 
-  Log::transmitBufferedSamples();
+  if (!ErrorMessage::hasError()) {
+    Log::transmitBufferedSamples();
+  }
+
+  if (ErrorMessage::errorType != ErrorMessage::Type::fatal) {
+    CommandTracker::processSerialInput();
+  }
 }
 
+
+bool getNextCommand(Command &nextCommand) {
+  if (CommandTracker::lock) {
+    return false;
+  }
+  if (CommandTracker::latestCommandID == CommandTracker::acknowledgedCommandID) {
+    return false;
+  }
+
+  nextCommand = CommandTracker::latestCommand;
+  CommandTracker::acknowledgedCommandID += 1;
+  return true;
+}
+Command previousCommand;
+
 void kilohertzLoop() {
+  Command nextCommand;
+  if (getNextCommand(nextCommand)) {
+    // TODO: process the change in commands
+    previousCommand = nextCommand;
+  }
+
   PA95::writeVoltage(1, 0.0);
   PA95::writeVoltage(2, 0.0);
   PA95::writeVoltage(3, 0.0);

@@ -2,13 +2,13 @@
 
 #include <Arduino.h>
 
-bool ErrorMessage::hasError() {
-  return (errorType != Type::none);
-}
-
 void ErrorMessage::reset() {
   errorType = Type::none;
   cursor = 0;
+}
+
+bool ErrorMessage::hasError() {
+  return (errorType != Type::none);
 }
 
 void ErrorMessage::nullTerminate() {
