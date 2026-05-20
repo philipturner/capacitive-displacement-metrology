@@ -1,7 +1,10 @@
+#include "Application.h"
+
 #include "IC/ADC.h"
 #include "IC/CDC.h"
 #include "IC/DAC.h"
-#include "Application.h"
+#include "Time/KilohertzLoop.h"
+#include "Util/FilterUtil.h"
 
 extern "C" void usb_init();
 
@@ -91,4 +94,13 @@ void Application::setupI2C() {
 
   // Clear any previous measurement data.
   CDC::readCapacitance();
+}
+
+void Application::updateCurrent() {
+  auto conversion = ADC::readVoltage();
+  Application::state.current = -conversion.voltage / 1e9;
+
+  float alpha = FilterUtil::getLowpassAlpha(10000, KilohertzLoop::period);
+  Application::state.filteredCurrent *= 1 - alpha;
+  Application::state.filteredCurrent += alpha * Application::state.current;
 }

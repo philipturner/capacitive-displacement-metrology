@@ -1,6 +1,6 @@
 #include "KilohertzLoop.h"
 
-#include "../Diagnostics/ErrorMessage.h"
+#include "Diagnostics/ErrorMessage.h"
 #include <Arduino.h>
 
 // Timing limits:

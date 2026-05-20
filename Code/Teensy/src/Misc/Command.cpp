@@ -1,6 +1,6 @@
 #include "Command.h"
 
-#include "../Diagnostics/ErrorMessage.h"
+#include "Diagnostics/ErrorMessage.h"
 #include <Arduino.h>
 
 void extractInput(uint32_t& length) {
@@ -221,4 +221,17 @@ void CommandTracker::throwError(
   ErrorMessage::addNewline();
   ErrorMessage::addInteger(number2);
   ErrorMessage::addNewline();
+}
+
+bool CommandTracker::nextCommand(Command &nextCommand) {
+  if (lock) {
+    return false;
+  }
+  if (latestCommandID == acknowledgedCommandID) {
+    return false;
+  }
+
+  nextCommand = latestCommand;
+  acknowledgedCommandID += 1;
+  return true;
 }

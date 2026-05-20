@@ -1,5 +1,6 @@
-#include "DAC.h"
 #include "PA95.h"
+
+#include "DAC.h"
 #include <Arduino.h>
 
 void PA95::writeVoltage(uint8_t channelID, float voltage) {

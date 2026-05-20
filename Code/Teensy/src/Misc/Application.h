@@ -10,4 +10,6 @@ struct Application {
   static void setupSPI();
 
   static void setupI2C();
+
+  static void updateCurrent();
 };

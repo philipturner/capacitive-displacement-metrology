@@ -38,24 +38,11 @@ void loop() {
   }
 }
 
-
-bool getNextCommand(Command &nextCommand) {
-  if (CommandTracker::lock) {
-    return false;
-  }
-  if (CommandTracker::latestCommandID == CommandTracker::acknowledgedCommandID) {
-    return false;
-  }
-
-  nextCommand = CommandTracker::latestCommand;
-  CommandTracker::acknowledgedCommandID += 1;
-  return true;
-}
 Command previousCommand;
 
 void kilohertzLoop() {
   Command nextCommand;
-  if (getNextCommand(nextCommand)) {
+  if (CommandTracker::nextCommand(nextCommand)) {
     // TODO: process the change in commands
     previousCommand = nextCommand;
   }
@@ -64,15 +51,7 @@ void kilohertzLoop() {
   PA95::writeVoltage(2, 0.0);
   PA95::writeVoltage(3, 0.0);
 
-  // Update current.
-  {
-    auto conversion = ADC::readVoltage();
-    Application::state.current = -conversion.voltage / 1e9;
-
-    float alpha = FilterUtil::getLowpassAlpha(10000, KilohertzLoop::period);
-    Application::state.filteredCurrent *= 1 - alpha;
-    Application::state.filteredCurrent += alpha * Application::state.current;
-  }
+  Application::updateCurrent();
 
   // Send data to the real-time monitor.
   if (ErrorMessage::hasError()) {

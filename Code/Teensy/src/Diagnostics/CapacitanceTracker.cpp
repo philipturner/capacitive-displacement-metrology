@@ -1,6 +1,6 @@
 #include "CapacitanceTracker.h"
 
-#include "../Time/KilohertzLoop.h"
+#include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
 CapacitanceTracker::CapacitanceTracker() {
