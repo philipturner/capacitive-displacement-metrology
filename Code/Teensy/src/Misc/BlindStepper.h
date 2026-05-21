@@ -1,7 +1,7 @@
 #pragma once
 
-#include <stdint.h>
 #include "Diagnostics/CapacitanceTracker.h"
+#include "Misc/Command.h"
 
 struct BlindStepper {
   enum class Mode {
@@ -22,7 +22,7 @@ struct BlindStepper {
   static constexpr float stepDownAmplitude = 200;
 
   BlindStepper();
-  BlindStepper(uint32_t *attributes);
+  BlindStepper(Command command);
 
   float sawtoothWave(uint32_t waveIterationDelta);
   

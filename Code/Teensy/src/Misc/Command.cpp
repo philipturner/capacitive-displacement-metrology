@@ -42,6 +42,18 @@ bool isDigit(char x) {
   }
 }
 
+bool findAlphaCode(char code, const char *cString) {
+  for (uint32_t i = 0; i < 50; ++i) {
+    if (cString[i] == 0) {
+      break;
+    }
+    if (cString[i] == code) {
+      return true;
+    }
+  }
+  return false;
+}
+
 bool decodeAttributes(
   const char *stringBuffer,
   uint32_t stringLength,
@@ -73,22 +85,22 @@ bool decodeAttributes(
   return true;
 }
 
-bool checkBlindSteppingAttributes(
+bool checkAttributes(
   Command command, 
   uint32_t numAttributes
 ) {
-  char code = char(command.attributes[0]);
-
-  uint32_t expectedNumAttributes;
-  if (code == 'u') {
+  uint32_t expectedNumAttributes = 0;
+  if (command.mode == Command::Mode::dacTest) {
     expectedNumAttributes = 1;
-  } else if (code == 'd') {
-    expectedNumAttributes = 1;
-  } else if (code == 'c') {
-    expectedNumAttributes = 2;
-  } else {
-    Serial.println("This should never happen.");
-    exit(0);
+  }
+  if (command.mode == Command::Mode::blindStepping) {
+    if (command.alphaCode == 'u') {
+      expectedNumAttributes = 1;
+    } else if (command.alphaCode == 'd') {
+      expectedNumAttributes = 1;
+    } else if (command.alphaCode == 'c') {
+      expectedNumAttributes = 2;
+    }
   }
 
   if (numAttributes != expectedNumAttributes) {
@@ -101,9 +113,8 @@ bool checkBlindSteppingAttributes(
   return true;
 }
 
-
-
 void CommandTracker::processSerialInput() {
+  // Copy the input to the buffer.
   uint32_t length = 0;
   extractInput(length);
   if (length >= 50) {
@@ -137,41 +148,45 @@ void CommandTracker::processSerialInput() {
   }
   command.mode = Command::Mode(modeCode);
 
-  // Decode the attributes.
-  if (command.mode == Command::Mode::blindStepping) {
-    if (length < 2) {
-      throwError("Not enough characters to decode the alphabetic code.");
-      return;
-    }
-
-    if (buffer[1] == 'u' ||
-        buffer[1] == 'd' ||
-        buffer[1] == 'c') {
-      command.attributes[0] = uint32_t(buffer[1]);
-    } else {
+  // Decode the alphabetic code attribute.
+  if (length >= 2) {
+    command.alphaCode = uint32_t(buffer[1]);
+  }
+  if (command.mode == Command::Mode::dacTest) {
+    if (!findAlphaCode(command.alphaCode, "xyzb")) {
       throwError("Invalid character for alphabetic code.");
       return;
     }
-
-    uint32_t numAttributes;
-    bool decodeAttributesWorked = decodeAttributes(
-      buffer + 2, 
-      length - 2, 
-      command.attributes + 1,
-      numAttributes);
-    if (!decodeAttributesWorked) {
-      return;
-    }
-    if (!checkBlindSteppingAttributes(command, numAttributes)) {
+  }
+  if (command.mode == Command::Mode::blindStepping) {
+    if (!findAlphaCode(command.alphaCode, "udc")) {
+      throwError("Invalid character for alphabetic code.");
       return;
     }
   } else {
-    if (length != 1) {
-      CommandTracker::throwError("There should be no attributes.");
+    if (command.alphaCode != 0) {
+      throwError("There should be no alpha code.");
       return;
     }
   }
 
+  // Decode the remaining attributes.
+  uint32_t numAttributes = 0;
+  if (length > 2) {
+    bool decodeAttributesWorked = decodeAttributes(
+      buffer + 2, 
+      length - 2, 
+      command.attributes,
+      numAttributes);
+    if (!decodeAttributesWorked) {
+      return;
+    }
+  }
+  if (!checkAttributes(command, numAttributes)) {
+    return;
+  }
+
+  // Register the new command.
   lock = true;
   bool registerCommandWorked = registerCommand(command);
   lock = false;

@@ -40,6 +40,8 @@ void loop() {
 }
 
 Command::Mode mode;
+uint32_t dacTestChannel;
+float dacTestVoltage;
 BlindStepper blindStepper;
 
 // Allocate one loop iteration of buffer time between command changes.
@@ -53,7 +55,7 @@ void kilohertzLoop() {
       Application::capTracker = CapacitanceTracker(true);
     }
     if (mode == Command::Mode::blindStepping) {
-      blindStepper = BlindStepper(nextCommand.attributes);
+      blindStepper = BlindStepper(nextCommand);
     }
 
     resettingForModeChange = false;
@@ -71,6 +73,9 @@ void kilohertzLoop() {
   } else {
     if (mode == Command::Mode::capacitanceReporting) {
       Application::updateCapacitanceTracker(/*regenerate=*/true);
+    }
+    if (mode == Command::Mode::blindStepping) {
+      blindStepper.update();
     }
   }
 

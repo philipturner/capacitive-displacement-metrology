@@ -4,13 +4,12 @@
 #include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
-BlindStepper::Mode getMode(uint32_t code) {
-  char character = char(code);
-  if (character == 'u') {
+BlindStepper::Mode getMode(char code) {
+  if (code == 'u') {
     return BlindStepper::Mode::up;
-  } else if (character == 'd') {
+  } else if (code == 'd') {
     return BlindStepper::Mode::down;
-  } else if (character == 'c') {
+  } else if (code == 'c') {
     return BlindStepper::Mode::capacitance;
   } else {
     Serial.println("This should never happen.");
@@ -22,14 +21,14 @@ BlindStepper::BlindStepper() {
 
 }
 
-BlindStepper::BlindStepper(uint32_t *attributes) {
-  mode = getMode(attributes[0]);
+BlindStepper::BlindStepper(Command command) {
+  mode = getMode(command.alphaCode);
 
   if (mode == Mode::up || mode == Mode::down) {
-    stepsPerCheck = attributes[1];
+    stepsPerCheck = command.attributes[0];
   } else if (mode == Mode::capacitance) {
-    stepsPerCheck = attributes[2];
-    capacitanceThreshold = float(attributes[1]) / 10000;
+    capacitanceThreshold = float(command.attributes[0]) / 10000;
+    stepsPerCheck = command.attributes[1];
   }
 
   Application::capTracker = CapacitanceTracker(true);

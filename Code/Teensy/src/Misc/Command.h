@@ -7,16 +7,19 @@ struct Command {
     // Set all DAC lines to zero and do nothing.
     idle = 0,
 
-    biasTriangleWave = 1,
+    // xXXX - X axis
+    // yXXX - Y axis
+    // zXXX - Z axis
+    // bXXX - bias
+    //
+    // 1008 Hz triangle wave, +/-XXX volts
+    dacTest = 1,
     
     capacitanceReporting = 2,
     
     // uXXXX - step up XXXX times
     // dXXXX - step down XXXX times
     // cXXXX,YYYY - step up until capacitance > XXX.X fF, YYYY steps per check
-    //
-    // There is an anti-spam mechanism to prevent this from activating until
-    // the mode has been set to idle.
     blindStepping = 3,
 
     // Approach the surface with woodpecker algorithm. For now, immediately
@@ -24,6 +27,7 @@ struct Command {
     tipApproach = 4,
   };
   Mode mode = Mode::idle;
+  char alphaCode = 0;
   uint32_t attributes[10];
 };
 
