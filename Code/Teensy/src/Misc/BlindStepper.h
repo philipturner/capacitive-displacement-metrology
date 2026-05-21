@@ -10,9 +10,22 @@ struct BlindStepper {
     capacitance = 2,
   };
 
+  enum class State {
+    measuring = 0,
+    stepping = 1,
+    finished = 2,
+  };
+
+  static constexpr uint32_t wavePeriod = 1200;
+  static constexpr float restPosition = -270;
+  static constexpr float stepUpAmplitude = 400;
+  static constexpr float stepDownAmplitude = 200;
+
   BlindStepper();
   BlindStepper(uint32_t *attributes);
 
+  float sawtoothWave(uint32_t waveIterationDelta);
+  
   void update();
 
 private:
@@ -20,7 +33,7 @@ private:
   float capacitanceThreshold; // units: pF
   uint32_t stepsPerCheck;
 
-  // Start iteration for basing off the current sequence of steps.
-  uint32_t startIterationID;
-  bool measuringCapacitance;
+  State currentState;
+  uint32_t cycleID = 0;
+  uint32_t waveStartIterationID = UINT32_MAX;
 };

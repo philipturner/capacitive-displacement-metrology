@@ -13,6 +13,8 @@ void kilohertzLoop();
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
+  Application::updatePiezoZVoltage(BlindStepper::restPosition);
+
   Log::initialize();
   KilohertzLoop::initialize(kilohertzLoop, 12);
 }
@@ -46,8 +48,6 @@ bool resettingForModeChange = false;
 
 void kilohertzLoop() {
   if (resettingForModeChange) {
-    resettingForModeChange = false;
-
     mode = nextCommand.mode;
     if (mode == Command::Mode::capacitanceReporting) {
       Application::capTracker = CapacitanceTracker(true);
@@ -55,6 +55,8 @@ void kilohertzLoop() {
     if (mode == Command::Mode::blindStepping) {
       blindStepper = BlindStepper(nextCommand.attributes);
     }
+
+    resettingForModeChange = false;
   } else {
     if (CommandTracker::nextCommand(nextCommand)) {
       resettingForModeChange = true;
@@ -64,7 +66,7 @@ void kilohertzLoop() {
   if (resettingForModeChange) {
     // Can only write to up to 3 DAC lines without exceeding the loop time.
     // For now, all commands touch the same number of DAC lines.
-    Application::updatePiezoZVoltage(0);
+    Application::updatePiezoZVoltage(BlindStepper::restPosition);
     Application::updateBiasVoltage(0);
   } else {
     if (mode == Command::Mode::capacitanceReporting) {
