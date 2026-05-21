@@ -5,6 +5,7 @@
 #include "Command/BlindStepper.h"
 #include "Command/Command.h"
 #include "Command/DACTester.h"
+#include "Command/TipApproacher.h"
 #include "Time/KilohertzLoop.h"
 #include "Util/FilterUtil.h"
 #include <Arduino.h>
@@ -43,6 +44,7 @@ void loop() {
 Command::Mode mode;
 DACTester dacTester;
 BlindStepper blindStepper;
+TipApproacher tipApproacher;
 
 // Allocate one loop iteration of buffer time between command changes.
 Command nextCommand;
@@ -51,11 +53,17 @@ bool resettingForModeChange = false;
 void kilohertzLoop() {
   if (resettingForModeChange) {
     mode = nextCommand.mode;
+    if (mode == Command::Mode::dacTest) {
+      dacTester = DACTester(nextCommand);
+    }
     if (mode == Command::Mode::capacitanceReporting) {
       Application::capTracker = CapacitanceTracker(true);
     }
     if (mode == Command::Mode::blindStepping) {
       blindStepper = BlindStepper(nextCommand);
+    }
+    if (mode == Command::Mode::tipApproach) {
+      tipApproacher = TipApproacher();
     }
 
     resettingForModeChange = false;
@@ -80,11 +88,17 @@ void kilohertzLoop() {
       Application::updateBiasVoltage(0);
     }
   } else {
+    if (mode == Command::Mode::dacTest) {
+      dacTester.update();
+    }
     if (mode == Command::Mode::capacitanceReporting) {
       Application::updateCapacitanceTracker(/*regenerate=*/true);
     }
     if (mode == Command::Mode::blindStepping) {
       blindStepper.update();
+    }
+    if (mode == Command::Mode::tipApproach) {
+      tipApproacher.update();
     }
   }
 

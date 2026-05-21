@@ -20,6 +20,17 @@ TipApproacher::TipApproacher() {
 }
 
 void TipApproacher::update() {
+  updateState();
+  updateDACs();
+}
+
+uint32_t TipApproacher::getTimeSinceStateStart() {
+  uint32_t deltaIters = KilohertzLoop::iterationID;
+  deltaIters -= stateStartIterationID;
+  return deltaIters * KilohertzLoop::period;
+}
+
+void TipApproacher::updateState() {
   previousState = currentState;
   uint32_t previousTime = getTimeSinceStateStart();
 
@@ -31,11 +42,22 @@ void TipApproacher::update() {
       currentState = State::waiting;
     }
   } else if (currentState == State::waiting) {
-
+    if (previousTime >= waitTime) {
+      currentState = State::approaching;
+    }
   } else if (currentState == State::approaching) {
-
+    if (previousTime >= approachTime) {
+      currentState = State::retracting;
+    } else {
+      float filteredCurrent = Application::state.filteredCurrent;
+      if (abs(filteredCurrent) > setpointCurrent) {
+        currentState = State::feedback;
+      }
+    }
   } else if (currentState == State::retracting) {
-
+    if (previousTime >= retractTime) {
+      currentState = State::forwardStepping;
+    }
   } else if (currentState == State::feedback) {
 
   }
@@ -59,28 +81,57 @@ void TipApproacher::update() {
 
     }
   }
+}
+
+void TipApproacher::updateDACs() {
+  uint32_t currentTime = getTimeSinceStateStart();
 
   if (currentState == State::forwardStepping) {
     blindStepper.update();
+
   } else if (currentState == State::waiting) {
     Application::updatePiezoVoltage(3, BlindStepper::restPosition);
-    Application::updateBiasVoltage(0);
+    Application::updateBiasVoltage(setpointVoltage);
+
   } else if (currentState == State::approaching) {
+    float progress = float(currentTime) / float(approachTime);
+    progress = min(progress, 1);
+
+    float scanAmplitude = 2 * abs(BlindStepper::restPosition);
+    float voltage = BlindStepper::restPosition + progress * scanAmplitude;
+    Application::updatePiezoVoltage(3, voltage);
+    Application::updateBiasVoltage(setpointVoltage);
 
   } else if (currentState == State::retracting) {
+    float progress = 1 - float(currentTime) / float(retractTime);
+    float smoothed = FilterUtil::thirdOrderSmoothstep(progress);
+
+    float scanAmplitude = 2 * abs(BlindStepper::restPosition);
+    float voltage = BlindStepper::restPosition + smoothed * scanAmplitude;
+    Application::updatePiezoVoltage(3, voltage);
+    Application::updateBiasVoltage(0);
 
   } else if (currentState == State::feedback) {
-    // dln(I)/dz = -1.025e10 * sqrt(tunnelingBarrierHeight)
-    //
+    float currentMagnitude = abs(Application::state.filteredCurrent);
+    currentMagnitude = max(currentMagnitude, 2e-12);
+    float dlnI = log(currentMagnitude / setpointCurrent);
+
+    // Position error in meters. Positive means you're too close, correct it
+    // by moving backward (more negative voltage).
+    float dlnI_dz = 1.025e10 * sqrt(tunnelingBarrierHeight);
+    float dz = dlnI / dlnI_dz;
+
     // Try a lowpass filter-like algorithm and extrapolate the small
     // alpha-like constant to equalling 1.0 at a low frequency like 1 kHz.
     // If dln(I)/dz is off by a factor of 2, it's only as if the cutoff
     // frequency is different by a factor of 2.
-  }
-}
+    float timeProgress = float(KilohertzLoop::period) / float(integratorTimeLag);
+    float correctionInMeters = -dz * timeProgress;
+    float correctionInVolts = correctionInMeters / 0.320e-9;
 
-uint32_t TipApproacher::getTimeSinceStateStart() {
-  uint32_t deltaIters = KilohertzLoop::iterationID;
-  deltaIters -= stateStartIterationID;
-  return deltaIters * KilohertzLoop::period;
+    float voltage = Application::state.piezoZVoltage;
+    voltage += correctionInVolts;
+    Application::updatePiezoVoltage(3, voltage);
+    Application::updateBiasVoltage(setpointVoltage);
+  }
 }
