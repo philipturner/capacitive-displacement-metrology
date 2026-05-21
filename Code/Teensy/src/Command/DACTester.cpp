@@ -39,18 +39,15 @@ void DACTester::update() {
   float voltage = FilterUtil::triangleWave(phaseNormalized);
   voltage *= bipolarAmplitude;
 
-  // TODO: Finish this.
   if (channelID == 4) {
-    
+    Application::updateBiasVoltage(voltage);
+  } else {
+    Application::updatePiezoVoltage(channelID, voltage);
   }
 }
 
-void DACTester::reset() {
-  
-}
-
 void DACTester::writeToLog(uint32_t slotID) {
-  float voltage;
+  float voltage = 0;
   if (channelID == 1) {
     voltage = Application::state.piezoXVoltage;
   } else if (channelID == 2) {

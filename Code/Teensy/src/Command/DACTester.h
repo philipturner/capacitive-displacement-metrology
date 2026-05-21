@@ -10,8 +10,6 @@ struct DACTester {
 
   void update();
 
-  void reset();
-
   void writeToLog(uint32_t slotID);
 
 public:

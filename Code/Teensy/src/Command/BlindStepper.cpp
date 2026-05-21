@@ -107,8 +107,8 @@ void BlindStepper::update() {
     Application::updateBiasVoltage(0);
 
     float voltage = sawtoothWave(waveIterationDelta, mode);
-    Application::updatePiezoZVoltage(voltage);
+    Application::updatePiezoVoltage(3, voltage);
   } else {
-    Application::updatePiezoZVoltage(BlindStepper::restPosition);
+    Application::updatePiezoVoltage(3, BlindStepper::restPosition);
   }
 }

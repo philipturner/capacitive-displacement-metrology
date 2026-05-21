@@ -66,14 +66,19 @@ void kilohertzLoop() {
   }
 
   if (resettingForModeChange) {
-    // Can only write to up to 3 DAC lines without exceeding the loop time.
-    // For now, all commands touch the same number of DAC lines.
+    // Can only write to 3 DAC channels without exceeding the loop time.
     if (mode == Command::Mode::dacTest) {
-      if (dacTester.)
+      if (dacTester.channelID == 4) {
+        Application::updateBiasVoltage(0);
+      } else if (dacTester.channelID == 3) {
+        Application::updatePiezoVoltage(3, BlindStepper::restPosition);
+      } else {
+        Application::updatePiezoVoltage(dacTester.channelID, 0);
+      }
     } else {
       Application::updatePiezoVoltage(3, BlindStepper::restPosition);
+      Application::updateBiasVoltage(0);
     }
-    Application::updateBiasVoltage(0);
   } else {
     if (mode == Command::Mode::capacitanceReporting) {
       Application::updateCapacitanceTracker(/*regenerate=*/true);
@@ -93,8 +98,8 @@ void kilohertzLoop() {
   if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
     uint32_t slotID = Log::unsafeBufferedLogID % Log::logSize;
 
-    if (mode == Command::Mode::dacTesting) {
-      dacTester.writeToLog(ringIndex);
+    if (mode == Command::Mode::dacTest) {
+      dacTester.writeToLog(slotID);
     } else if (mode == Command::Mode::blindStepping || 
                mode == Command::Mode::tipApproach) {
       Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
