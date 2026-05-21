@@ -106,9 +106,15 @@ void Application::updateCurrent() {
   Application::state.filteredCurrent += alpha * Application::state.current;
 }
 
-void Application::updatePiezoZVoltage(float voltage) {
-  Application::state.piezoZVoltage = voltage;
-  PA95::writeVoltage(3, voltage);
+void Application::updatePiezoVoltage(uint32_t channelID, float voltage) {
+  if (channelID == 1) {
+    Application::state.piezoXVoltage = voltage;
+  } else if (channelID == 2) {
+    Application::state.piezoYVoltage = voltage;
+  } else if (channelID == 3) {
+    Application::state.piezoZVoltage = voltage;
+  }
+  PA95::writeVoltage(channelID, voltage);
 }
 
 void Application::updateBiasVoltage(float voltage) {

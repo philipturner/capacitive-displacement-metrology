@@ -1,6 +1,6 @@
 #include "BlindStepper.h"
 
-#include "Misc/Application.h"
+#include "Application/Application.h"
 #include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
@@ -35,7 +35,10 @@ BlindStepper::BlindStepper(Command command) {
   currentState = State::measuring;
 }
 
-float BlindStepper::sawtoothWave(uint32_t waveIterationDelta) {
+float BlindStepper::sawtoothWave(
+  uint32_t waveIterationDelta,
+  BlindStepper::Mode mode
+) {
   if (wavePeriod % (2 * KilohertzLoop::period) != 0) {
     Serial.println("Blind stepper wave period not sufficiently divisible.");
     exit(0);
@@ -103,7 +106,7 @@ void BlindStepper::update() {
   if (currentState == State::stepping) {
     Application::updateBiasVoltage(0);
 
-    float voltage = sawtoothWave(waveIterationDelta);
+    float voltage = sawtoothWave(waveIterationDelta, mode);
     Application::updatePiezoZVoltage(voltage);
   } else {
     Application::updatePiezoZVoltage(BlindStepper::restPosition);

@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Application/State.h"
 #include "Diagnostics/CapacitanceTracker.h"
-#include "Misc/State.h"
 
 struct Application {
   static inline State state;
@@ -15,7 +15,7 @@ struct Application {
 
   static void updateCurrent();
 
-  static void updatePiezoZVoltage(float voltage);
+  static void updatePiezoVoltage(uint32_t channelID, float voltage);
 
   static void updateBiasVoltage(float voltage);
 
