@@ -22,8 +22,9 @@ struct Command {
     // cXXXX,YYYY - step up until capacitance > XXX.X fF, YYYY steps per check
     blindStepping = 3,
 
-    // Approach the surface with woodpecker algorithm. For now, immediately
-    // retract and step backward after detecting tunneling current.
+    // Approach the surface with the woodpecker algorithm. When feedback is
+    // detected, move to the minimum of the fine range, but do not perform any
+    // coarse stepping.
     tipApproach = 4,
   };
   Mode mode = Mode::idle;

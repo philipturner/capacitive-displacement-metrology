@@ -35,6 +35,11 @@ BlindStepper::BlindStepper(Command command) {
   currentState = State::measuring;
 }
 
+BlindStepper::State
+BlindStepper::getCurrentState() const {
+  return currentState;
+}
+
 float BlindStepper::sawtoothWave(
   uint32_t waveIterationDelta,
   BlindStepper::Mode mode

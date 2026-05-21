@@ -23,6 +23,7 @@ struct BlindStepper {
 
   BlindStepper();
   BlindStepper(Command command);
+  State getCurrentState() const;
 
   static float sawtoothWave(uint32_t waveIterationDelta, Mode mode);
   
