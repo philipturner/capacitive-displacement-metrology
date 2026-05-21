@@ -63,8 +63,8 @@ bool decodeAttributes(
   numAttributes = 0;
 
   uint32_t accumulator = 0;
-  for (uint32_t i = 0; i < stringLength; ++i) {
-    if (stringBuffer[i] == ',' || i == stringLength - 1) {
+  for (uint32_t i = 0; i <= stringLength; ++i) {
+    if (stringBuffer[i] == ',' || i == stringLength) {
       attributes[numAttributes] = accumulator;
       numAttributes += 1;
       accumulator = 0;
@@ -157,8 +157,7 @@ void CommandTracker::processSerialInput() {
       throwError("Invalid character for alphabetic code.");
       return;
     }
-  }
-  if (command.mode == Command::Mode::blindStepping) {
+  } else if (command.mode == Command::Mode::blindStepping) {
     if (!findAlphaCode(command.alphaCode, "udc")) {
       throwError("Invalid character for alphabetic code.");
       return;

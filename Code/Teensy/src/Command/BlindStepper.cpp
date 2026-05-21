@@ -27,7 +27,7 @@ BlindStepper::BlindStepper(Command command) {
   if (mode == Mode::up || mode == Mode::down) {
     stepsPerCheck = command.attributes[0];
   } else if (mode == Mode::capacitance) {
-    capacitanceThreshold = float(command.attributes[0]) / 10000;
+    capacitanceThreshold = float(command.attributes[0]) * 0.1e-15;
     stepsPerCheck = command.attributes[1];
   }
 
@@ -70,18 +70,18 @@ float BlindStepper::sawtoothWave(
 }
 
 void BlindStepper::update() {
-  uint32_t itersPerWaveSequence = wavePeriod / KilohertzLoop::period;
-  itersPerWaveSequence *= stepsPerCheck;
+  if (currentState == State::stepping) {
+    uint32_t itersPerWaveSequence = wavePeriod / KilohertzLoop::period;
+    itersPerWaveSequence *= stepsPerCheck;
 
-  if (waveStartIterationID == UINT32_MAX) {
-    Serial.println("Wave start iteration was not set.");
-    exit(0);
-  }
-  uint32_t waveIterationDelta = KilohertzLoop::iterationID - waveStartIterationID;
-  if (currentState == State::stepping && waveIterationDelta >= itersPerWaveSequence) {
-    currentState = State::measuring;
-    cycleID += 1;
-    waveStartIterationID = UINT32_MAX;
+    checkStartIterationValid();
+    uint32_t waveIterationDelta = KilohertzLoop::iterationID - waveStartIterationID;
+    if (waveIterationDelta >= itersPerWaveSequence) {
+      Application::capTracker = CapacitanceTracker(true);
+      currentState = State::measuring;
+      cycleID += 1;
+      waveStartIterationID = UINT32_MAX;
+    }
   }
 
   if (currentState == State::measuring) {
@@ -108,12 +108,38 @@ void BlindStepper::update() {
     }
   }
 
-  if (currentState == State::stepping) {
+  if (currentState == State::measuring) {
+    // For some reason, the capacitance measurement is thrown off by writing
+    // to the Z DAC here. The problem persists when the high voltage power
+    // supply is turned off.
+    //
+    // I reproduced the same effect by going to any random channel in DAC1.
+    // I also reproduce it by adding 'delayMicroseconds(2)' after updating the
+    // capacitance tracker. Adding the delay before updating didn't do anything.
+    //
+    // When migrating the ADC reading to the start of the feedback loop, adding
+    // the delay afterward had no effect. Adding the delay before writing to
+    // the bias voltage had a massive effect.
+    //
+    // The lesson is that the timing of DAC updates relative to ADC reads has
+    // some kind of effect on the capacitance signal. To make measurements
+    // consistent, never vary the timing between updating the bias voltage
+    // for capacitance measurement and reading the current.
+  } else if (currentState == State::stepping) {
     Application::updateBiasVoltage(0);
 
+    checkStartIterationValid();
+    uint32_t waveIterationDelta = KilohertzLoop::iterationID - waveStartIterationID;
     float voltage = sawtoothWave(waveIterationDelta, mode);
     Application::updatePiezoVoltage(3, voltage);
-  } else {
+  } else if (currentState == State::finished) {
     Application::updatePiezoVoltage(3, BlindStepper::restPosition);
+  }
+}
+
+void BlindStepper::checkStartIterationValid() {
+  if (waveStartIterationID == UINT32_MAX) {
+    Serial.println("Wave start iteration was not set.");
+    exit(0);
   }
 }

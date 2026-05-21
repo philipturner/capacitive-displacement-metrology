@@ -31,8 +31,11 @@ struct TipApproacher {
   static constexpr uint32_t integratorTimeLag = 1000;
   
   TipApproacher();
+  TipApproacher(bool notDefaultConstructor);
 
   void update();
+
+  void writeToLog(uint32_t slotID);
 
 private:
   State previousState;
@@ -40,6 +43,9 @@ private:
   uint32_t stateStartIterationID;
 
   BlindStepper blindStepper;
+
+  float feedback_diagnostic1;
+  float feedback_diagnostic2;
 
   uint32_t getTimeSinceStateStart();
   void updateState();

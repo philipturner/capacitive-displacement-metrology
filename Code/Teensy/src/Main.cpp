@@ -10,6 +10,8 @@
 #include "Util/FilterUtil.h"
 #include <Arduino.h>
 
+#include "IC/DAC.h"
+
 void kilohertzLoop();
 
 void setup() {
@@ -41,6 +43,7 @@ void loop() {
   }
 }
 
+
 Command::Mode mode;
 DACTester dacTester;
 BlindStepper blindStepper;
@@ -63,7 +66,7 @@ void kilohertzLoop() {
       blindStepper = BlindStepper(nextCommand);
     }
     if (mode == Command::Mode::tipApproach) {
-      tipApproacher = TipApproacher();
+      tipApproacher = TipApproacher(true);
     }
 
     resettingForModeChange = false;
@@ -112,19 +115,25 @@ void kilohertzLoop() {
   if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
     uint32_t slotID = Log::unsafeBufferedLogID % Log::logSize;
 
-    if (mode == Command::Mode::dacTest) {
-      dacTester.writeToLog(slotID);
-    } else if (mode == Command::Mode::blindStepping || 
-               mode == Command::Mode::tipApproach) {
-      Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
-      Log::ringBuffers[1][slotID] = Application::state.piezoZVoltage;
-      Log::ringBuffers[2][slotID] = Application::state.capacitance;
-      Log::ringBuffers[3][slotID] = Application::state.phaseShift;
-    } else {
+    if (mode == Command::Mode::idle) {
       Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
       Log::ringBuffers[1][slotID] = Application::state.biasVoltage;
       Log::ringBuffers[2][slotID] = Application::state.capacitance;
       Log::ringBuffers[3][slotID] = Application::state.phaseShift;
+    } else if (mode == Command::Mode::dacTest) {
+      dacTester.writeToLog(slotID);
+    } else if (mode == Command::Mode::capacitanceReporting) {
+      Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
+      Log::ringBuffers[1][slotID] = Application::state.biasVoltage;
+      Log::ringBuffers[2][slotID] = Application::state.capacitance;
+      Log::ringBuffers[3][slotID] = Application::state.phaseShift;
+    } else if (mode == Command::Mode::blindStepping) {
+      Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
+      Log::ringBuffers[1][slotID] = Application::state.piezoZVoltage;
+      Log::ringBuffers[2][slotID] = Application::state.capacitance;
+      Log::ringBuffers[3][slotID] = Application::state.phaseShift;
+    } else if (mode == Command::Mode::tipApproach) {
+      tipApproacher.writeToLog(slotID);
     }
 
     Log::unsafeBufferedLogID += 1;

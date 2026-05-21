@@ -1,11 +1,16 @@
 #include "TipApproacher.h"
 
 #include "Application/Application.h"
+#include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
 #include "Util/FilterUtil.h"
 #include <Arduino.h>
 
 TipApproacher::TipApproacher() {
+
+}
+
+TipApproacher::TipApproacher(bool notDefaultConstructor) {
   float piezoZVoltage = Application::state.piezoZVoltage;
   if (piezoZVoltage != BlindStepper::restPosition) {
     // Ensure the characters for the voltage appear first if the PC's
@@ -72,13 +77,13 @@ void TipApproacher::updateState() {
       command.attributes[0] = 1;
       blindStepper = BlindStepper(command);
     } else if (currentState == State::waiting) {
-
+      Application::updateBiasVoltage(setpointVoltage);
     } else if (currentState == State::approaching) {
-
+      Application::updateBiasVoltage(setpointVoltage);
     } else if (currentState == State::retracting) {
-
+      Application::updateBiasVoltage(setpointVoltage);
     } else if (currentState == State::feedback) {
-
+      Application::updateBiasVoltage(setpointVoltage);
     }
   }
 }
@@ -91,8 +96,7 @@ void TipApproacher::updateDACs() {
 
   } else if (currentState == State::waiting) {
     Application::updatePiezoVoltage(3, BlindStepper::restPosition);
-    Application::updateBiasVoltage(setpointVoltage);
-
+    
   } else if (currentState == State::approaching) {
     float progress = float(currentTime) / float(approachTime);
     progress = min(progress, 1);
@@ -100,7 +104,6 @@ void TipApproacher::updateDACs() {
     float scanAmplitude = 2 * abs(BlindStepper::restPosition);
     float voltage = BlindStepper::restPosition + progress * scanAmplitude;
     Application::updatePiezoVoltage(3, voltage);
-    Application::updateBiasVoltage(setpointVoltage);
 
   } else if (currentState == State::retracting) {
     float progress = 1 - float(currentTime) / float(retractTime);
@@ -109,7 +112,6 @@ void TipApproacher::updateDACs() {
     float scanAmplitude = 2 * abs(BlindStepper::restPosition);
     float voltage = BlindStepper::restPosition + smoothed * scanAmplitude;
     Application::updatePiezoVoltage(3, voltage);
-    Application::updateBiasVoltage(0);
 
   } else if (currentState == State::feedback) {
     float currentMagnitude = abs(Application::state.filteredCurrent);
@@ -120,6 +122,8 @@ void TipApproacher::updateDACs() {
     // by moving backward (more negative voltage).
     float dlnI_dz = 1.025e10 * sqrt(tunnelingBarrierHeight);
     float dz = dlnI / dlnI_dz;
+    feedback_diagnostic1 = dlnI;
+    feedback_diagnostic2 = dz;
 
     // Try a lowpass filter-like algorithm and extrapolate the small
     // alpha-like constant to equalling 1.0 at a low frequency like 1 kHz.
@@ -132,6 +136,24 @@ void TipApproacher::updateDACs() {
     float voltage = Application::state.piezoZVoltage;
     voltage += correctionInVolts;
     Application::updatePiezoVoltage(3, voltage);
-    Application::updateBiasVoltage(setpointVoltage);
+  }
+}
+
+void TipApproacher::writeToLog(uint32_t slotID) {
+  if (currentState == State::forwardStepping ||
+      currentState == State::waiting) {
+    Log::ringBuffers[0][slotID] = 0;
+  } else {
+    Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
+  }
+
+  Log::ringBuffers[1][slotID] = Application::state.piezoZVoltage;
+
+  if (currentState == State::feedback) {
+    Log::ringBuffers[2][slotID] = feedback_diagnostic1;
+    Log::ringBuffers[3][slotID] = feedback_diagnostic2;
+  } else {
+    Log::ringBuffers[2][slotID] = Application::state.capacitance;
+    Log::ringBuffers[3][slotID] = Application::state.phaseShift;
   }
 }

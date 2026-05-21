@@ -90,7 +90,7 @@ struct Watchdog {
               print("code:", code)
             }
           } else if shouldReportOK {
-            print("[\(currentDate)] Watchdog report: OK")
+            // print("[\(currentDate)] Watchdog report: OK")
           }
         }
       }

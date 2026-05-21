@@ -37,4 +37,6 @@ private:
   State currentState;
   uint32_t cycleID = 0;
   uint32_t waveStartIterationID = UINT32_MAX;
+
+  void checkStartIterationValid();
 };

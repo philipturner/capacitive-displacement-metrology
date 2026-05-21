@@ -2,32 +2,22 @@ import Foundation
 import PythonKit
 import SwiftSerial
 
-var trigger = Trigger()
-//trigger.type = .level(0)
-//trigger.polarity = .positive
-//trigger.channel = 1
+var trigger1 = Trigger()
+
+var trigger2 = Trigger()
+trigger2.type = .level(0)
+trigger2.polarity = .signAgnostic
+trigger2.channel = 1
 
 var applicationDesc = ApplicationDescriptor()
-applicationDesc.triggers = [trigger]
+applicationDesc.triggers = [trigger1, trigger2]
 let application = Application(descriptor: applicationDesc)
 Watchdog.initialize(trackedThreads: 2)
 
-func display(start: Double, end: Double) {
-  let timeInMs = (end - start) * 1000
-  let formattedTime = String(format: "%.3f", timeInMs)
-  print(formattedTime, "ms")
-}
-
 var nextLoopTime = Date().timeIntervalSince1970
-var previousLoopTime = nextLoopTime
 while !application.ui.isClosed {
   let currentTime = Date().timeIntervalSince1970
   if currentTime > nextLoopTime {
-    print()
-    print("time since last previous loop start:")
-    display(start: previousLoopTime, end: currentTime)
-    
-    previousLoopTime = currentTime
     while currentTime > nextLoopTime {
       nextLoopTime += 16.666e-3
     }
@@ -51,7 +41,7 @@ while !application.ui.isClosed {
   }
   guard output.shortTimeData.count > 0,
         output.longTimeData.count > 0 else {
-     print("[\(Date())] No data to graph.")
+    // print("[\(Date())] No data to graph.")
     continue
   }
   
@@ -91,15 +81,11 @@ while !application.ui.isClosed {
     application.ui.updateTime(columnID: 0, descriptor: shortTimeDesc)
   }
   
-  let time1 = Date().timeIntervalSince1970
-  
   updateLongTime()
   application.ui.updateLongPlots(
     data: output.longTimeData)
   application.ui.updateYRange(
     data: output.longTimeData)
-  
-  print(output.shortTimeData.last!.values[3])
   
   if let trace = output.trace {
     updateShortTimeForTrigger(trace: trace)
@@ -111,14 +97,5 @@ while !application.ui.isClosed {
       data: output.shortTimeData)
   }
   
-  let time2 = Date().timeIntervalSince1970
-  
   application.ui.app.processEvents()
-  
-  let time3 = Date().timeIntervalSince1970
-  
-  print("segments:")
-  display(start: time0, end: time1)
-  display(start: time1, end: time2)
-  display(start: time2, end: time3)
 }
