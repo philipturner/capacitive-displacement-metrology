@@ -31,8 +31,13 @@ BlindStepper::BlindStepper(Command command) {
     stepsPerCheck = command.attributes[1];
   }
 
-  Application::capTracker = CapacitanceTracker(true);
-  currentState = State::measuring;
+  if (mode == Mode::down) {
+    currentState = State::stepping;
+    waveStartIterationID = KilohertzLoop::iterationID;
+  } else {
+    Application::capTracker = CapacitanceTracker(true);
+    currentState = State::measuring;
+  }
 }
 
 BlindStepper::State
@@ -47,8 +52,13 @@ void BlindStepper::update() {
 
     uint32_t deltaIters = getIterationsSinceStart();
     if (deltaIters >= itersPerWaveSequence) {
-      Application::capTracker = CapacitanceTracker(true);
-      currentState = State::measuring;
+      if (mode == Mode::down) {
+        currentState = State::finished;
+      } else {
+        Application::capTracker = CapacitanceTracker(true);
+        currentState = State::measuring;
+      }
+
       cycleID += 1;
       waveStartIterationID = UINT32_MAX;
     }

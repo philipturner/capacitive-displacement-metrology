@@ -110,7 +110,7 @@ extension History {
         }
       }
       
-      print("Returning the first event, could not find any matching events.")
+      // print("Returning the first event, could not find any matching events.")
       return validEvents.first!
     }
     let bestEvent = getBestEvent()

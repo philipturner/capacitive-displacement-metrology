@@ -79,9 +79,9 @@ void TipApproacher::updateDACs() {
     float voltage = BlindStepper::restPosition + progress * scanAmplitude;
     Application::updatePiezoVoltage(3, voltage);
     Application::updateBiasVoltage(setpointVoltage);
-    
+
   } else if (currentState == State::feedback) {
-    /*
+    #if 1
     float currentMagnitude = abs(Application::state.filteredCurrent);
     currentMagnitude = max(currentMagnitude, 2e-12);
     float dlnI = log(currentMagnitude / setpointCurrent);
@@ -90,7 +90,7 @@ void TipApproacher::updateDACs() {
     // by moving backward (more negative voltage).
     float dlnI_dz = 1.025e10 * sqrt(tunnelingBarrierHeight);
     float dz = dlnI / dlnI_dz;
-    feedback_diagnostic1 = dlnI;
+    // feedback_diagnostic1 = dlnI;
     feedback_diagnostic2 = dz;
 
     // Try a lowpass filter-like algorithm and extrapolate the small
@@ -105,8 +105,8 @@ void TipApproacher::updateDACs() {
     voltage += correctionInVolts;
     Application::updatePiezoVoltage(3, voltage);
     Application::updateBiasVoltage(setpointVoltage);
-    */
 
+    #else
     float slewRate = 1000e-9 / 0.320e-9;
     float dt = float(KilohertzLoop::period) * 1e-6;
     float dV = slewRate * dt;
@@ -116,6 +116,7 @@ void TipApproacher::updateDACs() {
     voltage = max(voltage, BlindStepper::restPosition);
     Application::updatePiezoVoltage(3, voltage);
     Application::updateBiasVoltage(setpointVoltage);
+    #endif
   }
 }
 
