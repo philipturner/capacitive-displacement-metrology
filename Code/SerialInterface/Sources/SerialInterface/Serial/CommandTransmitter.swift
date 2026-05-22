@@ -68,35 +68,35 @@ class CommandTransmitter: @unchecked Sendable {
     switch input.first! {
     case "0":
       labels = [
-        "current (pA)",
+        "current (A)",
         "sample bias (V)",
         "capacitance (F)",
         "phase shift (°)"
       ]
     case "1":
       labels = [
-        "current (pA)",
+        "current (A)",
         "tested channel (V)",
         "channel ID",
         "n/a"
       ]
     case "2":
       labels = [
-        "current (pA)",
+        "current (A)",
         "sample bias (V)",
         "capacitance (F)",
         "phase shift (°)"
       ]
     case "3":
       labels = [
-        "current (pA)",
+        "current (A)",
         "piezo Z (V)",
         "capacitance (F)",
         "phase shift (°)"
       ]
     case "4":
       labels = [
-        "current (pA)",
+        "current (A)",
         "piezo Z (V)",
         "diagnostic 1",
         "diagnostic 2",
