@@ -1,18 +1,48 @@
 import Foundation
 
+struct TimeAxis {
+  var shortLength: Double = .zero
+  var shortMajorTick: Double = .zero
+  var longLength: Double = .zero
+  var longMajorTick: Double = .zero
+}
+
+struct HistoryDescriptor {
+  /// Required.
+  var shortTimeLength: Double?
+  
+  /// Optional. Defaults to 1/5 of the short time length.
+  var shortTimeMajorTick: Double?
+  
+  /// Required. The long-time length so the UI can properly configure the
+  /// amount of points per average.
+  var longTimeLength: Double?
+  
+  /// Optional. Defaults to 1/5 of the long time length.
+  var longTimeMajorTick: Double?
+  
+  /// Optional. The triggers for the history.
+  var triggers: [Trigger] = []
+  
+  init() {
+    
+  }
+}
+
 struct History {
   static let logPeriodMicros: Int = 48
-  static let historyLengthSeconds: Int = 5
+  static let historyLengthSeconds: Int = 30
   static let maxEntryCount: Int = {
     var output = History.historyLengthSeconds
     output *= 1_000_000 / History.logPeriodMicros
     return output
   }()
   
-  static let pointsPerAverage: Int = 5000 / logPeriodMicros
-  static let maxAverageCount: Int = {
-    History.maxEntryCount / History.pointsPerAverage
-  }()
+  var timeAxis = TimeAxis()
+  var pointsPerAverage: Int
+  var maxAverageCount: Int {
+    History.maxEntryCount / pointsPerAverage
+  }
   static let triggerEventCacheSize: Int = 100
   
   struct TimedSample {
@@ -36,35 +66,59 @@ struct History {
   }
   
   var sampleCursor: Int = .zero
-  private(set) var samplesBuffer: [TimedSample]
+  private(set) var samplesBuffer: [TimedSample] = []
   private(set) var latestSample: TimedSample?
   
   var averageCursor: Int = .zero
   private var samplesForNextAverage: [TimedSample] = []
-  private(set) var averagesBuffer: [TimedAverage]
+  private(set) var averagesBuffer: [TimedAverage] = []
   private(set) var latestAverage: TimedAverage?
   
   private(set) var triggers: [Trigger]
   var triggerEvents: [TriggerEvent] = []
   
-  init(triggers: [Trigger]) {
+  init(descriptor: HistoryDescriptor) {
+    guard let shortTimeLength = descriptor.shortTimeLength,
+          let longTimeLength = descriptor.longTimeLength else {
+      fatalError("Descriptor was incomplete.")
+    }
+    self.triggers = descriptor.triggers
+    
+    timeAxis.shortLength = shortTimeLength
+    timeAxis.shortMajorTick =
+    descriptor.shortTimeMajorTick ?? shortTimeLength / 5
+    
+    timeAxis.longLength = longTimeLength
+    timeAxis.longMajorTick =
+    descriptor.longTimeMajorTick ?? longTimeLength / 5
+    
+    let microsecondsPerAverage = (longTimeLength / 500) * 1e6
+    pointsPerAverage = max(2, Int(microsecondsPerAverage) / Self.logPeriodMicros)
+  }
+  
+  mutating func reset() {
     let emptySample = TimedSample(
       time: .nan,
       values: SIMD4<Float>(repeating: .nan))
-    self.samplesBuffer = Array(
+    sampleCursor = .zero
+    samplesBuffer = Array(
       repeating: emptySample,
       count: Self.maxEntryCount)
+    latestSample = nil
     
     let emptyAverage = TimedAverage(
       time: .nan,
       minimum: SIMD4<Float>(repeating: .nan),
       average: SIMD4<Float>(repeating: .nan),
       maximum: SIMD4<Float>(repeating: .nan))
-    self.averagesBuffer = Array(
+    averageCursor = .zero
+    samplesForNextAverage = []
+    averagesBuffer = Array(
       repeating: emptyAverage,
-      count: Self.maxAverageCount)
+      count: self.maxAverageCount)
+    latestAverage = nil
     
-    self.triggers = triggers
+    triggerEvents = []
   }
   
   mutating func addLines(_ input: [LineParser.Line]) {
@@ -107,7 +161,7 @@ struct History {
   }
   
   private mutating func incorporateAveragePoint() {
-    guard samplesForNextAverage.count >= Self.pointsPerAverage else {
+    guard samplesForNextAverage.count >= pointsPerAverage else {
       return
     }
     
@@ -135,7 +189,7 @@ struct History {
     }
     let average = createAverage()
     
-    let ringIndex = averageCursor % Self.maxAverageCount
+    let ringIndex = averageCursor % self.maxAverageCount
     averagesBuffer[ringIndex] = average
     averageCursor += 1
     latestAverage = average

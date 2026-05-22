@@ -2,12 +2,7 @@ import Foundation
 import SwiftSerial
 
 struct ApplicationDescriptor {
-  /// Optional. The triggers for the history.
-  var triggers: [Trigger] = []
-  
-  init() {
-    
-  }
+  var historyDescriptor: HistoryDescriptor?
 }
 
 class Application: @unchecked Sendable {
@@ -24,6 +19,10 @@ class Application: @unchecked Sendable {
   var inputForMainThread: [String] = []
   
   init(descriptor: ApplicationDescriptor) {
+    guard let historyDescriptor = descriptor.historyDescriptor else {
+      fatalError("Descriptor was incomplete.")
+    }
+    
     self.ui = UI()
     if Self.serialEmulation {
       self.port = SerialPort(path: "/dev/cu.debug-console")
@@ -32,7 +31,7 @@ class Application: @unchecked Sendable {
     }
     self.commandTransmitter = CommandTransmitter()
     self.lineParser = LineParser()
-    self.history = History(triggers: descriptor.triggers)
+    self.history = History(descriptor: historyDescriptor)
     
     try! port.open(
       receiveRate: .baud115200,
@@ -69,8 +68,7 @@ class Application: @unchecked Sendable {
       
       lineParser = LineParser()
       Application.queue.sync {
-        let triggers = self.history.triggers
-        self.history = History(triggers: triggers)
+        self.history.reset()
       }
     }
     

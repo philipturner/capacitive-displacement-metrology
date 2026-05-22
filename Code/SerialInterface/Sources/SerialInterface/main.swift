@@ -2,14 +2,21 @@ import Foundation
 import PythonKit
 import SwiftSerial
 
-var trigger1 = Trigger()
-var trigger2 = Trigger()
-trigger2.type = .level(0)
-trigger2.polarity = .positive
-trigger2.channel = 1
+func createTrigger1() -> Trigger {
+  var trigger = Trigger()
+  trigger.type = .level(10e-9)
+  trigger.polarity = .signAgnostic
+  trigger.channel = 0
+  return trigger
+}
+
+var historyDesc = HistoryDescriptor()
+historyDesc.shortTimeLength = 0.050
+historyDesc.longTimeLength = 20
+historyDesc.triggers = [createTrigger1()]
 
 var applicationDesc = ApplicationDescriptor()
-applicationDesc.triggers = [trigger2]
+applicationDesc.historyDescriptor = historyDesc
 let application = Application(descriptor: applicationDesc)
 Watchdog.initialize(trackedThreads: 2)
 
@@ -33,21 +40,14 @@ while !application.ui.isClosed {
       return ""
     }
   }
-  if input.count > 0 {
-    print("main thread recognized input:", input)
-  }
   application.commandTransmitter.updateLabels(
     input, ui: application.ui)
   
-  let shortTimeLength: Double = 0.003
-  let shortTimeMajorTick: Double = 0.001
-  let longTimeLength: Double = 1.0
-  let longTimeMajorTick: Double = 0.2
-  
+  let timeAxis = application.history.timeAxis
   let output = Application.queue.sync {
     return application.history.output(
-      shortInterval: shortTimeLength,
-      longInterval: longTimeLength)
+      shortInterval: timeAxis.shortLength,
+      longInterval: timeAxis.longLength)
   }
   guard output.shortTimeData.count > 0,
         output.longTimeData.count > 0 else {
@@ -59,18 +59,18 @@ while !application.ui.isClosed {
     let maximum = output.shortTimeData.last!.time
     
     var shortTimeDesc = UI.TimeAxisDescriptor()
-    shortTimeDesc.minimum = maximum - shortTimeLength
+    shortTimeDesc.minimum = maximum - timeAxis.shortLength
     shortTimeDesc.maximum = maximum
-    shortTimeDesc.majorTick = shortTimeMajorTick
+    shortTimeDesc.majorTick = timeAxis.shortMajorTick
     application.ui.updateTime(columnID: 0, descriptor: shortTimeDesc)
   }
   func updateLongTime() {
     let maximum = output.longTimeData.last!.time
     
     var longTimeDesc = UI.TimeAxisDescriptor()
-    longTimeDesc.minimum = maximum - longTimeLength
+    longTimeDesc.minimum = maximum - timeAxis.longLength
     longTimeDesc.maximum = maximum
-    longTimeDesc.majorTick = longTimeMajorTick
+    longTimeDesc.majorTick = timeAxis.longMajorTick
     application.ui.updateTime(columnID: 1, descriptor: longTimeDesc)
   }
   func updateShortTimeForTrigger(
@@ -79,7 +79,7 @@ while !application.ui.isClosed {
     var shortTimeDesc = UI.TimeAxisDescriptor()
     shortTimeDesc.minimum = trace.timeInterval[0]
     shortTimeDesc.maximum = trace.timeInterval[1]
-    shortTimeDesc.majorTick = shortTimeMajorTick
+    shortTimeDesc.majorTick = timeAxis.shortMajorTick
     
     if case .timeInterval(_, let offset) = trace.trigger.type {
       shortTimeDesc.offset = offset

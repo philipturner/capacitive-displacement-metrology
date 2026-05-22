@@ -66,9 +66,9 @@ extension History {
     
     var output: [TimedAverage] = []
     let endIndex = max(0, averageCursor - 1)
-    let startIndex = max(0, averageCursor - Self.maxAverageCount)
+    let startIndex = max(0, averageCursor - self.maxAverageCount)
     for i in (startIndex...endIndex).reversed() {
-      let ringIndex = i % Self.maxAverageCount
+      let ringIndex = i % self.maxAverageCount
       let average = averagesBuffer[ringIndex]
       
       if average.time >= earliestTime {

@@ -10,8 +10,6 @@
 #include "Util/FilterUtil.h"
 #include <Arduino.h>
 
-#include "IC/DAC.h"
-
 void kilohertzLoop();
 
 void setup() {

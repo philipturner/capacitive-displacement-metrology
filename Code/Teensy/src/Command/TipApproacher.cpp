@@ -55,6 +55,8 @@ void TipApproacher::updateState() {
       float filteredCurrent = Application::state.filteredCurrent;
       if (abs(filteredCurrent) > setpointCurrent) {
         currentState = State::feedback;
+        feedback_diagnostic1 = filteredCurrent;
+        feedback_diagnostic2 = Application::state.piezoZVoltage;
       }
     }
   } else if (currentState == State::retracting) {
@@ -105,6 +107,7 @@ void TipApproacher::updateDACs() {
     Application::updateBiasVoltage(setpointVoltage);
 
   } else if (currentState == State::feedback) {
+    /*
     float currentMagnitude = abs(Application::state.filteredCurrent);
     currentMagnitude = max(currentMagnitude, 2e-12);
     float dlnI = log(currentMagnitude / setpointCurrent);
@@ -126,6 +129,16 @@ void TipApproacher::updateDACs() {
 
     float voltage = Application::state.piezoZVoltage;
     voltage += correctionInVolts;
+    Application::updatePiezoVoltage(3, voltage);
+    Application::updateBiasVoltage(setpointVoltage);
+    */
+
+    float progress = 1 - float(currentTime) / float(retractTime);
+    float smoothed = FilterUtil::thirdOrderSmoothstep(progress);
+
+    float scanAmplitude = feedback_diagnostic2;
+    scanAmplitude -= BlindStepper::restPosition;
+    float voltage = BlindStepper::restPosition + smoothed * scanAmplitude;
     Application::updatePiezoVoltage(3, voltage);
     Application::updateBiasVoltage(setpointVoltage);
   }

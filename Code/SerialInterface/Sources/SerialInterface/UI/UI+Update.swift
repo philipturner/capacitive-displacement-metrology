@@ -99,8 +99,15 @@ extension UI {
       
       let center = (minimum + maximum) / 2
       let halfRange = maximum - center
-      let rangeMin = center - halfRange * 1.1
-      let rangeMax = center + halfRange * 1.1
+      var rangeMin = center - halfRange * 1.1
+      var rangeMax = center + halfRange * 1.1
+      
+      if rowID == 0 {
+        if rangeMax - rangeMin > 1e-9 {
+          rangeMax = 200e-12
+          rangeMin = -200e-12
+        }
+      }
       
       let plotLeft = plots[rowID][0]
       plotLeft.setYRange(rangeMin, rangeMax, padding: 0)
