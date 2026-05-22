@@ -3,14 +3,13 @@ import PythonKit
 import SwiftSerial
 
 var trigger1 = Trigger()
-
 var trigger2 = Trigger()
 trigger2.type = .level(0)
-trigger2.polarity = .signAgnostic
+trigger2.polarity = .positive
 trigger2.channel = 1
 
 var applicationDesc = ApplicationDescriptor()
-applicationDesc.triggers = [trigger1, trigger2]
+applicationDesc.triggers = [trigger2]
 let application = Application(descriptor: applicationDesc)
 Watchdog.initialize(trackedThreads: 2)
 
@@ -27,7 +26,18 @@ while !application.ui.isClosed {
   }
   Watchdog.notify(threadID: 0, code: 0)
   
-  let time0 = Date().timeIntervalSince1970
+  let input = Application.queue.sync {
+    if application.inputForMainThread.count > 0 {
+      return application.inputForMainThread.removeFirst()
+    } else {
+      return ""
+    }
+  }
+  if input.count > 0 {
+    print("main thread recognized input:", input)
+  }
+  application.commandTransmitter.updateLabels(
+    input, ui: application.ui)
   
   let shortTimeLength: Double = 0.003
   let shortTimeMajorTick: Double = 0.001

@@ -38,9 +38,7 @@ uint32_t TipApproacher::getTimeSinceStateStart() {
 void TipApproacher::updateState() {
   previousState = currentState;
   uint32_t previousTime = getTimeSinceStateStart();
-
-  // Implementation is still in progress.
-
+  
   if (currentState == State::forwardStepping) {
     auto state = blindStepper.getCurrentState();
     if (state == BlindStepper::State::finished) {
@@ -63,8 +61,6 @@ void TipApproacher::updateState() {
     if (previousTime >= retractTime) {
       currentState = State::forwardStepping;
     }
-  } else if (currentState == State::feedback) {
-
   }
 
   if (currentState != previousState) {
@@ -76,14 +72,6 @@ void TipApproacher::updateState() {
       command.alphaCode = 'u';
       command.attributes[0] = 1;
       blindStepper = BlindStepper(command);
-    } else if (currentState == State::waiting) {
-      Application::updateBiasVoltage(setpointVoltage);
-    } else if (currentState == State::approaching) {
-      Application::updateBiasVoltage(setpointVoltage);
-    } else if (currentState == State::retracting) {
-      Application::updateBiasVoltage(setpointVoltage);
-    } else if (currentState == State::feedback) {
-      Application::updateBiasVoltage(setpointVoltage);
     }
   }
 }
@@ -96,6 +84,7 @@ void TipApproacher::updateDACs() {
 
   } else if (currentState == State::waiting) {
     Application::updatePiezoVoltage(3, BlindStepper::restPosition);
+    Application::updateBiasVoltage(setpointVoltage);
     
   } else if (currentState == State::approaching) {
     float progress = float(currentTime) / float(approachTime);
@@ -104,6 +93,7 @@ void TipApproacher::updateDACs() {
     float scanAmplitude = 2 * abs(BlindStepper::restPosition);
     float voltage = BlindStepper::restPosition + progress * scanAmplitude;
     Application::updatePiezoVoltage(3, voltage);
+    Application::updateBiasVoltage(setpointVoltage);
 
   } else if (currentState == State::retracting) {
     float progress = 1 - float(currentTime) / float(retractTime);
@@ -112,6 +102,7 @@ void TipApproacher::updateDACs() {
     float scanAmplitude = 2 * abs(BlindStepper::restPosition);
     float voltage = BlindStepper::restPosition + smoothed * scanAmplitude;
     Application::updatePiezoVoltage(3, voltage);
+    Application::updateBiasVoltage(setpointVoltage);
 
   } else if (currentState == State::feedback) {
     float currentMagnitude = abs(Application::state.filteredCurrent);
@@ -136,6 +127,7 @@ void TipApproacher::updateDACs() {
     float voltage = Application::state.piezoZVoltage;
     voltage += correctionInVolts;
     Application::updatePiezoVoltage(3, voltage);
+    Application::updateBiasVoltage(setpointVoltage);
   }
 }
 

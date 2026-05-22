@@ -34,10 +34,7 @@ class CommandTransmitter: @unchecked Sendable {
     }
   }
   
-  func transmitSerialInput(port: SerialPort) {
-    let input = Application.queue.sync {
-      self.extractCharacters()
-    }
+  func transmitSerialInput(_ input: String, port: SerialPort) {
     guard input.count > 0 else {
       return
     }
@@ -60,5 +57,57 @@ class CommandTransmitter: @unchecked Sendable {
       fatalError("Did not write the number of expected bytes.")
     }
     print("Transmitted serial input: \(input)")
+  }
+  
+  func updateLabels(_ input: String, ui: UI) {
+    guard input.count > 0 else {
+      return
+    }
+    
+    var labels: [String]
+    switch input.first! {
+    case "0":
+      labels = [
+        "current (pA)",
+        "sample bias (V)",
+        "capacitance (F)",
+        "phase shift (°)"
+      ]
+    case "1":
+      labels = [
+        "current (pA)",
+        "tested channel (V)",
+        "channel ID",
+        "n/a"
+      ]
+    case "2":
+      labels = [
+        "current (pA)",
+        "sample bias (V)",
+        "capacitance (F)",
+        "phase shift (°)"
+      ]
+    case "3":
+      labels = [
+        "current (pA)",
+        "piezo Z (V)",
+        "capacitance (F)",
+        "phase shift (°)"
+      ]
+    case "4":
+      labels = [
+        "current (pA)",
+        "piezo Z (V)",
+        "diagnostic 1",
+        "diagnostic 2",
+      ]
+    default:
+      return
+    }
+    
+    for i in 0..<4 {
+      let labelText = labels[i]
+      ui.labels[i].setText(labelText)
+    }
   }
 }

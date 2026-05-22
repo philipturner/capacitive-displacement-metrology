@@ -6,14 +6,14 @@ private let rowSpacing: Int = 20
 private let columnWidth: Int = 500
 private let columnSpacing: Int = 20
 private let xAxisHeight: Int = 40
-private let yAxisWidth: Int = 100
+private let yAxisWidth: Int = 120
 #else // iPad
 private let rowHeight: Int = 150
 private let rowSpacing: Int = 20
 private let columnWidth: Int = 250
 private let columnSpacing: Int = 20
 private let xAxisHeight: Int = 40
-private let yAxisWidth: Int = 100
+private let yAxisWidth: Int = 120
 #endif
 
 extension UI {
@@ -184,9 +184,10 @@ extension UI {
     ).pythonObject
   }
   
-  func createPlotLabels(_ labelTextList: [String]) {
+  func createPlotLabels(_ labelTextList: [String]) -> [PythonObject] {
     let VerticalLabel = createVerticalLabel()
     
+    var output: [PythonObject] = []
     for labelID in labelTextList.indices {
       let text = labelTextList[labelID]
       let label = VerticalLabel(text, win)
@@ -199,7 +200,7 @@ extension UI {
       
       var x: Int = -boxSize / 2
       x += yAxisWidth
-      x += -70
+      x += -90
       
       var y: Int = -boxSize / 2
       y += labelID * (rowHeight + rowSpacing)
@@ -207,6 +208,9 @@ extension UI {
       y += 12
       
       label.move(x, y)
+      
+      output.append(label)
     }
+    return output
   }
 }

@@ -14,6 +14,7 @@ class UI {
   static let rowCount: Int = 4
   var plots: [[PythonObject]] = []
   var curves: [[PythonObject]] = []
+  var labels: [PythonObject] = []
   
   init() {
     PythonLibrary.useLibrary(at: "/Users/philipturner/miniforge3/bin/python")
@@ -33,23 +34,14 @@ class UI {
     setupLayout()
     setWindowPosition()
     
-    #if false
-    let labelTextList: [String] = [
-      "current (pA)",
-      "sample bias (V)",
-      "capacitance (fF)",
-      "phase shift (°)",
-    ]
-    #else
     let labelTextList: [String] = [
       "signal 0",
       "signal 1",
       "signal 2",
       "signal 3",
     ]
-    #endif
     createPlots()
     linkPlots()
-    createPlotLabels(labelTextList)
+    labels = createPlotLabels(labelTextList)
   }
 }

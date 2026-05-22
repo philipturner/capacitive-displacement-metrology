@@ -21,6 +21,8 @@ class Application: @unchecked Sendable {
   var lineParser: LineParser
   var history: History
   
+  var inputForMainThread: [String] = []
+  
   init(descriptor: ApplicationDescriptor) {
     self.ui = UI()
     if Self.serialEmulation {
@@ -131,7 +133,15 @@ class Application: @unchecked Sendable {
         usleep(10_000)
         Watchdog.notify(threadID: 1, code: 0)
         
-        commandTransmitter.transmitSerialInput(port: port)
+        let input = Application.queue.sync {
+          self.commandTransmitter.extractCharacters()
+        }
+        if input.count > 0 {
+          commandTransmitter.transmitSerialInput(input, port: port)
+          Application.queue.sync {
+            inputForMainThread.append(input)
+          }
+        }
         
         var lines: [LineParser.Line]
         if Self.serialEmulation {
