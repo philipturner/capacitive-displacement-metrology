@@ -15,7 +15,7 @@ struct TipApproacher {
   static constexpr float setpointVoltage = 0.050;
   static constexpr float setpointCurrent = 100e-12;
   static constexpr uint32_t waitTime = 1000;
-  static constexpr uint32_t retractTime = 1500;
+  static constexpr uint32_t retractTime = 10000;
 
   // -270 V -> 270 V, 0.32 nm/V, 1000 nm/s
   static constexpr uint32_t approachTime = 172800;

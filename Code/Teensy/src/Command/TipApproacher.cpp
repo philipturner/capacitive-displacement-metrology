@@ -51,17 +51,19 @@ void TipApproacher::updateState() {
   } else if (currentState == State::approaching) {
     if (previousTime >= approachTime) {
       currentState = State::retracting;
-    } else {
-      float filteredCurrent = Application::state.filteredCurrent;
-      if (abs(filteredCurrent) > setpointCurrent) {
-        currentState = State::feedback;
-        feedback_diagnostic1 = filteredCurrent;
-        feedback_diagnostic2 = Application::state.piezoZVoltage;
-      }
     }
   } else if (currentState == State::retracting) {
     if (previousTime >= retractTime) {
       currentState = State::forwardStepping;
+    }
+  }
+
+  if (currentState != State::feedback) {
+    float filteredCurrent = Application::state.filteredCurrent;
+    if (abs(filteredCurrent) > 10e-9) {
+      currentState = State::feedback;
+      feedback_diagnostic1 = filteredCurrent;
+      feedback_diagnostic2 = Application::state.piezoZVoltage;
     }
   }
 
@@ -82,7 +84,7 @@ void TipApproacher::updateDACs() {
   uint32_t currentTime = getTimeSinceStateStart();
 
   if (currentState == State::forwardStepping) {
-    blindStepper.update();
+    blindStepper.update(20000, true);
 
   } else if (currentState == State::waiting) {
     Application::updatePiezoVoltage(3, BlindStepper::restPosition);
@@ -145,20 +147,20 @@ void TipApproacher::updateDACs() {
 }
 
 void TipApproacher::writeToLog(uint32_t slotID) {
-  if (currentState == State::forwardStepping ||
-      currentState == State::waiting) {
-    Log::ringBuffers[0][slotID] = 0;
-  } else {
+  // if (currentState == State::forwardStepping ||
+  //     currentState == State::waiting) {
+  //   Log::ringBuffers[0][slotID] = 0;
+  // } else {
     Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
-  }
+  // }
 
   Log::ringBuffers[1][slotID] = Application::state.piezoZVoltage;
 
-  if (currentState == State::feedback) {
-    Log::ringBuffers[2][slotID] = feedback_diagnostic1;
-    Log::ringBuffers[3][slotID] = feedback_diagnostic2;
-  } else {
+  // if (currentState == State::feedback) {
+  //   Log::ringBuffers[2][slotID] = feedback_diagnostic1;
+  //   Log::ringBuffers[3][slotID] = feedback_diagnostic2;
+  // } else {
     Log::ringBuffers[2][slotID] = Application::state.capacitance;
     Log::ringBuffers[3][slotID] = Application::state.phaseShift;
-  }
+  // }
 }

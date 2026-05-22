@@ -42,12 +42,8 @@ BlindStepper::getCurrentState() const {
 
 float BlindStepper::sawtoothWave(
   uint32_t waveIterationDelta,
-  BlindStepper::Mode mode
+  uint32_t wavePeriod
 ) {
-  if (wavePeriod % (2 * KilohertzLoop::period) != 0) {
-    Serial.println("Blind stepper wave period not sufficiently divisible.");
-    exit(0);
-  }
   uint32_t itersPerWave = wavePeriod / KilohertzLoop::period;
   uint32_t phase = waveIterationDelta % itersPerWave;
   uint32_t halfPoint = itersPerWave / 2;
@@ -69,7 +65,11 @@ float BlindStepper::sawtoothWave(
   return output;
 }
 
-void BlindStepper::update() {
+void BlindStepper::update(uint32_t targetWavePeriod, bool skipMeasure) {
+  uint32_t wavePeriod = targetWavePeriod;
+  wavePeriod /= KilohertzLoop::period;
+  wavePeriod *= KilohertzLoop::period;
+
   if (currentState == State::stepping) {
     uint32_t itersPerWaveSequence = wavePeriod / KilohertzLoop::period;
     itersPerWaveSequence *= stepsPerCheck;
@@ -77,34 +77,43 @@ void BlindStepper::update() {
     checkStartIterationValid();
     uint32_t waveIterationDelta = KilohertzLoop::iterationID - waveStartIterationID;
     if (waveIterationDelta >= itersPerWaveSequence) {
-      Application::capTracker = CapacitanceTracker(true);
-      currentState = State::measuring;
-      cycleID += 1;
-      waveStartIterationID = UINT32_MAX;
+      if (skipMeasure) {
+        currentState = State::finished;
+      } else {
+        Application::capTracker = CapacitanceTracker(true);
+        currentState = State::measuring;
+        cycleID += 1;
+        waveStartIterationID = UINT32_MAX;
+      }
     }
   }
 
   if (currentState == State::measuring) {
-    // Does not update the bias voltage if the capacitance tracker finishes.
-    Application::updateCapacitanceTracker(/*regenerate=*/false);
-
-    auto state = Application::capTracker.getCurrentState();
-    if (state == CapacitanceTracker::State::finished) {
-      if (mode == Mode::up || mode == Mode::down) {
-        if (cycleID > 0) {
-          currentState = State::finished;
-        } else {
-          currentState = State::stepping;
-        }
-      } else if (mode == Mode::capacitance) {
-        float capacitance = Application::state.capacitance;
-        if (capacitance > capacitanceThreshold) {
-          currentState = State::finished;
-        } else {
-          currentState = State::stepping;
-        }
-      }
+    if (skipMeasure) {
+      currentState = State::stepping;
       waveStartIterationID = KilohertzLoop::iterationID;
+    } else {
+      // Does not update the bias voltage if the capacitance tracker finishes.
+      Application::updateCapacitanceTracker(/*regenerate=*/false);
+
+      auto state = Application::capTracker.getCurrentState();
+      if (state == CapacitanceTracker::State::finished) {
+        if (mode == Mode::up || mode == Mode::down) {
+          if (cycleID > 0) {
+            currentState = State::finished;
+          } else {
+            currentState = State::stepping;
+          }
+        } else if (mode == Mode::capacitance) {
+          float capacitance = Application::state.capacitance;
+          if (capacitance > capacitanceThreshold) {
+            currentState = State::finished;
+          } else {
+            currentState = State::stepping;
+          }
+        }
+        waveStartIterationID = KilohertzLoop::iterationID;
+      }
     }
   }
 
@@ -126,11 +135,12 @@ void BlindStepper::update() {
     // consistent, never vary the timing between updating the bias voltage
     // for capacitance measurement and reading the current.
   } else if (currentState == State::stepping) {
-    Application::updateBiasVoltage(0);
+    // Temporarily use the same bias voltage as feedback detection.
+    Application::updateBiasVoltage(0.050);
 
     checkStartIterationValid();
     uint32_t waveIterationDelta = KilohertzLoop::iterationID - waveStartIterationID;
-    float voltage = sawtoothWave(waveIterationDelta, mode);
+    float voltage = sawtoothWave(waveIterationDelta, wavePeriod);
     Application::updatePiezoVoltage(3, voltage);
   } else if (currentState == State::finished) {
     Application::updatePiezoVoltage(3, BlindStepper::restPosition);

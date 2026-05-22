@@ -3,6 +3,7 @@ import PythonKit
 import SwiftSerial
 
 func createTrigger1() -> Trigger {
+  // Also try triggering on the last falling edge of the Z piezo voltage.
   var trigger = Trigger()
   trigger.type = .level(10e-9)
   trigger.polarity = .signAgnostic
@@ -90,12 +91,24 @@ while !application.ui.isClosed {
     
     application.ui.updateTime(columnID: 0, descriptor: shortTimeDesc)
   }
+  func updateYRange() {
+    let maximum = output.longTimeData.last!.time
+    let minimum = maximum - 5
+    
+    var usedData: [History.TimedAverage] = []
+    for average in output.longTimeData {
+      if average.time < minimum {
+        continue
+      }
+      usedData.append(average)
+    }
+    application.ui.updateYRange(data: usedData)
+  }
   
   updateLongTime()
   application.ui.updateLongPlots(
     data: output.longTimeData)
-  application.ui.updateYRange(
-    data: output.longTimeData)
+  updateYRange()
   
   if let trace = output.trace {
     updateShortTimeForTrigger(trace: trace)
@@ -107,5 +120,6 @@ while !application.ui.isClosed {
       data: output.shortTimeData)
   }
   
+  // Randomly crashes on application start, cannot narrow down the cause.
   application.ui.app.processEvents()
 }
