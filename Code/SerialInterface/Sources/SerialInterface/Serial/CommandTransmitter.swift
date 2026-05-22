@@ -97,7 +97,7 @@ class CommandTransmitter: @unchecked Sendable {
     case "4":
       labels = [
         "current (A)",
-        "piezo Z (V)",
+        "piezo Z (nm)",
         "diagnostic 1",
         "diagnostic 2",
       ]

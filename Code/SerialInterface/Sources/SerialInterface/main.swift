@@ -4,7 +4,7 @@ import SwiftSerial
 
 func createTrigger1() -> Trigger {
   var trigger = Trigger()
-  trigger.type = .level(100e-12)
+  trigger.type = .level(1e-9)
   trigger.polarity = .signAgnostic
   trigger.channel = 0
   return trigger
@@ -12,7 +12,7 @@ func createTrigger1() -> Trigger {
 
 var historyDesc = HistoryDescriptor()
 historyDesc.shortTimeLength = 0.050
-historyDesc.longTimeLength = 20
+historyDesc.longTimeLength = 5
 historyDesc.triggers = [createTrigger1()]
 
 var applicationDesc = ApplicationDescriptor()
@@ -96,7 +96,7 @@ while !application.ui.isClosed {
     data: output.longTimeData)
   application.ui.updateYRange(
     data: output.longTimeData,
-    lifetimes: SIMD4(5, 5, 1, 1))
+    lifetimes: SIMD4(repeating: 1))
   
   if let trace = output.trace {
     updateShortTimeForTrigger(trace: trace)
@@ -108,6 +108,5 @@ while !application.ui.isClosed {
       data: output.shortTimeData)
   }
   
-  // Randomly crashes on application start, cannot narrow down the cause.
   application.ui.app.processEvents()
 }

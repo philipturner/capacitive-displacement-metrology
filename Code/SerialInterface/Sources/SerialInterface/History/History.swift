@@ -94,6 +94,8 @@ struct History {
     
     let microsecondsPerAverage = (longTimeLength / 500) * 1e6
     pointsPerAverage = max(2, Int(microsecondsPerAverage) / Self.logPeriodMicros)
+    
+    reset()
   }
   
   mutating func reset() {

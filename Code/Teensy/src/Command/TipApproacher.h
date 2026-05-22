@@ -9,7 +9,7 @@ struct TipApproacher {
     feedback = 2,
   };
 
-  static constexpr float setpointVoltage = 0.050;
+  static constexpr float setpointVoltage = 0.05;
   static constexpr float setpointCurrent = 100e-12;
   
   // -270 V -> 270 V, 0.32 nm/V, 1000 nm/s
@@ -24,7 +24,16 @@ struct TipApproacher {
   // 1.0 V -> 225 pm per decade
   // 0.5 V -> 318 pm per decade
   static constexpr float tunnelingBarrierHeight = 1.0;
-  static constexpr uint32_t integratorTimeLag = 1000;
+
+  // 100 ms: crashes at 50x setpoint; cannot react to disturbances fast enough
+  // 30 ms: still crashes, often error close to max possible
+  // 10 ms: state of crashiness and high error after tip approach
+  // 3 ms: prolonged rapid crashing after tip approach, then stable
+  // 1 ms: rapid crashing after tip approach or out of range
+  // 300 μs: still unexplained crashes
+  // 100 μs: occasional unexplained crashes and current spikes
+  // 30 μs: unexplained sudden crashes, high error
+  static constexpr uint32_t integratorTimeLag = 300;
   
   TipApproacher();
   TipApproacher(bool notDefaultConstructor);

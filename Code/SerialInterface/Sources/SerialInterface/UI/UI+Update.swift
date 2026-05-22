@@ -106,8 +106,8 @@ extension UI {
       
       let center = (minimum + maximum) / 2
       let halfRange = maximum - center
-      var rangeMin = center - halfRange * 1.1
-      var rangeMax = center + halfRange * 1.1
+      let rangeMin = center - halfRange * 1.1
+      let rangeMax = center + halfRange * 1.1
       
       let plotLeft = plots[rowID][0]
       plotLeft.setYRange(rangeMin, rangeMax, padding: 0)

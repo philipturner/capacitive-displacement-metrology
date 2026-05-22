@@ -40,15 +40,16 @@ void TipApproacher::updateState() {
   previousState = currentState;
   uint32_t previousTime = getTimeSinceStateStart();
 
-  if (currentState == State::approaching) {
-    float current = Application::state.current;
+  float current = Application::state.current;
+  if (currentState != State::waiting) {
     if (abs(current) > setpointCurrent) {
       currentState = State::feedback;
-      feedback_diagnostic1 = current;
-      feedback_diagnostic2 = Application::state.piezoZVoltage;
     }
   }
-  
+  if (abs(current) > 5e-9) {
+    feedback_diagnostic1 = 1;
+  }
+
   if (currentState == State::waiting) {
     if (previousTime >= waitTime) {
       currentState = State::approaching;
@@ -67,10 +68,12 @@ void TipApproacher::updateState() {
 void TipApproacher::updateDACs() {
   uint32_t currentTime = getTimeSinceStateStart();
 
+  if (Application::state.biasVoltage != setpointVoltage) {
+    Application::updateBiasVoltage(setpointVoltage);
+  }
+
   if (currentState == State::waiting) {
     Application::updatePiezoVoltage(3, BlindStepper::restPosition);
-    Application::updateBiasVoltage(setpointVoltage);
-    
   } else if (currentState == State::approaching) {
     float progress = float(currentTime) / float(approachTime);
     progress = min(progress, 1);
@@ -78,10 +81,7 @@ void TipApproacher::updateDACs() {
     float scanAmplitude = 2 * abs(BlindStepper::restPosition);
     float voltage = BlindStepper::restPosition + progress * scanAmplitude;
     Application::updatePiezoVoltage(3, voltage);
-    Application::updateBiasVoltage(setpointVoltage);
-
   } else if (currentState == State::feedback) {
-    #if 1
     float currentMagnitude = abs(Application::state.filteredCurrent);
     currentMagnitude = max(currentMagnitude, 2e-12);
     float dlnI = log(currentMagnitude / setpointCurrent);
@@ -90,7 +90,6 @@ void TipApproacher::updateDACs() {
     // by moving backward (more negative voltage).
     float dlnI_dz = 1.025e10 * sqrt(tunnelingBarrierHeight);
     float dz = dlnI / dlnI_dz;
-    // feedback_diagnostic1 = dlnI;
     feedback_diagnostic2 = dz;
 
     // Try a lowpass filter-like algorithm and extrapolate the small
@@ -99,30 +98,40 @@ void TipApproacher::updateDACs() {
     // frequency is different by a factor of 2.
     float timeProgress = float(KilohertzLoop::period) / float(integratorTimeLag);
     float correctionInMeters = -dz * timeProgress;
+
+    // This catches about 95% of unexplained crashes.
+    // 100 ms: crashes recorded
+    // 10 ms: crashes recorded (took 350 seconds though)
+    // 300 μs: crashes recorded
+    // 30 μs: crashes recorded
+    //
+    // Try making an exponential feedback function that maps the derivative
+    // at the setpoint to the position's response.
+    if (true) {
+      float currentMagnitude = float(Application::state.current);
+      if (currentMagnitude > 500e-12) {
+        dz = -2;
+
+        if (feedback_diagnostic1 == 0) {
+          feedback_diagnostic1 = -1;
+        }
+      }
+    }
+
     float correctionInVolts = correctionInMeters / 0.320e-9;
 
     float voltage = Application::state.piezoZVoltage;
     voltage += correctionInVolts;
+    voltage = max(-270, voltage);
+    voltage = min(270, voltage);
     Application::updatePiezoVoltage(3, voltage);
-    Application::updateBiasVoltage(setpointVoltage);
-
-    #else
-    float slewRate = 1000e-9 / 0.320e-9;
-    float dt = float(KilohertzLoop::period) * 1e-6;
-    float dV = slewRate * dt;
-
-    float voltage = Application::state.piezoZVoltage;
-    voltage -= dV;
-    voltage = max(voltage, BlindStepper::restPosition);
-    Application::updatePiezoVoltage(3, voltage);
-    Application::updateBiasVoltage(setpointVoltage);
-    #endif
   }
 }
 
 void TipApproacher::writeToLog(uint32_t slotID) {
-  Log::ringBuffers[0][slotID] = Application::state.current;
-  Log::ringBuffers[1][slotID] = Application::state.piezoZVoltage;
+  Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
+  Log::ringBuffers[1][slotID] = Application::state.piezoZVoltage * 0.320;
   Log::ringBuffers[2][slotID] = feedback_diagnostic1;
   Log::ringBuffers[3][slotID] = feedback_diagnostic2;
+  feedback_diagnostic1 = 0;
 }

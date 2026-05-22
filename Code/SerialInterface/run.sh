@@ -4,7 +4,7 @@
 
 dialog () {
  osascript <<EOD
- tell app "Terminal" to do script "cd $(pwd) && swift run -Xswiftc -Ounchecked SerialInterface"
+ tell app "Terminal" to do script "cd $(pwd) && swift run SerialInterface"
 EOD
 }
 
