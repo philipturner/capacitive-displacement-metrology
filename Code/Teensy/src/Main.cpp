@@ -96,7 +96,7 @@ void kilohertzLoop() {
       Application::updateCapacitanceTracker(/*regenerate=*/true);
     }
     if (mode == Command::Mode::blindStepping) {
-      blindStepper.update(1200);
+      blindStepper.update();
     }
     if (mode == Command::Mode::tipApproach) {
       tipApproacher.update();

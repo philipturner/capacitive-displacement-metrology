@@ -1,6 +1,7 @@
 #include "TipApproacher.h"
 
 #include "Application/Application.h"
+#include "Command/BlindStepper.h"
 #include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
 #include "Util/FilterUtil.h"
@@ -38,55 +39,35 @@ uint32_t TipApproacher::getTimeSinceStateStart() {
 void TipApproacher::updateState() {
   previousState = currentState;
   uint32_t previousTime = getTimeSinceStateStart();
-  
-  if (currentState == State::forwardStepping) {
-    auto state = blindStepper.getCurrentState();
-    if (state == BlindStepper::State::finished) {
-      currentState = State::waiting;
+
+  if (currentState == State::approaching) {
+    float current = Application::state.current;
+    if (abs(current) > setpointCurrent) {
+      currentState = State::feedback;
+      feedback_diagnostic1 = current;
+      feedback_diagnostic2 = Application::state.piezoZVoltage;
     }
-  } else if (currentState == State::waiting) {
+  }
+  
+  if (currentState == State::waiting) {
     if (previousTime >= waitTime) {
       currentState = State::approaching;
     }
   } else if (currentState == State::approaching) {
     if (previousTime >= approachTime) {
-      currentState = State::retracting;
-    }
-  } else if (currentState == State::retracting) {
-    if (previousTime >= retractTime) {
-      currentState = State::forwardStepping;
-    }
-  }
-
-  if (currentState != State::feedback) {
-    float filteredCurrent = Application::state.filteredCurrent;
-    if (abs(filteredCurrent) > 10e-9) {
-      currentState = State::feedback;
-      feedback_diagnostic1 = filteredCurrent;
-      feedback_diagnostic2 = Application::state.piezoZVoltage;
+      currentState = State::waiting;
     }
   }
 
   if (currentState != previousState) {
     stateStartIterationID = KilohertzLoop::iterationID;
-
-    if (currentState == State::forwardStepping) {
-      Command command;
-      command.mode = Command::Mode::blindStepping;
-      command.alphaCode = 'u';
-      command.attributes[0] = 1;
-      blindStepper = BlindStepper(command);
-    }
   }
 }
 
 void TipApproacher::updateDACs() {
   uint32_t currentTime = getTimeSinceStateStart();
 
-  if (currentState == State::forwardStepping) {
-    blindStepper.update(20000, true);
-
-  } else if (currentState == State::waiting) {
+  if (currentState == State::waiting) {
     Application::updatePiezoVoltage(3, BlindStepper::restPosition);
     Application::updateBiasVoltage(setpointVoltage);
     
@@ -98,16 +79,7 @@ void TipApproacher::updateDACs() {
     float voltage = BlindStepper::restPosition + progress * scanAmplitude;
     Application::updatePiezoVoltage(3, voltage);
     Application::updateBiasVoltage(setpointVoltage);
-
-  } else if (currentState == State::retracting) {
-    float progress = 1 - float(currentTime) / float(retractTime);
-    float smoothed = FilterUtil::thirdOrderSmoothstep(progress);
-
-    float scanAmplitude = 2 * abs(BlindStepper::restPosition);
-    float voltage = BlindStepper::restPosition + smoothed * scanAmplitude;
-    Application::updatePiezoVoltage(3, voltage);
-    Application::updateBiasVoltage(setpointVoltage);
-
+    
   } else if (currentState == State::feedback) {
     /*
     float currentMagnitude = abs(Application::state.filteredCurrent);
@@ -135,32 +107,21 @@ void TipApproacher::updateDACs() {
     Application::updateBiasVoltage(setpointVoltage);
     */
 
-    float progress = 1 - float(currentTime) / float(retractTime);
-    float smoothed = FilterUtil::thirdOrderSmoothstep(progress);
+    float slewRate = 1000e-9 / 0.320e-9;
+    float dt = float(KilohertzLoop::period) * 1e-6;
+    float dV = slewRate * dt;
 
-    float scanAmplitude = feedback_diagnostic2;
-    scanAmplitude -= BlindStepper::restPosition;
-    float voltage = BlindStepper::restPosition + smoothed * scanAmplitude;
+    float voltage = Application::state.piezoZVoltage;
+    voltage -= dV;
+    voltage = max(voltage, BlindStepper::restPosition);
     Application::updatePiezoVoltage(3, voltage);
     Application::updateBiasVoltage(setpointVoltage);
   }
 }
 
 void TipApproacher::writeToLog(uint32_t slotID) {
-  // if (currentState == State::forwardStepping ||
-  //     currentState == State::waiting) {
-  //   Log::ringBuffers[0][slotID] = 0;
-  // } else {
-    Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
-  // }
-
+  Log::ringBuffers[0][slotID] = Application::state.current;
   Log::ringBuffers[1][slotID] = Application::state.piezoZVoltage;
-
-  // if (currentState == State::feedback) {
-  //   Log::ringBuffers[2][slotID] = feedback_diagnostic1;
-  //   Log::ringBuffers[3][slotID] = feedback_diagnostic2;
-  // } else {
-    Log::ringBuffers[2][slotID] = Application::state.capacitance;
-    Log::ringBuffers[3][slotID] = Application::state.phaseShift;
-  // }
+  Log::ringBuffers[2][slotID] = feedback_diagnostic1;
+  Log::ringBuffers[3][slotID] = feedback_diagnostic2;
 }

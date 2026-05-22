@@ -82,11 +82,18 @@ extension UI {
     }
   }
   
-  func updateYRange(data: [History.TimedAverage]) {
+  func updateYRange(data: [History.TimedAverage], lifetimes: SIMD4<Double>) {
     for rowID in 0..<UI.rowCount {
+      let maximumTime = data.last!.time
+      let minimumTime = maximumTime - lifetimes[rowID]
+      
       var minimum: Float = .greatestFiniteMagnitude
       var maximum: Float = -.greatestFiniteMagnitude
       for sample in data {
+        guard sample.time > minimumTime else {
+          continue
+        }
+        
         let sampleMin = sample.minimum[rowID]
         let sampleMax = sample.maximum[rowID]
         if sampleMin < minimum {

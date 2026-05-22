@@ -16,6 +16,7 @@ struct BlindStepper {
     finished = 2,
   };
 
+  static constexpr uint32_t wavePeriod = 1200;
   static constexpr float restPosition = -270;
   static constexpr float stepUpAmplitude = 400;
   static constexpr float stepDownAmplitude = 200;
@@ -24,7 +25,7 @@ struct BlindStepper {
   BlindStepper(Command command);
   State getCurrentState() const;
 
-  void update(uint32_t targetWavePeriod, bool skipMeasure = false);
+  void update();
 
 private:
   Mode mode;
@@ -35,6 +36,6 @@ private:
   uint32_t cycleID = 0;
   uint32_t waveStartIterationID = UINT32_MAX;
 
-  float sawtoothWave(uint32_t waveIterationDelta, uint32_t wavePeriod);
-  void checkStartIterationValid();
+  uint32_t getIterationsSinceStart();
+  float getStepWaveVoltage();
 };
