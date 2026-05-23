@@ -9,12 +9,12 @@ struct TipApproacher {
     feedback = 2,
   };
 
-  static constexpr float setpointVoltage = 0.05;
+  static constexpr float setpointVoltage = 0.050;
   static constexpr float setpointCurrent = 100e-12;
   
   // -270 V -> 270 V, 0.32 nm/V, 1000 nm/s
-  static constexpr uint32_t approachTime = 172800;
-  static constexpr uint32_t waitTime = 2000;
+  static constexpr uint32_t approachTime = 172800; // μs
+  static constexpr uint32_t waitTime = 2000; // μs
 
   // Tunneling barrier height is not known precisely from the literature.
   // Supposedly, ambient contamination lowers it from 4.0-4.5 V in vacuum
@@ -25,15 +25,15 @@ struct TipApproacher {
   // 0.5 V -> 318 pm per decade
   static constexpr float tunnelingBarrierHeight = 1.0;
 
-  // 100 ms: crashes at 50x setpoint; cannot react to disturbances fast enough
-  // 30 ms: still crashes, often error close to max possible
-  // 10 ms: state of crashiness and high error after tip approach
-  // 3 ms: prolonged rapid crashing after tip approach, then stable
-  // 1 ms: rapid crashing after tip approach or out of range
-  // 300 μs: still unexplained crashes
-  // 100 μs: occasional unexplained crashes and current spikes
-  // 30 μs: unexplained sudden crashes, high error
-  static constexpr uint32_t integratorTimeLag = 300;
+  // 100 ms: one 5 nA and one 4 nA spike
+  // 30 ms: no crashes reported
+  // 10 ms: no crashes reported
+  // 3 ms: no crashes reported
+  // 1 ms: no capacitive spikes registered as over 5 nA
+  // 300 μs: looks like capacitive spike after tip approach
+  // 100 μs: a few crashes
+  // 30 μs: rapid crashing
+  static constexpr uint32_t integratorTimeLag = 10000; // μs
   
   TipApproacher();
   TipApproacher(bool notDefaultConstructor);

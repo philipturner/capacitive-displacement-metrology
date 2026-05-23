@@ -36,7 +36,7 @@ struct Trigger {
       times.round(.down)
       
       if times[0] == times[1] - 1 {
-        return times[1]
+        return times[1] * period
       } else if times[0] == times[1] {
         return nil
       } else {

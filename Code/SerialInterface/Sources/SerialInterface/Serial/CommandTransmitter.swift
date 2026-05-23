@@ -25,7 +25,6 @@ class CommandTransmitter: @unchecked Sendable {
         
         let userInput = readLine()
         if let userInput {
-          print("Detected serial input: \(userInput)")
           Application.queue.sync {
             self.addCharacters(userInput)
           }
@@ -98,8 +97,8 @@ class CommandTransmitter: @unchecked Sendable {
       labels = [
         "current (A)",
         "piezo Z (nm)",
-        "diagnostic 1",
-        "diagnostic 2",
+        "tip crashed (>5 nA)",
+        "position error (m)",
       ]
     default:
       return

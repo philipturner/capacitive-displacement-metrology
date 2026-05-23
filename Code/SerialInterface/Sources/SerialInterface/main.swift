@@ -4,7 +4,7 @@ import SwiftSerial
 
 func createTrigger1() -> Trigger {
   var trigger = Trigger()
-  trigger.type = .level(1e-9)
+  trigger.type = .timeInterval(period: 0.5, offset: 0)
   trigger.polarity = .signAgnostic
   trigger.channel = 0
   return trigger
@@ -96,7 +96,7 @@ while !application.ui.isClosed {
     data: output.longTimeData)
   application.ui.updateYRange(
     data: output.longTimeData,
-    lifetimes: SIMD4(repeating: 1))
+    lifetimes: SIMD4(5, 5, 2, 5))
   
   if let trace = output.trace {
     updateShortTimeForTrigger(trace: trace)
