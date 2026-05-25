@@ -4,8 +4,6 @@
 #include "IC/CDC.h"
 #include "IC/DAC.h"
 #include "IC/PA95.h"
-#include "Time/KilohertzLoop.h"
-#include "Util/FilterUtil.h"
 
 extern "C" void usb_init();
 
@@ -97,15 +95,6 @@ void Application::setupI2C() {
   CDC::readCapacitance();
 }
 
-void Application::updateCurrent() {
-  auto conversion = ADC::readVoltage();
-  Application::state.current = -conversion.voltage / 1e9;
-
-  float alpha = FilterUtil::getLowpassAlpha(10000, KilohertzLoop::period);
-  Application::state.filteredCurrent *= 1 - alpha;
-  Application::state.filteredCurrent += alpha * Application::state.current;
-}
-
 void Application::updatePiezoVoltage(uint32_t channelID, float voltage) {
   if (channelID == 1) {
     Application::state.piezoXVoltage = voltage;
@@ -118,6 +107,10 @@ void Application::updatePiezoVoltage(uint32_t channelID, float voltage) {
 }
 
 void Application::updateBiasVoltage(float voltage) {
+  float dV = voltage - Application::state.biasVoltage;
+  float dVdt = dV / (float(KilohertzLoop::period) * 1e-6);
+
+
   if (voltage != Application::state.biasVoltage) {
     Application::state.lastBiasChangeIter = KilohertzLoop::iterationID;
   }

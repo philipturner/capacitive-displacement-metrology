@@ -13,6 +13,20 @@ struct State {
   float piezoYVoltage = 0; // units: V
   float piezoZVoltage = 0; // units: V
 
-  bool tipCrashed = false;
-  uint32_t lastBiasChangeIter = 0;
+private:
+  // Delay line for 10 loop iterations.
+  float currentSpike[10] = { 
+    0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0,
+  };
+  float filteredCurrentSpike = 0;
+
+public:
+  void updateCurrent();
+
+  void addSpike(float dVdt, float C);
+
+  void updateCurrentSpike();
+
+  float getPredictedCurrentSpike();
 };

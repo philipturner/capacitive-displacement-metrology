@@ -46,10 +46,7 @@ void TipApproacher::updateState() {
       currentState = State::feedback;
     }
   }
-  if (abs(current) > 5e-9) {
-    feedback_diagnostic1 = 1;
-  }
-
+  
   if (currentState == State::waiting) {
     if (previousTime >= waitTime) {
       currentState = State::approaching;

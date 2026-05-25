@@ -98,7 +98,8 @@ void kilohertzLoop() {
     }
   }
 
-  Application::updateCurrent();
+  Application::state.updateCurrent();
+  Application::state.updateCurrentSpike();
 
   // Send data to the real-time monitor.
   if (ErrorMessage::hasError()) {
