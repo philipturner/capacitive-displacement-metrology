@@ -3,6 +3,7 @@ import func Foundation.atan2
 extension LineParser {
   struct Line {
     var id: Int
+    var flags: UInt8
     var values: SIMD8<Float>
     
     static let messageLength: Int = 27

@@ -105,31 +105,10 @@ void kilohertzLoop() {
   if (ErrorMessage::hasError()) {
     return;
   }
-  uint32_t iterationsPerLog = Log::targetLogPeriod / KilohertzLoop::period;
+  uint32_t iterationsPerLog = Log::logPeriod / KilohertzLoop::period;
   if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
-    uint32_t slotID = Log::unsafeBufferedLogID % Log::logSize;
-    for (uint32_t i = 0; i < 5; ++i) {
-      Log::ringBuffers[i][slotID] = 0;
-    }
-
     if (mode == Command::Mode::idle) {
-      Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
-    } else if (mode == Command::Mode::dacTest) {
-      dacTester.writeToLog(slotID);
-    } else if (mode == Command::Mode::capacitanceReporting) {
-      Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
-      Log::ringBuffers[1][slotID] = Application::state.biasVoltage;
-      Log::ringBuffers[2][slotID] = Application::state.capacitance;
-      Log::ringBuffers[3][slotID] = Application::state.phaseShift;
-    } else if (mode == Command::Mode::blindStepping) {
-      Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
-      Log::ringBuffers[1][slotID] = Application::state.piezoZVoltage;
-      Log::ringBuffers[2][slotID] = Application::state.capacitance;
-      Log::ringBuffers[3][slotID] = Application::state.phaseShift;
-    } else if (mode == Command::Mode::tipApproach) {
-      tipApproacher.writeToLog(slotID);
+      
     }
-
-    Log::unsafeBufferedLogID += 1;
   }
 }

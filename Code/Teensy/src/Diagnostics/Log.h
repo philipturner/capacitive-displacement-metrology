@@ -1,20 +1,19 @@
 #pragma once
 
-#include "Command/Command.h"
+#include <stdint.h>
 
 struct Log {
   static constexpr uint32_t logPeriod = 48;
   static constexpr uint32_t logSize = 6000;
   static constexpr uint32_t messageLength = 27;
-  static inline float ringBuffers[5][logSize];
-  static inline bool isSpecial[logSize];
+  static inline float valuesBuffer[logSize * 5];
+  static inline uint8_t flagsBuffer[logSize];
 
-  static inline uint32_t transmittedMessageID = 0;
-  static inline uint32_t unsafeBufferedMessageID = 0;
-  static inline uint32_t normalMessageCursor = 0;
-  static inline uint32_t specialMessageCursor = uint32_t(1) << 31;
-
-  static void initialize();
+  // Mark special messages with a flag, but do not alter the ordering. This
+  // makes it easier to detect corrupted data transmission. Instead, the
+  // PC must track time by starting at 0 and skipping special messages.
+  static inline uint32_t transmittedLogID = 0;
+  static inline uint32_t unsafeBufferedLogID = 0;
 
   static void transmitBufferedSamples();
 
@@ -24,7 +23,23 @@ struct Log {
     int32_t number2,
     int32_t number3);
   
-  static void recordMessage(Command::Mode mode);
+  static void writeValues(
+    float lane0 = 0,
+    float lane1 = 0,
+    float lane2 = 0,
+    float lane3 = 0,
+    float lane4 = 0,
+    uint8_t flags = 0);
 
-  static void recordModeChange();
+  // STM imaging can use the regular messaging mode, because it can have
+  // a delay line for the X and Y positions to correct for ~45 us delay to the
+  // current sensor. To denote which samples go to what part (if any) of the
+  // image, use a 24-bit integer and bit-cast it to 'float'.
+  static void recordNormalMessage(Command::Mode mode);
+
+  static void recordModeChange(Command::Mode newMode);
+
+  // Data from spectroscopy will use a new "special message" type with a
+  // identifying code from mode changes. It will probably need 2-3 lanes for
+  // the data.
 };

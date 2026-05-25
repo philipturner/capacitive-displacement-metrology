@@ -3,17 +3,6 @@
 #include "ErrorMessage.h"
 #include <Arduino.h>
 
-void Log::initialize() {
-  for (uint32_t i = 0; i < logSize; ++i) {
-    ringBuffers[0][i] = 0;
-    ringBuffers[1][i] = 0;
-    ringBuffers[2][i] = 0;
-    ringBuffers[3][i] = 0;
-    ringBuffers[4][i] = 0;
-    isSpecial[i] = false;
-  }
-}
-
 void base64Encode(uint32_t value, char* buffer, uint32_t encodedLength) {
   for (uint32_t i = 0; i < encodedLength; ++i) {
     uint32_t rightShiftAmount = 6 * i;
@@ -40,7 +29,7 @@ void base64Encode(uint32_t value, char* buffer, uint32_t encodedLength) {
 
 void Log::transmitBufferedSamples() {
   uint32_t bufferedLogID = unsafeBufferedLogID;
-  if (bufferedLogID - transmittedLogID >= logSize) {
+  if (bufferedLogID - transmittedLogID >= logSize - 2) {
     uint32_t difference = bufferedLogID - transmittedLogID;
     throwError(
       "First part of transmitBufferedSamples",
@@ -81,7 +70,7 @@ void Log::transmitBufferedSamples() {
   }
 
   // Check that the transmitted data was valid.
-  if (unsafeBufferedLogID - transmittedLogID >= logSize) {
+  if (unsafeBufferedLogID - transmittedLogID >= logSize - 1) {
     uint32_t difference = unsafeBufferedLogID - transmittedLogID;
     throwError(
       "Second part of transmitBufferedSamples",
@@ -119,10 +108,55 @@ void Log::throwError(
   ErrorMessage::addNewline();
 }
 
-void Log::recordMessage(Command::Mode mode) {
+void Log::writeValues(
+  float lane0,
+  float lane1,
+  float lane2,
+  float lane3,
+  float lane4,
+  uint8_t flags
+) {
+  uint32_t slotID = Log::unsafeBufferedLogID % Log::logSize;
+  uint32_t offset = 5 * slotID;
 
+  valuesBuffer[offset + 0] = lane0;
+  valuesBuffer[offset + 1] = lane1;
+  valuesBuffer[offset + 2] = lane2;
+  valuesBuffer[offset + 3] = lane3;
+  valuesBuffer[offset + 4] = lane4;
+
+  flagsBuffer[slotID] = flags;
+
+  Log::unsafeBufferedLogID += 1;
 }
 
-void Log::recordModeChange() {
-  
+void Log::recordNormalMessage(Command::Mode mode) {
+  uint32_t slotID = Log::unsafeBufferedLogID % Log::logSize;
+    for (uint32_t i = 0; i < 5; ++i) {
+      Log::ringBuffers[i][slotID] = 0;
+    }
+
+    if (mode == Command::Mode::idle) {
+      Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
+    } else if (mode == Command::Mode::dacTest) {
+      dacTester.writeToLog(slotID);
+    } else if (mode == Command::Mode::capacitanceReporting) {
+      Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
+      Log::ringBuffers[1][slotID] = Application::state.biasVoltage;
+      Log::ringBuffers[2][slotID] = Application::state.capacitance;
+      Log::ringBuffers[3][slotID] = Application::state.phaseShift;
+    } else if (mode == Command::Mode::blindStepping) {
+      Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
+      Log::ringBuffers[1][slotID] = Application::state.piezoZVoltage;
+      Log::ringBuffers[2][slotID] = Application::state.capacitance;
+      Log::ringBuffers[3][slotID] = Application::state.phaseShift;
+    } else if (mode == Command::Mode::tipApproach) {
+      tipApproacher.writeToLog(slotID);
+    }
+
+    Log::unsafeBufferedLogID += 1;
+}
+
+void Log::recordModeChange(Command::Mode newMode) {
+
 }
