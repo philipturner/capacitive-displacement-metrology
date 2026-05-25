@@ -13,8 +13,9 @@ void State::updateCurrent() {
   filteredCurrent += alpha * current;
 }
 
-void State::addSpike(float dVdt, float C) {
-  float I = C * dVdt;
+void State::addSpike(float dV, float C) {
+  float dt = float(KilohertzLoop::period) * 1e-6;
+  float I = C * (dV / dt);
   currentSpike[9] += abs(I);
 }
 

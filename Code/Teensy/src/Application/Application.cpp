@@ -96,25 +96,33 @@ void Application::setupI2C() {
 }
 
 void Application::updatePiezoVoltage(uint32_t channelID, float voltage) {
+  float C;
+  float previousVoltage;
   if (channelID == 1) {
-    Application::state.piezoXVoltage = voltage;
+    C = 13e-18;
+    previousVoltage = state.piezoXVoltage;
+    state.piezoXVoltage = voltage;
   } else if (channelID == 2) {
-    Application::state.piezoYVoltage = voltage;
+    C = 45e-18;
+    previousVoltage = state.piezoYVoltage;
+    state.piezoYVoltage = voltage;
   } else if (channelID == 3) {
-    Application::state.piezoZVoltage = voltage;
+    C = 27e-18;
+    previousVoltage = state.piezoZVoltage;
+    state.piezoZVoltage = voltage;
   }
   PA95::writeVoltage(channelID, voltage);
+
+  float dV = voltage - previousVoltage;
+  state.addSpike(dV, C);
 }
 
 void Application::updateBiasVoltage(float voltage) {
-  float dV = voltage - Application::state.biasVoltage;
-  float dVdt = dV / (float(KilohertzLoop::period) * 1e-6);
+  float dV = voltage - state.biasVoltage;
+  float C = 50e-15;
+  state.addSpike(dV, C);
 
-
-  if (voltage != Application::state.biasVoltage) {
-    Application::state.lastBiasChangeIter = KilohertzLoop::iterationID;
-  }
-  Application::state.biasVoltage = voltage;
+  state.biasVoltage = voltage;
   DAC2::writeVoltage(0, voltage);
 }
 
@@ -142,13 +150,4 @@ void Application::updateCapacitanceTracker(bool regenerate) {
 
   float filteredCurrent = Application::state.filteredCurrent;
   capTracker.integrate(filteredCurrent);
-}
-
-bool Application::biasChangedRecently() {
-  uint32_t deltaIters = KilohertzLoop::iterationID;
-  deltaIters -= Application::state.lastBiasChangeIter;
-  uint32_t deltaTime = deltaIters * KilohertzLoop::period;
-
-  // Decay: e^(-499 / 45) = 2^-16
-  if (deltaTime)
 }

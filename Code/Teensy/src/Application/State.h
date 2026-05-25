@@ -24,7 +24,7 @@ private:
 public:
   void updateCurrent();
 
-  void addSpike(float dVdt, float C);
+  void addSpike(float dV, float C);
 
   void updateCurrentSpike();
 
