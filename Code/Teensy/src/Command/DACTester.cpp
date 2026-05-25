@@ -46,7 +46,7 @@ void DACTester::update() {
   }
 }
 
-void DACTester::writeToLog(uint32_t slotID) {
+void DACTester::writeToLog() {
   float voltage = 0;
   if (channelID == 1) {
     voltage = Application::state.piezoXVoltage;
@@ -58,7 +58,8 @@ void DACTester::writeToLog(uint32_t slotID) {
     voltage = Application::state.biasVoltage;
   }
 
-  Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
-  Log::ringBuffers[1][slotID] = voltage;
-  Log::ringBuffers[2][slotID] = float(channelID);
+  Log::writeValues(
+    Application::state.filteredCurrent,
+    voltage,
+    float(channelID));
 }

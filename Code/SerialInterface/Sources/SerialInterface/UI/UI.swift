@@ -34,6 +34,11 @@ class UI {
     setupLayout()
     setWindowPosition()
     
+    // To update labels dynamically at runtime:
+    //    for i in 0..<5 {
+    //      let labelText = labels[i]
+    //      ui.labels[i].setText(labelText)
+    //    }
     let labelTextList: [String] = [
       "signal 0",
       "signal 1",

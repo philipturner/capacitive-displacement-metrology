@@ -4,6 +4,7 @@
 #include "IC/CDC.h"
 #include "IC/DAC.h"
 #include "IC/PA95.h"
+#include "Diagnostics/Log.h"
 
 extern "C" void usb_init();
 
@@ -150,4 +151,36 @@ void Application::updateCapacitanceTracker(bool regenerate) {
 
   float filteredCurrent = Application::state.filteredCurrent;
   capTracker.integrate(filteredCurrent);
+}
+
+void Application::logNormalMessage() {
+  float currentMaximum = state.extractCurrentMaximum();
+  float currentSpike = state.getPredictedCurrentSpike();
+
+  if (mode == Command::Mode::idle) {
+    Log::writeValues(
+      state.filteredCurrent);
+  } else if (mode == Command::Mode::dacTest) {
+    dacTester.writeToLog();
+  } else if (mode == Command::Mode::capacitanceReporting) {
+    Log::writeValues(
+      state.filteredCurrent,
+      state.biasVoltage,
+      state.capacitance,
+      state.phaseShift);
+  } else if (mode == Command::Mode::blindStepping) {
+    Log::writeValues(
+      state.filteredCurrent,
+      currentMaximum,
+      currentSpike,
+      state.piezoZVoltage * 0.320,
+      state.capacitance);
+  } else if (mode == Command::Mode::tipApproach) {
+    Log::writeValues(
+      state.filteredCurrent,
+      currentMaximum,
+      currentSpike,
+      state.piezoZVoltage * 0.320,
+      state.positionError * 1e9);
+  }
 }

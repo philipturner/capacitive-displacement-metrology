@@ -102,10 +102,8 @@ void BlindStepper::update() {
     // consistent, never vary the timing between updating the bias voltage
     // for capacitance measurement and reading the current.
   } else {
-    if (Application::state.biasVoltage != 0) {
-      Application::updateBiasVoltage(0);
-    }
-
+    Application::updateBiasVoltage(0);
+    
     if (currentState == State::retracting) {
       float voltage = getRetractVoltage();
       Application::updatePiezoVoltage(3, voltage);

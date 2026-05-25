@@ -12,8 +12,6 @@ struct TipApproacher {
 
   void update();
 
-  void writeToLog(uint32_t slotID);
-
 private:
   State previousState;
   State currentState;

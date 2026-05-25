@@ -1,10 +1,7 @@
 #include "TipApproacher.h"
 
 #include "Application/Application.h"
-#include "Command/BlindStepper.h"
-#include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
-#include "Util/FilterUtil.h"
 #include <Arduino.h>
 
 TipApproacher::TipApproacher() {
@@ -55,9 +52,10 @@ void TipApproacher::updateState() {
 
 void TipApproacher::updateDACs() {
   uint32_t currentTime = getTimeSinceStateStart();
+  Application::updateBiasVoltage(setpointVoltage);
 
   if (Application::state.biasVoltage != setpointVoltage) {
-    Application::updateBiasVoltage(setpointVoltage);
+    
   }
 
   // Change so it cannot suddenly jump to a specific voltage anymore.
@@ -73,11 +71,4 @@ void TipApproacher::updateDACs() {
   } else if (currentState == State::feedback) {
     
   }
-}
-
-void TipApproacher::writeToLog(uint32_t slotID) {
-  Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
-  Log::ringBuffers[1][slotID] = Application::state.piezoZVoltage * 0.320;
-  Log::ringBuffers[2][slotID] = feedback_diagnostic1;
-  Log::ringBuffers[3][slotID] = feedback_diagnostic2;
 }

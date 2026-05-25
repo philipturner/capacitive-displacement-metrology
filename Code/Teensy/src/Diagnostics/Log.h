@@ -30,16 +30,4 @@ struct Log {
     float lane3 = 0,
     float lane4 = 0,
     uint8_t flags = 0);
-
-  // STM imaging can use the regular messaging mode, because it can have
-  // a delay line for the X and Y positions to correct for ~45 us delay to the
-  // current sensor. To denote which samples go to what part (if any) of the
-  // image, use a 24-bit integer and bit-cast it to 'float'.
-  static void recordNormalMessage(Command::Mode mode);
-
-  static void recordModeChange(Command::Mode newMode);
-
-  // Data from spectroscopy will use a new "special message" type with a
-  // identifying code from mode changes. It will probably need 2-3 lanes for
-  // the data.
 };

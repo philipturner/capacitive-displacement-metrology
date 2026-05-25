@@ -16,8 +16,6 @@ class Application: @unchecked Sendable {
   var lineParser: LineParser
   var history: History
   
-  var inputForMainThread: [String] = []
-  
   init(descriptor: ApplicationDescriptor) {
     guard let historyDescriptor = descriptor.historyDescriptor else {
       fatalError("Descriptor was incomplete.")

@@ -1,11 +1,20 @@
 #pragma once
 
 #include "Application/State.h"
+#include "Command/BlindStepper.h"
+#include "Command/Command.h"
+#include "Command/DACTester.h"
+#include "Command/TipApproacher.h"
 #include "Diagnostics/CapacitanceTracker.h"
 
 struct Application {
   static inline State state;
+  static inline Command::Mode mode;
+
+  static inline DACTester dacTester;
   static inline CapacitanceTracker capTracker;
+  static inline BlindStepper blindStepper;
+  static inline TipApproacher tipApproacher;
 
   static void setupSerial();
 
@@ -18,4 +27,6 @@ struct Application {
   static void updateBiasVoltage(float voltage);
 
   static void updateCapacitanceTracker(bool regenerate);
+
+  static void logNormalMessage();
 };

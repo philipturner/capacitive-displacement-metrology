@@ -2,11 +2,8 @@
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
 #include "Application/Application.h"
-#include "Command/BlindStepper.h"
-#include "Command/Command.h"
-#include "Command/DACTester.h"
-#include "Command/TipApproacher.h"
 #include "Time/KilohertzLoop.h"
+#include "Util/Feedback.h"
 #include "Util/FilterUtil.h"
 #include <Arduino.h>
 
@@ -15,8 +12,6 @@ void kilohertzLoop();
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
-
-  Log::initialize();
   KilohertzLoop::initialize(kilohertzLoop, 12);
 }
 
@@ -40,32 +35,35 @@ void loop() {
   }
 }
 
-Command::Mode mode;
-DACTester dacTester;
-BlindStepper blindStepper;
-TipApproacher tipApproacher;
-
 // Allocate one loop iteration of buffer time between command changes.
 Command nextCommand;
 bool resettingForModeChange = false;
 
 void kilohertzLoop() {
   if (resettingForModeChange) {
-    mode = nextCommand.mode;
-    if (mode == Command::Mode::dacTest) {
-      dacTester = DACTester(nextCommand);
+    resettingForModeChange = false;
+
+    Application::mode = nextCommand.mode;
+    if (Application::mode == Command::Mode::dacTest) {
+      Application::dacTester = DACTester(nextCommand);
     }
-    if (mode == Command::Mode::capacitanceReporting) {
+    if (Application::mode == Command::Mode::capacitanceReporting) {
       Application::capTracker = CapacitanceTracker(true);
     }
-    if (mode == Command::Mode::blindStepping) {
-      blindStepper = BlindStepper(nextCommand);
+    if (Application::mode == Command::Mode::blindStepping) {
+      Application::blindStepper = BlindStepper(nextCommand);
     }
-    if (mode == Command::Mode::tipApproach) {
-      tipApproacher = TipApproacher(true);
+    if (Application::mode == Command::Mode::tipApproach) {
+      Application::tipApproacher = TipApproacher(true);
     }
 
-    resettingForModeChange = false;
+    Log::writeValues(
+      /*lane0=*/float(Application::mode),
+      /*lane1=*/0,
+      /*lane2=*/0,
+      /*lane3=*/0,
+      /*lane4=*/0,
+      /*flags=*/0b01);
   } else {
     if (CommandTracker::nextCommand(nextCommand)) {
       resettingForModeChange = true;
@@ -74,27 +72,26 @@ void kilohertzLoop() {
 
   if (resettingForModeChange) {
     // Can only write to 3 DAC channels without exceeding the loop time.
-    if (mode == Command::Mode::dacTest) {
-      if (dacTester.channelID == 4) {
-        Application::updateBiasVoltage(0);
-      } else {
-        Application::updatePiezoVoltage(dacTester.channelID, 0);
+    float newBiasVoltage = 0;
+    if (Application::mode == Command::Mode::dacTest) {
+      if (Application::dacTester.channelID != 4) {
+        Application::updatePiezoVoltage(
+          Application::dacTester.channelID, 0);
       }
-    } else {
-      Application::updateBiasVoltage(0);
     }
+    Application::updateBiasVoltage(0);
   } else {
-    if (mode == Command::Mode::dacTest) {
-      dacTester.update();
+    if (Application::mode == Command::Mode::dacTest) {
+      Application::dacTester.update();
     }
-    if (mode == Command::Mode::capacitanceReporting) {
+    if (Application::mode == Command::Mode::capacitanceReporting) {
       Application::updateCapacitanceTracker(/*regenerate=*/true);
     }
-    if (mode == Command::Mode::blindStepping) {
-      blindStepper.update();
+    if (Application::mode == Command::Mode::blindStepping) {
+      Application::blindStepper.update();
     }
-    if (mode == Command::Mode::tipApproach) {
-      tipApproacher.update();
+    if (Application::mode == Command::Mode::tipApproach) {
+      Application::tipApproacher.update();
     }
   }
 
@@ -107,8 +104,6 @@ void kilohertzLoop() {
   }
   uint32_t iterationsPerLog = Log::logPeriod / KilohertzLoop::period;
   if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
-    if (mode == Command::Mode::idle) {
-      
-    }
+    Application::logNormalMessage();
   }
 }

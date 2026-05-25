@@ -30,7 +30,6 @@ Watchdog.initialize(trackedThreads: 2)
 //   the middle of the parsing. Perhaps save the last contiguous block of
 //   normal messages and state that the history must be reset before processing
 //   them.
-// - This may be a more appropriate time to change the graph's labels.
 
 var nextLoopTime = Date().timeIntervalSince1970
 while !application.ui.isClosed {
@@ -44,16 +43,6 @@ while !application.ui.isClosed {
     continue
   }
   Watchdog.notify(threadID: 0, code: 0)
-  
-  let input = Application.queue.sync {
-    if application.inputForMainThread.count > 0 {
-      return application.inputForMainThread.removeFirst()
-    } else {
-      return ""
-    }
-  }
-  application.commandTransmitter.updateLabels(
-    input, ui: application.ui)
   
   let timeAxis = application.history.timeAxis
   let output = Application.queue.sync {

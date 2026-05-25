@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 struct Command {
-  enum class Mode {
+  enum class Mode: uint8_t {
     // Set all DAC lines to zero and do nothing.
     idle = 0,
 

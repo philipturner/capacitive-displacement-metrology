@@ -10,7 +10,7 @@ struct DACTester {
 
   void update();
 
-  void writeToLog(uint32_t slotID);
+  void writeToLog();
 
 public:
   uint32_t channelID;
