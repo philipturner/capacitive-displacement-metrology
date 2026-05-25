@@ -151,3 +151,32 @@ void Application::updateCapacitanceTracker(bool regenerate) {
   float filteredCurrent = Application::state.filteredCurrent;
   capTracker.integrate(filteredCurrent);
 }
+
+void Application::runFeedback(uint32_t integratorTimeLag) {
+  float currentMagnitude = abs(Application::state.filteredCurrent);
+  currentMagnitude = max(currentMagnitude, 2e-12);
+  float dlnI = log(currentMagnitude / setpointCurrent);
+
+  // Position error in meters. Positive means you're too close, correct it
+  // by moving backward (more negative voltage).
+  float dlnI_dz = 1.025e10 * sqrt(tunnelingBarrierHeight);
+  float dz = dlnI / dlnI_dz;
+  feedback_diagnostic2 = dz;
+
+  // The key to preventing tip crashes!
+  if (dlnI > 0) {
+    dz *= currentMagnitude / setpointCurrent;
+  }
+
+  float timeProgress = float(KilohertzLoop::period) / float(integratorTimeLag);
+  float correctionInMeters = -dz * timeProgress;
+  correctionInMeters = min(correctionInMeters, 2e-9);
+  correctionInMeters = max(correctionInMeters, -2e-9);
+  float correctionInVolts = correctionInMeters / 0.320e-9;
+
+  float voltage = Application::state.piezoZVoltage;
+  voltage += correctionInVolts;
+  voltage = min(voltage, 270);
+  voltage = max(voltage, -270);
+  Application::updatePiezoVoltage(3, voltage);
+}

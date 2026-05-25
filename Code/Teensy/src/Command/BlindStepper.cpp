@@ -114,8 +114,6 @@ void BlindStepper::update() {
       Application::updatePiezoVoltage(3, voltage);
     }
   }
-
-  checkTipCrash();
 }
 
 uint32_t BlindStepper::getIterationsSinceStart() {
@@ -172,32 +170,4 @@ float BlindStepper::getStepWaveVoltage() {
     }
   }
   return output;
-}
-
-void BlindStepper::checkTipCrash() {
-  float maxCurrent = 0;
-  if (mode == Mode::capacitance) {
-    // 75 V/ms, 50 fF = 3.7 nA
-    maxCurrent = 10e-9;
-  } else if (currentState == State::stepping) {
-    uint32_t itersPerWave = wavePeriod / KilohertzLoop::period;
-    uint32_t deltaIters = getIterationsSinceStart();
-    uint32_t phase = deltaIters % itersPerWave;
-    phase *= KilohertzLoop::period;
-
-    // Slew time: 540/18.6 = 29.0 μs
-    // Decay: e^(-200/45) = 1.2%
-    if (phase < 229) {
-      // 20.6 V/μs, 27 aF = 560 pA
-      maxCurrent = 1.2e-9;
-    } else {
-      // 1.4 V/μs, 27 aF =
-    }
-  } else {
-
-  }
-  } else {
-    
-
-  }
 }

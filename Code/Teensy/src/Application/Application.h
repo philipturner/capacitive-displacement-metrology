@@ -12,10 +12,12 @@ struct Application {
   static void setupSPI();
 
   static void setupI2C();
-  
+
   static void updatePiezoVoltage(uint32_t channelID, float voltage);
 
   static void updateBiasVoltage(float voltage);
 
   static void updateCapacitanceTracker(bool regenerate);
+
+  static void runFeedback(uint32_t integratorTimeLag);
 };
