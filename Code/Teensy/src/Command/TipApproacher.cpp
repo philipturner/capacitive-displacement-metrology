@@ -72,6 +72,7 @@ void TipApproacher::updateDACs() {
     Application::updateBiasVoltage(setpointVoltage);
   }
 
+  // Change so it cannot suddenly jump to a specific voltage anymore.
   if (currentState == State::waiting) {
     Application::updatePiezoVoltage(3, BlindStepper::restPosition);
   } else if (currentState == State::approaching) {

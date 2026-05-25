@@ -15,7 +15,6 @@ void kilohertzLoop();
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
-  Application::updatePiezoVoltage(3, BlindStepper::restPosition);
 
   Log::initialize();
   KilohertzLoop::initialize(kilohertzLoop, 12);
@@ -40,7 +39,6 @@ void loop() {
     CommandTracker::processSerialInput();
   }
 }
-
 
 Command::Mode mode;
 DACTester dacTester;
@@ -79,13 +77,10 @@ void kilohertzLoop() {
     if (mode == Command::Mode::dacTest) {
       if (dacTester.channelID == 4) {
         Application::updateBiasVoltage(0);
-      } else if (dacTester.channelID == 3) {
-        Application::updatePiezoVoltage(3, BlindStepper::restPosition);
       } else {
         Application::updatePiezoVoltage(dacTester.channelID, 0);
       }
     } else {
-      Application::updatePiezoVoltage(3, BlindStepper::restPosition);
       Application::updateBiasVoltage(0);
     }
   } else {

@@ -31,9 +31,8 @@ BlindStepper::BlindStepper(Command command) {
     stepsPerCheck = command.attributes[1];
   }
 
-  if (mode == Mode::down) {
-    currentState = State::stepping;
-    waveStartIterationID = KilohertzLoop::iterationID;
+  if (mode == Mode::up || mode == Mode::down) {
+    currentState = State::retracting;
   } else {
     Application::capTracker = CapacitanceTracker(true);
     currentState = State::measuring;
@@ -46,43 +45,39 @@ BlindStepper::getCurrentState() const {
 }
 
 void BlindStepper::update() {
+  if (currentState == State::retracting && finishedRetracting) {
+    currentState = State::stepping;
+    waveStartIterationID = KilohertzLoop::iterationID;
+  }
+
   if (currentState == State::stepping) {
     uint32_t itersPerWaveSequence = wavePeriod / KilohertzLoop::period;
     itersPerWaveSequence *= stepsPerCheck;
 
     uint32_t deltaIters = getIterationsSinceStart();
     if (deltaIters >= itersPerWaveSequence) {
-      if (mode == Mode::down) {
+      if (mode == Mode::up || mode == Mode::down) {
         currentState = State::finished;
       } else {
         Application::capTracker = CapacitanceTracker(true);
         currentState = State::measuring;
       }
-
-      cycleID += 1;
       waveStartIterationID = UINT32_MAX;
     }
   }
 
+  // This can only happen if the mode is 'capacitance'.
   if (currentState == State::measuring) {
     // Does not update the bias voltage if the capacitance tracker finishes.
     Application::updateCapacitanceTracker(/*regenerate=*/false);
 
     auto state = Application::capTracker.getCurrentState();
     if (state == CapacitanceTracker::State::finished) {
-      if (mode == Mode::up || mode == Mode::down) {
-        if (cycleID > 0) {
-          currentState = State::finished;
-        } else {
-          currentState = State::stepping;
-        }
-      } else if (mode == Mode::capacitance) {
-        float capacitance = Application::state.capacitance;
-        if (capacitance > capacitanceThreshold) {
-          currentState = State::finished;
-        } else {
-          currentState = State::stepping;
-        }
+      float capacitance = Application::state.capacitance;
+      if (capacitance > capacitanceThreshold) {
+        currentState = State::finished;
+      } else {
+        currentState = State::stepping;
       }
       waveStartIterationID = KilohertzLoop::iterationID;
     }
@@ -105,13 +100,18 @@ void BlindStepper::update() {
     // some kind of effect on the capacitance signal. To make measurements
     // consistent, never vary the timing between updating the bias voltage
     // for capacitance measurement and reading the current.
-  } else if (currentState == State::stepping) {
-    float voltage = getStepWaveVoltage();
-    Application::updatePiezoVoltage(3, voltage);
-    Application::updateBiasVoltage(0);
-  } else if (currentState == State::finished) {
-    Application::updatePiezoVoltage(3, BlindStepper::restPosition);
-    Application::updateBiasVoltage(0);
+  } else {
+    if (Application::state.biasVoltage != 0) {
+      Application::updateBiasVoltage(0);
+    }
+
+    if (currentState == State::retracting) {
+      float voltage = getRetractVoltage();
+      Application::updatePiezoVoltage(3, voltage);
+    } else if (currentState == State::stepping) {
+      float voltage = getStepWaveVoltage();
+      Application::updatePiezoVoltage(3, voltage);
+    }
   }
 }
 
@@ -124,6 +124,29 @@ uint32_t BlindStepper::getIterationsSinceStart() {
   return KilohertzLoop::iterationID - waveStartIterationID;
 }
 
+float BlindStepper::getRetractVoltage() {
+  float currentVoltage = Application::state.piezoZVoltage;
+  float expectedVoltage;
+
+  if (mode == Mode::up || mode == Mode::capacitance) {
+    expectedVoltage = 130;
+  } else if (mode == Mode::down) {
+    expectedVoltage = -270;
+  }
+
+  if (currentVoltage > expectedVoltage) {
+    float dVdt = float(840) / float(600);
+    float dV = -dVdt * float(KilohertzLoop::period);
+
+    float newVoltage = currentVoltage + dV;
+    newVoltage = max(newVoltage, expectedVoltage);
+    return newVoltage;
+  } else {
+    finishedRetracting = true;
+    return currentVoltage;
+  }
+}
+
 float BlindStepper::getStepWaveVoltage() {
   uint32_t itersPerWave = wavePeriod / KilohertzLoop::period;
   uint32_t halfPoint = itersPerWave / 2;
@@ -133,16 +156,16 @@ float BlindStepper::getStepWaveVoltage() {
   
   float output = 0;
   if (mode == Mode::up || mode == Mode::capacitance) {
-    output = restPosition;
+    output = -270;
     if (phase <= halfPoint) {
       float progress = float(phase) / float(halfPoint);
-      output += progress * stepUpAmplitude;
+      output += progress * 400;
     }
   } else if (mode == Mode::down) {
-    output = restPosition + stepDownAmplitude;
+    output = -130;
     if (phase >= halfPoint) {
       float progress = float(phase - halfPoint) / float(halfPoint);
-      output -= progress * stepDownAmplitude;
+      output += progress * -140;
     }
   }
   return output;
