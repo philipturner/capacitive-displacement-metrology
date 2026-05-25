@@ -48,15 +48,15 @@ struct History {
   struct TimedSample {
     // Time is in seconds.
     var time: Double
-    var values: SIMD4<Float>
+    var values: SIMD8<Float>
   }
   
   struct TimedAverage {
     // Time is in seconds.
     var time: Double
-    var minimum: SIMD4<Float>
-    var average: SIMD4<Float>
-    var maximum: SIMD4<Float>
+    var minimum: SIMD8<Float>
+    var average: SIMD8<Float>
+    var maximum: SIMD8<Float>
   }
   
   struct TriggerEvent {

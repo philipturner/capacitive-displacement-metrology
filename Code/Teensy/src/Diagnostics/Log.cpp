@@ -12,6 +12,7 @@ void Log::initialize() {
     ringBuffers[1][i] = 0;
     ringBuffers[2][i] = 0;
     ringBuffers[3][i] = 0;
+    ringBuffers[4][i] = 0;
   }
 }
 
@@ -52,28 +53,31 @@ void Log::transmitBufferedSamples() {
   }
 
   for (uint32_t i = transmittedLogID; i < bufferedLogID; ++i) {
-    float bufferValues[4];
+    float bufferValues[5];
     bufferValues[0] = ringBuffers[0][i % logSize];
     bufferValues[1] = ringBuffers[1][i % logSize];
     bufferValues[2] = ringBuffers[2][i % logSize];
     bufferValues[3] = ringBuffers[3][i % logSize];
+    bufferValues[4] = ringBuffers[4][i % logSize];
 
-    uint32_t numbers[5];
+    uint32_t numbers[6];
     numbers[0] = i;
-    memcpy(numbers + 1, bufferValues, 4 * sizeof(float));
+    memcpy(numbers + 1, bufferValues, sizeof(bufferValues));
     numbers[1] >>= 8;
     numbers[2] >>= 8;
     numbers[3] >>= 8;
     numbers[4] >>= 8;
+    numbers[5] >>= 8;
 
-    char cString[23 + 1];
+    char cString[27 + 1];
     cString[0] = '>';
     base64Encode(numbers[0], cString + 1, 6);
     base64Encode(numbers[1], cString + 7, 4);
     base64Encode(numbers[2], cString + 11, 4);
     base64Encode(numbers[3], cString + 15, 4);
     base64Encode(numbers[4], cString + 19, 4);
-    cString[23] = 0;
+    base64Encode(numbers[5], cString + 23, 4);
+    cString[27] = 0;
 
     Serial.print(cString);
   }

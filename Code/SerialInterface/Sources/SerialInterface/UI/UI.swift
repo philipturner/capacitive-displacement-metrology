@@ -11,7 +11,7 @@ class UI {
   let win: PythonObject
   var isClosed = false
   
-  static let rowCount: Int = 4
+  static let rowCount: Int = 5
   var plots: [[PythonObject]] = []
   var curves: [[PythonObject]] = []
   var labels: [PythonObject] = []
@@ -39,6 +39,7 @@ class UI {
       "signal 1",
       "signal 2",
       "signal 3",
+      "signal 4",
     ]
     createPlots()
     linkPlots()

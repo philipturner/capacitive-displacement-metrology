@@ -63,6 +63,9 @@ class CommandTransmitter: @unchecked Sendable {
       return
     }
     
+    // TODO: Implement new labels.
+    
+    /*
     var labels: [String]
     switch input.first! {
     case "0":
@@ -108,5 +111,6 @@ class CommandTransmitter: @unchecked Sendable {
       let labelText = labels[i]
       ui.labels[i].setText(labelText)
     }
+     */
   }
 }

@@ -20,6 +20,7 @@ private:
     0, 0, 0, 0, 0,
   };
   float filteredCurrentSpike = 0;
+  float currentMaximum = 0;
 
 public:
   void updateCurrent();
@@ -28,5 +29,8 @@ public:
 
   void updateCurrentSpike();
 
-  float getPredictedCurrentSpike();
+  float getPredictedCurrentSpike() const;
+
+  // Retrieves the current maximum for usage in logging and resets it.
+  float extractCurrentMaximum();
 };

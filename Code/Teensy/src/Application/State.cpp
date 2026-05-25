@@ -11,6 +11,8 @@ void State::updateCurrent() {
   float alpha = FilterUtil::getLowpassAlpha(10000, KilohertzLoop::period);
   filteredCurrent *= 1 - alpha;
   filteredCurrent += alpha * current;
+
+  currentMaximum = max(currentMaximum, abs(current));
 }
 
 void State::addSpike(float dV, float C) {
@@ -30,7 +32,7 @@ void State::updateCurrentSpike() {
   currentSpike[9] = 0;
 }
 
-float State::getPredictedCurrentSpike() {
+float State::getPredictedCurrentSpike() const {
   float maxCurrent = 0;
   for (uint32_t i = 0; i < 9; ++i) {
     float historyCurrent = currentSpike[i];
@@ -38,4 +40,10 @@ float State::getPredictedCurrentSpike() {
   }
   maxCurrent = max(maxCurrent, filteredCurrentSpike);
   return maxCurrent;
+}
+
+float State::extractCurrentMaximum() {
+  float output = currentMaximum;
+  currentMaximum = 0;
+  return output;
 }

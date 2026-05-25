@@ -96,7 +96,7 @@ while !application.ui.isClosed {
     data: output.longTimeData)
   application.ui.updateYRange(
     data: output.longTimeData,
-    lifetimes: SIMD4(5, 5, 2, 5))
+    lifetimes: SIMD4(repeating: 1000))
   
   if let trace = output.trace {
     updateShortTimeForTrigger(trace: trace)

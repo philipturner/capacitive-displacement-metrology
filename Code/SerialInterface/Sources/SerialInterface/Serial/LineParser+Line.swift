@@ -3,12 +3,12 @@ import func Foundation.atan2
 extension LineParser {
   struct Line {
     var id: Int
-    var values: SIMD4<Float>
+    var values: SIMD8<Float>
     
-    static let messageLength: Int = 23
+    static let messageLength: Int = 26
     static let messageStartCode: UInt8 = Character(">").asciiValue!
     
-    init(id: Int, values: SIMD4<Float>) {
+    init(id: Int, values: SIMD8<Float>) {
       self.id = id
       self.values = values
     }

@@ -12,15 +12,6 @@ TipApproacher::TipApproacher() {
 }
 
 TipApproacher::TipApproacher(bool notDefaultConstructor) {
-  float piezoZVoltage = Application::state.piezoZVoltage;
-  if (piezoZVoltage != BlindStepper::restPosition) {
-    // Ensure the characters for the voltage appear first if the PC's
-    // serial plotter only scans the first ~20 characters.
-    Serial.println(piezoZVoltage, 3);
-    Serial.println("Tip approach did not start at expected position.");
-    exit(0);
-  }
-
   currentState = State::waiting;
   stateStartIterationID = KilohertzLoop::iterationID;
 }
@@ -46,7 +37,7 @@ void TipApproacher::updateState() {
       currentState = State::feedback;
     }
   }
-  
+
   if (currentState == State::waiting) {
     if (previousTime >= waitTime) {
       currentState = State::approaching;
@@ -80,6 +71,9 @@ void TipApproacher::updateDACs() {
     float voltage = BlindStepper::restPosition + progress * scanAmplitude;
     Application::updatePiezoVoltage(3, voltage);
   } else if (currentState == State::feedback) {
+    // TODO: Split feedback into its own file (Util/Feedback.cpp)
+    // Feedback::run(tunnelingBarrierHeight, integratorTimeLag);
+
     float currentMagnitude = abs(Application::state.filteredCurrent);
     currentMagnitude = max(currentMagnitude, 2e-12);
     float dlnI = log(currentMagnitude / setpointCurrent);
