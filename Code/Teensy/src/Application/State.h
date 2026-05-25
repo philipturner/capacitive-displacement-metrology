@@ -12,4 +12,7 @@ struct State {
   float piezoXVoltage = 0; // units: V
   float piezoYVoltage = 0; // units: V
   float piezoZVoltage = 0; // units: V
+
+  bool tipCrashed = false;
+  uint32_t lastBiasChangeIter = 0;
 };

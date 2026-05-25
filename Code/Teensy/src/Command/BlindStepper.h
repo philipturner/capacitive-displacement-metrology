@@ -37,4 +37,7 @@ private:
   uint32_t getIterationsSinceStart();
   float getRetractVoltage();
   float getStepWaveVoltage();
+  void checkTipCrash() {
+    
+  }
 };

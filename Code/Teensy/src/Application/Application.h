@@ -20,4 +20,6 @@ struct Application {
   static void updateBiasVoltage(float voltage);
 
   static void updateCapacitanceTracker(bool regenerate);
+
+  static bool biasChangedRecently();
 };

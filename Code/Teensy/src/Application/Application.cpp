@@ -118,6 +118,9 @@ void Application::updatePiezoVoltage(uint32_t channelID, float voltage) {
 }
 
 void Application::updateBiasVoltage(float voltage) {
+  if (voltage != Application::state.biasVoltage) {
+    Application::state.lastBiasChangeIter = KilohertzLoop::iterationID;
+  }
   Application::state.biasVoltage = voltage;
   DAC2::writeVoltage(0, voltage);
 }
@@ -146,4 +149,13 @@ void Application::updateCapacitanceTracker(bool regenerate) {
 
   float filteredCurrent = Application::state.filteredCurrent;
   capTracker.integrate(filteredCurrent);
+}
+
+bool Application::biasChangedRecently() {
+  uint32_t deltaIters = KilohertzLoop::iterationID;
+  deltaIters -= Application::state.lastBiasChangeIter;
+  uint32_t deltaTime = deltaIters * KilohertzLoop::period;
+
+  // Decay: e^(-499 / 45) = 2^-16
+  if (deltaTime)
 }

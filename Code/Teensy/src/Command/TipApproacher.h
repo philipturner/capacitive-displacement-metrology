@@ -14,6 +14,8 @@ struct TipApproacher {
   
   // -270 V -> 270 V, 0.32 nm/V, 1000 nm/s
   static constexpr uint32_t approachTime = 172800; // μs
+
+
   static constexpr uint32_t waitTime = 2000; // μs
 
   // Tunneling barrier height is not known precisely from the literature.
@@ -45,11 +47,9 @@ struct TipApproacher {
 private:
   State previousState;
   State currentState;
-  uint32_t stateStartIterationID;
-
-  float feedback_diagnostic1 = 0;
-  float feedback_diagnostic2 = 0;
-
+  uint32_t stateStartIterationID; // remove entirely
+  float positionError = 0;
+  
   uint32_t getTimeSinceStateStart();
   void updateState();
   void updateDACs();
