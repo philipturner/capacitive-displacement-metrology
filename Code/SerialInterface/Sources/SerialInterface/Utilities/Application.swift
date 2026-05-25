@@ -60,12 +60,6 @@ class Application: @unchecked Sendable {
   
   private func createLines(bytes: [UInt8]) -> [LineParser.Line] {
     func reset(error: LocalizedError) {
-//      print("Resetting lineParser and history.")
-//      if let description = error.errorDescription {
-//        print("error description:")
-//        print(description)
-//      }
-      
       lineParser = LineParser()
       Application.queue.sync {
         self.history.reset()

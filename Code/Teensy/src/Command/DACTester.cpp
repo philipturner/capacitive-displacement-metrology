@@ -61,5 +61,4 @@ void DACTester::writeToLog(uint32_t slotID) {
   Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
   Log::ringBuffers[1][slotID] = voltage;
   Log::ringBuffers[2][slotID] = float(channelID);
-  Log::ringBuffers[3][slotID] = 0;
 }

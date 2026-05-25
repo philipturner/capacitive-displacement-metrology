@@ -4,15 +4,13 @@
 #include <Arduino.h>
 
 void Log::initialize() {
-  transmittedLogID = 0;
-  unsafeBufferedLogID = 0;
-  
   for (uint32_t i = 0; i < logSize; ++i) {
     ringBuffers[0][i] = 0;
     ringBuffers[1][i] = 0;
     ringBuffers[2][i] = 0;
     ringBuffers[3][i] = 0;
     ringBuffers[4][i] = 0;
+    isSpecial[i] = false;
   }
 }
 
@@ -42,7 +40,7 @@ void base64Encode(uint32_t value, char* buffer, uint32_t encodedLength) {
 
 void Log::transmitBufferedSamples() {
   uint32_t bufferedLogID = unsafeBufferedLogID;
-  if (bufferedLogID - transmittedLogID >= logSize / 2) {
+  if (bufferedLogID - transmittedLogID >= logSize) {
     uint32_t difference = bufferedLogID - transmittedLogID;
     throwError(
       "First part of transmitBufferedSamples",
@@ -119,4 +117,12 @@ void Log::throwError(
   ErrorMessage::addNewline();
   ErrorMessage::addInteger(number3);
   ErrorMessage::addNewline();
+}
+
+void Log::recordMessage(Command::Mode mode) {
+
+}
+
+void Log::recordModeChange() {
+  
 }

@@ -108,12 +108,12 @@ void kilohertzLoop() {
   uint32_t iterationsPerLog = Log::targetLogPeriod / KilohertzLoop::period;
   if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
     uint32_t slotID = Log::unsafeBufferedLogID % Log::logSize;
+    for (uint32_t i = 0; i < 5; ++i) {
+      Log::ringBuffers[i][slotID] = 0;
+    }
 
     if (mode == Command::Mode::idle) {
       Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
-      Log::ringBuffers[1][slotID] = Application::state.biasVoltage;
-      Log::ringBuffers[2][slotID] = Application::state.capacitance;
-      Log::ringBuffers[3][slotID] = Application::state.phaseShift;
     } else if (mode == Command::Mode::dacTest) {
       dacTester.writeToLog(slotID);
     } else if (mode == Command::Mode::capacitanceReporting) {

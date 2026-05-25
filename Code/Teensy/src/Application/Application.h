@@ -18,6 +18,4 @@ struct Application {
   static void updateBiasVoltage(float voltage);
 
   static void updateCapacitanceTracker(bool regenerate);
-
-  static void runFeedback(uint32_t integratorTimeLag);
 };

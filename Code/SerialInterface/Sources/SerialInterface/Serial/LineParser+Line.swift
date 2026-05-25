@@ -5,7 +5,7 @@ extension LineParser {
     var id: Int
     var values: SIMD8<Float>
     
-    static let messageLength: Int = 26
+    static let messageLength: Int = 27
     static let messageStartCode: UInt8 = Character(">").asciiValue!
     
     init(id: Int, values: SIMD8<Float>) {
@@ -26,6 +26,7 @@ extension LineParser {
           try Self.base64Decode(buffer + 11, encodedLength: 4),
           try Self.base64Decode(buffer + 15, encodedLength: 4),
           try Self.base64Decode(buffer + 19, encodedLength: 4),
+          try Self.base64Decode(buffer + 23, encodedLength: 4),
         ]
       } catch {
         let string = Line.display(buffer)
@@ -35,7 +36,7 @@ extension LineParser {
       self.id = Int(numbers[0])
       self.values = .zero
       
-      for laneID in 0..<4 {
+      for laneID in 0..<5 {
         var bitPattern = numbers[1 + laneID]
         bitPattern <<= 8
         let floatValue = Float(bitPattern: bitPattern)
@@ -91,7 +92,7 @@ extension LineParser {
       length: Int = Line.messageLength
     ) -> String {
       var string: String = ""
-      for i in 0..<23 {
+      for i in 0..<27 {
         let code = buffer[i]
         let character = Character(Unicode.Scalar(code))
         string.append(character)

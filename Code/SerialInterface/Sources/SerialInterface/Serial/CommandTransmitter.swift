@@ -63,8 +63,6 @@ class CommandTransmitter: @unchecked Sendable {
       return
     }
     
-    // TODO: Implement new labels.
-    
     /*
     var labels: [String]
     switch input.first! {
@@ -107,7 +105,7 @@ class CommandTransmitter: @unchecked Sendable {
       return
     }
     
-    for i in 0..<4 {
+    for i in 0..<5 {
       let labelText = labels[i]
       ui.labels[i].setText(labelText)
     }

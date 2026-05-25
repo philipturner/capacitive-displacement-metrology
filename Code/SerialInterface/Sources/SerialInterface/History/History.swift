@@ -101,7 +101,7 @@ struct History {
   mutating func reset() {
     let emptySample = TimedSample(
       time: .nan,
-      values: SIMD4<Float>(repeating: .nan))
+      values: SIMD8<Float>(repeating: .nan))
     sampleCursor = .zero
     samplesBuffer = Array(
       repeating: emptySample,
@@ -110,9 +110,9 @@ struct History {
     
     let emptyAverage = TimedAverage(
       time: .nan,
-      minimum: SIMD4<Float>(repeating: .nan),
-      average: SIMD4<Float>(repeating: .nan),
-      maximum: SIMD4<Float>(repeating: .nan))
+      minimum: SIMD8<Float>(repeating: .nan),
+      average: SIMD8<Float>(repeating: .nan),
+      maximum: SIMD8<Float>(repeating: .nan))
     averageCursor = .zero
     samplesForNextAverage = []
     averagesBuffer = Array(
@@ -170,9 +170,9 @@ struct History {
     func createAverage() -> TimedAverage {
       var accumulator = TimedAverage(
         time: .zero,
-        minimum: SIMD4<Float>(repeating: .greatestFiniteMagnitude),
-        average: SIMD4<Float>(repeating: .zero),
-        maximum: SIMD4<Float>(repeating: -.greatestFiniteMagnitude))
+        minimum: SIMD8<Float>(repeating: .greatestFiniteMagnitude),
+        average: SIMD8<Float>(repeating: .zero),
+        maximum: SIMD8<Float>(repeating: -.greatestFiniteMagnitude))
       
       for entry in samplesForNextAverage {
         accumulator.time += entry.time

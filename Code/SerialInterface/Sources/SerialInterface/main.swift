@@ -20,6 +20,18 @@ applicationDesc.historyDescriptor = historyDesc
 let application = Application(descriptor: applicationDesc)
 Watchdog.initialize(trackedThreads: 2)
 
+// Don't know where to put this note:
+// upon receiving a "mode change" message,
+// remove the triggers from the history
+// make it impossible for past data to affect Y ranges of graphs
+//
+// easiest way to do this is by resetting this history
+// - This will disrupt a sequence of lines, as a history reset could happen in
+//   the middle of the parsing. Perhaps save the last contiguous block of
+//   normal messages and state that the history must be reset before processing
+//   them.
+// - This may be a more appropriate time to change the graph's labels.
+
 var nextLoopTime = Date().timeIntervalSince1970
 while !application.ui.isClosed {
   let currentTime = Date().timeIntervalSince1970
@@ -51,7 +63,6 @@ while !application.ui.isClosed {
   }
   guard output.shortTimeData.count > 0,
         output.longTimeData.count > 0 else {
-    // print("[\(Date())] No data to graph.")
     continue
   }
   
@@ -95,8 +106,7 @@ while !application.ui.isClosed {
   application.ui.updateLongPlots(
     data: output.longTimeData)
   application.ui.updateYRange(
-    data: output.longTimeData,
-    lifetimes: SIMD4(repeating: 1000))
+    data: output.longTimeData)
   
   if let trace = output.trace {
     updateShortTimeForTrigger(trace: trace)
