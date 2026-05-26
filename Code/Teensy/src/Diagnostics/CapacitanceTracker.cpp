@@ -1,5 +1,6 @@
 #include "CapacitanceTracker.h"
 
+#include "Application/Application.h"
 #include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
@@ -39,10 +40,7 @@ CapacitanceTracker::getCurrentState() const {
   return currentState;
 }
 
-void CapacitanceTracker::update(
-  float &capacitance, 
-  float &phaseShift
-) {
+void CapacitanceTracker::update() {
   previousState = currentState;
   currentState = getState(KilohertzLoop::iterationID);
 
@@ -81,23 +79,32 @@ void CapacitanceTracker::update(
     }
 
     float n = float(lockInSampleCount);
-    float sineSquaredMixed = sineSquaredAccumulator / n;
-    float cosineSquaredMixed = cosineSquaredAccumulator / n;
-    float signalMax = sqrt(sineSquaredMixed + cosineSquaredMixed) * 2;
+    float sineMixed = 2 * sineAccumulator / n;
+    float cosineMixed = 2 * cosineAccumulator / n;
+    Application::state.diagnostic1 = sineMixed;
+    Application::state.diagnostic2 = cosineMixed;
+
+    float signalMax = 0;
+    signalMax += sineMixed * sineMixed;
+    signalMax += cosineMixed * cosineMixed;
+    signalMax = sqrt(signalMax);
 
     float waveFrequency = float(1e6) / float(wavePeriod);
     float slewRateMax = stimulusAmplitude * 2 * M_PI * waveFrequency;
-    capacitance = signalMax / slewRateMax;
+    Application::state.capacitance = signalMax / slewRateMax;
 
     // sqrt(X^2 + Y^2) != (signal's sine wave amplitude) / 2
     //
     // This is a confirmed error. I tested it with a simulated waveform
     // from 7.00 fF capacitance and the bias voltage, but the measured
     // capacitance was 9.91 fF (a factor of 1.416 higher).
-    capacitance *= M_SQRT1_2;
+    // float multiplier = M_SQRT2;
+    // Application::state.capacitance *= multiplier;
+    Application::state.diagnostic1 *= 1 / slewRateMax;
+    Application::state.diagnostic2 *= 1 / slewRateMax;
 
     if (zeroCrossingFailed) {
-      phaseShift = -1000;
+      Application::state.phaseShift = -1000;
     } else {
       if (zeroCrossingSampleCount != waveCountPost) {
         Serial.println("Unexpected behavior in phase measurement");
@@ -121,21 +128,11 @@ void CapacitanceTracker::update(
       servoLoopLag += 5.0; // ADC conversion time
       servoLoopLag += 5.0; // ADC acquisition time
       servoLoopLag += 15.9; // digital 10 kHz LPF
-      #else
-      // After validating that this is correct, change the reference signal
-      // to be time-shifted. Monitor the in-phase and out-of-phase components
-      // of the mixed signal instead of phase shift from zero crossings. Find
-      // the time lag that makes this quantity converge to expectations.
-      // float servoLoopLag = 64.7;
-      float servoLoopLag = 0;
-      #endif
       timeLag -= servoLoopLag;
+      #endif
 
       float relativeTimeLag = timeLag / float(wavePeriod);
-      phaseShift = -relativeTimeLag * 360;
-      if (phaseShift > 180) {
-        phaseShift -= 360;
-      }
+      Application::state.phaseShift = -relativeTimeLag * 360;
     }
   }
 }
@@ -146,12 +143,24 @@ void CapacitanceTracker::updateReferenceSignals() {
   uint32_t phase = deltaMicros % wavePeriod;
 
   float phaseNormalized = float(phase) / float(wavePeriod);
-  referenceSine = sin(phaseNormalized * 2 * M_PI);
-  referenceCosine = cos(phaseNormalized * 2 * M_PI);
+  referenceStimulus = sin(phaseNormalized * 2 * M_PI);
+
+  // 65: -4.3e-12
+  // 64: -1.1e-12
+  // 63.8: -5e-13, -6.5e-13
+  // 63.6: 5e-14
+  // 63.4: 6e-13
+  // 63: 2e12
+  float integrationPhase = float(phase);
+  integrationPhase -= 63.6;
+  integrationPhase /= float(wavePeriod);
+
+  referenceSine = sin(integrationPhase * 2 * M_PI);
+  referenceCosine = cos(integrationPhase * 2 * M_PI);
 }
 
 float CapacitanceTracker::getBiasVoltage() const {
-  return stimulusAmplitude * referenceSine;
+  return stimulusAmplitude * referenceStimulus;
 }
 
 void CapacitanceTracker::integrate(float current) {
@@ -174,6 +183,8 @@ void CapacitanceTracker::integrate(float current) {
     float cosineMixed = referenceCosine * current;
     sineSquaredAccumulator += sineMixed * sineMixed;
     cosineSquaredAccumulator += cosineMixed * cosineMixed;
+    sineAccumulator += sineMixed;
+    cosineAccumulator += cosineMixed;
     lockInSampleCount += 1;
   }
 

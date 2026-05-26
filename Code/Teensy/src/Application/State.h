@@ -14,6 +14,9 @@ struct State {
   float piezoYVoltage = 0; // units: V
   float piezoZVoltage = 0; // units: V
 
+  float diagnostic1 = 0;
+  float diagnostic2 = 0;
+
 private:
   // Delay line for 10 loop iterations.
   float currentSpike[10] = { 

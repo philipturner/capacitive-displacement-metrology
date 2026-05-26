@@ -19,10 +19,11 @@ struct CapacitanceTracker {
   State getState(uint32_t iterationID);
   State getCurrentState() const;
 
-  void update(float &capacitance, float &phaseShift);
+  void update();
 
   float getBiasVoltage() const;
 
+  // In the kilohertz loop, call this prior to reading from the ADC.
   void integrate(float current);
 
 private:
@@ -30,6 +31,7 @@ private:
   State previousState;
   State currentState;
 
+  float referenceStimulus;
   float referenceSine;
   float referenceCosine;
   void updateReferenceSignals();
@@ -39,6 +41,8 @@ private:
   float zeroCrossingIterations;
   float sineSquaredAccumulator = 0;
   float cosineSquaredAccumulator = 0;
+  float sineAccumulator = 0;
+  float cosineAccumulator = 0;
   uint32_t lockInSampleCount = 0;
 
   bool zeroCrossingFailed = false;

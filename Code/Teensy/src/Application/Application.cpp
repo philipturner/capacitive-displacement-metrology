@@ -130,9 +130,7 @@ void Application::updateBiasVoltage(float voltage) {
 void Application::updateCapacitanceTracker(bool regenerate) {
   // This only writes to capacitance and phaseShift if the mode is
   // transitioning from 'measuring' to 'finished'.
-  capTracker.update(
-    Application::state.capacitance,
-    Application::state.phaseShift);
+  capTracker.update();
   
   auto state = capTracker.getCurrentState();
   if (state == CapacitanceTracker::State::finished) {
@@ -141,9 +139,7 @@ void Application::updateCapacitanceTracker(bool regenerate) {
     }
 
     capTracker = CapacitanceTracker(true);
-    capTracker.update(
-      Application::state.capacitance,
-      Application::state.phaseShift);
+    capTracker.update();
   }
 
   float biasVoltage = capTracker.getBiasVoltage();
@@ -172,7 +168,9 @@ void Application::logNormalMessage() {
       state.filteredCurrent,
       state.biasVoltage,
       state.capacitance,
-      state.phaseShift);
+      // state.phaseShift);
+      Application::state.diagnostic1,
+      Application::state.diagnostic2);
   } else if (mode == Command::Mode::blindStepping) {
     Log::writeValues(
       state.filteredCurrent,
