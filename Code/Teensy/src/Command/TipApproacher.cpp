@@ -96,8 +96,12 @@ void TipApproacher::update() {
 
   Application::updateBiasVoltage(Feedback::setpointVoltage);
 
-  float voltageZ = getPiezoVoltage();
-  Application::updatePiezoVoltage(3, voltageZ);
+  if (currentState == State::finished) {
+    Feedback::updatePiezoZ();
+  } else {
+    float voltageZ = getPiezoVoltage();
+    Application::updatePiezoVoltage(3, voltageZ);
+  }
 }
 
 uint32_t TipApproacher::getTimeSinceStart() {

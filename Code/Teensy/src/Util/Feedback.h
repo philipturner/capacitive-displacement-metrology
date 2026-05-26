@@ -18,5 +18,5 @@ struct Feedback {
 
   static constexpr uint32_t integratorTimeLag = 1000; // μs
 
-  static void update();
+  static void updatePiezoZ();
 };

@@ -4,7 +4,7 @@
 #include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
-void Feedback::update() {
+void Feedback::updatePiezoZ() {
   float currentMagnitude = abs(Application::state.filteredCurrent);
   currentMagnitude = max(currentMagnitude, 2e-12);
   float dlnI = log(currentMagnitude / setpointCurrent);

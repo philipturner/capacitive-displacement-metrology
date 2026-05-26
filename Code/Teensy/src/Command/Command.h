@@ -4,7 +4,6 @@
 
 struct Command {
   enum class Mode: uint8_t {
-    // Set all DAC lines to zero and do nothing.
     idle = 0,
 
     // xXXX - X axis
@@ -22,8 +21,6 @@ struct Command {
     // cXXXX,YYYY - step up until capacitance > XXX.X fF, YYYY steps per check
     blindStepping = 3,
 
-    // Approach the surface with the woodpecker algorithm. Then hold the tip
-    // at a constant setpoint current away from the sample.
     tipApproach = 4,
   };
   Mode mode = Mode::idle;
