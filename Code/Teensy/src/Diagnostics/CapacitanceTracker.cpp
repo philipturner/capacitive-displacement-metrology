@@ -111,6 +111,9 @@ void CapacitanceTracker::update(
       timeLag *= float(KilohertzLoop::period);
       timeLag -= float(wavePeriod);
 
+      // We need to calibrate this with the actual time lag; it is reading
+      // +83° instead of +90° phase shift.
+      #if 0
       float servoLoopLag = 0;
       servoLoopLag += 2.4; // DAC sequential update wait time
       servoLoopLag += 3.5; // TIA, 45 kHz pole
@@ -118,6 +121,9 @@ void CapacitanceTracker::update(
       servoLoopLag += 5.0; // ADC conversion time
       servoLoopLag += 5.0; // ADC acquisition time
       servoLoopLag += 15.9; // digital 10 kHz LPF
+      #else
+      float servoLoopLag = 64.7;
+      #endif
       timeLag -= servoLoopLag;
 
       float relativeTimeLag = timeLag / float(wavePeriod);

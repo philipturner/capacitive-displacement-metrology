@@ -46,7 +46,7 @@ void DACTester::update() {
   }
 }
 
-void DACTester::writeToLog() {
+float DACTester::getActiveChannelVoltage() {
   float voltage = 0;
   if (channelID == 1) {
     voltage = Application::state.piezoXVoltage;
@@ -57,9 +57,5 @@ void DACTester::writeToLog() {
   } else if (channelID == 4) {
     voltage = Application::state.biasVoltage;
   }
-
-  Log::writeValues(
-    Application::state.filteredCurrent,
-    voltage,
-    float(channelID));
+  return voltage;
 }

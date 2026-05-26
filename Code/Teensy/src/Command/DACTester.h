@@ -10,7 +10,7 @@ struct DACTester {
 
   void update();
 
-  void writeToLog();
+  float getActiveChannelVoltage();
 
 public:
   uint32_t channelID;

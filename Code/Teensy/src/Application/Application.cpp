@@ -155,13 +155,18 @@ void Application::updateCapacitanceTracker(bool regenerate) {
 
 void Application::logNormalMessage() {
   float currentMaximum = state.extractCurrentMaximum();
-  float currentSpike = state.getPredictedCurrentSpike();
+  float currentSpikePrediction = state.getPredictedCurrentSpike();
 
   if (mode == Command::Mode::idle) {
     Log::writeValues(
       state.filteredCurrent);
   } else if (mode == Command::Mode::dacTest) {
-    dacTester.writeToLog();
+    Log::writeValues(
+      state.filteredCurrent,
+      currentMaximum,
+      currentSpikePrediction,
+      dacTester.getActiveChannelVoltage(),
+      float(dacTester.channelID));
   } else if (mode == Command::Mode::capacitanceReporting) {
     Log::writeValues(
       state.filteredCurrent,
@@ -172,14 +177,14 @@ void Application::logNormalMessage() {
     Log::writeValues(
       state.filteredCurrent,
       currentMaximum,
-      currentSpike,
+      currentSpikePrediction,
       state.piezoZVoltage * 0.320,
       state.capacitance);
   } else if (mode == Command::Mode::tipApproach) {
     Log::writeValues(
       state.filteredCurrent,
       currentMaximum,
-      currentSpike,
+      currentSpikePrediction,
       state.piezoZVoltage * 0.320,
       state.positionError * 1e9);
   }
