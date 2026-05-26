@@ -1,24 +1,21 @@
 import Foundation
 import SwiftSerial
 
-class CommandTransmitter: @unchecked Sendable {
-  private var characterQueue: String = ""
+class CommandTransmitter {
+  nonisolated(unsafe)
+  private static var characterQueue: String = ""
   
-  init() {
-    
-  }
-  
-  func addCharacters(_ input: String) {
+  static func addCharacters(_ input: String) {
     characterQueue += input
   }
   
-  func extractCharacters() -> String {
+  static func extractCharacters() -> String {
     let output = characterQueue
     characterQueue = ""
     return output
   }
   
-  func startPollingThread() {
+  static func startPollingThread() {
     DispatchQueue.global().async {
       while !Application.needsToClose {
         usleep(50_000)
@@ -26,14 +23,14 @@ class CommandTransmitter: @unchecked Sendable {
         let userInput = readLine()
         if let userInput {
           Application.queue.sync {
-            self.addCharacters(userInput)
+            Self.addCharacters(userInput)
           }
         }
       }
     }
   }
   
-  func transmitSerialInput(_ input: String, port: SerialPort) {
+  static func transmitSerialInput(_ input: String, port: SerialPort) {
     guard input.count > 0 else {
       return
     }

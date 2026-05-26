@@ -85,54 +85,19 @@ extension History {
   private func triggerEventTrace(
     bipolarHistoryTime: Double
   ) -> TriggerEventTrace? {
-    func isValid(event: TriggerEvent) -> Bool {
-      let minimumStartPoint = sampleCursor - Self.maxEntryCount + 3
-      if event.cursor < minimumStartPoint {
-        return false
-      }
-      return true
-    }
-    let validEvents = triggerEvents.filter(isValid(event:))
+    let candidateEvents = getCandidateEvents()
+    let validEvents = candidateEvents.filter(isValid(event:))
     guard validEvents.count > 0 else {
       return nil
     }
     
-    func getBestEvent() -> TriggerEvent {
-      guard let latestSample else {
-        fatalError("This should never happen.")
-      }
-      let maximumTime = latestSample.time - bipolarHistoryTime
-      
-      for i in validEvents.indices.reversed() {
-        let event = validEvents[i]
-        if event.centerTime <= maximumTime {
-          return event
-        }
-      }
-      return validEvents.first!
-    }
-    let bestEvent = getBestEvent()
-    
-    func getCursorRange() -> Range<Int>? {
-      let samplePeriod = Double(Self.logPeriodMicros) * 1e-6
-      let bipolarSampleCount = Int(bipolarHistoryTime / samplePeriod)
-      
-      var minimumCursor = bestEvent.cursor - bipolarSampleCount
-      minimumCursor = max(minimumCursor, sampleCursor - Self.maxEntryCount)
-      minimumCursor = max(minimumCursor, 0)
-      
-      var maximumCursor = bestEvent.cursor + bipolarSampleCount
-      maximumCursor = min(maximumCursor, sampleCursor)
-      
-      guard maximumCursor - minimumCursor > 3 else {
-        print("Cursor range was too small.")
-        print(minimumCursor)
-        print(maximumCursor)
-        return nil
-      }
-      return minimumCursor..<maximumCursor
-    }
-    guard let cursorRange = getCursorRange() else {
+    let bestEvent = getBestEvent(
+      events: validEvents,
+      bipolarHistoryTime: bipolarHistoryTime)
+    let cursorRange = getCursorRange(
+      event: bestEvent,
+      bipolarHistoryTime: bipolarHistoryTime)
+    guard let cursorRange else {
       return nil
     }
     
@@ -151,5 +116,64 @@ extension History {
       data: outputData,
       timeInterval: outputInterval,
       trigger: bestEvent.trigger)
+  }
+}
+
+extension History {
+  private func getCandidateEvents() -> [TriggerEvent] {
+    var output = triggerEvents
+    if let currentSpike {
+      output.append(currentSpike)
+    }
+    return output
+  }
+  
+  private func isValid(event: TriggerEvent) -> Bool {
+    let minimumStartPoint = sampleCursor - Self.maxEntryCount + 3
+    if event.cursor < minimumStartPoint {
+      return false
+    }
+    return true
+  }
+  
+  private func getBestEvent(
+    events: [TriggerEvent],
+    bipolarHistoryTime: Double
+  ) -> TriggerEvent {
+    guard let latestSample else {
+      fatalError("This should never happen.")
+    }
+    let maximumTime = latestSample.time - bipolarHistoryTime
+    
+    for i in events.indices.reversed() {
+      let event = events[i]
+      if event.centerTime <= maximumTime {
+        return event
+      }
+    }
+    return events.first!
+  }
+  
+  private func getCursorRange(
+    event: TriggerEvent,
+    bipolarHistoryTime: Double
+  ) -> Range<Int>? {
+    let samplePeriod = Double(Self.logPeriodMicros) * 1e-6
+    let bipolarSampleCount = Int(bipolarHistoryTime / samplePeriod)
+    
+    var minimumCursor = event.cursor - bipolarSampleCount
+    minimumCursor = max(minimumCursor, sampleCursor - Self.maxEntryCount)
+    minimumCursor = max(minimumCursor, 0)
+    
+    var maximumCursor = event.cursor + bipolarSampleCount
+    maximumCursor = min(maximumCursor, sampleCursor)
+    
+    guard maximumCursor - minimumCursor > 3 else {
+      print("Cursor range was too small.")
+      print(minimumCursor)
+      print(maximumCursor)
+      return nil
+    }
+    return minimumCursor..<maximumCursor
   }
 }

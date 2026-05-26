@@ -23,6 +23,7 @@ private:
   State currentState;
   uint32_t segmentStartIterationID;
 
-  uint32_t getTimeSinceStart();
+  void updateState();
+  uint32_t getIterationsSinceStart();
   float getPiezoVoltage();
 };

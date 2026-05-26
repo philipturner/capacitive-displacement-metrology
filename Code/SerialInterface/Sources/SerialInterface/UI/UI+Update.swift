@@ -95,11 +95,11 @@ extension UI {
       for sampleID in data.indices {
         let sample = data[sampleID]
         
-        if maximumTime > spikeTime {
-          if sample.time < spikeTime {
-            continue
-          }
-        }
+//        if maximumTime > spikeTime {
+//          if sample.time < spikeTime {
+//            continue
+//          }
+//        }
         
         let sampleMin = sample.minimum[rowID]
         let sampleMax = sample.maximum[rowID]
@@ -111,13 +111,28 @@ extension UI {
         }
       }
       
-      let center = (minimum + maximum) / 2
-      let halfRange = maximum - center
-      let rangeMin = center - halfRange * 1.1
-      let rangeMax = center + halfRange * 1.1
+      func getRange() -> SIMD2<Float> {
+        let center = (minimum + maximum) / 2
+        let halfRange = maximum - center
+        
+        if halfRange == 0 {
+          if center > 0 {
+            return SIMD2(center * 0.99, center * 1.01)
+          } else if center < 0 {
+            return SIMD2(center * -1.01, center * -0.99)
+          } else {
+            return SIMD2(-1, 1)
+          }
+        } else {
+          let rangeMin = center - halfRange * 1.1
+          let rangeMax = center + halfRange * 1.1
+          return SIMD2(rangeMin, rangeMax)
+        }
+      }
+      let range = getRange()
       
       let plotLeft = plots[rowID][0]
-      plotLeft.setYRange(rangeMin, rangeMax, padding: 0)
+      plotLeft.setYRange(range[0], range[1], padding: 0)
     }
   }
 }

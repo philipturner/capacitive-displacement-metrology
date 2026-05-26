@@ -76,6 +76,7 @@ struct History {
   
   private(set) var triggers: [Trigger]
   var triggerEvents: [TriggerEvent] = []
+  var currentSpike: TriggerEvent?
   
   init(descriptor: HistoryDescriptor) {
     guard let shortTimeLength = descriptor.shortTimeLength,
@@ -121,6 +122,7 @@ struct History {
     latestAverage = nil
     
     triggerEvents = []
+    currentSpike = nil
   }
   
   mutating func addLines(_ input: [LineParser.Line]) {
@@ -133,6 +135,11 @@ struct History {
         
       } else if line.flags == 1 {
         reset()
+        if line.values[0] == 4 {
+          Application.historyCurrentSpikeOverride = true
+        } else {
+          Application.historyCurrentSpikeOverride = false
+        }
         continue
       } else {
         fatalError("Flags not handled: \(line.flags)")
@@ -155,6 +162,7 @@ struct History {
           }
         }
       }
+      checkCurrentSpike(sample: sample)
       
       let ringIndex = sampleCursor % Self.maxEntryCount
       samplesBuffer[ringIndex] = sample
@@ -206,5 +214,35 @@ struct History {
     latestAverage = average
     
     samplesForNextAverage.removeAll()
+  }
+  
+  private mutating func checkCurrentSpike(sample: TimedSample) {
+    guard Application.historyCurrentSpikeOverride else {
+      return
+    }
+    guard Application.nextPauseTime == nil else {
+      return
+    }
+    guard currentSpike == nil else {
+      return
+    }
+    
+    if abs(sample.values[1]) > 100e-12,
+       abs(sample.values[2]) < 50e-12 {
+      var trigger = Trigger()
+      trigger.type = .level(1e-9)
+      trigger.polarity = .signAgnostic
+      trigger.channel = 0
+      
+      let triggerEvent = TriggerEvent(
+        cursor: sampleCursor,
+        centerTime: sample.time,
+        trigger: trigger)
+      
+      currentSpike = triggerEvent
+      
+      let currentTime = Date().timeIntervalSince1970
+      Application.nextPauseTime = currentTime + 1
+    }
   }
 }

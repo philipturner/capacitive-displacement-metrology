@@ -11,10 +11,13 @@ class Application: @unchecked Sendable {
     label: "avoiding.bugs.from.swift.concurrency")
   nonisolated(unsafe)
   static var needsToClose: Bool = false
+  nonisolated(unsafe)
+  static var nextPauseTime: Double?
+  nonisolated(unsafe)
+  static var historyCurrentSpikeOverride: Bool = false
   
   let ui: UI
   let port: SerialPort
-  let commandTransmitter: CommandTransmitter
   var lineParser: LineParser
   var history: History
   
@@ -29,14 +32,13 @@ class Application: @unchecked Sendable {
     } else {
       self.port = SerialPort(path: "/dev/cu.usbmodem182280901")
     }
-    self.commandTransmitter = CommandTransmitter()
     self.lineParser = LineParser()
     self.history = History(descriptor: historyDescriptor)
     
     try! port.open(
       receiveRate: .baud115200,
       transmitRate: .baud115200)
-    commandTransmitter.startPollingThread()
+    CommandTransmitter.startPollingThread()
     startLineExtractionThread()
   }
   
@@ -126,10 +128,17 @@ class Application: @unchecked Sendable {
         Watchdog.notify(threadID: 1, code: 0)
         
         let input = Application.queue.sync {
-          self.commandTransmitter.extractCharacters()
+          CommandTransmitter.extractCharacters()
         }
-        if input.count > 0 {
-          commandTransmitter.transmitSerialInput(input, port: port)
+        if input == "p" {
+          let currentTime = Date().timeIntervalSince1970
+          if Application.nextPauseTime == nil {
+            Application.nextPauseTime = currentTime
+          } else {
+            Application.nextPauseTime = nil
+          }
+        } else if input.count > 0 {
+          CommandTransmitter.transmitSerialInput(input, port: port)
         }
         
         var lines: [LineParser.Line]

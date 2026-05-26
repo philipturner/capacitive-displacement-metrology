@@ -21,9 +21,10 @@ private:
     0, 0, 0, 0, 0,
   };
   float filteredCurrentSpike = 0;
-  float currentMaximum = 0;
+  
 
 public:
+float currentMaximum = 0;
   void updateCurrent();
 
   void addSpike(float dV, float C);

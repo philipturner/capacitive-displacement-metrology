@@ -14,7 +14,6 @@ void kilohertzLoop();
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
-  DAC2::writeVoltage(0, Feedback::setpointVoltage);
   KilohertzLoop::initialize(kilohertzLoop, 12);
 }
 

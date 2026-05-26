@@ -4,9 +4,15 @@ import SwiftSerial
 
 func createTrigger1() -> Trigger {
   var trigger = Trigger()
+  #if true
   trigger.type = .timeInterval(period: 0.5, offset: 0)
   trigger.polarity = .signAgnostic
   trigger.channel = 0
+  #else
+  trigger.type = .level(3e-9)
+  trigger.polarity = .signAgnostic
+  trigger.channel = 0
+  #endif
   return trigger
 }
 
@@ -33,7 +39,17 @@ while !application.ui.isClosed, !Application.needsToClose {
   }
   Watchdog.notify(threadID: 0, code: 0)
   
-  let timeAxis = application.history.timeAxis
+  if let pauseTime = Application.nextPauseTime {
+    if pauseTime < currentTime {
+      continue
+    }
+  }
+  
+  let timeAxis = Application.queue.sync {
+    // Solution to Swift bug that is extremely hard to reproduce?
+    // The code has not crashed unexpectedly since I implemented this change.
+    application.history.timeAxis
+  }
   let output = Application.queue.sync {
     return application.history.output(
       shortInterval: timeAxis.shortLength,
