@@ -4,7 +4,13 @@
 
 struct TipApproacher {
   enum class State {
-    
+    preWait = 0,
+    wait = 1,
+    approach = 2,
+    preStep = 3,
+    stepAndWait = 4,
+    retract = 5,
+    finished = 6,
   };
 
   TipApproacher();
@@ -15,10 +21,8 @@ struct TipApproacher {
 private:
   State previousState;
   State currentState;
-  uint32_t stateStartIterationID; // remove entirely
-  float positionError = 0;
+  uint32_t segmentStartIterationID;
 
-  uint32_t getTimeSinceStateStart();
-  void updateState();
-  void updateDACs();
+  uint32_t getTimeSinceStart();
+  float getPiezoVoltage();
 };

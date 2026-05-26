@@ -72,7 +72,6 @@ void kilohertzLoop() {
 
   if (resettingForModeChange) {
     // Can only write to 3 DAC channels without exceeding the loop time.
-    float newBiasVoltage = 0;
     if (Application::mode == Command::Mode::dacTest) {
       if (Application::dacTester.channelID != 4) {
         Application::updatePiezoVoltage(

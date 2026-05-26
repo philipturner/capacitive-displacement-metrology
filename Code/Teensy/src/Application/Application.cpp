@@ -97,8 +97,8 @@ void Application::setupI2C() {
 }
 
 void Application::updatePiezoVoltage(uint32_t channelID, float voltage) {
-  float C;
-  float previousVoltage;
+  float C = 0;
+  float previousVoltage = 0;
   if (channelID == 1) {
     C = 13e-18;
     previousVoltage = state.piezoXVoltage;

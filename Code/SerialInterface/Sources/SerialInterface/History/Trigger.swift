@@ -2,7 +2,7 @@ enum TriggerType {
   // Detect when the signal crosses a threshold.
   case level(Float)
   
-  // Detect when the absolute magnitude of the slope exceeds dx / dt.
+  // Detect when the magnitude of the slope exceeds dx / dt.
   case derivative(dx: Float, dt: Float)
   
   // Report at a repeating time interval.

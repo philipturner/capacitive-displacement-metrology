@@ -2,15 +2,9 @@ import Foundation
 import SwiftSerial
 
 struct LineParser {
-  var previousPendingBytes: [UInt8]
-  var totalLineCount: Int
+  var previousPendingBytes: [UInt8] = []
+  var totalLineCount: Int = .zero
   var previousLineID: Int?
-  
-  init() {
-    self.previousPendingBytes = []
-    self.totalLineCount = 0
-    self.previousLineID = nil
-  }
   
   static func getValidBytes(port: SerialPort) -> [UInt8] {
     let data = Application.queue.sync {

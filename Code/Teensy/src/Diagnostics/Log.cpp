@@ -40,21 +40,18 @@ void Log::transmitBufferedSamples() {
   }
 
   for (uint32_t i = transmittedLogID; i < bufferedLogID; ++i) {
-    float bufferValues[5];
-    bufferValues[0] = ringBuffers[0][i % logSize];
-    bufferValues[1] = ringBuffers[1][i % logSize];
-    bufferValues[2] = ringBuffers[2][i % logSize];
-    bufferValues[3] = ringBuffers[3][i % logSize];
-    bufferValues[4] = ringBuffers[4][i % logSize];
+    uint8_t flags = flagsBuffer[i % logSize];
+    uint32_t firstWord = (i & 0x3FFFFFFF) | (uint32_t(flags) << 30);
 
     uint32_t numbers[6];
-    numbers[0] = i;
-    memcpy(numbers + 1, bufferValues, sizeof(bufferValues));
-    numbers[1] >>= 8;
-    numbers[2] >>= 8;
-    numbers[3] >>= 8;
-    numbers[4] >>= 8;
-    numbers[5] >>= 8;
+    numbers[0] = firstWord;
+    memcpy(
+      /*dst=*/numbers + 1, 
+      /*src=*/valuesBuffer + (i % logSize) * 5,
+      /*size=*/4 * 5);
+    for (uint32_t j = 1; j < 6; ++j) {
+      numbers[i] >>= 8;
+    }
 
     char cString[27 + 1];
     cString[0] = '>';
@@ -128,35 +125,4 @@ void Log::writeValues(
   flagsBuffer[slotID] = flags;
 
   Log::unsafeBufferedLogID += 1;
-}
-
-void Log::recordNormalMessage(Command::Mode mode) {
-  uint32_t slotID = Log::unsafeBufferedLogID % Log::logSize;
-    for (uint32_t i = 0; i < 5; ++i) {
-      Log::ringBuffers[i][slotID] = 0;
-    }
-
-    if (mode == Command::Mode::idle) {
-      Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
-    } else if (mode == Command::Mode::dacTest) {
-      dacTester.writeToLog(slotID);
-    } else if (mode == Command::Mode::capacitanceReporting) {
-      Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
-      Log::ringBuffers[1][slotID] = Application::state.biasVoltage;
-      Log::ringBuffers[2][slotID] = Application::state.capacitance;
-      Log::ringBuffers[3][slotID] = Application::state.phaseShift;
-    } else if (mode == Command::Mode::blindStepping) {
-      Log::ringBuffers[0][slotID] = Application::state.filteredCurrent;
-      Log::ringBuffers[1][slotID] = Application::state.piezoZVoltage;
-      Log::ringBuffers[2][slotID] = Application::state.capacitance;
-      Log::ringBuffers[3][slotID] = Application::state.phaseShift;
-    } else if (mode == Command::Mode::tipApproach) {
-      tipApproacher.writeToLog(slotID);
-    }
-
-    Log::unsafeBufferedLogID += 1;
-}
-
-void Log::recordModeChange(Command::Mode newMode) {
-
 }

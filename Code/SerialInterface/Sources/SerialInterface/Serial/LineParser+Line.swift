@@ -9,8 +9,9 @@ extension LineParser {
     static let messageLength: Int = 27
     static let messageStartCode: UInt8 = Character(">").asciiValue!
     
-    init(id: Int, values: SIMD8<Float>) {
+    init(id: Int, flags: UInt8, values: SIMD8<Float>) {
       self.id = id
+      self.flags = flags
       self.values = values
     }
     
@@ -34,7 +35,8 @@ extension LineParser {
         fatalError("Failed to decode. Contents of buffer: \(string)")
       }
       
-      self.id = Int(numbers[0])
+      self.id = Int(numbers[0] & 0x3FFF_FFFF)
+      self.flags = UInt8(numbers[0] >> 30)
       self.values = .zero
       
       for laneID in 0..<5 {

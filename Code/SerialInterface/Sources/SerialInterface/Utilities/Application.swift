@@ -107,7 +107,7 @@ class Application: @unchecked Sendable {
           let dacVoltage = 10 * Self.triangleWave(phaseNormalized)
           let current = 200 * Self.squareWave(phaseNormalized)
           
-          var line = LineParser.Line(id: i, values: .zero)
+          var line = LineParser.Line(id: i, flags: .zero, values: .zero)
           line.values[0] = current
           line.values[1] = dacVoltage
           line.values[2] = Float.random(in: -0.001..<0.001)
@@ -128,9 +128,6 @@ class Application: @unchecked Sendable {
         }
         if input.count > 0 {
           commandTransmitter.transmitSerialInput(input, port: port)
-          Application.queue.sync {
-            inputForMainThread.append(input)
-          }
         }
         
         var lines: [LineParser.Line]

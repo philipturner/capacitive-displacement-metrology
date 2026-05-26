@@ -125,7 +125,7 @@ uint32_t BlindStepper::getIterationsSinceStart() {
 
 float BlindStepper::getRetractVoltage() {
   float currentVoltage = Application::state.piezoZVoltage;
-  float expectedVoltage;
+  float expectedVoltage = 0;
 
   if (mode == Mode::up || mode == Mode::capacitance) {
     expectedVoltage = 130;

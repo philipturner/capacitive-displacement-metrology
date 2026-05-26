@@ -129,8 +129,17 @@ struct History {
     }
     
     for line in input {
+      if line.flags == 0 {
+        
+      } else if line.flags == 1 {
+        reset()
+        continue
+      } else {
+        fatalError("Flags not handled: \(line.flags)")
+      }
+      
       let logPeriodSeconds = Double(1e-6) * Double(Self.logPeriodMicros)
-      let time = Double(line.id) * logPeriodSeconds
+      let time = Double(sampleCursor) * logPeriodSeconds
       
       let sample = TimedSample(time: time, values: line.values)
       if let latestSample {
