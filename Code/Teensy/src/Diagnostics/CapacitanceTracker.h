@@ -14,6 +14,16 @@ struct CapacitanceTracker {
   static constexpr uint32_t waveCountPost = 10;
   static constexpr float stimulusAmplitude = 12;
 
+  // Magnitude of accumulate(referenceSine * current) / n
+  //
+  // 65: -4.3e-12
+  // 64: -1.1e-12
+  // 63.8: -5e-13, -6.5e-13
+  // 63.6: 5e-14
+  // 63.4: 6e-13
+  // 63: 2e12
+  static constexpr float loopTimeLag = 63.6; // μs
+
   CapacitanceTracker();
   CapacitanceTracker(bool notDefaultConstructor);
   State getState(uint32_t iterationID);
@@ -39,8 +49,6 @@ private:
   float previousCurrent = 0;
   int32_t zeroCrossingStartID;
   float zeroCrossingIterations;
-  float sineSquaredAccumulator = 0;
-  float cosineSquaredAccumulator = 0;
   float sineAccumulator = 0;
   float cosineAccumulator = 0;
   uint32_t lockInSampleCount = 0;

@@ -81,27 +81,15 @@ void CapacitanceTracker::update() {
     float n = float(lockInSampleCount);
     float sineMixed = 2 * sineAccumulator / n;
     float cosineMixed = 2 * cosineAccumulator / n;
-    Application::state.diagnostic1 = sineMixed;
-    Application::state.diagnostic2 = cosineMixed;
 
-    float signalMax = 0;
-    signalMax += sineMixed * sineMixed;
-    signalMax += cosineMixed * cosineMixed;
-    signalMax = sqrt(signalMax);
+    float magnitude = 0;
+    magnitude += sineMixed * sineMixed;
+    magnitude += cosineMixed * cosineMixed;
+    magnitude = sqrt(magnitude);
 
     float waveFrequency = float(1e6) / float(wavePeriod);
     float slewRateMax = stimulusAmplitude * 2 * M_PI * waveFrequency;
-    Application::state.capacitance = signalMax / slewRateMax;
-
-    // sqrt(X^2 + Y^2) != (signal's sine wave amplitude) / 2
-    //
-    // This is a confirmed error. I tested it with a simulated waveform
-    // from 7.00 fF capacitance and the bias voltage, but the measured
-    // capacitance was 9.91 fF (a factor of 1.416 higher).
-    // float multiplier = M_SQRT2;
-    // Application::state.capacitance *= multiplier;
-    Application::state.diagnostic1 *= 1 / slewRateMax;
-    Application::state.diagnostic2 *= 1 / slewRateMax;
+    Application::state.capacitance = magnitude / slewRateMax;
 
     if (zeroCrossingFailed) {
       Application::state.phaseShift = -1000;
@@ -117,19 +105,7 @@ void CapacitanceTracker::update() {
       timeLag /= float(zeroCrossingSampleCount);
       timeLag *= float(KilohertzLoop::period);
       timeLag -= float(wavePeriod);
-
-      // We need to calibrate this with the actual time lag; it is reading
-      // +83° instead of +90° phase shift.
-      #if 0
-      float servoLoopLag = 0;
-      servoLoopLag += 2.4; // DAC sequential update wait time
-      servoLoopLag += 3.5; // TIA, 45 kHz pole
-      servoLoopLag += 13.3; // ADC suspected 24 kHz, Q = 0.500
-      servoLoopLag += 5.0; // ADC conversion time
-      servoLoopLag += 5.0; // ADC acquisition time
-      servoLoopLag += 15.9; // digital 10 kHz LPF
-      timeLag -= servoLoopLag;
-      #endif
+      timeLag -= loopTimeLag;
 
       float relativeTimeLag = timeLag / float(wavePeriod);
       Application::state.phaseShift = -relativeTimeLag * 360;
@@ -145,14 +121,8 @@ void CapacitanceTracker::updateReferenceSignals() {
   float phaseNormalized = float(phase) / float(wavePeriod);
   referenceStimulus = sin(phaseNormalized * 2 * M_PI);
 
-  // 65: -4.3e-12
-  // 64: -1.1e-12
-  // 63.8: -5e-13, -6.5e-13
-  // 63.6: 5e-14
-  // 63.4: 6e-13
-  // 63: 2e12
   float integrationPhase = float(phase);
-  integrationPhase -= 63.6;
+  integrationPhase -= loopTimeLag;
   integrationPhase /= float(wavePeriod);
 
   referenceSine = sin(integrationPhase * 2 * M_PI);
@@ -179,12 +149,8 @@ void CapacitanceTracker::integrate(float current) {
       }
     }
 
-    float sineMixed = referenceSine * current;
-    float cosineMixed = referenceCosine * current;
-    sineSquaredAccumulator += sineMixed * sineMixed;
-    cosineSquaredAccumulator += cosineMixed * cosineMixed;
-    sineAccumulator += sineMixed;
-    cosineAccumulator += cosineMixed;
+    sineAccumulator += referenceSine * current;
+    cosineAccumulator += referenceCosine * current;
     lockInSampleCount += 1;
   }
 

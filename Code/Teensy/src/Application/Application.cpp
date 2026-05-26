@@ -168,9 +168,7 @@ void Application::logNormalMessage() {
       state.filteredCurrent,
       state.biasVoltage,
       state.capacitance,
-      // state.phaseShift);
-      Application::state.diagnostic1,
-      Application::state.diagnostic2);
+      state.phaseShift);
   } else if (mode == Command::Mode::blindStepping) {
     Log::writeValues(
       state.filteredCurrent,
