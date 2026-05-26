@@ -122,7 +122,12 @@ void CapacitanceTracker::update(
       servoLoopLag += 5.0; // ADC acquisition time
       servoLoopLag += 15.9; // digital 10 kHz LPF
       #else
-      float servoLoopLag = 64.7;
+      // After validating that this is correct, change the reference signal
+      // to be time-shifted. Monitor the in-phase and out-of-phase components
+      // of the mixed signal instead of phase shift from zero crossings. Find
+      // the time lag that makes this quantity converge to expectations.
+      // float servoLoopLag = 64.7;
+      float servoLoopLag = 0;
       #endif
       timeLag -= servoLoopLag;
 

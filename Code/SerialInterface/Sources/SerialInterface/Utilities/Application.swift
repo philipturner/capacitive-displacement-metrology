@@ -9,6 +9,8 @@ class Application: @unchecked Sendable {
   static let serialEmulation: Bool = false
   static let queue = DispatchQueue(
     label: "avoiding.bugs.from.swift.concurrency")
+  nonisolated(unsafe)
+  static var needsToClose: Bool = false
   
   let ui: UI
   let port: SerialPort
@@ -119,7 +121,7 @@ class Application: @unchecked Sendable {
         return lines
       }
       
-      while true {
+      while !Application.needsToClose {
         usleep(10_000)
         Watchdog.notify(threadID: 1, code: 0)
         
@@ -134,8 +136,13 @@ class Application: @unchecked Sendable {
         if Self.serialEmulation {
           lines = createTestLines()
         } else {
-          let bytes = LineParser.getValidBytes(port: port)
-          lines = createLines(bytes: bytes)
+          do {
+            let bytes = try LineParser.getValidBytes(port: port)
+            lines = createLines(bytes: bytes)
+          } catch {
+            Application.needsToClose = true
+            break
+          }
         }
         
         Application.queue.sync {

@@ -11,7 +11,7 @@ func createTrigger1() -> Trigger {
 }
 
 var historyDesc = HistoryDescriptor()
-historyDesc.shortTimeLength = 0.003
+historyDesc.shortTimeLength = 0.005
 historyDesc.longTimeLength = 5
 historyDesc.triggers = [createTrigger1()]
 
@@ -20,19 +20,8 @@ applicationDesc.historyDescriptor = historyDesc
 let application = Application(descriptor: applicationDesc)
 Watchdog.initialize(trackedThreads: 2)
 
-// Don't know where to put this note:
-// upon receiving a "mode change" message,
-// remove the triggers from the history
-// make it impossible for past data to affect Y ranges of graphs
-//
-// easiest way to do this is by resetting this history
-// - This will disrupt a sequence of lines, as a history reset could happen in
-//   the middle of the parsing. Perhaps save the last contiguous block of
-//   normal messages and state that the history must be reset before processing
-//   them.
-
 var nextLoopTime = Date().timeIntervalSince1970
-while !application.ui.isClosed {
+while !application.ui.isClosed, !Application.needsToClose {
   let currentTime = Date().timeIntervalSince1970
   if currentTime > nextLoopTime {
     while currentTime > nextLoopTime {

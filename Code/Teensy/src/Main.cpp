@@ -7,11 +7,14 @@
 #include "Util/FilterUtil.h"
 #include <Arduino.h>
 
+#include "IC/DAC.h"
+
 void kilohertzLoop();
 
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
+  DAC2::writeVoltage(0, Feedback::setpointVoltage);
   KilohertzLoop::initialize(kilohertzLoop, 12);
 }
 

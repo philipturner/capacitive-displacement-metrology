@@ -50,7 +50,7 @@ void Log::transmitBufferedSamples() {
       /*src=*/valuesBuffer + (i % logSize) * 5,
       /*size=*/4 * 5);
     for (uint32_t j = 1; j < 6; ++j) {
-      numbers[i] >>= 8;
+      numbers[j] >>= 8;
     }
 
     char cString[27 + 1];

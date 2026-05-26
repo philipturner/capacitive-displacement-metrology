@@ -6,10 +6,17 @@ struct LineParser {
   var totalLineCount: Int = .zero
   var previousLineID: Int?
   
-  static func getValidBytes(port: SerialPort) -> [UInt8] {
-    let data = Application.queue.sync {
-      return try! port.readBytesBlocking(
-        count: 500_000, timeout: 0.001)
+  static func getValidBytes(port: SerialPort) throws -> [UInt8] {
+    let data = try Application.queue.sync {
+      do {
+        return try port.readBytesBlocking(
+          count: 500_000, timeout: 0.001)
+      } catch let error as SwiftSerial.SerialError {
+        print("Received serial error: \(error)")
+        throw error
+      } catch {
+        fatalError("Unexpected error: \(error)")
+      }
     }
     
     var output: [UInt8] = []

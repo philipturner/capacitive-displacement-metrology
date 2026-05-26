@@ -20,7 +20,7 @@ class CommandTransmitter: @unchecked Sendable {
   
   func startPollingThread() {
     DispatchQueue.global().async {
-      while true {
+      while !Application.needsToClose {
         usleep(50_000)
         
         let userInput = readLine()
