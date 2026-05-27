@@ -12,10 +12,7 @@ struct Spectroscopy {
   };
 
   struct Result {
-    float accumulatorBefore = 0;
-    float accumulatorDuring = 0;
-    float accumulatorAfter = 0;
-    uint32_t sampleCount = 0;
+    float accumulators[3] = { 0, 0, 0 };
   };
 
   static constexpr uint32_t voltageSlewPeriod = 252;
@@ -44,10 +41,16 @@ private:
   int32_t resultID = 0;
   Result pendingResult = Result();
 
+  float restPiezoZVoltage;
+
   uint32_t getTimeSinceTrialStart();
   uint32_t getTimePerTrial();
   uint32_t getResultCount();
   VZPair getCurrentVZPair();
 
   void updateState();
+
+  void accumulate(uint32_t index);
+  float getBiasVoltage(float progress);
+  float getPiezoZVoltage(float progress);
 };
