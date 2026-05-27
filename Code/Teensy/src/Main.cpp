@@ -14,6 +14,7 @@ void kilohertzLoop();
 void setup() {
   Application::setupSerial();
   Application::setupSPI();
+  Spectroscopy::fillAutoVZPairs();
   KilohertzLoop::initialize(kilohertzLoop, 12);
 }
 

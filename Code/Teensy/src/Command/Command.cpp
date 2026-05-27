@@ -118,7 +118,7 @@ bool checkAttributes(
     if (command.alphaCode == 'a') {
       expectedNumAttributes = 0;
     } else if (command.alphaCode == 'c') {
-      expectedNumAttributes = 1;
+      expectedNumAttributes = 2;
     }
   }
 

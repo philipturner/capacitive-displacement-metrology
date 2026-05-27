@@ -4,6 +4,7 @@
 #include "Command/BlindStepper.h"
 #include "Command/Command.h"
 #include "Command/DACTester.h"
+#include "Command/Spectroscopy.h"
 #include "Command/TipApproacher.h"
 #include "Diagnostics/CapacitanceTracker.h"
 
@@ -15,6 +16,7 @@ struct Application {
   static inline CapacitanceTracker capTracker;
   static inline BlindStepper blindStepper;
   static inline TipApproacher tipApproacher;
+  static inline Spectroscopy spectroscopy;
 
   static void setupSerial();
 
