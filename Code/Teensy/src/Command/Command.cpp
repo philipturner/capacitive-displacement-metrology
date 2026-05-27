@@ -57,29 +57,41 @@ bool findAlphaCode(char code, const char *cString) {
 bool decodeAttributes(
   const char *stringBuffer,
   uint32_t stringLength,
-  uint32_t *attributes,
+  int32_t *attributes,
   uint32_t &numAttributes
 ) {
   numAttributes = 0;
 
-  uint32_t accumulator = 0;
+  int32_t accumulator = 0;
+  int32_t sign = 1;
   for (uint32_t i = 0; i <= stringLength; ++i) {
     if (stringBuffer[i] == ',' || i == stringLength) {
-      attributes[numAttributes] = accumulator;
+      int32_t decoded = accumulator * sign;
+      attributes[numAttributes] = decoded;
       numAttributes += 1;
+
       accumulator = 0;
+      sign = 1;
       continue;
     }
 
-    if (!isDigit(stringBuffer[i])) {
+    if (stringBuffer[i] == '-') {
+      if (accumulator != 0 || sign != 1) {
+        CommandTracker::throwError(
+          "Invalid placement of negative sign", 
+          i);
+        return false;
+      }
+      sign = -1;
+    } else if (isDigit(stringBuffer[i])) {
+      uint8_t digit = uint8_t(stringBuffer[i] - '0');
+      accumulator = accumulator * 10 + digit;
+    } else {
       CommandTracker::throwError(
         "While decoding attributes, a character was not a digit.", 
         i);
       return false;
     }
-
-    uint8_t digit = uint8_t(stringBuffer[i] - '0');
-    accumulator = accumulator * 10 + digit;
   }
 
   return true;
@@ -100,6 +112,13 @@ bool checkAttributes(
       expectedNumAttributes = 1;
     } else if (command.alphaCode == 'c') {
       expectedNumAttributes = 2;
+    }
+  }
+  if (command.mode == Command::Mode::spectroscopy) {
+    if (command.alphaCode == 'a') {
+      expectedNumAttributes = 0;
+    } else if (command.alphaCode == 'c') {
+      expectedNumAttributes = 1;
     }
   }
 
@@ -159,6 +178,11 @@ void CommandTracker::processSerialInput() {
     }
   } else if (command.mode == Command::Mode::blindStepping) {
     if (!findAlphaCode(command.alphaCode, "udc")) {
+      throwError("Invalid character for alphabetic code.");
+      return;
+    }
+  } else if (command.mode == Command::Mode::spectroscopy) {
+    if (!findAlphaCode(command.alphaCode, "ac")) {
       throwError("Invalid character for alphabetic code.");
       return;
     }

@@ -22,10 +22,14 @@ struct Command {
     blindStepping = 3,
 
     tipApproach = 4,
+
+    // a - auto; use list of V,Z pairs stored in program memory
+    // cXXXX,YYYY - custom; change bias to XXXX mV, move YYYY pm from setpoint
+    spectroscopy = 5,
   };
   Mode mode = Mode::idle;
   char alphaCode = 0;
-  uint32_t attributes[10];
+  int32_t attributes[10];
 };
 
 struct CommandTracker {

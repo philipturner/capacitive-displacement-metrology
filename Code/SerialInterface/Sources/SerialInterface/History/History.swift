@@ -135,11 +135,13 @@ struct History {
         
       } else if line.flags == 1 {
         reset()
+        /*
         if line.values[0] == 4 {
           Application.historyCurrentSpikeOverride = true
         } else {
           Application.historyCurrentSpikeOverride = false
         }
+         */
         continue
       } else {
         fatalError("Flags not handled: \(line.flags)")
@@ -227,6 +229,7 @@ struct History {
       return
     }
     
+    /*
     if abs(sample.values[0]) > 1e-9,
        abs(sample.values[1]) < 100e-12 {
       var trigger = Trigger()
@@ -244,5 +247,6 @@ struct History {
       let currentTime = Date().timeIntervalSince1970
       Application.nextPauseTime = currentTime + 1
     }
+     */
   }
 }
