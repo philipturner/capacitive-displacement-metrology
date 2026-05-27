@@ -13,6 +13,7 @@ struct Spectroscopy {
 
   struct Result {
     float accumulators[3] = { 0, 0, 0 };
+    float sampleCount[3] = { 0, 0, 0 };
   };
 
   static constexpr uint32_t voltageSlewPeriod = 252;
@@ -38,10 +39,9 @@ private:
   // Don't forget to reset these each trial.
   uint32_t trialStartIterationID;
   uint32_t trialID = 0;
-  int32_t resultID = 0;
+  uint32_t resultID = 0;
   Result pendingResult = Result();
-
-  float restPiezoZVoltage;
+  float restPiezoZVoltage = -270;
 
   uint32_t getTimeSinceTrialStart();
   uint32_t getTimePerTrial();
