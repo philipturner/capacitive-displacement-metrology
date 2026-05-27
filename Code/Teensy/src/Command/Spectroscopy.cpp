@@ -1,5 +1,7 @@
 #include "Spectroscopy.h"
 
+#include "Application/Application.h"
+#include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
 void Spectroscopy::fillAutoVZPairs() {
@@ -31,5 +33,48 @@ Spectroscopy::Spectroscopy(Command command) {
     float picometers = float(command.attributes[1]);
     customVZPair.voltage = millivolts * 1e-3;
     customVZPair.position = picometers * 1e-12;
+  }
+
+  trialStartIterationID = KilohertzLoop::iterationID;
+}
+
+uint32_t Spectroscopy::getIterationsSinceTrialStart() {
+  uint32_t deltaIters = KilohertzLoop::iterationID;
+  deltaIters -= trialStartIterationID;
+  return deltaIters;
+}
+
+uint32_t Spectroscopy::getTimePerTrial() {
+  uint32_t output = 0;
+  output += integratePeriod;
+  output += 2 * (positionSettlePeriod + integratePeriod);
+  output += feedbackTime;
+  return output;
+}
+
+uint32_t Spectroscopy::getResultCount() {
+  if (useCustomVZPair) {
+    return 1;
+  } else {
+    return numAutoVZPairs;
+  }
+}
+
+Spectroscopy::VZPair
+Spectroscopy::getCurrentVZPair() {
+  if (useCustomVZPair) {
+    return customVZPair;
+  } else {
+
+  }
+}
+
+void Spectroscopy::updateState() {
+  uint32_t timePerTrial = getTimePerTrial();
+  uint32_t currentTime = getIterationsSinceTrialStart();
+  currentTime *= KilohertzLoop::period;
+
+  if (currentTime >= timePerTrial) {
+    
   }
 }
