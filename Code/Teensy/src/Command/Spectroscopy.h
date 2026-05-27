@@ -39,15 +39,16 @@ private:
   // Don't forget to reset these each trial.
   uint32_t trialStartIterationID;
   uint32_t trialID = 0;
-  uint32_t resultID = 0;
+  uint32_t pairID = 0;
   Result pendingResult = Result();
   float restPiezoZVoltage = -270;
 
   uint32_t getTimeSinceTrialStart();
   uint32_t getTimePerTrial();
-  uint32_t getResultCount();
+  uint32_t getPairCount();
   VZPair getCurrentVZPair();
 
+  void pushResult(uint32_t sampleCount);
   void updateState();
 
   void accumulate(uint32_t index);

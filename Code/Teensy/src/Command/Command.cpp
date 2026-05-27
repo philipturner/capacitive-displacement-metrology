@@ -161,7 +161,7 @@ void CommandTracker::processSerialInput() {
     return;
   }
   uint8_t modeCode = uint8_t(buffer[0] - '0');
-  if (modeCode > 4) {
+  if (modeCode > 5) {
     throwError("Invalid mode code.");
     return;
   }

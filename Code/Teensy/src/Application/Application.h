@@ -18,6 +18,8 @@ struct Application {
   static inline TipApproacher tipApproacher;
   static inline Spectroscopy spectroscopy;
 
+  static void initialize();
+
   static void setupSerial();
 
   static void setupSPI();

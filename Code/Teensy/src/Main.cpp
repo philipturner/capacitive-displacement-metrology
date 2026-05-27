@@ -1,4 +1,3 @@
-#include "Diagnostics/CapacitanceTracker.h"
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
 #include "Application/Application.h"
@@ -7,14 +6,10 @@
 #include "Util/FilterUtil.h"
 #include <Arduino.h>
 
-#include "IC/DAC.h"
-
 void kilohertzLoop();
 
 void setup() {
-  Application::setupSerial();
-  Application::setupSPI();
-  Spectroscopy::fillAutoVZPairs();
+  Application::initialize();
   KilohertzLoop::initialize(kilohertzLoop, 12);
 }
 
@@ -59,6 +54,9 @@ void kilohertzLoop() {
     if (Application::mode == Command::Mode::tipApproach) {
       Application::tipApproacher = TipApproacher(true);
     }
+    if (Application::mode == Command::Mode::spectroscopy) {
+      Application::spectroscopy = Spectroscopy(nextCommand);
+    }
 
     Log::writeValues(
       /*lane0=*/float(Application::mode),
@@ -97,6 +95,9 @@ void kilohertzLoop() {
     }
     if (Application::mode == Command::Mode::tipApproach) {
       Application::tipApproacher.update();
+    }
+    if (Application::mode == Command::Mode::spectroscopy) {
+      Application::spectroscopy.update();
     }
   }
 

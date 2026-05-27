@@ -55,7 +55,7 @@ uint32_t Spectroscopy::getTimePerTrial() {
   return output;
 }
 
-uint32_t Spectroscopy::getResultCount() {
+uint32_t Spectroscopy::getPairCount() {
   if (useCustomVZPair) {
     return 1;
   } else {
@@ -63,17 +63,40 @@ uint32_t Spectroscopy::getResultCount() {
   }
 }
 
-Spectroscopy::VZPair
-Spectroscopy::getCurrentVZPair() {
+Spectroscopy::VZPair Spectroscopy::getCurrentVZPair() {
   if (useCustomVZPair) {
     return customVZPair;
   } else {
-    return autoVZPairs[resultID];
+    return autoVZPairs[pairID];
   }
 }
 
+void Spectroscopy::pushResult(uint32_t sampleCount) {
+  auto pair = getCurrentVZPair();
+  auto result = pendingResult;
+
+  for (uint32_t i = 0; i < 3; ++i) {
+    result.accumulators[i] *= 1 / float(sampleCount);
+
+    if (result.sampleCount[i] != sampleCount) {
+      Serial.println("Incorrect sample count.");
+      exit(0);
+    }
+  }
+
+  Log::writeValues(
+    /*lane0=*/pair.voltage,
+    /*lane1=*/pair.position * 1e12,
+    /*lane2=*/result.accumulators[0] * 1e12,
+    /*lane3=*/result.accumulators[1] * 1e12,
+    /*lane4=*/result.accumulators[2] * 1e12,
+    /*flags=*/0b10);
+  
+  pendingResult = Result();
+}
+
 void Spectroscopy::updateState() {
-  if (resultID >= getResultCount()) {
+  if (pairID >= getPairCount()) {
     return;
   }
 
@@ -81,41 +104,28 @@ void Spectroscopy::updateState() {
   uint32_t currentTime = getTimeSinceTrialStart();
 
   if (currentTime >= timePerTrial) {
+    uint32_t sampleCount = integratePeriod / KilohertzLoop::period;
+    pushResult(sampleCount);
+
     trialID += 1;
     trialStartIterationID = KilohertzLoop::iterationID;
     restPiezoZVoltage = -270;
   }
 
   if (trialID >= trialsPerResult) {
-    auto pair = getCurrentVZPair();
-    auto result = pendingResult;
-
-    uint32_t n = integratePeriod / KilohertzLoop::period;
-    for (uint32_t i = 0; i < 3; ++i) {
-      result.accumulators[i] *= 1 / float(n);
-
-      if (result.sampleCount[i] != n) {
-        Serial.println("Incorrect sample count.");
-        exit(0);
-      }
-    }
-
-    Log::writeValues(
-      /*lane0=*/pair.voltage,
-      /*lane1=*/pair.position * 1e12,
-      /*lane2=*/result.accumulators[0] * 1e12,
-      /*lane3=*/result.accumulators[1] * 1e12,
-      /*lane4=*/result.accumulators[2] * 1e12,
-      /*flags=*/0b10);
-    
     trialID = 0;
-    resultID += 1;
-    pendingResult = Result();
+    pairID += 1;
   }
 }
 
 void Spectroscopy::accumulate(uint32_t index) {
   float current = Application::state.filteredCurrent;
+
+  // Checking basic operation of the new code.
+  if (index == 1) {
+    current = float(pendingResult.sampleCount[index]);
+  }
+
   pendingResult.accumulators[index] += current;
   pendingResult.sampleCount[index] += 1;
 }
@@ -149,10 +159,25 @@ float Spectroscopy::getPiezoZVoltage(float unsmoothedProgress) {
   return output;
 }
 
+/*
+-0.049999237, 400.0, 0.3641281, 2.0499879e+13, -0.028001785, 
+-0.049999237, 400.0, 0.40020752, 2.0499879e+13, -0.12823105, 
+-0.049999237, 400.0, -0.13733292, 2.0499879e+13, -0.118494034, 
+-0.049999237, 400.0, 0.64756775, 2.0499879e+13, -0.24730301, 
+-0.049999237, 400.0, 0.57629395, 2.0499879e+13, -0.21464157, 
+-0.049999237, 400.0, 0.31822205, 2.0499879e+13, -0.2422638, 
+-0.049999237, 400.0, -0.32456207, 2.0499879e+13, -0.39032745, 
+-0.049999237, 400.0, -0.08976364, 2.0499879e+13, -0.31079102, 
+-0.049999237, 400.0, 0.22520828, 2.0499879e+13, -0.20956802, 
+-0.049999237, 400.0, 0.251503, 2.0499879e+13, 0.103227615, 
+*/
+
 void Spectroscopy::update() {
-  if (resultID >= getResultCount()) {
+  updateState();
+
+  if (pairID >= getPairCount()) {
     Application::updateBiasVoltage(Feedback::setpointVoltage);
-    Feedback::updatePiezoZ();
+    //Feedback::updatePiezoZ();
     return;
   }
 
@@ -160,7 +185,9 @@ void Spectroscopy::update() {
   if (time < integratePeriod) {
     accumulate(0);
 
-    Application::updateBiasVoltage(Feedback::setpointVoltage);
+    if (time == 0) {
+      Application::updateBiasVoltage(Feedback::setpointVoltage);
+    }
     restPiezoZVoltage = Application::state.piezoZVoltage;
     return;
   } else {
@@ -194,8 +221,10 @@ void Spectroscopy::update() {
     }
 
     if (time < integratePeriod) {
-      Application::updateBiasVoltage(biasVoltage);
-      Application::updatePiezoVoltage(3, piezoZVoltage);
+      if (time == 0) {
+        Application::updateBiasVoltage(biasVoltage);
+        Application::updatePiezoVoltage(3, piezoZVoltage);
+      }
       accumulate(1 + i);
       return;
     } else {
@@ -204,5 +233,5 @@ void Spectroscopy::update() {
   }
 
   Application::updateBiasVoltage(Feedback::setpointVoltage);
-  Feedback::updatePiezoZ();
+  //Feedback::updatePiezoZ();
 }

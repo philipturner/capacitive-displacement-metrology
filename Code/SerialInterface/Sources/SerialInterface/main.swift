@@ -4,14 +4,14 @@ import SwiftSerial
 
 func createTrigger1() -> Trigger {
   var trigger = Trigger()
-  #if true
+  #if false
   trigger.type = .timeInterval(period: 0.5, offset: 0)
   trigger.polarity = .signAgnostic
   trigger.channel = 0
   #else
-  trigger.type = .level(3e-9)
-  trigger.polarity = .signAgnostic
-  trigger.channel = 0
+  trigger.type = .level(0.2)
+  trigger.polarity = .positive
+  trigger.channel = 2
   #endif
   return trigger
 }

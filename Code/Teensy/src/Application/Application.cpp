@@ -6,6 +6,12 @@
 #include "IC/PA95.h"
 #include "Diagnostics/Log.h"
 
+void Application::initialize() {
+  setupSerial();
+  setupSPI();
+  Spectroscopy::fillAutoVZPairs();
+}
+
 extern "C" void usb_init();
 
 void Application::setupSerial() {
@@ -184,5 +190,12 @@ void Application::logNormalMessage() {
       state.piezoZVoltage * 0.320,
       state.positionError * 1e9,
       state.feedbackErrorTerm * 1e9);
+  } else if (mode == Command::Mode::spectroscopy) {
+    Log::writeValues(
+      currentMaximum,
+      currentSpikePrediction,
+      state.piezoZVoltage * 0.320,
+      state.biasVoltage,
+      state.positionError * 1e9);
   }
 }
