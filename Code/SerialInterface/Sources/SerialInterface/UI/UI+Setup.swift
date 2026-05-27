@@ -1,6 +1,6 @@
 import PythonKit
 
-#if true // Mac
+#if false // Mac
 private let rowHeight: Int = 180
 private let rowSpacing: Int = 20
 private let columnWidth: Int = 500
@@ -8,8 +8,8 @@ private let columnSpacing: Int = 20
 private let xAxisHeight: Int = 40
 private let yAxisWidth: Int = 120
 #else // iPad
-private let rowHeight: Int = 150
-private let rowSpacing: Int = 20
+private let rowHeight: Int = 120
+private let rowSpacing: Int = 10
 private let columnWidth: Int = 250
 private let columnSpacing: Int = 20
 private let xAxisHeight: Int = 40

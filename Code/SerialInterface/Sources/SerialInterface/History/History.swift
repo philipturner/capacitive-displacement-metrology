@@ -227,8 +227,8 @@ struct History {
       return
     }
     
-    if abs(sample.values[1]) > 100e-12,
-       abs(sample.values[2]) < 50e-12 {
+    if abs(sample.values[1]) > 1e-9,
+       abs(sample.values[2]) < 100e-12 {
       var trigger = Trigger()
       trigger.type = .level(1e-9)
       trigger.polarity = .signAgnostic

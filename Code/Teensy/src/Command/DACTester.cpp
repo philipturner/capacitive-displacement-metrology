@@ -36,7 +36,7 @@ void DACTester::update() {
   uint32_t phase = deltaTime % wavePeriod;
 
   float phaseNormalized = float(phase) / float(wavePeriod);
-  float voltage = FilterUtil::sineWave(phaseNormalized);
+  float voltage = FilterUtil::triangleWave(phaseNormalized);
   voltage *= bipolarAmplitude;
 
   if (channelID == 4) {
