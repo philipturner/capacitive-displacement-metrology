@@ -12,7 +12,6 @@ struct Spectroscopy {
   };
 
   struct Result {
-    VZPair pair;
     float accumulatorBefore = 0;
     float accumulatorDuring = 0;
     float accumulatorAfter = 0;
@@ -45,7 +44,7 @@ private:
   int32_t resultID = 0;
   Result pendingResult = Result();
 
-  uint32_t getIterationsSinceTrialStart();
+  uint32_t getTimeSinceTrialStart();
   uint32_t getTimePerTrial();
   uint32_t getResultCount();
   VZPair getCurrentVZPair();

@@ -1,6 +1,7 @@
 #include "Spectroscopy.h"
 
 #include "Application/Application.h"
+#include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
@@ -38,10 +39,10 @@ Spectroscopy::Spectroscopy(Command command) {
   trialStartIterationID = KilohertzLoop::iterationID;
 }
 
-uint32_t Spectroscopy::getIterationsSinceTrialStart() {
+uint32_t Spectroscopy::getTimeSinceTrialStart() {
   uint32_t deltaIters = KilohertzLoop::iterationID;
   deltaIters -= trialStartIterationID;
-  return deltaIters;
+  return deltaIters * KilohertzLoop::period;
 }
 
 uint32_t Spectroscopy::getTimePerTrial() {
@@ -65,16 +66,38 @@ Spectroscopy::getCurrentVZPair() {
   if (useCustomVZPair) {
     return customVZPair;
   } else {
-
+    return autoVZPairs[resultID];
   }
 }
 
 void Spectroscopy::updateState() {
+  if (resultID >= getResultCount()) {
+    return;
+  }
+
   uint32_t timePerTrial = getTimePerTrial();
-  uint32_t currentTime = getIterationsSinceTrialStart();
-  currentTime *= KilohertzLoop::period;
+  uint32_t currentTime = getTimeSinceTrialStart();
 
   if (currentTime >= timePerTrial) {
+    trialID += 1;
+    trialStartIterationID = KilohertzLoop::iterationID;
+  }
+
+  if (trialID >= trialsPerResult) {
+    auto pair = getCurrentVZPair();
+    auto result = pendingResult;
+    float n = float(result.sampleCount);
     
+    Log::writeValues(
+      /*lane0=*/pair.voltage,
+      /*lane1=*/pair.position,
+      /*lane2=*/result.accumulatorBefore / n,
+      /*lane3=*/result.accumulatorDuring / n,
+      /*lane4=*/result.accumulatorAfter / n,
+      /*flags=*/0b10);
+    
+    trialID = 0;
+    resultID += 1;
+    pendingResult = Result();
   }
 }
