@@ -154,6 +154,9 @@ class Application: @unchecked Sendable {
           }
         }
         
+        let resultLines = Spectroscopy.removeResultLines(&lines)
+        Spectroscopy.displayResultLines(resultLines)
+        
         Application.queue.sync {
           self.history.addLines(lines)
         }

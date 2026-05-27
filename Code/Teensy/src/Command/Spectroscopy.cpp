@@ -87,13 +87,13 @@ void Spectroscopy::updateState() {
     auto pair = getCurrentVZPair();
     auto result = pendingResult;
     float n = float(result.sampleCount);
-    
+
     Log::writeValues(
       /*lane0=*/pair.voltage,
-      /*lane1=*/pair.position,
-      /*lane2=*/result.accumulatorBefore / n,
-      /*lane3=*/result.accumulatorDuring / n,
-      /*lane4=*/result.accumulatorAfter / n,
+      /*lane1=*/pair.position * 1e12,
+      /*lane2=*/result.accumulatorBefore / n * 1e12,
+      /*lane3=*/result.accumulatorDuring / n * 1e12,
+      /*lane4=*/result.accumulatorAfter / n * 1e12,
       /*flags=*/0b10);
     
     trialID = 0;
