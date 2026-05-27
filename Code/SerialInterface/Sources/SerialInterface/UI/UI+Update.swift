@@ -119,7 +119,7 @@ extension UI {
           if center > 0 {
             return SIMD2(center * 0.99, center * 1.01)
           } else if center < 0 {
-            return SIMD2(center * -1.01, center * -0.99)
+            return SIMD2(center * 1.01, center * 0.99)
           } else {
             return SIMD2(-1, 1)
           }

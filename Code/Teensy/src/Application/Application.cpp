@@ -155,7 +155,9 @@ void Application::logNormalMessage() {
 
   if (mode == Command::Mode::idle) {
     Log::writeValues(
-      state.filteredCurrent);
+      state.filteredCurrent,
+      currentMaximum,
+      currentSpikePrediction);
   } else if (mode == Command::Mode::dacTest) {
     Log::writeValues(
       state.filteredCurrent,
@@ -171,17 +173,16 @@ void Application::logNormalMessage() {
       state.phaseShift);
   } else if (mode == Command::Mode::blindStepping) {
     Log::writeValues(
-      state.filteredCurrent,
       currentMaximum,
       currentSpikePrediction,
       state.piezoZVoltage * 0.320,
       state.capacitance);
   } else if (mode == Command::Mode::tipApproach) {
     Log::writeValues(
-      state.filteredCurrent,
       currentMaximum,
       currentSpikePrediction,
       state.piezoZVoltage * 0.320,
-      state.positionError * 1e9);
+      state.positionError * 1e9,
+      state.feedbackErrorTerm * 1e9);
   }
 }

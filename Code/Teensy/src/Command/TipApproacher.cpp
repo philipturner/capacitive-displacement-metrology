@@ -146,18 +146,9 @@ float TipApproacher::getPiezoVoltage() {
       break;
     }
     case State::retract: {
-      uint32_t deltaIters = getIterationsSinceStart();
-
-      // if (deltaIters >= 100) {
-        float dVdt = float(840) / float(600e-6);
-        float dV = dVdt * dt;
-        voltageZ = retract(voltageZ, dV);
-      // } else if (deltaIters >= 30 && deltaIters < 35) {
-      //   //voltageZ += -2e-9 / 0.320e-9;
-      // } else if (deltaIters == 60) {
-
-      // }
-
+      float dVdt = float(840) / float(600e-6);
+      float dV = dVdt * dt;
+      voltageZ = retract(voltageZ, dV);
       break;
     }
     case State::finished: {

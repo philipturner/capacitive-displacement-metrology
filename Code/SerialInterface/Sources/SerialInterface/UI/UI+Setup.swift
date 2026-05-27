@@ -1,9 +1,9 @@
 import PythonKit
 
-#if false // Mac
+#if true // Mac
 private let rowHeight: Int = 180
 private let rowSpacing: Int = 20
-private let columnWidth: Int = 500
+private let columnWidth: Int = 350
 private let columnSpacing: Int = 20
 private let xAxisHeight: Int = 40
 private let yAxisWidth: Int = 120
@@ -67,7 +67,7 @@ extension UI {
     let screenMiddle = screenDimensions / 2
     let upperLeft = screenMiddle - windowDimensions / 2
     win.move(
-      Int(upperLeft.x),
+      Int(200),
       Int(20))
     
     #else // iPad
