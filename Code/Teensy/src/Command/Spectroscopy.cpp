@@ -7,12 +7,23 @@
 #include "Util/FilterUtil.h"
 #include <Arduino.h>
 
+// Reduce the chance of accidentally crashing the tip because of a typing
+// or programming error.
+void clampPair(Spectroscopy::VZPair& pair) {
+  pair.voltage = min(pair.voltage, 2.0);
+  pair.voltage = max(pair.voltage, -2.0);
+
+  pair.position = min(pair.position, 1000e-12);
+  pair.position = max(pair.position, -1000e-12);
+}
+
 void Spectroscopy::fillAutoVZPairs() {
   for (uint32_t i = 0; i < 1; ++i) {
     Spectroscopy::VZPair pair;
     pair.voltage = 0.050;
     pair.position = 0e-12;
 
+    clampPair(pair);
     autoVZPairs[i] = pair;
   }
 }
@@ -36,6 +47,7 @@ Spectroscopy::Spectroscopy(Command command) {
     float picometers = float(command.attributes[1]);
     customVZPair.voltage = millivolts * 1e-3;
     customVZPair.position = picometers * 1e-12;
+    clampPair(customVZPair);
   }
 
   trialStartIterationID = KilohertzLoop::iterationID;
@@ -71,9 +83,8 @@ Spectroscopy::VZPair Spectroscopy::getCurrentVZPair() {
   }
 }
 
-void Spectroscopy::pushResult(uint32_t sampleCount) {
+void Spectroscopy::pushResult(uint32_t sampleCount, Result& result) {
   auto pair = getCurrentVZPair();
-  auto result = pendingResult;
 
   for (uint32_t i = 0; i < 3; ++i) {
     result.accumulators[i] *= 1 / float(sampleCount);
@@ -92,7 +103,7 @@ void Spectroscopy::pushResult(uint32_t sampleCount) {
     /*lane4=*/result.accumulators[2] * 1e12,
     /*flags=*/0b10);
   
-  pendingResult = Result();
+  result = Result();
 }
 
 void Spectroscopy::updateState() {
@@ -105,7 +116,7 @@ void Spectroscopy::updateState() {
 
   if (currentTime >= timePerTrial) {
     uint32_t sampleCount = integratePeriod / KilohertzLoop::period;
-    pushResult(sampleCount);
+    pushResult(sampleCount, pendingResult1);
 
     trialID += 1;
     trialStartIterationID = KilohertzLoop::iterationID;
@@ -113,6 +124,10 @@ void Spectroscopy::updateState() {
   }
 
   if (trialID >= trialsPerResult) {
+    uint32_t sampleCount = integratePeriod / KilohertzLoop::period;
+    sampleCount *= trialsPerResult;
+    pushResult(sampleCount, pendingResult2);
+
     trialID = 0;
     pairID += 1;
   }
@@ -120,14 +135,10 @@ void Spectroscopy::updateState() {
 
 void Spectroscopy::accumulate(uint32_t index) {
   float current = Application::state.filteredCurrent;
-
-  // Checking basic operation of the new code.
-  if (index == 1) {
-    current = float(pendingResult.sampleCount[index]);
-  }
-
-  pendingResult.accumulators[index] += current;
-  pendingResult.sampleCount[index] += 1;
+  pendingResult1.accumulators[index] += current;
+  pendingResult1.sampleCount[index] += 1;
+  pendingResult2.accumulators[index] += current;
+  pendingResult2.sampleCount[index] += 1;
 }
 
 float linearInterpolate(float start, float end, float t) {
@@ -158,19 +169,6 @@ float Spectroscopy::getPiezoZVoltage(float unsmoothedProgress) {
   output = max(output, -130);
   return output;
 }
-
-/*
--0.049999237, 400.0, 0.3641281, 2.0499879e+13, -0.028001785, 
--0.049999237, 400.0, 0.40020752, 2.0499879e+13, -0.12823105, 
--0.049999237, 400.0, -0.13733292, 2.0499879e+13, -0.118494034, 
--0.049999237, 400.0, 0.64756775, 2.0499879e+13, -0.24730301, 
--0.049999237, 400.0, 0.57629395, 2.0499879e+13, -0.21464157, 
--0.049999237, 400.0, 0.31822205, 2.0499879e+13, -0.2422638, 
--0.049999237, 400.0, -0.32456207, 2.0499879e+13, -0.39032745, 
--0.049999237, 400.0, -0.08976364, 2.0499879e+13, -0.31079102, 
--0.049999237, 400.0, 0.22520828, 2.0499879e+13, -0.20956802, 
--0.049999237, 400.0, 0.251503, 2.0499879e+13, 0.103227615, 
-*/
 
 void Spectroscopy::update() {
   updateState();

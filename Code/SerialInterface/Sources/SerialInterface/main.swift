@@ -9,17 +9,25 @@ func createTrigger1() -> Trigger {
   trigger.polarity = .signAgnostic
   trigger.channel = 0
   #else
-  trigger.type = .level(0.2)
+  trigger.type = .level(0.1)
   trigger.polarity = .positive
-  trigger.channel = 2
+  trigger.channel = 3
   #endif
+  return trigger
+}
+
+func createTrigger2() -> Trigger {
+  var trigger = Trigger()
+  trigger.type = .level(-0.1)
+  trigger.polarity = .negative
+  trigger.channel = 3
   return trigger
 }
 
 var historyDesc = HistoryDescriptor()
 historyDesc.shortTimeLength = 0.005
 historyDesc.longTimeLength = 5
-historyDesc.triggers = [createTrigger1()]
+historyDesc.triggers = [createTrigger1(), createTrigger2()]
 
 var applicationDesc = ApplicationDescriptor()
 applicationDesc.historyDescriptor = historyDesc
