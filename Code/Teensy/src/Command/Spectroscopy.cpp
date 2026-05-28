@@ -43,8 +43,8 @@ Spectroscopy::Spectroscopy(Command command) {
   }
 
   if (useCustomVZPair) {
-    // float millivolts = float(command.attributes[0]);
-    // customVZPair.voltage = millivolts * 1e-3;
+    //float millivolts = float(command.attributes[0]);
+    //customVZPair.voltage = millivolts * 1e-3;
     customVZPair.voltage = 0.051;
 
     float picometers = float(command.attributes[1]);
@@ -52,9 +52,9 @@ Spectroscopy::Spectroscopy(Command command) {
     
     clampPair(customVZPair);
 
-    positionSettlePeriod = command.attributes[0];
-    positionSettlePeriod = max(positionSettlePeriod, uint32_t(252));
-    positionSettlePeriod -= positionSettlePeriod % KilohertzLoop::period;
+    // positionSettlePeriod = command.attributes[0];
+    // positionSettlePeriod = max(positionSettlePeriod, uint32_t(252));
+    // positionSettlePeriod -= positionSettlePeriod % KilohertzLoop::period;
   }
 
   trialStartIterationID = KilohertzLoop::iterationID;
@@ -69,7 +69,7 @@ uint32_t Spectroscopy::getTimeSinceTrialStart() {
 uint32_t Spectroscopy::getTimePerTrial() {
   uint32_t output = 0;
   output += integratePeriod;
-  output += 2 * (positionSettlePeriod + integratePeriod);
+  //output += 2 * (positionSettlePeriod + integratePeriod);
   output += extraSettleTime;
   output += feedbackTime;
   return output;
@@ -167,8 +167,9 @@ float Spectroscopy::getPiezoZVoltage(float progress) {
 
   float start = restPiezoZVoltage;
   float end = start + dV;
+  float WTF = FilterUtil::thirdOrderSmoothstep(progress);
   
-  float output = linearInterpolate(start, end, progress);
+  float output = linearInterpolate(start, end, WTF);
   output = min(output, 270);
   output = max(output, -130);
   return output;
@@ -202,12 +203,14 @@ void Spectroscopy::update() {
       exit(0);
     }
 
-    float voltageProgress;
-    if (time < positionSettlePeriod - voltageSlewPeriod) {
-      voltageProgress = 0;
-    } else {
-      voltageProgress = 1;
-    }
+    float voltageProgress = float(time) / float(voltageSlewPeriod);
+
+    // float voltageProgress;
+    // if (time < positionSettlePeriod - voltageSlewPeriod) {
+    //   voltageProgress = 0;
+    // } else {
+    //   voltageProgress = 1;
+    // }
 
     float positionProgress = float(time) / float(positionSettlePeriod);
     positionProgress = min(positionProgress, 1);
@@ -227,7 +230,7 @@ void Spectroscopy::update() {
     }
 
     // comment out for 'linear' waveform type
-    positionProgress = FilterUtil::thirdOrderSmoothstep(positionProgress);
+    //positionProgress = FilterUtil::thirdOrderSmoothstep(positionProgress);
 
     float biasVoltage = getBiasVoltage(voltageProgress);
     float piezoZVoltage = getPiezoZVoltage(positionProgress);

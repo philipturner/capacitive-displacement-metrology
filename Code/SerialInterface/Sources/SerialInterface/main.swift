@@ -10,7 +10,7 @@ func createTrigger1() -> Trigger {
   trigger.channel = 0
   #else
   trigger.type = .level(0.0501)
-  trigger.polarity = .positive
+  trigger.polarity = .negative
   trigger.channel = 3
   #endif
   return trigger
@@ -19,7 +19,7 @@ func createTrigger1() -> Trigger {
 func createTrigger2() -> Trigger {
   var trigger = Trigger()
   trigger.type = .level(0.0499)
-  trigger.polarity = .negative
+  trigger.polarity = .positive
   trigger.channel = 3
   return trigger
 }

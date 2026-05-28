@@ -43,7 +43,7 @@ struct Spectroscopy {
   // Resonance frequency of Z axis is unfortunately 2 kHz, not 20 kHz.
   // 2016 μs does much better than 1512 μs, perhaps not colliding with the
   // resonance or one of its harmonics.
-  //static constexpr uint32_t positionSettlePeriod = 504 * 4;
+  static constexpr uint32_t positionSettlePeriod = 504 * 4;
   static constexpr uint32_t integratePeriod = 504 * 3;
 
   static constexpr uint32_t extraSettleTime = 5000;
@@ -62,7 +62,7 @@ struct Spectroscopy {
 private:
   bool useCustomVZPair;
   VZPair customVZPair;
-  uint32_t positionSettlePeriod = 252;
+  //uint32_t positionSettlePeriod = 252;
   
   // Don't forget to reset these each trial.
   uint32_t trialStartIterationID;
