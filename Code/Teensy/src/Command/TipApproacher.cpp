@@ -90,6 +90,11 @@ void TipApproacher::updateState() {
       break;
     }
     case State::finished: {
+      if (Application::state.piezoZVoltage >= 270) {
+        if (time >= 100000) {
+          currentState = State::preStep;
+        }
+      }
       break;
     }
   }
@@ -99,7 +104,6 @@ void TipApproacher::updateState() {
     float setpoint = Feedback::setpointCurrent;
     if (abs(current) >= setpoint) {
       currentState = State::retract;
-      Application::state.positionError = 0.5e-9;
     }
   }
 

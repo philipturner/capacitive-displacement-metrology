@@ -25,7 +25,7 @@ func createTrigger2() -> Trigger {
 }
 
 var historyDesc = HistoryDescriptor()
-historyDesc.shortTimeLength = 0.050
+historyDesc.shortTimeLength = 0.030
 historyDesc.longTimeLength = 5
 historyDesc.triggers = [createTrigger1(), createTrigger2()]
 
