@@ -192,7 +192,7 @@ void Application::logNormalMessage() {
       state.feedbackErrorTerm * 1e9);
   } else if (mode == Command::Mode::spectroscopy) {
     Log::writeValues(
-      currentMaximum,
+      state.filteredCurrent,
       currentSpikePrediction,
       state.piezoZVoltage * 0.320,
       state.biasVoltage,
