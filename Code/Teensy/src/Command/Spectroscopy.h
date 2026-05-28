@@ -39,8 +39,12 @@ struct Spectroscopy {
   //   noise:  -0.24 pA
   //            0.65 pA (w/o 10-trial average)
   static constexpr uint32_t voltageSlewPeriod = 120;
-  static constexpr uint32_t positionSettlePeriod = 504;
-  static constexpr uint32_t integratePeriod = 504;
+
+  // Resonance frequency of Z axis is unfortunately 2 kHz, not 20 kHz.
+  // 2016 μs does much better than 1512 μs, perhaps not colliding with the
+  // resonance or one of its harmonics.
+  static constexpr uint32_t positionSettlePeriod = 504 * 4;
+  static constexpr uint32_t integratePeriod = 504 * 3;
 
   static constexpr uint32_t feedbackTime = 10080;
   static constexpr uint32_t trialsPerResult = 10;

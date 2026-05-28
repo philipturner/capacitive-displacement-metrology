@@ -31,10 +31,6 @@ float getFeedbackErrorTerm() {
 
   float k = 1.025e10 * sqrt(Feedback::tunnelingBarrierHeight);
   float F = exp(k * 50e-12);
-  if (x > F) {
-    // Check that F is correct.
-    Application::state.positionError = 300e-12;
-  }
 
   float kΔz = x - 1;
   if (x > F) {

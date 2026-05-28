@@ -14,7 +14,7 @@ void clampPair(Spectroscopy::VZPair& pair) {
   pair.voltage = max(pair.voltage, -2.0);
 
   pair.position = min(pair.position, 1000e-12);
-  pair.position = max(pair.position, -1000e-12);
+  pair.position = max(pair.position, -5000e-12);
 }
 
 void Spectroscopy::fillAutoVZPairs() {
@@ -115,8 +115,8 @@ void Spectroscopy::updateState() {
   uint32_t currentTime = getTimeSinceTrialStart();
 
   if (currentTime >= timePerTrial) {
-    uint32_t sampleCount = integratePeriod / KilohertzLoop::period;
-    pushResult(sampleCount, pendingResult1);
+    //uint32_t sampleCount = integratePeriod / KilohertzLoop::period;
+    //pushResult(sampleCount, pendingResult1);
 
     trialID += 1;
     trialStartIterationID = KilohertzLoop::iterationID;
@@ -175,7 +175,7 @@ void Spectroscopy::update() {
 
   if (pairID >= getPairCount()) {
     Application::updateBiasVoltage(Feedback::setpointVoltage);
-    //Feedback::updatePiezoZ();
+    Feedback::updatePiezoZ();
     return;
   }
 
@@ -231,5 +231,5 @@ void Spectroscopy::update() {
   }
 
   Application::updateBiasVoltage(Feedback::setpointVoltage);
-  //Feedback::updatePiezoZ();
+  Feedback::updatePiezoZ();
 }

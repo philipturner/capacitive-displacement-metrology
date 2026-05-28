@@ -5,7 +5,7 @@
 struct Feedback {
   static constexpr float setpointVoltage = 0.050;
 
-  static constexpr float setpointCurrent = 100e-12;
+  static constexpr float setpointCurrent = 1000e-12;
 
   // Tunneling barrier height is not known precisely from the literature.
   // Supposedly, ambient contamination lowers it from 4.0-4.5 V in vacuum
