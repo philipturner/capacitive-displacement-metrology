@@ -134,7 +134,14 @@ float TipApproacher::getPiezoVoltage() {
       break;
     }
     case State::approach: {
-      float dVdt = float(1000e-9) / float(0.320e-9);
+      // Retracting at 840 V / 600 μs
+      // Δx_equilibrium reaches -5.4 nm in 12 μs
+      // acceleration reaches -0.46 m/s^2 at 1.47 kHz resonance
+      // 1000 nm/s velocity comes to a stop in 2.2 μs
+      float speed = float(50e-12) / float(64e-6 + 12e-6 + 2.2e-6);
+      speed *= 0.80; // 80% derating factor
+      
+      float dVdt = speed / float(0.320e-9);
       voltageZ += dVdt * dt;
       voltageZ = min(voltageZ, 270);
       break;

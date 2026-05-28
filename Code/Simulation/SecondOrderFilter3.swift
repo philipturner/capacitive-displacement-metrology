@@ -2,8 +2,8 @@ import Foundation
 
 // MARK: - Filters
 
-let resonanceFrequency: Double = 2000
-let Q: Double = 10
+let resonanceFrequency: Double = 1470
+let Q: Double = 18
 
 struct BiquadFilterDescriptor {
   var resonanceFrequency: Double?
@@ -128,7 +128,6 @@ func smoothstep(
 let stepTypes: [StepType] = [
   .immediate,
   .linear,
-  .firstOrderSmooth,
   .thirdOrderSmooth,
 ]
 
