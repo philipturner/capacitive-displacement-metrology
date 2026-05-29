@@ -13,18 +13,18 @@ void clampPair(Spectroscopy::VZPair& pair) {
   pair.voltage = min(pair.voltage, 2.0);
   pair.voltage = max(pair.voltage, -2.0);
 
-  pair.position = min(pair.position, 1000e-12);
+  pair.position = min(pair.position, 5000e-12);
   pair.position = max(pair.position, -5000e-12);
 }
 
 void Spectroscopy::fillAutoVZPairs() {
-  for (uint32_t i = 0; i < 1; ++i) {
+  for (uint32_t i = 0; i <= 4000; i += 20) {
     Spectroscopy::VZPair pair;
-    pair.voltage = 0.051;
-    pair.position = 0e-12;
-
+    pair.voltage = (float(i) - 2000) / 1000;
+    pair.position = 0;
     clampPair(pair);
-    autoVZPairs[i] = pair;
+
+    autoVZPairs[i / 20] = pair;
   }
 }
 
@@ -43,18 +43,13 @@ Spectroscopy::Spectroscopy(Command command) {
   }
 
   if (useCustomVZPair) {
-    //float millivolts = float(command.attributes[0]);
-    //customVZPair.voltage = millivolts * 1e-3;
-    customVZPair.voltage = 0.051;
+    float millivolts = float(command.attributes[0]);
+    customVZPair.voltage = millivolts * 1e-3;
 
     float picometers = float(command.attributes[1]);
     customVZPair.position = picometers * 1e-12;
     
     clampPair(customVZPair);
-
-    positionSettlePeriod = command.attributes[0];
-    positionSettlePeriod = max(positionSettlePeriod, uint32_t(252));
-    positionSettlePeriod -= positionSettlePeriod % KilohertzLoop::period;
   }
 
   trialStartIterationID = KilohertzLoop::iterationID;
@@ -70,7 +65,6 @@ uint32_t Spectroscopy::getTimePerTrial() {
   uint32_t output = 0;
   output += integratePeriod;
   output += 2 * (positionSettlePeriod + integratePeriod);
-  output += extraSettleTime;
   output += feedbackTime;
   return output;
 }
@@ -104,8 +98,7 @@ void Spectroscopy::pushResult(uint32_t sampleCount, Result& result) {
   }
 
   Log::writeValues(
-    ///*lane0=*/pair.voltage,
-    float(positionSettlePeriod),
+    /*lane0=*/pair.voltage,
     /*lane1=*/pair.position * 1e12,
     /*lane2=*/result.accumulators[0] * 1e12,
     /*lane3=*/result.accumulators[1] * 1e12,
@@ -124,6 +117,9 @@ void Spectroscopy::updateState() {
   uint32_t currentTime = getTimeSinceTrialStart();
 
   if (currentTime >= timePerTrial) {
+    // uint32_t sampleCount = integratePeriod / KilohertzLoop::period;
+    // pushResult(sampleCount, pendingResult1);
+
     trialID += 1;
     trialStartIterationID = KilohertzLoop::iterationID;
     restPiezoZVoltage = -270;
@@ -203,39 +199,28 @@ void Spectroscopy::update() {
       exit(0);
     }
 
-    float voltageProgress;
-    if (time < positionSettlePeriod - voltageSlewPeriod) {
-      voltageProgress = 0;
-    } else {
-      voltageProgress = 1;
-    }
-
+    float voltageProgress = float(time) / float(voltageSlewPeriod);
     float positionProgress = float(time) / float(positionSettlePeriod);
+    voltageProgress = min(voltageProgress, 1);
     positionProgress = min(positionProgress, 1);
-
-    // 'immediate' waveform type
-    #if 0
-    if (positionProgress < 0.99) {
-      positionProgress = 0;
-    } else {
-      positionProgress = 1;
-    }
-    #endif
-
     if (i == 1) {
       voltageProgress = 1 - voltageProgress;
       positionProgress = 1 - positionProgress;
     }
 
-    // comment out for 'linear' waveform type
+    // 1471 Hz resonance
+    // below 2000 μs rise time, a simple line is optimal
+    // above 2000 μs rise time, a 3rd-order smoothstep attenuates overshoot better
     positionProgress = FilterUtil::thirdOrderSmoothstep(positionProgress);
 
     float biasVoltage = getBiasVoltage(voltageProgress);
     float piezoZVoltage = getPiezoZVoltage(positionProgress);
+    float triggerSignal = (i == 0) ? float(2) : float(-2);
     
     if (time < positionSettlePeriod) {
       Application::updateBiasVoltage(biasVoltage);
       Application::updatePiezoVoltage(3, piezoZVoltage);
+      Application::state.positionError = triggerSignal;
       return;
     } else {
       time -= positionSettlePeriod;
@@ -251,12 +236,6 @@ void Spectroscopy::update() {
     } else {
       time -= integratePeriod;
     }
-  }
-
-  if (time < extraSettleTime) {
-    return;
-  } else {
-    time -= extraSettleTime;
   }
 
   Application::updateBiasVoltage(Feedback::setpointVoltage);
