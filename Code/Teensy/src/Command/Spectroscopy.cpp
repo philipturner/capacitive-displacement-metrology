@@ -10,14 +10,18 @@
 // Reduce the chance of accidentally crashing the tip because of a typing
 // or programming error.
 void clampPair(Spectroscopy::VZPair& pair) {
-  pair.voltage = min(pair.voltage, 2.0);
-  pair.voltage = max(pair.voltage, -2.0);
+  pair.voltage = min(pair.voltage, 5.0);
+  pair.voltage = max(pair.voltage, -5.0);
 
-  pair.position = min(pair.position, 5000e-12);
-  pair.position = max(pair.position, -5000e-12);
+  pair.position = min(pair.position, 1000e-12);
+  pair.position = max(pair.position, -1000e-12);
 }
 
+// +/-700 mV, 10 mV resolution, setpoint  +50 mV / 10 pA
+// +/-1.1 V,  25 mV resolution, setpoint +300 mV / 10 pA
+// Going to higher setpoints always results in unstable feedback
 void Spectroscopy::fillAutoVZPairs() {
+  /*
   for (uint32_t i = 0; i <= 4000; i += 20) {
     Spectroscopy::VZPair pair;
     pair.voltage = (float(i) - 2000) / 1000;
@@ -26,6 +30,9 @@ void Spectroscopy::fillAutoVZPairs() {
 
     autoVZPairs[i / 20] = pair;
   }
+    */
+
+    autoVZPairs[0] = { 0, 0 };
 }
 
 Spectroscopy::Spectroscopy() {
@@ -65,6 +72,7 @@ uint32_t Spectroscopy::getTimePerTrial() {
   uint32_t output = 0;
   output += integratePeriod;
   output += 2 * (positionSettlePeriod + integratePeriod);
+  output += extraDelay;
   output += feedbackTime;
   return output;
 }
@@ -89,12 +97,22 @@ void Spectroscopy::pushResult(uint32_t sampleCount, Result& result) {
   auto pair = getCurrentVZPair();
 
   for (uint32_t i = 0; i < 3; ++i) {
-    result.accumulators[i] *= 1 / float(sampleCount);
-
     if (result.sampleCount[i] != sampleCount) {
       Serial.println("Incorrect sample count.");
       exit(0);
     }
+    if (result.signBallot[i] == 0) {
+      Serial.println("No sign ballot.");
+      exit(0);
+    }
+
+    float output = result.accumulators[i];
+    output *= 1 / float(sampleCount);
+    output = exp(output);
+    if (result.signBallot[i] < 0) {
+      output = -output;
+    }
+    result.accumulators[i] = output;
   }
 
   Log::writeValues(
@@ -117,8 +135,8 @@ void Spectroscopy::updateState() {
   uint32_t currentTime = getTimeSinceTrialStart();
 
   if (currentTime >= timePerTrial) {
-    // uint32_t sampleCount = integratePeriod / KilohertzLoop::period;
-    // pushResult(sampleCount, pendingResult1);
+    uint32_t sampleCount = integratePeriod / KilohertzLoop::period;
+    pushResult(sampleCount, pendingResult1);
 
     trialID += 1;
     trialStartIterationID = KilohertzLoop::iterationID;
@@ -137,10 +155,12 @@ void Spectroscopy::updateState() {
 
 void Spectroscopy::accumulate(uint32_t index) {
   float current = Application::state.filteredCurrent;
-  pendingResult1.accumulators[index] += current;
+  pendingResult1.accumulators[index] += log(abs(current));
   pendingResult1.sampleCount[index] += 1;
-  pendingResult2.accumulators[index] += current;
+  pendingResult1.signBallot[index] += (current > 0) ? 1 : -1;
+  pendingResult2.accumulators[index] += log(abs(current));
   pendingResult2.sampleCount[index] += 1;
+  pendingResult2.signBallot[index] += (current > 0) ? 1 : -1;
 }
 
 float linearInterpolate(float start, float end, float t) {
@@ -236,6 +256,12 @@ void Spectroscopy::update() {
     } else {
       time -= integratePeriod;
     }
+  }
+
+  if (time < extraDelay) {
+    return;
+  } else {
+    time -= extraDelay;
   }
 
   Application::updateBiasVoltage(Feedback::setpointVoltage);

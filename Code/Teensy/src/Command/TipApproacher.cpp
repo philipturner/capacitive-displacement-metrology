@@ -15,19 +15,19 @@ TipApproacher::TipApproacher(bool notDefaultConstructor) {
 }
 
 bool isRetracted(float voltageZ) {
-  float targetVoltage = -130;
+  float targetVoltage = -80;
   float dV = voltageZ - targetVoltage;
   return abs(dV) < 0.05;
 }
 
 float retract(float input, float dV) {
   float output = input;
-  if (input < -130) {
+  if (input < -80) {
     output += dV;
-    output = min(output, -130);
+    output = min(output, -80);
   } else {
     output += -dV;
-    output = max(output, -130);
+    output = max(output, -80);
   }
   return output;
 }
@@ -72,7 +72,7 @@ void TipApproacher::updateState() {
       break;
     }
     case State::preStep: {
-      if (voltageZ <= 130) {
+      if (voltageZ <= 0) {
         currentState = State::stepAndWait;
       }
       break;
@@ -130,7 +130,7 @@ float TipApproacher::getPiezoVoltage() {
       break;
     }
     case State::wait: {
-      voltageZ = -130;
+      voltageZ = -80;
       break;
     }
     case State::approach: {
@@ -149,7 +149,7 @@ float TipApproacher::getPiezoVoltage() {
     case State::preStep: {
       float dVdt = float(840) / float(600e-6);
       voltageZ += -dVdt * dt;
-      voltageZ = max(voltageZ, 130);
+      voltageZ = max(voltageZ, 0);
       break;
     }
     case State::stepAndWait: {
@@ -163,7 +163,7 @@ float TipApproacher::getPiezoVoltage() {
       break;
     }
     case State::finished: {
-      voltageZ = -130;
+      voltageZ = -80;
       break;
     }
   }

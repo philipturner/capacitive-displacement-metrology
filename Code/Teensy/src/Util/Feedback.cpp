@@ -20,6 +20,8 @@ void updatePositionErrorDiagnostic() {
 }
 
 // https://www.desmos.com/calculator/jd4kbteajk
+//
+// F makes it jump backward too much on Cu2O/Cu
 float getFeedbackErrorTerm() {
   float expectedCurrent = abs(Feedback::setpointCurrent);
   if (Feedback::setpointVoltage < 0) {
@@ -30,12 +32,12 @@ float getFeedbackErrorTerm() {
   x = max(x, -0.5);
 
   float k = 1.025e10 * sqrt(Feedback::tunnelingBarrierHeight);
-  float F = exp(k * 50e-12);
+  // float F = exp(k * 50e-12);
 
   float kΔz = x - 1;
-  if (x > F) {
-    kΔz += (x - F) * (x - F);
-  }
+  // if (x > F) {
+  //   kΔz += (x - F) * (x - F);
+  // }
   return kΔz / k;
 }
 
