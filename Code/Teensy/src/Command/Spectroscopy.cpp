@@ -35,14 +35,15 @@ void clampPair(Spectroscopy::VZPair& pair) {
 // +50 mV / 10 pA: [-2000, 4000] pm
 // +1.0 V / 1 nA:  [-6000, 0] pm
 void Spectroscopy::fillAutoVZPairs() {
-  #if 0
-  for (uint32_t i = 0; i <= 4000; i += 20) {
+  #if 1
+  constexpr uint32_t dV = 10;
+  for (uint32_t i = 0; i <= 1400; i += dV) {
     Spectroscopy::VZPair pair;
-    pair.voltage = (float(i) - 2000) * 1e-3;
+    pair.voltage = (float(i) - 700) * 1e-3;
     pair.position = 0;
     clampPair(pair);
 
-    autoVZPairs[i / 20] = pair;
+    autoVZPairs[i / dV] = pair;
   }
   #else
   for (uint32_t i = 0; i <= 6000; i += 50) {

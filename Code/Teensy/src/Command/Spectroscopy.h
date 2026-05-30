@@ -45,8 +45,8 @@ struct Spectroscopy {
   static constexpr uint32_t feedbackTime = 30000;
   static constexpr uint32_t trialsPerResult = 10;
 
-  static constexpr bool autoTypeIsPosition = true;
-  static constexpr uint32_t numAutoVZPairs = 121;
+  static constexpr bool autoTypeIsPosition = false;
+  static constexpr uint32_t numAutoVZPairs = 141;
   static inline VZPair autoVZPairs[numAutoVZPairs];
   static void fillAutoVZPairs();
 
