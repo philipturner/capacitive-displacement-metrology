@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 struct Feedback {
-  static constexpr float setpointVoltage = 0.500;
+  static constexpr float setpointVoltage = 0.050;
 
   static constexpr float setpointCurrent = 10e-12;
 

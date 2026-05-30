@@ -10,29 +10,50 @@
 // Reduce the chance of accidentally crashing the tip because of a typing
 // or programming error.
 void clampPair(Spectroscopy::VZPair& pair) {
-  pair.voltage = min(pair.voltage, 5.0);
-  pair.voltage = max(pair.voltage, -5.0);
+  //pair.voltage = min(pair.voltage, 5.0);
+  //pair.voltage = max(pair.voltage, -5.0);
 
-  pair.position = min(pair.position, 1000e-12);
-  pair.position = max(pair.position, -1000e-12);
+  pair.position = min(pair.position, 10000e-12);
+  pair.position = max(pair.position, -10000e-12);
 }
 
+// HOPG I(V) spectroscopy
+//
+// 201 points
+// +/-2.0 V, 20 mV resolution, setpoint +50 mV / 10 pA
+//
+// Cu2O/Cu I(V) spectroscopy
+//
 // +/-700 mV, 10 mV resolution, setpoint  +50 mV / 10 pA
-// +/-1.1 V,  25 mV resolution, setpoint +300 mV / 10 pA
+// +/-1.1 V,  20 mV resolution, setpoint +300 mV / 10 pA
 // Going to higher setpoints always results in unstable feedback
+//
+// HOPG I(z) spectroscopy
+//
+// 50 pm resolution, 121 points
+// +50 mV / 10 pA: [-2000, 4000] pm
 void Spectroscopy::fillAutoVZPairs() {
-  /*
+  #if 0
+  for (uint32_t i = 0; i <= 6000; i += 50) {
+    Spectroscopy::VZPair pair;
+    pair.voltage = 0.050;
+    pair.position = (float(i) - 2000) * 1e-12;
+    clampPair(pair);
+
+    autoVZPairs[i / 50] = pair;
+  }
+  #else
   for (uint32_t i = 0; i <= 4000; i += 20) {
     Spectroscopy::VZPair pair;
-    pair.voltage = (float(i) - 2000) / 1000;
+    pair.voltage = (float(i) - 2000) * 1e-3;
     pair.position = 0;
     clampPair(pair);
 
     autoVZPairs[i / 20] = pair;
   }
-    */
+  #endif
 
-    autoVZPairs[0] = { 0, 0 };
+  //  autoVZPairs[0] = { 0, 0 };
 }
 
 Spectroscopy::Spectroscopy() {
@@ -72,7 +93,6 @@ uint32_t Spectroscopy::getTimePerTrial() {
   uint32_t output = 0;
   output += integratePeriod;
   output += 2 * (positionSettlePeriod + integratePeriod);
-  output += extraDelay;
   output += feedbackTime;
   return output;
 }
@@ -101,15 +121,13 @@ void Spectroscopy::pushResult(uint32_t sampleCount, Result& result) {
       Serial.println("Incorrect sample count.");
       exit(0);
     }
-    if (result.signBallot[i] == 0) {
-      Serial.println("No sign ballot.");
-      exit(0);
-    }
 
     float output = result.accumulators[i];
     output *= 1 / float(sampleCount);
     output = exp(output);
-    if (result.signBallot[i] < 0) {
+    if (result.signBallot[i] == 0) {
+      output = 0;
+    } else if (result.signBallot[i] < 0) {
       output = -output;
     }
     result.accumulators[i] = output;
@@ -135,8 +153,8 @@ void Spectroscopy::updateState() {
   uint32_t currentTime = getTimeSinceTrialStart();
 
   if (currentTime >= timePerTrial) {
-    uint32_t sampleCount = integratePeriod / KilohertzLoop::period;
-    pushResult(sampleCount, pendingResult1);
+    // uint32_t sampleCount = integratePeriod / KilohertzLoop::period;
+    // pushResult(sampleCount, pendingResult1);
 
     trialID += 1;
     trialStartIterationID = KilohertzLoop::iterationID;
@@ -187,7 +205,7 @@ float Spectroscopy::getPiezoZVoltage(float progress) {
   
   float output = linearInterpolate(start, end, progress);
   output = min(output, 270);
-  output = max(output, -130);
+  output = max(output, -80);
   return output;
 }
 
@@ -256,12 +274,6 @@ void Spectroscopy::update() {
     } else {
       time -= integratePeriod;
     }
-  }
-
-  if (time < extraDelay) {
-    return;
-  } else {
-    time -= extraDelay;
   }
 
   Application::updateBiasVoltage(Feedback::setpointVoltage);

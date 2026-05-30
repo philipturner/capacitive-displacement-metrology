@@ -128,7 +128,7 @@ float BlindStepper::getRetractVoltage() {
   float expectedVoltage = 0;
 
   if (mode == Mode::up || mode == Mode::capacitance) {
-    expectedVoltage = 0;
+    expectedVoltage = 80;
   } else if (mode == Mode::down) {
     expectedVoltage = -270;
   }
@@ -158,7 +158,7 @@ float BlindStepper::getStepWaveVoltage() {
     output = -270;
     if (phase <= halfPoint) {
       float progress = float(phase) / float(halfPoint);
-      output += progress * 270;
+      output += progress * 350;
     }
   } else if (mode == Mode::down) {
     output = -80;

@@ -69,6 +69,6 @@ void Feedback::updatePiezoZ() {
   float voltage = Application::state.piezoZVoltage;
   voltage += correctionInMeters / 0.320e-9;
   voltage = min(voltage, 270);
-  voltage = max(voltage, -130);
+  voltage = max(voltage, -80);
   Application::updatePiezoVoltage(3, voltage);
 }

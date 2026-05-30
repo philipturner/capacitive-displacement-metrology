@@ -72,7 +72,7 @@ void TipApproacher::updateState() {
       break;
     }
     case State::preStep: {
-      if (voltageZ <= 0) {
+      if (voltageZ <= preStepVoltage) {
         currentState = State::stepAndWait;
       }
       break;
@@ -90,7 +90,7 @@ void TipApproacher::updateState() {
       break;
     }
     case State::finished: {
-      if (Application::state.piezoZVoltage >= 270) {
+      if (Application::state.piezoZVoltage >= 210) {
         if (time >= 100000) {
           currentState = State::preStep;
         }
@@ -104,6 +104,7 @@ void TipApproacher::updateState() {
     float setpoint = Feedback::setpointCurrent;
     if (abs(current) >= setpoint) {
       currentState = State::retract;
+      preStepVoltage = 20;
     }
   }
 
@@ -149,7 +150,7 @@ float TipApproacher::getPiezoVoltage() {
     case State::preStep: {
       float dVdt = float(840) / float(600e-6);
       voltageZ += -dVdt * dt;
-      voltageZ = max(voltageZ, 0);
+      voltageZ = max(voltageZ, preStepVoltage);
       break;
     }
     case State::stepAndWait: {

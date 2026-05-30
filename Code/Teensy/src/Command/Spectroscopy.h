@@ -39,17 +39,13 @@ struct Spectroscopy {
   //   -2 V -> -0.53 pA
   //   noise:  -0.24 pA
   //            0.65 pA (w/o 10-trial average)
-  static constexpr uint32_t voltageSlewPeriod = 1200;
+  static constexpr uint32_t voltageSlewPeriod = 120;
   static constexpr uint32_t positionSettlePeriod = 2496;
   static constexpr uint32_t integratePeriod = 1008;
-  
-
-  // extraDelay: leave 0 by default except in very unstable cases
-  static constexpr uint32_t extraDelay = 30000;
-  static constexpr uint32_t feedbackTime = 1000000;
+  static constexpr uint32_t feedbackTime = 30000;
   static constexpr uint32_t trialsPerResult = 10;
 
-  static constexpr uint32_t numAutoVZPairs = 1;
+  static constexpr uint32_t numAutoVZPairs = 201;
   static inline VZPair autoVZPairs[numAutoVZPairs];
   static void fillAutoVZPairs();
 
