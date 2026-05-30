@@ -45,7 +45,8 @@ struct Spectroscopy {
   static constexpr uint32_t feedbackTime = 30000;
   static constexpr uint32_t trialsPerResult = 10;
 
-  static constexpr uint32_t numAutoVZPairs = 201;
+  static constexpr bool autoTypeIsPosition = true;
+  static constexpr uint32_t numAutoVZPairs = 121;
   static inline VZPair autoVZPairs[numAutoVZPairs];
   static void fillAutoVZPairs();
 
@@ -57,6 +58,7 @@ struct Spectroscopy {
 private:
   bool useCustomVZPair;
   VZPair customVZPair;
+  float autoScaleFactor = 0;
   
   // Don't forget to reset these each trial.
   uint32_t trialStartIterationID;

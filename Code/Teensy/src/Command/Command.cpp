@@ -116,7 +116,7 @@ bool checkAttributes(
   }
   if (command.mode == Command::Mode::spectroscopy) {
     if (command.alphaCode == 'a') {
-      expectedNumAttributes = 0;
+      expectedNumAttributes = 1;
     } else if (command.alphaCode == 'c') {
       expectedNumAttributes = 2;
     }

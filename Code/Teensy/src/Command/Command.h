@@ -23,7 +23,7 @@ struct Command {
 
     tipApproach = 4,
 
-    // a - auto; use list of V,Z pairs stored in program memory
+    // aXXXX - auto; use list of V,Z pairs stored in program memory, XXXX = scale factor * 1000
     // cXXXX,YYYY - custom; change bias to XXXX mV, move YYYY pm from setpoint
     spectroscopy = 5,
   };

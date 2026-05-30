@@ -13,14 +13,15 @@ void clampPair(Spectroscopy::VZPair& pair) {
   //pair.voltage = min(pair.voltage, 5.0);
   //pair.voltage = max(pair.voltage, -5.0);
 
-  pair.position = min(pair.position, 10000e-12);
-  pair.position = max(pair.position, -10000e-12);
+  //pair.position = min(pair.position, 10000e-12);
+  //pair.position = max(pair.position, -10000e-12);
 }
 
 // HOPG I(V) spectroscopy
 //
 // 201 points
 // +/-2.0 V, 20 mV resolution, setpoint +50 mV / 10 pA
+// +/-2.0 V, 20 mV resolution, setpoint +1.0 V / 1 nA
 //
 // Cu2O/Cu I(V) spectroscopy
 //
@@ -32,17 +33,9 @@ void clampPair(Spectroscopy::VZPair& pair) {
 //
 // 50 pm resolution, 121 points
 // +50 mV / 10 pA: [-2000, 4000] pm
+// +1.0 V / 1 nA:  [-6000, 0] pm
 void Spectroscopy::fillAutoVZPairs() {
   #if 0
-  for (uint32_t i = 0; i <= 6000; i += 50) {
-    Spectroscopy::VZPair pair;
-    pair.voltage = 0.050;
-    pair.position = (float(i) - 2000) * 1e-12;
-    clampPair(pair);
-
-    autoVZPairs[i / 50] = pair;
-  }
-  #else
   for (uint32_t i = 0; i <= 4000; i += 20) {
     Spectroscopy::VZPair pair;
     pair.voltage = (float(i) - 2000) * 1e-3;
@@ -50,6 +43,15 @@ void Spectroscopy::fillAutoVZPairs() {
     clampPair(pair);
 
     autoVZPairs[i / 20] = pair;
+  }
+  #else
+  for (uint32_t i = 0; i <= 6000; i += 50) {
+    Spectroscopy::VZPair pair;
+    pair.voltage = Feedback::setpointVoltage;
+    pair.position = (float(i) - 6000) * 1e-12;
+    clampPair(pair);
+
+    autoVZPairs[i / 50] = pair;
   }
   #endif
 
@@ -63,6 +65,7 @@ Spectroscopy::Spectroscopy() {
 Spectroscopy::Spectroscopy(Command command) {
   if (command.alphaCode == 'a') {
     useCustomVZPair = false;
+    autoScaleFactor = float(command.attributes[0]) / 1000;
   } else if (command.alphaCode == 'c') {
     useCustomVZPair = true;
   } else {
@@ -109,7 +112,13 @@ Spectroscopy::VZPair Spectroscopy::getCurrentVZPair() {
   if (useCustomVZPair) {
     return customVZPair;
   } else {
-    return autoVZPairs[pairID];
+    VZPair output = autoVZPairs[pairID];
+    if (autoTypeIsPosition) {
+      output.position *= autoScaleFactor;
+    } else {
+      output.voltage *= autoScaleFactor;
+    }
+    return output;
   }
 }
 
