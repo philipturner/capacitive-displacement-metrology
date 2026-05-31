@@ -7,10 +7,12 @@
 #include "Command/Spectroscopy.h"
 #include "Command/TipApproacher.h"
 #include "Diagnostics/CapacitanceTracker.h"
+#include "Util/Feedback.h"
 
 struct Application {
   static inline State state;
   static inline Command::Mode mode;
+  static inline Feedback feedback;
 
   static inline DACTester dacTester;
   static inline CapacitanceTracker capTracker;

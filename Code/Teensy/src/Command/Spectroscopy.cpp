@@ -7,16 +7,6 @@
 #include "Util/FilterUtil.h"
 #include <Arduino.h>
 
-// Reduce the chance of accidentally crashing the tip because of a typing
-// or programming error.
-void clampPair(Spectroscopy::VZPair& pair) {
-  //pair.voltage = min(pair.voltage, 5.0);
-  //pair.voltage = max(pair.voltage, -5.0);
-
-  //pair.position = min(pair.position, 10000e-12);
-  //pair.position = max(pair.position, -10000e-12);
-}
-
 // HOPG I(V) spectroscopy
 //
 // 201 points
@@ -25,7 +15,9 @@ void clampPair(Spectroscopy::VZPair& pair) {
 //
 // Cu2O/Cu I(V) spectroscopy
 //
+// 141 points
 // +/-700 mV, 10 mV resolution, setpoint  +50 mV / 10 pA
+// 111 points
 // +/-1.1 V,  20 mV resolution, setpoint +300 mV / 10 pA
 // Going to higher setpoints always results in unstable feedback
 //
@@ -37,9 +29,10 @@ void clampPair(Spectroscopy::VZPair& pair) {
 void Spectroscopy::fillAutoVZPairs() {
   #if 1
   constexpr uint32_t dV = 10;
-  for (uint32_t i = 0; i <= 1400; i += dV) {
+  constexpr uint32_t V_bipolar_range = 700;
+  for (uint32_t i = 0; i <= 2 * V_bipolar_range; i += dV) {
     Spectroscopy::VZPair pair;
-    pair.voltage = (float(i) - 700) * 1e-3;
+    pair.voltage = (float(i) - float(V_bipolar_range)) * 1e-3;
     pair.position = 0;
     clampPair(pair);
 
@@ -55,9 +48,6 @@ void Spectroscopy::fillAutoVZPairs() {
     autoVZPairs[i / 50] = pair;
   }
   #endif
-
-  //  autoVZPairs[0] = { 0, 0 };
-}
 
 Spectroscopy::Spectroscopy() {
 

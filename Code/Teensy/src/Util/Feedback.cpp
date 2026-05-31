@@ -4,6 +4,39 @@
 #include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
+Feedback::Feedback() {
+
+}
+
+Feedback::Feedback(bool notDefaultConstructor) {
+  currentState = State::normal;
+  stateStartIterationID = 0; // kilohertz loop not initialized yet
+}
+
+uint32_t Feedback::getIterationsSinceStart() {
+  uint32_t deltaIters = KilohertzLoop::iterationID;
+  deltaIters -= stateStartIterationID;
+  return deltaIters;
+}
+
+void Feedback::updateState(float rangeMin, float rangeMax) {
+  State previousState = currentState;
+
+  uint32_t deltaIters = getIterationsSinceStart();
+  uint32_t time = deltaIters * KilohertzLoop::period;
+  float voltageZ = Application::state.piezoZVoltage;
+
+  switch (currentState) {
+
+  }
+
+  if (currentState != previousState) {
+    stateStartIterationID = KilohertzLoop::iterationID;
+  }
+}
+
+// MARK: - updatePiezoZ
+
 void updatePositionErrorDiagnostic() {
   float current = Application::state.filteredCurrent;
   if (Feedback::setpointVoltage < 0) {
@@ -19,9 +52,6 @@ void updatePositionErrorDiagnostic() {
   Application::state.positionError = dz;
 }
 
-// https://www.desmos.com/calculator/jd4kbteajk
-//
-// F makes it jump backward too much on Cu2O/Cu
 float getFeedbackErrorTerm() {
   float expectedCurrent = abs(Feedback::setpointCurrent);
   if (Feedback::setpointVoltage < 0) {
@@ -32,16 +62,11 @@ float getFeedbackErrorTerm() {
   x = max(x, -0.5);
 
   float k = 1.025e10 * sqrt(Feedback::tunnelingBarrierHeight);
-  // float F = exp(k * 50e-12);
-
   float kΔz = x - 1;
-  // if (x > F) {
-  //   kΔz += (x - F) * (x - F);
-  // }
   return kΔz / k;
 }
 
-void Feedback::updatePiezoZ() {
+void Feedback::updatePiezoZForNormal() {
   updatePositionErrorDiagnostic();
   float dz = getFeedbackErrorTerm();
   Application::state.feedbackErrorTerm = dz;

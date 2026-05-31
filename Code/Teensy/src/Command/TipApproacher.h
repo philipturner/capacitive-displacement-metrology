@@ -22,7 +22,6 @@ private:
   State previousState;
   State currentState;
   uint32_t segmentStartIterationID;
-  float preStepVoltage = 80;
 
   void updateState();
   uint32_t getIterationsSinceStart();

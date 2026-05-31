@@ -1,6 +1,6 @@
 import PythonKit
 
-#if false // Mac
+#if true // Mac
 private let rowHeight: Int = 180
 private let rowSpacing: Int = 20
 private let columnWidth: Int = 350
