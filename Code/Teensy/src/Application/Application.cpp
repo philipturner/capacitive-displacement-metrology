@@ -9,7 +9,6 @@
 void Application::initialize() {
   setupSerial();
   setupSPI();
-  Application::feedback = Feedback(true);
   Spectroscopy::fillAutoVZPairs();
 }
 

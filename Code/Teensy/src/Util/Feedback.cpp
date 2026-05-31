@@ -4,39 +4,6 @@
 #include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
-Feedback::Feedback() {
-
-}
-
-Feedback::Feedback(bool notDefaultConstructor) {
-  currentState = State::normal;
-  stateStartIterationID = 0; // kilohertz loop not initialized yet
-}
-
-uint32_t Feedback::getIterationsSinceStart() {
-  uint32_t deltaIters = KilohertzLoop::iterationID;
-  deltaIters -= stateStartIterationID;
-  return deltaIters;
-}
-
-void Feedback::updateState(float rangeMin, float rangeMax) {
-  State previousState = currentState;
-
-  uint32_t deltaIters = getIterationsSinceStart();
-  uint32_t time = deltaIters * KilohertzLoop::period;
-  float voltageZ = Application::state.piezoZVoltage;
-
-  switch (currentState) {
-
-  }
-
-  if (currentState != previousState) {
-    stateStartIterationID = KilohertzLoop::iterationID;
-  }
-}
-
-// MARK: - updatePiezoZ
-
 void updatePositionErrorDiagnostic() {
   float current = Application::state.filteredCurrent;
   if (Feedback::setpointVoltage < 0) {
@@ -66,7 +33,7 @@ float getFeedbackErrorTerm() {
   return kΔz / k;
 }
 
-void Feedback::updatePiezoZForNormal() {
+void Feedback::updatePiezoZ() {
   updatePositionErrorDiagnostic();
   float dz = getFeedbackErrorTerm();
   Application::state.feedbackErrorTerm = dz;

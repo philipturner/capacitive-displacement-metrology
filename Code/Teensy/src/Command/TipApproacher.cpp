@@ -90,7 +90,7 @@ void TipApproacher::updateState() {
       break;
     }
     case State::finished: {
-      if (Application::state.piezoZVoltage >= 210) {
+      if (voltageZ >= 210) {
         if (time >= 100000) {
           currentState = State::preStep;
         }

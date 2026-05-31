@@ -34,7 +34,6 @@ void Spectroscopy::fillAutoVZPairs() {
     Spectroscopy::VZPair pair;
     pair.voltage = (float(i) - float(V_bipolar_range)) * 1e-3;
     pair.position = 0;
-    clampPair(pair);
 
     autoVZPairs[i / dV] = pair;
   }
@@ -43,11 +42,11 @@ void Spectroscopy::fillAutoVZPairs() {
     Spectroscopy::VZPair pair;
     pair.voltage = Feedback::setpointVoltage;
     pair.position = (float(i) - 6000) * 1e-12;
-    clampPair(pair);
 
     autoVZPairs[i / 50] = pair;
   }
   #endif
+}
 
 Spectroscopy::Spectroscopy() {
 
@@ -70,8 +69,6 @@ Spectroscopy::Spectroscopy(Command command) {
 
     float picometers = float(command.attributes[1]);
     customVZPair.position = picometers * 1e-12;
-    
-    clampPair(customVZPair);
   }
 
   trialStartIterationID = KilohertzLoop::iterationID;
