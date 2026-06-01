@@ -44,6 +44,7 @@ Table of Contents:
 - [April 2, 2026](#april-2-2026)
 - [April 27, 2026](#april-27-2026)
 - [May 4, 2026](#may-4-2026)
+- [Jun 1, 2026](#jun-1-2026)
 
 ## December 15, 2025
 
@@ -1278,3 +1279,7 @@ I should note that much of the commentary/results for this phase has occurred on
 Quite the opposite. In fact, we are just about to set up the synthetic chemistry lab for tripods. I initiated the first of two $4200 transfers to ChimiaDAO for my contribution to the lab costs. The tripod synthesis effort has not been publicly documented as much, mostly because there isn't much to show. We have been planning for what to synthesize, and where to synthesize it.
 
 I have sent off some emails to prepare for the second design iteration of the STM (targeting coarse XY nanopositioning). But I have not been allocating serious attention to it. Even if the lead time for sputtered LiNbO3 wafers is 4-5 weeks, the focus right now is not on that time bottleneck. Perhaps my mindset, timelines, and cost concerns will radically change after the $2 million raise in the middle of Phase II.
+
+## Jun 1, 2026
+
+[Spectroscopy (Google Sheets)](https://docs.google.com/spreadsheets/d/19oGVppj79vV9zthusr1JtBoi9Rc_ug5Zc2yT6IvzHww/edit?usp=sharing)
