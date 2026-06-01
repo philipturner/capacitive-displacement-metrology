@@ -1,6 +1,7 @@
 import PythonKit
 
 #if true // Mac
+private let windowPositionMac = true
 private let rowHeight: Int = 180
 private let rowSpacing: Int = 20
 private let columnWidth: Int = 350
@@ -8,6 +9,7 @@ private let columnSpacing: Int = 20
 private let xAxisHeight: Int = 40
 private let yAxisWidth: Int = 120
 #else // iPad
+private let windowPositionMac = false
 private let rowHeight: Int = 120
 private let rowSpacing: Int = 10
 private let columnWidth: Int = 250
@@ -54,28 +56,11 @@ extension UI {
   
   // Set the window position on the screen.
   func setWindowPosition() {
-    #if true // Mac
-    let screen = app.primaryScreen()
-    let screenSize = screen.size()
-    let screenDimensions = SIMD2<Float>(
-      Float(screenSize.width())!,
-      Float(screenSize.height())!)
-    let windowDimensions = SIMD2<Float>(
-      Float(win.width())!,
-      Float(win.height())!)
-    
-    let screenMiddle = screenDimensions / 2
-    let upperLeft = screenMiddle - windowDimensions / 2
-    win.move(
-      Int(200),
-      Int(20))
-    
-    #else // iPad
-    win.move(
-      Int(50),
-      Int(0))
-    
-    #endif
+    if windowPositionMac {
+      win.move(Int(200), Int(20))
+    } else {
+      win.move(Int(50), Int(0))
+    }
   }
   
   func createPlots() {
@@ -88,6 +73,12 @@ extension UI {
         plot.showGrid(x: true, y: true)
         plot.disableAutoRange()
         
+        func setThickness(axis: PythonObject) {
+          let pen = axis.pen()
+          pen.setWidth(Self.thicknessFactor)
+          axis.setPen(pen)
+        }
+        
         let xAxis = plot.getAxis("bottom")
         if row == UI.rowCount - 1 {
           plot.setFixedHeight(rowHeight + xAxisHeight)
@@ -96,6 +87,7 @@ extension UI {
           plot.setFixedHeight(rowHeight)
           xAxis.setStyle(showValues: false)
         }
+        setThickness(axis: xAxis)
         
         let yAxis = plot.getAxis("left")
         if col == 0 {
@@ -103,17 +95,22 @@ extension UI {
         } else {
           yAxis.setStyle(showValues: false)
         }
+        setThickness(axis: yAxis)
         
         // Create persistent curves
         let emptyArray = [Float]()
         if col == 0 {
-          let pen = pg.mkPen("#2e7ec9", width: 2)
+          let pen = pg.mkPen("#2e7ec9", width: 2 * Self.thicknessFactor)
           let curve = plot.plot(emptyArray, emptyArray, pen: pen)
           curveRow.append(curve)
         } else {
-          let minCurve = plot.plot(emptyArray, emptyArray, pen: pg.mkPen("#1fb864"))
-          let avgCurve = plot.plot(emptyArray, emptyArray, pen: pg.mkPen("orange"))
-          let maxCurve = plot.plot(emptyArray, emptyArray, pen: pg.mkPen("red"))
+          func pen(_ color: String) -> PythonObject {
+            return pg.mkPen(color, width: Self.thicknessFactor)
+          }
+          
+          let minCurve = plot.plot(emptyArray, emptyArray, pen: pen("#1fb864"))
+          let avgCurve = plot.plot(emptyArray, emptyArray, pen: pen("orange"))
+          let maxCurve = plot.plot(emptyArray, emptyArray, pen: pen("red"))
           curveRow.append(PythonObject([minCurve, avgCurve, maxCurve]))
         }
         

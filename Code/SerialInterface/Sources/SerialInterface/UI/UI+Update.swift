@@ -86,20 +86,12 @@ extension UI {
     guard data.count > 0 else {
       return
     }
-    let maximumTime = data.last!.time
-    let spikeTime: Double = 0.1
     
     for rowID in 0..<UI.rowCount {
       var minimum: Float = .greatestFiniteMagnitude
       var maximum: Float = -.greatestFiniteMagnitude
       for sampleID in data.indices {
         let sample = data[sampleID]
-        
-//        if maximumTime > spikeTime {
-//          if sample.time < spikeTime {
-//            continue
-//          }
-//        }
         
         let sampleMin = sample.minimum[rowID]
         let sampleMax = sample.maximum[rowID]

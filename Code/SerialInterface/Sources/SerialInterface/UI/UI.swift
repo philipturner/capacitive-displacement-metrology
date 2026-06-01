@@ -16,6 +16,8 @@ class UI {
   var curves: [[PythonObject]] = []
   var labels: [PythonObject] = []
   
+  static let thicknessFactor: Int = 2
+  
   init() {
     PythonLibrary.useLibrary(at: "/Users/philipturner/miniforge3/bin/python")
     np = Python.import("numpy")
@@ -39,6 +41,7 @@ class UI {
     //      let labelText = labels[i]
     //      ui.labels[i].setText(labelText)
     //    }
+    #if false
     let labelTextList: [String] = [
       "signal 0",
       "signal 1",
@@ -46,6 +49,15 @@ class UI {
       "signal 3",
       "signal 4",
     ]
+    #else
+    let labelTextList: [String] = [
+      "current (A)",
+      "capacitive spike (A)",
+      "piezo Z (nm)",
+      "sample bias (V)",
+      "multipurpose channel",
+    ]
+    #endif
     createPlots()
     linkPlots()
     labels = createPlotLabels(labelTextList)

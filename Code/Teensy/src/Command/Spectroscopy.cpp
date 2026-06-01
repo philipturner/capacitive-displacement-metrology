@@ -27,7 +27,7 @@
 // +50 mV / 10 pA: [-2000, 4000] pm
 // +1.0 V / 1 nA:  [-6000, 0] pm
 void Spectroscopy::fillAutoVZPairs() {
-  #if 1
+  #if 0
   constexpr uint32_t dV = 10;
   constexpr uint32_t V_bipolar_range = 700;
   for (uint32_t i = 0; i <= 2 * V_bipolar_range; i += dV) {
@@ -41,7 +41,7 @@ void Spectroscopy::fillAutoVZPairs() {
   for (uint32_t i = 0; i <= 6000; i += 50) {
     Spectroscopy::VZPair pair;
     pair.voltage = Feedback::setpointVoltage;
-    pair.position = (float(i) - 6000) * 1e-12;
+    pair.position = (float(i) - 2000) * 1e-12;
 
     autoVZPairs[i / 50] = pair;
   }
