@@ -99,10 +99,10 @@ bool decodeAttributes(
 
 bool validateImageBounds(float X, float Y, float S) {
   float bounds[4] = {
-    X,
-    Y,
-    X + S,
-    Y + S,
+    X - S / 2,
+    Y - S / 2,
+    X + S / 2,
+    Y + S / 2,
   };
 
   for (uint32_t i = 0; i < 4; ++i) {
@@ -123,6 +123,8 @@ bool checkAttributes(
   Command command, 
   uint32_t numAttributes
 ) {
+  // Check the number of attributes.
+
   uint32_t expectedNumAttributes = 0;
   if (command.mode == Command::Mode::dacTest) {
     expectedNumAttributes = 1;
@@ -155,12 +157,33 @@ bool checkAttributes(
       expectedNumAttributes = 6;
     }
   }
+
   if (numAttributes != expectedNumAttributes) {
     CommandTracker::throwError(
       "Unexpected number of attributes.",
       expectedNumAttributes,
       numAttributes);
     return false;
+  }
+
+  // Check the values of the attributes.
+
+  if (command.mode == Command::Mode::simpleScanning) {
+    uint32_t frequency = command.attributes[0];
+    if (frequency == 0 || frequency > 10000) {
+      CommandTracker::throwError(
+        "Invalid frequency.",
+        frequency);
+      return false;
+    }
+
+    float peakPeakAmplitude = float(command.attributes[1]) * 0.1;
+    if (peakPeakAmplitude <= 0 || peakPeakAmplitude > 270) {
+      CommandTracker::throwError(
+        "Invalid peak-peak amplitude.",
+        int32_t(peakPeakAmplitude * 10));
+      return false;
+    }
   }
 
   if (command.mode == Command::Mode::imaging) {
@@ -173,7 +196,7 @@ bool checkAttributes(
     }
 
     float R = float(command.attributes[1]) * 0.1;
-    if (R <= 0.1 || R > 270) {
+    if (R <= 0 || R > 270) {
       CommandTracker::throwError(
         "Invalid R parameter.",
         int32_t(R * 10));

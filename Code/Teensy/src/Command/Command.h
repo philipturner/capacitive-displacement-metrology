@@ -6,12 +6,12 @@ struct Command {
   enum class Mode: uint8_t {
     idle = 0,
 
-    // xXXX - X axis
-    // yXXX - Y axis
-    // zXXX - Z axis
-    // bXXX - bias
+    // xXXXX - X axis
+    // yXXXX - Y axis
+    // zXXXX - Z axis
+    // bXXXX - bias
     //
-    // 1008 Hz triangle wave, +/-XXX volts
+    // 992.1 Hz triangle wave, +/-XXXX volts
     dacTest = 1,
     
     capacitanceReporting = 2,
@@ -29,10 +29,10 @@ struct Command {
     // cXXXX,YYYY - custom; change bias to XXXX mV, move YYYY pm from setpoint
     spectroscopy = 6,
 
-    // xXXX,YYY - x axis
-    // yXXX,YYY - y axis
+    // xXXXX,YYYY - x axis
+    // yXXXX,YYYY - y axis
     //
-    // XXX Hz sine wave, +/-YYY volts
+    // ~XXXX Hz scan wave, YYY.Y nm peak to peak
     // Z feedback active while scanning
     simpleScanning = 7,
 
@@ -42,10 +42,9 @@ struct Command {
     //
     // R - resolution; number of pixels
     // S - size of image
-    // X,Y - origin; most negative coordinate of image bounds
+    // X,Y - center of image
     //
-    // X, Y, S are multiples of 0.1 nm, limit of image bounds is +/-135.0 nm or
-    // +/-1350 in the raw serial input.
+    // X, Y, S are in integer multiples of 0.1 nm
     imaging = 8,
 
     NUM_MODES = 9,
