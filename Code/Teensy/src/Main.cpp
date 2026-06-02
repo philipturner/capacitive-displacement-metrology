@@ -1,6 +1,6 @@
+#include "Application/Application.h"
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
-#include "Application/Application.h"
 #include "Time/KilohertzLoop.h"
 #include "Util/Feedback.h"
 #include "Util/FilterUtil.h"
