@@ -121,7 +121,15 @@ bool checkAttributes(
       expectedNumAttributes = 2;
     }
   }
-
+  if (command.mode == Command::Mode::imaging) {
+    if (command.alphaCode == 'i') {
+      expectedNumAttributes = 4;
+    } else if (command.alphaCode == 'v') {
+      expectedNumAttributes = 4;
+    } else if (command.alphaCode == 'd') {
+      expectedNumAttributes = 6;
+    }
+  }
   if (numAttributes != expectedNumAttributes) {
     CommandTracker::throwError(
       "Unexpected number of attributes.",
@@ -129,6 +137,11 @@ bool checkAttributes(
       numAttributes);
     return false;
   }
+
+  if (command.mode == Command::Mode::imaging) {
+    // TODO: call static utility function to validate the parameters
+  }
+
   return true;
 }
 
@@ -161,7 +174,7 @@ void CommandTracker::processSerialInput() {
     return;
   }
   uint8_t modeCode = uint8_t(buffer[0] - '0');
-  if (modeCode > 5) {
+  if (modeCode >= uint8_t(Command::Mode::NUM_MODES)) {
     throwError("Invalid mode code.");
     return;
   }
@@ -183,6 +196,11 @@ void CommandTracker::processSerialInput() {
     }
   } else if (command.mode == Command::Mode::spectroscopy) {
     if (!findAlphaCode(command.alphaCode, "ac")) {
+      throwError("Invalid character for alphabetic code.");
+      return;
+    }
+  } else if (command.mode == Command::Mode::imaging) {
+    if (!findAlphaCode(command.alphaCode, "ivd")) {
       throwError("Invalid character for alphabetic code.");
       return;
     }

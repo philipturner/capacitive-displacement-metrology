@@ -41,6 +41,7 @@ void kilohertzLoop() {
   if (resettingForModeChange) {
     resettingForModeChange = false;
 
+    // Update application
     Application::mode = nextCommand.mode;
     if (Application::mode == Command::Mode::dacTest) {
       Application::dacTester = DACTester(nextCommand);
@@ -57,7 +58,35 @@ void kilohertzLoop() {
     if (Application::mode == Command::Mode::spectroscopy) {
       Application::spectroscopy = Spectroscopy(nextCommand);
     }
+    if (Application::mode == Command::Mode::imaging) {
+      // TODO
+    }
 
+    // Forward necessary data to host program
+    if (Application::mode == Command::Mode::imaging) {
+      float X2 = 0;
+      float Y2 = 0;
+      if (nextCommand.alphaCode == 'd') {
+        X2 = float(nextCommand.attributes[4]);
+        Y2 = float(nextCommand.attributes[5]);
+      }
+
+      Log::writeValues(
+        /*lane0=*/1000,
+        /*lane1=*/float(nextCommand.alphaCode),
+        /*lane2=*/float(nextCommand.attributes[0]),
+        /*lane3=*/float(nextCommand.attributes[1]),
+        /*lane4=*/float(nextCommand.attributes[2]),
+        /*flags=*/0b01);
+      
+      Log::writeValues(
+        /*lane0=*/1000,
+        /*lane1=*/float(nextCommand.attributes[3]),
+        /*lane2=*/X2,
+        /*lane3=*/Y2,
+        /*lane4=*/0,
+        /*flags=*/0b01);
+    }
     Log::writeValues(
       /*lane0=*/float(Application::mode),
       /*lane1=*/0,
@@ -95,6 +124,10 @@ void kilohertzLoop() {
     }
     if (Application::mode == Command::Mode::tipApproach) {
       Application::tipApproacher.update();
+    }
+    if (Application::mode == Command::Mode::idleFeedback) {
+      Application::updateBiasVoltage(Feedback::setpointVoltage);
+      Feedback::updatePiezoZ();
     }
     if (Application::mode == Command::Mode::spectroscopy) {
       Application::spectroscopy.update();

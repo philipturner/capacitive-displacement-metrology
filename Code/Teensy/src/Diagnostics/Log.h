@@ -3,9 +3,8 @@
 #include <stdint.h>
 
 struct Log {
-  static constexpr uint32_t logPeriod = 48;
+  static constexpr uint32_t logPeriod = 72;
   static constexpr uint32_t logSize = 6000;
-  static constexpr uint32_t messageLength = 27;
   static inline float valuesBuffer[logSize * 5];
   static inline uint8_t flagsBuffer[logSize];
 

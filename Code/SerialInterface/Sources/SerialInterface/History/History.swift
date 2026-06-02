@@ -30,7 +30,7 @@ struct HistoryDescriptor {
 }
 
 struct History {
-  static let logPeriodMicros: Int = 48
+  static let logPeriodMicros: Int = 72
   static let historyLengthSeconds: Int = 30
   static let maxEntryCount: Int = {
     var output = History.historyLengthSeconds

@@ -23,9 +23,25 @@ struct Command {
 
     tipApproach = 4,
 
-    // aXXXX - auto; use list of V,Z pairs stored in program memory, XXXX = scale factor * 1000
+    idleFeedback = 5,
+
+    // aXXXX - auto; use list of V,Z pairs stored in program memory, X.XXX = scale factor
     // cXXXX,YYYY - custom; change bias to XXXX mV, move YYYY pm from setpoint
-    spectroscopy = 5,
+    spectroscopy = 6,
+
+    // iR,S,X,Y - single image
+    // vR,S,X,Y - repeating video at single spot
+    // dR,S,X,Y,X2,Y2 - dual; video alternating between two spots
+    //
+    // R - resolution; number of pixels
+    // S - size of image
+    // X,Y - origin; most negative coordinate of image bounds
+    //
+    // X, Y, S are multiples of 0.1 nm, limit of image bounds is +/-135.0 nm or
+    // +/-1350 in the raw serial input.
+    imaging = 7,
+
+    NUM_MODES = 8,
   };
   Mode mode = Mode::idle;
   char alphaCode = 0;
