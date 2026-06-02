@@ -183,7 +183,8 @@ void Application::logNormalMessage() {
       currentSpikePrediction,
       state.piezoZVoltage * 0.320,
       state.capacitance);
-  } else if (mode == Command::Mode::tipApproach) {
+  } else if (mode == Command::Mode::tipApproach ||
+             mode == Command::Mode::idleFeedback) {
     Log::writeValues(
       currentMaximum,
       currentSpikePrediction,
@@ -196,6 +197,14 @@ void Application::logNormalMessage() {
       currentSpikePrediction,
       state.piezoZVoltage * 0.320,
       state.biasVoltage,
+      state.positionError * 1e9);
+  } else if (mode == Command::Mode::simpleScanning ||
+             mode == Command::Mode::imaging) {
+    Log::writeValues(
+      state.filteredCurrent,
+      state.piezoXVoltage * 0.320,
+      state.piezoYVoltage * 0.320,
+      state.piezoZVoltage * 0.320,
       state.positionError * 1e9);
   }
 }

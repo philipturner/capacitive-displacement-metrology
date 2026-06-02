@@ -58,7 +58,7 @@ void kilohertzLoop() {
     if (Application::mode == Command::Mode::spectroscopy) {
       Application::spectroscopy = Spectroscopy(nextCommand);
     }
-    if (Application::mode == Command::Mode::imaging) {
+    if (Application::mode == Command::Mode::simpleScanning) {
       // TODO
     }
 
@@ -103,15 +103,18 @@ void kilohertzLoop() {
   if (resettingForModeChange) {
     // Can only write to 3 DAC channels without exceeding the loop time.
     if (Application::mode == Command::Mode::dacTest) {
-      if (Application::dacTester.channelID == 4) {
-        Application::updateBiasVoltage(0);
-      } else {
-        Application::updatePiezoVoltage(
-          Application::dacTester.channelID, 0);
+      uint32_t channelID = Application::dacTester.channelID;
+      if (channelID != 4) {
+        Application::updatePiezoVoltage(channelID, 0);
       }
-    } else {
-      Application::updateBiasVoltage(Feedback::setpointVoltage);
     }
+
+    if (Application::mode == Command::Mode::simpleScanning) {
+      Application::updatePiezoVoltage(1, 0);
+      Application::updatePiezoVoltage(2, 0);
+    }
+
+    Application::updateBiasVoltage(Feedback::setpointVoltage);
   } else {
     if (Application::mode == Command::Mode::dacTest) {
       Application::dacTester.update();
@@ -131,6 +134,13 @@ void kilohertzLoop() {
     }
     if (Application::mode == Command::Mode::spectroscopy) {
       Application::spectroscopy.update();
+    }
+    if (Application::mode == Command::Mode::simpleScanning) {
+      // TODO
+    }
+    if (Application::mode == Command::Mode::imaging) {
+      Application::updateBiasVoltage(Feedback::setpointVoltage);
+      Feedback::updatePiezoZ();
     }
   }
 

@@ -29,6 +29,13 @@ struct Command {
     // cXXXX,YYYY - custom; change bias to XXXX mV, move YYYY pm from setpoint
     spectroscopy = 6,
 
+    // xXXX,YYY - x axis
+    // yXXX,YYY - y axis
+    //
+    // XXX Hz sine wave, +/-YYY volts
+    // Z feedback active while scanning
+    simpleScanning = 7,
+
     // iR,S,X,Y - single image
     // vR,S,X,Y - repeating video at single spot
     // dR,S,X,Y,X2,Y2 - dual; video alternating between two spots
@@ -39,9 +46,9 @@ struct Command {
     //
     // X, Y, S are multiples of 0.1 nm, limit of image bounds is +/-135.0 nm or
     // +/-1350 in the raw serial input.
-    imaging = 7,
+    imaging = 8,
 
-    NUM_MODES = 8,
+    NUM_MODES = 9,
   };
   Mode mode = Mode::idle;
   char alphaCode = 0;

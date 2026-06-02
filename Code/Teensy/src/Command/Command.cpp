@@ -97,6 +97,28 @@ bool decodeAttributes(
   return true;
 }
 
+bool validateImageBounds(float X, float Y, float S) {
+  float bounds[4] = {
+    X,
+    Y,
+    X + S,
+    Y + S,
+  };
+
+  for (uint32_t i = 0; i < 4; ++i) {
+    float bound = bounds[i];
+    if (bound < -135 || bound > 135) {
+      CommandTracker::throwError(
+        "Invalid image bounds.",
+        int32_t(i),
+        int32_t(bound * 10));
+      return false;
+    }
+  }
+
+  return true;
+}
+
 bool checkAttributes(
   Command command, 
   uint32_t numAttributes
@@ -121,6 +143,9 @@ bool checkAttributes(
       expectedNumAttributes = 2;
     }
   }
+  if (command.mode == Command::Mode::simpleScanning) {
+    expectedNumAttributes = 2;
+  }
   if (command.mode == Command::Mode::imaging) {
     if (command.alphaCode == 'i') {
       expectedNumAttributes = 4;
@@ -139,7 +164,35 @@ bool checkAttributes(
   }
 
   if (command.mode == Command::Mode::imaging) {
-    // TODO: call static utility function to validate the parameters
+    uint32_t S = command.attributes[0];
+    if (S == 0 || S > 1024) {
+      CommandTracker::throwError(
+        "Invalid S parameter.",
+        S);
+      return false;
+    }
+
+    float R = float(command.attributes[1]) * 0.1;
+    if (R <= 0.1 || R > 270) {
+      CommandTracker::throwError(
+        "Invalid R parameter.",
+        int32_t(R * 10));
+      return false;
+    }
+
+    float X = float(command.attributes[2]) * 0.1;
+    float Y = float(command.attributes[3]) * 0.1;
+    if (!validateImageBounds(X, Y, S)) {
+      return false;
+    }
+
+    if (command.alphaCode == 'd') {
+      float X2 = float(command.attributes[4]) * 0.1;
+      float Y2 = float(command.attributes[5]) * 0.1;
+      if (!validateImageBounds(X2, Y2, S)) {
+        return false;
+      }
+    }
   }
 
   return true;
@@ -196,6 +249,11 @@ void CommandTracker::processSerialInput() {
     }
   } else if (command.mode == Command::Mode::spectroscopy) {
     if (!findAlphaCode(command.alphaCode, "ac")) {
+      throwError("Invalid character for alphabetic code.");
+      return;
+    }
+  } else if (command.mode == Command::Mode::simpleScanning) {
+    if (!findAlphaCode(command.alphaCode, "xy")) {
       throwError("Invalid character for alphabetic code.");
       return;
     }
