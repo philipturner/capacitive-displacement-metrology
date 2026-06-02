@@ -1,16 +1,102 @@
 #include "SimpleScanner.h"
 
+#include "Application/Application.h"
+#include "Time/KilohertzLoop.h"
+#include "Util/Feedback.h"
+#include "Util/FilterUtil.h"
+#include <Arduino.h>
+
 SimpleScanner::SimpleScanner() {
 
 }
 
-// uint32_t channelID;
-// uint32_t targetWavePeriod;
-// float bipolarAmplitude;
 SimpleScanner::SimpleScanner(Command command) {
   if (command.alphaCode == 'x') {
     channelID = 1;
   } else {
     channelID = 2;
   }
+
+  uint32_t frequency = command.attributes[0];
+  uint32_t period = uint32_t(1000 * 1000) / frequency;
+  halfWavePeriod = period / 2;
+  halfWavePeriod -= halfWavePeriod % 96;
+
+  peakPeakAmplitude = float(command.attributes[1]) * 0.1;
+
+  startIterationID = KilohertzLoop::period;
+}
+
+uint32_t SimpleScanner::getTimeSinceStart() {
+  uint32_t deltaIters = KilohertzLoop::iterationID;
+  deltaIters -= startIterationID;
+  return deltaIters * KilohertzLoop::period;
+}
+
+void SimpleScanner::update() {
+  uint32_t time = getTimeSinceStart();
+  if (time == 0) {
+    Application::updateBiasVoltage(Feedback::setpointVoltage);
+  }
+
+  // Prevent voltage spikes at the start from corrupting feedback.
+  if (time > 1000) {
+    Feedback::updatePiezoZ();
+  }
+
+  if (!usePolynomialWave) {
+    uint32_t wavePeriod = 2 * halfWavePeriod;
+    uint32_t phase = time % wavePeriod;
+    
+    float phaseNormalized = float(phase) / float(wavePeriod);
+    float position = FilterUtil::triangleWave(phaseNormalized);
+    Application::updatePiezoVoltage(channelID, position / 0.320);
+    return;
+  }
+
+  float linearPartVelocity = peakPeakAmplitude / float(halfWavePeriod);
+  float peakDefaultVelocity = 1 / float(polynomialPeakTime);
+  float peakScaleFactor = linearPartVelocity / peakDefaultVelocity;
+
+  bool needsOutskirt = (time < polynomialPeakTime);
+  uint32_t fullPeriod = 2 * halfWavePeriod + 2 * polynomialPeakTime;
+  time = time % fullPeriod;
+
+  for (uint32_t i = 0; i < 2; ++i) {
+    if (time < polynomialPeakTime) {
+      float timeProgress = float(time) / float(polynomialPeakTime);
+      float peakValue;
+      if (needsOutskirt) {
+        peakValue = FilterUtil::polynomialWaveOutskirt(timeProgress);
+      } else {
+        peakValue = FilterUtil::polynomialWaveBend(timeProgress);
+      }
+      float position = peakScaleFactor * (peakValue - 0.5);
+
+      if (i == 1) {
+        position = peakPeakAmplitude - position;
+      }
+      position -= peakPeakAmplitude / 2;
+      Application::updatePiezoVoltage(channelID, position / 0.320);
+    } else {
+      time -= polynomialPeakTime;
+    }
+
+    if (time < halfWavePeriod) {
+      float timeProgress = float(time) / float(halfWavePeriod);
+      float position = timeProgress * peakPeakAmplitude;
+
+      if (i == 1) {
+        position = peakPeakAmplitude - position;
+      }
+      position -= peakPeakAmplitude / 2;
+      Application::updatePiezoVoltage(channelID, position / 0.320);
+      return;
+    } else {
+      time -= halfWavePeriod;
+    }
+  }
+
+  Serial.println("This should never happen.");
+  exit(0);
 }
