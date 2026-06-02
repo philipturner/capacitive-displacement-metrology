@@ -61,7 +61,7 @@ void kilohertzLoop() {
       Application::spectroscopy = Spectroscopy(nextCommand);
     }
     if (Application::mode == Command::Mode::simpleScanning) {
-      // TODO
+      Application::simpleScanner = SimpleScanner(nextCommand);
     }
 
     // Forward necessary data to host program
@@ -131,7 +131,7 @@ void kilohertzLoop() {
       Application::spectroscopy.update();
     }
     if (Application::mode == Command::Mode::simpleScanning) {
-      // TODO
+      Application::simpleScanner.update();
     }
     if (Application::mode == Command::Mode::imaging) {
       Application::updateBiasVoltage(Feedback::setpointVoltage);

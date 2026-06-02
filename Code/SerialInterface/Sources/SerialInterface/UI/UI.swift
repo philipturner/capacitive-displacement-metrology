@@ -16,7 +16,7 @@ class UI {
   var curves: [[PythonObject]] = []
   var labels: [PythonObject] = []
   
-  static let thicknessFactor: Int = 2
+  static let thicknessFactor: Int = 1
   
   init() {
     PythonLibrary.useLibrary(at: "/Users/philipturner/miniforge3/bin/python")
