@@ -36,10 +36,12 @@ void loop() {
 // Allocate one loop iteration of buffer time between command changes.
 Command nextCommand;
 bool resettingForModeChange = false;
+uint32_t capacitanceUpdateCountAtModeChange = 0;
 
 void kilohertzLoop() {
   if (resettingForModeChange) {
     resettingForModeChange = false;
+    capacitanceUpdateCountAtModeChange = Application::state.capacitanceUpdateCount;
 
     // Update application
     Application::mode = nextCommand.mode;
@@ -71,29 +73,22 @@ void kilohertzLoop() {
         Y2 = float(nextCommand.attributes[5]);
       }
 
-      Log::writeValues(
-        /*lane0=*/1000,
-        /*lane1=*/float(nextCommand.alphaCode),
-        /*lane2=*/float(nextCommand.attributes[0]),
-        /*lane3=*/float(nextCommand.attributes[1]),
-        /*lane4=*/float(nextCommand.attributes[2]),
-        /*flags=*/0b01);
+      Log::writeValuesWithFlags(
+        /*flags=*/4,
+        float(nextCommand.alphaCode),
+        float(nextCommand.attributes[0]),
+        float(nextCommand.attributes[1]),
+        float(nextCommand.attributes[2]),
+        float(nextCommand.attributes[3]));
       
-      Log::writeValues(
-        /*lane0=*/1000,
-        /*lane1=*/float(nextCommand.attributes[3]),
-        /*lane2=*/X2,
-        /*lane3=*/Y2,
-        /*lane4=*/0,
-        /*flags=*/0b01);
+      Log::writeValuesWithFlags(
+        /*flags=*/4,
+        X2,
+        Y2);
     }
-    Log::writeValues(
-      /*lane0=*/float(Application::mode),
-      /*lane1=*/0,
-      /*lane2=*/0,
-      /*lane3=*/0,
-      /*lane4=*/0,
-      /*flags=*/0b01);
+    Log::writeValuesWithFlags(
+      /*flags=*/1,
+      float(Application::mode));
   } else {
     if (CommandTracker::nextCommand(nextCommand)) {
       resettingForModeChange = true;
@@ -153,6 +148,6 @@ void kilohertzLoop() {
   }
   uint32_t iterationsPerLog = Log::logPeriod / KilohertzLoop::period;
   if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
-    Application::logNormalMessage();
+    Application::logNormalMessage(capacitanceUpdateCountAtModeChange);
   }
 }

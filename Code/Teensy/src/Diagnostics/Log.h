@@ -21,12 +21,28 @@ struct Log {
     int32_t number1,
     int32_t number2,
     int32_t number3);
-  
-  static void writeValues(
+    
+  static void writeValuesWithFlags(
+    uint8_t flags,
     float lane0 = 0,
     float lane1 = 0,
     float lane2 = 0,
     float lane3 = 0,
-    float lane4 = 0,
-    uint8_t flags = 0);
+    float lane4 = 0);
+
+  static void writeValuesNormal(
+    float lane0 = 0,
+    float lane1 = 0,
+    float lane2 = 0,
+    float lane3 = 0,
+    float lane4 = 0
+  ) {
+    writeValuesWithFlags(
+      0,
+      lane0,
+      lane1,
+      lane2,
+      lane3,
+      lane4);
+  }
 };

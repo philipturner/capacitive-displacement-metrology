@@ -1,11 +1,29 @@
 import Foundation
 
-struct SerialEmulation {
+struct SerialEmulator {
   var startTime: Double
   var previousLineID: Int = 0
   
   init() {
     startTime = Date().timeIntervalSince1970
+  }
+  
+  private static func squareWave(_ phaseNormalized: Float) -> Float {
+    if phaseNormalized < 0.5 {
+      return 1
+    } else {
+      return -1
+    }
+  }
+  
+  private static func triangleWave(_ phaseNormalized: Float) -> Float {
+    var progress: Float
+    if phaseNormalized < 0.5 {
+      progress = 2 * phaseNormalized
+    } else {
+      progress = 2 * (1 - phaseNormalized)
+    }
+    return 2 * progress - 1
   }
   
   mutating func createTestLines() -> [LineParser.Line] {

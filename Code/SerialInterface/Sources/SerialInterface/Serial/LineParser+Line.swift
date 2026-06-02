@@ -35,8 +35,8 @@ extension LineParser {
         fatalError("Failed to decode. Contents of buffer: \(string)")
       }
       
-      self.id = Int(numbers[0] & 0x3FFF_FFFF)
-      self.flags = UInt8(numbers[0] >> 30)
+      self.id = Int(numbers[0] & 0x1FFF_FFFF)
+      self.flags = UInt8(numbers[0] >> 29)
       self.values = .zero
       
       for laneID in 0..<5 {

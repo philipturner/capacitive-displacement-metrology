@@ -85,8 +85,7 @@ extension History {
   private func triggerEventTrace(
     bipolarHistoryTime: Double
   ) -> TriggerEventTrace? {
-    let candidateEvents = getCandidateEvents()
-    let validEvents = candidateEvents.filter(isValid(event:))
+    let validEvents = triggerEvents.filter(isValid(event:))
     guard validEvents.count > 0 else {
       return nil
     }
@@ -120,13 +119,6 @@ extension History {
 }
 
 extension History {
-  private func getCandidateEvents() -> [TriggerEvent] {
-    var output = triggerEvents
-    if let currentSpike {
-      output.append(currentSpike)
-    }
-    return output
-  }
   
   private func isValid(event: TriggerEvent) -> Bool {
     let minimumStartPoint = sampleCursor - Self.maxEntryCount + 3

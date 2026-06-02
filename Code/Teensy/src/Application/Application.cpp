@@ -155,44 +155,59 @@ void Application::updateCapacitanceTracker(bool regenerate) {
   capTracker.integrate(filteredCurrent);
 }
 
-void Application::logNormalMessage() {
+void Application::logNormalMessage(
+  uint32_t capacitanceUpdateCountAtModeChange
+) {
+  bool capacitanceDidChange = false;
+  uint32_t updateCount = state.capacitanceUpdateCount;
+  if (updateCount > capacitanceUpdateCountAtModeChange) {
+    capacitanceDidChange = true;
+  }
+
   float currentMaximum = state.extractCurrentMaximum();
   float currentSpikePrediction = state.getPredictedCurrentSpike();
 
   if (mode == Command::Mode::idle) {
-    Log::writeValues(
+    Log::writeValuesNormal(
       state.filteredCurrent,
       currentMaximum,
       currentSpikePrediction);
   } else if (mode == Command::Mode::dacTest) {
-    Log::writeValues(
+    Log::writeValuesNormal(
       state.filteredCurrent,
       currentMaximum,
       currentSpikePrediction,
       dacTester.getActiveChannelVoltage(),
       float(dacTester.channelID));
   } else if (mode == Command::Mode::capacitanceReporting) {
-    Log::writeValues(
+    Log::writeValuesWithFlags(
+      /*flags=*/capacitanceDidChange ? 0 : 3,
       state.filteredCurrent,
       state.biasVoltage,
       state.capacitance,
       state.phaseShift);
   } else if (mode == Command::Mode::blindStepping) {
-    Log::writeValues(
+    uint8_t flags = 0;
+    if (blindStepper.mode == BlindStepper::Mode::capacitance) {
+      flags = capacitanceDidChange ? 0 : 3;
+    }
+
+    Log::writeValuesWithFlags(
+      /*flags=*/flags,
       currentMaximum,
       currentSpikePrediction,
       state.piezoZVoltage * 0.320,
       state.capacitance);
   } else if (mode == Command::Mode::tipApproach ||
              mode == Command::Mode::idleFeedback) {
-    Log::writeValues(
+    Log::writeValuesNormal(
       currentMaximum,
       currentSpikePrediction,
       state.piezoZVoltage * 0.320,
       state.positionError * 1e9,
       state.feedbackErrorTerm * 1e9);
   } else if (mode == Command::Mode::spectroscopy) {
-    Log::writeValues(
+    Log::writeValuesNormal(
       state.filteredCurrent,
       currentSpikePrediction,
       state.piezoZVoltage * 0.320,
@@ -200,7 +215,7 @@ void Application::logNormalMessage() {
       state.positionError * 1e9);
   } else if (mode == Command::Mode::simpleScanning ||
              mode == Command::Mode::imaging) {
-    Log::writeValues(
+    Log::writeValuesNormal(
       state.filteredCurrent,
       state.piezoXVoltage * 0.320,
       state.piezoYVoltage * 0.320,

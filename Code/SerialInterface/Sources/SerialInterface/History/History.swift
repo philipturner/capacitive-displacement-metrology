@@ -1,12 +1,3 @@
-import Foundation
-
-struct TimeAxis {
-  var shortLength: Double = .zero
-  var shortMajorTick: Double = .zero
-  var longLength: Double = .zero
-  var longMajorTick: Double = .zero
-}
-
 struct HistoryDescriptor {
   /// Required.
   var shortTimeLength: Double?
@@ -37,12 +28,6 @@ struct History {
     output *= 1_000_000 / History.logPeriodMicros
     return output
   }()
-  
-  var timeAxis = TimeAxis()
-  var pointsPerAverage: Int
-  var maxAverageCount: Int {
-    History.maxEntryCount / pointsPerAverage
-  }
   static let triggerEventCacheSize: Int = 100
   
   struct TimedSample {
@@ -65,64 +50,68 @@ struct History {
     var trigger: Trigger
   }
   
-  var sampleCursor: Int = .zero
-  private(set) var samplesBuffer: [TimedSample] = []
-  private(set) var latestSample: TimedSample?
+  var timeAxis: TimeAxis
+  var pointsPerAverage: Int
+  var maxAverageCount: Int {
+    History.maxEntryCount / pointsPerAverage
+  }
   
-  var averageCursor: Int = .zero
-  private var samplesForNextAverage: [TimedSample] = []
-  private(set) var averagesBuffer: [TimedAverage] = []
-  private(set) var latestAverage: TimedAverage?
+  var sampleCursor: Int = 0
+  var samplesBuffer: [TimedSample]
+  var latestSample: TimedSample?
   
-  private(set) var triggers: [Trigger]
+  var averageCursor: Int = 0
+  var samplesForNextAverage: [TimedSample] = []
+  var averagesBuffer: [TimedAverage]
+  var latestAverage: TimedAverage?
+  
+  var triggers: [Trigger]
   var triggerEvents: [TriggerEvent] = []
-  var currentSpike: TriggerEvent?
   
   init(descriptor: HistoryDescriptor) {
-    guard let shortTimeLength = descriptor.shortTimeLength,
-          let longTimeLength = descriptor.longTimeLength else {
+    guard let longTimeLength = descriptor.longTimeLength else {
       fatalError("Descriptor was incomplete.")
     }
     self.triggers = descriptor.triggers
-    
-    timeAxis.shortLength = shortTimeLength
-    timeAxis.shortMajorTick =
-    descriptor.shortTimeMajorTick ?? shortTimeLength / 5
-    
-    timeAxis.longLength = longTimeLength
-    timeAxis.longMajorTick =
-    descriptor.longTimeMajorTick ?? longTimeLength / 5
-    
+    self.timeAxis = TimeAxis(descriptor: descriptor)
+ 
     let microsecondsPerAverage = (longTimeLength / 500) * 1e6
-    pointsPerAverage = max(2, Int(microsecondsPerAverage) / Self.logPeriodMicros)
+    self.pointsPerAverage = max(
+      2, Int(microsecondsPerAverage) / Self.logPeriodMicros)
     
-    reset()
+    self.samplesBuffer = Self.emptySamplesBuffer()
+    self.averagesBuffer = Self.emptyAveragesBuffer(
+      maxCount: History.maxEntryCount / pointsPerAverage)
   }
   
-  mutating func reset() {
+  init(copying other: History) {
+    self.triggers = other.triggers
+    self.timeAxis = other.timeAxis
+    self.pointsPerAverage = other.pointsPerAverage
+    
+    self.samplesBuffer = Self.emptySamplesBuffer()
+    self.averagesBuffer = Self.emptyAveragesBuffer(
+      maxCount: History.maxEntryCount / pointsPerAverage)
+  }
+  
+  static func emptySamplesBuffer() -> [TimedSample] {
     let emptySample = TimedSample(
       time: .nan,
       values: SIMD8<Float>(repeating: .nan))
-    sampleCursor = .zero
-    samplesBuffer = Array(
+    return Array(
       repeating: emptySample,
       count: Self.maxEntryCount)
-    latestSample = nil
-    
+  }
+  
+  static func emptyAveragesBuffer(maxCount: Int) -> [TimedAverage] {
     let emptyAverage = TimedAverage(
       time: .nan,
       minimum: SIMD8<Float>(repeating: .nan),
       average: SIMD8<Float>(repeating: .nan),
       maximum: SIMD8<Float>(repeating: .nan))
-    averageCursor = .zero
-    samplesForNextAverage = []
-    averagesBuffer = Array(
+    return Array(
       repeating: emptyAverage,
-      count: self.maxAverageCount)
-    latestAverage = nil
-    
-    triggerEvents = []
-    currentSpike = nil
+      count: maxCount)
   }
   
   mutating func addLines(_ input: [LineParser.Line]) {
@@ -131,20 +120,8 @@ struct History {
     }
     
     for line in input {
-      if line.flags == 0 {
-        
-      } else if line.flags == 1 {
-        reset()
-        /*
-        if line.values[0] == 4 {
-          Application.historyCurrentSpikeOverride = true
-        } else {
-          Application.historyCurrentSpikeOverride = false
-        }
-         */
-        continue
-      } else {
-        fatalError("Flags not handled: \(line.flags)")
+      guard line.flags == 0 else {
+        fatalError("This should never happen.")
       }
       
       let logPeriodSeconds = Double(1e-6) * Double(Self.logPeriodMicros)
@@ -164,7 +141,6 @@ struct History {
           }
         }
       }
-      checkCurrentSpike(sample: sample)
       
       let ringIndex = sampleCursor % Self.maxEntryCount
       samplesBuffer[ringIndex] = sample
@@ -216,37 +192,5 @@ struct History {
     latestAverage = average
     
     samplesForNextAverage.removeAll()
-  }
-  
-  private mutating func checkCurrentSpike(sample: TimedSample) {
-    guard Application.historyCurrentSpikeOverride else {
-      return
-    }
-    guard Application.nextPauseTime == nil else {
-      return
-    }
-    guard currentSpike == nil else {
-      return
-    }
-    
-    /*
-    if abs(sample.values[0]) > 1e-9,
-       abs(sample.values[1]) < 100e-12 {
-      var trigger = Trigger()
-      trigger.type = .level(1e-9)
-      trigger.polarity = .signAgnostic
-      trigger.channel = 0
-      
-      let triggerEvent = TriggerEvent(
-        cursor: sampleCursor,
-        centerTime: sample.time,
-        trigger: trigger)
-      
-      currentSpike = triggerEvent
-      
-      let currentTime = Date().timeIntervalSince1970
-      Application.nextPauseTime = currentTime + 1
-    }
-     */
   }
 }

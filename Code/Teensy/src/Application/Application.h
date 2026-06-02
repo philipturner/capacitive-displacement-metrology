@@ -11,9 +11,9 @@
 struct Application {
   static inline State state;
   static inline Command::Mode mode;
+  static inline CapacitanceTracker capTracker;
 
   static inline DACTester dacTester;
-  static inline CapacitanceTracker capTracker;
   static inline BlindStepper blindStepper;
   static inline TipApproacher tipApproacher;
   static inline Spectroscopy spectroscopy;
@@ -32,5 +32,6 @@ struct Application {
 
   static void updateCapacitanceTracker(bool regenerate);
 
-  static void logNormalMessage();
+  static void logNormalMessage(
+    uint32_t capacitanceUpdateCountAtModeChange);
 };

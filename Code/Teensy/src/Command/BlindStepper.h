@@ -25,8 +25,9 @@ struct BlindStepper {
 
   void update();
 
-private:
   Mode mode;
+
+private:
   float capacitanceThreshold; // units: pF
   uint32_t stepsPerCheck;
 

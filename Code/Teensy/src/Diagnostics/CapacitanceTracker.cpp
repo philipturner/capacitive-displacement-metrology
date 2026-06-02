@@ -110,6 +110,8 @@ void CapacitanceTracker::update() {
       float relativeTimeLag = timeLag / float(wavePeriod);
       Application::state.phaseShift = -relativeTimeLag * 360;
     }
+    
+    Application::state.capacitanceUpdateCount += 1;
   }
 }
 

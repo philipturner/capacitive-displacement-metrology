@@ -130,13 +130,13 @@ void Spectroscopy::pushResult(uint32_t sampleCount, Result& result) {
     result.accumulators[i] = output;
   }
 
-  Log::writeValues(
-    /*lane0=*/pair.voltage,
-    /*lane1=*/pair.position * 1e12,
-    /*lane2=*/result.accumulators[0] * 1e12,
-    /*lane3=*/result.accumulators[1] * 1e12,
-    /*lane4=*/result.accumulators[2] * 1e12,
-    /*flags=*/0b10);
+  Log::writeValuesWithFlags(
+    /*flags=*/2,
+    pair.voltage,
+    pair.position * 1e12,
+    result.accumulators[0] * 1e12,
+    result.accumulators[1] * 1e12,
+    result.accumulators[2] * 1e12);
   
   result = Result();
 }

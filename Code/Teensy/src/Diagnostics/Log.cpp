@@ -41,7 +41,7 @@ void Log::transmitBufferedSamples() {
 
   for (uint32_t i = transmittedLogID; i < bufferedLogID; ++i) {
     uint8_t flags = flagsBuffer[i % logSize];
-    uint32_t firstWord = (i & 0x3FFFFFFF) | (uint32_t(flags) << 30);
+    uint32_t firstWord = (i & 0x1FFFFFFF) | (uint32_t(flags) << 29);
 
     uint32_t numbers[6];
     numbers[0] = firstWord;
@@ -105,13 +105,13 @@ void Log::throwError(
   ErrorMessage::addNewline();
 }
 
-void Log::writeValues(
+void Log::writeValuesWithFlags(
+  uint8_t flags,
   float lane0,
   float lane1,
   float lane2,
   float lane3,
-  float lane4,
-  uint8_t flags
+  float lane4
 ) {
   uint32_t slotID = Log::unsafeBufferedLogID % Log::logSize;
   uint32_t offset = 5 * slotID;

@@ -13,8 +13,6 @@ class Application: @unchecked Sendable {
   static var needsToClose: Bool = false
   nonisolated(unsafe)
   static var nextPauseTime: Double?
-  nonisolated(unsafe)
-  static var historyCurrentSpikeOverride: Bool = false
   
   let ui: UI
   let port: SerialPort
@@ -42,29 +40,13 @@ class Application: @unchecked Sendable {
     startLineExtractionThread()
   }
   
-  private static func squareWave(_ phaseNormalized: Float) -> Float {
-    if phaseNormalized < 0.5 {
-      return 1
-    } else {
-      return -1
-    }
-  }
-  
-  private static func triangleWave(_ phaseNormalized: Float) -> Float {
-    var progress: Float
-    if phaseNormalized < 0.5 {
-      progress = 2 * phaseNormalized
-    } else {
-      progress = 2 * (1 - phaseNormalized)
-    }
-    return 2 * progress - 1
-  }
-  
   private func createLines(bytes: [UInt8]) -> [LineParser.Line] {
     func reset(error: LocalizedError) {
       lineParser = LineParser()
       Application.queue.sync {
-        self.history.reset()
+        // This may cause undefined behavior when the UI for imaging is
+        // implemented.
+        self.history = History(copying: self.history)
       }
     }
     
@@ -92,36 +74,7 @@ class Application: @unchecked Sendable {
   
   func startLineExtractionThread() {
     DispatchQueue.global().async { [self] in
-      let startTime = Date().timeIntervalSince1970
-      var previousLineID: Int = .zero
-      
-      func createTestLines() -> [LineParser.Line] {
-        let currentTime = Date().timeIntervalSince1970
-        let elapsedTime = currentTime - startTime
-        let elapsedMicros = Int(elapsedTime * 1e6)
-        let elapsedLogPeriods = elapsedMicros / 49
-        
-        var lines: [LineParser.Line] = []
-        for i in previousLineID..<elapsedLogPeriods {
-          let elapsedTimeMicros = i * 49
-          let sinePeriodMicros = 1000
-          let phaseMicros = elapsedTimeMicros % sinePeriodMicros
-          
-          let phaseNormalized = Float(phaseMicros) / Float(sinePeriodMicros)
-          let dacVoltage = 10 * Self.triangleWave(phaseNormalized)
-          let current = 200 * Self.squareWave(phaseNormalized)
-          
-          var line = LineParser.Line(id: i, flags: .zero, values: .zero)
-          line.values[0] = current
-          line.values[1] = dacVoltage
-          line.values[2] = Float.random(in: -0.001..<0.001)
-          line.values[3] = Float.pi
-          lines.append(line)
-        }
-        previousLineID = elapsedLogPeriods
-        
-        return lines
-      }
+      var emulator = SerialEmulator()
       
       while !Application.needsToClose {
         usleep(10_000)
@@ -143,7 +96,7 @@ class Application: @unchecked Sendable {
         
         var lines: [LineParser.Line]
         if Self.serialEmulation {
-          lines = createTestLines()
+          lines = emulator.createTestLines()
         } else {
           do {
             let bytes = try LineParser.getValidBytes(port: port)
@@ -154,12 +107,32 @@ class Application: @unchecked Sendable {
           }
         }
         
-        let resultLines = Spectroscopy.removeResultLines(&lines)
-        Spectroscopy.displayResultLines(resultLines)
-        
+        let splitting = Flags.split(lines: lines)
         Application.queue.sync {
-          self.history.addLines(lines)
+          if splitting.newMode != nil {
+            self.history = History(copying: self.history)
+          }
+          self.history.addLines(splitting.history)
         }
+        
+        func display(lines: [LineParser.Line], label: String?) {
+          for line in lines {
+            if let label {
+              print(label, terminator: ": ")
+            }
+            for laneID in 0..<5 {
+              let value = line.values[laneID]
+              print(value, terminator: ", ")
+            }
+            print()
+          }
+        }
+        display(lines: splitting.spectroscopy, label: nil)
+        display(lines: splitting.imagingSettings, label: "imaging settings")
+        if splitting.newMode == 8 {
+          print("switched to imaging mode")
+        }
+        display(lines: splitting.imaging, label: "imaging")
       }
     }
   }

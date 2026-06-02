@@ -5,8 +5,11 @@
 struct State {
   float current = 0; // units: A
   float filteredCurrent = 0; // units: A
+
   float capacitance = 0; // units: pF
   float phaseShift = 0; // units: °
+  uint32_t capacitanceUpdateCount = 0;
+
   float positionError = 0; // units: m
   float feedbackErrorTerm = 0; // units: m
 
@@ -22,10 +25,9 @@ private:
     0, 0, 0, 0, 0,
   };
   float filteredCurrentSpike = 0;
-  
+  float currentMaximum = 0;
 
 public:
-float currentMaximum = 0;
   void updateCurrent();
 
   void addSpike(float dV, float C);
