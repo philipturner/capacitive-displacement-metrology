@@ -4,6 +4,7 @@
 #include "Command/BlindStepper.h"
 #include "Command/Command.h"
 #include "Command/DACTester.h"
+#include "Command/Imager.h"
 #include "Command/SimpleScanner.h"
 #include "Command/Spectroscopy.h"
 #include "Command/TipApproacher.h"
@@ -19,6 +20,7 @@ struct Application {
   static inline TipApproacher tipApproacher;
   static inline Spectroscopy spectroscopy;
   static inline SimpleScanner simpleScanner;
+  static inline Imager imager;
 
   static void initialize();
 

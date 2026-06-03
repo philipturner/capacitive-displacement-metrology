@@ -38,6 +38,12 @@ void Feedback::updatePiezoZ() {
   float dz = getFeedbackErrorTerm();
   Application::state.feedbackErrorTerm = dz;
 
+  // Prevent voltage spikes at the start from corrupting feedback.
+  uint32_t time = Application::state.getTimeSinceModeStart();
+  if (time < 500) {
+    return;
+  }
+
   float timeProgress = float(KilohertzLoop::period) / float(integratorTimeLag);
   float correctionInMeters = -dz * timeProgress;
 

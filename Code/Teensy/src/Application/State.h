@@ -3,6 +3,8 @@
 #include <stdint.h>
 
 struct State {
+  uint32_t modeStartIterationID = 0;
+
   float current = 0; // units: A
   float filteredCurrent = 0; // units: A
 
@@ -38,4 +40,6 @@ public:
 
   // Retrieves the current maximum for usage in logging and resets it.
   float extractCurrentMaximum();
+
+  uint32_t getTimeSinceModeStart();
 };

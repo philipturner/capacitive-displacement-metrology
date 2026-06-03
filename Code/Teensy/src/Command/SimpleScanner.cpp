@@ -1,7 +1,6 @@
 #include "SimpleScanner.h"
 
 #include "Application/Application.h"
-#include "Time/KilohertzLoop.h"
 #include "Util/Feedback.h"
 #include "Util/FilterUtil.h"
 #include <Arduino.h>
@@ -23,26 +22,14 @@ SimpleScanner::SimpleScanner(Command command) {
   halfWavePeriod -= halfWavePeriod % 96;
 
   peakPeakAmplitude = float(command.attributes[1]) * 0.1;
-
-  startIterationID = KilohertzLoop::iterationID;
-}
-
-uint32_t SimpleScanner::getTimeSinceStart() {
-  uint32_t deltaIters = KilohertzLoop::iterationID;
-  deltaIters -= startIterationID;
-  return deltaIters * KilohertzLoop::period;
 }
 
 void SimpleScanner::update() {
-  uint32_t time = getTimeSinceStart();
+  uint32_t time = Application::state.getTimeSinceModeStart();
   if (time == 0) {
     Application::updateBiasVoltage(Feedback::setpointVoltage);
   }
-
-  // Prevent voltage spikes at the start from corrupting feedback.
-  if (time > 1000) {
-    Feedback::updatePiezoZ();
-  }
+  Feedback::updatePiezoZ();
 
   if (!usePolynomialWave) {
     uint32_t wavePeriod = 2 * halfWavePeriod;

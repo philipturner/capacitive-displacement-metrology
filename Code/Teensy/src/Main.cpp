@@ -45,6 +45,7 @@ void kilohertzLoop() {
 
     // Update application
     Application::mode = nextCommand.mode;
+    Application::state.modeStartIterationID = KilohertzLoop::iterationID;
     if (Application::mode == Command::Mode::dacTest) {
       Application::dacTester = DACTester(nextCommand);
     }
@@ -62,6 +63,9 @@ void kilohertzLoop() {
     }
     if (Application::mode == Command::Mode::simpleScanning) {
       Application::simpleScanner = SimpleScanner(nextCommand);
+    }
+    if (Application::mode == Command::Mode::imaging) {
+      Application::imager = Imager(nextCommand);
     }
 
     // Forward necessary data to host program
@@ -124,7 +128,10 @@ void kilohertzLoop() {
       Application::tipApproacher.update();
     }
     if (Application::mode == Command::Mode::idleFeedback) {
-      Application::updateBiasVoltage(Feedback::setpointVoltage);
+      uint32_t time = Application::state.getTimeSinceModeStart();
+      if (time == 0) {
+        Application::updateBiasVoltage(Feedback::setpointVoltage);
+      }
       Feedback::updatePiezoZ();
     }
     if (Application::mode == Command::Mode::spectroscopy) {
@@ -134,8 +141,7 @@ void kilohertzLoop() {
       Application::simpleScanner.update();
     }
     if (Application::mode == Command::Mode::imaging) {
-      Application::updateBiasVoltage(Feedback::setpointVoltage);
-      Feedback::updatePiezoZ();
+      Application::imager.update();
     }
   }
 

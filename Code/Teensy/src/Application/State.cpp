@@ -47,3 +47,9 @@ float State::extractCurrentMaximum() {
   currentMaximum = 0;
   return output;
 }
+
+uint32_t State::getTimeSinceModeStart() {
+  uint32_t deltaIters = KilohertzLoop::iterationID;
+  deltaIters -= modeStartIterationID;
+  return deltaIters * KilohertzLoop::period;
+}

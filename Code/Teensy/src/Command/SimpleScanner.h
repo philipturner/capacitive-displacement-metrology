@@ -15,7 +15,4 @@ private:
   uint32_t channelID;
   uint32_t halfWavePeriod;
   float peakPeakAmplitude;
-  uint32_t startIterationID;
-
-  uint32_t getTimeSinceStart();
 };
