@@ -24,7 +24,7 @@ SimpleScanner::SimpleScanner(Command command) {
 
   peakPeakAmplitude = float(command.attributes[1]) * 0.1;
 
-  startIterationID = KilohertzLoop::period;
+  startIterationID = KilohertzLoop::iterationID;
 }
 
 uint32_t SimpleScanner::getTimeSinceStart() {
@@ -50,6 +50,7 @@ void SimpleScanner::update() {
     
     float phaseNormalized = float(phase) / float(wavePeriod);
     float position = FilterUtil::triangleWave(phaseNormalized);
+    position *= peakPeakAmplitude / 2;
     Application::updatePiezoVoltage(channelID, position / 0.320);
     return;
   }
@@ -78,6 +79,7 @@ void SimpleScanner::update() {
       }
       position -= peakPeakAmplitude / 2;
       Application::updatePiezoVoltage(channelID, position / 0.320);
+      return;
     } else {
       time -= polynomialPeakTime;
     }

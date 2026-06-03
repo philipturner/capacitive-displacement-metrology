@@ -119,7 +119,6 @@ extension History {
 }
 
 extension History {
-  
   private func isValid(event: TriggerEvent) -> Bool {
     let minimumStartPoint = sampleCursor - Self.maxEntryCount + 3
     if event.cursor < minimumStartPoint {
@@ -143,6 +142,7 @@ extension History {
         return event
       }
     }
+    
     return events.first!
   }
   

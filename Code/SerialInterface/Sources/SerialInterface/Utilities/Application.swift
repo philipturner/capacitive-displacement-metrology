@@ -6,7 +6,7 @@ struct ApplicationDescriptor {
 }
 
 class Application: @unchecked Sendable {
-  static let serialEmulation: Bool = true
+  static let serialEmulation: Bool = false
   static let queue = DispatchQueue(
     label: "avoiding.bugs.from.swift.concurrency")
   nonisolated(unsafe)

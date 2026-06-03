@@ -4,15 +4,21 @@ import SwiftSerial
 
 func createTrigger1() -> Trigger {
   var trigger = Trigger()
+  #if true
   trigger.type = .timeInterval(period: 0.5, offset: 0)
   trigger.polarity = .signAgnostic
   trigger.channel = 0
+  #else
+  trigger.type = .level(0)
+  trigger.polarity = .positive
+  trigger.channel = 1
+  #endif
   return trigger
 }
 
 var historyDesc = HistoryDescriptor()
-historyDesc.shortTimeLength = 0.012
-historyDesc.longTimeLength = 5
+historyDesc.shortTimeLength = 0.010
+historyDesc.longTimeLength = 3
 historyDesc.triggers = [createTrigger1()]
 
 var applicationDesc = ApplicationDescriptor()
