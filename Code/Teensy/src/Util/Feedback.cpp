@@ -36,6 +36,10 @@ float getFeedbackErrorTerm() {
 void Feedback::updatePiezoZ() {
   updatePositionErrorDiagnostic();
   float dz = getFeedbackErrorTerm();
+  if (useNotchFilter) {
+    notchFilter.update(dz);
+    dz = notchFilter.getOutput();
+  }
   Application::state.feedbackErrorTerm = dz;
 
   // Prevent voltage spikes at the start from corrupting feedback.

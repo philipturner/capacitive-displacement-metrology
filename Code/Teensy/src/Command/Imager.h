@@ -17,6 +17,8 @@ struct Imager {
   Imager();
   Imager(Command command);
 
+  static Mode getMode(char code);
+
   void update();
 
   Mode mode;

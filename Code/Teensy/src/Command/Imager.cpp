@@ -5,7 +5,7 @@
 #include "Util/FilterUtil.h"
 #include <Arduino.h>
 
-Imager::Mode getMode(char code) {
+Imager::Mode Imager::getMode(char code) {
   if (code == 'i') {
     return Imager::Mode::image;
   } else if (code == 'v') {
@@ -24,4 +24,8 @@ Imager::Imager() {
 
 Imager::Imager(Command command) {
   mode = getMode(command.alphaCode);
+}
+
+void Imager::update() {
+
 }

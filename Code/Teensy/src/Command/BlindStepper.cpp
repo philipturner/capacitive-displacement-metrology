@@ -4,7 +4,7 @@
 #include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
-BlindStepper::Mode getMode(char code) {
+BlindStepper::Mode BlindStepper::getMode(char code) {
   if (code == 'u') {
     return BlindStepper::Mode::up;
   } else if (code == 'd') {
