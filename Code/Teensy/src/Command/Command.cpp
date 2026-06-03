@@ -187,32 +187,32 @@ bool checkAttributes(
   }
 
   if (command.mode == Command::Mode::imaging) {
-    uint32_t S = command.attributes[0];
-    if (S == 0 || S > 1024) {
+    uint32_t resolution = command.attributes[0];
+    if (resolution == 0 || resolution > 1024) {
       CommandTracker::throwError(
-        "Invalid S parameter.",
-        S);
+        "Invalid resolution.",
+        resolution);
       return false;
     }
 
-    float R = float(command.attributes[1]) * 0.1;
-    if (R <= 0 || R > 270) {
+    float size = float(command.attributes[1]) * 0.1;
+    if (size <= 0 || size > 270) {
       CommandTracker::throwError(
-        "Invalid R parameter.",
-        int32_t(R * 10));
+        "Invalid size.",
+        int32_t(size * 10));
       return false;
     }
 
     float X = float(command.attributes[2]) * 0.1;
     float Y = float(command.attributes[3]) * 0.1;
-    if (!validateImageBounds(X, Y, S)) {
+    if (!validateImageBounds(X, Y, size)) {
       return false;
     }
 
     if (command.alphaCode == 'd') {
       float X2 = float(command.attributes[4]) * 0.1;
       float Y2 = float(command.attributes[5]) * 0.1;
-      if (!validateImageBounds(X2, Y2, S)) {
+      if (!validateImageBounds(X2, Y2, size)) {
         return false;
       }
     }
