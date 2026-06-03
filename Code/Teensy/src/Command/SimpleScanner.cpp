@@ -49,7 +49,7 @@ void SimpleScanner::update() {
     uint32_t phase = time % wavePeriod;
     
     float phaseNormalized = float(phase) / float(wavePeriod);
-    float position = FilterUtil::triangleWave(phaseNormalized);
+    float position = FilterUtil::sineWave(phaseNormalized);
     position *= peakPeakAmplitude / 2;
     Application::updatePiezoVoltage(channelID, position / 0.320);
     return;
