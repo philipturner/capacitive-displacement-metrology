@@ -84,6 +84,13 @@ void Imager::update() {
   getPosition(x, y, timeInImage, imageID);
   Application::updatePiezoVoltage(1, x / 0.320);
   Application::updatePiezoVoltage(2, y / 0.320);
+
+  // TODO: Separate function to figure out what iteration IDs are for writing
+  // pixels
+
+  // TODO: Conditional block to detect when the requested future iteration ID
+  // is reached.
+  // pixel: [ID in sequence, X_past, Y_past, Z_past, I_future]
 }
 
 void Imager::getPosition(
@@ -96,15 +103,64 @@ void Imager::getPosition(
   float peakDefaultVelocity = 1 / float(polynomialPeakTime);
   float peakScaleFactor = linearPartVelocity / peakDefaultVelocity;
 
-  if (timeInImage < largeMoveRiseTime) {
+  uint32_t time = timeInImage;
+  if (time < largeMoveRiseTime) {
     float peakValue = FilterUtil::polynomialWaveOutskirt(0);
     float targetPositionX = peakScaleFactor * (peakValue - 0.5);
     float targetPositionY = 0.5 * imageSize / float(resolution);
     correctNormalizedPosition(targetPositionX, targetPositionY);
 
-    float progress = float(timeInImage) / float(largeMoveRiseTime);
+    float progress = float(time) / float(largeMoveRiseTime);
     progress = FilterUtil::thirdOrderSmoothstep(progress);
+    x = previousX * (1 - progress) + targetPositionX * progress;
+    y = previousY * (1 - progress) + targetPositionY * progress;
+    return;
+  } else {
+    time -= largeMoveRiseTime;
   }
+
+  if (time < resolution * getRowTime()) {
+    uint32_t rowID = time / getRowTime();
+    time = time % getRowTime();
+
+    if (time < polynomialPeakTime) {
+      float progress = float(time) / float(polynomialPeakTime);
+      float peakValue;
+      if (rowID == 0) {
+        peakValue = FilterUtil::polynomialWaveOutskirt(progress);
+      } else {
+        peakValue = FilterUtil::polynomialWaveBend(progress);
+      }
+      x = peakScaleFactor * (peakValue - 0.5);
+      
+      float startRowID = max(0, float(rowID) - 1);
+      float endRowID = max(0, float(rowID));
+      float interpolatedRowID = startRowID * (1 - progress) + endRowID * progress;
+      y = (interpolatedRowID + 0.5) * imageSize / float(resolution);
+    } else {
+      time -= polynomialPeakTime;
+
+      float progress = float(time) / float(resolution * pixelTime);
+      x = progress * imageSize;
+      y = (float(rowID) + 0.5) * imageSize / float(resolution);
+    }
+
+    if (rowID % 2 == 1) {
+      x = imageSize - x;
+    }
+  } else {
+    time -= resolution * getRowTime();
+    time = min(time, polynomialPeakTime);
+
+    float progress = float(time) / float(polynomialPeakTime);
+    progress = 1 - progress;
+
+    float peakValue = FilterUtil::polynomialWaveOutskirt(0);
+    x = peakScaleFactor * (peakValue - 0.5);
+    y = (float(resolution) - 0.5) * imageSize / float(resolution);
+  }
+
+  correctNormalizedPosition(x, y);
 }
 
 void Imager::correctNormalizedPosition(float &x, float &y) {
