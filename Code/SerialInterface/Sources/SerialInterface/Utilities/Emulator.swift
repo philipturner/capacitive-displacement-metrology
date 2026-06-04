@@ -46,6 +46,7 @@ struct Emulator {
     case .dacTest:
       output += createHistoryLines(currentTime: currentTime)
     case .imaging:
+      output += createHistoryLines(currentTime: currentTime)
       output += createImagingLines(currentTime: currentTime)
     }
     
@@ -64,6 +65,7 @@ struct Emulator {
       newMode = .dacTest
     }
     if newMode != mode {
+      previousTime = currentTime
       modeStartTime = currentTime
       mode = newMode
       return true
@@ -128,16 +130,34 @@ extension Emulator {
       let imageID = time / timePerImage
       if Self.imagingMode == .image, imageID > 0 {
         time = timePerImage - 1
+      } else {
+        time = time % timePerImage
       }
-      time = time % timePerImage
+      var positionY = Float(time) / Float(timePerImage)
+      positionY *= Self.imageSize
+      positionY -= Self.imageSize / 2
       
-      // TODO: Continue here
+      let rowID = time / timePerRow
+      time = time % (2 * timePerRow)
+      let waveXProgress = Float(time) / Float(2 * timePerRow)
       
-      // current
-      // positionX
-      // positionY
-      // positionZ
-      // positionError
+      var positionX = cos(2 * Float.pi * waveXProgress)
+      positionX = -positionX
+      positionX *= Self.imageSize / 2
+      positionX *= 2 / Float(3).squareRoot()
+      
+      var position = SIMD2(positionX, positionY)
+      position += Self.getImageCenter(imageID: imageID)
+      
+      let z = position.x / 10 + position.y / 10
+      let current = Self.getCurrent(position: position)
+      let positionError = 50e-12 * Float.random(in: -1...1)
+      
+      output[0] = current
+      output[1] = position.x
+      output[2] = position.y
+      output[3] = z
+      output[4] = positionError
     }
     return output
   }
@@ -173,8 +193,8 @@ extension Emulator {
   static let imageResolution: Int = 64
   static let imageSize: Float = 1.5
   static let imageCenters: [SIMD2<Float>] = [
-    SIMD2<Float>(-3.0, -2.0),
-    SIMD2<Float>(2.2, 2.2),
+    SIMD2<Float>(-30, -20),
+    SIMD2<Float>(22, 22),
   ]
   
   mutating func createImagingParameterLines() -> [LineParser.Line] {
@@ -290,6 +310,18 @@ extension Emulator {
       var columnID = time
       if rowID % 2 == 1 {
         columnID = (Self.imageResolution - 1) - columnID
+      }
+      
+      if (rowID * Self.imageResolution + columnID) < 0 {
+        fatalError("""
+          This should never happen.
+          \(pixelCursorPrevious)
+          \(pixelCursorNext)
+          \(time)
+          \(imageID)
+          \(rowID)
+          \(columnID)
+          """)
       }
       
       let values = createPixel(

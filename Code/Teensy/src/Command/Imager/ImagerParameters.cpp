@@ -46,6 +46,12 @@ bool Imager::checkAttributes(Command command) {
       resolution);
     return false;
   }
+  if (resolution % 2 != 0) {
+    CommandTracker::throwError(
+      "Resolution must be even.",
+      resolution);
+    return false;
+  }
 
   float size = float(command.attributes[1]) * 0.1;
   if (size <= 0 || size > 270) {
