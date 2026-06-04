@@ -1,5 +1,7 @@
 #include "Command.h"
 
+#include "Command/Imager/Imager.h"
+#include "Command/SimpleScanner.h"
 #include "Diagnostics/ErrorMessage.h"
 #include <Arduino.h>
 
@@ -97,27 +99,6 @@ bool decodeAttributes(
   return true;
 }
 
-bool validateImageBounds(float X, float Y, float S) {
-  float bounds[4] = {
-    X - S / 2,
-    Y - S / 2,
-    X + S / 2,
-    Y + S / 2,
-  };
-
-  for (uint32_t i = 0; i < 4; ++i) {
-    float bound = bounds[i];
-    if (bound < -135 || bound > 135) {
-      CommandTracker::throwError(
-        "Invalid image bounds.",
-        int32_t(i),
-        int32_t(bound * 10));
-      return false;
-    }
-  }
-
-  return true;
-}
 
 bool checkAttributes(
   Command command, 
@@ -169,56 +150,12 @@ bool checkAttributes(
   // Check the values of the attributes.
 
   if (command.mode == Command::Mode::simpleScanning) {
-    uint32_t frequency = command.attributes[0];
-    if (frequency == 0 || frequency > 10000) {
-      CommandTracker::throwError(
-        "Invalid frequency.",
-        frequency);
-      return false;
-    }
-
-    float peakPeakAmplitude = float(command.attributes[1]) * 0.1;
-    if (peakPeakAmplitude <= 0 || peakPeakAmplitude > 270) {
-      CommandTracker::throwError(
-        "Invalid peak-peak amplitude.",
-        int32_t(peakPeakAmplitude * 10));
-      return false;
-    }
+    return SimpleScanner::checkAttributes(command);
+  } else if (command.mode == Command::Mode::imaging) {
+    return Imager::checkAttributes(command);
+  } else {
+    return true;
   }
-
-  if (command.mode == Command::Mode::imaging) {
-    uint32_t resolution = command.attributes[0];
-    if (resolution == 0 || resolution > 1024) {
-      CommandTracker::throwError(
-        "Invalid resolution.",
-        resolution);
-      return false;
-    }
-
-    float size = float(command.attributes[1]) * 0.1;
-    if (size <= 0 || size > 270) {
-      CommandTracker::throwError(
-        "Invalid size.",
-        int32_t(size * 10));
-      return false;
-    }
-
-    float X = float(command.attributes[2]) * 0.1;
-    float Y = float(command.attributes[3]) * 0.1;
-    if (!validateImageBounds(X, Y, size)) {
-      return false;
-    }
-
-    if (command.alphaCode == 'd') {
-      float X2 = float(command.attributes[4]) * 0.1;
-      float Y2 = float(command.attributes[5]) * 0.1;
-      if (!validateImageBounds(X2, Y2, size)) {
-        return false;
-      }
-    }
-  }
-
-  return true;
 }
 
 void CommandTracker::processSerialInput() {

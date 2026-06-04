@@ -25,10 +25,11 @@ struct Imager {
 
   Imager();
   Imager(Command command);
+  void update();
 
   static Mode getMode(char code);
-
-  void update();
+  static bool checkAttributes(Command command);
+  void forwardParameters();
 
   Mode mode;
 

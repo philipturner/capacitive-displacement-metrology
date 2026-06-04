@@ -71,25 +71,7 @@ void kilohertzLoop() {
 
     // Forward necessary data to host program
     if (Application::mode == Command::Mode::imaging) {
-      float X2 = 0;
-      float Y2 = 0;
-      if (nextCommand.alphaCode == 'd') {
-        X2 = float(nextCommand.attributes[4]) * 0.1;
-        Y2 = float(nextCommand.attributes[5]) * 0.1;
-      }
-
-      Log::writeValuesWithFlags(
-        /*flags=*/4,
-        float(nextCommand.alphaCode),
-        float(nextCommand.attributes[0]),
-        float(nextCommand.attributes[1]) * 0.1,
-        float(nextCommand.attributes[2]) * 0.1,
-        float(nextCommand.attributes[3]) * 0.1);
-      
-      Log::writeValuesWithFlags(
-        /*flags=*/4,
-        X2,
-        Y2);
+      Application::imager.forwardParameters();
     }
     Log::writeValuesWithFlags(
       /*flags=*/1,

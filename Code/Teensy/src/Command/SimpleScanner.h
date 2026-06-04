@@ -9,6 +9,8 @@ struct SimpleScanner {
   SimpleScanner();
   SimpleScanner(Command command);
 
+  static bool checkAttributes(Command command);
+
   void update();
 
 private:

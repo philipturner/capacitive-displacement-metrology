@@ -4,7 +4,7 @@
 #include "Command/BlindStepper.h"
 #include "Command/Command.h"
 #include "Command/DACTester.h"
-#include "Command/Imager.h"
+#include "Command/Imager/Imager.h"
 #include "Command/SimpleScanner.h"
 #include "Command/Spectroscopy.h"
 #include "Command/TipApproacher.h"
