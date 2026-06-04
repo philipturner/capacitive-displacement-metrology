@@ -29,12 +29,12 @@ private:
   float filteredCurrentSpike = 0;
   float currentMaximum = 0;
 
+  void updateCurrentSpike();
+
 public:
-  void updateCurrent();
+  void updateCurrent(bool useADC);
 
   void addSpike(float dV, float C);
-
-  void updateCurrentSpike();
 
   float getPredictedCurrentSpike() const;
 

@@ -4,15 +4,20 @@
 #include "Time/KilohertzLoop.h"
 #include "Util/FilterUtil.h"
 
-void State::updateCurrent() {
-  auto conversion = ADC::readVoltage();
-  current = -conversion.voltage / 1e9;
+void State::updateCurrent(bool useADC) {
+  if (useADC) {
+    auto conversion = ADC::readVoltage();
+    current = -conversion.voltage / 1e9;
+  } else {
+    current = 0;
+  }
 
   float alpha = FilterUtil::getLowpassAlpha(10000, KilohertzLoop::period);
   filteredCurrent *= 1 - alpha;
   filteredCurrent += alpha * current;
 
   currentMaximum = max(currentMaximum, abs(current));
+  updateCurrentSpike();
 }
 
 void State::addSpike(float dV, float C) {
