@@ -74,7 +74,7 @@ class Application: @unchecked Sendable {
   
   func startLineExtractionThread() {
     DispatchQueue.global().async { [self] in
-      var emulator = SerialEmulator()
+      var emulator = Emulator()
       
       while !Application.needsToClose {
         usleep(10_000)

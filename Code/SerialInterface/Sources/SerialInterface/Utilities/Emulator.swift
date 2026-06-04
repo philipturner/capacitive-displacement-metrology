@@ -1,13 +1,46 @@
 import Foundation
 
-struct SerialEmulator {
+struct Emulator {
+  static let imagingStartTime: Double = 5.0 // units: seconds
+  
   var startTime: Double
-  var previousLineID: Int = 0
+  var lineCursor: Int = 0
+  var imagingStartLineID: Int?
   
   init() {
     startTime = Date().timeIntervalSince1970
   }
   
+  mutating func createTestLines() -> [LineParser.Line] {
+    let currentTime = Date().timeIntervalSince1970
+    let elapsedTime = currentTime - startTime
+    
+    if elapsedTime < Self.imagingStartTime {
+      let elapsedMicros = Int(elapsedTime * 1e6)
+      let elapsedLogPeriods = elapsedMicros / 49
+      
+      let output = createNormalLines(until: elapsedLogPeriods)
+      lineCursor = elapsedLogPeriods
+      return output
+    } else {
+      if imagingStartLineID == nil {
+        imagingStartLineID = lineCursor
+      }
+      
+      // TODO: Function to generate simulated lines from STM imaging mode
+      // - parameters to set up the UI
+      // - ability to simulate i, v, and d modes
+      // - mapping time to progress in number of pixels
+      // - fake STM image of a square lattice
+      
+      return []
+    }
+  }
+}
+
+// MARK: - Normal Serial
+
+extension Emulator {
   private static func squareWave(_ phaseNormalized: Float) -> Float {
     if phaseNormalized < 0.5 {
       return 1
@@ -26,14 +59,10 @@ struct SerialEmulator {
     return 2 * progress - 1
   }
   
-  mutating func createTestLines() -> [LineParser.Line] {
-    let currentTime = Date().timeIntervalSince1970
-    let elapsedTime = currentTime - startTime
-    let elapsedMicros = Int(elapsedTime * 1e6)
-    let elapsedLogPeriods = elapsedMicros / 49
-    
+  
+  func createNormalLines(until elapsedLogPeriods: Int) -> [LineParser.Line] {
     var lines: [LineParser.Line] = []
-    for i in previousLineID..<elapsedLogPeriods {
+    for i in lineCursor..<elapsedLogPeriods {
       let elapsedTimeMicros = i * 49
       let sinePeriodMicros = 1000
       let phaseMicros = elapsedTimeMicros % sinePeriodMicros
@@ -49,8 +78,8 @@ struct SerialEmulator {
       line.values[3] = Float.pi
       lines.append(line)
     }
-    previousLineID = elapsedLogPeriods
-    
     return lines
   }
 }
+
+// MARK: - Imaging

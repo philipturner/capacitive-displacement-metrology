@@ -8,7 +8,7 @@ struct State {
   float current = 0; // units: A
   float filteredCurrent = 0; // units: A
 
-  float capacitance = 0; // units: pF
+  float capacitance = 0; // units: F
   float phaseShift = 0; // units: °
   uint32_t capacitanceUpdateCount = 0;
 

@@ -9,10 +9,19 @@ struct Imager {
     dualVideo = 2,
   };
 
+  struct Pixel {
+    uint32_t id;
+    float x; // units: nm
+    float y; // units: nm
+    float z; // units: nm
+    float current; // units: A
+  };
+
   static constexpr uint32_t largeMoveRiseTime = 5004;
   static constexpr uint32_t polynomialPeakTime = 1008;
   static constexpr uint32_t pixelTime = 96;
-  static constexpr uint32_t currentTimeLag = 0; // 72
+  static constexpr uint32_t currentTimeLagRoundedUp = 72;
+  static constexpr float currentTimeLagHighRes = 63.6;
 
   Imager();
   Imager(Command command);
@@ -41,7 +50,10 @@ private:
     float &y, 
     uint32_t timeInImage, 
     uint32_t imageID);
-  void correctNormalizedPosition(
-    float &x,
-    float &y);
+  void correctNormalizedPosition(float &x, float &y);
+
+  float previousCurrent = 0;
+  uint32_t writePixelIterationID = UINT32_MAX;
+  Pixel pendingPixel;
+  void updatePendingPixel(uint32_t timeInImage);
 };

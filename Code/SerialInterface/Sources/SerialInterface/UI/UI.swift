@@ -8,8 +8,11 @@ class UI {
   let QtWidgets: PythonObject
   
   let app: PythonObject
+  
+  // TODO: Encapsulate all the variables below into "Oscilloscope" and "Imaging"
+  // windows, separate code for each.
   let win: PythonObject
-  var isClosed = false
+  var isClosed = false // program exits when oscilloscope UI is closed
   
   static let rowCount: Int = 5
   var plots: [[PythonObject]] = []

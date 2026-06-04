@@ -1,6 +1,8 @@
 #include "Imager.h"
 
 #include "Application/Application.h"
+#include "Diagnostics/Log.h"
+#include "Time/KilohertzLoop.h"
 #include "Util/Feedback.h"
 #include "Util/FilterUtil.h"
 #include <Arduino.h>
@@ -85,12 +87,28 @@ void Imager::update() {
   Application::updatePiezoVoltage(1, x / 0.320);
   Application::updatePiezoVoltage(2, y / 0.320);
 
-  // TODO: Separate function to figure out what iteration IDs are for writing
-  // pixels
+  updatePendingPixel(timeInImage);
 
-  // TODO: Conditional block to detect when the requested future iteration ID
-  // is reached.
-  // pixel: [ID in sequence, X_past, Y_past, Z_past, I_future]
+  if (KilohertzLoop::iterationID == writePixelIterationID) {
+    float progress = currentTimeLagHighRes;
+    progress -= float(currentTimeLagRoundedUp);
+    progress += float(KilohertzLoop::period);
+    progress /= float(KilohertzLoop::period);
+
+    float start = previousCurrent;
+    float end = Application::state.filteredCurrent;
+    float current = start * (1 - progress) + end * progress;
+    pendingPixel.current = current;
+
+    Log::writeValuesWithFlags(
+      /*flags=*/5,
+      float(pendingPixel.id),
+      pendingPixel.x,
+      pendingPixel.y,
+      pendingPixel.z,
+      pendingPixel.current);
+  }
+  previousCurrent = Application::state.filteredCurrent;
 }
 
 void Imager::getPosition(
@@ -169,4 +187,44 @@ void Imager::correctNormalizedPosition(float &x, float &y) {
 
   x += imageCenterX;
   y += imageCenterY;
+}
+
+void Imager::updatePendingPixel(uint32_t timeInImage) {
+  uint32_t time = timeInImage;
+  if (time < largeMoveRiseTime) {
+    return;
+  } else {
+    time -= largeMoveRiseTime;
+  }
+
+  if (time >= resolution * getRowTime()) {
+    return;
+  }
+
+  uint32_t rowID = time / getRowTime();
+  time = time % getRowTime();
+
+  if (time < polynomialPeakTime) {
+    return;
+  } else {
+    time -= polynomialPeakTime;
+  }
+
+  uint32_t columnID = time / pixelTime;
+  time = time % pixelTime;
+  if (time != pixelTime / 2) {
+    return;
+  }
+
+  if (rowID % 2 == 1) {
+    columnID = (resolution - 1) - columnID;
+  }
+
+  writePixelIterationID = KilohertzLoop::iterationID;
+  writePixelIterationID += currentTimeLagRoundedUp / KilohertzLoop::period;
+
+  pendingPixel.id = rowID * resolution + columnID;
+  pendingPixel.x = Application::state.piezoXVoltage * 0.320;
+  pendingPixel.y = Application::state.piezoYVoltage * 0.320;
+  pendingPixel.z = Application::state.piezoZVoltage * 0.320;
 }
