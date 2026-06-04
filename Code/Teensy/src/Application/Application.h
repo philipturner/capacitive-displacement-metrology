@@ -36,6 +36,5 @@ struct Application {
 
   static void updateCapacitanceTracker(bool regenerate);
 
-  static void logNormalMessage(
-    uint32_t capacitanceUpdateCountAtModeChange);
+  static void logNormalMessage();
 };

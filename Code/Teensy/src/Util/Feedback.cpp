@@ -60,6 +60,7 @@ void Feedback::updatePiezoZ() {
   Application::state.feedbackErrorTerm = dz;
 
   // Prevent voltage spikes at the start from corrupting feedback.
+  // TODO: Remove the need for this.
   uint32_t time = Application::state.getTimeSinceModeStart();
   if (time < 500) {
     return;

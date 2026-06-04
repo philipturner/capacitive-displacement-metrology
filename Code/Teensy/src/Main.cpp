@@ -34,19 +34,16 @@ void loop() {
   }
 }
 
-// Allocate one loop iteration of buffer time between command changes.
 Command nextCommand;
-bool resettingForModeChange = false;
-uint32_t capacitanceUpdateCountAtModeChange = 0;
+uint32_t modeChangeStart = 0;
+uint32_t modeChangeEnd = 0;
 
 void kilohertzLoop() {
-  if (resettingForModeChange) {
-    resettingForModeChange = false;
-    capacitanceUpdateCountAtModeChange = Application::state.capacitanceUpdateCount;
-
+  if (KilohertzLoop::iterationID == modeChangeEnd) {
     // Update application
     Application::mode = nextCommand.mode;
     Application::state.modeStartIterationID = KilohertzLoop::iterationID;
+    Application::state.capacitanceUpdateCount = 0;
     if (Application::mode == Command::Mode::dacTest) {
       Application::dacTester = DACTester(nextCommand);
     }
@@ -76,14 +73,21 @@ void kilohertzLoop() {
     Log::writeValuesWithFlags(
       /*flags=*/1,
       float(Application::mode));
-  } else {
+  } else if (KilohertzLoop::iterationID > modeChangeEnd) {
     if (CommandTracker::nextCommand(nextCommand)) {
-      resettingForModeChange = true;
+      modeChangeStart = KilohertzLoop::iterationID;
+      modeChangeEnd = modeChangeStart;
+
+      if (Application::mode >= Command::Mode::tipApproach &&
+          nextCommand.mode >= Command::Mode::idleFeedback) {
+        modeChangeEnd += Imager::largeMoveRiseTime / KilohertzLoop::period;
+      } else {
+        modeChangeEnd += 1;
+      }
     }
   }
 
-  if (resettingForModeChange) {
-    // Can only write to 3 DAC channels without exceeding the loop time.
+  if (KilohertzLoop::iterationID < modeChangeEnd) {
     if (Application::mode == Command::Mode::dacTest) {
       uint32_t channelID = Application::dacTester.channelID;
       if (channelID != 4) {
@@ -137,6 +141,6 @@ void kilohertzLoop() {
   }
   uint32_t iterationsPerLog = Log::logPeriod / KilohertzLoop::period;
   if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
-    Application::logNormalMessage(capacitanceUpdateCountAtModeChange);
+    Application::logNormalMessage();
   }
 }

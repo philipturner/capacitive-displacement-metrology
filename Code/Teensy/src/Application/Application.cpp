@@ -155,12 +155,9 @@ void Application::updateCapacitanceTracker(bool regenerate) {
   capTracker.integrate(filteredCurrent);
 }
 
-void Application::logNormalMessage(
-  uint32_t capacitanceUpdateCountAtModeChange
-) {
+void Application::logNormalMessage() {
   bool capacitanceDidChange = false;
-  uint32_t updateCount = state.capacitanceUpdateCount;
-  if (updateCount > capacitanceUpdateCountAtModeChange) {
+  if (state.capacitanceUpdateCount > 0) {
     capacitanceDidChange = true;
   }
 
@@ -180,16 +177,26 @@ void Application::logNormalMessage(
       dacTester.getActiveChannelVoltage(),
       float(dacTester.channelID));
   } else if (mode == Command::Mode::capacitanceReporting) {
+    uint8_t flags = 3;
+    if (capacitanceDidChange) {
+      flags = 0;
+    }
+
     Log::writeValuesWithFlags(
-      /*flags=*/capacitanceDidChange ? 0 : 3,
+      /*flags=*/flags,
       state.filteredCurrent,
       state.biasVoltage,
       state.capacitance,
       state.phaseShift);
   } else if (mode == Command::Mode::blindStepping) {
-    uint8_t flags = 0;
+    uint8_t flags;
     if (blindStepper.mode == BlindStepper::Mode::capacitance) {
-      flags = capacitanceDidChange ? 0 : 3;
+      flags = 3;
+      if (capacitanceDidChange) {
+        flags = 0;
+      }
+    } else {
+      flags = 0;
     }
 
     Log::writeValuesWithFlags(
