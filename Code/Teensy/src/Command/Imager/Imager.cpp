@@ -42,9 +42,6 @@ uint32_t Imager::getImageTime() const {
 
 void Imager::update() {
   uint32_t time = Application::state.getTimeSinceModeStart();
-  if (time == 0) {
-    Application::updateBiasVoltage(Feedback::setpointVoltage);
-  }
   Feedback::updatePiezoZ();
 
   uint32_t imageTime = getImageTime();

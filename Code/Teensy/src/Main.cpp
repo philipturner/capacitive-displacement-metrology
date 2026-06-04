@@ -40,7 +40,6 @@ uint32_t modeChangeEnd = 0;
 bool modeChangeNeedsFeedback = false;
 bool modeChangeNeedsFixedZ = false;
 float previousXYVoltage[2] = { 0, 0 };
-float targetXYVoltage[2] = { 0, 0 };
 
 void kilohertzLoop() {
   if (KilohertzLoop::iterationID == modeChangeEnd) {
@@ -86,8 +85,6 @@ void kilohertzLoop() {
       modeChangeNeedsFixedZ = false;
       previousXYVoltage[0] = Application::state.piezoXVoltage;
       previousXYVoltage[1] = Application::state.piezoYVoltage;
-      targetXYVoltage[0] = 0;
-      targetXYVoltage[1] = 0;
 
       if (nextCommand.mode >= Command::Mode::idleFeedback) {
         modeChangeNeedsFeedback = true;
@@ -100,10 +97,22 @@ void kilohertzLoop() {
   bool useADC = true;
   if (KilohertzLoop::iterationID < modeChangeEnd) {
     if (modeChangeNeedsFeedback) {
-      if (KilohertzLoop::iterationID == modeChangeStart) {
+      uint32_t feedbackStart = modeChangeStart + 500 / KilohertzLoop::period;
+      if (KilohertzLoop::iterationID < feedbackStart) {
         Application::updateBiasVoltage(Feedback::setpointVoltage);
       } else {
+        float deltaIters = KilohertzLoop::iterationID - feedbackStart;
+        float deltaItersMax = (modeChangeEnd - feedbackStart) - 1;
+        
+        float progress = float(deltaIters) / float(deltaItersMax);
+        progress = FilterUtil::thirdOrderSmoothstep(progress);
+        progress = 1 - progress;
 
+        float piezoXVoltage = previousXYVoltage[0] * progress;
+        float piezoYVoltage = previousXYVoltage[1] * progress;
+        Application::updatePiezoVoltage(1, piezoXVoltage);
+        Application::updatePiezoVoltage(2, piezoYVoltage);
+        Feedback::updatePiezoZ();
       }
     } else {
       Application::updateBiasVoltage(0);
@@ -112,24 +121,9 @@ void kilohertzLoop() {
       if (!modeChangeNeedsFixedZ) {
         Application::updatePiezoVoltage(3, 0);
       }
-      
+
       useADC = false;
     }
-
-    if (Application::mode == Command::Mode::dacTest) {
-      uint32_t channelID = Application::dacTester.channelID;
-      if (channelID != 4) {
-        Application::updatePiezoVoltage(channelID, 0);
-      }
-    }
-
-    if (Application::mode == Command::Mode::simpleScanning) {
-      Application::updatePiezoVoltage(1, 0);
-      Application::updatePiezoVoltage(2, 0);
-    }
-
-    
-
   } else {
     if (Application::mode == Command::Mode::dacTest) {
       Application::dacTester.update();
@@ -144,12 +138,6 @@ void kilohertzLoop() {
       Application::tipApproacher.update();
     }
     if (Application::mode == Command::Mode::idleFeedback) {
-      uint32_t time = Application::state.getTimeSinceModeStart();
-
-      // TODO: Remove the need for this.
-      if (time == 0) {
-        Application::updateBiasVoltage(Feedback::setpointVoltage);
-      }
       Feedback::updatePiezoZ();
     }
     if (Application::mode == Command::Mode::spectroscopy) {

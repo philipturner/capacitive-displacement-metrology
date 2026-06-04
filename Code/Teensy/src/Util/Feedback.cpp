@@ -58,14 +58,7 @@ void Feedback::updatePiezoZ() {
     dz = notchFilter.getOutput();
   }
   Application::state.feedbackErrorTerm = dz;
-
-  // Prevent voltage spikes at the start from corrupting feedback.
-  // TODO: Remove the need for this.
-  uint32_t time = Application::state.getTimeSinceModeStart();
-  if (time < 500) {
-    return;
-  }
-
+  
   float timeProgress = float(KilohertzLoop::period) / float(integratorTimeLag);
   float correctionInMeters = -dz * timeProgress;
 
