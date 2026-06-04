@@ -49,14 +49,13 @@ extension HistoryWindow {
     win.ci.layout.setColumnSpacing(1, columnSpacing)
   }
   
-  
   func createPlots() {
-    for row in 0..<Self.rowCount {
+    for rowID in 0..<Self.rowCount {
       var plotRow: [PythonObject] = []
       var curveRow: [PythonObject] = []
 
-      for col in 0..<2 {
-        let plot = win.addPlot(row: row, col: col)
+      for columnID in 0..<2 {
+        let plot = win.addPlot(row: rowID, col: columnID)
         plot.showGrid(x: true, y: true)
         plot.disableAutoRange()
         
@@ -67,7 +66,7 @@ extension HistoryWindow {
         }
         
         let xAxis = plot.getAxis("bottom")
-        if row == Self.rowCount - 1 {
+        if rowID == Self.rowCount - 1 {
           plot.setFixedHeight(rowHeight + xAxisHeight)
           xAxis.setHeight(xAxisHeight)
         } else {
@@ -77,7 +76,7 @@ extension HistoryWindow {
         setThickness(axis: xAxis)
         
         let yAxis = plot.getAxis("left")
-        if col == 0 {
+        if columnID == 0 {
           yAxis.setWidth(yAxisWidth)
         } else {
           yAxis.setStyle(showValues: false)
@@ -86,7 +85,7 @@ extension HistoryWindow {
         
         // Create persistent curves
         let emptyArray = [Float]()
-        if col == 0 {
+        if columnID == 0 {
           let pen = pg.mkPen("#2e7ec9", width: 2 * Self.thicknessFactor)
           let curve = plot.plot(emptyArray, emptyArray, pen: pen)
           curveRow.append(curve)

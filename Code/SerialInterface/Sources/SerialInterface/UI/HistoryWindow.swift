@@ -16,6 +16,9 @@ class HistoryWindow {
     setWindowSize()
     UI.connectCloseShortcut(win: win)
     
+    createPlots()
+    linkPlots()
+    
     let labelTextList: [String] = [
       "signal 0",
       "signal 1",
@@ -23,8 +26,6 @@ class HistoryWindow {
       "signal 3",
       "signal 4",
     ]
-    createPlots()
-    linkPlots()
     labels = createPlotLabels(labelTextList)
   }
 }

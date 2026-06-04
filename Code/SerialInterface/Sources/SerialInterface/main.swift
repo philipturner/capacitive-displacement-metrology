@@ -24,6 +24,7 @@ let application = createApplication()
 
 application.ui.historyWindow.win.hide()
 
+let start = Date().timeIntervalSince1970
 application.run {
   let output = Application.queue.sync {
     application.history.getOutput()
