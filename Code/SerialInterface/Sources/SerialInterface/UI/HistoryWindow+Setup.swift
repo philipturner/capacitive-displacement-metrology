@@ -18,7 +18,7 @@ private let xAxisHeight: Int = 40
 private let yAxisWidth: Int = 120
 #endif
 
-extension UI {
+extension HistoryWindow {
   func connectShortcut() {
     let shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+W"), win)
     
@@ -38,15 +38,15 @@ extension UI {
     x += columnSpacing + 40
     
     var y: Int = .zero
-    y += UI.rowCount * rowHeight
-    y += (UI.rowCount - 1) * rowSpacing
+    y += Self.rowCount * rowHeight
+    y += (Self.rowCount - 1) * rowSpacing
     y += xAxisHeight + 10
     
     win.resize(x, y)
     win.ci.layout.setColumnMaximumWidth(0, columnWidth + yAxisWidth)
     win.ci.layout.setColumnMaximumWidth(1, columnWidth)
     
-    for rowID in 0..<UI.rowCount {
+    for rowID in 0..<Self.rowCount {
       win.ci.layout.setRowSpacing(rowID, rowSpacing)
     }
     win.ci.layout.setColumnSpacing(0, columnSpacing)
@@ -63,7 +63,7 @@ extension UI {
   }
   
   func createPlots() {
-    for row in 0..<UI.rowCount {
+    for row in 0..<Self.rowCount {
       var plotRow: [PythonObject] = []
       var curveRow: [PythonObject] = []
 
@@ -79,7 +79,7 @@ extension UI {
         }
         
         let xAxis = plot.getAxis("bottom")
-        if row == UI.rowCount - 1 {
+        if row == Self.rowCount - 1 {
           plot.setFixedHeight(rowHeight + xAxisHeight)
           xAxis.setHeight(xAxisHeight)
         } else {
@@ -124,10 +124,10 @@ extension UI {
   func linkPlots() {
     // If multiple graphs share a dimension, only set the bounds of one graph
     // and have PyQtGraph make the rest follow it.
-    for row in 0..<UI.rowCount {
+    for row in 0..<Self.rowCount {
       plots[row][1].setYLink(plots[row][0])
     }
-    for row in 1..<UI.rowCount {
+    for row in 1..<Self.rowCount {
       plots[row][0].setXLink(plots[0][0])
       plots[row][1].setXLink(plots[0][1])
     }

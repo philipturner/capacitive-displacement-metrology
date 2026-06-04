@@ -11,15 +11,13 @@ extension History {
     var trigger: Trigger
   }
   
-  func output(
-    shortInterval: Double,
-    longInterval: Double
-  ) -> Output {
+  func getOutput() -> Output {
     var output = Output()
-    output.shortTimeData = sampleHistory(time: shortInterval)
-    output.longTimeData = averageHistory(time: longInterval)
+    output.shortTimeData = sampleHistory(time: TimeAxis.shortLength)
+    output.longTimeData = averageHistory(time: TimeAxis.longLength)
     
-    let trace = triggerEventTrace(bipolarHistoryTime: shortInterval / 2)
+    let bipolarHistoryTime = TimeAxis.shortLength / 2
+    let trace = triggerEventTrace(bipolarHistoryTime: bipolarHistoryTime)
     output.trace = trace
     return output
   }
@@ -66,9 +64,9 @@ extension History {
     
     var output: [TimedAverage] = []
     let endIndex = max(0, averageCursor - 1)
-    let startIndex = max(0, averageCursor - self.maxAverageCount)
+    let startIndex = max(0, averageCursor - Self.maxAverageCount)
     for i in (startIndex...endIndex).reversed() {
-      let ringIndex = i % self.maxAverageCount
+      let ringIndex = i % Self.maxAverageCount
       let average = averagesBuffer[ringIndex]
       
       if average.time >= earliestTime {

@@ -3,8 +3,8 @@ import PythonKit
 import SwiftSerial
 
 struct ApplicationDescriptor {
-  var historyDescriptor: HistoryDescriptor?
   var pythonLibraryPath: String?
+  var triggers: [Trigger] = []
   var useEmulator: Bool = false
 }
 
@@ -24,8 +24,7 @@ class Application: @unchecked Sendable {
   var history: History
   
   init(descriptor: ApplicationDescriptor) {
-    guard let historyDescriptor = descriptor.historyDescriptor,
-          let pythonLibraryPath = descriptor.pythonLibraryPath else {
+    guard let pythonLibraryPath = descriptor.pythonLibraryPath else {
       fatalError("Descriptor was incomplete.")
     }
     
@@ -39,7 +38,7 @@ class Application: @unchecked Sendable {
       self.port = SerialPort(path: "/dev/cu.usbmodem182280901")
     }
     self.lineParser = LineParser()
-    self.history = History(descriptor: historyDescriptor)
+    self.history = History(triggers: descriptor.triggers)
     
     try! port.open(
       receiveRate: .baud115200,
