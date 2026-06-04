@@ -19,7 +19,7 @@ SimpleScanner::SimpleScanner(Command command) {
   uint32_t frequency = command.attributes[0];
   uint32_t period = uint32_t(1000 * 1000) / frequency;
   halfWavePeriod = period / 2;
-  halfWavePeriod -= halfWavePeriod % 96;
+  halfWavePeriod -= halfWavePeriod % Imager::pixelTime;
 
   peakPeakAmplitude = float(command.attributes[1]) * 0.1;
 }
@@ -51,6 +51,13 @@ void SimpleScanner::update() {
   }
   Feedback::updatePiezoZ();
 
+  float position = getPosition(time);
+  Application::updatePiezoVoltage(channelID, position / 0.320);
+}
+
+float SimpleScanner::getPosition(uint32_t inputTime) const {
+  uint32_t time = inputTime;
+
   if (!usePolynomialWave) {
     uint32_t wavePeriod = 2 * halfWavePeriod;
     uint32_t phase = time % wavePeriod;
@@ -58,8 +65,7 @@ void SimpleScanner::update() {
     float phaseNormalized = float(phase) / float(wavePeriod);
     float position = FilterUtil::sineWave(phaseNormalized);
     position *= peakPeakAmplitude / 2;
-    Application::updatePiezoVoltage(channelID, position / 0.320);
-    return;
+    return position;
   }
 
   float linearPartVelocity = peakPeakAmplitude / float(halfWavePeriod);
@@ -85,8 +91,7 @@ void SimpleScanner::update() {
         position = peakPeakAmplitude - position;
       }
       position -= peakPeakAmplitude / 2;
-      Application::updatePiezoVoltage(channelID, position / 0.320);
-      return;
+      return position;
     } else {
       time -= polynomialPeakTime;
     }
@@ -99,8 +104,7 @@ void SimpleScanner::update() {
         position = peakPeakAmplitude - position;
       }
       position -= peakPeakAmplitude / 2;
-      Application::updatePiezoVoltage(channelID, position / 0.320);
-      return;
+      return position;
     } else {
       time -= halfWavePeriod;
     }
