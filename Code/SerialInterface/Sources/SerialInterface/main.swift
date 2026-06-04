@@ -20,8 +20,10 @@ applicationDesc.historyDescriptor = historyDesc
 let application = Application(descriptor: applicationDesc)
 Watchdog.initialize(trackedThreads: 2)
 
-let start = Date().timeIntervalSince1970
+// TODO: Encapsulate this in 'application.run { }'
+let startTime = Date().timeIntervalSince1970
 var nextLoopTime = Date().timeIntervalSince1970
+var didHide = false
 while !Application.needsToClose {
   let currentTime = Date().timeIntervalSince1970
   if currentTime > nextLoopTime {
@@ -40,6 +42,7 @@ while !Application.needsToClose {
     }
   }
   
+  #if false
   let timeAxis = Application.queue.sync {
     // Solution to Swift bug that is extremely hard to reproduce?
     // The code has not crashed unexpectedly since I implemented this change.
@@ -106,6 +109,7 @@ while !Application.needsToClose {
     application.ui.updateShortPlots(
       data: output.shortTimeData)
   }
+  #endif
   
   application.ui.app.processEvents()
 }
