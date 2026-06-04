@@ -1,12 +1,6 @@
 import PythonKit
 
 class UI {
-  let np: PythonObject
-  let pg: PythonObject
-  let QtCore: PythonObject
-  let QtGui: PythonObject
-  let QtWidgets: PythonObject
-  
   let app: PythonObject
   
   // TODO: Encapsulate all the variables below into "Oscilloscope" and "Imaging"
@@ -21,13 +15,6 @@ class UI {
   static let thicknessFactor: Int = 1
   
   init() {
-    PythonLibrary.useLibrary(at: "/Users/philipturner/miniforge3/bin/python")
-    np = Python.import("numpy")
-    pg = Python.import("pyqtgraph")
-    QtCore = Python.import("PyQt5.QtCore")
-    QtGui = Python.import("PyQt5.QtGui")
-    QtWidgets = Python.import("PyQt5.QtWidgets")
-    
     pg.setConfigOptions(useOpenGL: true)
     pg.setConfigOptions(antialias: true)
     app = QtWidgets.QApplication([String]())

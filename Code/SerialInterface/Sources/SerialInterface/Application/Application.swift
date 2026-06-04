@@ -1,12 +1,14 @@
 import Foundation
+import PythonKit
 import SwiftSerial
 
 struct ApplicationDescriptor {
   var historyDescriptor: HistoryDescriptor?
+  var pythonLibraryPath: String?
+  var useEmulator: Bool = false
 }
 
 class Application: @unchecked Sendable {
-  static let serialEmulation: Bool = true
   static let queue = DispatchQueue(
     label: "avoiding.bugs.from.swift.concurrency")
   nonisolated(unsafe)
@@ -14,18 +16,24 @@ class Application: @unchecked Sendable {
   nonisolated(unsafe)
   static var nextPauseTime: Double?
   
+  var useEmulator: Bool
+  
   let ui: UI
   let port: SerialPort
   var lineParser: LineParser
   var history: History
   
   init(descriptor: ApplicationDescriptor) {
-    guard let historyDescriptor = descriptor.historyDescriptor else {
+    guard let historyDescriptor = descriptor.historyDescriptor,
+          let pythonLibraryPath = descriptor.pythonLibraryPath else {
       fatalError("Descriptor was incomplete.")
     }
     
+    PythonLibrary.useLibrary(at: pythonLibraryPath)
+    self.useEmulator = descriptor.useEmulator
+    
     self.ui = UI()
-    if Self.serialEmulation {
+    if useEmulator {
       self.port = SerialPort(path: "/dev/cu.debug-console")
     } else {
       self.port = SerialPort(path: "/dev/cu.usbmodem182280901")
@@ -36,7 +44,37 @@ class Application: @unchecked Sendable {
     try! port.open(
       receiveRate: .baud115200,
       transmitRate: .baud115200)
+  }
+  
+  func run(_ loop: () -> Void) {
     CommandTransmitter.startPollingThread()
+    
+    Watchdog.initialize(trackedThreads: 2)
+    
     startLineExtractionThread()
+    
+    var nextLoopTime = Date().timeIntervalSince1970
+    while !Application.needsToClose {
+      let currentTime = Date().timeIntervalSince1970
+      if currentTime > nextLoopTime {
+        while currentTime > nextLoopTime {
+          nextLoopTime += 16.666e-3
+        }
+      } else {
+        usleep(1_000)
+        continue
+      }
+      Watchdog.notify(threadID: 0, code: 0)
+      
+      if let pauseTime = Application.nextPauseTime {
+        if pauseTime < currentTime {
+          continue
+        }
+      }
+      
+      loop()
+      
+      ui.app.processEvents()
+    }
   }
 }

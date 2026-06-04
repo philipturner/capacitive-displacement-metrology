@@ -10,38 +10,21 @@ func createTrigger1() -> Trigger {
   return trigger
 }
 
-var historyDesc = HistoryDescriptor()
-historyDesc.shortTimeLength = 0.010
-historyDesc.longTimeLength = 3
-historyDesc.triggers = [createTrigger1()]
+func createApplication() -> Application {
+  var historyDesc = HistoryDescriptor()
+  historyDesc.shortTimeLength = 0.010
+  historyDesc.longTimeLength = 3
+  historyDesc.triggers = [createTrigger1()]
 
-var applicationDesc = ApplicationDescriptor()
-applicationDesc.historyDescriptor = historyDesc
-let application = Application(descriptor: applicationDesc)
-Watchdog.initialize(trackedThreads: 2)
+  var applicationDesc = ApplicationDescriptor()
+  applicationDesc.historyDescriptor = historyDesc
+  applicationDesc.pythonLibraryPath = "/Users/philipturner/miniforge3/bin/python"
+  applicationDesc.useEmulator = true
+  return Application(descriptor: applicationDesc)
+}
+let application = createApplication()
 
-// TODO: Encapsulate this in 'application.run { }'
-let startTime = Date().timeIntervalSince1970
-var nextLoopTime = Date().timeIntervalSince1970
-var didHide = false
-while !Application.needsToClose {
-  let currentTime = Date().timeIntervalSince1970
-  if currentTime > nextLoopTime {
-    while currentTime > nextLoopTime {
-      nextLoopTime += 16.666e-3
-    }
-  } else {
-    usleep(1_000)
-    continue
-  }
-  Watchdog.notify(threadID: 0, code: 0)
-  
-  if let pauseTime = Application.nextPauseTime {
-    if pauseTime < currentTime {
-      continue
-    }
-  }
-  
+application.run {
   #if false
   let timeAxis = Application.queue.sync {
     // Solution to Swift bug that is extremely hard to reproduce?
@@ -55,7 +38,7 @@ while !Application.needsToClose {
   }
   guard output.shortTimeData.count > 0,
         output.longTimeData.count > 0 else {
-    continue
+    return
   }
   
   func updateShortTimeForHistory() {
@@ -110,6 +93,4 @@ while !Application.needsToClose {
       data: output.shortTimeData)
   }
   #endif
-  
-  application.ui.app.processEvents()
 }

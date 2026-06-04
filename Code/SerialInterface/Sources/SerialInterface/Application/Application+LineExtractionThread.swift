@@ -29,7 +29,7 @@ extension Application {
     }
     
     var lines: [LineParser.Line]
-    if Self.serialEmulation {
+    if useEmulator {
       lines = emulator.update()
     } else {
       do {
