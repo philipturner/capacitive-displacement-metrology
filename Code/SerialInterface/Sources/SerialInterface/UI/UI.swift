@@ -34,7 +34,6 @@ class UI {
     win = pg.GraphicsLayoutWidget(show: true)
     
     connectShortcut()
-    connectWindowCloseEvent()
     setupLayout()
     setWindowPosition()
     

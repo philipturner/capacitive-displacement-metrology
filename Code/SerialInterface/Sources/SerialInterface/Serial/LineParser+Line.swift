@@ -2,16 +2,16 @@ import func Foundation.atan2
 
 extension LineParser {
   struct Line {
-    var id: Int
     var flags: UInt8
+    var id: Int
     var values: SIMD8<Float>
     
     static let messageLength: Int = 27
     static let messageStartCode: UInt8 = Character(">").asciiValue!
     
     init() {
-      self.id = .zero
       self.flags = .zero
+      self.id = .zero
       self.values = .zero
     }
     

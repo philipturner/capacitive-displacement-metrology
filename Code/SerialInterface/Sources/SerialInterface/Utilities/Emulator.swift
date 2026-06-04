@@ -1,28 +1,21 @@
 import Foundation
 
 struct Emulator {
-  enum Mode {
-    case normal
-    case imaging
+  enum Mode: UInt8 {
+    case dacTest = 1
+    case imaging = 5
   }
   
   var startTime: Double
   var previousTime: Double
   var modeStartTime: Double
   var idCursor: Int = 0
-  var mode: Mode = .normal
+  var mode: Mode = .dacTest
   
   init() {
     startTime = Date().timeIntervalSince1970
     previousTime = startTime
     modeStartTime = startTime
-  }
-  
-  mutating func setMode(_ newMode: Mode, currentTime: Double) {
-    if newMode != mode {
-      modeStartTime = currentTime
-      mode = newMode
-    }
   }
   
   static func elapsedMicros(
@@ -35,32 +28,28 @@ struct Emulator {
   
   mutating func update() -> [LineParser.Line] {
     let currentTime = Date().timeIntervalSince1970
-    let elapsedTime = currentTime - startTime
     defer {
       previousTime = currentTime
     }
     
-    if elapsedTime < 5.0 {
-      setMode(.normal, currentTime: currentTime)
-    } else if elapsedTime < 15.0 {
-      setMode(.imaging, currentTime: currentTime)
-    } else {
-      setMode(.normal, currentTime: currentTime)
+    let modeDidUpdate = updateMode(currentTime: currentTime)
+    
+    var output: [LineParser.Line] = []
+    if modeDidUpdate {
+      if mode == .imaging {
+        output += createImagingParameterLines()
+      }
+      output.append(createModeChangeLine())
     }
     
     switch mode {
-    case .normal:
-      return createNormalLines(currentTime: currentTime)
+    case .dacTest:
+      output += createHistoryLines(currentTime: currentTime)
     case .imaging:
-      var output: [LineParser.Line] = []
-      
-      let deltaTime = currentTime - modeStartTime
-      if deltaTime == 0 {
-        
-      }
-      
       fatalError("Not implemented.")
     }
+    
+    return output
     
     /*
     if elapsedTime < Self.imagingStartTime {
@@ -95,7 +84,39 @@ struct Emulator {
     }
      */
   }
+  
+  mutating func updateMode(currentTime: Double) -> Bool {
+    let elapsedTime = currentTime - startTime
+    
+    var newMode: Mode
+    if elapsedTime < 5.0 {
+      newMode = .dacTest
+    } else if elapsedTime < 15.0 {
+      newMode = .imaging
+    } else {
+      newMode = .dacTest
+    }
+    if newMode != mode {
+      modeStartTime = currentTime
+      mode = newMode
+      return true
+    } else {
+      return false
+    }
+  }
+  
+  mutating func createModeChangeLine() -> LineParser.Line {
+    var line = LineParser.Line()
+    line.flags = 1
+    line.id = idCursor
+    idCursor += 1
+    
+    line.values[0] = Float(mode.rawValue)
+    return line
+  }
 }
+
+// MARK: - Normal Lines
 
 extension Emulator {
   private static func squareWave(_ phaseNormalized: Float) -> Float {
@@ -116,13 +137,13 @@ extension Emulator {
     return 2 * progress - 1
   }
   
-  mutating func createNormalLines(currentTime: Double) -> [LineParser.Line] {
+  mutating func createHistoryLines(currentTime: Double) -> [LineParser.Line] {
     let lineCursorPrevious = Self
       .elapsedMicros(modeStartTime, previousTime) / History.logPeriodMicros
     let lineCursorNext = Self
       .elapsedMicros(modeStartTime, currentTime) / History.logPeriodMicros
     
-    var lines: [LineParser.Line] = []
+    var output: [LineParser.Line] = []
     for relativeLineID in lineCursorPrevious..<lineCursorNext {
       let elapsedTimeMicros = relativeLineID * History.logPeriodMicros
       let sinePeriodMicros = 1000
@@ -140,8 +161,58 @@ extension Emulator {
       line.values[1] = dacVoltage
       line.values[2] = Float.random(in: -0.001..<0.001)
       line.values[3] = Float.pi
-      lines.append(line)
+      output.append(line)
     }
-    return lines
+    return output
+  }
+}
+
+// MARK: - Imaging Lines
+
+extension Emulator {
+  static let imagingMode: Imaging.Mode = .image
+  
+  static let pixelPeriodMicros: Int = 144
+  
+  static let imageResolution: Int = 64
+  static let imageSize: Float = 1.5
+  static let imageCenters: [SIMD2<Float>] = [
+    SIMD2<Float>(-3.0, -2.0),
+    SIMD2<Float>(2.0, 2.0),
+  ]
+  
+  mutating func createImagingParameterLines() -> [LineParser.Line] {
+    var output: [LineParser.Line] = []
+    for i in 0..<2 {
+      var line = LineParser.Line()
+      line.flags = 4
+      line.id = idCursor
+      idCursor += 1
+      
+      if i == 0 {
+        line.values[0] = Float(Self.imagingMode.rawValue)
+        line.values[1] = Float(Self.imageResolution)
+        line.values[2] = Self.imageSize
+        line.values[3] = Self.imageCenters[0].x
+        line.values[4] = Self.imageCenters[0].y
+      } else {
+        if Self.imagingMode == .dualVideo {
+          line.values[0] = Self.imageCenters[1].x
+          line.values[1] = Self.imageCenters[1].y
+        } else {
+          line.values[0] = -100
+          line.values[1] = -100
+        }
+      }
+      output.append(line)
+    }
+    return output
+  }
+  
+  mutating func createImagingLines(currentTime: Double) -> [LineParser.Line] {
+    let pixelCursorPrevious = Self
+      .elapsedMicros(modeStartTime, previousTime) / History.logPeriodMicros
+    let pixelCursorNext = Self
+      .elapsedMicros(modeStartTime, currentTime) / History.logPeriodMicros
   }
 }

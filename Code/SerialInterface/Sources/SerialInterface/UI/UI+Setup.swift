@@ -21,14 +21,13 @@ private let yAxisWidth: Int = 120
 extension UI {
   func connectShortcut() {
     let shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+W"), win)
-    shortcut.activated.connect(win.close)
-  }
-  
-  func connectWindowCloseEvent() {
-    win.closeEvent = PythonFunction { args in
+    
+    let closeEvent = PythonFunction { args in
       Application.needsToClose = true
       return Python.None
     }.pythonObject
+    
+    shortcut.activated.connect(closeEvent)
   }
   
   // Size the window and layout.
