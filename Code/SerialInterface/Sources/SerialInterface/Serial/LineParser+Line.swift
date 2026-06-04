@@ -9,10 +9,10 @@ extension LineParser {
     static let messageLength: Int = 27
     static let messageStartCode: UInt8 = Character(">").asciiValue!
     
-    init(id: Int, flags: UInt8, values: SIMD8<Float>) {
-      self.id = id
-      self.flags = flags
-      self.values = values
+    init() {
+      self.id = .zero
+      self.flags = .zero
+      self.values = .zero
     }
     
     init(decoding buffer: UnsafePointer<UInt8>) {

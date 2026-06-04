@@ -26,7 +26,7 @@ extension UI {
   
   func connectWindowCloseEvent() {
     win.closeEvent = PythonFunction { args in
-      self.isClosed = true
+      Application.needsToClose = true
       return Python.None
     }.pythonObject
   }

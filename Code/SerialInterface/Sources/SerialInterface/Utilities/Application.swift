@@ -6,7 +6,7 @@ struct ApplicationDescriptor {
 }
 
 class Application: @unchecked Sendable {
-  static let serialEmulation: Bool = false
+  static let serialEmulation: Bool = true
   static let queue = DispatchQueue(
     label: "avoiding.bugs.from.swift.concurrency")
   nonisolated(unsafe)
@@ -96,7 +96,7 @@ class Application: @unchecked Sendable {
         
         var lines: [LineParser.Line]
         if Self.serialEmulation {
-          lines = emulator.createTestLines()
+          lines = emulator.update()
         } else {
           do {
             let bytes = try LineParser.getValidBytes(port: port)

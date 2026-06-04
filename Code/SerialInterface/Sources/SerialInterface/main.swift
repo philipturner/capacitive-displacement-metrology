@@ -4,15 +4,9 @@ import SwiftSerial
 
 func createTrigger1() -> Trigger {
   var trigger = Trigger()
-  #if true
   trigger.type = .timeInterval(period: 0.5, offset: 0)
   trigger.polarity = .signAgnostic
   trigger.channel = 0
-  #else
-  trigger.type = .level(0)
-  trigger.polarity = .positive
-  trigger.channel = 1
-  #endif
   return trigger
 }
 
@@ -26,8 +20,9 @@ applicationDesc.historyDescriptor = historyDesc
 let application = Application(descriptor: applicationDesc)
 Watchdog.initialize(trackedThreads: 2)
 
+let start = Date().timeIntervalSince1970
 var nextLoopTime = Date().timeIntervalSince1970
-while !application.ui.isClosed, !Application.needsToClose {
+while !Application.needsToClose {
   let currentTime = Date().timeIntervalSince1970
   if currentTime > nextLoopTime {
     while currentTime > nextLoopTime {
