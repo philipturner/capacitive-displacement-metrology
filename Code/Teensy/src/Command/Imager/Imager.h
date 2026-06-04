@@ -20,8 +20,8 @@ struct Imager {
   static constexpr uint32_t largeMoveRiseTime = 5004;
   static constexpr uint32_t polynomialPeakTime = 1008;
   static constexpr uint32_t pixelTime = 96;
-  static constexpr uint32_t currentTimeLagRoundedUp = 72;
-  static constexpr float currentTimeLagHighRes = 63.6;
+  static constexpr uint32_t currentTimeLagRoundedUp = 0; // 72
+  static constexpr float currentTimeLagHighRes = 0; // 63.6
 
   Imager();
   Imager(Command command);
