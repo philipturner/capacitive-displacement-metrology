@@ -104,6 +104,44 @@ extension Emulator {
     return 2 * progress - 1
   }
   
+  private func createHistoryEntry(elapsedTimeMicros: Int) -> SIMD8<Float> {
+    var output: SIMD8<Float> = .zero
+    switch mode {
+    case .dacTest:
+      let sinePeriodMicros = 1000
+      let phaseMicros = elapsedTimeMicros % sinePeriodMicros
+      
+      let phaseNormalized = Float(phaseMicros) / Float(sinePeriodMicros)
+      let dacVoltage = 10 * Self.triangleWave(phaseNormalized)
+      let current = 200 * Self.squareWave(phaseNormalized)
+      
+      output[0] = current
+      output[1] = dacVoltage
+      output[2] = Float.random(in: -0.001..<0.001)
+      output[3] = Float.pi
+      
+    case .imaging:
+      let timePerRow = Self.imageResolution * Self.pixelPeriodMicros
+      let timePerImage = Self.imageResolution * timePerRow
+      var time = elapsedTimeMicros
+      
+      let imageID = time / timePerImage
+      if Self.imagingMode == .image, imageID > 0 {
+        time = timePerImage - 1
+      }
+      time = time % timePerImage
+      
+      // TODO: Continue here
+      
+      // current
+      // positionX
+      // positionY
+      // positionZ
+      // positionError
+    }
+    return output
+  }
+  
   mutating func createHistoryLines(currentTime: Double) -> [LineParser.Line] {
     let lineCursorPrevious = Self
       .elapsedMicros(modeStartTime, previousTime) / History.logPeriodMicros
@@ -112,22 +150,13 @@ extension Emulator {
     
     var output: [LineParser.Line] = []
     for lineID in lineCursorPrevious..<lineCursorNext {
-      let elapsedTimeMicros = lineID * History.logPeriodMicros
-      let sinePeriodMicros = 1000
-      let phaseMicros = elapsedTimeMicros % sinePeriodMicros
-      
-      let phaseNormalized = Float(phaseMicros) / Float(sinePeriodMicros)
-      let dacVoltage = 10 * Self.triangleWave(phaseNormalized)
-      let current = 200 * Self.squareWave(phaseNormalized)
-      
       var line = LineParser.Line()
+      line.flags = 0
       line.id = idCursor
       idCursor += 1
       
-      line.values[0] = current
-      line.values[1] = dacVoltage
-      line.values[2] = Float.random(in: -0.001..<0.001)
-      line.values[3] = Float.pi
+      let elapsedTimeMicros = lineID * History.logPeriodMicros
+      line.values = createHistoryEntry(elapsedTimeMicros: elapsedTimeMicros)
       output.append(line)
     }
     return output
@@ -138,14 +167,14 @@ extension Emulator {
 
 extension Emulator {
   static let pixelPeriodMicros: Int = 144
-  static let atomSpacing: Float = 0.25 // units: nm
+  static let atomSpacing: Float = 0.246 // units: nm
   
-  static let imagingMode: Imaging.Mode = .image
+  static let imagingMode: ImagingMode = .image
   static let imageResolution: Int = 64
   static let imageSize: Float = 1.5
   static let imageCenters: [SIMD2<Float>] = [
     SIMD2<Float>(-3.0, -2.0),
-    SIMD2<Float>(2.0, 2.0),
+    SIMD2<Float>(2.2, 2.2),
   ]
   
   mutating func createImagingParameterLines() -> [LineParser.Line] {
