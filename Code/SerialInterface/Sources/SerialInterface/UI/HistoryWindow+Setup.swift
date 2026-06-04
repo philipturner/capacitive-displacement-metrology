@@ -19,19 +19,15 @@ private let yAxisWidth: Int = 120
 #endif
 
 extension HistoryWindow {
-  func connectShortcut() {
-    let shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+W"), win)
-    
-    let closeEvent = PythonFunction { args in
-      Application.needsToClose = true
-      return Python.None
-    }.pythonObject
-    
-    shortcut.activated.connect(closeEvent)
+  func setWindowPosition() {
+    if windowPositionMac {
+      win.move(Int(200), Int(20))
+    } else {
+      win.move(Int(50), Int(0))
+    }
   }
   
-  // Size the window and layout.
-  func setupLayout() {
+  func setWindowSize() {
     var x: Int = .zero
     x += yAxisWidth
     x += 2 * columnWidth
@@ -53,14 +49,6 @@ extension HistoryWindow {
     win.ci.layout.setColumnSpacing(1, columnSpacing)
   }
   
-  // Set the window position on the screen.
-  func setWindowPosition() {
-    if windowPositionMac {
-      win.move(Int(200), Int(20))
-    } else {
-      win.move(Int(50), Int(0))
-    }
-  }
   
   func createPlots() {
     for row in 0..<Self.rowCount {

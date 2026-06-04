@@ -12,10 +12,9 @@ class HistoryWindow {
   
   init() {
     win = pg.GraphicsLayoutWidget(show: true)
-    
-    connectShortcut()
-    setupLayout()
     setWindowPosition()
+    setWindowSize()
+    UI.connectCloseShortcut(win: win)
     
     let labelTextList: [String] = [
       "signal 0",
