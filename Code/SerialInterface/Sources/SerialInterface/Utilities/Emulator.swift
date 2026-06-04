@@ -46,43 +46,10 @@ struct Emulator {
     case .dacTest:
       output += createHistoryLines(currentTime: currentTime)
     case .imaging:
-      fatalError("Not implemented.")
+      output += createImagingLines(currentTime: currentTime)
     }
     
     return output
-    
-    /*
-    if elapsedTime < Self.imagingStartTime {
-      let elapsedMicros = Int(elapsedTime * 1e6)
-      let elapsedLogPeriods = elapsedMicros / 72
-      
-      let output = createNormalLines(until: elapsedLogPeriods)
-      lineCursor = elapsedLogPeriods
-      return output
-    } else if elapsedTime < Self.imagingEndTime {
-      if imagingStartLineID == nil {
-        imagingStartLineID = lineCursor
-      }
-      
-      let imageElapsedTime = elapsedTime - Self.imagingStartTime
-      let elapsedMicros = Int(imageElapsedTime * 1e6)
-      let elapsedPixels = elapsedMicros / 144
-      
-      // TODO: Function to generate simulated lines from STM imaging mode
-      // - parameters to set up the UI
-      // - ability to simulate i, v, and d modes
-      // - mapping time to progress in number of pixels
-      // - fake STM image of a square lattice
-      
-      return []
-    } else {
-      lineCursor += pixelCursor
-      pixelCursor = 0
-      imagingStartLineID = nil
-      
-      
-    }
-     */
   }
   
   mutating func updateMode(currentTime: Double) -> Bool {
@@ -144,8 +111,8 @@ extension Emulator {
       .elapsedMicros(modeStartTime, currentTime) / History.logPeriodMicros
     
     var output: [LineParser.Line] = []
-    for relativeLineID in lineCursorPrevious..<lineCursorNext {
-      let elapsedTimeMicros = relativeLineID * History.logPeriodMicros
+    for lineID in lineCursorPrevious..<lineCursorNext {
+      let elapsedTimeMicros = lineID * History.logPeriodMicros
       let sinePeriodMicros = 1000
       let phaseMicros = elapsedTimeMicros % sinePeriodMicros
       
@@ -170,10 +137,10 @@ extension Emulator {
 // MARK: - Imaging Lines
 
 extension Emulator {
-  static let imagingMode: Imaging.Mode = .image
-  
   static let pixelPeriodMicros: Int = 144
+  static let atomSpacing: Float = 0.25 // units: nm
   
+  static let imagingMode: Imaging.Mode = .image
   static let imageResolution: Int = 64
   static let imageSize: Float = 1.5
   static let imageCenters: [SIMD2<Float>] = [
@@ -209,10 +176,106 @@ extension Emulator {
     return output
   }
   
+  private static func getImageCenter(imageID: Int) -> SIMD2<Float> {
+    if Self.imagingMode == .dualVideo, imageID % 2 == 1 {
+      return Self.imageCenters[1]
+    } else {
+      return Self.imageCenters[0]
+    }
+  }
+  
+  private static func getCurrent(position: SIMD2<Float>) -> Float {
+    let x = position[0] / Self.atomSpacing
+    let y = position[1] / Self.atomSpacing
+    
+    var phases: SIMD3<Float> = .zero
+    phases[0] = x
+    phases[1] = -0.5 * x + (Float(3).squareRoot() / 2) * y
+    phases[2] = -0.5 * x - (Float(3).squareRoot() / 2) * y
+    
+    var corrugationAmplitude: Float = .zero
+    for laneID in 0..<3 {
+      var phaseNormalized = phases[laneID]
+      phaseNormalized -= phaseNormalized.rounded(.down)
+      corrugationAmplitude += cos(2 * Float.pi * phaseNormalized)
+    }
+    corrugationAmplitude /= 3
+    
+    func randomGaussian() -> Float {
+      var u1: Float = .zero
+      while u1 < 0.001 {
+        u1 = Float.random(in: 0..<1)
+      }
+      let u2 = Float.random(in: 0..<1)
+      
+      // Box-Muller Transform formula
+      return sqrt(-2.0 * log(u1)) * cos(2.0 * Float.pi * u2)
+    }
+    
+    var output: Float = 1e-9
+    output += 0.2e-9 * corrugationAmplitude
+    output += 0.05e-9 * randomGaussian()
+    return output
+  }
+  
+  private func createPixel(
+    imageID: Int,
+    rowID: Int,
+    columnID: Int
+  ) -> SIMD8<Float> {
+    var position = SIMD2(Float(columnID), Float(rowID))
+    position = (position + 0.5) * Self.imageSize / Float(Self.imageResolution)
+    position -= Self.imageSize / 2
+    position += Self.getImageCenter(imageID: imageID)
+    
+    let pixelID = rowID * Self.imageResolution + columnID
+    let z = position.x / 10 + position.y / 10
+    let current = Self.getCurrent(position: position)
+    
+    var output: SIMD8<Float> = .zero
+    output[0] = Float(pixelID)
+    output[1] = position.x
+    output[2] = position.y
+    output[3] = z
+    output[4] = current
+    return output
+  }
+  
   mutating func createImagingLines(currentTime: Double) -> [LineParser.Line] {
     let pixelCursorPrevious = Self
-      .elapsedMicros(modeStartTime, previousTime) / History.logPeriodMicros
+      .elapsedMicros(modeStartTime, previousTime) / Self.pixelPeriodMicros
     let pixelCursorNext = Self
-      .elapsedMicros(modeStartTime, currentTime) / History.logPeriodMicros
+      .elapsedMicros(modeStartTime, currentTime) / Self.pixelPeriodMicros
+    
+    var output: [LineParser.Line] = []
+    for var time in pixelCursorPrevious..<pixelCursorNext {
+      let imageID = time / (Self.imageResolution * Self.imageResolution)
+      if Self.imagingMode == .image, imageID > 0 {
+        break
+      }
+      time = time % (Self.imageResolution * Self.imageResolution)
+      
+      let rowID = time / Self.imageResolution
+      time = time % Self.imageResolution
+      
+      var columnID = time
+      if rowID % 2 == 1 {
+        columnID = (Self.imageResolution - 1) - columnID
+      }
+      
+      let values = createPixel(
+        imageID: imageID,
+        rowID: rowID,
+        columnID: columnID)
+      
+      var line = LineParser.Line()
+      line.flags = 5
+      line.id = idCursor
+      idCursor += 1
+      
+      line.values = values
+      output.append(line)
+    }
+    return output
   }
 }
