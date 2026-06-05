@@ -19,11 +19,13 @@ class ImagingWindow {
   var scanImages: [[Image]]
   var fourierImage: Image
   
-  var settings: ImagingSettings?
   var pendingSettingsLines: [LineParser.Line] = []
-  // var pendingHistoryLines: [LineParser.Line] = []
+  var pendingHistoryLines: [LineParser.Line] = []
   var pendingPixelLines: [LineParser.Line] = []
   
+  var settings: ImagingSettings?
+  var pixelTracker: PixelTracker!
+
   init() {
     win = pg.GraphicsLayoutWidget(show: true)
     win.move(Int(200), Int(20))
@@ -33,12 +35,7 @@ class ImagingWindow {
     scanImages = Self.createScanImages(win: win)
     fourierImage = Self.createFourierImage(win: win)
     
-    for imageRow in scanImages {
-      for image in imageRow {
-        Self.updateScan(image: image)
-      }
-    }
-    Self.updateFourier(image: fourierImage)
+    linkPlots()
   }
   
   func reset() {
@@ -58,9 +55,10 @@ class ImagingWindow {
       values.append(line.values[i])
     }
     settings = ImagingSettings(values: values)
+    pixelTracker = PixelTracker(settings: settings!)
     
     pendingSettingsLines = []
-    // pendingHistoryLines = []
+    pendingHistoryLines = []
     pendingPixelLines = []
   }
 }

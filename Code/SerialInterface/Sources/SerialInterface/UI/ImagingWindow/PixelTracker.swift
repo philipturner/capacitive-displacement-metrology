@@ -62,6 +62,7 @@ struct PixelTracker {
       }
       
       let data = SIMD2(abs(pixel[4]), pixel[3])
+      dataBuffer[pixelID] = data
       occupiedBuffer[pixelID] = true
       receivedPixels += 1
     }

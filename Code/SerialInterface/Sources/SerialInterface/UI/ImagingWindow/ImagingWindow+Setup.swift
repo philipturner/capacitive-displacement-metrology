@@ -122,4 +122,10 @@ extension ImagingWindow {
       colorBar: colorBar)
     return image
   }
+  
+  func linkPlots() {
+    let plot0 = historyPlots[0].plot
+    let plot1 = historyPlots[1].plot
+    plot1.setXLink(plot0)
+  }
 }

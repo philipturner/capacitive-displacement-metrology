@@ -42,7 +42,7 @@ extension Application {
         }
       }
       if imagingModeActive {
-        // ui.imagingWindow.pendingHistoryLines += splitting.history
+        ui.imagingWindow.pendingHistoryLines += splitting.history
         ui.imagingWindow.pendingPixelLines += splitting.pixel
       }
       
