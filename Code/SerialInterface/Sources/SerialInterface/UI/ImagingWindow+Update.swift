@@ -3,38 +3,33 @@ import PythonKit
 
 extension ImagingWindow {
   static let imageSize: Int = 100
+  static let realSpacePixelSize: Float = 0.1
+  static let startPosition = SIMD2<Float>(-2, -3)
   
   static func createFakeData() -> PythonObject {
-    let arrayDimension = PythonObject(
-      tupleOf: Int(imageSize), Int(imageSize))
-    var data = np.zeros(shape: arrayDimension, dtype: np.float32)
-    for i in 0..<imageSize {
-      for j in 0..<imageSize {
-        var output: Float = 1 + 0.3 * sin(Float(i))
-        output *= Float(i) * Float(i)
-        output += Float(j) * Float(j)
+    var array = [Float](
+      repeating: .zero,
+      count: imageSize * imageSize)
+    for rowID in 0..<imageSize {
+      for columnID in 0..<imageSize {
+        var output: Float = 1 + 0.3 * sin(Float(columnID))
+        output *= Float(columnID) * Float(columnID)
+        output += Float(rowID) * Float(rowID)
         output *= 1 + 0.2 * Float.random(in: 0..<1)
         
-        data[j, i] = PythonObject(output)
+        let pixelID = rowID * imageSize + columnID
+        array[pixelID] = output
       }
     }
-    return data
+    
+    var ndarray = array.makeNumpyArray()
+    ndarray = ndarray.reshape(imageSize, imageSize)
+    return ndarray
   }
   
-  static func levels(array: PythonObject) -> SIMD2<Float> {
-    var minimum: Float = .greatestFiniteMagnitude
-    var maximum: Float = -.greatestFiniteMagnitude
-    for i in 0..<imageSize {
-      for j in 0..<imageSize {
-        let value = Float(array[j, i])
-        guard let value else {
-          fatalError("Could not decode FP32 from Python.")
-        }
-        
-        minimum = min(minimum, value)
-        maximum = max(maximum, value)
-      }
-    }
+  static func levels(data: PythonObject) -> SIMD2<Float> {
+    let minimum = Float(np.nanmin(data))!
+    let maximum = Float(np.nanmax(data))!
     return SIMD2(minimum, maximum)
   }
   
@@ -42,8 +37,7 @@ extension ImagingWindow {
     let fakeData = createFakeData()
     image.imageItem.setImage(fakeData, autoLevels: false)
     
-    let pixelSize: Float = 0.1
-    let startPosition = SIMD2<Float>(-2, -3)
+    let pixelSize = realSpacePixelSize
     let transform = QtGui.QTransform()
     transform.scale(pixelSize, pixelSize)
     transform.translate(
@@ -51,18 +45,27 @@ extension ImagingWindow {
       startPosition[1] / pixelSize)
     image.imageItem.setTransform(transform)
     
-    let levels = Self.levels(array: fakeData)
+    let levels = Self.levels(data: fakeData)
     image.colorBar.setLevels(
       low: levels[0] + (levels[1] - levels[0]) * 0.00,
       high: levels[0] + (levels[1] - levels[0]) * 0.75)
   }
   
   static func updateFourier(image: Image) {
-    let fakeData = createFakeData()
-    image.imageItem.setImage(_fakeData, autoLevels: false)
+    let start = Date().timeIntervalSince1970
     
-    let pixelSize: Float = 0.1
-    let startPosition = SIMD2<Float>(-2, -3)
+    let fakeData = createFakeData()
+    let f_transform = np.fft.fft2(fakeData)
+    let f_shifted = np.fft.fftshift(f_transform)
+    let output = 20 * np.log10(np.abs(f_shifted))
+    image.imageItem.setImage(output, autoLevels: false)
+    
+    let fourierSpacePixelSize = (1 / realSpacePixelSize) / Float(imageSize)
+    let offset = -Float(imageSize) / 2 * fourierSpacePixelSize
+    
+    let pixelSize = fourierSpacePixelSize
+    let startPosition = SIMD2(repeating: offset)
+    
     let transform = QtGui.QTransform()
     transform.scale(pixelSize, pixelSize)
     transform.translate(
@@ -70,9 +73,12 @@ extension ImagingWindow {
       startPosition[1] / pixelSize)
     image.imageItem.setTransform(transform)
     
-    let levels = Self.levels(array: _fakeData)
+    let levels = Self.levels(data: output)
     image.colorBar.setLevels(
-      low: levels[0] + (levels[1] - levels[0]) * 0.25,
-      high: levels[0] + (levels[1] - levels[0]) * 0.75)
+      low: levels[0] + (levels[1] - levels[0]) * 0.50,
+      high: levels[0] + (levels[1] - levels[0]) * 1.00)
+    
+    let end = Date().timeIntervalSince1970
+    print("time:", Float(end - start) * 1000)
   }
 }

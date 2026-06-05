@@ -1,84 +1,19 @@
 import PythonKit
 
 extension HistoryWindow {
-  struct TimeAxisDescriptor {
-    /// Required. The start of the time interval.
-    var minimum: Double?
-    
-    /// Required. The end of the time interval.
-    var maximum: Double?
-    
-    /// Required. Spacing for major ticks.
-    var majorTick: Double?
-    
-    /// Optional. Origin for ticks.
-    var offset: Double?
-  }
-  
-  func updateTime(columnID: Int, descriptor: TimeAxisDescriptor) {
-    guard let minimum = descriptor.minimum,
-          let maximum = descriptor.maximum,
-          let majorTick = descriptor.majorTick else {
-      fatalError("Descriptor was incomplete.")
-    }
-    
+  func updateTimeAxis(columnID: Int, descriptor: UI.TimeAxisDescriptor) {
+    var extractedPlots: [PythonObject] = []
     for rowID in 0..<Self.rowCount {
-      let plot = plots[rowID][columnID]
-      if rowID == 0 {
-        plot.setXRange(minimum, maximum, padding: 0)
-      }
-      
-      let xAxis = plot.getAxis("bottom")
-      let minorTick = majorTick / 5
-      if let offset = descriptor.offset {
-        let levels: [PythonObject] = [
-          PythonObject(tupleOf: majorTick, offset),
-          PythonObject(tupleOf: minorTick, offset),
-        ]
-        xAxis.setTickSpacing(levels: levels)
-      } else {
-        xAxis.setTickSpacing(majorTick, minorTick)
-      }
+      let plot = self.plots[rowID][columnID]
+      extractedPlots.append(plot)
     }
+    
+    UI.updateTimeAxis(
+      plots: extractedPlots,
+      descriptor: descriptor)
   }
   
-  func updateShortPlots(data: [History.TimedSample]) {
-    for rowID in 0..<Self.rowCount {
-      var x: [Double] = []
-      var y: [Float] = []
-      for sample in data {
-        x.append(sample.time)
-        y.append(sample.values[rowID])
-      }
-      
-      let curveSet = curveSets[rowID][0]
-      curveSet.setData(np.array(x), np.array(y))
-    }
-  }
-  
-  func updateLongPlots(data: [History.TimedAverage]) {
-    for rowID in 0..<Self.rowCount {
-      var x: [Double] = []
-      var minimumPoints: [Float] = []
-      var averagePoints: [Float] = []
-      var maximumPoints: [Float] = []
-      
-      for sample in data {
-        x.append(sample.time)
-        minimumPoints.append(sample.minimum[rowID])
-        averagePoints.append(sample.average[rowID])
-        maximumPoints.append(sample.maximum[rowID])
-      }
-      
-      let xArray = np.array(x)
-      let curveSet = curveSets[rowID][1]
-      curveSet[0].setData(xArray, np.array(minimumPoints))
-      curveSet[1].setData(xArray, np.array(averagePoints))
-      curveSet[2].setData(xArray, np.array(maximumPoints))
-    }
-  }
-  
-  func updateYRange(data: [History.TimedAverage]) {
+  func updateYAxis(data: [History.TimedAverage]) {
     guard data.count > 0 else {
       return
     }
@@ -123,6 +58,42 @@ extension HistoryWindow {
       plotLeft.setYRange(range[0], range[1], padding: 0)
     }
   }
+  
+  func updateShortPlots(data: [History.TimedSample]) {
+    for rowID in 0..<Self.rowCount {
+      var x: [Double] = []
+      var y: [Float] = []
+      for sample in data {
+        x.append(sample.time)
+        y.append(sample.values[rowID])
+      }
+      
+      let curveSet = curveSets[rowID][0]
+      curveSet.setData(np.array(x), np.array(y))
+    }
+  }
+  
+  func updateLongPlots(data: [History.TimedAverage]) {
+    for rowID in 0..<Self.rowCount {
+      var x: [Double] = []
+      var minimumPoints: [Float] = []
+      var averagePoints: [Float] = []
+      var maximumPoints: [Float] = []
+      
+      for sample in data {
+        x.append(sample.time)
+        minimumPoints.append(sample.minimum[rowID])
+        averagePoints.append(sample.average[rowID])
+        maximumPoints.append(sample.maximum[rowID])
+      }
+      
+      let xArray = np.array(x)
+      let curveSet = curveSets[rowID][1]
+      curveSet[0].setData(xArray, np.array(minimumPoints))
+      curveSet[1].setData(xArray, np.array(averagePoints))
+      curveSet[2].setData(xArray, np.array(maximumPoints))
+    }
+  }
 }
 
 extension HistoryWindow {
@@ -135,25 +106,25 @@ extension HistoryWindow {
     func updateShortTimeForHistory() {
       let maximum = output.shortTimeData.last!.time
       
-      var shortTimeDesc = HistoryWindow.TimeAxisDescriptor()
+      var shortTimeDesc = UI.TimeAxisDescriptor()
       shortTimeDesc.minimum = maximum - TimeAxis.shortLength
       shortTimeDesc.maximum = maximum
       shortTimeDesc.majorTick = TimeAxis.shortMajorTick
-      updateTime(columnID: 0, descriptor: shortTimeDesc)
+      updateTimeAxis(columnID: 0, descriptor: shortTimeDesc)
     }
     func updateLongTime() {
       let maximum = output.longTimeData.last!.time
       
-      var longTimeDesc = HistoryWindow.TimeAxisDescriptor()
+      var longTimeDesc = UI.TimeAxisDescriptor()
       longTimeDesc.minimum = maximum - TimeAxis.longLength
       longTimeDesc.maximum = maximum
       longTimeDesc.majorTick = TimeAxis.longMajorTick
-      updateTime(columnID: 1, descriptor: longTimeDesc)
+      updateTimeAxis(columnID: 1, descriptor: longTimeDesc)
     }
     func updateShortTimeForTrigger(
       trace: History.TriggerEventTrace
     ) {
-      var shortTimeDesc = HistoryWindow.TimeAxisDescriptor()
+      var shortTimeDesc = UI.TimeAxisDescriptor()
       shortTimeDesc.minimum = trace.timeInterval[0]
       shortTimeDesc.maximum = trace.timeInterval[1]
       shortTimeDesc.majorTick = TimeAxis.shortMajorTick
@@ -165,12 +136,12 @@ extension HistoryWindow {
         shortTimeDesc.offset = offset
       }
       
-      updateTime(columnID: 0, descriptor: shortTimeDesc)
+      updateTimeAxis(columnID: 0, descriptor: shortTimeDesc)
     }
     
     updateLongTime()
     updateLongPlots(data: output.longTimeData)
-    updateYRange(data: output.longTimeData)
+    updateYAxis(data: output.longTimeData)
     
     if let trace = output.trace {
       updateShortTimeForTrigger(trace: trace)

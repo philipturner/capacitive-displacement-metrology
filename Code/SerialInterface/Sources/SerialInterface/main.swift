@@ -22,12 +22,12 @@ func createApplication() -> Application {
 }
 let application = createApplication()
 
-application.ui.historyWindow.win.hide()
+application.ui.imagingWindow.win.hide()
 
 let start = Date().timeIntervalSince1970
 application.run {
   let output = Application.queue.sync {
     application.history.getOutput()
   }
-  //application.ui.historyWindow.update(output: output)
+  application.ui.historyWindow.update(output: output)
 }

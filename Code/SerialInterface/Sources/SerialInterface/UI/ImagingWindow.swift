@@ -42,7 +42,7 @@ class ImagingWindow {
   
   func createPlotLabels() {
     let rowLabels: [String] = [
-      "current (A)",
+      "current (pA)", // we will change units on the host side
       "piezo Z (nm)",
       "XY trajectory (nm)",
     ]
