@@ -62,9 +62,4 @@ class ImagingWindow {
     pendingHistoryLines = []
     pendingPixelLines = []
   }
-  
-  func splitPixelLines() -> [[LineParser.Line]] {
-    var segments: [[LineParser.Line]] = []
-    var previousSegmentID = receivedPixelCount
-  }
 }

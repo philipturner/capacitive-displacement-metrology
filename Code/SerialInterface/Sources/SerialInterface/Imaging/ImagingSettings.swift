@@ -35,6 +35,10 @@ struct ImagingSettings {
     self.setpointCurrent = values[7]
   }
   
+  var pixelsPerImage: Int {
+    resolution * resolution
+  }
+  
   func currentImageCenter(imageID: Int) -> SIMD2<Float> {
     if mode == .dualVideo, imageID % 2 == 1 {
       return centers[1]

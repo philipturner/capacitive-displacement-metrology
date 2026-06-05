@@ -6,22 +6,33 @@ struct PixelTracker {
   
   init(settings: ImagingSettings) {
     self.settings = settings
-    
-    let bufferSize = settings.resolution * settings.resolution
-    self.dataBuffer = Array(repeating: .zero, count: bufferSize)
-    self.occupiedBuffer = Array(repeating: false, count: bufferSize)
+    self.dataBuffer = Array(
+      repeating: .zero,
+      count: settings.pixelsPerImage)
+    self.occupiedBuffer = Array(
+      repeating: false,
+      count: settings.pixelsPerImage)
   }
   
   var finishedRowCount: Int {
     receivedPixelCount / settings.resolution
   }
   
-  mutating func receive(lines: [LineParser.Line], imageID: Int) -> Int {
-    var acceptedPixelCount = dataBuffer.count - receivedPixelCount
-    acceptedPixelCount = min(acceptedPixelCount, lines.count)
+  var isFinished: Bool {
+    guard receivedPixelCount <= settings.pixelsPerImage else {
+      fatalError("Received pixel count was too large.")
+    }
+    return (receivedPixelCount == settings.pixelsPerImage)
+  }
+  
+  mutating func receive(lines: [LineParser.Line], imageID: Int) {
+    let nextPixelCount = receivedPixelCount + lines.count
+    if nextPixelCount > settings.pixelsPerImage {
+      fatalError("Requesting too many lines for pixel tracker.")
+    }
     
-    for i in 0..<acceptedPixelCount {
-      let pixel = lines[i].values
+    for line in lines {
+      let pixel = line.values
       guard let pixelID = Int(exactly: pixel[0]) else {
         fatalError("Invalid pixel ID.")
       }
@@ -61,7 +72,5 @@ struct PixelTracker {
       occupiedBuffer[pixelID] = true
       receivedPixelCount += 1
     }
-    
-    return acceptedPixelCount
   }
 }

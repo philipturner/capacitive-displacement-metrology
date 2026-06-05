@@ -6,11 +6,15 @@ extension ImagingWindow {
     
     updateHistoryRanges(output: output)
     updateHistoryPlots(output: output)
-  }
-  
-  func updateState() {
+    
+    let historyLines = pendingHistoryLines
+    let pixelSegments = state.split(lines: pendingPixelLines)
     pendingHistoryLines = []
     pendingPixelLines = []
+    
+    updateTrajectoryPlot(
+      historyLines: historyLines,
+      pixelSegments: pixelSegments)
   }
   
   func updateHistoryRanges(output: History.Output) {
@@ -93,17 +97,22 @@ extension ImagingWindow {
     }
   }
   
-  func updateTrajectoryPlot() {
+  func updateTrajectoryPlot(
+    historyLines: [LineParser.Line],
+    pixelSegments: [[LineParser.Line]]
+  ) {
     func updateHistoryCurve() {
       
     }
     
-    func splitPixelCurve() {
-      
+    func updatePixelCurves() {
+      if pixelSegments.count > Self.maxImagesPerFrame {
+        fatalError("Exceeded allowed number of images per frame.")
+      }
     }
     
-    // just check whether the current pixel row < the previous row, then you
-    // detect the boundary between consecutive images
+    updateHistoryCurve()
+    updatePixelCurves()
   }
   
   func updateScanImages() {
@@ -118,10 +127,6 @@ extension ImagingWindow {
       fourierImage.plot.show()
     }
     
-    
-  }
-  
-  func clearPendingLines() {
     
   }
 }
