@@ -1,4 +1,4 @@
-
+import PythonKit
 
 struct ImagingSettings {
   var mode: ImagingMode
@@ -56,5 +56,41 @@ struct ImagingSettings {
     position -= size / 2
     position += currentImageCenter(imageID: imageID)
     return position
+  }
+}
+
+extension ImagingSettings {
+  func realSpaceTransform(videoChannelID: Int) -> PythonObject {
+    guard videoChannelID == 0 || videoChannelID == 1 else {
+      fatalError("This should never happen.")
+    }
+    
+    let pixelSize = size / Float(resolution)
+    
+    var position: SIMD2<Float> = .zero
+    position -= size / 2
+    position += currentImageCenter(imageID: videoChannelID)
+    
+    let transform = QtGui.QTransform()
+    transform.scale(pixelSize, pixelSize)
+    transform.translate(
+      position[0] / pixelSize,
+      position[1] / pixelSize)
+    return transform
+  }
+  
+  func fourierSpaceTransform() -> PythonObject {
+    let realSpacePixelSize = size / Float(resolution)
+    let pixelSize = (1 / realSpacePixelSize) / Float(resolution)
+    
+    let offset = -Float(resolution) / 2 * pixelSize
+    let position = SIMD2(repeating: offset)
+    
+    let transform = QtGui.QTransform()
+    transform.scale(pixelSize, pixelSize)
+    transform.translate(
+      position[0] / pixelSize,
+      position[1] / pixelSize)
+    return transform
   }
 }

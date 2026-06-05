@@ -6,36 +6,28 @@ extension ImagingWindow {
   private static let testRealSpacePixelSize: Float = 0.1
   private static let testStartPosition = SIMD2<Float>(-2, -3)
   
-  static func createTestData() -> PythonObject {
+  private static func createTestData() -> PythonObject {
     var array = [Float](
       repeating: .zero,
       count: testImageSize * testImageSize)
     for rowID in 0..<testImageSize {
       for columnID in 0..<testImageSize {
-        var output: Float = 1 + 0.3 * sin(Float(columnID))
-        output *= Float(columnID) * Float(columnID)
-        output += Float(rowID) * Float(rowID)
-        output *= 1 + 0.2 * Float.random(in: 0..<1)
+        var pixelValue: Float = 1 + 0.3 * sin(Float(columnID))
+        pixelValue *= Float(columnID) * Float(columnID)
+        pixelValue += Float(rowID) * Float(rowID)
+        pixelValue *= 1 + 0.2 * Float.random(in: 0..<1)
         
         let pixelID = rowID * testImageSize + columnID
-        array[pixelID] = output
+        array[pixelID] = pixelValue
       }
     }
     
-    var ndarray = array.makeNumpyArray()
-    ndarray = ndarray.reshape(testImageSize, testImageSize)
-    return ndarray
-  }
-  
-  static func levels(data: PythonObject) -> SIMD2<Float> {
-    let minimum = Float(np.nanmin(data))!
-    let maximum = Float(np.nanmax(data))!
-    return SIMD2(minimum, maximum)
+    return Self.castToNumpy(array)
   }
   
   static func updateScanImageWithTest(image: Image) {
-    let testData = createTestData()
-    image.imageItem.setImage(testData, autoLevels: false)
+    let finalData = createTestData()
+    image.imageItem.setImage(finalData, autoLevels: false)
     
     let pixelSize = testRealSpacePixelSize
     let transform = QtGui.QTransform()
@@ -45,7 +37,7 @@ extension ImagingWindow {
       testStartPosition[1] / pixelSize)
     image.imageItem.setTransform(transform)
     
-    let levels = Self.levels(data: testData)
+    let levels = Self.levels(data: finalData)
     image.colorBar.setLevels(
       low: levels[0] + (levels[1] - levels[0]) * 0.00,
       high: levels[0] + (levels[1] - levels[0]) * 0.75)
@@ -53,10 +45,8 @@ extension ImagingWindow {
   
   static func updateFourierImageWithTest(image: Image) {
     let testData = createTestData()
-    let f_transform = np.fft.fft2(testData)
-    let f_shifted = np.fft.fftshift(f_transform)
-    let output = 20 * np.log10(np.abs(f_shifted))
-    image.imageItem.setImage(output, autoLevels: false)
+    let finalData = Self.fourierTransform(testData)
+    image.imageItem.setImage(finalData, autoLevels: false)
     
     let fourierSpacePixelSize = (1 / testRealSpacePixelSize) / Float(testImageSize)
     let offset = -Float(testImageSize) / 2 * fourierSpacePixelSize
@@ -71,7 +61,7 @@ extension ImagingWindow {
       startPosition[1] / pixelSize)
     image.imageItem.setTransform(transform)
     
-    let levels = Self.levels(data: output)
+    let levels = Self.levels(data: finalData)
     image.colorBar.setLevels(
       low: levels[0] + (levels[1] - levels[0]) * 0.50,
       high: levels[0] + (levels[1] - levels[0]) * 1.00)
