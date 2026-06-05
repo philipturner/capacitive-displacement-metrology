@@ -4,13 +4,28 @@ extension Emulator {
   static let pixelPeriodMicros: Int = 144
   static let atomSpacing: Float = 0.246 // units: nm
   
-  static let imagingMode: ImagingMode = .image
+  static let imagingMode: ImagingMode = .video
   static let imageResolution: Int = 64
   static let imageSize: Float = 1.5
   static let imageCenters: [SIMD2<Float>] = [
     SIMD2<Float>(-30, -20),
     SIMD2<Float>(22, 22),
   ]
+  
+  mutating func increaseDriftOffset() {
+    let u1 = Float.random(in: 0.001...1.0)
+    let u2 = Float.random(in: 0.001...1.0)
+    let standardNormal1 = sqrt(-2.0 * log(u1)) * sin(2.0 * Float.pi * u2)
+    let standardNormal2 = sqrt(-2.0 * log(u1)) * cos(2.0 * Float.pi * u2)
+    
+    let speedTarget: Float = 0.05
+    var velocity = SIMD2<Float>(standardNormal1, standardNormal2)
+    velocity *= speedTarget
+    
+    let dt = Float(1e-6) * Float(Self.pixelPeriodMicros)
+    driftOffset += sqrt(dt) * velocity
+    print(driftOffset)
+  }
   
   mutating func createImagingParameterLines() -> [LineParser.Line] {
     var output: [LineParser.Line] = []
@@ -93,9 +108,11 @@ extension Emulator {
     position -= Self.imageSize / 2
     position += Self.getImageCenter(imageID: imageID)
     
+    let driftedPosition = position + driftOffset
+    
     let pixelID = rowID * Self.imageResolution + columnID
-    let z = position.x / 10 + position.y / 10
-    let current = Self.getCurrent(position: position)
+    let z = driftedPosition.x / 10 + driftedPosition.y / 10
+    let current = Self.getCurrent(position: driftedPosition)
     
     var output: SIMD8<Float> = .zero
     output[0] = Float(pixelID)
@@ -140,6 +157,7 @@ extension Emulator {
           """)
       }
       
+      increaseDriftOffset()
       let values = createPixel(
         imageID: imageID,
         rowID: rowID,

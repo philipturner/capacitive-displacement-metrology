@@ -1,14 +1,14 @@
 import PythonKit
 
 extension ImagingWindow {
-  static func castToNumpy(_ data: [Float]) -> PythonObject {
-    let sizeFloat = Double(data.count).squareRoot()
-    guard let sizeInt = Int(exactly: sizeFloat) else {
-      fatalError("Image was not square.")
+  static func castToNumpy(_ data: [Float], columnCount: Int) -> PythonObject {
+    guard data.count % columnCount == 0 else {
+      fatalError("Image was not divisible by column count.")
     }
+    let rowCount = data.count / columnCount
     
     var ndarray = data.makeNumpyArray()
-    ndarray = ndarray.reshape(sizeInt, sizeInt)
+    ndarray = ndarray.reshape(rowCount, columnCount)
     return ndarray
   }
   
@@ -27,6 +27,7 @@ extension ImagingWindow {
   
   static func fourierTransform(_ image: PythonObject) -> PythonObject {
     var output = image
+    output -= np.mean(output)
     output = np.fft.fft2(output)
     output = np.fft.fftshift(output)
     output = np.abs(output)
@@ -74,9 +75,11 @@ extension ImagingWindow {
           continue
         }
         let data = sourceData.map { $0[rowID] }
-        let finalData = Self.castToNumpy(data)
+        let finalData = Self.castToNumpy(
+          data, columnCount: state.settings.resolution)
         
         let image = scanImages[rowID][columnID]
+        image.imageItem.setImage(finalData, autoLevels: false)
         
         func createVideoChannelID() -> Int {
           if state.settings.mode == .dualVideo {
@@ -86,6 +89,27 @@ extension ImagingWindow {
           }
         }
         let videoChannelID = createVideoChannelID()
+        let transform = state.settings.realSpaceTransform(
+          videoChannelID: videoChannelID)
+        image.imageItem.setTransform(transform)
+        
+        // Eventually, we might migrate to a different heuristic:
+        // mask out the outliers (current spikes) outside 0 < I < 2 * setpoint
+        // take the average and standard deviation
+        // plot out to +/-3 sigma
+        if rowID == 0 {
+          let levels = SIMD2<Float>(
+            0.5 * state.settings.setpointCurrent,
+            1.5 * state.settings.setpointCurrent)
+          image.colorBar.setLevels(
+            low: levels[0],
+            high: levels[1])
+        } else {
+          let levels = Self.levels(data: finalData)
+          image.colorBar.setLevels(
+            low: levels[0],
+            high: levels[1])
+        }
       }
     }
   }
@@ -102,13 +126,24 @@ extension ImagingWindow {
     guard let sourceData else {
       return
     }
-    let data = sourceData.map { $0[0] }
-    let dataNumpy = Self.castToNumpy(data)
+    var data = sourceData.map { $0[0] }
+    
+    for i in 0..<data.count {
+      data[i] /= state.settings.setpointCurrent
+    }
+    let dataNumpy = Self.castToNumpy(
+      data, columnCount: state.settings.resolution)
     let finalData = Self.fourierTransform(dataNumpy)
     
     let image = fourierImage
+    image.imageItem.setImage(finalData, autoLevels: false)
     
-    // high: data max
-    // low: data max - 100 dB
+    let transform = state.settings.fourierSpaceTransform()
+    image.imageItem.setTransform(transform)
+    
+    let levels = Self.levels(data: finalData)
+    image.colorBar.setLevels(
+      low: levels[1] - 40,
+      high: levels[1])
   }
 }

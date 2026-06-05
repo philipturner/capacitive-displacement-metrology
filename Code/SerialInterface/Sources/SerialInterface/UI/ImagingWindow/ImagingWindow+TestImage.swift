@@ -22,7 +22,8 @@ extension ImagingWindow {
       }
     }
     
-    return Self.castToNumpy(array)
+    return Self.castToNumpy(
+      array, columnCount: Self.testImageSize)
   }
   
   static func updateScanImageWithTest(image: Image) {
@@ -63,7 +64,7 @@ extension ImagingWindow {
     
     let levels = Self.levels(data: finalData)
     image.colorBar.setLevels(
-      low: levels[0] + (levels[1] - levels[0]) * 0.50,
-      high: levels[0] + (levels[1] - levels[0]) * 1.00)
+      low: levels[1] - 40,
+      high: levels[1])
   }
 }

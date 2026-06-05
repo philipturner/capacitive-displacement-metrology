@@ -12,6 +12,8 @@ struct Emulator {
   var idCursor: Int = 0
   var mode: Mode = .dacTest
   
+  var driftOffset: SIMD2<Float> = .zero
+  
   init() {
     startTime = Date().timeIntervalSince1970
     previousTime = startTime
@@ -57,12 +59,10 @@ struct Emulator {
     let elapsedTime = currentTime - startTime
     
     var newMode: Mode
-    if elapsedTime < 5.0 {
+    if elapsedTime < 2.0 {
       newMode = .dacTest
-    } else if elapsedTime < 15.0 {
-      newMode = .imaging
     } else {
-      newMode = .dacTest
+      newMode = .imaging
     }
     if newMode != mode {
       previousTime = currentTime

@@ -16,8 +16,16 @@ extension ImagingWindow {
       historyLines: historyLines,
       pixelSegments: pixelSegments)
     
+    state.update(segments: pixelSegments)
     updateScanImages()
     updateFourierImage()
+    
+    if state.settings.mode == .image {
+      if state.pendingImages[0] != nil {
+        freezeTrajectory = true
+      }
+    }
+    
     for i in state.pendingImages.indices {
       state.pendingImages[i] = nil
     }
@@ -60,14 +68,17 @@ extension ImagingWindow {
         rangeZ[0],
         rangeZ[1],
         padding: 0)
-      plotXY.setXRange(
-        rangeX[0],
-        rangeX[1],
-        padding: 0)
-      plotXY.setYRange(
-        rangeY[0],
-        rangeY[1],
-        padding: 0)
+      
+      if !freezeTrajectory {
+        plotXY.setXRange(
+          rangeX[0],
+          rangeX[1],
+          padding: 0)
+        plotXY.setYRange(
+          rangeY[0],
+          rangeY[1],
+          padding: 0)
+      }
     }
     
     updateLongTime()
@@ -112,7 +123,6 @@ extension ImagingWindow {
     func updateHistoryCurve() {
       var x: [Float] = []
       var y: [Float] = []
-      
       for line in historyLines {
         x.append(line.values[1])
         y.append(line.values[2])
@@ -143,7 +153,9 @@ extension ImagingWindow {
       }
     }
     
-    updateHistoryCurve()
-    updatePixelCurves()
+    if !freezeTrajectory {
+      updateHistoryCurve()
+      updatePixelCurves()
+    }
   }
 }

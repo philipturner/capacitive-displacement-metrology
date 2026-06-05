@@ -26,6 +26,7 @@ class ImagingWindow {
   var pendingSettingsLines: [LineParser.Line] = []
   var pendingHistoryLines: [LineParser.Line] = []
   var pendingPixelLines: [LineParser.Line] = []
+  var freezeTrajectory = false
   
   init() {
     win = pg.GraphicsLayoutWidget(show: true)
@@ -37,6 +38,15 @@ class ImagingWindow {
     fourierImage = Self.createFourierImage(win: win)
     
     linkPlots()
+    
+    #if false
+    for imageRow in scanImages {
+      for image in imageRow {
+        Self.updateScanImageWithTest(image: image)
+      }
+    }
+    Self.updateFourierImageWithTest(image: fourierImage)
+    #endif
   }
   
   func reset() {
@@ -62,5 +72,6 @@ class ImagingWindow {
     pendingSettingsLines = []
     pendingHistoryLines = []
     pendingPixelLines = []
+    freezeTrajectory = false
   }
 }

@@ -26,7 +26,11 @@ application.run {
   Application.queue.sync {
     let output = application.history.getOutput()
     if application.ui.imagingModeActive {
+      #if false
+      application.ui.imagingWindow.plotDataValid = true
+      #else
       application.ui.imagingWindow.update(output: output)
+      #endif
     } else {
       application.ui.historyWindow.update(output: output)
     }

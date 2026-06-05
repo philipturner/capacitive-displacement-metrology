@@ -73,7 +73,7 @@ struct ImagingState {
       pixelTracker.receive(
         lines: segment,
         imageID: imageID)
-      receivedPixelCount += settings.pixelsPerImage
+      receivedPixelCount += segment.count
       
       if segmentID < segments.count - 1 {
         guard pixelTracker.isFinished else {
