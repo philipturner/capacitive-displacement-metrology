@@ -2,6 +2,8 @@ import Foundation
 import PythonKit
 
 class ImagingWindow {
+  static let maxImagesPerFrame: Int = 5
+  
   let win: PythonObject
   
   struct HistoryPlot {
@@ -19,13 +21,11 @@ class ImagingWindow {
   var scanImages: [[Image]]
   var fourierImage: Image
   
+  var state: ImagingState!
   var pendingSettingsLines: [LineParser.Line] = []
   var pendingHistoryLines: [LineParser.Line] = []
   var pendingPixelLines: [LineParser.Line] = []
   
-  var settings: ImagingSettings!
-  var pixelTracker: PixelTracker!
-
   init() {
     win = pg.GraphicsLayoutWidget(show: true)
     win.move(Int(200), Int(20))
@@ -54,11 +54,17 @@ class ImagingWindow {
       let line = pendingSettingsLines[1]
       values.append(line.values[i])
     }
-    settings = ImagingSettings(values: values)
-    pixelTracker = PixelTracker(settings: settings!)
+    
+    let settings = ImagingSettings(values: values)
+    state = ImagingState(settings: settings)
     
     pendingSettingsLines = []
     pendingHistoryLines = []
     pendingPixelLines = []
+  }
+  
+  func splitPixelLines() -> [[LineParser.Line]] {
+    var segments: [[LineParser.Line]] = []
+    var previousSegmentID = receivedPixelCount
   }
 }

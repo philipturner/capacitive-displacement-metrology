@@ -3,7 +3,9 @@ extension ImagingWindow {
     guard output.longTimeData.count > 0 else {
       return
     }
+    
     updateHistoryRanges(output: output)
+    updateHistoryPlots(output: output)
   }
   
   func updateState() {
@@ -71,12 +73,35 @@ extension ImagingWindow {
       }
       let laneID = getLaneID()
       
+      var x: [Double] = []
+      var minimumPoints: [Float] = []
+      var averagePoints: [Float] = []
+      var maximumPoints: [Float] = []
       
+      for sample in output.longTimeData {
+        x.append(sample.time)
+        minimumPoints.append(sample.minimum[laneID])
+        averagePoints.append(sample.average[laneID])
+        maximumPoints.append(sample.maximum[laneID])
+      }
       
+      let xArray = np.array(x)
+      let curves = historyPlots[plotID].curves
+      curves[0].setData(xArray, np.array(minimumPoints))
+      curves[1].setData(xArray, np.array(averagePoints))
+      curves[2].setData(xArray, np.array(maximumPoints))
     }
   }
   
   func updateTrajectoryPlot() {
+    func updateHistoryCurve() {
+      
+    }
+    
+    func splitPixelCurve() {
+      
+    }
+    
     // just check whether the current pixel row < the previous row, then you
     // detect the boundary between consecutive images
   }
@@ -86,7 +111,7 @@ extension ImagingWindow {
   }
   
   func updateFourierImage() {
-    if settings.mode == .dualVideo {
+    if state.settings.mode == .dualVideo {
       fourierImage.plot.hide()
       return
     } else {

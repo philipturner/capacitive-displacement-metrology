@@ -2,7 +2,7 @@ struct PixelTracker {
   var settings: ImagingSettings
   var dataBuffer: [SIMD2<Float>]
   var occupiedBuffer: [Bool]
-  var receivedPixels: Int = 0
+  var receivedPixelCount: Int = 0
   
   init(settings: ImagingSettings) {
     self.settings = settings
@@ -13,11 +13,11 @@ struct PixelTracker {
   }
   
   var finishedRowCount: Int {
-    receivedPixels / settings.resolution
+    receivedPixelCount / settings.resolution
   }
   
-  mutating func receive(lines: [LineParser.Line]) -> Int {
-    var acceptedPixelCount = dataBuffer.count - receivedPixels
+  mutating func receive(lines: [LineParser.Line], imageID: Int) -> Int {
+    var acceptedPixelCount = dataBuffer.count - receivedPixelCount
     acceptedPixelCount = min(acceptedPixelCount, lines.count)
     
     for i in 0..<acceptedPixelCount {
@@ -38,7 +38,9 @@ struct PixelTracker {
         fatalError("Incorrect row for pixel.")
       }
       
-      let expectedPosition = settings.expectedPosition(pixelID: pixelID)
+      let expectedPosition = settings.expectedPosition(
+        pixelID: pixelID,
+        imageID: imageID)
       let actualPosition = SIMD2(pixel[1], pixel[2])
       let error = expectedPosition - actualPosition
       let errorMagnitude = (error * error).sum().squareRoot()
@@ -50,14 +52,14 @@ struct PixelTracker {
         fatalError("""
           Pixel was invalid.
           \(pixel)
-          \(settings.imageID)
+          \(imageID)
           """)
       }
       
       let data = SIMD2(abs(pixel[4]), pixel[3])
       dataBuffer[pixelID] = data
       occupiedBuffer[pixelID] = true
-      receivedPixels += 1
+      receivedPixelCount += 1
     }
     
     return acceptedPixelCount
