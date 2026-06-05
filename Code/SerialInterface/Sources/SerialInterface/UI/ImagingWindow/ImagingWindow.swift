@@ -19,6 +19,9 @@ class ImagingWindow {
   var scanImages: [[Image]]
   var fourierImage: Image
   
+  var pendingSettingsLines: [LineParser.Line] = []
+  var settings: ImagingSettings?
+  
   init() {
     win = pg.GraphicsLayoutWidget(show: true)
     win.move(Int(200), Int(20))
@@ -36,17 +39,22 @@ class ImagingWindow {
     Self.updateFourier(image: fourierImage)
   }
   
-  func setWindowSize() {
+  func reset() {
+    guard pendingSettingsLines.count == 2 else {
+      let lineCount = pendingSettingsLines.count
+      fatalError(
+        "Invalid number of pending settings lines: \(lineCount)")
+    }
     
-  }
-  
-  func createPlotLabels() {
-    let rowLabels: [String] = [
-      "current (A)",
-      "piezo Z (nm)",
-      "XY trajectory (nm)",
-    ]
-    
-    let fourierPlotLabel: String = "Fourier transform"
+    var values: [Float] = []
+    for i in 0..<5 {
+      let line = pendingSettingsLines[0]
+      values.append(line.values[i])
+    }
+    for i in 0..<3 {
+      let line = pendingSettingsLines[1]
+      values.append(line.values[i])
+    }
+    settings = ImagingSettings(values: values)
   }
 }

@@ -22,12 +22,21 @@ func createApplication() -> Application {
 }
 let application = createApplication()
 
-application.ui.imagingWindow.win.hide()
-
-let start = Date().timeIntervalSince1970
 application.run {
-  let output = Application.queue.sync {
-    application.history.getOutput()
+  Application.queue.sync {
+    if application.imagingModeActive {
+      application.ui.historyWindow.win.hide()
+      application.ui.imagingWindow.win.show()
+    } else {
+      application.ui.historyWindow.win.show()
+      application.ui.imagingWindow.win.hide()
+    }
+    
+    let output = application.history.getOutput()
+    if application.imagingModeActive {
+      print(application.ui.imagingWindow.settings!.resolution)
+    } else {
+      application.ui.historyWindow.update(output: output)
+    }
   }
-  application.ui.historyWindow.update(output: output)
 }

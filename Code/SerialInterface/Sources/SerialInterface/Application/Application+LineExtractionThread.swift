@@ -10,23 +10,11 @@ extension Application {
     }
   }
   
-  func lineExtractionLoop(emulator: inout Emulator) {
+  private func lineExtractionLoop(emulator: inout Emulator) {
     usleep(10_000)
     Watchdog.notify(threadID: 1, code: 0)
     
-    let input = Application.queue.sync {
-      CommandTransmitter.extractCharacters()
-    }
-    if input == "p" {
-      let currentTime = Date().timeIntervalSince1970
-      if Application.nextPauseTime == nil {
-        Application.nextPauseTime = currentTime
-      } else {
-        Application.nextPauseTime = nil
-      }
-    } else if input.count > 0 {
-      CommandTransmitter.transmitSerialInput(input, port: port)
-    }
+    processSerialInput()
     
     var lines: [LineParser.Line]
     if useEmulator {
@@ -42,11 +30,20 @@ extension Application {
     }
     
     let splitting = Flags.split(lines: lines)
-    Application.queue.sync {
-      if splitting.newMode != nil {
-        self.history = History(copying: self.history)
+    Application.queue.sync { [self] in
+      ui.imagingWindow.pendingSettingsLines += splitting.imagingSettings
+      
+      if let newMode = splitting.newMode {
+        history = History(copying: history)
+        
+        if newMode == 8 {
+          imagingModeActive = true
+          ui.imagingWindow.reset()
+        } else {
+          imagingModeActive = false
+        }
       }
-      self.history.addLines(splitting.history)
+      history.addLines(splitting.history)
     }
     
     func display(lines: [LineParser.Line], label: String?) {
@@ -63,19 +60,34 @@ extension Application {
     }
     display(lines: splitting.spectroscopy, label: nil)
     display(lines: splitting.imagingSettings, label: "imaging settings")
-    if splitting.newMode == 8 {
-      print("switched to imaging mode")
+  }
+  
+  private func processSerialInput() {
+    let input = Application.queue.sync {
+      CommandTransmitter.extractCharacters()
     }
-    display(lines: splitting.imaging, label: "imaging")
+    if input == "p" {
+      let currentTime = Date().timeIntervalSince1970
+      if Application.nextPauseTime == nil {
+        Application.nextPauseTime = currentTime
+      } else {
+        Application.nextPauseTime = nil
+      }
+    } else if input.count > 0 {
+      CommandTransmitter.transmitSerialInput(input, port: port)
+    }
   }
   
   private func createLines(bytes: [UInt8]) -> [LineParser.Line] {
     func reset(error: LocalizedError) {
       lineParser = LineParser()
       Application.queue.sync {
-        // This may cause undefined behavior when the UI for imaging is
-        // implemented.
-        self.history = History(copying: self.history)
+        if imagingModeActive {
+          fatalError(
+            "Encountered corrupted data while imaging mode was active.")
+        } else {
+          history = History(copying: history)
+        }
       }
     }
     

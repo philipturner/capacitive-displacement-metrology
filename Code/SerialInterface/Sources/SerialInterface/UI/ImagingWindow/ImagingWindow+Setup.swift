@@ -1,6 +1,16 @@
 import PythonKit
 
 extension ImagingWindow {
+  func createPlotLabels() {
+    let rowLabels: [String] = [
+      "current (A)",
+      "piezo Z (nm)",
+      "XY trajectory (nm)",
+    ]
+    
+    let fourierPlotLabel: String = "Fourier transform"
+  }
+  
   static func createHistoryPlots(win: PythonObject) -> [HistoryPlot] {
     var output: [HistoryPlot] = []
     

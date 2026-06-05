@@ -24,6 +24,12 @@ class UI {
       return Python.None
     }.pythonObject
     
+    // Makes the application close when "Ctrl + W" is typed, and the window
+    // 'win' is in focus.
     shortcut.activated.connect(closeEvent)
+    
+    // Makes the application close after pressing the red button to close the
+    // window.
+    win.closeEvent = closeEvent
   }
 }

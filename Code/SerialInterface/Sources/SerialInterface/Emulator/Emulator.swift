@@ -3,7 +3,7 @@ import Foundation
 struct Emulator {
   enum Mode: UInt8 {
     case dacTest = 1
-    case imaging = 5
+    case imaging = 8
   }
   
   var startTime: Double
