@@ -1,9 +1,11 @@
 import PythonKit
 
+private let colorBarAxisWidth: Float = 45
+
 extension ImagingWindow {
   func createPlotLabels() {
     let rowLabels: [String] = [
-      "current (A)",
+      "current (pA)",
       "piezo Z (nm)",
       "XY trajectory (nm)",
     ]
@@ -73,6 +75,7 @@ extension ImagingWindow {
           colorMap: colorMap,
           interactive: false)
         colorBar.setImageItem(imageItem, insert_in: plot)
+//        colorBar.axis.setWidth(colorBarAxisWidth)
         
         let image = Image(
           plot: plot,
@@ -98,6 +101,7 @@ extension ImagingWindow {
       colorMap: colorMap,
       interactive: false)
     colorBar.setImageItem(imageItem, insert_in: plot)
+//    colorBar.axis.setWidth(colorBarAxisWidth)
     
     let image = Image(
       plot: plot,

@@ -51,7 +51,7 @@ extension ImagingWindow {
     func updateYAxis() {
       let axisBounds = UI.axisBounds(data: output.longTimeData)
       
-      let rangeCurrent = axisBounds[0]
+      let rangeCurrent = axisBounds[0] * 1e12
       let rangeX = axisBounds[1]
       let rangeY = axisBounds[2]
       let rangeZ = axisBounds[3]
@@ -103,9 +103,19 @@ extension ImagingWindow {
       
       for sample in output.longTimeData {
         x.append(sample.time)
-        minimumPoints.append(sample.minimum[laneID])
-        averagePoints.append(sample.average[laneID])
-        maximumPoints.append(sample.maximum[laneID])
+        
+        func getMultiplier() -> Float {
+          if plotID == 0 {
+            return 1e12
+          } else {
+            return 1
+          }
+        }
+        let multiplier = getMultiplier()
+        
+        minimumPoints.append(sample.minimum[laneID] * multiplier)
+        averagePoints.append(sample.average[laneID] * multiplier)
+        maximumPoints.append(sample.maximum[laneID] * multiplier)
       }
       
       let xArray = np.array(x)

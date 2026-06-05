@@ -43,9 +43,28 @@ extension ImagingWindow {
     }
     
     let pixelsPerImage = state.settings.pixelsPerImage
-    let pixel = SIMD2<Float>(
-      state.settings.setpointCurrent, 0)
+    let pixel = SIMD2<Float>(0, 0)
     return Array(repeating: pixel, count: pixelsPerImage)
+  }
+  
+  func fillRemainingRows(_ image: [SIMD2<Float>]) -> [SIMD2<Float>] {
+    if image.count == state.settings.pixelsPerImage {
+      return image
+    }
+    
+    var minimumZ: Float = .zero
+    for pixel in image {
+      let z = pixel[1]
+      minimumZ = min(minimumZ, z)
+
+    }
+    
+    let fillerPixel = SIMD2<Float>(0, minimumZ)
+    let remainingPixelCount = state.settings.pixelsPerImage - image.count
+    let fillerChunk = Array(
+      repeating: fillerPixel,
+      count: remainingPixelCount)
+    return image + fillerChunk
   }
   
   func updateScanImages() {
@@ -62,7 +81,8 @@ extension ImagingWindow {
               } else {
                 let pixelCount = finishedRowCount * state.settings.resolution
                 let dataBuffer = state.pixelTracker.dataBuffer
-                return Array(dataBuffer[0..<pixelCount])
+                let startChunk = Array(dataBuffer[0..<pixelCount])
+                return fillRemainingRows(startChunk)
               }
             } else {
               return state.pendingImages[0]
@@ -74,7 +94,13 @@ extension ImagingWindow {
         guard let sourceData else {
           continue
         }
-        let data = sourceData.map { $0[rowID] }
+        var data = sourceData.map { $0[rowID] }
+        if rowID == 0 {
+          for i in 0..<data.count {
+            data[i] *= 1e12
+          }
+        }
+        
         let finalData = Self.castToNumpy(
           data, columnCount: state.settings.resolution)
         
@@ -99,8 +125,8 @@ extension ImagingWindow {
         // plot out to +/-3 sigma
         if rowID == 0 {
           let levels = SIMD2<Float>(
-            0.5 * state.settings.setpointCurrent,
-            1.5 * state.settings.setpointCurrent)
+            0.5 * state.settings.setpointCurrent * 1e12,
+            1.5 * state.settings.setpointCurrent * 1e12)
           image.colorBar.setLevels(
             low: levels[0],
             high: levels[1])
@@ -127,10 +153,10 @@ extension ImagingWindow {
       return
     }
     var data = sourceData.map { $0[0] }
-    
     for i in 0..<data.count {
       data[i] /= state.settings.setpointCurrent
     }
+    
     let dataNumpy = Self.castToNumpy(
       data, columnCount: state.settings.resolution)
     let finalData = Self.fourierTransform(dataNumpy)

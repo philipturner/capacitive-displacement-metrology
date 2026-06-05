@@ -4,12 +4,12 @@ extension Emulator {
   static let pixelPeriodMicros: Int = 144
   static let atomSpacing: Float = 0.246 // units: nm
   
-  static let imagingMode: ImagingMode = .video
+  static let imagingMode: ImagingMode = .dualVideo
   static let imageResolution: Int = 64
   static let imageSize: Float = 1.5
   static let imageCenters: [SIMD2<Float>] = [
-    SIMD2<Float>(-30, -20),
-    SIMD2<Float>(22, 22),
+    SIMD2<Float>(-3.0, -2.0),
+    SIMD2<Float>(2.2, 2.2),
   ]
   
   mutating func increaseDriftOffset() {
