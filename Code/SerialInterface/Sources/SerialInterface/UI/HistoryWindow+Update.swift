@@ -51,9 +51,8 @@ extension HistoryWindow {
         y.append(sample.values[rowID])
       }
       
-      curves[rowID][0].setData(
-        np.array(x),
-        np.array(y))
+      let curveSet = curveSets[rowID][0]
+      curveSet.setData(np.array(x), np.array(y))
     }
   }
   
@@ -72,7 +71,7 @@ extension HistoryWindow {
       }
       
       let xArray = np.array(x)
-      let curveSet = curves[rowID][1]
+      let curveSet = curveSets[rowID][1]
       curveSet[0].setData(xArray, np.array(minimumPoints))
       curveSet[1].setData(xArray, np.array(averagePoints))
       curveSet[2].setData(xArray, np.array(maximumPoints))

@@ -5,7 +5,7 @@ class HistoryWindow {
   
   static let rowCount: Int = 5
   var plots: [[PythonObject]] = []
-  var curves: [[PythonObject]] = []
+  var curveSets: [[PythonObject]] = []
   var labels: [PythonObject] = []
   
   static let thicknessFactor: Int = 1

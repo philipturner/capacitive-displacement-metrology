@@ -104,7 +104,7 @@ extension HistoryWindow {
       }
 
       plots.append(plotRow)
-      curves.append(curveRow)
+      curveSets.append(curveRow)
     }
   }
   

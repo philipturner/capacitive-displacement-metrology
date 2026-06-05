@@ -9,6 +9,7 @@ class UI {
   init() {
     pg.setConfigOptions(useOpenGL: true)
     pg.setConfigOptions(antialias: true)
+    pg.setConfigOption("imageAxisOrder", "row-major")
     app = QtWidgets.QApplication([String]())
     
     historyWindow = HistoryWindow()

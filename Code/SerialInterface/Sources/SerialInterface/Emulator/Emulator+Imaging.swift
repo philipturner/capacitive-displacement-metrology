@@ -34,6 +34,7 @@ extension Emulator {
           line.values[0] = -100
           line.values[1] = -100
         }
+        line.values[2] = 1000e-12
       }
       output.append(line)
     }

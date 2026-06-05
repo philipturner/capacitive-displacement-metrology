@@ -1,6 +1,7 @@
 #include "Imager.h"
 
 #include "Diagnostics/Log.h"
+#include "Util/Feedback.h"
 #include <Arduino.h>
 
 Imager::Mode Imager::getMode(char code) {
@@ -90,5 +91,6 @@ void Imager::forwardParameters() {
   Log::writeValuesWithFlags(
     /*flags=*/4,
     centersX[1],
-    centersY[1]);
+    centersY[1],
+    Feedback::setpointCurrent);
 }
