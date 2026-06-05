@@ -66,9 +66,9 @@ extension Emulator {
       let positionError = 50e-12 * Float.random(in: -1...1)
       
       output[0] = current
-      output[1] = z
-      output[2] = position.x
-      output[3] = position.y
+      output[1] = position.x
+      output[2] = position.y
+      output[3] = z
       output[4] = positionError
     }
     return output

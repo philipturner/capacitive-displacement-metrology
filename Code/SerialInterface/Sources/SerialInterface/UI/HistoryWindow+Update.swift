@@ -14,46 +14,10 @@ extension HistoryWindow {
   }
   
   func updateYAxis(data: [History.TimedAverage]) {
-    guard data.count > 0 else {
-      return
-    }
+    let axisBounds = UI.axisBounds(data: data)
     
     for rowID in 0..<Self.rowCount {
-      var minimum: Float = .greatestFiniteMagnitude
-      var maximum: Float = -.greatestFiniteMagnitude
-      for sampleID in data.indices {
-        let sample = data[sampleID]
-        
-        let sampleMin = sample.minimum[rowID]
-        let sampleMax = sample.maximum[rowID]
-        if sampleMin < minimum {
-          minimum = sampleMin
-        }
-        if sampleMax > maximum {
-          maximum = sampleMax
-        }
-      }
-      
-      func getRange() -> SIMD2<Float> {
-        let center = (minimum + maximum) / 2
-        let halfRange = maximum - center
-        
-        if halfRange == 0 {
-          if center > 0 {
-            return SIMD2(center * 0.99, center * 1.01)
-          } else if center < 0 {
-            return SIMD2(center * 1.01, center * 0.99)
-          } else {
-            return SIMD2(-1, 1)
-          }
-        } else {
-          let rangeMin = center - halfRange * 1.1
-          let rangeMax = center + halfRange * 1.1
-          return SIMD2(rangeMin, rangeMax)
-        }
-      }
-      let range = getRange()
-      
+      let range = axisBounds[rowID]
       let plotLeft = plots[rowID][0]
       plotLeft.setYRange(range[0], range[1], padding: 0)
     }
@@ -112,6 +76,7 @@ extension HistoryWindow {
       shortTimeDesc.majorTick = TimeAxis.shortMajorTick
       updateTimeAxis(columnID: 0, descriptor: shortTimeDesc)
     }
+    
     func updateLongTime() {
       let maximum = output.longTimeData.last!.time
       
@@ -121,6 +86,7 @@ extension HistoryWindow {
       longTimeDesc.majorTick = TimeAxis.longMajorTick
       updateTimeAxis(columnID: 1, descriptor: longTimeDesc)
     }
+    
     func updateShortTimeForTrigger(
       trace: History.TriggerEventTrace
     ) {

@@ -52,8 +52,6 @@ extension ImagingWindow {
   }
   
   static func updateFourier(image: Image) {
-    let start = Date().timeIntervalSince1970
-    
     let fakeData = createFakeData()
     let f_transform = np.fft.fft2(fakeData)
     let f_shifted = np.fft.fftshift(f_transform)
@@ -77,8 +75,5 @@ extension ImagingWindow {
     image.colorBar.setLevels(
       low: levels[0] + (levels[1] - levels[0]) * 0.50,
       high: levels[0] + (levels[1] - levels[0]) * 1.00)
-    
-    let end = Date().timeIntervalSince1970
-    print("time:", Float(end - start) * 1000)
   }
 }

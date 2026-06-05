@@ -42,4 +42,53 @@ extension UI {
       }
     }
   }
+  
+  static func axisBounds(
+    data: [History.TimedAverage]
+  ) -> [SIMD2<Float>] {
+    guard data.count > 0 else {
+      fatalError("No data elements.")
+    }
+    
+    var minAccumulator = SIMD8<Float>(repeating: .greatestFiniteMagnitude)
+    var maxAccumulator = SIMD8<Float>(repeating: -.greatestFiniteMagnitude)
+    for sampleID in data.indices {
+      let sample = data[sampleID]
+      minAccumulator.replace(
+        with: sample.minimum,
+        where: sample.minimum .< minAccumulator)
+      maxAccumulator.replace(
+        with: sample.maximum,
+        where: sample.maximum .> maxAccumulator)
+    }
+    
+    var output: [SIMD2<Float>] = []
+    for laneID in 0..<8 {
+      let minimum = minAccumulator[laneID]
+      let maximum = maxAccumulator[laneID]
+      
+      func getRange() -> SIMD2<Float> {
+        let center = (minimum + maximum) / 2
+        let halfRange = maximum - center
+        
+        if halfRange == 0 {
+          if center > 0 {
+            return SIMD2(center * 0.99, center * 1.01)
+          } else if center < 0 {
+            return SIMD2(center * 1.01, center * 0.99)
+          } else {
+            return SIMD2(-1, 1)
+          }
+        } else {
+          let rangeMin = center - halfRange * 1.1
+          let rangeMax = center + halfRange * 1.1
+          return SIMD2(rangeMin, rangeMax)
+        }
+      }
+      
+      let range = getRange()
+      output.append(range)
+    }
+    return output
+  }
 }

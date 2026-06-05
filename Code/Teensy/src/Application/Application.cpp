@@ -224,9 +224,9 @@ void Application::logNormalMessage() {
              mode == Command::Mode::imaging) {
     Log::writeValuesNormal(
       state.filteredCurrent,
-      state.piezoZVoltage * 0.320,
       state.piezoXVoltage * 0.320,
       state.piezoYVoltage * 0.320,
+      state.piezoZVoltage * 0.320,
       state.positionError * 1e9);
   }
 }
