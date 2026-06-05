@@ -7,14 +7,14 @@ class UI {
   var historyWindow: HistoryWindow
   var imagingWindow: ImagingWindow
   
-  init() {
+  init(trajectoryLagTime: Double?) {
     pg.setConfigOptions(useOpenGL: true)
     pg.setConfigOptions(antialias: true)
     pg.setConfigOption("imageAxisOrder", "row-major")
     app = QtWidgets.QApplication([String]())
     
     historyWindow = HistoryWindow()
-    imagingWindow = ImagingWindow()
+    imagingWindow = ImagingWindow(trajectoryLagTime: trajectoryLagTime)
   }
   
   static func connectCloseShortcut(win: PythonObject) {

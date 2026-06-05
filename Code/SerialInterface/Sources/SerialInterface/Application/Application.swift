@@ -4,6 +4,7 @@ import SwiftSerial
 
 struct ApplicationDescriptor {
   var pythonLibraryPath: String?
+  var trajectoryLagTime: Double?
   var triggers: [Trigger] = []
   var useEmulator: Bool = false
 }
@@ -31,7 +32,7 @@ class Application: @unchecked Sendable {
     PythonLibrary.useLibrary(at: pythonLibraryPath)
     self.useEmulator = descriptor.useEmulator
     
-    self.ui = UI()
+    self.ui = UI(trajectoryLagTime: descriptor.trajectoryLagTime)
     if useEmulator {
       self.port = SerialPort(path: "/dev/cu.debug-console")
     } else {

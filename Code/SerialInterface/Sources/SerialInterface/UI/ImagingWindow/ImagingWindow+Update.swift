@@ -1,3 +1,6 @@
+import Foundation
+import PythonKit
+
 extension ImagingWindow {
   func update(output: History.Output) {
     guard output.longTimeData.count > 0 else {
@@ -7,9 +10,37 @@ extension ImagingWindow {
     updateHistoryRanges(output: output)
     updateHistoryPlots(output: output)
     
+    if state.trajectorySynchronization == nil {
+      if pendingHistoryLines.count > 0 {
+        let timestamp = Date().timeIntervalSince1970
+        let lineID = pendingHistoryLines.count
+        state.trajectorySynchronization = (timestamp, lineID)
+      }
+    }
+    
     let historyLines = pendingHistoryLines
+    if let trajectoryLagTime = trajectoryLagTime {
+      if let synchronization = state.trajectorySynchronization {
+        let currentTime = Date().timeIntervalSince1970
+        let pastTime = currentTime - 0.1
+        let deltaTime = pastTime - synchronization.timestamp
+        
+        let timePerLine = 1e-6 * Double(History.logPeriodMicros)
+        let deltaLines = Int(deltaTime / timePerLine)
+        var maxLineID = synchronization.lineID + deltaLines
+        maxLineID -= state.deletedHistoryLineCount
+        
+        if maxLineID > 0 {
+          let deletedLineCount = min(maxLineID, pendingHistoryLines.count)
+          pendingHistoryLines = Array(pendingHistoryLines[deletedLineCount...])
+          state.deletedHistoryLineCount += deletedLineCount
+        }
+      }
+    } else {
+      pendingHistoryLines = []
+    }
+    
     let pixelSegments = state.split(lines: pendingPixelLines)
-    pendingHistoryLines = []
     pendingPixelLines = []
     
     updateTrajectoryPlot(
@@ -22,7 +53,7 @@ extension ImagingWindow {
     
     if state.settings.mode == .image {
       if state.pendingImages[0] != nil {
-        freezeTrajectory = true
+        state.freezeTrajectory = true
       }
     }
     
@@ -69,15 +100,41 @@ extension ImagingWindow {
         rangeZ[1],
         padding: 0)
       
-      if !freezeTrajectory {
+      if !state.freezeTrajectory {
+        let centerX = rangeX.sum() / 2
+        let centerY = rangeY.sum() / 2
+        let spanX = rangeX[1] - rangeX[0]
+        let spanY = rangeY[1] - rangeY[0]
+        let maxSpan = max(spanX, spanY)
+        
+        let newRangeX = SIMD2(
+          centerX - maxSpan / 2,
+          centerX + maxSpan / 2)
+        let newRangeY = SIMD2(
+          centerY - maxSpan / 2,
+          centerY + maxSpan / 2)
+        
         plotXY.setXRange(
-          rangeX[0],
-          rangeX[1],
+          newRangeX[0],
+          newRangeX[1],
           padding: 0)
         plotXY.setYRange(
-          rangeY[0],
-          rangeY[1],
+          newRangeY[0],
+          newRangeY[1],
           padding: 0)
+        
+        let majorTick = maxSpan / 5
+        let minorTick = majorTick / 5
+        let offset: Float = 1.0
+        
+        let levels: [PythonObject] = [
+          PythonObject(tupleOf: majorTick, offset),
+          PythonObject(tupleOf: minorTick, offset),
+        ]
+        let xAxis = plotXY.getAxis("bottom")
+        let yAxis = plotXY.getAxis("left")
+        xAxis.setTickSpacing(majorTick, minorTick)
+        yAxis.setTickSpacing(majorTick, minorTick)
       }
     }
     
@@ -163,7 +220,7 @@ extension ImagingWindow {
       }
     }
     
-    if !freezeTrajectory {
+    if !state.freezeTrajectory {
       updateHistoryCurve()
       updatePixelCurves()
     }

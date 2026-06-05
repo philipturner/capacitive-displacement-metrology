@@ -21,7 +21,7 @@ private let yAxisWidth: Int = 120
 extension HistoryWindow {
   func setWindowPosition() {
     if windowPositionMac {
-      win.move(Int(200), Int(20))
+      win.move(Int(0), Int(0))
     } else {
       win.move(Int(50), Int(0))
     }

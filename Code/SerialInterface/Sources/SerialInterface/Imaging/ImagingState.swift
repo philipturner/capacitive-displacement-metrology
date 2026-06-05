@@ -4,6 +4,9 @@ struct ImagingState {
   
   var receivedPixelCount: Int = 0
   var pendingImages: [[SIMD2<Float>]?] // overwrite to 'nil' after retrieving
+  var freezeTrajectory = false
+  var trajectorySynchronization: (timestamp: Double, lineID: Int)?
+  var deletedHistoryLineCount: Int = 0
   
   init(settings: ImagingSettings) {
     self.settings = settings

@@ -21,6 +21,10 @@ extension ImagingWindow {
       plot.showGrid(x: true, y: true)
       plot.disableAutoRange()
       
+      if rowID == 2 {
+        plot.getViewBox().setAspectLocked(true)
+      }
+      
       func createCurves() -> [PythonObject] {
         let empty: [Float] = []
         if rowID == 2 {
@@ -75,7 +79,6 @@ extension ImagingWindow {
           colorMap: colorMap,
           interactive: false)
         colorBar.setImageItem(imageItem, insert_in: plot)
-//        colorBar.axis.setWidth(colorBarAxisWidth)
         
         let image = Image(
           plot: plot,
@@ -101,7 +104,6 @@ extension ImagingWindow {
       colorMap: colorMap,
       interactive: false)
     colorBar.setImageItem(imageItem, insert_in: plot)
-//    colorBar.axis.setWidth(colorBarAxisWidth)
     
     let image = Image(
       plot: plot,

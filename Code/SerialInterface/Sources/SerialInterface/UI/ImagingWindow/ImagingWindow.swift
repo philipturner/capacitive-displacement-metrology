@@ -3,6 +3,7 @@ import PythonKit
 
 class ImagingWindow {
   static let maxImagesPerFrame: Int = 5
+  var trajectoryLagTime: Double?
   
   let win: PythonObject
   var plotDataValid = false
@@ -26,11 +27,12 @@ class ImagingWindow {
   var pendingSettingsLines: [LineParser.Line] = []
   var pendingHistoryLines: [LineParser.Line] = []
   var pendingPixelLines: [LineParser.Line] = []
-  var freezeTrajectory = false
   
-  init() {
+  init(trajectoryLagTime: Double?) {
+    self.trajectoryLagTime = trajectoryLagTime
+    
     win = pg.GraphicsLayoutWidget(show: true)
-    win.move(Int(200), Int(20))
+    win.move(Int(0), Int(0))
     UI.connectCloseShortcut(win: win)
     
     historyPlots = Self.createHistoryPlots(win: win)
@@ -72,6 +74,5 @@ class ImagingWindow {
     pendingSettingsLines = []
     pendingHistoryLines = []
     pendingPixelLines = []
-    freezeTrajectory = false
   }
 }

@@ -4,9 +4,9 @@ extension Emulator {
   static let pixelPeriodMicros: Int = 144
   static let atomSpacing: Float = 0.246 // units: nm
   
-  static let imagingMode: ImagingMode = .dualVideo
-  static let imageResolution: Int = 64
-  static let imageSize: Float = 1.5
+  static let imagingMode: ImagingMode = .video
+  static let imageResolution: Int = 64 * 2
+  static let imageSize: Float = 1.5 * 2
   static let imageCenters: [SIMD2<Float>] = [
     SIMD2<Float>(-3.0, -2.0),
     SIMD2<Float>(2.2, 2.2),
@@ -24,7 +24,6 @@ extension Emulator {
     
     let dt = Float(1e-6) * Float(Self.pixelPeriodMicros)
     driftOffset += sqrt(dt) * velocity
-    print(driftOffset)
   }
   
   mutating func createImagingParameterLines() -> [LineParser.Line] {
