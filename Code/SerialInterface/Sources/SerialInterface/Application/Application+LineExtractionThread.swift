@@ -35,14 +35,24 @@ extension Application {
       ui.imagingWindow.pendingSettingsLines += splitting.imagingSettings
       if let newMode = splitting.newMode {
         if newMode == 8 {
-          imagingModeActive = true
+          ui.imagingModeActive = true
           ui.imagingWindow.reset()
         } else {
-          imagingModeActive = false
-          ui.imagingWindow.settings = nil
+          ui.imagingModeActive = false
+          ui.imagingWindow.state = nil
         }
+        ui.imagingWindow.plotDataValid = false
+        ui.historyWindow.plotDataValid = false
       }
-      if imagingModeActive {
+      if ui.imagingModeActive {
+        if let pauseTime = Application.nextPauseTime {
+          let currentTime = Date().timeIntervalSince1970
+          if pauseTime < currentTime {
+            fatalError(
+              "Pausing during imaging would overwhelm the current code.")
+          }
+        }
+        
         ui.imagingWindow.pendingHistoryLines += splitting.history
         ui.imagingWindow.pendingPixelLines += splitting.pixel
       }
@@ -90,7 +100,7 @@ extension Application {
     func reset(error: LocalizedError) {
       lineParser = LineParser()
       Application.queue.sync {
-        if imagingModeActive {
+        if ui.imagingModeActive {
           fatalError(
             "Encountered corrupted data while imaging mode was active.")
         } else {

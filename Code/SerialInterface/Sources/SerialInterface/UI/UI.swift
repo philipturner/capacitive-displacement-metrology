@@ -3,6 +3,7 @@ import PythonKit
 class UI {
   let app: PythonObject
   
+  var imagingModeActive: Bool = false
   var historyWindow: HistoryWindow
   var imagingWindow: ImagingWindow
   
@@ -31,5 +32,19 @@ class UI {
     // Makes the application close after pressing the red button to close the
     // window.
     win.closeEvent = closeEvent
+  }
+  
+  func showActiveWindows() {
+    if !imagingModeActive, historyWindow.plotDataValid {
+      historyWindow.win.show()
+    } else {
+      historyWindow.win.hide()
+    }
+    
+    if imagingModeActive, imagingWindow.plotDataValid {
+      imagingWindow.win.show()
+    } else {
+      imagingWindow.win.hide()
+    }
   }
 }

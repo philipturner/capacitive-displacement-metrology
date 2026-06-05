@@ -17,7 +17,6 @@ class Application: @unchecked Sendable {
   static var nextPauseTime: Double?
   
   var useEmulator: Bool
-  var imagingModeActive: Bool = false
   
   let ui: UI
   let port: SerialPort

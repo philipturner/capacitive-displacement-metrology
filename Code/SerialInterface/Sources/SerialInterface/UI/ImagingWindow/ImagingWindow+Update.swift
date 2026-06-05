@@ -15,6 +15,14 @@ extension ImagingWindow {
     updateTrajectoryPlot(
       historyLines: historyLines,
       pixelSegments: pixelSegments)
+    
+    updateScanImages()
+    updateFourierImage()
+    for i in state.pendingImages.indices {
+      state.pendingImages[i] = nil
+    }
+    
+    plotDataValid = true
   }
   
   func updateHistoryRanges(output: History.Output) {
@@ -102,12 +110,36 @@ extension ImagingWindow {
     pixelSegments: [[LineParser.Line]]
   ) {
     func updateHistoryCurve() {
+      var x: [Float] = []
+      var y: [Float] = []
       
+      for line in historyLines {
+        x.append(line.values[1])
+        y.append(line.values[2])
+      }
+      
+      let curve = historyPlots[2].curves[0]
+      curve.setData(np.array(x), np.array(y))
     }
     
     func updatePixelCurves() {
       if pixelSegments.count > Self.maxImagesPerFrame {
         fatalError("Exceeded allowed number of images per frame.")
+      }
+      
+      for segmentID in 0..<Self.maxImagesPerFrame {
+        var x: [Float] = []
+        var y: [Float] = []
+        if segmentID < pixelSegments.count {
+          let segment = pixelSegments[segmentID]
+          for line in segment {
+            x.append(line.values[1])
+            y.append(line.values[2])
+          }
+        }
+        
+        let curve = historyPlots[2].curves[1 + segmentID]
+        curve.setData(np.array(x), np.array(y))
       }
     }
     
@@ -115,8 +147,47 @@ extension ImagingWindow {
     updatePixelCurves()
   }
   
-  func updateScanImages() {
+  // Returns a replacement image only when the image views need to be reset.
+  func emptyImage() -> [SIMD2<Float>]? {
+    if plotDataValid {
+      return nil
+    }
     
+    let pixelsPerImage = state.settings.pixelsPerImage
+    let pixel = SIMD2<Float>(
+      state.settings.setpointCurrent, 0)
+    return Array(repeating: pixel, count: pixelsPerImage)
+  }
+  
+  func updateScanImages() {
+    for rowID in 0..<2 {
+      for columnID in 0..<2 {
+        func createSourceData() -> [SIMD2<Float>]? {
+          if state.settings.mode == .dualVideo {
+            return state.pendingImages[columnID]
+          } else {
+            if columnID == 0 {
+              let finishedRowCount = state.pixelTracker.finishedRowCount
+              if finishedRowCount == 0 {
+                return nil
+              } else {
+                let pixelCount = finishedRowCount * state.settings.resolution
+                let dataBuffer = state.pixelTracker.dataBuffer
+                return Array(dataBuffer[0..<pixelCount])
+              }
+            } else {
+              return state.pendingImages[0]
+            }
+          }
+        }
+        
+        let sourceData = createSourceData() ?? emptyImage()
+        guard let sourceData else {
+          continue
+        }
+        let data = sourceData.map { $0[rowID] }
+      }
+    }
   }
   
   func updateFourierImage() {
@@ -127,6 +198,10 @@ extension ImagingWindow {
       fourierImage.plot.show()
     }
     
-    
+    let sourceData = state.pendingImages[0] ?? emptyImage()
+    guard let sourceData else {
+      return
+    }
+    let data = sourceData.map { $0[0] }
   }
 }

@@ -74,27 +74,6 @@ extension ImagingWindow {
           interactive: false)
         colorBar.setImageItem(imageItem, insert_in: plot)
         
-        // For now, don't worry about the problem of color labels consuming
-        // excessive space.
-        /*
-        bar.axis.setStyle(showValues: false)
-        bar.axis.setWidth(0)
-        
-        let labelTop = pg.TextItem(
-          "15000",
-          color: "w",
-          anchor: PythonObject(tupleOf: Float(0.5), Float(1.0)))
-        labelTop.setParentItem(bar)
-        labelTop.setPos(Int(5), Int(0))
-        
-        let labelBottom = pg.TextItem(
-          "5000",
-          color: "w",
-          anchor: PythonObject(tupleOf: Float(0.5), Float(0.0)))
-        labelBottom.setParentItem(bar)
-        labelBottom.setPos(Int(5), Int(100))
-        */
-        
         let image = Image(
           plot: plot,
           imageItem: imageItem,

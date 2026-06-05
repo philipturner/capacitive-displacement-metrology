@@ -24,19 +24,12 @@ let application = createApplication()
 
 application.run {
   Application.queue.sync {
-    if application.imagingModeActive {
-      application.ui.historyWindow.win.hide()
-      application.ui.imagingWindow.win.show()
-    } else {
-      application.ui.historyWindow.win.show()
-      application.ui.imagingWindow.win.hide()
-    }
-    
     let output = application.history.getOutput()
-    if application.imagingModeActive {
-      
+    if application.ui.imagingModeActive {
+      application.ui.imagingWindow.update(output: output)
     } else {
       application.ui.historyWindow.update(output: output)
     }
+    application.ui.showActiveWindows()
   }
 }

@@ -2,6 +2,7 @@ import PythonKit
 
 class HistoryWindow {
   let win: PythonObject
+  var plotDataValid = false
   
   static let rowCount: Int = 5
   var plots: [[PythonObject]] = []

@@ -5,6 +5,7 @@ class ImagingWindow {
   static let maxImagesPerFrame: Int = 5
   
   let win: PythonObject
+  var plotDataValid = false
   
   struct HistoryPlot {
     var plot: PythonObject
