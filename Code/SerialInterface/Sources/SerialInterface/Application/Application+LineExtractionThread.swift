@@ -39,6 +39,7 @@ extension Application {
           ui.imagingWindow.reset()
         } else {
           imagingModeActive = false
+          ui.imagingWindow.settings = nil
         }
       }
       if imagingModeActive {

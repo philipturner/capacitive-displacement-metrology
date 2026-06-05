@@ -16,14 +16,7 @@ struct PixelTracker {
     receivedPixels / settings.resolution
   }
   
-  var isFinished: Bool {
-    if receivedPixels > dataBuffer.count {
-      fatalError("This should never happen.")
-    }
-    return (receivedPixels == dataBuffer.count)
-  }
-  
-  mutating func receive(lines: inout [LineParser.Line]) {
+  mutating func receive(lines: [LineParser.Line]) -> Int {
     var acceptedPixelCount = dataBuffer.count - receivedPixels
     acceptedPixelCount = min(acceptedPixelCount, lines.count)
     
@@ -66,5 +59,7 @@ struct PixelTracker {
       occupiedBuffer[pixelID] = true
       receivedPixels += 1
     }
+    
+    return acceptedPixelCount
   }
 }

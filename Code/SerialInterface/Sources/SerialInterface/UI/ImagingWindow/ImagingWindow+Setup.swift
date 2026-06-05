@@ -27,8 +27,11 @@ extension ImagingWindow {
           }
           
           let historyCurve = plot.plot(empty, empty, pen: pen("#2e7ec9"))
-          let pixelCurve = plot.plot(empty, empty, pen: pen("orange"))
-          return [historyCurve, pixelCurve]
+          
+          // Pixel curves for consecutive images in the same frame.
+          let pixelCurve1 = plot.plot(empty, empty, pen: pen("orange"))
+          let pixelCurve2 = plot.plot(empty, empty, pen: pen("orange"))
+          return [historyCurve, pixelCurve1, pixelCurve2]
         } else {
           func pen(_ color: String) -> PythonObject {
             return pg.mkPen(color, width: 1)

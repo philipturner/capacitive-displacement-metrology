@@ -23,7 +23,7 @@ class ImagingWindow {
   var pendingHistoryLines: [LineParser.Line] = []
   var pendingPixelLines: [LineParser.Line] = []
   
-  var settings: ImagingSettings?
+  var settings: ImagingSettings!
   var pixelTracker: PixelTracker!
 
   init() {
