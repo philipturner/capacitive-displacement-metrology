@@ -19,8 +19,10 @@ class ImagingWindow {
   var scanImages: [[Image]]
   var fourierImage: Image
   
-  var pendingSettingsLines: [LineParser.Line] = []
   var settings: ImagingSettings?
+  var pendingSettingsLines: [LineParser.Line] = []
+  // var pendingHistoryLines: [LineParser.Line] = []
+  var pendingPixelLines: [LineParser.Line] = []
   
   init() {
     win = pg.GraphicsLayoutWidget(show: true)
@@ -56,5 +58,9 @@ class ImagingWindow {
       values.append(line.values[i])
     }
     settings = ImagingSettings(values: values)
+    
+    pendingSettingsLines = []
+    // pendingHistoryLines = []
+    pendingPixelLines = []
   }
 }

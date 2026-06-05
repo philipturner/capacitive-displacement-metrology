@@ -11,6 +11,8 @@ struct ImagingSettings {
   var centers: [SIMD2<Float>]
   var setpointCurrent: Float
   
+  var imageID: Int = 0
+  
   init(values: [Float]) {
     guard values.count == 8 else {
       fatalError("Invalid number of values.")
@@ -37,5 +39,24 @@ struct ImagingSettings {
     ]
     
     self.setpointCurrent = values[7]
+  }
+  
+  var currentImageCenter: SIMD2<Float> {
+    if mode == .dualVideo, imageID % 2 == 1 {
+      return centers[1]
+    } else {
+      return centers[0]
+    }
+  }
+  
+  func expectedPosition(pixelID: Int) -> SIMD2<Float> {
+    let rowID = pixelID / resolution
+    let columnID = pixelID % resolution
+    
+    var position = SIMD2(Float(columnID), Float(rowID))
+    position = (position + 0.5) * size / Float(resolution)
+    position -= size / 2
+    position += currentImageCenter
+    return position
   }
 }

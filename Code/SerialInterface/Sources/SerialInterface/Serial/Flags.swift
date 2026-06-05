@@ -3,7 +3,7 @@ struct Flags {
     var newMode: Int?
     var history: [LineParser.Line] = []
     var spectroscopy: [LineParser.Line] = []
-    var imaging: [LineParser.Line] = []
+    var pixel: [LineParser.Line] = []
     var imagingSettings: [LineParser.Line] = []
   }
   
@@ -25,7 +25,7 @@ struct Flags {
       case 4:
         output.imagingSettings.append(line)
       case 5:
-        output.imaging.append(line)
+        output.pixel.append(line)
       default:
         fatalError("Unexpected flags: \(line.flags)")
       }

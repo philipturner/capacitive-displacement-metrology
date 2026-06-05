@@ -34,7 +34,7 @@ application.run {
     
     let output = application.history.getOutput()
     if application.imagingModeActive {
-      print(application.ui.imagingWindow.settings!.resolution)
+      
     } else {
       application.ui.historyWindow.update(output: output)
     }

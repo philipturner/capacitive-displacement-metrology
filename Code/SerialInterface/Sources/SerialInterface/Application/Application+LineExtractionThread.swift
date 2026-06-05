@@ -31,17 +31,24 @@ extension Application {
     
     let splitting = Flags.split(lines: lines)
     Application.queue.sync { [self] in
+      // Update the imaging window.
       ui.imagingWindow.pendingSettingsLines += splitting.imagingSettings
-      
       if let newMode = splitting.newMode {
-        history = History(copying: history)
-        
         if newMode == 8 {
           imagingModeActive = true
           ui.imagingWindow.reset()
         } else {
           imagingModeActive = false
         }
+      }
+      if imagingModeActive {
+        // ui.imagingWindow.pendingHistoryLines += splitting.history
+        ui.imagingWindow.pendingPixelLines += splitting.pixel
+      }
+      
+      // Update the history.
+      if splitting.newMode != nil {
+        history = History(copying: history)
       }
       history.addLines(splitting.history)
     }
