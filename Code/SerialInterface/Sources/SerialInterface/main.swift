@@ -12,7 +12,7 @@ func createTrigger1() -> Trigger {
 
 func createApplication() -> Application {
   TimeAxis.shortLength = 0.010
-  TimeAxis.longLength = 3
+  TimeAxis.longLength = 2.5
   
   var applicationDesc = ApplicationDescriptor()
   applicationDesc.pythonLibraryPath = "/Users/philipturner/miniforge3/bin/python"

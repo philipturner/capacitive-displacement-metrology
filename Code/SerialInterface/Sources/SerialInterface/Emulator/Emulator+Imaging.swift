@@ -5,11 +5,11 @@ extension Emulator {
   static let atomSpacing: Float = 0.246 // units: nm
   
   static let imagingMode: ImagingMode = .video
-  static let imageResolution: Int = 64 * 2
-  static let imageSize: Float = 1.5 * 2
+  static let imageResolution: Int = 96
+  static let imageSize: Float = 0.040 * Float(imageResolution)
   static let imageCenters: [SIMD2<Float>] = [
-    SIMD2<Float>(-3.0, -2.0),
-    SIMD2<Float>(2.2, 2.2),
+    SIMD2<Float>(0, 0),
+    SIMD2<Float>(10, 10),
   ]
   
   mutating func increaseDriftOffset() {
@@ -64,21 +64,28 @@ extension Emulator {
   }
   
   static func getCurrent(position: SIMD2<Float>) -> Float {
-    let x = position[0] / Self.atomSpacing
-    let y = position[1] / Self.atomSpacing
-    
-    var phases: SIMD3<Float> = .zero
-    phases[0] = x
-    phases[1] = -0.5 * x + (Float(3).squareRoot() / 2) * y
-    phases[2] = -0.5 * x - (Float(3).squareRoot() / 2) * y
-    
-    var corrugationAmplitude: Float = .zero
-    for laneID in 0..<3 {
-      var phaseNormalized = phases[laneID]
-      phaseNormalized -= phaseNormalized.rounded(.down)
-      corrugationAmplitude += cos(2 * Float.pi * phaseNormalized)
+    // min: -0.5
+    // avg: 0.0
+    // max: 1.0
+    func getCorrugationAmplitude() -> Float {
+      let x = position[0] / Self.atomSpacing
+      let y = position[1] / Self.atomSpacing
+      
+      var phases: SIMD3<Float> = .zero
+      phases[0] = x
+      phases[1] = -0.5 * x + (Float(3).squareRoot() / 2) * y
+      phases[2] = -0.5 * x - (Float(3).squareRoot() / 2) * y
+      
+      var corrugationAmplitude: Float = .zero
+      for laneID in 0..<3 {
+        var phaseNormalized = phases[laneID]
+        phaseNormalized -= phaseNormalized.rounded(.down)
+        corrugationAmplitude += cos(2 * Float.pi * phaseNormalized)
+      }
+      corrugationAmplitude /= 3
+      
+      return corrugationAmplitude
     }
-    corrugationAmplitude /= 3
     
     func randomGaussian() -> Float {
       var u1: Float = .zero
@@ -92,8 +99,8 @@ extension Emulator {
     }
     
     var output: Float = 1e-9
-    output += 0.2e-9 * corrugationAmplitude
-    output += 0.05e-9 * randomGaussian()
+    output += 0.2e-9 * getCorrugationAmplitude()
+    output += 0.03e-9 * randomGaussian()
     return output
   }
   

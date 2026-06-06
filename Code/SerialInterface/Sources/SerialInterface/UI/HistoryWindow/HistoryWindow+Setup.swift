@@ -59,12 +59,6 @@ extension HistoryWindow {
         plot.showGrid(x: true, y: true)
         plot.disableAutoRange()
         
-        func setThickness(axis: PythonObject) {
-          let pen = axis.pen()
-          pen.setWidth(Self.thicknessFactor)
-          axis.setPen(pen)
-        }
-        
         let xAxis = plot.getAxis("bottom")
         if rowID == Self.rowCount - 1 {
           plot.setFixedHeight(rowHeight + xAxisHeight)
@@ -73,7 +67,7 @@ extension HistoryWindow {
           plot.setFixedHeight(rowHeight)
           xAxis.setStyle(showValues: false)
         }
-        setThickness(axis: xAxis)
+        UI.setThickness(axis: xAxis)
         
         let yAxis = plot.getAxis("left")
         if columnID == 0 {
@@ -81,17 +75,17 @@ extension HistoryWindow {
         } else {
           yAxis.setStyle(showValues: false)
         }
-        setThickness(axis: yAxis)
+        UI.setThickness(axis: yAxis)
         
         // Create persistent curves
         let emptyArray = [Float]()
         if columnID == 0 {
-          let pen = pg.mkPen("#2e7ec9", width: 2 * Self.thicknessFactor)
+          let pen = pg.mkPen("#2e7ec9", width: 2 * UI.thicknessFactor)
           let curve = plot.plot(emptyArray, emptyArray, pen: pen)
           curveRow.append(curve)
         } else {
           func pen(_ color: String) -> PythonObject {
-            return pg.mkPen(color, width: Self.thicknessFactor)
+            return pg.mkPen(color, width: UI.thicknessFactor)
           }
           
           let minCurve = plot.plot(emptyArray, emptyArray, pen: pen("#1fb864"))
@@ -120,60 +114,11 @@ extension HistoryWindow {
     }
   }
   
-  private func createVerticalLabel() -> PythonObject {
-    PythonClass(
-      "VerticalLabel",
-      superclasses: [QtWidgets.QLabel],
-      members: [
-        "__init__": PythonInstanceMethod { [QtWidgets] args in
-          let `self` = args[0]
-          guard args.count == 3 else {
-            fatalError("Was expecting just the text as an argument.")
-          }
-          QtWidgets.QLabel.__init__(`self`, args[1], args[2])
-          
-          return Python.None
-        },
-        
-        "paintEvent": PythonInstanceMethod { [QtGui, QtCore] args in
-          let `self` = args[0]
-          guard args.count == 2 else {
-            fatalError("Was expecting just the event as an argument.")
-          }
-          
-          let painter = QtGui.QPainter(`self`)
-          `self`.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-          
-          painter.translate(`self`.rect().center())
-          painter.rotate(-90)
-          painter.translate(-`self`.rect().center())
-          painter.drawText(`self`.rect(), QtCore.Qt.AlignCenter, `self`.text())
-          
-          return Python.None
-        },
-        
-        "minimumSizeHint": PythonInstanceMethod { [QtWidgets, QtCore] args in
-          let `self` = args[0]
-          let size = QtWidgets.QLabel.minimumSizeHint(`self`)
-          return QtCore.QSize(size.height(), size.width())
-        },
-        
-        "sizeHint": PythonInstanceMethod { [QtWidgets, QtCore] args in
-          let `self` = args[0]
-          let size = QtWidgets.QLabel.sizeHint(`self`)
-          return QtCore.QSize(size.height(), size.width())
-        }
-      ]
-    ).pythonObject
-  }
-  
   func createPlotLabels(_ labelTextList: [String]) -> [PythonObject] {
-    let VerticalLabel = createVerticalLabel()
-    
     var output: [PythonObject] = []
     for labelID in labelTextList.indices {
       let text = labelTextList[labelID]
-      let label = VerticalLabel(text, win)
+      let label = UI.VerticalLabel(text, win)
       
       let boxSize: Int = 500
       label.setStyleSheet("font-size: 20px;")

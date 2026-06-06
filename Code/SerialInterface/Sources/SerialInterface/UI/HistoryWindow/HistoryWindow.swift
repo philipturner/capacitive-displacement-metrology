@@ -9,8 +9,6 @@ class HistoryWindow {
   var curveSets: [[PythonObject]] = []
   var labels: [PythonObject] = []
   
-  static let thicknessFactor: Int = 1
-  
   init() {
     win = pg.GraphicsLayoutWidget(show: true)
     setWindowPosition()

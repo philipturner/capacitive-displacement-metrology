@@ -22,6 +22,7 @@ class ImagingWindow {
   var historyPlots: [HistoryPlot]
   var scanImages: [[Image]]
   var fourierImage: Image
+  var labels: [PythonObject]
   
   var state: ImagingState!
   var pendingSettingsLines: [LineParser.Line] = []
@@ -38,8 +39,10 @@ class ImagingWindow {
     historyPlots = Self.createHistoryPlots(win: win)
     scanImages = Self.createScanImages(win: win)
     fourierImage = Self.createFourierImage(win: win)
+    labels = Self.createPlotLabels(win: win)
     
     linkPlots()
+    setWindowSize()
     
     #if false
     for imageRow in scanImages {

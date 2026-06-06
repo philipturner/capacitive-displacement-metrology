@@ -73,9 +73,12 @@ extension ImagingWindow {
       longTimeDesc.maximum = maximum
       longTimeDesc.majorTick = TimeAxis.longMajorTick
       
-      let plot = historyPlots[0].plot
+      let plots = [
+        historyPlots[0].plot,
+        historyPlots[1].plot,
+      ]
       UI.updateTimeAxis(
-        plots: [plot],
+        plots: plots,
         descriptor: longTimeDesc)
     }
     

@@ -7,6 +7,8 @@ class UI {
   var historyWindow: HistoryWindow
   var imagingWindow: ImagingWindow
   
+  static let thicknessFactor: Int = 2
+  
   init(trajectoryLagTime: Double?) {
     pg.setConfigOptions(useOpenGL: true)
     pg.setConfigOptions(antialias: true)

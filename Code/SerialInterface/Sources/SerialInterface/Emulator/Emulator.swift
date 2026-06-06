@@ -59,7 +59,7 @@ struct Emulator {
     let elapsedTime = currentTime - startTime
     
     var newMode: Mode
-    if elapsedTime < 2.0 {
+    if elapsedTime < 0.5 {
       newMode = .dacTest
     } else {
       newMode = .imaging

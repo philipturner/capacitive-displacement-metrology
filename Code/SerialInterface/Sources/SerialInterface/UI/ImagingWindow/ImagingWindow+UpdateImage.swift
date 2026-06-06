@@ -125,8 +125,8 @@ extension ImagingWindow {
         // plot out to +/-3 sigma
         if rowID == 0 {
           let levels = SIMD2<Float>(
-            0.5 * state.settings.setpointCurrent * 1e12,
-            1.5 * state.settings.setpointCurrent * 1e12)
+            0.7 * state.settings.setpointCurrent * 1e12,
+            1.3 * state.settings.setpointCurrent * 1e12)
           image.colorBar.setLevels(
             low: levels[0],
             high: levels[1])
@@ -143,9 +143,11 @@ extension ImagingWindow {
   func updateFourierImage() {
     if state.settings.mode == .dualVideo {
       fourierImage.plot.hide()
+      labels[3].hide()
       return
     } else {
       fourierImage.plot.show()
+      labels[3].show()
     }
     
     let sourceData = state.pendingImages[0] ?? emptyImage()
@@ -168,8 +170,14 @@ extension ImagingWindow {
     image.imageItem.setTransform(transform)
     
     let levels = Self.levels(data: finalData)
-    image.colorBar.setLevels(
-      low: levels[1] - 40,
-      high: levels[1])
+    if state.pendingImages[0] == nil {
+      image.colorBar.setLevels(
+        low: levels[1],
+        high: levels[1] + 40)
+    } else {
+      image.colorBar.setLevels(
+        low: levels[1] - 40,
+        high: levels[1])
+    }
   }
 }
