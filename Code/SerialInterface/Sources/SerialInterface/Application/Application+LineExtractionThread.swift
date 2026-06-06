@@ -34,13 +34,13 @@ extension Application {
       // Update the imaging window.
       ui.imagingWindow.pendingSettingsLines += splitting.imagingSettings
       if let newMode = splitting.newMode {
-//        if newMode == 8 {
-//          ui.imagingModeActive = true
-//          ui.imagingWindow.reset()
-//        } else {
+        if newMode == 8 {
+          ui.imagingModeActive = true
+          ui.imagingWindow.reset()
+        } else {
           ui.imagingModeActive = false
           ui.imagingWindow.state = nil
-//        }
+        }
         ui.imagingWindow.plotDataValid = false
         ui.historyWindow.plotDataValid = false
       }
@@ -78,7 +78,6 @@ extension Application {
     }
     display(lines: splitting.spectroscopy, label: nil)
     display(lines: splitting.imagingSettings, label: "imaging settings")
-    display(lines: splitting.pixel, label: "pixel")
   }
   
   private func processSerialInput() {

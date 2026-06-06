@@ -78,7 +78,7 @@ void kilohertzLoop() {
   } else if (KilohertzLoop::iterationID > modeChangeEnd) {
     if (CommandTracker::nextCommand(nextCommand)) {
       modeChangeStart = KilohertzLoop::iterationID;
-      modeChangeEnd = modeChangeStart + (5000 * 100) / KilohertzLoop::period;
+      modeChangeEnd = modeChangeStart + 5000 / KilohertzLoop::period;
 
       modeChangeNeedsFeedback = false;
       modeChangeNeedsFixedZ = false;
@@ -111,7 +111,7 @@ void kilohertzLoop() {
         float piezoYVoltage = previousXYVoltage[1] * progress;
         Application::updatePiezoVoltage(1, piezoXVoltage);
         Application::updatePiezoVoltage(2, piezoYVoltage);
-        Feedback::updatePiezoZ();
+        Feedback::updatePiezoZ(false);
       }
     } else {
       Application::updateBiasVoltage(0);

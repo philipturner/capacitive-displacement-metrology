@@ -4,7 +4,7 @@
 
 struct Log {
   static constexpr uint32_t logPeriod = 72;
-  static constexpr uint32_t logSize = 6000;
+  static constexpr uint32_t logSize = 9000;
   static inline float valuesBuffer[logSize * 5];
   static inline uint8_t flagsBuffer[logSize];
 

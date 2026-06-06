@@ -52,14 +52,7 @@ extension ImagingWindow {
       return image
     }
     
-    var minimumZ: Float = .zero
-    for pixel in image {
-      let z = pixel[1]
-      minimumZ = min(minimumZ, z)
-
-    }
-    
-    let fillerPixel = SIMD2<Float>(0, minimumZ)
+    let fillerPixel = SIMD2<Float>(-100_000, -1000)
     let remainingPixelCount = state.settings.pixelsPerImage - image.count
     let fillerChunk = Array(
       repeating: fillerPixel,
@@ -70,6 +63,11 @@ extension ImagingWindow {
   func updateScanImages() {
     for rowID in 0..<2 {
       for columnID in 0..<2 {
+        struct SourceData {
+          var partialImage: [SIMD2<Float>] = []
+          var filledImage: [SIMD2<Float>] = []
+        }
+        
         func createSourceData() -> [SIMD2<Float>]? {
           if state.settings.mode == .dualVideo {
             return state.pendingImages[columnID]
@@ -82,7 +80,7 @@ extension ImagingWindow {
                 let pixelCount = finishedRowCount * state.settings.resolution
                 let dataBuffer = state.pixelTracker.dataBuffer
                 let startChunk = Array(dataBuffer[0..<pixelCount])
-                return fillRemainingRows(startChunk)
+                return startChunk
               }
             } else {
               return state.pendingImages[0]
@@ -94,48 +92,71 @@ extension ImagingWindow {
         guard let sourceData else {
           continue
         }
-        var data = sourceData.map { $0[rowID] }
-        if rowID == 0 {
-          for i in 0..<data.count {
-            data[i] *= 1e12
+        
+        func createSourceData2() -> [SIMD2<Float>] {
+          var output = sourceData
+          for i in output.indices {
+            output[i][0] *= 1e12
           }
+          return output
         }
-        
-        let finalData = Self.castToNumpy(
-          data, columnCount: state.settings.resolution)
-        
+        let sourceData2 = createSourceData2()
+        let partialData = sourceData2.map { $0[rowID] }
+        let filledData = fillRemainingRows(sourceData2).map { $0[rowID] }
         let image = scanImages[rowID][columnID]
-        image.imageItem.setImage(finalData, autoLevels: false)
         
-        func createVideoChannelID() -> Int {
-          if state.settings.mode == .dualVideo {
-            return columnID
+        do {
+          let filledDataNumpy = Self.castToNumpy(
+            filledData, columnCount: state.settings.resolution)
+          image.imageItem.setImage(filledDataNumpy, autoLevels: false)
+        }
+        
+        do {
+          func createVideoChannelID() -> Int {
+            if state.settings.mode == .dualVideo {
+              return columnID
+            } else {
+              return 1
+            }
+          }
+          let videoChannelID = createVideoChannelID()
+          let transform = state.settings.realSpaceTransform(
+            videoChannelID: videoChannelID)
+          image.imageItem.setTransform(transform)
+        }
+        
+        func createLevels() -> SIMD2<Float> {
+          let partialDataNumpy = Self.castToNumpy(
+            partialData, columnCount: state.settings.resolution)
+          
+          if rowID == 0 {
+            #if true
+            let mean = Float(np.mean(partialDataNumpy))!
+            let stddev = Float(np.std(partialDataNumpy))!
+            return SIMD2<Float>(
+              mean - stddev * 3,
+              mean + stddev * 3)
+            #else
+            return SIMD2<Float>(
+              0.5 * state.settings.setpointCurrent * 1e12,
+              1.5 * state.settings.setpointCurrent * 1e12)
+            #endif
           } else {
-            return 1
+            let levels = Self.levels(data: partialDataNumpy)
+            let dz = levels[1] - levels[0]
+            if dz < 0.1 {
+              let center = levels.sum() / 2
+              return SIMD2(center - 0.05, center + 0.05)
+            } else {
+              return levels
+            }
           }
         }
-        let videoChannelID = createVideoChannelID()
-        let transform = state.settings.realSpaceTransform(
-          videoChannelID: videoChannelID)
-        image.imageItem.setTransform(transform)
         
-        // Eventually, we might migrate to a different heuristic:
-        // mask out the outliers (current spikes) outside 0 < I < 2 * setpoint
-        // take the average and standard deviation
-        // plot out to +/-3 sigma
-        if rowID == 0 {
-          let levels = SIMD2<Float>(
-            0.5 * state.settings.setpointCurrent * 1e12,
-            1.5 * state.settings.setpointCurrent * 1e12)
-          image.colorBar.setLevels(
-            low: levels[0],
-            high: levels[1])
-        } else {
-          let levels = Self.levels(data: finalData)
-          image.colorBar.setLevels(
-            low: levels[0],
-            high: levels[1])
-        }
+        let levels = createLevels()
+        image.colorBar.setLevels(
+          low: levels[0],
+          high: levels[1])
       }
     }
   }

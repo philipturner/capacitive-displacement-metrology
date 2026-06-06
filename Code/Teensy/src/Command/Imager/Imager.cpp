@@ -42,7 +42,7 @@ uint32_t Imager::getImageTime() const {
 
 void Imager::update() {
   uint32_t time = Application::state.getTimeSinceModeStart();
-  Feedback::updatePiezoZ();
+  Feedback::updatePiezoZ(false);
 
   uint32_t imageTime = getImageTime();
   uint32_t imageID = time / imageTime;

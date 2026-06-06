@@ -63,13 +63,11 @@ extension Emulator {
       
       let z = position.x / 10 + position.y / 10
       let current = Self.getCurrent(position: position)
-      let positionError = 50e-12 * Float.random(in: -1...1)
       
       output[0] = current
       output[1] = position.x
       output[2] = position.y
       output[3] = z
-      output[4] = positionError
     }
     return output
   }

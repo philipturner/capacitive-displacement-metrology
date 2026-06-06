@@ -17,7 +17,7 @@ struct Imager {
     float current; // units: A
   };
 
-  static constexpr uint32_t largeMoveRiseTime = 5004 * 100;
+  static constexpr uint32_t largeMoveRiseTime = 5004;
   static constexpr uint32_t polynomialPeakTime = 1008;
   static constexpr uint32_t pixelTime = 96;
   static constexpr uint32_t currentTimeLagRoundedUp = 0; // 72

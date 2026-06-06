@@ -16,6 +16,7 @@ struct Flags {
       case 1:
         output.newMode = Int(line.values[0])
         output.history = []
+        output.pixel = []
       case 2:
         output.spectroscopy.append(line)
       case 3:

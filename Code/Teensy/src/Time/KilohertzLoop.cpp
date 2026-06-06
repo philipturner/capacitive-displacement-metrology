@@ -1,6 +1,5 @@
 #include "KilohertzLoop.h"
 
-#include "Application/Application.h"
 #include "Diagnostics/ErrorMessage.h"
 #include <Arduino.h>
 

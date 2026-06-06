@@ -17,22 +17,6 @@ void updatePositionErrorDiagnostic() {
   // by moving backward (more negative voltage).
   float dlnI_dz = 1.025e10 * sqrt(Feedback::tunnelingBarrierHeight);
   float dz = dlnI / dlnI_dz;
-
-  // Notch filter test.
-  if (Feedback::useNotchFilter) {
-    float stimulusFrequency = 1470;
-    uint32_t wavePeriod = uint32_t(1e6 / stimulusFrequency);
-
-    uint32_t time = Application::state.getTimeSinceModeStart();
-    uint32_t phase = time % wavePeriod;
-    float phaseNormalized = float(phase) / float(wavePeriod);
-    float waveAmplitude = FilterUtil::sineWave(phaseNormalized);
-    dz += 200e-12 * waveAmplitude;
-    
-    Feedback::notchFilter.update(dz);
-    dz = Feedback::notchFilter.getOutput();
-  }
-
   Application::state.positionError = dz;
 }
 
@@ -50,14 +34,15 @@ float getFeedbackErrorTerm() {
   return kΔz / k;
 }
 
-void Feedback::updatePiezoZ() {
+void Feedback::updatePiezoZ(bool updatePositionError) {
   // This takes too many clock cycles in certain modes, pushing it over the
-  // threshold for integral error. It's currently not a problem with some
-  // optimizations to the code, but keep an eye out for it.
-  updatePositionErrorDiagnostic();
+  // threshold for integral error.
+  if (updatePositionError) {
+    updatePositionErrorDiagnostic();
+  }
 
   float dz = getFeedbackErrorTerm();
-  if (false) {
+  if (useNotchFilter) {
     notchFilter.update(dz);
     dz = notchFilter.getOutput();
   }

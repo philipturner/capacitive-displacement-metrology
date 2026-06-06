@@ -231,11 +231,16 @@ void Application::logNormalMessage() {
       state.positionError * 1e9);
   } else if (mode == Command::Mode::simpleScanning ||
              mode == Command::Mode::imaging) {
+    float errorTerm = 0;
+    if (mode == Command::Mode::simpleScanning) {
+      errorTerm = state.positionError * 1e9;
+    }
+    
     Log::writeValuesNormal(
       state.filteredCurrent,
       state.piezoXVoltage * 0.320,
       state.piezoYVoltage * 0.320,
       state.piezoZVoltage * 0.320,
-      state.positionError * 1e9);
+      errorTerm);
   }
 }
