@@ -79,7 +79,7 @@ void kilohertzLoop() {
   } else if (KilohertzLoop::iterationID > modeChangeEnd) {
     if (CommandTracker::nextCommand(nextCommand)) {
       modeChangeStart = KilohertzLoop::iterationID;
-      modeChangeEnd = modeChangeStart + 5000 / KilohertzLoop::period;
+      modeChangeEnd = modeChangeStart + (5000 * 100) / KilohertzLoop::period;
 
       modeChangeNeedsFeedback = false;
       modeChangeNeedsFixedZ = false;

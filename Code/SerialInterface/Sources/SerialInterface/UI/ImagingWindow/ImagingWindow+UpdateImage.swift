@@ -125,8 +125,8 @@ extension ImagingWindow {
         // plot out to +/-3 sigma
         if rowID == 0 {
           let levels = SIMD2<Float>(
-            0.7 * state.settings.setpointCurrent * 1e12,
-            1.3 * state.settings.setpointCurrent * 1e12)
+            0.5 * state.settings.setpointCurrent * 1e12,
+            1.5 * state.settings.setpointCurrent * 1e12)
           image.colorBar.setLevels(
             low: levels[0],
             high: levels[1])

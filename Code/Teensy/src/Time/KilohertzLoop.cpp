@@ -1,5 +1,6 @@
 #include "KilohertzLoop.h"
 
+#include "Application/Application.h"
 #include "Diagnostics/ErrorMessage.h"
 #include <Arduino.h>
 
@@ -61,7 +62,7 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
       return;
     }
 
-    int32_t maxError = 10;
+    int32_t maxError = 11;
 
     int32_t differentialError = interval - period;
     if (abs(differentialError) > maxError) {
@@ -81,9 +82,12 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
     if (abs(integralError) > maxError) {
       throwError(
         "Integral error was too large.",
-        expectedIntegrated,
-        actualIntegrated,
-        integralError);
+        // expectedIntegrated,
+        // actualIntegrated,
+        // integralError,
+        uint32_t(100),
+        CommandTracker::latestCommandID - CommandTracker::acknowledgedCommandID,
+        Application::state.getTimeSinceModeStart());
       return;
     }
   }

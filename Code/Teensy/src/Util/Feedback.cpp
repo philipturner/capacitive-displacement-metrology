@@ -51,7 +51,10 @@ float getFeedbackErrorTerm() {
 }
 
 void Feedback::updatePiezoZ() {
-  updatePositionErrorDiagnostic();
+  // This takes too many clock cycles in certain modes, pushing it over the
+  // threshold for integral error.
+  //updatePositionErrorDiagnostic();
+
   float dz = getFeedbackErrorTerm();
   if (false) {
     notchFilter.update(dz);
