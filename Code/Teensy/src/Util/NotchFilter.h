@@ -7,7 +7,7 @@ struct NotchFilter {
   static constexpr float Q = 1.0;
   
   NotchFilter();
-  NotchFilter(uint32_t samplingPeriod);
+  NotchFilter(bool notDefaultConstructor);
   
   float getOutput() const;
 

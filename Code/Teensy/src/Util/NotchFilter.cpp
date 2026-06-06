@@ -1,12 +1,14 @@
 #include "NotchFilter.h"
 
+#include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
 NotchFilter::NotchFilter() {
 
 }
 
-NotchFilter::NotchFilter(uint32_t samplingPeriod) {
+NotchFilter::NotchFilter(bool notDefaultConstructoor) {
+  uint32_t samplingPeriod = KilohertzLoop::period;
   float samplingFrequency = float(1e6) / float(samplingPeriod);
   float ω0 = 2 * M_PI * resonanceFrequency / samplingFrequency;
   float alpha = sin(ω0) / (2 * Q);

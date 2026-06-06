@@ -45,6 +45,8 @@ struct DACInput {
 };
 
 struct DAC {
+  static constexpr bool enableCRC = false;
+
   static uint16_t transfer(
     uint8_t CS,
     DACInput input,

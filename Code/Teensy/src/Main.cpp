@@ -10,8 +10,7 @@ void kilohertzLoop();
 
 void setup() {
   Application::initialize();
-  Feedback::notchFilter = NotchFilter(12);
-  KilohertzLoop::initialize(kilohertzLoop, 12);
+  KilohertzLoop::initialize(kilohertzLoop);
 }
 
 void loop() {

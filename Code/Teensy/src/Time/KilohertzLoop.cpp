@@ -62,7 +62,7 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
       return;
     }
 
-    int32_t maxError = 11;
+    int32_t maxError = 10;
 
     int32_t differentialError = interval - period;
     if (abs(differentialError) > maxError) {
@@ -82,12 +82,9 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
     if (abs(integralError) > maxError) {
       throwError(
         "Integral error was too large.",
-        // expectedIntegrated,
-        // actualIntegrated,
-        // integralError,
-        uint32_t(100),
-        CommandTracker::latestCommandID - CommandTracker::acknowledgedCommandID,
-        Application::state.getTimeSinceModeStart());
+        expectedIntegrated,
+        actualIntegrated,
+        integralError);
       return;
     }
   }
@@ -102,11 +99,9 @@ void _kilohertzLoopBodyOuter() {
 }
 
 void KilohertzLoop::initialize(
-  teensy::inplace_function<void(void), 16> loopBody,
-  uint32_t period
+  teensy::inplace_function<void(void), 16> loopBody
 ) {
   KilohertzLoop::loopBody = loopBody;
-  KilohertzLoop::period = period;
 
   uint32_t timestamp = micros();
   startTimestamp = timestamp;

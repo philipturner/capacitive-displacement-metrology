@@ -52,8 +52,9 @@ float getFeedbackErrorTerm() {
 
 void Feedback::updatePiezoZ() {
   // This takes too many clock cycles in certain modes, pushing it over the
-  // threshold for integral error.
-  //updatePositionErrorDiagnostic();
+  // threshold for integral error. It's currently not a problem with some
+  // optimizations to the code, but keep an eye out for it.
+  updatePositionErrorDiagnostic();
 
   float dz = getFeedbackErrorTerm();
   if (false) {

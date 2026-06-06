@@ -1,15 +1,17 @@
 #include "Application.h"
 
+#include "Diagnostics/Log.h"
 #include "IC/ADC.h"
 #include "IC/CDC.h"
 #include "IC/DAC.h"
 #include "IC/PA95.h"
-#include "Diagnostics/Log.h"
+#include "Util/Feedback.h"
 
 void Application::initialize() {
   setupSerial();
   setupSPI();
   Spectroscopy::fillAutoVZPairs();
+  Feedback::notchFilter = NotchFilter(true);
 }
 
 extern "C" void usb_init();
@@ -61,8 +63,15 @@ void Application::setupSPI() {
   uint32_t ADC_ID = ADC::readRegister(ADS8699_DEVICE_ID_REG) >> 16;
   checkDeviceID(ADC_ID, 0b1101);
 
+  uint16_t spiConfigFlags;
+  if (DAC::enableCRC) {
+    spiConfigFlags = 0b10010110;
+  } else {
+    spiConfigFlags = 0b10000110;
+  }
+
   // Set up DAC1.
-  DAC1::writeRegister(DAC81404_SPICONFIG, 0b10010110, CRC::Flags::NONE);
+  DAC1::writeRegister(DAC81404_SPICONFIG, spiConfigFlags, CRC::Flags::NONE);
   DAC1::writeRegister(DAC81404_GENCONFIG, 0x0000, CRC::Flags::MOSI);
   DAC1::writeRegister(DAC81404_DACPWDWN, 0xFFF0);
   DAC1::writeRegister(DAC81404_DACRANGE, 0x1111 * DAC81404_RANGE_12V_BIPOLAR);
@@ -75,7 +84,7 @@ void Application::setupSPI() {
   DAC1::writeVoltage(3, 0.0);
 
   // Set up DAC2.
-  DAC2::writeRegister(DAC81404_SPICONFIG, 0b10010110, CRC::Flags::NONE);
+  DAC2::writeRegister(DAC81404_SPICONFIG, spiConfigFlags, CRC::Flags::NONE);
   DAC2::writeRegister(DAC81404_GENCONFIG, 0x0000, CRC::Flags::MOSI);
   DAC2::writeRegister(DAC81404_DACPWDWN, 0xFFFE);
   DAC2::writeRegister(DAC81404_DACRANGE, 0x0001 * DAC81404_RANGE_12V_BIPOLAR);

@@ -6,7 +6,7 @@
 struct KilohertzLoop {
   static inline IntervalTimer timer;
   static inline teensy::inplace_function<void(void), 16> loopBody;
-  static inline uint32_t period;
+  static constexpr uint32_t period = 12;
 
   // These will roll back to zero after 71 minutes. However, if we
   // check for and handle a rollover event, the loop can run forever.
@@ -22,8 +22,7 @@ struct KilohertzLoop {
   // Time fidelity: close to program startup, a few jumps
   // can be larger or smaller than the expected duration.
   static void initialize(
-    teensy::inplace_function<void(void), 16> loopBody,
-    uint32_t period);
+    teensy::inplace_function<void(void), 16> loopBody);
 
   static void _kilohertzLoopBodyInner();
 
