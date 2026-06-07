@@ -56,6 +56,7 @@ struct PixelTracker {
       let error = expectedPosition - actualPosition
       let errorMagnitude = (error * error).sum().squareRoot()
       
+      #if false
       let pixelSize = Float(settings.size) / Float(settings.resolution)
       if errorMagnitude < 0.1 * pixelSize {
         
@@ -66,9 +67,13 @@ struct PixelTracker {
           \(imageID)
           """)
       }
+      #endif
       
       let data = SIMD2(abs(pixel[4]), pixel[3])
-      dataBuffer[pixelID] = data
+      if rowID % 2 == 0 {
+        dataBuffer[pixelID] = data
+        dataBuffer[pixelID + settings.resolution] = data
+      }
       occupiedBuffer[pixelID] = true
       receivedPixelCount += 1
     }

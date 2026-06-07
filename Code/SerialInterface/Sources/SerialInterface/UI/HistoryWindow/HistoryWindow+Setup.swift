@@ -1,7 +1,6 @@
 import PythonKit
 
 #if true // Mac
-private let windowPositionMac = true
 private let rowHeight: Int = 180
 private let rowSpacing: Int = 20
 private let columnWidth: Int = 350
@@ -9,24 +8,15 @@ private let columnSpacing: Int = 20
 private let xAxisHeight: Int = 40
 private let yAxisWidth: Int = 120
 #else // iPad
-private let windowPositionMac = false
 private let rowHeight: Int = 120
 private let rowSpacing: Int = 10
-private let columnWidth: Int = 250
+private let columnWidth: Int = 200
 private let columnSpacing: Int = 20
 private let xAxisHeight: Int = 40
 private let yAxisWidth: Int = 120
 #endif
 
 extension HistoryWindow {
-  func setWindowPosition() {
-    if windowPositionMac {
-      win.move(Int(0), Int(0))
-    } else {
-      win.move(Int(50), Int(0))
-    }
-  }
-  
   func setWindowSize() {
     var x: Int = .zero
     x += yAxisWidth

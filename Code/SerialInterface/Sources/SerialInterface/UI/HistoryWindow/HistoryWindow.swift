@@ -11,12 +11,8 @@ class HistoryWindow {
   
   init() {
     win = pg.GraphicsLayoutWidget(show: true)
-    setWindowPosition()
-    setWindowSize()
+    win.move(Int(0), Int(0))
     UI.connectCloseShortcut(win: win)
-    
-    createPlots()
-    linkPlots()
     
     let labelTextList: [String] = [
       "signal 0",
@@ -26,5 +22,9 @@ class HistoryWindow {
       "signal 4",
     ]
     labels = createPlotLabels(labelTextList)
+    
+    createPlots()
+    linkPlots()
+    setWindowSize()
   }
 }
