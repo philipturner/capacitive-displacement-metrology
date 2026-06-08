@@ -84,6 +84,15 @@ bool CommandParsing::checkAlphaCode(Command command) {
   return false;
 }
 
+struct NumberAccumulator {
+  uint32_t wholePart = 0;
+  uint32_t decimalNumerator = 0;
+  uint32_t decimalDenominator = 1;
+  bool signSeen = false;
+  bool decimalSeen = false;
+  bool digitSeen = false;
+};
+
 bool CommandParsing::parseAttributes(
   const char *stringBuffer,
   uint32_t stringLength,
@@ -92,28 +101,55 @@ bool CommandParsing::parseAttributes(
 ) {
   numAttributes = 0;
 
-  int32_t accumulator = 0;
-  int32_t sign = 1;
+  NumberAccumulator number;
+
   for (uint32_t i = 0; i <= stringLength; ++i) {
     if (stringBuffer[i] == ',' || i == stringLength) {
-      int32_t decoded = accumulator * sign;
+      if (!number.digitSeen) {
+        CommandTracker::throwError("No digits in number.");
+        return false;
+      }
+
+      float fraction = number.decimalNumerator;
+      fraction /= float(number.decimalDenominator);
+      if (fraction < -1 || fraction > 1) {
+        CommandTracker::throwError("Failed to decode fraction correctly.");
+        return;
+      }
+
+      float decoded = float(number.wholePart) + fraction;
+      if (number.signSeen) {
+        decoded = -decoded;
+      }
+
       attributes[numAttributes] = decoded;
       numAttributes += 1;
-
-      accumulator = 0;
-      sign = 1;
+      number = NumberAccumulator();
       continue;
     }
 
     if (stringBuffer[i] == '-') {
-      sign = -1;
-    } else if (isDigit(stringBuffer[i])) {
-      uint8_t digit = uint8_t(stringBuffer[i] - '0');
-      accumulator = accumulator * 10 + digit;
+      if (number.signSeen || number.decimalSeen || number.digitSeen) {
+        CommandTracker::throwError("Invalid sign.");
+        return false;
+      }
+      number.signSeen = true;
+    } else if (stringBuffer[i] == '.') {
+      if (number.decimalSeen) {
+        CommandTracker::throwError("Invalid decimal.");
+        return false;
+      }
+      number.decimalSeen = true;
+    }  else if (isDigit(stringBuffer[i])) {
+      uint8_t digit = stringBuffer[i] - '0';
+      if (number.decimalSeen) {
+        number.decimalNumerator = number.decimalNumerator * 10 + digit;
+        number.decimalDenominator *= 10;
+      } else {
+        number.wholePart = number.wholePart * 10 + digit;
+      }
     } else {
-      CommandTracker::throwError(
-        "While decoding attributes, a character was not a digit.", 
-        i);
+      CommandTracker::throwError("Unexpected character type.");
       return false;
     }
   }
