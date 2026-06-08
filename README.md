@@ -45,6 +45,7 @@ Table of Contents:
 - [April 27, 2026](#april-27-2026)
 - [May 4, 2026](#may-4-2026)
 - [Jun 1, 2026](#jun-1-2026)
+- [Jun 7, 2026](#jun-7-2026)
 
 ## December 15, 2025
 
@@ -1283,3 +1284,7 @@ I have sent off some emails to prepare for the second design iteration of the ST
 ## Jun 1, 2026
 
 [Spectroscopy (Google Sheets)](https://docs.google.com/spreadsheets/d/19oGVppj79vV9zthusr1JtBoi9Rc_ug5Zc2yT6IvzHww/edit?usp=sharing)
+
+## Jun 7, 2026
+
+[Creep Quantification (Google Sheets)](https://docs.google.com/spreadsheets/d/1sMFUhWJW1PjHLAMwuU-sI6h_4UuGs7WQjF9z8UE9yGs/edit?usp=sharing)
