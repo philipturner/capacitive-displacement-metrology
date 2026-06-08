@@ -8,9 +8,7 @@ struct SimpleScanner {
 
   SimpleScanner();
   SimpleScanner(Command command);
-
-  static bool checkAttributes(Command command);
-
+  
   void update();
 
   // Returns the position of the active channel.

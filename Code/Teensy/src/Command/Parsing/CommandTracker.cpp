@@ -36,62 +36,8 @@ bool isRecoverCommand(uint32_t length) {
   return true;
 }
 
-bool isDigit(char x) {
-  if (x >= '0' && x <= '9') {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-int32_t findModeCode(
-  uint32_t length,
-  uint32_t &remainderOffset
-) {
-  remainderOffset = 0;
-
-  if (isDigit(CommandTracker::buffer[0])) {
-    remainderOffset += 1;
-  } else {
-    CommandTracker::throwError("First character not digit.");
-    return -1;
-  }
-
-  if (length > 1 && isDigit(CommandTracker::buffer[1])) {
-    remainderOffset += 1;
-  }
-
-  uint32_t accumulator = 0;
-  for (uint32_t i = 0; i < remainderOffset; ++i) {
-    uint8_t digit = uint8_t(CommandTracker::buffer[i] - '0');
-    accumulator = accumulator * 10 + digit;
-  }
-  if (accumulator >= uint8_t(Command::Mode::NUM_MODES)) {
-    CommandTracker::throwError("Invalid mode code.");
-    return -1;
-  }
-  return accumulator;
-}
-
-bool findAlphaCode(char code, const char *cString) {
-  for (uint32_t i = 0; i < 50; ++i) {
-    if (cString[i] == 0) {
-      break;
-    }
-    if (cString[i] == code) {
-      return true;
-    }
-  }
-  return false;
-}
-
-bool checkAttributes(
-  Command command, 
-  uint32_t numAttributes
-) {
-  // Check the number of attributes.
-
-  uint32_t expectedNumAttributes = 0;
+bool checkNumAttributes(Command command, uint32_t numAttributes) {
+uint32_t expectedNumAttributes = 0;
   if (command.mode == Command::Mode::dacTest) {
     expectedNumAttributes = 1;
   }
@@ -135,15 +81,25 @@ bool checkAttributes(
     return false;
   }
 
-  // Check the values of the attributes.
+  return true;
+}
 
+bool checkAttributes(Command command) {
   if (command.mode == Command::Mode::simpleScanning) {
-    return SimpleScanner::checkAttributes(command);
+    uint32_t frequency = command.attributes[0];
+    if (frequency == 0 || frequency > 10000) {
+      CommandTracker::throwError("Invalid frequency.");
+      return false;
+    }
   } else if (command.mode == Command::Mode::imaging) {
-    return Imager::checkAttributes(command);
-  } else {
-    return true;
+    uint32_t resolution = command.attributes[0];
+    if (resolution == 0 || resolution > 1024 || (resolution % 2 != 0)) {
+      CommandTracker::throwError("Invalid resolution.");
+      return false;
+    }
   }
+
+  return true;
 }
 
 void CommandTracker::processSerialInput() {
@@ -170,9 +126,9 @@ void CommandTracker::processSerialInput() {
   }
   
   // Decode the mode.
+  uint32_t modeCode;
   uint32_t remainderOffset;
-  int32_t modeCode = findModeCode(length, remainderOffset);
-  if (modeCode < 0) {
+  if (!CommandParsing::findModeCode(length, modeCode, remainderOffset)) {
     return;
   }
   command.mode = Command::Mode(modeCode);
@@ -181,43 +137,10 @@ void CommandTracker::processSerialInput() {
   if (length >= remainderOffset) {
     command.alphaCode = uint32_t(buffer[remainderOffset]);
   }
-  if (command.mode == Command::Mode::dacTest) {
-    if (!findAlphaCode(command.alphaCode, "xyzb")) {
-      throwError("Invalid character for alphabetic code.");
-      return;
-    }
-  } else if (command.mode == Command::Mode::blindStepping) {
-    if (!findAlphaCode(command.alphaCode, "udc")) {
-      throwError("Invalid character for alphabetic code.");
-      return;
-    }
-  } else if (command.mode == Command::Mode::spectroscopy) {
-    if (!findAlphaCode(command.alphaCode, "ac")) {
-      throwError("Invalid character for alphabetic code.");
-      return;
-    }
-  } else if (command.mode == Command::Mode::simpleScanning) {
-    if (!findAlphaCode(command.alphaCode, "xy")) {
-      throwError("Invalid character for alphabetic code.");
-      return;
-    }
-  } else if (command.mode == Command::Mode::imaging) {
-    if (!findAlphaCode(command.alphaCode, "ivd")) {
-      throwError("Invalid character for alphabetic code.");
-      return;
-    }
-  } else if (command.mode == Command::Mode::imagingSettings) {
-    if (!findAlphaCode(command.alphaCode, "axy")) {
-      throwError("Invalid character for alphabetic code.");
-      return;
-    }
-  } else {
-    if (command.alphaCode != 0) {
-      throwError("There should be no alpha code.");
-      return;
-    }
+  if (!CommandParsing::checkAlphaCode(command)) {
+    return;
   }
-
+  
   // Decode the remaining attributes.
   uint32_t numAttributes = 0;
   if (length > remainderOffset) {

@@ -24,26 +24,6 @@ SimpleScanner::SimpleScanner(Command command) {
   peakPeakAmplitude = float(command.attributes[1]) * 0.1;
 }
 
-bool SimpleScanner::checkAttributes(Command command) {
-  uint32_t frequency = command.attributes[0];
-  if (frequency == 0 || frequency > 10000) {
-    CommandTracker::throwError(
-      "Invalid frequency.",
-      frequency);
-    return false;
-  }
-
-  float peakPeakAmplitude = float(command.attributes[1]) * 0.1;
-  if (peakPeakAmplitude <= 0 || peakPeakAmplitude > 270) {
-    CommandTracker::throwError(
-      "Invalid peak-peak amplitude.",
-      int32_t(peakPeakAmplitude * 10));
-    return false;
-  }
-
-  return true;
-}
-
 void SimpleScanner::update() {
   uint32_t time = Application::state.getTimeSinceModeStart();
   Feedback::updatePiezoZ();

@@ -38,9 +38,6 @@ struct Imager {
   void update();
 
   static Mode getMode(char imagingAlphaCode);
-  static uint32_t getNumAttributes(char settingsAlphaCode);
-  static bool checkForImaging(Command command);
-  static bool checkForImagingSettings(Command command);
   static bool updatePendingSettings(Command command);
   static void forwardStaticSettings();
   void forwardInstanceSettings();
