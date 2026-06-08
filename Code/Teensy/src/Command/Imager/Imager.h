@@ -22,8 +22,6 @@ struct Imager {
   // 5904 - 1e-5 resonant overshoot, 2.65 kHz
   static constexpr uint32_t largeMoveRiseTime = 5904; 
   static constexpr uint32_t pixelTime = 96;
-  static constexpr uint32_t currentTimeLagRoundedUp = 0; // 72
-  static constexpr float currentTimeLagHighRes = 0; // 63.6
 
   Imager();
   Imager(Command command);

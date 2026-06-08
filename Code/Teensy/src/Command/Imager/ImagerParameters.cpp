@@ -39,7 +39,14 @@ bool validateImageBounds(float X, float Y, float S) {
   return true;
 }
 
-bool Imager::checkAttributes(Command command) {
+// TODO: Refactor how image settings are validated. There should be a command
+// for each specific parameter. It attempts to set the parameter, but if it
+// cannot, b
+//
+// or, check the current state of the image settings and throw errors if the
+// current centers would throw it out of bounds...
+
+bool Imager::_checkAttributes(Command command) {
   uint32_t resolution = command.attributes[0];
   if (resolution == 0 || resolution > 1024) {
     CommandTracker::throwError(

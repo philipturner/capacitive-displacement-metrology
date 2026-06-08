@@ -82,25 +82,14 @@ void Imager::update() {
   updatePendingPixel(timeInImage);
 
   if (KilohertzLoop::iterationID == writePixelIterationID) {
-    float progress = currentTimeLagHighRes;
-    progress -= float(currentTimeLagRoundedUp);
-    progress += float(KilohertzLoop::period);
-    progress /= float(KilohertzLoop::period);
-
-    float start = previousCurrent;
-    float end = Application::state.filteredCurrent;
-    float current = start * (1 - progress) + end * progress;
-    pendingPixel.current = current;
-
     Log::writeValuesWithFlags(
       /*flags=*/5,
       float(pendingPixel.id),
       pendingPixel.x,
       pendingPixel.y,
       pendingPixel.z,
-      pendingPixel.current);
+      Application::state.filteredCurrent);
   }
-  previousCurrent = Application::state.filteredCurrent;
 }
 
 void Imager::getPosition(

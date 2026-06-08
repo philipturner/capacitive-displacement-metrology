@@ -51,6 +51,7 @@ struct Command {
 
     // aN - dominant scan axis, x = 0, y = 1
     // cI,X,Y - center #I, position (X, Y) * 0.1 nm
+    // lN - wait ~N μs for fixed time lag of electronics
     // sN - wait ~N ms for creep settling in dual video mode
     // xNNN - x creep constant, N.NN%/decade
     // yNNN - y creep constant, N.NN%/decade
