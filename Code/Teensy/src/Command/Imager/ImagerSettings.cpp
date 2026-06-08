@@ -4,12 +4,12 @@
 #include "Util/Feedback.h"
 #include <Arduino.h>
 
-Imager::Mode Imager::getMode(char code) {
-  if (code == 'i') {
+Imager::Mode Imager::getMode(char imagingAlphaCode) {
+  if (imagingAlphaCode == 'i') {
     return Imager::Mode::image;
-  } else if (code == 'v') {
+  } else if (imagingAlphaCode == 'v') {
     return Imager::Mode::video;
-  } else if (code == 'd') {
+  } else if (imagingAlphaCode == 'd') {
     return Imager::Mode::dualVideo;
   } else {
     Serial.println("This should never happen.");

@@ -9,6 +9,16 @@ struct Imager {
     dualVideo = 2,
   };
 
+  struct Settings {
+    bool dominantAxisIsY = false;
+    float creepConstants[2] = { 0, 0 };
+    float center0[2] = { 0, 0 };
+    float center1[2] = { 0, 0 };
+    uint32_t electronicTimeLag = 0; // μs
+    uint32_t creepSettlingTime = 0; // ms
+  };
+  static inline Settings pendingSettings;
+
   struct Pixel {
     uint32_t id;
     float x; // units: nm
@@ -22,23 +32,26 @@ struct Imager {
   // 5904 - 1e-5 resonant overshoot, 2.65 kHz
   static constexpr uint32_t largeMoveRiseTime = 5904; 
   static constexpr uint32_t pixelTime = 96;
-
+  
   Imager();
   Imager(Command command);
   void update();
 
-  static Mode getMode(char code);
-  static bool checkAttributes(Command command);
-  void forwardParameters();
+  static Mode getMode(char imagingAlphaCode);
+  static uint32_t getNumAttributes(char settingsAlphaCode);
+  static bool checkForImaging(Command command);
+  static bool checkForImagingSettings(Command command);
+  static bool updatePendingSettings(Command command);
+  static void forwardStaticSettings();
+  void forwardInstanceSettings();
 
   Mode mode;
 
 private:
+  Settings settings;
   uint32_t resolution;
   uint32_t polynomialPeakTime;
   float imageSize; // units: nm
-  float centersX[2]; // units: nm
-  float centersY[2]; // units: nm
 
   uint32_t getRowTime() const;
   uint32_t getImageTime() const;
@@ -54,7 +67,6 @@ private:
     uint32_t imageID);
   void correctNormalizedPosition(float &x, float &y);
 
-  float previousCurrent = 0;
   uint32_t writePixelIterationID = UINT32_MAX;
   Pixel pendingPixel;
   void updatePendingPixel(uint32_t timeInImage);

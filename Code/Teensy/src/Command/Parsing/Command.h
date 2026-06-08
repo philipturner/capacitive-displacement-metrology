@@ -49,44 +49,22 @@ struct Command {
     placeholder2 = 10,
     placeholder3 = 11,
 
-    // aN - dominant scan axis, x = 0, y = 1
-    // cI,X,Y - center #I, position (X, Y) * 0.1 nm
+    // aN - dominant scan axis, 0 = x, 1 = y
+    // cX,Y - creep constants, in multiples of 0.01%/decade
     // lN - wait ~N μs for fixed time lag of electronics
+    // oI,X,Y - center #I, position (X, Y) in multiples of 0.1 nm
+    // r - reset to defaults
     // sN - wait ~N ms for creep settling in dual video mode
-    // xNNN - x creep constant, N.NN%/decade
-    // yNNN - y creep constant, N.NN%/decade
     imagingSettings = 12,
 
     NUM_MODES = 13,
   };
+  
   Mode mode = Mode::idle;
+
   char alphaCode = 0;
-  int32_t attributes[10];
-};
 
-struct CommandTracker {
-  static inline char buffer[51];
-
-  // Tells the fast loop whether the slow loop was interrupted while updating
-  // the latest command.
-  static inline bool lock = false;
-
-  // Reject future commands until the latest one is acknowledged.
-  static inline uint32_t latestCommandID = 0;
-  static inline uint32_t acknowledgedCommandID = 0;
-  static inline Command latestCommand;
-
-  static void processSerialInput();
-
-private:
-  static bool registerCommand(Command command);
-
-public:
-  static void throwError(
-    const char *reason,
-    int32_t number1 = 0,
-    int32_t number2 = 0);
-
-  // This is for the fast loop to invoke.
-  static bool nextCommand(Command &nextCommand);
+  // TODO: Double check all files that touch 'attributes'; it was recently
+  // changed from 'int32_t' to 'float'.
+  float attributes[10];
 };

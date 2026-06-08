@@ -1,5 +1,10 @@
 struct PixelTracker {
   var settings: ImagingSettings
+  
+  // TODO: Initialize empty pixels to [-100_000, -1000]
+  // TODO: Invert Y axis and convert from A to pA here
+  // TODO: Accumulate the min, max, mean, variance (<x^2> - <x>^2) on
+  // the fly as pixels are added
   var dataBuffer: [SIMD2<Float>]
   var occupiedBuffer: [Bool]
   var receivedPixelCount: Int = 0
