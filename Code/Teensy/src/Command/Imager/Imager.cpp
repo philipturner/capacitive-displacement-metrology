@@ -26,6 +26,14 @@ Imager::Imager(Command command) {
     centersX[1] = -100;
     centersY[1] = -100;
   }
+
+  if (resolution <= 32) {
+    polynomialPeakTime = 1008;
+  } else if (resolution <= 48) {
+    polynomialPeakTime = 1500;
+  } else {
+    polynomialPeakTime = 2004;
+  }
 }
 
 uint32_t Imager::getRowTime() const {

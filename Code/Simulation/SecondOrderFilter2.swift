@@ -2,8 +2,8 @@ import Foundation
 
 // MARK: - Filters
 
-let resonanceFrequency: Double = 8700
-let Q: Double = 200
+let resonanceFrequency: Double = 2650
+let Q: Double = 18
 let dacResolution: Int = 12
 
 struct BiquadFilterDescriptor {

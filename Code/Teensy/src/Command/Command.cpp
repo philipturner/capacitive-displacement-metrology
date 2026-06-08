@@ -44,6 +44,35 @@ bool isDigit(char x) {
   }
 }
 
+int32_t findModeCode(
+  uint32_t length,
+  uint32_t &remainderOffset
+) {
+  remainderOffset = 0;
+
+  if (isDigit(CommandTracker::buffer[0])) {
+    remainderOffset += 1;
+  } else {
+    CommandTracker::throwError("First character not digit.");
+    return -1;
+  }
+
+  if (length > 1 && isDigit(CommandTracker::buffer[1])) {
+    remainderOffset += 1;
+  }
+
+  uint32_t accumulator = 0;
+  for (uint32_t i = 0; i < remainderOffset; ++i) {
+    uint8_t digit = uint8_t(CommandTracker::buffer[i] - '0');
+    accumulator = accumulator * 10 + digit;
+  }
+  if (accumulator >= uint8_t(Command::Mode::NUM_MODES)) {
+    CommandTracker::throwError("Invalid mode code.");
+    return -1;
+  }
+  return accumulator;
+}
+
 bool findAlphaCode(char code, const char *cString) {
   for (uint32_t i = 0; i < 50; ++i) {
     if (cString[i] == 0) {
@@ -138,6 +167,9 @@ bool checkAttributes(
       expectedNumAttributes = 6;
     }
   }
+  if (command.mode == Command::Mode::imagingSettings) {
+    expectedNumAttributes = 1;
+  }
 
   if (numAttributes != expectedNumAttributes) {
     CommandTracker::throwError(
@@ -182,20 +214,16 @@ void CommandTracker::processSerialInput() {
   }
   
   // Decode the mode.
-  if (!isDigit(buffer[0])) {
-    throwError("First character not digit.");
-    return;
-  }
-  uint8_t modeCode = uint8_t(buffer[0] - '0');
-  if (modeCode >= uint8_t(Command::Mode::NUM_MODES)) {
-    throwError("Invalid mode code.");
+  uint32_t remainderOffset;
+  int32_t modeCode = findModeCode(length, remainderOffset);
+  if (modeCode < 0) {
     return;
   }
   command.mode = Command::Mode(modeCode);
 
   // Decode the alphabetic code attribute.
-  if (length >= 2) {
-    command.alphaCode = uint32_t(buffer[1]);
+  if (length >= remainderOffset) {
+    command.alphaCode = uint32_t(buffer[remainderOffset]);
   }
   if (command.mode == Command::Mode::dacTest) {
     if (!findAlphaCode(command.alphaCode, "xyzb")) {
@@ -222,6 +250,11 @@ void CommandTracker::processSerialInput() {
       throwError("Invalid character for alphabetic code.");
       return;
     }
+  } else if (command.mode == Command::Mode::imagingSettings) {
+    if (!findAlphaCode(command.alphaCode, "axy")) {
+      throwError("Invalid character for alphabetic code.");
+      return;
+    }
   } else {
     if (command.alphaCode != 0) {
       throwError("There should be no alpha code.");
@@ -231,10 +264,10 @@ void CommandTracker::processSerialInput() {
 
   // Decode the remaining attributes.
   uint32_t numAttributes = 0;
-  if (length > 2) {
+  if (length > remainderOffset) {
     bool decodeAttributesWorked = decodeAttributes(
-      buffer + 2, 
-      length - 2, 
+      buffer + remainderOffset, 
+      length - remainderOffset, 
       command.attributes,
       numAttributes);
     if (!decodeAttributesWorked) {

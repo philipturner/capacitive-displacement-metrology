@@ -77,18 +77,34 @@ void kilohertzLoop() {
       float(Application::mode));
   } else if (KilohertzLoop::iterationID > modeChangeEnd) {
     if (CommandTracker::nextCommand(nextCommand)) {
-      modeChangeStart = KilohertzLoop::iterationID;
-      modeChangeEnd = modeChangeStart + 5000 / KilohertzLoop::period;
+      uint8_t modeCode = uint8_t(nextCommand.mode);
 
-      modeChangeNeedsFeedback = false;
-      modeChangeNeedsFixedZ = false;
-      previousXYVoltage[0] = Application::state.piezoXVoltage;
-      previousXYVoltage[1] = Application::state.piezoYVoltage;
+      if (modeCode < uint8_t(Command::Mode::placeholder1)) {
+        modeChangeStart = KilohertzLoop::iterationID;
+        modeChangeEnd = modeChangeStart;
+        modeChangeEnd += Imager::largeMoveRiseTime / KilohertzLoop::period;
 
-      if (nextCommand.mode >= Command::Mode::idleFeedback) {
-        modeChangeNeedsFeedback = true;
-      } else if (nextCommand.mode >= Command::Mode::blindStepping) {
-        modeChangeNeedsFixedZ = true;
+        modeChangeNeedsFeedback = false;
+        modeChangeNeedsFixedZ = false;
+        previousXYVoltage[0] = Application::state.piezoXVoltage;
+        previousXYVoltage[1] = Application::state.piezoYVoltage;
+
+        if (nextCommand.mode >= Command::Mode::idleFeedback) {
+          modeChangeNeedsFeedback = true;
+        } else if (nextCommand.mode >= Command::Mode::blindStepping) {
+          modeChangeNeedsFixedZ = true;
+        }
+      } else if (modeCode == uint8_t(Command::Mode::imagingSettings)) {
+
+      } else {
+        ErrorMessage::reset();
+        ErrorMessage::errorType = ErrorMessage::Type::fatal;
+
+        ErrorMessage::addString("Invalid mode.");
+        ErrorMessage::addNewline();
+        ErrorMessage::addInteger(modeCode);
+        ErrorMessage::addNewline();
+        return;
       }
     }
   }

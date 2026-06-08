@@ -17,8 +17,10 @@ struct Imager {
     float current; // units: A
   };
 
-  static constexpr uint32_t largeMoveRiseTime = 5004 * 10;
-  static constexpr uint32_t polynomialPeakTime = 1008;
+  // 1668 - 1e-3 resonant overshoot, 2.65 kHz
+  // 3324 - 1e-4 resonant overshoot, 2.65 kHz
+  // 5904 - 1e-5 resonant overshoot, 2.65 kHz
+  static constexpr uint32_t largeMoveRiseTime = 5904; 
   static constexpr uint32_t pixelTime = 96;
   static constexpr uint32_t currentTimeLagRoundedUp = 0; // 72
   static constexpr float currentTimeLagHighRes = 0; // 63.6
@@ -35,6 +37,7 @@ struct Imager {
 
 private:
   uint32_t resolution;
+  uint32_t polynomialPeakTime;
   float imageSize; // units: nm
   float centersX[2]; // units: nm
   float centersY[2]; // units: nm

@@ -36,18 +36,27 @@ struct Command {
     // Z feedback active while scanning
     simpleScanning = 7,
 
-    // iR,S,X,Y - single image
-    // vR,S,X,Y - repeating video at single spot
-    // dR,S,X,Y,X2,Y2 - dual; video alternating between two spots
+    // iR,S - single image
+    // vR,S - repeating video at single spot
+    // dR,S - dual; video alternating between two spots
     //
     // R - resolution; number of pixels
-    // S - size of image
-    // X,Y - center of image
-    //
-    // X, Y, S are in integer multiples of 0.1 nm
+    // S - size of image, in multiples of 0.1 nm
     imaging = 8,
 
-    NUM_MODES = 9,
+    // Temporarily force a mode to >10 to test new command parsing logic.
+    placeholder1 = 9,
+    placeholder2 = 10,
+    placeholder3 = 11,
+
+    // aN - dominant scan axis, x = 0, y = 1
+    // cI,X,Y - center #I, position (X, Y) * 0.1 nm
+    // sN - wait ~N ms for creep settling in dual video mode
+    // xNNN - x creep constant, N.NN%/decade
+    // yNNN - y creep constant, N.NN%/decade
+    imagingSettings = 12,
+
+    NUM_MODES = 13,
   };
   Mode mode = Mode::idle;
   char alphaCode = 0;
