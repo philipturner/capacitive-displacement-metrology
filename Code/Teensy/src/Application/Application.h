@@ -2,7 +2,6 @@
 
 #include "Application/State.h"
 #include "Command/BlindStepper.h"
-#include "Command/Command.h"
 #include "Command/DACTester.h"
 #include "Command/Imager/Imager.h"
 #include "Command/SimpleScanner.h"

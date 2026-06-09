@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Command/Command.h"
+#include "Command/Parsing/Command.h"
 
 struct Spectroscopy {
   struct VZPair {

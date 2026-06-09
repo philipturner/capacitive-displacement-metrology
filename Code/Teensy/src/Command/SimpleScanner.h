@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Command/Command.h"
+#include "Command/Parsing/Command.h"
 
 struct SimpleScanner {
   static constexpr bool usePolynomialWave = true;
@@ -8,7 +8,7 @@ struct SimpleScanner {
 
   SimpleScanner();
   SimpleScanner(Command command);
-  
+
   void update();
 
   // Returns the position of the active channel.

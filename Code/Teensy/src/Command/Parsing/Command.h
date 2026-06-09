@@ -46,7 +46,7 @@ struct Command {
     placeholder1 = 9,
     placeholder2 = 10,
     placeholder3 = 11,
-    
+
     // aN - dominant scan axis, 0 = x, 1 = y
     // cX,Y - creep constants, in %/decade
     // lN - wait ~N μs for fixed time lag of electronics
@@ -61,10 +61,6 @@ struct Command {
   Mode mode = Mode::idle;
 
   char alphaCode = 0;
-
-  // TODO: Double check all files that touch 'attributes'; it was recently
-  // changed from 'int32_t' to 'float'.
-  //
-  // Change ones relying on integer multiples of 0.1 or 0.01.
+  
   float attributes[10];
 };

@@ -18,11 +18,11 @@ struct CommandTracker {
 
   static bool registerCommand(Command command);
 
+  // This is for the fast loop to invoke.
+  static bool nextCommand(Command &nextCommand);
+
   static void throwError(
     const char *reason,
     int32_t number1 = 0,
-    int32_t number2 = 0);
-
-  // This is for the fast loop to invoke.
-  static bool nextCommand(Command &nextCommand);
+    int32_t number2 = 0);  
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Command/Command.h"
+#include "Command/Parsing/Command.h"
 
 struct DACTester {
   static constexpr uint32_t wavePeriod = 1008;

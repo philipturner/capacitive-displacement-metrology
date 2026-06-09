@@ -1,5 +1,6 @@
 #include "CommandTracker.h"
 
+#include "Command/Parsing/CommandParsing.h"
 #include "Diagnostics/ErrorMessage.h"
 #include <Arduino.h>
 
@@ -177,7 +178,7 @@ void CommandTracker::processSerialInput() {
   // Decode the mode.
   uint32_t modeCode;
   uint32_t remainderOffset;
-  if (!CommandParsing::findModeCode(length, modeCode, remainderOffset)) {
+  if (!CommandParsing::parseModeCode(length, modeCode, remainderOffset)) {
     return;
   }
   command.mode = Command::Mode(modeCode);
@@ -193,16 +194,25 @@ void CommandTracker::processSerialInput() {
   // Decode the remaining attributes.
   uint32_t numAttributes = 0;
   if (length > remainderOffset) {
-    bool decodeAttributesWorked = decodeAttributes(
+    bool succeeded = CommandParsing::parseAttributes(
       buffer + remainderOffset, 
       length - remainderOffset, 
       command.attributes,
       numAttributes);
-    if (!decodeAttributesWorked) {
+    if (!succeeded) {
       return;
     }
   }
-  if (!checkAttributes(command, numAttributes)) {
+  uint32_t expectedNumAttributes = getExpectedNumAttributes(
+    command, numAttributes);
+  if (numAttributes != expectedNumAttributes) {
+    CommandTracker::throwError(
+      "Unexpected number of attributes.",
+      numAttributes,
+      expectedNumAttributes);
+    return;
+  }
+  if (!checkAttributes(command)) {
     return;
   }
 
@@ -227,6 +237,19 @@ bool CommandTracker::registerCommand(Command command) {
 
   latestCommandID += 1;
   latestCommand = command;
+  return true;
+}
+
+bool CommandTracker::nextCommand(Command &nextCommand) {
+  if (lock) {
+    return false;
+  }
+  if (latestCommandID == acknowledgedCommandID) {
+    return false;
+  }
+
+  nextCommand = latestCommand;
+  acknowledgedCommandID += 1;
   return true;
 }
 
@@ -256,17 +279,4 @@ void CommandTracker::throwError(
   ErrorMessage::addNewline();
   ErrorMessage::addInteger(number2);
   ErrorMessage::addNewline();
-}
-
-bool CommandTracker::nextCommand(Command &nextCommand) {
-  if (lock) {
-    return false;
-  }
-  if (latestCommandID == acknowledgedCommandID) {
-    return false;
-  }
-
-  nextCommand = latestCommand;
-  acknowledgedCommandID += 1;
-  return true;
 }
