@@ -1,6 +1,10 @@
 import Foundation
 
 let creepConstant: Float = 0.85e-2 / log(10)
+let logScaleResolution: Int = 20
+let timeLimitSimple: Int = 100
+let numTimeSteps: Int = 10000
+typealias PreciseType = Float
 
 // MARK: - Simple Creep Filter
 
@@ -20,28 +24,28 @@ struct Sample {
 }
 
 struct SimpleCreepFilter {
-  var currentResponse: Float = .zero
+  var currentResponse: PreciseType = .zero
   var currentStimulus: Float = .zero
   var samples: [Sample] = []
   
   func creepRate(time: Float) -> Float {
-    var accumulator: Float = .zero
+    var accumulator: PreciseType = .zero
     for sample in samples {
       let dt = time - sample.time
       guard dt >= 1 else {
         fatalError("This should never happen.")
       }
       
-      accumulator += sample.dV / dt
+      accumulator += PreciseType(sample.dV / dt)
     }
-    return creepConstant * accumulator
+    return creepConstant * Float(accumulator)
   }
   
   // Returns the change in response.
   mutating func update(stimulus: Float, time: Float) {
     let creep_dx = creepRate(time: time)
     let dV = stimulus - currentStimulus
-    currentResponse += creep_dx + dV
+    currentResponse += PreciseType(creep_dx + dV)
     currentStimulus = stimulus
     
     let sample = Sample(dV: dV, time: time)
@@ -69,7 +73,9 @@ struct Queue {
     let mergedSample = Sample(sample0, sample1)
     
     // Arbitrary choice for threshold: average time vs. time of samples[1]
-    let dt = time - samples[1].time
+    // The former gives a more consistent distribution of samples across the
+    // queues.
+    let dt = time - mergedSample.time
     if dt > maxTime {
       samples.removeFirst(2)
       return mergedSample
@@ -84,19 +90,20 @@ struct Queue {
 }
 
 struct CreepFilter {
+  var currentResponse: PreciseType = .zero
   var currentStimulus: Float = .zero
   var queues: [Queue] = []
   
   init() {
-    for i in (0...5).reversed() {
-      let maxTime = 4 * (1 << i)
+    for i in (0...20).reversed() {
+      let maxTime = logScaleResolution * (1 << i)
       let queue = Queue(maxTime: Float(maxTime))
       queues.append(queue)
     }
   }
   
   func creepRate(time: Float) -> Float {
-    var accumulator: Float = .zero
+    var accumulator: PreciseType = .zero
     for queue in queues {
       for sample in queue.samples {
         let dt = time - sample.time
@@ -104,10 +111,10 @@ struct CreepFilter {
           fatalError("This should never happen.")
         }
         
-        accumulator += sample.dV / dt
+        accumulator += PreciseType(sample.dV / dt)
       }
     }
-    return creepConstant * accumulator
+    return creepConstant * Float(accumulator)
   }
   
   mutating func shiftSamples(time: Float) {
@@ -118,6 +125,10 @@ struct CreepFilter {
       }
       
       if queueID == 0 {
+        print(queues[queueID].maxTime)
+        print(removed.dV)
+        print(removed.time)
+        print(time)
         fatalError("Reached end of delay line.")
       }
       
@@ -126,7 +137,9 @@ struct CreepFilter {
   }
   
   mutating func update(stimulus: Float, time: Float) {
+    let creep_dx = creepRate(time: time)
     let dV = stimulus - currentStimulus
+    currentResponse += PreciseType(creep_dx + dV)
     currentStimulus = stimulus
     
     let sample = Sample(dV: dV, time: time)
@@ -141,11 +154,15 @@ struct CreepFilter {
 #if true
 
 var simpleCreepFilter = SimpleCreepFilter()
+var creepFilter = CreepFilter()
 let stepVoltageAmplitude: Float = 1
 let stepVoltageTime: Int = 10
+var errorSimple: Float = .zero
+var errorEfficient: Float = .zero
 
-for time in 0..<100 {
+for time in 0..<numTimeSteps {
   let simulatedCreepRate = simpleCreepFilter.creepRate(time: Float(time))
+  let simulatedCreepRate2 = creepFilter.creepRate(time: Float(time))
   
   var voltage: Float
   var position: Float
@@ -180,12 +197,13 @@ for time in 0..<100 {
   print("t:", pad("\(time)", length: 4), terminator: " | ")
   print("V:", display(voltage), terminator: " | ")
   print("x:", display(position), terminator: " | ")
-  print("x:", display(simpleCreepFilter.currentResponse), terminator: " | ")
+  print("x:", display(Float(simpleCreepFilter.currentResponse)), terminator: " | ")
+  print("x:", display(Float(creepFilter.currentResponse)), terminator: " | ")
   print("dx:", display(creepRate), terminator: " | ")
   print("dx:", display(simulatedCreepRate), terminator: " | ")
+  print("dx:", display(simulatedCreepRate2), terminator: " | ")
   
-  func getFormattedError() -> String {
-    let error = simpleCreepFilter.currentResponse - position
+  func getFormattedError(_ error: Float) -> String {
     var output = String(format: "%.6f", error)
     
     let length = String("-X.XXXXXX").count
@@ -193,10 +211,19 @@ for time in 0..<100 {
     return output
   }
   
-  print(getFormattedError(), terminator: " | ")
+  if time < timeLimitSimple {
+    errorSimple = Float(simpleCreepFilter.currentResponse) - position
+  }
+  errorEfficient = Float(creepFilter.currentResponse) - position - errorSimple
+  errorEfficient /= Float(position - voltage)
+  print(getFormattedError(errorSimple), terminator: " | ")
+  print(getFormattedError(errorEfficient), terminator: " | ")
   print()
   
-  simpleCreepFilter.update(stimulus: voltage, time: Float(time))
+  if time < timeLimitSimple {
+    simpleCreepFilter.update(stimulus: voltage, time: Float(time))
+  }
+  creepFilter.update(stimulus: voltage, time: Float(time))
 }
 
 #endif
@@ -204,14 +231,22 @@ for time in 0..<100 {
 #if false
 
 let voltageSequence: [Float] = [
-//  0, 0, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 20, 20,
-  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+  0, 0, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 20, 20,
+//  0, 0, 0, 0, 1,
 ]
 
 var creepFilter = CreepFilter()
 
-for time in voltageSequence.indices {
-  let voltage = voltageSequence[time]
+//for time in voltageSequence.indices {
+//  let voltage = voltageSequence[time]
+for time in 0..<100 {
+  var voltage: Float
+  if time < voltageSequence.count {
+    voltage = voltageSequence[time]
+  } else {
+    voltage = voltageSequence.last!
+  }
+  
   print()
   print("time:", time)
   print("voltage:", voltage)
