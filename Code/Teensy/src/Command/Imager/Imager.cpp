@@ -14,19 +14,8 @@ Imager::Imager() {
 Imager::Imager(Command command) {
   mode = getMode(command.alphaCode);
   resolution = uint32_t(command.attributes[0]);
-  imageSize = float(command.attributes[1]) * 0.1;
-
-  centersX[0] = float(command.attributes[2]) * 0.1;
-  centersY[0] = float(command.attributes[3]) * 0.1;
-
-  if (mode == Mode::dualVideo) {
-    centersX[1] = float(command.attributes[4]) * 0.1;
-    centersY[1] = float(command.attributes[5]) * 0.1;
-  } else {
-    centersX[1] = -100;
-    centersY[1] = -100;
-  }
-
+  imageSize = command.attributes[1];
+  
   if (resolution <= 32) {
     polynomialPeakTime = 1008;
   } else if (resolution <= 48) {

@@ -95,7 +95,7 @@ void kilohertzLoop() {
           modeChangeNeedsFixedZ = true;
         }
       } else if (modeCode == uint8_t(Command::Mode::imagingSettings)) {
-
+        Imager::updatePendingSettings(nextCommand);
       } else {
         ErrorMessage::reset();
         ErrorMessage::errorType = ErrorMessage::Type::fatal;

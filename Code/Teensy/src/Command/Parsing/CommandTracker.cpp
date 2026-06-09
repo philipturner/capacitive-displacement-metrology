@@ -1,7 +1,5 @@
-#include "Command.h"
+#include "CommandTracker.h"
 
-#include "Command/Imager/Imager.h"
-#include "Command/SimpleScanner.h"
 #include "Diagnostics/ErrorMessage.h"
 #include <Arduino.h>
 
@@ -36,66 +34,117 @@ bool isRecoverCommand(uint32_t length) {
   return true;
 }
 
-bool checkNumAttributes(Command command, uint32_t numAttributes) {
-uint32_t expectedNumAttributes = 0;
-  if (command.mode == Command::Mode::dacTest) {
-    expectedNumAttributes = 1;
-  }
-  if (command.mode == Command::Mode::blindStepping) {
-    if (command.alphaCode == 'u') {
-      expectedNumAttributes = 1;
-    } else if (command.alphaCode == 'd') {
-      expectedNumAttributes = 1;
-    } else if (command.alphaCode == 'c') {
-      expectedNumAttributes = 2;
+uint32_t getExpectedNumAttributes(Command command, uint32_t numAttributes) {
+  switch (command.mode) {
+    case Command::Mode::dacTest: {
+      return 1;
+    }
+    case Command::Mode::blindStepping: {
+      if (command.alphaCode == 'c') {
+        return 2;
+      } else {
+        return 1;
+      }
+    }
+    case Command::Mode::spectroscopy: {
+      if (command.alphaCode == 'a') {
+        return 1;
+      } else {
+        return 2;
+      }
+    }
+    case Command::Mode::simpleScanning: {
+      return 2;
+    }
+    case Command::Mode::imaging: {
+      return 2;
+    }
+    case Command::Mode::imagingSettings: {
+      switch (command.alphaCode) {
+        case 'a': return 1;
+        case 'c': return 2;
+        case 'l': return 1;
+        case 'o': return 3;
+        case 'r': return 0;
+        case 's': return 1;
+        default: return 0;
+      }
+    }
+    default: {
+      return 0;
     }
   }
-  if (command.mode == Command::Mode::spectroscopy) {
-    if (command.alphaCode == 'a') {
-      expectedNumAttributes = 1;
-    } else if (command.alphaCode == 'c') {
-      expectedNumAttributes = 2;
-    }
-  }
-  if (command.mode == Command::Mode::simpleScanning) {
-    expectedNumAttributes = 2;
-  }
-  if (command.mode == Command::Mode::imaging) {
-    if (command.alphaCode == 'i') {
-      expectedNumAttributes = 4;
-    } else if (command.alphaCode == 'v') {
-      expectedNumAttributes = 4;
-    } else if (command.alphaCode == 'd') {
-      expectedNumAttributes = 6;
-    }
-  }
-  if (command.mode == Command::Mode::imagingSettings) {
-    expectedNumAttributes = 1;
-  }
-
-  if (numAttributes != expectedNumAttributes) {
-    CommandTracker::throwError(
-      "Unexpected number of attributes.",
-      expectedNumAttributes,
-      numAttributes);
-    return false;
-  }
-
-  return true;
 }
 
 bool checkAttributes(Command command) {
-  if (command.mode == Command::Mode::simpleScanning) {
-    uint32_t frequency = command.attributes[0];
-    if (frequency == 0 || frequency > 10000) {
-      CommandTracker::throwError("Invalid frequency.");
-      return false;
+  switch (command.mode) {
+    case Command::Mode::blindStepping: {
+      if (command.attributes[0] < 0) {
+        CommandTracker::throwError("Invalid step count.");
+        return false;
+      }
+      if (command.alphaCode == 'c') {
+        float capacitance = command.attributes[1];
+        if (capacitance <= 0) {
+          CommandTracker::throwError("Invalid capacitance.");
+          return false;
+        }
+      }
+      break;
     }
-  } else if (command.mode == Command::Mode::imaging) {
-    uint32_t resolution = command.attributes[0];
-    if (resolution == 0 || resolution > 1024 || (resolution % 2 != 0)) {
-      CommandTracker::throwError("Invalid resolution.");
-      return false;
+    case Command::Mode::simpleScanning: {
+      float frequency = command.attributes[0];
+      if (frequency <= 0) {
+        CommandTracker::throwError("Invalid frequency.");
+        return false;
+      }
+      break;
+    }
+    case Command::Mode::imaging: {
+      uint32_t resolution = command.attributes[0];
+      if (resolution == 0 || resolution > 1024 || (resolution % 2 != 0)) {
+        CommandTracker::throwError("Invalid resolution.");
+        return false;
+      }
+
+      float size = command.attributes[1];
+      if (size <= 0 || size > 270) {
+        CommandTracker::throwError("Invalid image size.");
+        return false;
+      }
+
+      break;
+    }
+    case Command::Mode::imagingSettings: {
+      switch (command.alphaCode) {
+        case 'a': {
+          uint8_t axisCode = command.attributes[0];
+          if (axisCode != 0 && axisCode != 1) {
+            CommandTracker::throwError("Invalid axis code.");
+            return false;
+          }
+          break;
+        }
+        case 'o': {
+          uint8_t centerID = command.attributes[0];
+          if (centerID != 0 && centerID != 1) {
+            CommandTracker::throwError("Invalid center ID.");
+            return false;
+          }
+          break;
+        }
+        case 'l':
+        case 's': {
+          float time = command.attributes[0];
+          if (time < 0) {
+            CommandTracker::throwError("Invalid time.");
+            return false;
+          }
+          break;
+        }
+      }
+
+      break;
     }
   }
 

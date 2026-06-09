@@ -27,7 +27,7 @@ DACTester::DACTester() {
 
 DACTester::DACTester(Command command) {
   channelID = decodeChannelID(command.alphaCode);
-  bipolarAmplitude = float(command.attributes[0]);
+  bipolarAmplitude = command.attributes[0];
 }
 
 void DACTester::update() {

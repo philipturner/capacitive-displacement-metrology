@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Command/Command.h"
+#include "Command/Parsing/Command.h"
 
 struct Imager {
   enum class Mode {
@@ -9,16 +9,6 @@ struct Imager {
     dualVideo = 2,
   };
 
-  struct Settings {
-    bool dominantAxisIsY = false;
-    float creepConstants[2] = { 0, 0 };
-    float center0[2] = { 0, 0 };
-    float center1[2] = { 0, 0 };
-    uint32_t electronicTimeLag = 0; // μs
-    uint32_t creepSettlingTime = 0; // ms
-  };
-  static inline Settings pendingSettings;
-
   struct Pixel {
     uint32_t id;
     float x; // units: nm
@@ -26,6 +16,18 @@ struct Imager {
     float z; // units: nm
     float current; // units: A
   };
+
+  struct Settings {
+    uint8_t dominantAxis = 0; // either 0 or 1
+    float creepConstants[2] = { 0, 0 };
+    float centers[2][2] = {
+      { 0, 0 }, 
+      { 0, 0 },
+    };
+    uint32_t electronicTimeLag = 0; // μs
+    uint32_t creepSettlingTime = 0; // ms
+  };
+  static inline Settings pendingSettings;
 
   // 1668 - 1e-3 resonant overshoot, 2.65 kHz
   // 3324 - 1e-4 resonant overshoot, 2.65 kHz
@@ -37,8 +39,8 @@ struct Imager {
   Imager(Command command);
   void update();
 
-  static Mode getMode(char imagingAlphaCode);
-  static bool updatePendingSettings(Command command);
+  static Mode getMode(char code);
+  static void updatePendingSettings(Command command);
   static void forwardStaticSettings();
   void forwardInstanceSettings();
 

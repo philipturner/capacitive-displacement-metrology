@@ -55,22 +55,16 @@ Spectroscopy::Spectroscopy() {
 Spectroscopy::Spectroscopy(Command command) {
   if (command.alphaCode == 'a') {
     useCustomVZPair = false;
-    autoScaleFactor = float(command.attributes[0]) / 1000;
+    autoScaleFactor = command.attributes[0];
   } else if (command.alphaCode == 'c') {
     useCustomVZPair = true;
+    customVZPair.voltage = command.attributes[0];
+    customVZPair.position = command.attributes[1] * 1e-12;
   } else {
     Serial.println("This should never happen.");
     exit(0);
   }
-
-  if (useCustomVZPair) {
-    float millivolts = float(command.attributes[0]);
-    customVZPair.voltage = millivolts * 1e-3;
-
-    float picometers = float(command.attributes[1]);
-    customVZPair.position = picometers * 1e-12;
-  }
-
+  
   trialStartIterationID = KilohertzLoop::iterationID;
 }
 

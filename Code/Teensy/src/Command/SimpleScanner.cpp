@@ -16,12 +16,13 @@ SimpleScanner::SimpleScanner(Command command) {
     channelID = 2;
   }
 
-  uint32_t frequency = command.attributes[0];
-  uint32_t period = uint32_t(1000 * 1000) / frequency;
+  float frequency = command.attributes[0];
+  uint32_t period = float(1e6) / frequency;
   halfWavePeriod = period / 2;
+  halfWavePeriod += Imager::pixelTime - 1;
   halfWavePeriod -= halfWavePeriod % Imager::pixelTime;
 
-  peakPeakAmplitude = float(command.attributes[1]) * 0.1;
+  peakPeakAmplitude = command.attributes[1];
 }
 
 void SimpleScanner::update() {

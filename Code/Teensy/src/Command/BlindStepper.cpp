@@ -27,8 +27,8 @@ BlindStepper::BlindStepper(Command command) {
   if (mode == Mode::up || mode == Mode::down) {
     stepsPerCheck = command.attributes[0];
   } else if (mode == Mode::capacitance) {
-    capacitanceThreshold = float(command.attributes[0]) * 0.1e-15;
-    stepsPerCheck = command.attributes[1];
+    stepsPerCheck = command.attributes[0];
+    capacitanceThreshold = command.attributes[1] * 1e-15;
   }
 
   if (mode == Mode::up || mode == Mode::down) {
