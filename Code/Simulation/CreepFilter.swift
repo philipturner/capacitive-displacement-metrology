@@ -9,20 +9,12 @@ struct CreepFilter {
   var currentVoltage: Double = .zero
   var samples: [SIMD2<Double>] = []
   
-  mutating func addSample(voltage: Double, t: Int) {
-    let dV = voltage - currentVoltage
-    currentVoltage = voltage
-    
-    let sample = SIMD2(dV, Double(t))
-    samples.append(sample)
-  }
-  
   func creepRate(t: Double) -> Double {
     var output: Double = .zero
     for sample in samples {
       let dt = t - sample[1]
       guard dt >= 1 else {
-        continue
+        fatalError("This should never happen.")
       }
       
       let dV = sample[0]
@@ -31,43 +23,37 @@ struct CreepFilter {
     return creepConstant * output
   }
   
-  // Smoothly integrates creep over 1 unit of time.
-  func positionChange(startTime: Int) -> Double {
-    let subsamplingResolution: Int = 10
+  private func creepInducedChange(startTime: Int) -> Double {
+    let subsamplingResolution: Int = 1
     
-    func creepInducedChange() -> Double {
-      var accumulator: Double = .zero
-      for i in 0..<subsamplingResolution {
-        let t = Double(startTime) + Double(i) / Double(subsamplingResolution)
-        let creepRate = self.creepRate(t: t)
-        accumulator += creepRate
-      }
-      accumulator /= Double(subsamplingResolution)
-      
-      return accumulator
+    var accumulator: Double = .zero
+    for i in 0..<subsamplingResolution {
+      let t = Double(startTime) + Double(i) / Double(subsamplingResolution)
+      let creepRate = self.creepRate(t: t)
+      accumulator += creepRate
     }
+    accumulator /= Double(subsamplingResolution)
     
-    func voltageInducedChange() -> Double {
-      guard samples.count > 0 else {
-        fatalError("Could not get latest sample.")
-      }
-      let latestSample = samples.last!
-      let latestTime = Int(latestSample[1])
-      guard latestTime == startTime else {
-        fatalError("Latest sample had wrong time.")
-      }
-      
-      let dV = latestSample[0]
-      return dV
-    }
+    return accumulator
+  }
+  
+  // Returns the change in position.
+  mutating func update(voltage: Double, t: Int) -> Double {
+    let creep_dx = creepInducedChange(startTime: t)
     
-    return voltageInducedChange() + creepInducedChange()
+    let dV = voltage - currentVoltage
+    currentVoltage = voltage
+    samples.append(SIMD2(dV, Double(t)))
+    
+    return creep_dx + dV
   }
 }
 
 var creepFilter = CreepFilter()
 let stepVoltageAmplitude: Double = 1
 let stepVoltageTime: Int = 10
+
+var simulatedPosition: Double = 0
 
 for t in 0..<100 {
   var voltage: Double
@@ -89,6 +75,8 @@ for t in 0..<100 {
     creepRate = stepVoltageAmplitude * (creepConstant / dt)
   }
   
+  let simulatedCreepRate = creepFilter.creepRate(t: Double(t))
+  
   func pad(_ string: String, length: Int) -> String {
     var output = string
     while output.count < length {
@@ -104,6 +92,23 @@ for t in 0..<100 {
   print(pad("\(t)", length: 4), terminator: " | ")
   print(display(voltage), terminator: " | ")
   print(display(position), terminator: " | ")
+  print(display(simulatedPosition), terminator: " | ")
   print(display(creepRate), terminator: " | ")
+  print(display(simulatedCreepRate), terminator: " | ")
+  
+  func getFormattedError() -> String {
+    let error = simulatedPosition - position
+    var output = String(format: "%.5f", error)
+    
+    let length = String("-X.XXXXX").count
+    output = pad(output, length: length)
+    return output
+  }
+  
+  // subsampling 1:  0.00211 @ t = 99
+  // subsampling 10: 0.00019 @ t = 99
+  print(getFormattedError(), terminator: " | ")
   print()
+  
+  simulatedPosition += creepFilter.update(voltage: voltage, t: t)
 }
