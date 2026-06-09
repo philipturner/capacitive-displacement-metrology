@@ -2,9 +2,21 @@ import Foundation
 
 let creepConstant: Float = 0.85e-2 / log(10)
 
+// MARK: - Simple Creep Filter
+
 struct Sample {
   var dV: Float
   var time: Float
+  
+  init(dV: Float, time: Float) {
+    self.dV = dV
+    self.time = time
+  }
+  
+  init(_ source1: Sample, _ source2: Sample) {
+    dV = source1.dV + source2.dV
+    time = (source1.time + source2.time) / 2
+  }
 }
 
 struct SimpleCreepFilter {
@@ -37,7 +49,96 @@ struct SimpleCreepFilter {
   }
 }
 
-// TODO
+// MARK: - Efficient Creep Filter
+
+struct Queue {
+  var maxTime: Float
+  var samples: [Sample] = [] // eventually a ring buffer
+  
+  init(maxTime: Float) {
+    self.maxTime = maxTime
+  }
+  
+  mutating func removeFirst(time: Float) -> Sample? {
+    guard samples.count >= 2 else {
+      return nil
+    }
+    
+    let sample0 = samples[0]
+    let sample1 = samples[1]
+    let mergedSample = Sample(sample0, sample1)
+    
+    // Arbitrary choice for threshold: average time vs. time of samples[1]
+    let dt = time - samples[1].time
+    if dt > maxTime {
+      samples.removeFirst(2)
+      return mergedSample
+    } else {
+      return nil
+    }
+  }
+  
+  mutating func insert(_ sample: Sample) {
+    samples.append(sample)
+  }
+}
+
+struct CreepFilter {
+  var currentStimulus: Float = .zero
+  var queues: [Queue] = []
+  
+  init() {
+    for i in (0...5).reversed() {
+      let maxTime = 4 * (1 << i)
+      let queue = Queue(maxTime: Float(maxTime))
+      queues.append(queue)
+    }
+  }
+  
+  func creepRate(time: Float) -> Float {
+    var accumulator: Float = .zero
+    for queue in queues {
+      for sample in queue.samples {
+        let dt = time - sample.time
+        guard dt >= 1 else {
+          fatalError("This should never happen.")
+        }
+        
+        accumulator += sample.dV / dt
+      }
+    }
+    return creepConstant * accumulator
+  }
+  
+  mutating func shiftSamples(time: Float) {
+    for queueID in queues.indices {
+      let removed = queues[queueID].removeFirst(time: time)
+      guard let removed else {
+        continue
+      }
+      
+      if queueID == 0 {
+        fatalError("Reached end of delay line.")
+      }
+      
+      queues[queueID - 1].insert(removed)
+    }
+  }
+  
+  mutating func update(stimulus: Float, time: Float) {
+    let dV = stimulus - currentStimulus
+    currentStimulus = stimulus
+    
+    let sample = Sample(dV: dV, time: time)
+    queues[queues.count - 1].insert(sample)
+    
+    shiftSamples(time: time)
+  }
+}
+
+// MARK: - Testing
+
+#if true
 
 var simpleCreepFilter = SimpleCreepFilter()
 let stepVoltageAmplitude: Float = 1
@@ -97,3 +198,54 @@ for time in 0..<100 {
   
   simpleCreepFilter.update(stimulus: voltage, time: Float(time))
 }
+
+#endif
+
+#if false
+
+let voltageSequence: [Float] = [
+//  0, 0, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 20, 20,
+  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+]
+
+var creepFilter = CreepFilter()
+
+for time in voltageSequence.indices {
+  let voltage = voltageSequence[time]
+  print()
+  print("time:", time)
+  print("voltage:", voltage)
+  
+  creepFilter.update(stimulus: voltage, time: Float(time))
+  
+  print("creep filter:")
+  for queueID in creepFilter.queues.indices {
+    print("- queues[\(queueID)]:")
+    
+    let queue = creepFilter.queues[queueID]
+    print("  - maxTime: \(queue.maxTime)")
+    
+    for sampleID in queue.samples.indices {
+      let sample = queue.samples[sampleID]
+      print("  - samples[\(sampleID)]:", terminator: " ")
+      print(sample.dV, terminator: ", ")
+      print(sample.time, terminator: " ")
+      
+      let dt = Float(time) - sample.time
+      print("(\(-dt))")
+    }
+  }
+  
+  func getSum() -> Float {
+    var output: Float = .zero
+    for queue in creepFilter.queues {
+      for sample in queue.samples {
+        output += sample.dV
+      }
+    }
+    return output
+  }
+  print("sum:", getSum())
+}
+
+#endif
