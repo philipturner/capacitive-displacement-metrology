@@ -8,12 +8,18 @@ typealias PreciseType = Float
 
 let timeOriginUpdateRate: Int = 1000
 
-// MARK: - Simple Creep Filter
+// t: 10000 | V: 1.0000 | x: 1.0340 | x: 1.0187 | x: 1.0361 | dx: 0.0000 | dx: 0.0000 |  0.002110 |  0.000161 |
+
+// MARK: - Common Structures
 
 struct Sample {
-  var dV: Float
-  var time: Float
-  var queueTime: Float
+  var dV: Float = .zero
+  var time: Float = .zero
+  var queueTime: Float = .zero
+  
+  init() {
+    
+  }
   
   init(dV: Float, time: Float) {
     self.dV = dV
@@ -42,11 +48,103 @@ struct Sample {
   }
 }
 
+struct SampleBuffer {
+  var capacity: Int
+  var data: [Sample]
+  var startIndex: Int = .zero
+  var endIndex: Int = .zero
+  
+  init(capacity: Int) {
+    self.capacity = capacity
+    self.data = Array(repeating: Sample(), count: capacity)
+  }
+  
+  var count: Int {
+    endIndex - startIndex
+  }
+  
+  mutating func insert(_ sample: Sample) {
+    if count >= capacity {
+      fatalError("Exceeded capacity of ring buffer.")
+    }
+    
+    data[endIndex % capacity] = sample
+    endIndex += 1
+  }
+  
+  mutating func removeFirst() {
+    guard startIndex < endIndex else {
+      fatalError("Cannot remove first.")
+    }
+    startIndex += 1
+  }
+  
+  subscript(index: Int) -> Sample {
+    _read {
+      let slotID = (startIndex + index) % capacity
+      yield data[slotID]
+    }
+  }
+  
+  @inline(__always)
+  func forEach(_ closure: (Sample) -> Void) {
+    for i in startIndex..<endIndex {
+      let slotID = i % capacity
+      closure(data[slotID])
+    }
+  }
+  
+  mutating func shiftTimeOrigin() {
+    for i in startIndex..<endIndex {
+      let slotID = i % capacity
+      data[slotID].time -= Float(timeOriginUpdateRate)
+      data[slotID].queueTime -= Float(timeOriginUpdateRate)
+    }
+  }
+}
+
+struct Queue {
+  var maxTime: Float
+  var buffer: SampleBuffer
+  
+  init(maxTime: Float, capacity: Int) {
+    self.maxTime = maxTime
+    self.buffer = SampleBuffer(capacity: capacity)
+  }
+  
+  mutating func removeFirst(time: Float) -> Sample? {
+    guard buffer.count >= 2 else {
+      return nil
+    }
+    
+    let sample0 = buffer[0]
+    let sample1 = buffer[1]
+    let queueTime = (sample0.queueTime + sample1.queueTime) / 2
+    
+    // Arbitrary choice for threshold: average time vs. time of samples[1]
+    // The former gives a more consistent distribution of samples across the
+    // queues.
+    let dt = time - queueTime
+    if dt > maxTime {
+      buffer.removeFirst()
+      buffer.removeFirst()
+      return Sample(sample0, sample1)
+    } else {
+      return nil
+    }
+  }
+}
+
+// MARK: - Simple Creep Filter
+
 struct SimpleCreepFilter {
   var currentResponse: PreciseType = .zero
   var currentStimulus: Float = .zero
   var timeOrigin: Int = .zero
   var samples: [Sample] = []
+  
+  // TODO: Add options for supersampling rate and a bound to history depth;
+  // make it a ring buffer.
   
   func creepRate(time: Int) -> Float {
     let relativeTime = Float(time - timeOrigin)
@@ -58,6 +156,7 @@ struct SimpleCreepFilter {
         fatalError("This should never happen.")
       }
       
+      // Supersample most efficiently through a loop right here.
       accumulator += PreciseType(sample.dV / dt)
     }
     return creepConstant * Float(accumulator)
@@ -93,46 +192,6 @@ struct SimpleCreepFilter {
 
 // 103-112 ns execution time so far
 
-struct Queue {
-  // TODO: Finish code development by changing this to a ring buffer.
-  var maxTime: Float
-  var samples: [Sample] = [] // eventually a ring buffer
-  var capacity: Int
-  
-  init(maxTime: Float, capacity: Int) {
-    self.maxTime = maxTime
-    self.capacity = capacity
-  }
-  
-  mutating func removeFirst(time: Float) -> Sample? {
-    guard samples.count >= 2 else {
-      return nil
-    }
-    
-    let sample0 = samples[0]
-    let sample1 = samples[1]
-    let queueTime = (sample0.queueTime + sample1.queueTime) / 2
-    
-    // Arbitrary choice for threshold: average time vs. time of samples[1]
-    // The former gives a more consistent distribution of samples across the
-    // queues.
-    let dt = time - queueTime
-    if dt > maxTime {
-      samples.removeFirst(2)
-      return Sample(sample0, sample1)
-    } else {
-      return nil
-    }
-  }
-  
-  mutating func insert(_ sample: Sample) {
-    if samples.count == capacity {
-      fatalError("Exceeded capacity.")
-    }
-    samples.append(sample)
-  }
-}
-
 struct CreepFilter {
   var currentResponse: PreciseType = .zero
   var currentStimulus: Float = .zero
@@ -166,7 +225,7 @@ struct CreepFilter {
     
     var accumulator: PreciseType = .zero
     for queue in queues {
-      for sample in queue.samples {
+      queue.buffer.forEach { sample in
         let dt = relativeTime - sample.time
         accumulator += PreciseType(sample.dV / dt)
       }
@@ -178,12 +237,7 @@ struct CreepFilter {
     timeOrigin += timeOriginUpdateRate
     
     for queueID in queues.indices {
-      for sampleID in queues[queueID].samples.indices {
-        var sample = queues[queueID].samples[sampleID]
-        sample.time -= Float(timeOriginUpdateRate)
-        sample.queueTime -= Float(timeOriginUpdateRate)
-        queues[queueID].samples[sampleID] = sample
-      }
+      queues[queueID].buffer.shiftTimeOrigin()
     }
   }
   
@@ -205,7 +259,7 @@ struct CreepFilter {
         fatalError("Reached end of delay line.")
       }
       
-      queues[queueID - 1].insert(removed)
+      queues[queueID - 1].buffer.insert(removed)
       
       // Limit the number of removal operations per cycle. The infrequent
       // events where multiple bins switch will be spread out over the few
@@ -231,7 +285,7 @@ struct CreepFilter {
     
     let relativeTime = Float(time - timeOrigin)
     let sample = Sample(dV: dV, time: relativeTime)
-    queues[queues.count - 1].insert(sample)
+    queues[queues.count - 1].buffer.insert(sample)
     
     shiftSamples(time: time)
   }
@@ -287,7 +341,7 @@ for time in 0..<numTimeSteps {
     timeCheckpoint2 = Date().timeIntervalSince1970
   }
   
-  #if true
+  #if false
   print("t:", pad("\(time)", length: 4), terminator: " | ")
   print("V:", display(voltage), terminator: " | ")
   print("x:", display(position), terminator: " | ")
@@ -369,8 +423,8 @@ for time in 0..<1000 {
     let queue = creepFilter.queues[queueID]
     print("  - maxTime: \(queue.maxTime)")
     
-    for sampleID in queue.samples.indices {
-      let sample = queue.samples[sampleID]
+    var sampleID: Int = 0
+    queue.buffer.forEach { sample in
       print("  - samples[\(sampleID)]:", terminator: " ")
       print(sample.dV, terminator: ", ")
       print(sample.time, terminator: " ")
@@ -379,13 +433,15 @@ for time in 0..<1000 {
       let dt1 = Float(time - creepFilter.timeOrigin) - sample.time
       let dt2 = Float(time - creepFilter.timeOrigin) - sample.queueTime
       print("(\(-dt1), \(-dt2))")
+      
+      sampleID += 1
     }
   }
   
   func getSum() -> Float {
     var output: Float = .zero
     for queue in creepFilter.queues {
-      for sample in queue.samples {
+      queue.buffer.forEach { sample in
         output += sample.dV
       }
     }
