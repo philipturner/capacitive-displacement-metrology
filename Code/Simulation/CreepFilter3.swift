@@ -1,6 +1,6 @@
 import Foundation
 
-let creepConstant: Float = 10e-2 / log(10)
+let creepConstant: Float = 1e-2 / log(10)
 let logScaleResolution: Int = 4 // even numbers never have >1 transition/cycle
 let timeOriginUpdateRate: Int = 100
 typealias PreciseType = Float
@@ -8,21 +8,34 @@ typealias PreciseType = Float
 let supersamplingRateEfficient: Int = 10
 let capacitySimpleLowRes: Int = 100
 let timeLimit: Int = 3000
-let enableCreepCorrection: Bool = true
+let enableCreepCorrection: Bool = false
 
-//let wavePeriods: [Int] = [
-//  8, 12, 16, 20, 24, 28, 32, 36, 40,
-//  60, 64, 68,
-//  80, 96,
-//  120, 124, 128, 132,
-//  160, 192,
-//  240, 244, 248, 256, 260, 264,
-//]
+enum StimulusType {
+  case triangleWave
+  case sineWave
+}
+let stimulusType: StimulusType = .sineWave
 
 func createWavePeriods() -> [Int] {
   var output: [Int] = []
-  for i in 2...(132 / 4) {
-    output.append(i * 4)
+  for i in 2...(550 / 4) {
+    let period = i * 4
+    if period > 200 {
+      guard period % 8 == 0 else {
+        continue
+      }
+    }
+    
+    let logBase2 = log(Float(period)) / log(Float(2))
+    let nearestPower2 = round(logBase2)
+    
+    // <0.05 in log space -> <3.5%
+    // <0.10 in log space -> <7%
+    let distance = abs(logBase2 - nearestPower2)
+    if distance < 0.10 {
+      continue
+    }
+    output.append(period)
   }
   return output
 }
@@ -258,13 +271,11 @@ for wavePeriod in wavePeriods {
         }
         
         func getCapacity() -> Int {
-          // queue sizes grow exponentially unless base = 2
-          if base != 2 {
-            return 100
-          }
-          
           var multiplier: Float
-          if i == 0 {
+          if base != 2 {
+            // queue sizes grow exponentially unless base = 2
+            multiplier = 100
+          } else if i == 0 {
             multiplier = base * 2
           } else {
             multiplier = base
@@ -388,22 +399,22 @@ for wavePeriod in wavePeriods {
 #endif
   
   func createStimulusSignal(time: Int) -> Float {
-    //  if time < 10 {
-    //    return 0
-    //  } else {
-    //    return 1
-    //  }
-    
     let phase = time % wavePeriod
     let phaseNormalized = Float(phase) / Float(wavePeriod)
     
     var output: Float
-    if phaseNormalized < 0.5 {
-      output = 2 * phaseNormalized
-    } else {
-      output = 2 * (1 - phaseNormalized)
+    switch stimulusType {
+    case .triangleWave:
+      if phaseNormalized < 0.5 {
+        output = 2 * phaseNormalized
+      } else {
+        output = 2 * (1 - phaseNormalized)
+      }
+      output -= 0.5
+    case .sineWave:
+      output = -cos(2 * Float.pi * phaseNormalized)
+      output /= 2
     }
-    output -= 0.5
     
     if time < wavePeriod / 2 {
       output = max(output, 0)

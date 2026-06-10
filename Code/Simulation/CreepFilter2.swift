@@ -262,13 +262,11 @@ struct CreepFilter {
       }
       
       func getCapacity() -> Int {
-        // queue sizes grow exponentially unless base = 2
-        if base != 2 {
-          return 100
-        }
-        
         var multiplier: Float
-        if i == 0 {
+        if base != 2 {
+          // queue sizes grow exponentially unless base = 2
+          multiplier = 100
+        } else if i == 0 {
           multiplier = base * 2
         } else {
           multiplier = base
