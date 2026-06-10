@@ -2,8 +2,8 @@ import Foundation
 
 let creepConstant: Float = 0.85e-2 / log(10)
 let logScaleResolution: Int = 4 // even numbers never have >1 transition/cycle
-let timeLimitSimple: Int = 1000
-let numTimeSteps: Int = 100000 + 1
+let timeLimitSimple: Int = 100
+let numTimeSteps: Int = 10000 + 1
 typealias PreciseType = Float
 
 let timeOriginUpdateRate: Int = 1000
@@ -91,9 +91,10 @@ struct SimpleCreepFilter {
 
 // MARK: - Efficient Creep Filter
 
-// 112 ns execution time so far
+// 103-112 ns execution time so far
 
 struct Queue {
+  // TODO: Finish code development by changing this to a ring buffer.
   var maxTime: Float
   var samples: [Sample] = [] // eventually a ring buffer
   var capacity: Int
@@ -167,10 +168,6 @@ struct CreepFilter {
     for queue in queues {
       for sample in queue.samples {
         let dt = relativeTime - sample.time
-        guard dt >= 1 else {
-          fatalError("This should never happen.")
-        }
-        
         accumulator += PreciseType(sample.dV / dt)
       }
     }
@@ -290,7 +287,7 @@ for time in 0..<numTimeSteps {
     timeCheckpoint2 = Date().timeIntervalSince1970
   }
   
-  #if false
+  #if true
   print("t:", pad("\(time)", length: 4), terminator: " | ")
   print("V:", display(voltage), terminator: " | ")
   print("x:", display(position), terminator: " | ")
