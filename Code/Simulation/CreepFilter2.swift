@@ -519,8 +519,9 @@ for time in 0..<1000 {
     queue.buffer.forEach { sample in
       print("  - samples[\(sampleID)]:", terminator: " ")
       print(sample.dV, terminator: ", ")
-      print(sample.time, terminator: " ")
+      print(sample.time, terminator: ", ")
       print(sample.queueTime, terminator: " ")
+      print()
       
       let dt1 = Float(time - creepFilter.timeOrigin) - sample.time
       let dt2 = Float(time - creepFilter.timeOrigin) - sample.queueTime

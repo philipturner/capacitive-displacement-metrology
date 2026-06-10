@@ -8,9 +8,13 @@ typealias PreciseType = Float
 let supersamplingRateEfficient: Int = 10
 let capacitySimpleLowRes: Int = 100
 let timeLimit: Int = 3000
-let enableCreepCorrection: Bool = true
+let enableCreepCorrection: Bool = false
 
-let wavePeriod: Int = 40
+//let wavePeriods: [Int] = [
+//  8, 12, 16, 20, 24, 28, 32, 36, 40, 60, 80, 120, 160, 240
+//]
+
+let wavePeriod: Int = 16
 
 // MARK: - Common Structures
 
@@ -372,7 +376,7 @@ func createStimulusSignal(time: Int) -> Float {
   } else {
     output = 2 * (1 - phaseNormalized)
   }
-  output -= 0.5
+//  output -= 0.5
   
   if time < wavePeriod / 2 {
     output = max(output, 0)
@@ -389,6 +393,14 @@ for time in 0..<timeLimit {
   let creepRate = simulationFilter.creepRate(time: time)
   if enableCreepCorrection {
     creepOffset -= creepRate
+  }
+  
+  func fmtNumber(_ number: Double) -> String {
+    var output = String(format: "%.4f", number)
+    if number >= 0 {
+      output = " " + output
+    }
+    return output
   }
   
   func fmtNumber(_ number: Float) -> String {
@@ -434,11 +446,14 @@ for time in 0..<timeLimit {
     print("x:", fmtNumber(groundTruthFilter.currentResponse), terminator: " | ")
     print("x:", fmtNumber(simulationFilter.currentResponse), terminator: " | ")
     print("dx/dt:", fmtNumber(creepRate), terminator: " | ")
+    
+    let creepRate2 = groundTruthFilter.creepRate(time: time)
+    print("dx/dt:", fmtNumber(creepRate2), terminator: " | ")
   }
   
   let errorStimulus = creepOffset
-  let errorTarget = groundTruthFilter.currentResponse - pastStimulus
-  let errorModel = groundTruthFilter.currentResponse - simulationFilter.currentResponse
+  let errorTarget = Float(groundTruthFilter.currentResponse) - pastStimulus
+  let errorModel = Float(groundTruthFilter.currentResponse - simulationFilter.currentResponse)
   if canDisplay() {
     print("dx(stimulus):", fmtError(errorStimulus), terminator: " | ")
     print("dx(target):", fmtError(errorTarget), terminator: " | ")
@@ -461,7 +476,7 @@ for time in 0..<timeLimit {
       return nil
     }
     
-    let currentLoopMiddle = groundTruthFilter.currentResponse
+    let currentLoopMiddle = Float(groundTruthFilter.currentResponse)
     defer { previousLoopMiddle = currentLoopMiddle }
     
     if let previousLoopMiddle {
@@ -489,10 +504,41 @@ let endTimestamp = Date().timeIntervalSince1970
 print("program execution time:", terminator: " ")
 print(String(format: "%.6f", endTimestamp - startTimestamp))
 
-print(wavePeriod, greatestErrors[1], greatestErrors[3], enableCreepCorrection)
+print(
+  enableCreepCorrection,
+  logScaleResolution,
+  supersamplingRateEfficient,
+  wavePeriod,
+  String(format: "%.6f", greatestErrors[1]),
+  String(format: "%.6f", greatestErrors[3]))
 
-//for i in [1, 3] {
-//  let error = greatestErrors[i]
-//  print(String(format: "%.6f", error))
-//}
+print()
+print("creep filter:")
+for queueID in simulationFilter.queues.indices {
+  print("- queues[\(queueID)]:")
+  
+  let queue = simulationFilter.queues[queueID]
+  print("  - maxTime: \(queue.maxTime)")
+  
+  var sampleID: Int = 0
+  queue.buffer.forEach { sample in
+    print("  - samples[\(sampleID)]:", terminator: " ")
+    print(sample.dV, terminator: ", ")
+    print(sample.time, terminator: ", ")
+    print(sample.queueTime, terminator: " ")
+    print()
+    
+    sampleID += 1
+  }
+}
 
+func getSum() -> Float {
+  var output: Float = .zero
+  for queue in simulationFilter.queues {
+    queue.buffer.forEach { sample in
+      output += sample.dV
+    }
+  }
+  return output
+}
+print("sum:", getSum())
