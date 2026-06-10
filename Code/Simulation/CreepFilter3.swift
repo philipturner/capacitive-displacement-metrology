@@ -1,14 +1,16 @@
 import Foundation
 
-let creepConstant: Float = 0.85e-2 / log(10)
+let creepConstant: Float = 1e-2 / log(10)
 let logScaleResolution: Int = 4 // even numbers never have >1 transition/cycle
 let timeOriginUpdateRate: Int = 100
 typealias PreciseType = Float
 
-let supersamplingRateHighRes: Int = 30
-let capacitySimpleLowRes: Int = 1000
-let timeLimit: Int = 1000
-let enableCreepCancellation: Bool = true
+let supersamplingRateEfficient: Int = 10
+let capacitySimpleLowRes: Int = 100
+let timeLimit: Int = 3000
+let enableCreepCorrection: Bool = true
+
+let wavePeriod: Int = 40
 
 // MARK: - Common Structures
 
@@ -142,11 +144,11 @@ struct SimpleCreepFilter {
   var currentStimulus: Float = .zero
   var timeOrigin: Int = .zero
   var buffer: SampleBuffer
-  var supersamplingRate: Int
+  var supersampling: Bool
   
-  init(capacity: Int, supersamplingRate: Int = 1) {
+  init(capacity: Int, supersampling: Bool = false) {
     self.buffer = SampleBuffer(capacity: capacity)
-    self.supersamplingRate = supersamplingRate
+    self.supersampling = supersampling
   }
   
   static func createSupersamplingOffsets(rate: Int) -> [Float] {
@@ -160,8 +162,6 @@ struct SimpleCreepFilter {
   
   func creepRate(time: Int) -> Float {
     let relativeTime = Float(time - timeOrigin)
-    let offsets = Self.createSupersamplingOffsets(rate: supersamplingRate)
-    let sampleWeight = 1 / Float(supersamplingRate)
     
     var accumulator: PreciseType = .zero
     buffer.forEach { sample in
@@ -170,9 +170,22 @@ struct SimpleCreepFilter {
         fatalError("This should never happen.")
       }
       
-      for offset in offsets {
-        let multiplier = sampleWeight / (dt + offset)
-        accumulator += PreciseType(sample.dV * multiplier)
+      if supersampling {
+        var sampleCount = max(100 / dt, 10)
+        sampleCount.round(.up)
+        
+        var localAccumulator: Float = 0
+        var i: Float = 0
+        while i < sampleCount {
+          let offset = i / sampleCount
+          localAccumulator += 1 / (dt + offset)
+          i += 1
+        }
+        localAccumulator /= sampleCount
+        
+        accumulator += PreciseType(sample.dV * localAccumulator)
+      } else {
+        accumulator += PreciseType(sample.dV / dt)
       }
     }
     return creepConstant * Float(accumulator)
@@ -184,7 +197,6 @@ struct SimpleCreepFilter {
     buffer.shiftTimeOrigin()
   }
   
-  // Returns the change in response.
   mutating func update(stimulus: Float, time: Int) {
     let creep_dx = creepRate(time: time)
     let dV = stimulus - currentStimulus
@@ -213,8 +225,11 @@ struct CreepFilter {
   var currentStimulus: Float = .zero
   var timeOrigin: Int = .zero
   var queues: [Queue] = []
+  var supersampling: Bool
   
-  init() {
+  init(supersampling: Bool) {
+    self.supersampling = supersampling
+    
     for i in (0...33).reversed() {
       let maxTime = logScaleResolution * (1 << i)
       
@@ -242,9 +257,29 @@ struct CreepFilter {
     var accumulator: PreciseType = .zero
     for queue in queues {
       queue.buffer.forEach { sample in
-        // Any way to pre-compute this somewhat for samples farther in the past?
         let dt = relativeTime - sample.time
-        accumulator += PreciseType(sample.dV / dt)
+        
+        if supersampling {
+          var sampleCount = Float(supersamplingRateEfficient) / dt
+          if sampleCount <= 1 {
+            accumulator += PreciseType(sample.dV / dt)
+          } else {
+            sampleCount.round(.up)
+            
+            var localAccumulator: Float = 0
+            var i: Float = 0
+            while i < sampleCount {
+              let offset = i / sampleCount
+              localAccumulator += 1 / (dt + offset)
+              i += 1
+            }
+            localAccumulator /= sampleCount
+            
+            accumulator += PreciseType(sample.dV * localAccumulator)
+          }
+        } else {
+          accumulator += PreciseType(sample.dV / dt)
+        }
       }
     }
     return creepConstant * Float(accumulator)
@@ -311,31 +346,50 @@ struct CreepFilter {
 // MARK: - Scripting
 
 var groundTruthFilter = SimpleCreepFilter(
-  capacity: timeLimit,
-  supersamplingRate: supersamplingRateHighRes)
-var simpleFilter = SimpleCreepFilter(
-  capacity: capacitySimpleLowRes)
-var efficientFilter = CreepFilter()
-var creepOffsetSimple: Float = 0
-var creepOffsetEfficient: Float = 0
+  capacity: timeLimit, supersampling: true)
+var creepOffset: Float = .zero
+
+#if false
+var simulationFilter = SimpleCreepFilter(
+  capacity: capacitySimpleLowRes, supersampling: false)
+#else
+var simulationFilter = CreepFilter(supersampling: true)
+#endif
 
 func createStimulusSignal(time: Int) -> Float {
-  if time < 10 {
-    return 0
+//  if time < 10 {
+//    return 0
+//  } else {
+//    return 1
+//  }
+  
+  let phase = time % wavePeriod
+  let phaseNormalized = Float(phase) / Float(wavePeriod)
+  
+  var output: Float
+  if phaseNormalized < 0.5 {
+    output = 2 * phaseNormalized
   } else {
-    return 1
+    output = 2 * (1 - phaseNormalized)
   }
+  output -= 0.5
+  
+  if time < wavePeriod / 2 {
+    output = max(output, 0)
+  }
+  return output
 }
 
 let startTimestamp = Date().timeIntervalSince1970
+var greatestErrors: SIMD4<Float> = .zero
+
+var previousLoopMiddle: Float?
+
 for time in 0..<timeLimit {
-  let creepRateSimple = simpleFilter.creepRate(time: time)
-  let creepRateEfficient = efficientFilter.creepRate(time: time)
-  if enableCreepCancellation {
-    creepOffsetSimple -= creepOffsetSimple
-    creepOffsetEfficient -= creepOffsetEfficient
+  let creepRate = simulationFilter.creepRate(time: time)
+  if enableCreepCorrection {
+    creepOffset -= creepRate
   }
-  let stimulus = createStimulusSignal(time: time)
   
   func fmtNumber(_ number: Float) -> String {
     var output = String(format: "%.4f", number)
@@ -345,26 +399,100 @@ for time in 0..<timeLimit {
     return output
   }
   
-  if true {
-    print("t:", time, terminator: " | ")
-    print("V:", fmtNumber(stimulus), terminator: " | ")
-    print("V:", fmtNumber(stimulus + creepOffsetSimple), terminator: " | ")
-    print("V:", fmtNumber(stimulus + creepOffsetEfficient), terminator: " | ")
-    print("x:", fmtNumber(groundTruthFilter.currentResponse), terminator: " | ")
-    print("x:", fmtNumber(simpleFilter.currentResponse), terminator: " | ")
-    print("x:", fmtNumber(efficientFilter.currentResponse), terminator: " | ")
+  func fmtError(_ number: Float) -> String {
+    var output = String(format: "%.6f", number)
+    if number >= 0 {
+      output = " " + output
+    }
+    return output
+  }
+  
+  func canDisplay() -> Bool {
+    if time <= 1000 {
+      return true
+    }
     
-    let errorSimple = simpleFilter.currentResponse - groundTruthFilter.currentResponse
-    let errorEfficient = efficientFilter.currentResponse - groundTruthFilter.currentResponse
-    print("dx:", fmtNumber(errorSimple), terminator: " | ")
-    print("dx:", fmtNumber(errorEfficient), terminator: " | ")
+    let allowedTimes: [Int] = [
+      200, 500, 1000, 2000, 5000, 10_000, 20_000, 50_000, 100_000
+    ]
+    if allowedTimes.contains(time) {
+      return true
+    }
+    
+    if time == timeLimit - 1 {
+      return true
+    }
+    return false
+  }
+  
+  
+  let pastStimulus = createStimulusSignal(time: max(0, time - 1))
+  if canDisplay() {
+    print("t:", time, terminator: " | ")
+    print("V:", fmtNumber(pastStimulus), terminator: " | ")
+    print("V:", fmtNumber(simulationFilter.currentStimulus), terminator: " | ")
+    print("x:", fmtNumber(groundTruthFilter.currentResponse), terminator: " | ")
+    print("x:", fmtNumber(simulationFilter.currentResponse), terminator: " | ")
+    print("dx/dt:", fmtNumber(creepRate), terminator: " | ")
+  }
+  
+  let errorStimulus = creepOffset
+  let errorTarget = groundTruthFilter.currentResponse - pastStimulus
+  let errorModel = groundTruthFilter.currentResponse - simulationFilter.currentResponse
+  if canDisplay() {
+    print("dx(stimulus):", fmtError(errorStimulus), terminator: " | ")
+    print("dx(target):", fmtError(errorTarget), terminator: " | ")
+    print("dx(model):", fmtError(errorModel), terminator: " | ")
     print()
   }
   
-  groundTruthFilter.update(stimulus: stimulus, time: time)
-  simpleFilter.update(stimulus: stimulus + creepOffsetSimple, time: time)
-  efficientFilter.update(stimulus: stimulus + creepOffsetEfficient, time: time)
+  var currentErrors = SIMD4(
+    errorStimulus.magnitude,
+    errorTarget.magnitude,
+    errorModel.magnitude,
+    0)
+  
+  func getHysteresisWidth() -> Float? {
+    guard wavePeriod % 4 == 0 else {
+      fatalError("Wave period not divisible.")
+    }
+    let phase = time % wavePeriod
+    guard (phase % (wavePeriod / 2)) == (wavePeriod / 4 + 1) else {
+      return nil
+    }
+    
+    let currentLoopMiddle = groundTruthFilter.currentResponse
+    defer { previousLoopMiddle = currentLoopMiddle }
+    
+    if let previousLoopMiddle {
+      return abs(currentLoopMiddle - previousLoopMiddle)
+    } else {
+      return nil
+    }
+  }
+  
+  if let hysteresisWidth = getHysteresisWidth() {
+    currentErrors[3] = hysteresisWidth
+  }
+  
+  // Skip the first few cycles to make it settle.
+  if time / wavePeriod > 2 {
+    greatestErrors.replace(
+      with: currentErrors, where: currentErrors .> greatestErrors)
+  }
+  
+  let stimulus = createStimulusSignal(time: time)
+  groundTruthFilter.update(stimulus: stimulus + creepOffset, time: time)
+  simulationFilter.update(stimulus: stimulus + creepOffset, time: time)
 }
 let endTimestamp = Date().timeIntervalSince1970
 print("program execution time:", terminator: " ")
 print(String(format: "%.6f", endTimestamp - startTimestamp))
+
+print(wavePeriod, greatestErrors[1], greatestErrors[3], enableCreepCorrection)
+
+//for i in [1, 3] {
+//  let error = greatestErrors[i]
+//  print(String(format: "%.6f", error))
+//}
+

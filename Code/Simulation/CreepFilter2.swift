@@ -37,8 +37,8 @@ typealias PreciseType = Float
 // largest supersampling rates. Changing from 4 to 2 reduces the time by 33%.
 
 let supersamplingRateSimple: Int = 10
-let supersamplingRateEfficient: Int = 1
-let supersamplingCutoff: Bool = false
+let supersamplingRateEfficient: Int = 10
+let supersamplingCutoff: Bool = true
 let capacitySimple: Int = 100
 let timeLimitSimple: Int = 100
 let timeLimitEfficient: Int = 10000
@@ -219,7 +219,6 @@ struct SimpleCreepFilter {
     buffer.shiftTimeOrigin()
   }
   
-  // Returns the change in response.
   mutating func update(stimulus: Float, time: Int) {
     let creep_dx = creepRate(time: time)
     let dV = stimulus - currentStimulus
@@ -479,12 +478,12 @@ print(getFormattedTime(
   timeCheckpoint3 - timeCheckpoint2,
   timeLimitEfficient - timeLimitSimple))
 
-var accumulator: Int = 0
-for queue in creepFilter.queues {
-  print(queue.maxTime, queue.buffer.count)
-  accumulator += queue.buffer.count
-}
-print(accumulator)
+//var accumulator: Int = 0
+//for queue in creepFilter.queues {
+//  print(queue.maxTime, queue.buffer.count)
+//  accumulator += queue.buffer.count
+//}
+//print(accumulator)
 
 #else
 
