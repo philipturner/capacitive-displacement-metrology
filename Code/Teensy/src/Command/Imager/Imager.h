@@ -19,7 +19,6 @@ struct Imager {
 
   struct Settings {
     uint8_t dominantAxis = 0; // either 0 or 1
-    float creepConstants[2] = { 0, 0 };
     float centers[2][2] = {
       { 0, 0 }, 
       { 0, 0 },

@@ -48,14 +48,17 @@ struct Command {
     placeholder3 = 11,
 
     // aN - dominant scan axis, 0 = x, 1 = y
-    // cX,Y - creep constants, in %/decade
     // lN - wait ~N μs for fixed time lag of electronics
     // oI,X,Y - center #I, position (X, Y) in nm
     // r - reset to defaults
     // sN - wait ~N ms for creep settling in dual video mode
     imagingSettings = 12,
 
-    NUM_MODES = 13,
+    // TODO: Mode for changing the creep constants dynamically at runtine.
+    // cX,Y - creep constants, in %/decade
+    creepSettings = 13,
+
+    NUM_MODES = 14,
   };
   
   Mode mode = Mode::idle;
