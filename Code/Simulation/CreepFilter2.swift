@@ -7,9 +7,10 @@ typealias PreciseType = Float
 
 // t: 10000 | V: 1.0000 | x: 1.0340 | x: 1.0187 | x: 1.0361 | dx: 0.0000 | dx: 0.0000 |  0.002110 |  0.000161 |
 
-// ground truth: 1.0340
+// ground truth: 1.03400
 //
 // logScaleResolution = 4
+// 1,  false: 1.03611 | 0.000000121
 // 2,  false: 1.03498 | 0.000000134
 // 3,  false: 1.03463 | 0.000000144
 // 4,  false: 1.03446 | 0.000000157
@@ -21,6 +22,7 @@ typealias PreciseType = Float
 // 25, false: 1.03406 | 0.000000624
 // 30, false: 1.03404 | 0.000000744
 //
+// 1,  true:  1.03611 | 0.000000114
 // 2,  true:  1.03550 | 0.000000118
 // 3,  true:  1.03513 | 0.000000123
 // 5,  true:  1.03479 | 0.000000142
@@ -35,8 +37,8 @@ typealias PreciseType = Float
 // largest supersampling rates. Changing from 4 to 2 reduces the time by 33%.
 
 let supersamplingRateSimple: Int = 10
-let supersamplingRateEfficient: Int = 130
-let supersamplingCutoff: Bool = true
+let supersamplingRateEfficient: Int = 1
+let supersamplingCutoff: Bool = false
 let capacitySimple: Int = 100
 let timeLimitSimple: Int = 100
 let timeLimitEfficient: Int = 10000
@@ -476,6 +478,13 @@ print(getFormattedTime(
 print(getFormattedTime(
   timeCheckpoint3 - timeCheckpoint2,
   timeLimitEfficient - timeLimitSimple))
+
+var accumulator: Int = 0
+for queue in creepFilter.queues {
+  print(queue.maxTime, queue.buffer.count)
+  accumulator += queue.buffer.count
+}
+print(accumulator)
 
 #else
 
