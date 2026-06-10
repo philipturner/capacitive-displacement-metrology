@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../Util/CRC.h"
-#include <SPI.h>
 
 constexpr uint8_t CS_DAC1 = 36;
 constexpr uint8_t CS_DAC2 = 37;
@@ -45,8 +44,6 @@ struct DACInput {
 };
 
 struct DAC {
-  static constexpr bool enableCRC = false;
-
   static uint16_t transfer(
     uint8_t CS,
     DACInput input,

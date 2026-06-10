@@ -56,9 +56,8 @@ struct Command {
 
     // TODO: Mode for changing the creep constants dynamically at runtine.
     // cX,Y - creep constants, in %/decade
-    creepSettings = 13,
 
-    NUM_MODES = 14,
+    NUM_MODES = 13,
   };
   
   Mode mode = Mode::idle;

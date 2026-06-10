@@ -1,12 +1,17 @@
 #include "ADC.h"
 
+#include "Validation.h"
+#include <SPI.h>
+
 ADCOutputConversion::ADCOutputConversion(uint32_t rawData) {
   integerValue = rawData >> 14;
   otherBits = rawData & 0x3FFF;
 
-  if (!checkParity(0b1101)) {
-    Serial.println("ADC MISO data was corrupted.");
-    exit(0);
+  if (Validation::checkDeviceID) {
+    if (!checkParity(0b1101)) {
+      Serial.println("ADC MISO data was corrupted.");
+      exit(0);
+    }
   }
 
   float floatValue = float(integerValue) / float(1 << 18);

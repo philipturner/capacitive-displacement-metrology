@@ -1,7 +1,5 @@
 #pragma once
 
-#include <SPI.h>
-
 constexpr uint8_t CS_ADC = 10;
 
 // register addresses
