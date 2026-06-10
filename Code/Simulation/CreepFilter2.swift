@@ -98,9 +98,9 @@ struct SampleBuffer {
     endIndex - startIndex
   }
   
-  mutating func insert(_ sample: Sample) {
+  mutating func insert(_ sample: Sample, line: UInt = #line) {
     if count >= capacity {
-      fatalError("Exceeded capacity of ring buffer.")
+      fatalError("Exceeded capacity of ring buffer: \(line).")
     }
     
     data[endIndex % capacity] = sample
@@ -253,21 +253,34 @@ struct CreepFilter {
     self.supersamplingRate = supersamplingRate
     
     for i in (0...33).reversed() {
-      let maxTime = logScaleResolution * (1 << i)
+      let base: Float = 2.0
+      
+      func getMaxTime() -> Float {
+        var output = pow(base, Float(i))
+        output *= Float(logScaleResolution)
+        return output
+      }
       
       func getCapacity() -> Int {
-        var multiplier: Int
-        if i == 0 {
-          multiplier = 2
-        } else {
-          multiplier = 1
+        // queue sizes grow exponentially unless base = 2
+        if base != 2 {
+          return 100
         }
         
-        return multiplier * logScaleResolution
+        var multiplier: Float
+        if i == 0 {
+          multiplier = base * 2
+        } else {
+          multiplier = base
+        }
+        
+        var output = Int(multiplier.rounded(.up))
+        output *= logScaleResolution
+        return output
       }
       
       let queue = Queue(
-        maxTime: Float(maxTime),
+        maxTime: getMaxTime(),
         capacity: getCapacity())
       queues.append(queue)
     }
@@ -492,9 +505,10 @@ let voltageSequence: [Float] = [
 //  0, 0, 0, 0, 1,
 ]
 
-var creepFilter = CreepFilter()
+var creepFilter = CreepFilter(
+  supersamplingRate: supersamplingRateEfficient)
 
-for time in 0..<1000 {
+for time in 0..<10000 {
   var voltage: Float
   if time < voltageSequence.count {
     voltage = voltageSequence[time]
@@ -522,10 +536,6 @@ for time in 0..<1000 {
       print(sample.time, terminator: ", ")
       print(sample.queueTime, terminator: " ")
       print()
-      
-      let dt1 = Float(time - creepFilter.timeOrigin) - sample.time
-      let dt2 = Float(time - creepFilter.timeOrigin) - sample.queueTime
-      print("(\(-dt1), \(-dt2))")
       
       sampleID += 1
     }
