@@ -1,26 +1,18 @@
 import Foundation
 
-// numTimeSteps = 10000
-// logScaleResolution = 3 -> 10% error relative to creep
-// logScaleResolution = 20 -> 1% error relative to creep
-// error relative to creep has vanished to 0.02% after fixing the systematic error in the code
 let creepConstant: Float = 0.85e-2 / log(10)
-let logScaleResolution: Int = 4
-let timeLimitSimple: Int = 100
-let numTimeSteps: Int = 10000
+let logScaleResolution: Int = 4 // even numbers never have >1 transition/cycle
+let timeLimitSimple: Int = 1000
+let numTimeSteps: Int = 100000 + 1
 typealias PreciseType = Float
+
+let timeOriginUpdateRate: Int = 1000
 
 // MARK: - Simple Creep Filter
 
 struct Sample {
   var dV: Float
-  
-  // runs out of precision after 201 seconds
-  //
-  // idea: run an operation to subtract 1000 from all samples, which overlaps
-  // with a cycle where 1 or less bins transitioned
   var time: Float
-  
   var queueTime: Float
   
   init(dV: Float, time: Float) {
@@ -53,12 +45,15 @@ struct Sample {
 struct SimpleCreepFilter {
   var currentResponse: PreciseType = .zero
   var currentStimulus: Float = .zero
+  var timeOrigin: Int = .zero
   var samples: [Sample] = []
   
-  func creepRate(time: Float) -> Float {
+  func creepRate(time: Int) -> Float {
+    let relativeTime = Float(time - timeOrigin)
+    
     var accumulator: PreciseType = .zero
     for sample in samples {
-      let dt = time - sample.time
+      let dt = relativeTime - sample.time
       guard dt >= 1 else {
         fatalError("This should never happen.")
       }
@@ -68,26 +63,44 @@ struct SimpleCreepFilter {
     return creepConstant * Float(accumulator)
   }
   
+  mutating func shiftTimeOrigin() {
+    timeOrigin += timeOriginUpdateRate
+    
+    for sampleID in samples.indices {
+      samples[sampleID].time -= Float(timeOriginUpdateRate)
+      samples[sampleID].queueTime -= Float(timeOriginUpdateRate)
+    }
+  }
+  
   // Returns the change in response.
-  mutating func update(stimulus: Float, time: Float) {
+  mutating func update(stimulus: Float, time: Int) {
     let creep_dx = creepRate(time: time)
     let dV = stimulus - currentStimulus
     currentResponse += PreciseType(creep_dx + dV)
     currentStimulus = stimulus
     
-    let sample = Sample(dV: dV, time: time)
+    let relativeTime = Float(time - timeOrigin)
+    let sample = Sample(dV: dV, time: relativeTime)
     samples.append(sample)
+    
+    if relativeTime > Float(timeOriginUpdateRate) {
+      shiftTimeOrigin()
+    }
   }
 }
 
 // MARK: - Efficient Creep Filter
 
+// 112 ns execution time so far
+
 struct Queue {
   var maxTime: Float
   var samples: [Sample] = [] // eventually a ring buffer
+  var capacity: Int
   
-  init(maxTime: Float) {
+  init(maxTime: Float, capacity: Int) {
     self.maxTime = maxTime
+    self.capacity = capacity
   }
   
   mutating func removeFirst(time: Float) -> Sample? {
@@ -112,6 +125,9 @@ struct Queue {
   }
   
   mutating func insert(_ sample: Sample) {
+    if samples.count == capacity {
+      fatalError("Exceeded capacity.")
+    }
     samples.append(sample)
   }
 }
@@ -119,21 +135,38 @@ struct Queue {
 struct CreepFilter {
   var currentResponse: PreciseType = .zero
   var currentStimulus: Float = .zero
+  var timeOrigin: Int = .zero
   var queues: [Queue] = []
   
   init() {
-    for i in (0...20).reversed() {
+    for i in (0...33).reversed() {
       let maxTime = logScaleResolution * (1 << i)
-      let queue = Queue(maxTime: Float(maxTime))
+      
+      func getCapacity() -> Int {
+        var multiplier: Int
+        if i == 0 {
+          multiplier = 2
+        } else {
+          multiplier = 1
+        }
+        
+        return multiplier * logScaleResolution
+      }
+      
+      let queue = Queue(
+        maxTime: Float(maxTime),
+        capacity: getCapacity())
       queues.append(queue)
     }
   }
   
-  func creepRate(time: Float) -> Float {
+  func creepRate(time: Int) -> Float {
+    let relativeTime = Float(time - timeOrigin)
+    
     var accumulator: PreciseType = .zero
     for queue in queues {
       for sample in queue.samples {
-        let dt = time - sample.time
+        let dt = relativeTime - sample.time
         guard dt >= 1 else {
           fatalError("This should never happen.")
         }
@@ -144,10 +177,25 @@ struct CreepFilter {
     return creepConstant * Float(accumulator)
   }
   
-  mutating func shiftSamples(time: Float) {
+  mutating func shiftTimeOrigin() {
+    timeOrigin += timeOriginUpdateRate
+    
+    for queueID in queues.indices {
+      for sampleID in queues[queueID].samples.indices {
+        var sample = queues[queueID].samples[sampleID]
+        sample.time -= Float(timeOriginUpdateRate)
+        sample.queueTime -= Float(timeOriginUpdateRate)
+        queues[queueID].samples[sampleID] = sample
+      }
+    }
+  }
+  
+  mutating func shiftSamples(time: Int) {
+    let relativeTime = Float(time - timeOrigin)
+    
     var removesDone: Int = 0
     for queueID in queues.indices.reversed() {
-      let removed = queues[queueID].removeFirst(time: time)
+      let removed = queues[queueID].removeFirst(time: relativeTime)
       guard let removed else {
         continue
       }
@@ -170,15 +218,22 @@ struct CreepFilter {
         break
       }
     }
+    
+    if removesDone <= 1 {
+      if relativeTime > Float(timeOriginUpdateRate) {
+        shiftTimeOrigin()
+      }
+    }
   }
   
-  mutating func update(stimulus: Float, time: Float) {
+  mutating func update(stimulus: Float, time: Int) {
     let creep_dx = creepRate(time: time)
     let dV = stimulus - currentStimulus
     currentResponse += PreciseType(creep_dx + dV)
     currentStimulus = stimulus
     
-    let sample = Sample(dV: dV, time: time)
+    let relativeTime = Float(time - timeOrigin)
+    let sample = Sample(dV: dV, time: relativeTime)
     queues[queues.count - 1].insert(sample)
     
     shiftSamples(time: time)
@@ -196,10 +251,11 @@ let stepVoltageTime: Int = 10
 var errorSimple: Float = .zero
 var errorEfficient: Float = .zero
 
+var timeCheckpoint1 = Date().timeIntervalSince1970
+var timeCheckpoint2: Double = 0
+var timeCheckpoint3: Double = 0
+
 for time in 0..<numTimeSteps {
-  let simulatedCreepRate = simpleCreepFilter.creepRate(time: Float(time))
-  let simulatedCreepRate2 = creepFilter.creepRate(time: Float(time))
-  
   var voltage: Float
   var position: Float
   var creepRate: Float
@@ -230,14 +286,25 @@ for time in 0..<numTimeSteps {
     return output
   }
   
+  if time == timeLimitSimple {
+    timeCheckpoint2 = Date().timeIntervalSince1970
+  }
+  
+  #if false
   print("t:", pad("\(time)", length: 4), terminator: " | ")
   print("V:", display(voltage), terminator: " | ")
   print("x:", display(position), terminator: " | ")
   print("x:", display(Float(simpleCreepFilter.currentResponse)), terminator: " | ")
   print("x:", display(Float(creepFilter.currentResponse)), terminator: " | ")
   print("dx:", display(creepRate), terminator: " | ")
-  print("dx:", display(simulatedCreepRate), terminator: " | ")
-  print("dx:", display(simulatedCreepRate2), terminator: " | ")
+  if time < timeLimitSimple {
+    let simulatedCreepRate = simpleCreepFilter.creepRate(time: time)
+    print("dx:", display(simulatedCreepRate), terminator: " | ")
+  }
+  do {
+    let simulatedCreepRate2 = creepFilter.creepRate(time: time)
+    print("dx:", display(simulatedCreepRate2), terminator: " | ")
+  }
   
   func getFormattedError(_ error: Float) -> String {
     var output = String(format: "%.6f", error)
@@ -255,16 +322,27 @@ for time in 0..<numTimeSteps {
   print(getFormattedError(errorSimple), terminator: " | ")
   print(getFormattedError(errorEfficient), terminator: " | ")
   print()
+  #endif
   
   if time < timeLimitSimple {
-    simpleCreepFilter.update(stimulus: voltage, time: Float(time))
+    simpleCreepFilter.update(stimulus: voltage, time: time)
   }
-  creepFilter.update(stimulus: voltage, time: Float(time))
+  creepFilter.update(stimulus: voltage, time: time)
 }
 
-#endif
+timeCheckpoint3 = Date().timeIntervalSince1970
 
-#if false
+func getFormattedTime(_ x: Double, _ int: Int) -> String {
+  var output: String = ""
+  output += String(format: "%.6f", x)
+  output += " "
+  output += String(format: "%.9f", x / Double(int))
+  return output
+}
+print(getFormattedTime(timeCheckpoint2 - timeCheckpoint1, timeLimitSimple))
+print(getFormattedTime(timeCheckpoint3 - timeCheckpoint2, numTimeSteps - timeLimitSimple))
+
+#else
 
 let voltageSequence: [Float] = [
   0, 0, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 20, 20,
@@ -273,7 +351,7 @@ let voltageSequence: [Float] = [
 
 var creepFilter = CreepFilter()
 
-for time in 0..<10000 {
+for time in 0..<1000 {
   var voltage: Float
   if time < voltageSequence.count {
     voltage = voltageSequence[time]
@@ -285,7 +363,7 @@ for time in 0..<10000 {
   print("time:", time)
   print("voltage:", voltage)
   
-  creepFilter.update(stimulus: voltage, time: Float(time))
+  creepFilter.update(stimulus: voltage, time: time)
   
   print("creep filter:")
   for queueID in creepFilter.queues.indices {
@@ -301,8 +379,8 @@ for time in 0..<10000 {
       print(sample.time, terminator: " ")
       print(sample.queueTime, terminator: " ")
       
-      let dt1 = Float(time) - sample.time
-      let dt2 = Float(time) - sample.queueTime
+      let dt1 = Float(time - creepFilter.timeOrigin) - sample.time
+      let dt2 = Float(time - creepFilter.timeOrigin) - sample.queueTime
       print("(\(-dt1), \(-dt2))")
     }
   }
