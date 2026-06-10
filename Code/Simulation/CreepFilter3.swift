@@ -6,8 +6,9 @@ let timeOriginUpdateRate: Int = 100
 typealias PreciseType = Float
 
 let supersamplingRateHighRes: Int = 30
-let capacitySimpleLowRes: Int = 100
+let capacitySimpleLowRes: Int = 1000
 let timeLimit: Int = 1000
+let enableCreepCancellation: Bool = true
 
 // MARK: - Common Structures
 
@@ -315,3 +316,55 @@ var groundTruthFilter = SimpleCreepFilter(
 var simpleFilter = SimpleCreepFilter(
   capacity: capacitySimpleLowRes)
 var efficientFilter = CreepFilter()
+var creepOffsetSimple: Float = 0
+var creepOffsetEfficient: Float = 0
+
+func createStimulusSignal(time: Int) -> Float {
+  if time < 10 {
+    return 0
+  } else {
+    return 1
+  }
+}
+
+let startTimestamp = Date().timeIntervalSince1970
+for time in 0..<timeLimit {
+  let creepRateSimple = simpleFilter.creepRate(time: time)
+  let creepRateEfficient = efficientFilter.creepRate(time: time)
+  if enableCreepCancellation {
+    creepOffsetSimple -= creepOffsetSimple
+    creepOffsetEfficient -= creepOffsetEfficient
+  }
+  let stimulus = createStimulusSignal(time: time)
+  
+  func fmtNumber(_ number: Float) -> String {
+    var output = String(format: "%.4f", number)
+    if number >= 0 {
+      output = " " + output
+    }
+    return output
+  }
+  
+  if true {
+    print("t:", time, terminator: " | ")
+    print("V:", fmtNumber(stimulus), terminator: " | ")
+    print("V:", fmtNumber(stimulus + creepOffsetSimple), terminator: " | ")
+    print("V:", fmtNumber(stimulus + creepOffsetEfficient), terminator: " | ")
+    print("x:", fmtNumber(groundTruthFilter.currentResponse), terminator: " | ")
+    print("x:", fmtNumber(simpleFilter.currentResponse), terminator: " | ")
+    print("x:", fmtNumber(efficientFilter.currentResponse), terminator: " | ")
+    
+    let errorSimple = simpleFilter.currentResponse - groundTruthFilter.currentResponse
+    let errorEfficient = efficientFilter.currentResponse - groundTruthFilter.currentResponse
+    print("dx:", fmtNumber(errorSimple), terminator: " | ")
+    print("dx:", fmtNumber(errorEfficient), terminator: " | ")
+    print()
+  }
+  
+  groundTruthFilter.update(stimulus: stimulus, time: time)
+  simpleFilter.update(stimulus: stimulus + creepOffsetSimple, time: time)
+  efficientFilter.update(stimulus: stimulus + creepOffsetEfficient, time: time)
+}
+let endTimestamp = Date().timeIntervalSince1970
+print("program execution time:", terminator: " ")
+print(String(format: "%.6f", endTimestamp - startTimestamp))

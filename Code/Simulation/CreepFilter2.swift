@@ -5,12 +5,43 @@ let logScaleResolution: Int = 4 // even numbers never have >1 transition/cycle
 let timeOriginUpdateRate: Int = 100
 typealias PreciseType = Float
 
-let supersamplingRateSimple: Int = 1
+// t: 10000 | V: 1.0000 | x: 1.0340 | x: 1.0187 | x: 1.0361 | dx: 0.0000 | dx: 0.0000 |  0.002110 |  0.000161 |
+
+// ground truth: 1.0340
+//
+// logScaleResolution = 4
+// 2,  false: 1.03498 | 0.000000134
+// 3,  false: 1.03463 | 0.000000144
+// 4,  false: 1.03446 | 0.000000157
+// 5,  false: 1.03436 | 0.000000174
+// 7,  false: 1.03425 | 0.000000209
+// 10, false: 1.03417 | 0.000000282
+// 14, false: 1.03411 | 0.000000373
+// 20, false: 1.03407 | 0.000000513
+// 25, false: 1.03406 | 0.000000624
+// 30, false: 1.03404 | 0.000000744
+//
+// 2,  true:  1.03550 | 0.000000118
+// 3,  true:  1.03513 | 0.000000123
+// 5,  true:  1.03479 | 0.000000142
+// 10, true:  1.03449 | 0.000000151
+// 20, true:  1.03429 | 0.000000182
+// 30, true:  1.03421 | 0.000000218
+// 50, true:  1.03413 | 0.000000292
+// 80, true:  1.03409 | 0.000000371
+// 130, true: 1.03405 | 0.000000586
+//
+// Changing logScaleResolution does not change the outcome at all, even for the
+// largest supersampling rates. Changing from 4 to 2 reduces the time by 33%.
+
+let supersamplingRateSimple: Int = 10
+let supersamplingRateEfficient: Int = 130
+let supersamplingCutoff: Bool = true
 let capacitySimple: Int = 100
 let timeLimitSimple: Int = 100
-let timeLimitEfficient: Int = 500
+let timeLimitEfficient: Int = 10000
 
-// t: 10000 | V: 1.0000 | x: 1.0340 | x: 1.0187 | x: 1.0361 | dx: 0.0000 | dx: 0.0000 |  0.002110 |  0.000161 |
+let displayResults: Bool = true
 
 // MARK: - Common Structures
 
@@ -146,7 +177,7 @@ struct SimpleCreepFilter {
   var buffer: SampleBuffer
   var supersamplingRate: Int
   
-  init(capacity: Int, supersamplingRate: Int = 1) {
+  init(capacity: Int, supersamplingRate: Int) {
     self.buffer = SampleBuffer(capacity: capacity)
     self.supersamplingRate = supersamplingRate
   }
@@ -215,8 +246,11 @@ struct CreepFilter {
   var currentStimulus: Float = .zero
   var timeOrigin: Int = .zero
   var queues: [Queue] = []
+  var supersamplingRate: Int
   
-  init() {
+  init(supersamplingRate: Int) {
+    self.supersamplingRate = supersamplingRate
+    
     for i in (0...33).reversed() {
       let maxTime = logScaleResolution * (1 << i)
       
@@ -244,9 +278,33 @@ struct CreepFilter {
     var accumulator: PreciseType = .zero
     for queue in queues {
       queue.buffer.forEach { sample in
-        // Any way to pre-compute this somewhat for samples farther in the past?
         let dt = relativeTime - sample.time
-        accumulator += PreciseType(sample.dV / dt)
+        
+        if supersamplingCutoff {
+          var sampleCount = Float(supersamplingRate) / dt
+          if sampleCount <= 1 {
+            accumulator += PreciseType(sample.dV / dt)
+          } else {
+            sampleCount.round(.up)
+            
+            var localAccumulator: Float = 0
+            var i: Float = 0
+            while i < sampleCount {
+              let offset = i / sampleCount
+              localAccumulator += 1 / (dt + offset)
+              i += 1
+            }
+            
+            accumulator += sample.dV * localAccumulator / sampleCount
+          }
+        } else {
+          let sampleWeight = 1 / Float(supersamplingRate)
+          for i in 0..<supersamplingRate {
+            let offset = Float(i) / Float(supersamplingRate)
+            let multiplier = sampleWeight / (dt + offset)
+            accumulator += PreciseType(sample.dV * multiplier)
+          }
+        }
       }
     }
     return creepConstant * Float(accumulator)
@@ -317,7 +375,8 @@ struct CreepFilter {
 var simpleCreepFilter = SimpleCreepFilter(
   capacity: capacitySimple,
   supersamplingRate: supersamplingRateSimple)
-var creepFilter = CreepFilter()
+var creepFilter = CreepFilter(
+  supersamplingRate: supersamplingRateEfficient)
 let stepVoltageAmplitude: Float = 1
 let stepVoltageTime: Int = 10
 var errorSimple: Float = .zero
@@ -354,47 +413,47 @@ for time in 0..<timeLimitEfficient {
     return output
   }
   func display(_ number: Float) -> String {
-    let output = String(format: "%.4f", number)
+    let output = String(format: "%.5f", number)
     return output
   }
   
   if time == timeLimitSimple {
     timeCheckpoint2 = Date().timeIntervalSince1970
   }
-  
-  #if true
-  print("t:", pad("\(time)", length: 4), terminator: " | ")
-  print("V:", display(voltage), terminator: " | ")
-  print("x:", display(position), terminator: " | ")
-  print("x:", display(Float(simpleCreepFilter.currentResponse)), terminator: " | ")
-  print("x:", display(Float(creepFilter.currentResponse)), terminator: " | ")
-  print("dx:", display(creepRate), terminator: " | ")
-  if time < timeLimitSimple {
-    let simulatedCreepRate = simpleCreepFilter.creepRate(time: time)
-    print("dx:", display(simulatedCreepRate), terminator: " | ")
-  }
-  do {
-    let simulatedCreepRate2 = creepFilter.creepRate(time: time)
-    print("dx:", display(simulatedCreepRate2), terminator: " | ")
-  }
-  
-  func getFormattedError(_ error: Float) -> String {
-    var output = String(format: "%.6f", error)
+
+  if displayResults {
+    print("t:", pad("\(time)", length: 4), terminator: " | ")
+    print("V:", display(voltage), terminator: " | ")
+    print("x:", display(position), terminator: " | ")
+    print("x:", display(Float(simpleCreepFilter.currentResponse)), terminator: " | ")
+    print("x:", display(Float(creepFilter.currentResponse)), terminator: " | ")
+    print("dx:", display(creepRate), terminator: " | ")
+    if time < timeLimitSimple {
+      let simulatedCreepRate = simpleCreepFilter.creepRate(time: time)
+      print("dx:", display(simulatedCreepRate), terminator: " | ")
+    }
+    do {
+      let simulatedCreepRate2 = creepFilter.creepRate(time: time)
+      print("dx:", display(simulatedCreepRate2), terminator: " | ")
+    }
     
-    let length = String("-X.XXXXXX").count
-    output = pad(output, length: length)
-    return output
+    func getFormattedError(_ error: Float) -> String {
+      var output = String(format: "%.6f", error)
+      
+      let length = String("-X.XXXXXX").count
+      output = pad(output, length: length)
+      return output
+    }
+    
+    if time < timeLimitSimple {
+      errorSimple = Float(simpleCreepFilter.currentResponse) - position
+    }
+    errorEfficient = Float(creepFilter.currentResponse) - position - errorSimple
+    errorEfficient /= Float(position - voltage)
+    print(getFormattedError(errorSimple), terminator: " | ")
+    print(getFormattedError(errorEfficient), terminator: " | ")
+    print()
   }
-  
-  if time < timeLimitSimple {
-    errorSimple = Float(simpleCreepFilter.currentResponse) - position
-  }
-  errorEfficient = Float(creepFilter.currentResponse) - position - errorSimple
-  errorEfficient /= Float(position - voltage)
-  print(getFormattedError(errorSimple), terminator: " | ")
-  print(getFormattedError(errorEfficient), terminator: " | ")
-  print()
-  #endif
   
   if time < timeLimitSimple {
     simpleCreepFilter.update(stimulus: voltage, time: time)
