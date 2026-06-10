@@ -1,7 +1,11 @@
 import Foundation
 
+// numTimeSteps = 10000
+// logScaleResolution = 3 -> 10% error relative to creep
+// logScaleResolution = 20 -> 1% error relative to creep
+// error relative to creep has vanished to 0.02% after fixing the systematic error in the code
 let creepConstant: Float = 0.85e-2 / log(10)
-let logScaleResolution: Int = 20
+let logScaleResolution: Int = 4
 let timeLimitSimple: Int = 100
 let numTimeSteps: Int = 10000
 typealias PreciseType = Float
@@ -10,16 +14,39 @@ typealias PreciseType = Float
 
 struct Sample {
   var dV: Float
+  
+  // runs out of precision after 201 seconds
+  //
+  // idea: run an operation to subtract 1000 from all samples, which overlaps
+  // with a cycle where 1 or less bins transitioned
   var time: Float
+  
+  var queueTime: Float
   
   init(dV: Float, time: Float) {
     self.dV = dV
     self.time = time
+    self.queueTime = time
   }
   
   init(_ source1: Sample, _ source2: Sample) {
     dV = source1.dV + source2.dV
-    time = (source1.time + source2.time) / 2
+    
+    func getWeightedTime() -> Float {
+      let denominator = abs(source1.dV) + abs(source2.dV)
+      if denominator < 1e-6 {
+        return (source1.time + source2.time) / 2
+      }
+      
+      var accumulator: Float = .zero
+      accumulator += source1.time * abs(source1.dV)
+      accumulator += source2.time * abs(source2.dV)
+      accumulator /= abs(source1.dV) + abs(source2.dV)
+      return accumulator
+    }
+    time = getWeightedTime()
+    
+    queueTime = (source1.queueTime + source2.queueTime) / 2
   }
 }
 
@@ -70,15 +97,15 @@ struct Queue {
     
     let sample0 = samples[0]
     let sample1 = samples[1]
-    let mergedSample = Sample(sample0, sample1)
+    let queueTime = (sample0.queueTime + sample1.queueTime) / 2
     
     // Arbitrary choice for threshold: average time vs. time of samples[1]
     // The former gives a more consistent distribution of samples across the
     // queues.
-    let dt = time - mergedSample.time
+    let dt = time - queueTime
     if dt > maxTime {
       samples.removeFirst(2)
-      return mergedSample
+      return Sample(sample0, sample1)
     } else {
       return nil
     }
@@ -118,7 +145,8 @@ struct CreepFilter {
   }
   
   mutating func shiftSamples(time: Float) {
-    for queueID in queues.indices {
+    var removesDone: Int = 0
+    for queueID in queues.indices.reversed() {
       let removed = queues[queueID].removeFirst(time: time)
       guard let removed else {
         continue
@@ -133,6 +161,14 @@ struct CreepFilter {
       }
       
       queues[queueID - 1].insert(removed)
+      
+      // Limit the number of removal operations per cycle. The infrequent
+      // events where multiple bins switch will be spread out over the few
+      // following cycles.
+      removesDone += 1
+      if removesDone >= 4 {
+        break
+      }
     }
   }
   
@@ -237,9 +273,7 @@ let voltageSequence: [Float] = [
 
 var creepFilter = CreepFilter()
 
-//for time in voltageSequence.indices {
-//  let voltage = voltageSequence[time]
-for time in 0..<100 {
+for time in 0..<10000 {
   var voltage: Float
   if time < voltageSequence.count {
     voltage = voltageSequence[time]
@@ -265,9 +299,11 @@ for time in 0..<100 {
       print("  - samples[\(sampleID)]:", terminator: " ")
       print(sample.dV, terminator: ", ")
       print(sample.time, terminator: " ")
+      print(sample.queueTime, terminator: " ")
       
-      let dt = Float(time) - sample.time
-      print("(\(-dt))")
+      let dt1 = Float(time) - sample.time
+      let dt2 = Float(time) - sample.queueTime
+      print("(\(-dt1), \(-dt2))")
     }
   }
   
