@@ -2,11 +2,13 @@ import Foundation
 
 let creepConstant: Float = 0.85e-2 / log(10)
 let logScaleResolution: Int = 4 // even numbers never have >1 transition/cycle
-let timeLimitSimple: Int = 100
-let numTimeSteps: Int = 10000 + 1
+let timeOriginUpdateRate: Int = 100
 typealias PreciseType = Float
 
-let timeOriginUpdateRate: Int = 1000
+let supersamplingRateSimple: Int = 1
+let capacitySimple: Int = 100
+let timeLimitSimple: Int = 100
+let timeLimitEfficient: Int = 500
 
 // t: 10000 | V: 1.0000 | x: 1.0340 | x: 1.0187 | x: 1.0361 | dx: 0.0000 | dx: 0.0000 |  0.002110 |  0.000161 |
 
@@ -141,23 +143,39 @@ struct SimpleCreepFilter {
   var currentResponse: PreciseType = .zero
   var currentStimulus: Float = .zero
   var timeOrigin: Int = .zero
-  var samples: [Sample] = []
+  var buffer: SampleBuffer
+  var supersamplingRate: Int
   
-  // TODO: Add options for supersampling rate and a bound to history depth;
-  // make it a ring buffer.
+  init(capacity: Int, supersamplingRate: Int = 1) {
+    self.buffer = SampleBuffer(capacity: capacity)
+    self.supersamplingRate = supersamplingRate
+  }
+  
+  static func createSupersamplingOffsets(rate: Int) -> [Float] {
+    var output: [Float] = []
+    for i in 0..<rate {
+      let offset = Float(i) / Float(rate)
+      output.append(offset)
+    }
+    return output
+  }
   
   func creepRate(time: Int) -> Float {
     let relativeTime = Float(time - timeOrigin)
+    let offsets = Self.createSupersamplingOffsets(rate: supersamplingRate)
+    let sampleWeight = 1 / Float(supersamplingRate)
     
     var accumulator: PreciseType = .zero
-    for sample in samples {
+    buffer.forEach { sample in
       let dt = relativeTime - sample.time
       guard dt >= 1 else {
         fatalError("This should never happen.")
       }
       
-      // Supersample most efficiently through a loop right here.
-      accumulator += PreciseType(sample.dV / dt)
+      for offset in offsets {
+        let multiplier = sampleWeight / (dt + offset)
+        accumulator += PreciseType(sample.dV * multiplier)
+      }
     }
     return creepConstant * Float(accumulator)
   }
@@ -165,10 +183,7 @@ struct SimpleCreepFilter {
   mutating func shiftTimeOrigin() {
     timeOrigin += timeOriginUpdateRate
     
-    for sampleID in samples.indices {
-      samples[sampleID].time -= Float(timeOriginUpdateRate)
-      samples[sampleID].queueTime -= Float(timeOriginUpdateRate)
-    }
+    buffer.shiftTimeOrigin()
   }
   
   // Returns the change in response.
@@ -180,7 +195,10 @@ struct SimpleCreepFilter {
     
     let relativeTime = Float(time - timeOrigin)
     let sample = Sample(dV: dV, time: relativeTime)
-    samples.append(sample)
+    if buffer.count >= buffer.capacity {
+      buffer.removeFirst()
+    }
+    buffer.insert(sample)
     
     if relativeTime > Float(timeOriginUpdateRate) {
       shiftTimeOrigin()
@@ -190,7 +208,7 @@ struct SimpleCreepFilter {
 
 // MARK: - Efficient Creep Filter
 
-// 103-112 ns execution time so far
+// 98-112 ns execution time so far
 
 struct CreepFilter {
   var currentResponse: PreciseType = .zero
@@ -226,6 +244,7 @@ struct CreepFilter {
     var accumulator: PreciseType = .zero
     for queue in queues {
       queue.buffer.forEach { sample in
+        // Any way to pre-compute this somewhat for samples farther in the past?
         let dt = relativeTime - sample.time
         accumulator += PreciseType(sample.dV / dt)
       }
@@ -295,7 +314,9 @@ struct CreepFilter {
 
 #if true
 
-var simpleCreepFilter = SimpleCreepFilter()
+var simpleCreepFilter = SimpleCreepFilter(
+  capacity: capacitySimple,
+  supersamplingRate: supersamplingRateSimple)
 var creepFilter = CreepFilter()
 let stepVoltageAmplitude: Float = 1
 let stepVoltageTime: Int = 10
@@ -306,7 +327,7 @@ var timeCheckpoint1 = Date().timeIntervalSince1970
 var timeCheckpoint2: Double = 0
 var timeCheckpoint3: Double = 0
 
-for time in 0..<numTimeSteps {
+for time in 0..<timeLimitEfficient {
   var voltage: Float
   var position: Float
   var creepRate: Float
@@ -341,7 +362,7 @@ for time in 0..<numTimeSteps {
     timeCheckpoint2 = Date().timeIntervalSince1970
   }
   
-  #if false
+  #if true
   print("t:", pad("\(time)", length: 4), terminator: " | ")
   print("V:", display(voltage), terminator: " | ")
   print("x:", display(position), terminator: " | ")
@@ -390,8 +411,12 @@ func getFormattedTime(_ x: Double, _ int: Int) -> String {
   output += String(format: "%.9f", x / Double(int))
   return output
 }
-print(getFormattedTime(timeCheckpoint2 - timeCheckpoint1, timeLimitSimple))
-print(getFormattedTime(timeCheckpoint3 - timeCheckpoint2, numTimeSteps - timeLimitSimple))
+print(getFormattedTime(
+  timeCheckpoint2 - timeCheckpoint1,
+  timeLimitSimple))
+print(getFormattedTime(
+  timeCheckpoint3 - timeCheckpoint2,
+  timeLimitEfficient - timeLimitSimple))
 
 #else
 
