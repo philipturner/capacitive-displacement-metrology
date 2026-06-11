@@ -25,6 +25,11 @@ Imager::Imager(Command command) {
   } else {
     polynomialPeakTime = 2004;
   }
+
+  settings = Imager::pendingSettings;
+
+  uint32_t capacity = (settings.electronicTimeLag / pixelTime) + 1;
+  pixelBuffer = std::make_shared<PixelBuffer>(capacity);
 }
 
 void Imager::update() {
@@ -47,7 +52,7 @@ void Imager::update() {
   }
 
   float2 position = getPosition(timeInImage, imageID);
-  writePixel(position, timeInImage);
+  createPendingPixel(position, timeInImage);
 
   Application::updatePiezoVoltage(1, position.x / 0.320);
   Application::updatePiezoVoltage(2, position.y / 0.320);
@@ -155,7 +160,7 @@ float2 Imager::getPosition(uint32_t timeInImage, uint32_t imageID) {
   return getPosition(localPosition, imageID);
 }
 
-void Imager::writePixel(float2 position, uint32_t timeInImage) {
+void Imager::createPendingPixel(float2 position, uint32_t timeInImage) {
   uint32_t time = timeInImage;
   if (time < largeMoveRiseTime) {
     return;
@@ -188,6 +193,7 @@ void Imager::writePixel(float2 position, uint32_t timeInImage) {
 
   uint32_t id = rowID * resolution + columnID;
 
+  #if 0
   Log::writeValuesWithFlags(
     /*flags=*/5,
     float(id),
@@ -195,4 +201,13 @@ void Imager::writePixel(float2 position, uint32_t timeInImage) {
     position.y,
     Application::state.piezoZVoltage * 0.320,
     Application::state.filteredCurrent);
+  #else
+  Serial.print("Writing pixel #");
+  Serial.print(id);
+  Serial.print(", current iteration ");
+  Serial.print(KilohertzLoop::iterationID);
+  Serial.print(", future iteration ");
+  Serial.print(0);
+  Serial.println();
+  #endif
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NotchFilter.h"
+#include "Filter/NotchFilter.h"
 
 struct Feedback {
   static constexpr float setpointVoltage = 0.050;

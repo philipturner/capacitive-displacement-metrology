@@ -49,7 +49,10 @@ struct Command {
     // sN - wait ~N ms for creep settling in dual video mode
     imagingSettings = 9,
 
-    NUM_MODES = 10,
+    // cXXX,YYY - creep constants in %/decade
+    creepSettings = 10,
+
+    NUM_MODES = 11,
   };
   
   Mode mode = Mode::idle;

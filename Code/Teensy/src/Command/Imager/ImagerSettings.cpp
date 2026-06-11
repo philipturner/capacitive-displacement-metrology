@@ -30,7 +30,6 @@ void Imager::updatePendingSettings(Command command) {
       time += KilohertzLoop::period - 1;
       time -= time % KilohertzLoop::period;
       
-      time = min(time, 99 * Imager::pixelTime);
       pendingSettings.electronicTimeLag = time;
       break;
     }

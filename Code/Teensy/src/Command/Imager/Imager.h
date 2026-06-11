@@ -1,7 +1,9 @@
 #pragma once
 
+#include "Command/Imager/PixelBuffer.h"
 #include "Command/Parsing/Command.h"
 #include "Util/Vector.h"
+#include <memory>
 
 struct Imager {
   enum class Mode {
@@ -18,7 +20,7 @@ struct Imager {
     };
     uint32_t electronicTimeLag = 0; // μs
     uint32_t creepSettlingTime = 0; // μs
-
+    
     Settings() { }
   };
   static inline Settings pendingSettings;
@@ -44,6 +46,7 @@ private:
   float pixelDimension; // units: nm
   uint32_t polynomialPeakTime;
   Settings settings;
+  std::shared_ptr<PixelBuffer> pixelBuffer;
   
   uint32_t getRowTime() const;
   uint32_t getImageTime() const;
@@ -53,5 +56,6 @@ private:
   float2 getPosition(float2 localPosition, uint32_t imageID);
   float2 getPosition(uint32_t timeInImage, uint32_t imageID);
 
-  void writePixel(float2 position, uint32_t timeInImage);
+  // TODO: Implement electronic time lag.
+  void createPendingPixel(float2 position, uint32_t timeInImage);
 };

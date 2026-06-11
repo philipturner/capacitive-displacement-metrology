@@ -10,12 +10,12 @@ typealias PreciseType = Float
 
 let supersamplingRateEfficient: Int = 10
 let capacitySimpleLowRes: Int = 100
-let timeLimit: Int = 1500
+let timeLimit: Int = 3000
 let enableCreepCorrection: Bool = true
 
 let showResults: Bool = false
-let displayHighResCutoff: Int = 100
-let stimulusActiveCutoff: Int? = nil
+let displayHighResCutoff: Int = 1100
+let stimulusActiveCutoff: Int? = 1000
 
 enum StimulusType {
   case triangleWave
@@ -562,79 +562,67 @@ for wavePeriod in wavePeriods {
         with: currentErrors, where: currentErrors .> greatestErrors)
     }
     
-    let maxWavePeriod = 1499 / wavePeriod
-    if time == (maxWavePeriod - 1) * wavePeriod || time == maxWavePeriod * wavePeriod {
-      print()
-      print()
-      print()
-      print("============")
-      print("t = \(time)")
-      print("============")
-      print(fmtError(errorModel))
-      
-      print()
-      print("ground truth filter:")
-      let minI = groundTruthFilter.buffer.endIndex - 30
-      let maxI = groundTruthFilter.buffer.endIndex
-      
-      for i in minI..<maxI {
-        let sample = groundTruthFilter.buffer.data[i]
-        print("  - samples[\(i)]:", terminator: " ")
-        print(sample.dV, terminator: ", ")
-        print(sample.time, terminator: ", ")
-        print(sample.queueTime, terminator: " ")
-        print()
-      }
-      
-      print()
-      print("simulation filter:")
-      for queueID in simulationFilter.queues.indices {
-        print("- queues[\(queueID)]:")
-        
-        let queue = simulationFilter.queues[queueID]
-        print("  - maxTime: \(queue.maxTime)")
-        
-        var sampleID: Int = 0
-        queue.buffer.forEach { sample in
-          let dt = Float(time - simulationFilter.timeOrigin)
-          
-          print("  - samples[\(sampleID)]:", terminator: " ")
-          print(sample.dV, terminator: ", ")
-          print(sample.time - dt, terminator: ", ")
-          print(sample.queueTime - dt, terminator: " ")
+        if time == 1015 || time == 1016 || time == 1017 || time == 1018 {
           print()
+          print()
+          print()
+          print("============")
+          print("t = \(time)")
+          print("============")
+          print(fmtError(errorModel))
           
-          sampleID += 1
-        }
-      }
-      
-      func getSum1() -> Float {
-        var output: Float = .zero
-        for queueID in 0..<(simulationFilter.queues.count - 5) {
-          let queue = simulationFilter.queues[queueID]
-          queue.buffer.forEach { sample in
-            output += sample.dV
+          print()
+          print("simulation filter:")
+          for queueID in simulationFilter.queues.indices {
+            if queueID < 24 {
+              continue
+            }
+            print("- queues[\(queueID)]:")
+            
+            let queue = simulationFilter.queues[queueID]
+            print("  - maxTime: \(queue.maxTime)")
+            
+            var sampleID: Int = 0
+            queue.buffer.forEach { sample in
+              let dt = Float(time - simulationFilter.timeOrigin)
+              
+              print("  - samples[\(sampleID)]:", terminator: " ")
+              print(sample.dV, terminator: ", ")
+              print(sample.time - dt, terminator: ", ")
+              print(sample.queueTime - dt, terminator: " ")
+              print()
+              
+              sampleID += 1
+            }
           }
-        }
-        return output
-      }
-      
-      func getSum2() -> Float {
-        var output: Float = .zero
-        for queueID in (simulationFilter.queues.count - 5)..<simulationFilter.queues.count {
-          let queue = simulationFilter.queues[queueID]
-          queue.buffer.forEach { sample in
-            output += sample.dV
+          
+          func getSum1() -> Float {
+            var output: Float = .zero
+            for queueID in 0..<(simulationFilter.queues.count - 5) {
+              let queue = simulationFilter.queues[queueID]
+              queue.buffer.forEach { sample in
+                output += sample.dV
+              }
+            }
+            return output
           }
+          
+          func getSum2() -> Float {
+            var output: Float = .zero
+            for queueID in (simulationFilter.queues.count - 5)..<simulationFilter.queues.count {
+              let queue = simulationFilter.queues[queueID]
+              queue.buffer.forEach { sample in
+                output += sample.dV
+              }
+            }
+            return output
+          }
+          
+          print()
+          print(getSum1())
+          print(getSum2())
+          print(getSum1() + getSum2())
         }
-        return output
-      }
-      
-      print()
-      print(getSum1())
-      print(getSum2())
-      print(getSum1() + getSum2())
-    }
     
     let stimulus = createStimulusSignal(time: time)
     groundTruthFilter.update(stimulus: stimulus + creepOffset, time: time)

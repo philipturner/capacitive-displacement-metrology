@@ -164,6 +164,6 @@ void kilohertzLoop() {
   }
   uint32_t iterationsPerLog = Log::logPeriod / KilohertzLoop::period;
   if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
-    Application::logNormalMessage();
+    //Application::logNormalMessage();
   }
 }
