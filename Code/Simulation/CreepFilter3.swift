@@ -1,5 +1,8 @@
 import Foundation
 
+// This code is a mess now, after looking deeper into the cause of the
+// numerical instability.
+
 let creepConstant: Float = 1e-2 / log(10)
 let logScaleResolution: Int = 4 // even numbers never have >1 transition/cycle
 let timeOriginUpdateRate: Int = 100
@@ -7,8 +10,12 @@ typealias PreciseType = Float
 
 let supersamplingRateEfficient: Int = 10
 let capacitySimpleLowRes: Int = 100
-let timeLimit: Int = 3000
-let enableCreepCorrection: Bool = false
+let timeLimit: Int = 1500
+let enableCreepCorrection: Bool = true
+
+let showResults: Bool = false
+let displayHighResCutoff: Int = 100
+let stimulusActiveCutoff: Int? = nil
 
 enum StimulusType {
   case triangleWave
@@ -16,30 +23,32 @@ enum StimulusType {
 }
 let stimulusType: StimulusType = .sineWave
 
-func createWavePeriods() -> [Int] {
-  var output: [Int] = []
-  for i in 2...(550 / 4) {
-    let period = i * 4
-    if period > 200 {
-      guard period % 8 == 0 else {
-        continue
-      }
-    }
-    
-    let logBase2 = log(Float(period)) / log(Float(2))
-    let nearestPower2 = round(logBase2)
-    
-    // <0.05 in log space -> <3.5%
-    // <0.10 in log space -> <7%
-    let distance = abs(logBase2 - nearestPower2)
-    if distance < 0.10 {
-      continue
-    }
-    output.append(period)
-  }
-  return output
-}
-let wavePeriods = createWavePeriods()
+//func createWavePeriods() -> [Int] {
+//  var output: [Int] = []
+//  for i in 2...(550 / 4) {
+//    let period = i * 4
+//    if period > 200 {
+//      guard period % 8 == 0 else {
+//        continue
+//      }
+//    }
+//    
+//    let logBase2 = log(Float(period)) / log(Float(2))
+//    let nearestPower2 = round(logBase2)
+//    
+//    // <0.05 in log space -> <3.5%
+//    // <0.10 in log space -> <7%
+//    let distance = abs(logBase2 - nearestPower2)
+//    if distance < 0.10 {
+//      continue
+//    }
+//    output.append(period)
+//  }
+//  return output
+//}
+//let wavePeriods = createWavePeriods()
+
+let wavePeriods: [Int] = [16]
 
 for wavePeriod in wavePeriods {
   
@@ -78,6 +87,7 @@ for wavePeriod in wavePeriods {
       time = getWeightedTime()
       
       queueTime = (source1.queueTime + source2.queueTime) / 2
+//      queueTime = min(source1.queueTime, source2.queueTime)
     }
   }
   
@@ -152,7 +162,8 @@ for wavePeriod in wavePeriods {
       
       let sample0 = buffer[0]
       let sample1 = buffer[1]
-      let queueTime = (sample0.queueTime + sample1.queueTime) / 2
+       let queueTime = (sample0.queueTime + sample1.queueTime) / 2
+//      let queueTime = min(sample0.queueTime, sample1.queueTime)
       
       // Arbitrary choice for threshold: average time vs. time of samples[1]
       // The former gives a more consistent distribution of samples across the
@@ -419,14 +430,25 @@ for wavePeriod in wavePeriods {
     if time < wavePeriod / 2 {
       output = max(output, 0)
     }
+    
+    if let stimulusActiveCutoff {
+      let maxWaveID = stimulusActiveCutoff / wavePeriod
+      let waveID = time / wavePeriod
+      if waveID >= maxWaveID {
+        if waveID == maxWaveID,
+           phase < wavePeriod / 2 {
+          output = min(output, 0)
+        } else {
+          output = 0
+        }
+      }
+    }
+    
     return output
   }
   
-  let startTimestamp = Date().timeIntervalSince1970
   var greatestErrors: SIMD4<Float> = .zero
-  
   var previousLoopMiddle: Float?
-  
   for time in 0..<timeLimit {
     let creepRate = simulationFilter.creepRate(time: time)
     if enableCreepCorrection {
@@ -434,7 +456,7 @@ for wavePeriod in wavePeriods {
     }
     
     func fmtNumber(_ number: Double) -> String {
-      var output = String(format: "%.4f", number)
+      var output = String(format: "%.8f", number) // 4
       if number >= 0 {
         output = " " + output
       }
@@ -442,7 +464,7 @@ for wavePeriod in wavePeriods {
     }
     
     func fmtNumber(_ number: Float) -> String {
-      var output = String(format: "%.4f", number)
+      var output = String(format: "%.8f", number) // 4
       if number >= 0 {
         output = " " + output
       }
@@ -450,7 +472,7 @@ for wavePeriod in wavePeriods {
     }
     
     func fmtError(_ number: Float) -> String {
-      var output = String(format: "%.6f", number)
+      var output = String(format: "%.8f", number) // 6
       if number >= 0 {
         output = " " + output
       }
@@ -458,21 +480,26 @@ for wavePeriod in wavePeriods {
     }
     
     func canDisplay() -> Bool {
-//      if time <= 1000 {
-//        return true
-//      }
-//      
-//      let allowedTimes: [Int] = [
-//        200, 500, 1000, 2000, 5000, 10_000, 20_000, 50_000, 100_000
-//      ]
-//      if allowedTimes.contains(time) {
-//        return true
-//      }
-//      
-//      if time == timeLimit - 1 {
-//        return true
-//      }
-//      return false
+      if !showResults {
+        return false
+      }
+      
+      if time < displayHighResCutoff {
+        return true
+      }
+      
+      if time == timeLimit - 1 {
+        return true
+      }
+      
+      if time % wavePeriod == 0 {
+        return true
+      }
+      
+      if time > timeLimit - 2 * wavePeriod {
+        return true
+      }
+      
       return false
     }
     
@@ -535,13 +562,84 @@ for wavePeriod in wavePeriods {
         with: currentErrors, where: currentErrors .> greatestErrors)
     }
     
+    let maxWavePeriod = 1499 / wavePeriod
+    if time == (maxWavePeriod - 1) * wavePeriod || time == maxWavePeriod * wavePeriod {
+      print()
+      print()
+      print()
+      print("============")
+      print("t = \(time)")
+      print("============")
+      print(fmtError(errorModel))
+      
+      print()
+      print("ground truth filter:")
+      let minI = groundTruthFilter.buffer.endIndex - 30
+      let maxI = groundTruthFilter.buffer.endIndex
+      
+      for i in minI..<maxI {
+        let sample = groundTruthFilter.buffer.data[i]
+        print("  - samples[\(i)]:", terminator: " ")
+        print(sample.dV, terminator: ", ")
+        print(sample.time, terminator: ", ")
+        print(sample.queueTime, terminator: " ")
+        print()
+      }
+      
+      print()
+      print("simulation filter:")
+      for queueID in simulationFilter.queues.indices {
+        print("- queues[\(queueID)]:")
+        
+        let queue = simulationFilter.queues[queueID]
+        print("  - maxTime: \(queue.maxTime)")
+        
+        var sampleID: Int = 0
+        queue.buffer.forEach { sample in
+          let dt = Float(time - simulationFilter.timeOrigin)
+          
+          print("  - samples[\(sampleID)]:", terminator: " ")
+          print(sample.dV, terminator: ", ")
+          print(sample.time - dt, terminator: ", ")
+          print(sample.queueTime - dt, terminator: " ")
+          print()
+          
+          sampleID += 1
+        }
+      }
+      
+      func getSum1() -> Float {
+        var output: Float = .zero
+        for queueID in 0..<(simulationFilter.queues.count - 5) {
+          let queue = simulationFilter.queues[queueID]
+          queue.buffer.forEach { sample in
+            output += sample.dV
+          }
+        }
+        return output
+      }
+      
+      func getSum2() -> Float {
+        var output: Float = .zero
+        for queueID in (simulationFilter.queues.count - 5)..<simulationFilter.queues.count {
+          let queue = simulationFilter.queues[queueID]
+          queue.buffer.forEach { sample in
+            output += sample.dV
+          }
+        }
+        return output
+      }
+      
+      print()
+      print(getSum1())
+      print(getSum2())
+      print(getSum1() + getSum2())
+    }
+    
     let stimulus = createStimulusSignal(time: time)
     groundTruthFilter.update(stimulus: stimulus + creepOffset, time: time)
     simulationFilter.update(stimulus: stimulus + creepOffset, time: time)
   }
-  let endTimestamp = Date().timeIntervalSince1970
-//  print("program execution time:", terminator: " ")
-//  print(String(format: "%.6f", endTimestamp - startTimestamp))
   
   print(
     enableCreepCorrection,
