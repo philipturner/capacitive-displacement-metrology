@@ -56,18 +56,25 @@ void Imager::updatePendingSettings(Command command) {
   }
 }
 
-void Imager::forwardParameters() {
+void Imager::forwardSettings() {
   Log::writeValuesWithFlags(
     /*flags=*/4,
-    float(mode),
-    float(resolution),
+    uint8_t(mode),
+    resolution,
     imageSize,
-    centersX[0],
-    centersY[0]);
+    polynomialPeakTime,
+    Feedback::setpointCurrent);
   
   Log::writeValuesWithFlags(
     /*flags=*/4,
-    centersX[1],
-    centersY[1],
-    Feedback::setpointCurrent);
+    settings.dominantAxis,
+    settings.centers[0].x,
+    settings.centers[0].y,
+    settings.centers[1].x,
+    settings.centers[1].y);
+  
+  Log::writeValuesWithFlags(
+    /*flags=*/4,
+    settings.electronicTimeLag,
+    settings.creepSettlingTime);
 }

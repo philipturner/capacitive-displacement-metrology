@@ -42,23 +42,14 @@ struct Command {
     // RRRxRRR image, SSS nm width
     imaging = 8,
 
-    // Temporarily force a mode to >10 to test new command parsing logic.
-    placeholder1 = 9,
-    placeholder2 = 10,
-    placeholder3 = 11,
-
     // aN - dominant scan axis, 0 = x, 1 = y
     // lN - wait ~N μs for fixed time lag of electronics
     // oI,X,Y - center #I, position (X, Y) in nm
     // r - reset to defaults
     // sN - wait ~N ms for creep settling in dual video mode
-    imagingSettings = 12,
+    imagingSettings = 9,
 
-    // TODO: Mode for changing the creep constants dynamically at runtime.
-    // xCCC - X creep constant, in %/decade
-    // yCCC - Y creep constant, in %/decade
-
-    NUM_MODES = 13,
+    NUM_MODES = 10,
   };
   
   Mode mode = Mode::idle;

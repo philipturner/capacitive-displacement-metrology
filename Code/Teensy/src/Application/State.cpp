@@ -3,6 +3,7 @@
 #include "IC/ADC.h"
 #include "Time/KilohertzLoop.h"
 #include "Util/FilterUtil.h"
+#include <Arduino.h>
 
 void State::updateCurrent(bool useADC) {
   if (useADC) {

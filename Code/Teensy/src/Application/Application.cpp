@@ -124,6 +124,7 @@ void Application::logNormalMessage() {
       state.positionError * 1e9);
   } else if (mode == Command::Mode::simpleScanning ||
              mode == Command::Mode::imaging) {
+    // Change this to some quantity regarding creep.
     float errorTerm = 0;
     if (mode == Command::Mode::simpleScanning) {
       errorTerm = state.positionError * 1e9;

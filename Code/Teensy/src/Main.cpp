@@ -1,4 +1,5 @@
 #include "Application/Application.h"
+#include "Command/Parsing/CommandTracker.h"
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
@@ -37,8 +38,8 @@ Command nextCommand;
 uint32_t modeChangeStart = 0;
 uint32_t modeChangeEnd = 0;
 bool modeChangeNeedsFeedback = false;
-bool modeChangeNeedsFixedZ = false;
-float previousXYVoltage[2] = { 0, 0 };
+bool modeChangePreservesZ = false;
+float2 previousScannerVoltage;
 
 void kilohertzLoop() {
   if (KilohertzLoop::iterationID == modeChangeEnd) {
@@ -70,7 +71,7 @@ void kilohertzLoop() {
 
     // Forward necessary data to host program
     if (Application::mode == Command::Mode::imaging) {
-      Application::imager.forwardParameters();
+      Application::imager.forwardSettings();
     }
     Log::writeValuesWithFlags(
       /*flags=*/1,
@@ -79,32 +80,23 @@ void kilohertzLoop() {
     if (CommandTracker::nextCommand(nextCommand)) {
       uint8_t modeCode = uint8_t(nextCommand.mode);
 
-      if (modeCode < uint8_t(Command::Mode::placeholder1)) {
+      if (modeCode == uint8_t(Command::Mode::imagingSettings)) {
+        Imager::updatePendingSettings(nextCommand);
+      } else {
         modeChangeStart = KilohertzLoop::iterationID;
         modeChangeEnd = modeChangeStart;
         modeChangeEnd += Imager::largeMoveRiseTime / KilohertzLoop::period;
 
         modeChangeNeedsFeedback = false;
-        modeChangeNeedsFixedZ = false;
-        previousXYVoltage[0] = Application::state.piezoXVoltage;
-        previousXYVoltage[1] = Application::state.piezoYVoltage;
+        modeChangePreservesZ = false;
+        previousScannerVoltage.x = Application::state.piezoXVoltage;
+        previousScannerVoltage.y = Application::state.piezoYVoltage;
 
         if (nextCommand.mode >= Command::Mode::idleFeedback) {
           modeChangeNeedsFeedback = true;
         } else if (nextCommand.mode >= Command::Mode::blindStepping) {
-          modeChangeNeedsFixedZ = true;
+          modeChangePreservesZ = true;
         }
-      } else if (modeCode == uint8_t(Command::Mode::imagingSettings)) {
-        Imager::updatePendingSettings(nextCommand);
-      } else {
-        ErrorMessage::reset();
-        ErrorMessage::errorType = ErrorMessage::Type::fatal;
-
-        ErrorMessage::addString("Invalid mode.");
-        ErrorMessage::addNewline();
-        ErrorMessage::addInteger(modeCode);
-        ErrorMessage::addNewline();
-        return;
       }
     }
   }
@@ -121,19 +113,17 @@ void kilohertzLoop() {
         
         float progress = float(deltaIters) / float(deltaItersMax);
         progress = FilterUtil::thirdOrderSmoothstep(progress);
-        progress = 1 - progress;
 
-        float piezoXVoltage = previousXYVoltage[0] * progress;
-        float piezoYVoltage = previousXYVoltage[1] * progress;
-        Application::updatePiezoVoltage(1, piezoXVoltage);
-        Application::updatePiezoVoltage(2, piezoYVoltage);
+        float2 scannerVoltage = previousScannerVoltage * (1 - progress);
+        Application::updatePiezoVoltage(1, scannerVoltage.x);
+        Application::updatePiezoVoltage(2, scannerVoltage.y);
         Feedback::updatePiezoZ(false);
       }
     } else {
       Application::updateBiasVoltage(0);
       Application::updatePiezoVoltage(1, 0);
       Application::updatePiezoVoltage(2, 0);
-      if (!modeChangeNeedsFixedZ) {
+      if (!modeChangePreservesZ) {
         Application::updatePiezoVoltage(3, 0);
       }
 

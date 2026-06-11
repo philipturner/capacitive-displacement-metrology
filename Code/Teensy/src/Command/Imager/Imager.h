@@ -9,7 +9,7 @@ struct Imager {
     video = 1,
     dualVideo = 2,
   };
-  
+
   struct Settings {
     uint8_t dominantAxis = 0; // either 0 or 1
     float2 centers[2] = {
@@ -18,6 +18,8 @@ struct Imager {
     };
     uint32_t electronicTimeLag = 0; // μs
     uint32_t creepSettlingTime = 0; // μs
+
+    Settings() { }
   };
   static inline Settings pendingSettings;
 
@@ -33,11 +35,10 @@ struct Imager {
 
   static Mode getMode(char code);
   static void updatePendingSettings(Command command);
-  void forwardSettings(); // flags = 4
-
-  Mode mode;
+  void forwardSettings();
 
 private:
+  Mode mode;
   uint32_t resolution;
   float imageSize; // units: nm
   float pixelDimension; // units: nm

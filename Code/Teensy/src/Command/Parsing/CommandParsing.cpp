@@ -1,5 +1,7 @@
 #include "CommandParsing.h"
 
+#include <Arduino.h>
+
 bool isDigit(char x) {
   if (x >= '0' && x <= '9') {
     return true;
@@ -20,7 +22,7 @@ bool findAlphaCode(char code, const char *cString) {
   return false;
 }
 
-bool parseModeCode(
+bool CommandParsing::parseModeCode(
   uint32_t length,
   uint32_t &modeCode,
   uint32_t &remainderOffset
@@ -47,7 +49,9 @@ bool parseModeCode(
     CommandTracker::throwError("Invalid mode code.");
     return false;
   }
-  return accumulator;
+  modeCode = accumulator;
+
+  return true;
 }
 
 bool CommandParsing::checkAlphaCode(Command command) {
@@ -69,6 +73,7 @@ bool CommandParsing::checkAlphaCode(Command command) {
       CommandTracker::throwError("There should be no alpha code.");
       return false;
     }
+    return true;
   }
 
   for (uint32_t i = 0; i < 50; ++i) {
@@ -114,7 +119,7 @@ bool CommandParsing::parseAttributes(
       fraction /= float(number.decimalDenominator);
       if (fraction < -1 || fraction > 1) {
         CommandTracker::throwError("Failed to decode fraction correctly.");
-        return;
+        return false;
       }
 
       float decoded = float(number.wholePart) + fraction;
@@ -140,7 +145,7 @@ bool CommandParsing::parseAttributes(
         return false;
       }
       number.decimalSeen = true;
-    }  else if (isDigit(stringBuffer[i])) {
+    } else if (isDigit(stringBuffer[i])) {
       uint8_t digit = stringBuffer[i] - '0';
       if (number.decimalSeen) {
         number.decimalNumerator = number.decimalNumerator * 10 + digit;
@@ -148,8 +153,10 @@ bool CommandParsing::parseAttributes(
       } else {
         number.wholePart = number.wholePart * 10 + digit;
       }
+      number.digitSeen = true;
     } else {
-      CommandTracker::throwError("Unexpected character type.");
+      CommandTracker::throwError(
+        "Unexpected character type.", i, stringBuffer[i]);
       return false;
     }
   }

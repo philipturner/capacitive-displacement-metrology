@@ -36,40 +36,21 @@ void Imager::update() {
   uint32_t timeInImage = time % imageTime;
 
   if (timeInImage == 0) {
-    previousX = Application::state.piezoXVoltage * 0.320;
-    previousY = Application::state.piezoYVoltage * 0.320;
-
-    if (mode == Mode::dualVideo && (imageID % 2 == 1)) {
-      imageCenterX = centersX[1];
-      imageCenterY = centersY[1];
-    } else {
-      imageCenterX = centersX[0];
-      imageCenterY = centersY[0];
-    }
+    // Reset the creep drift accumulator here.
+    float x = Application::state.piezoXVoltage * 0.320;
+    float y = Application::state.piezoYVoltage * 0.320;
+    previousImageEnd = float2(x, y);
   }
 
   if (mode == Mode::image && imageID > 0) {
     return;
   }
 
-  float x = 0;
-  float y = 0;
-  getPosition(x, y, timeInImage, imageID);
-  
-  updatePendingPixel(timeInImage);
+  float2 position = getPosition(timeInImage, imageID);
+  writePixel(position, timeInImage);
 
-  if (KilohertzLoop::iterationID == writePixelIterationID) {
-    Log::writeValuesWithFlags(
-      /*flags=*/5,
-      float(pendingPixel.id),
-      pendingPixel.x,
-      pendingPixel.y,
-      pendingPixel.z,
-      Application::state.filteredCurrent);
-  }
-
-  Application::updatePiezoVoltage(1, x / 0.320);
-  Application::updatePiezoVoltage(2, y / 0.320);
+  Application::updatePiezoVoltage(1, position.x / 0.320);
+  Application::updatePiezoVoltage(2, position.y / 0.320);
 }
 
 uint32_t Imager::getRowTime() const {
@@ -206,7 +187,7 @@ void Imager::writePixel(float2 position, uint32_t timeInImage) {
   }
 
   uint32_t id = rowID * resolution + columnID;
-  
+
   Log::writeValuesWithFlags(
     /*flags=*/5,
     float(id),

@@ -27,7 +27,7 @@ void Application::setupSerial() {
   // More elegant solution here only works with external program polling Serial.
   // It locks up PlatformIO's serial implementation for some reason. Use the
   // `#if` macro to disable the patch for tests that don't stress IO bandwidth.
-  #if 1
+  #if 0
   USB1_USBCMD = 0; // turn off USB controller
   USB1_USBCMD = 2; // begin USB controller reset
   delay(250);

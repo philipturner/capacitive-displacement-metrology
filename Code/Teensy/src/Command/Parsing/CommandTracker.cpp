@@ -146,6 +146,9 @@ bool checkAttributes(Command command) {
 
       break;
     }
+    default: {
+      break;
+    }
   }
 
   return true;
@@ -185,6 +188,7 @@ void CommandTracker::processSerialInput() {
   // Decode the alphabetic code attribute.
   if (length >= remainderOffset) {
     command.alphaCode = uint32_t(buffer[remainderOffset]);
+    remainderOffset += 1;
   }
   if (!CommandParsing::checkAlphaCode(command)) {
     return;

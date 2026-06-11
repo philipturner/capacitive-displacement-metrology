@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 constexpr uint8_t CS_ADC = 10;
 
 // register addresses
