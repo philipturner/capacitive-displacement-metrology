@@ -62,13 +62,6 @@ void PixelBuffer::flushReadyPixel() {
   Pixel pixel = pixels[startIndex % capacity];
   startIndex += 1;
 
-  Serial.print("Flushing pixel #");
-  Serial.print(pixel.id);
-  Serial.print(", current iteration ");
-  Serial.print(KilohertzLoop::iterationID);
-  Serial.println();
-
-  #if 0
   Log::writeValuesWithFlags(
     /*flags=*/5,
     pixel.id,
@@ -76,5 +69,4 @@ void PixelBuffer::flushReadyPixel() {
     pixel.y,
     pixel.z,
     Application::state.filteredCurrent);
-  #endif
 }

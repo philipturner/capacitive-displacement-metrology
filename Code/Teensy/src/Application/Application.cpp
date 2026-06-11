@@ -124,7 +124,7 @@ void Application::logNormalMessage() {
       state.positionError * 1e9);
   } else if (mode == Command::Mode::simpleScanning ||
              mode == Command::Mode::imaging) {
-    // Change this to the creep drift offset.
+    // TODO: Change this to the creep drift offset.
     float errorTerm = 0;
     if (mode == Command::Mode::simpleScanning) {
       errorTerm = state.positionError * 1e9;

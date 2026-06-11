@@ -61,7 +61,8 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
       return;
     }
 
-    #if 0
+    // TODO: Ensure this is on after the recent changes.
+    #if 1
     int32_t maxError = 10;
 
     int32_t differentialError = interval - period;

@@ -33,6 +33,7 @@ struct Imager {
   
   Imager();
   Imager(Command command);
+  void adjustScanFrequency();
   void update();
 
   static Mode getMode(char code);
@@ -41,8 +42,8 @@ struct Imager {
 
 private:
   Mode mode;
-  uint32_t resolution;
-  float imageSize; // units: nm
+  uint32_t resolutionMajor;
+  uint32_t resolutionMinor;
   float pixelDimension; // units: nm
   uint32_t polynomialPeakTime;
   Settings settings;
@@ -56,6 +57,5 @@ private:
   float2 getPosition(float2 localPosition, uint32_t imageID);
   float2 getPosition(uint32_t timeInImage, uint32_t imageID);
 
-  // TODO: Implement electronic time lag.
   void createPendingPixel(float2 position, uint32_t timeInImage);
 };
