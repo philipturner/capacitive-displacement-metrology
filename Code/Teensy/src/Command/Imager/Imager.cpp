@@ -5,6 +5,7 @@
 #include "Time/KilohertzLoop.h"
 #include "Util/Feedback.h"
 #include "Util/FilterUtil.h"
+#include "Util/Interpolate.h"
 #include <Arduino.h>
 
 Imager::Imager() {
@@ -15,6 +16,7 @@ Imager::Imager(Command command) {
   mode = getMode(command.alphaCode);
   resolution = uint32_t(command.attributes[0]);
   imageSize = command.attributes[1];
+  pixelDimension = imageSize / float(resolution);
   
   if (resolution <= 32) {
     polynomialPeakTime = 1008;
@@ -23,18 +25,6 @@ Imager::Imager(Command command) {
   } else {
     polynomialPeakTime = 2004;
   }
-}
-
-uint32_t Imager::getRowTime() const {
-  return polynomialPeakTime + resolution * pixelTime;
-}
-
-uint32_t Imager::getImageTime() const {
-  uint32_t output = 0;
-  output += largeMoveRiseTime;
-  output += resolution * getRowTime();
-  output += polynomialPeakTime;
-  return output;
 }
 
 void Imager::update() {
@@ -65,9 +55,7 @@ void Imager::update() {
   float x = 0;
   float y = 0;
   getPosition(x, y, timeInImage, imageID);
-  Application::updatePiezoVoltage(1, x / 0.320);
-  Application::updatePiezoVoltage(2, y / 0.320);
-
+  
   updatePendingPixel(timeInImage);
 
   if (KilohertzLoop::iterationID == writePixelIterationID) {
@@ -79,58 +67,93 @@ void Imager::update() {
       pendingPixel.z,
       Application::state.filteredCurrent);
   }
+
+  Application::updatePiezoVoltage(1, x / 0.320);
+  Application::updatePiezoVoltage(2, y / 0.320);
 }
 
-void Imager::getPosition(
-  float &x, 
-  float &y, 
-  uint32_t timeInImage, 
-  uint32_t imageID
-) {
-  float linearPartVelocity = imageSize / float(resolution * pixelTime);
+uint32_t Imager::getRowTime() const {
+  return polynomialPeakTime + resolution * pixelTime;
+}
+
+uint32_t Imager::getImageTime() const {
+  uint32_t output = 0;
+  output += largeMoveRiseTime;
+  output += settings.creepSettlingTime;
+  output += resolution * getRowTime();
+  output += polynomialPeakTime;
+  return output;
+}
+
+float Imager::getPeakValue(float amplitudeNormalized) const {
+  float linearPartVelocity = pixelDimension / float(pixelTime);
   float peakDefaultVelocity = 1 / float(polynomialPeakTime);
   float peakScaleFactor = linearPartVelocity / peakDefaultVelocity;
 
+  return peakScaleFactor * (amplitudeNormalized - 0.5);
+}
+
+float2 Imager::getPosition(float2 localPosition, uint32_t imageID) {
+  float2 output;
+  if (settings.dominantAxis == 0) {
+    output = localPosition;
+  } else {
+    output.y = localPosition.x;
+    output.x = localPosition.y;
+  }
+  output += -imageSize / 2;
+
+  if (mode == Mode::dualVideo && (imageID % 2 == 1)) {
+    output += settings.centers[1];
+  } else {
+    output += settings.centers[0];
+  }
+  return output;
+}
+
+float2 Imager::getPosition(uint32_t timeInImage, uint32_t imageID) {
   uint32_t time = timeInImage;
-  if (time < largeMoveRiseTime) {
-    float peakValue = FilterUtil::polynomialWaveOutskirt(0);
-    float targetPositionX = peakScaleFactor * (peakValue - 0.5);
-    float targetPositionY = 0.5 * imageSize / float(resolution);
-    correctNormalizedPosition(targetPositionX, targetPositionY);
+  if (time < largeMoveRiseTime + settings.creepSettlingTime) {
+    float peakNormalized = FilterUtil::polynomialWaveOutskirt(0);
+    float peakValue = getPeakValue(peakNormalized);
+
+    float2 targetLocal;
+    targetLocal.x = peakValue;
+    targetLocal.y = 0.5 * pixelDimension;
+    float2 targetPosition = getPosition(targetLocal, imageID);
 
     float progress = float(time) / float(largeMoveRiseTime);
     progress = FilterUtil::thirdOrderSmoothstep(progress);
-    x = previousX * (1 - progress) + targetPositionX * progress;
-    y = previousY * (1 - progress) + targetPositionY * progress;
-    return;
+    return interpolate(previousImageEnd, targetPosition, progress);
   } else {
-    time -= largeMoveRiseTime;
+    time -= largeMoveRiseTime + settings.creepSettlingTime;
   }
 
+  float x;
+  float y;
   if (time < resolution * getRowTime()) {
     uint32_t rowID = time / getRowTime();
     time = time % getRowTime();
 
     if (time < polynomialPeakTime) {
       float progress = float(time) / float(polynomialPeakTime);
-      float peakValue;
+      float peakNormalized;
       if (rowID == 0) {
-        peakValue = FilterUtil::polynomialWaveOutskirt(progress);
+        peakNormalized = FilterUtil::polynomialWaveOutskirt(progress);
       } else {
-        peakValue = FilterUtil::polynomialWaveBend(progress);
+        peakNormalized = FilterUtil::polynomialWaveBend(progress);
       }
-      x = peakScaleFactor * (peakValue - 0.5);
+      x = getPeakValue(peakNormalized);
       
-      float startRowID = max(0, float(rowID) - 1);
-      float endRowID = max(0, float(rowID));
-      float interpolatedRowID = startRowID * (1 - progress) + endRowID * progress;
-      y = (interpolatedRowID + 0.5) * imageSize / float(resolution);
+      float startRow = max(0, float(rowID) - 1);
+      float endRow = float(rowID);
+      float row = interpolate(startRow, endRow, progress);
+      y = (row + 0.5) * pixelDimension;
     } else {
       time -= polynomialPeakTime;
 
-      float progress = float(time) / float(resolution * pixelTime);
-      x = progress * imageSize;
-      y = (float(rowID) + 0.5) * imageSize / float(resolution);
+      x = float(time) / float(pixelTime) * pixelDimension;
+      y = (float(rowID) + 0.5) * pixelDimension;
     }
 
     if (rowID % 2 == 1) {
@@ -140,26 +163,18 @@ void Imager::getPosition(
     time -= resolution * getRowTime();
     time = min(time, polynomialPeakTime);
 
-    float progress = float(time) / float(polynomialPeakTime);
-    progress = 1 - progress;
+    float progress = 1 - float(time) / float(polynomialPeakTime);
+    float peakNormalized = FilterUtil::polynomialWaveOutskirt(progress);
 
-    float peakValue = FilterUtil::polynomialWaveOutskirt(0);
-    x = peakScaleFactor * (peakValue - 0.5);
-    y = (float(resolution) - 0.5) * imageSize / float(resolution);
+    x = getPeakValue(peakNormalized);
+    y = imageSize - 0.5 * pixelDimension;
   }
 
-  correctNormalizedPosition(x, y);
+  float2 localPosition = float2(x, y);
+  return getPosition(localPosition, imageID);
 }
 
-void Imager::correctNormalizedPosition(float &x, float &y) {
-  x -= imageSize / 2;
-  y -= imageSize / 2;
-
-  x += imageCenterX;
-  y += imageCenterY;
-}
-
-void Imager::updatePendingPixel(uint32_t timeInImage) {
+void Imager::writePixel(float2 position, uint32_t timeInImage) {
   uint32_t time = timeInImage;
   if (time < largeMoveRiseTime) {
     return;
@@ -190,11 +205,13 @@ void Imager::updatePendingPixel(uint32_t timeInImage) {
     columnID = (resolution - 1) - columnID;
   }
 
-  writePixelIterationID = KilohertzLoop::iterationID;
-  writePixelIterationID += currentTimeLagRoundedUp / KilohertzLoop::period;
-
-  pendingPixel.id = rowID * resolution + columnID;
-  pendingPixel.x = Application::state.piezoXVoltage * 0.320;
-  pendingPixel.y = Application::state.piezoYVoltage * 0.320;
-  pendingPixel.z = Application::state.piezoZVoltage * 0.320;
+  uint32_t id = rowID * resolution + columnID;
+  
+  Log::writeValuesWithFlags(
+    /*flags=*/5,
+    float(id),
+    position.x,
+    position.y,
+    Application::state.piezoZVoltage * 0.320,
+    Application::state.filteredCurrent);
 }

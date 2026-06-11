@@ -77,7 +77,7 @@ void Application::logNormalMessage() {
       currentMaximum,
       currentSpikePrediction,
       dacTester.getActiveChannelVoltage(),
-      float(dacTester.channelID));
+      dacTester.channelID);
   } else if (mode == Command::Mode::capacitanceReporting) {
     uint8_t flags = 3;
     if (capacitanceDidChange) {

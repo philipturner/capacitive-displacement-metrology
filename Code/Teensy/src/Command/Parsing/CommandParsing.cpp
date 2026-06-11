@@ -63,7 +63,7 @@ bool CommandParsing::checkAlphaCode(Command command) {
   } else if (command.mode == Command::Mode::imaging) {
     cString = "ivd";
   } else if (command.mode == Command::Mode::imagingSettings) {
-    cString = "aclors";
+    cString = "alors";
   } else {
     if (command.alphaCode != 0) {
       CommandTracker::throwError("There should be no alpha code.");

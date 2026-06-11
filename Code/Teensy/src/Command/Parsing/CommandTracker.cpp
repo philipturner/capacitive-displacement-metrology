@@ -63,7 +63,6 @@ uint32_t getExpectedNumAttributes(Command command, uint32_t numAttributes) {
     case Command::Mode::imagingSettings: {
       switch (command.alphaCode) {
         case 'a': return 1;
-        case 'c': return 2;
         case 'l': return 1;
         case 'o': return 3;
         case 'r': return 0;

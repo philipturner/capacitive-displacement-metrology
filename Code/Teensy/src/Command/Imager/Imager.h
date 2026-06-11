@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Command/Parsing/Command.h"
+#include "Util/Vector.h"
 
 struct Imager {
   enum class Mode {
@@ -8,23 +9,15 @@ struct Imager {
     video = 1,
     dualVideo = 2,
   };
-
-  struct Pixel {
-    uint32_t id;
-    float x; // units: nm
-    float y; // units: nm
-    float z; // units: nm
-    float current; // units: A
-  };
-
+  
   struct Settings {
     uint8_t dominantAxis = 0; // either 0 or 1
-    float centers[2][2] = {
-      { 0, 0 }, 
-      { 0, 0 },
+    float2 centers[2] = {
+      float2(), 
+      float2(),
     };
     uint32_t electronicTimeLag = 0; // μs
-    uint32_t creepSettlingTime = 0; // ms
+    uint32_t creepSettlingTime = 0; // μs
   };
   static inline Settings pendingSettings;
 
@@ -40,32 +33,24 @@ struct Imager {
 
   static Mode getMode(char code);
   static void updatePendingSettings(Command command);
-  static void forwardStaticSettings();
-  void forwardInstanceSettings();
+  void forwardSettings(); // flags = 4
 
   Mode mode;
 
 private:
-  Settings settings;
   uint32_t resolution;
-  uint32_t polynomialPeakTime;
   float imageSize; // units: nm
-
+  float pixelDimension; // units: nm
+  uint32_t polynomialPeakTime;
+  Settings settings;
+  
   uint32_t getRowTime() const;
   uint32_t getImageTime() const;
+  float getPeakValue(float amplitudeNormalized) const;
 
-  float previousX = 0;
-  float previousY = 0;
-  float imageCenterX = 0;
-  float imageCenterY = 0;
-  void getPosition(
-    float &x, 
-    float &y, 
-    uint32_t timeInImage, 
-    uint32_t imageID);
-  void correctNormalizedPosition(float &x, float &y);
+  float2 previousImageEnd;
+  float2 getPosition(float2 localPosition, uint32_t imageID);
+  float2 getPosition(uint32_t timeInImage, uint32_t imageID);
 
-  uint32_t writePixelIterationID = UINT32_MAX;
-  Pixel pendingPixel;
-  void updatePendingPixel(uint32_t timeInImage);
+  void writePixel(float2 position, uint32_t timeInImage);
 };

@@ -5,8 +5,6 @@
 struct Log {
   static constexpr uint32_t logPeriod = 72;
   static constexpr uint32_t logSize = 9000;
-  static inline float valuesBuffer[logSize * 5];
-  static inline uint8_t flagsBuffer[logSize];
 
   // Mark special messages with a flag, but do not alter the ordering. This
   // makes it easier to detect corrupted data transmission. Instead, the

@@ -25,27 +25,20 @@ void Imager::updatePendingSettings(Command command) {
       pendingSettings.dominantAxis = axisCode;
       break;
     }
-    case 'c': {
-      float constantX = command.attributes[0] * 0.01;
-      float constantY = command.attributes[1] * 0.01;
-      pendingSettings.creepConstants[0] = constantX;
-      pendingSettings.creepConstants[1] = constantY;
-      break;
-    }
     case 'l': {
       uint32_t time = command.attributes[0];
       time += KilohertzLoop::period - 1;
       time -= time % KilohertzLoop::period;
       
+      time = min(time, 99 * Imager::pixelTime);
       pendingSettings.electronicTimeLag = time;
       break;
     }
     case 'o': {
       uint8_t centerID = command.attributes[0];
-      float centerX = command.attributes[1];
-      float centerY = command.attributes[2];
-      pendingSettings.centers[centerID][0] = centerX;
-      pendingSettings.centers[centerID][1] = centerY;
+      float x = command.attributes[1];
+      float y = command.attributes[2];
+      pendingSettings.centers[centerID] = float2(x, y);
       break;
     }
     case 'r': {
@@ -53,7 +46,10 @@ void Imager::updatePendingSettings(Command command) {
       break;
     }
     case 's': {
-      uint32_t time = command.attributes[0];
+      uint32_t time = command.attributes[0] * 1000;
+      time += KilohertzLoop::period - 1;
+      time -= time % KilohertzLoop::period;
+
       pendingSettings.creepSettlingTime = time;
       break;
     }

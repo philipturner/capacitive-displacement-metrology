@@ -3,6 +3,9 @@
 #include "ErrorMessage.h"
 #include <Arduino.h>
 
+EXTMEM float valuesBuffer[Log::logSize * 5];
+EXTMEM uint8_t flagsBuffer[Log::logSize];
+
 void base64Encode(uint32_t value, char* buffer, uint32_t encodedLength) {
   for (uint32_t i = 0; i < encodedLength; ++i) {
     uint32_t rightShiftAmount = 6 * i;

@@ -23,9 +23,7 @@ struct BlindStepper {
   BlindStepper(Command command);
 
   static Mode getMode(char code);
-
   State getCurrentState() const;
-
   void update();
 
   Mode mode;

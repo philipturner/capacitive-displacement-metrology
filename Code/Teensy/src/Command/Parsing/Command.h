@@ -54,8 +54,9 @@ struct Command {
     // sN - wait ~N ms for creep settling in dual video mode
     imagingSettings = 12,
 
-    // TODO: Mode for changing the creep constants dynamically at runtine.
-    // cX,Y - creep constants, in %/decade
+    // TODO: Mode for changing the creep constants dynamically at runtime.
+    // xCCC - X creep constant, in %/decade
+    // yCCC - Y creep constant, in %/decade
 
     NUM_MODES = 13,
   };
