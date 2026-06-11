@@ -17,7 +17,6 @@ Imager::Imager(Command command) {
   resolution = uint32_t(command.attributes[0]);
   imageSize = command.attributes[1];
   pixelDimension = imageSize / float(resolution);
-  
   if (resolution <= 32) {
     polynomialPeakTime = 1008;
   } else if (resolution <= 48) {
@@ -25,11 +24,13 @@ Imager::Imager(Command command) {
   } else {
     polynomialPeakTime = 2004;
   }
-
   settings = Imager::pendingSettings;
 
   uint32_t capacity = (settings.electronicTimeLag / pixelTime) + 1;
   pixelBuffer = std::make_shared<PixelBuffer>(capacity);
+
+  // TODO: increase the resolution and image size until you're not overlapping
+  // a harmonic of the creep filter
 }
 
 void Imager::update() {
@@ -53,6 +54,9 @@ void Imager::update() {
 
   float2 position = getPosition(timeInImage, imageID);
   createPendingPixel(position, timeInImage);
+  if (pixelBuffer->hasReadyPixel()) {
+    pixelBuffer->flushReadyPixel();
+  }
 
   Application::updatePiezoVoltage(1, position.x / 0.320);
   Application::updatePiezoVoltage(2, position.y / 0.320);
@@ -196,18 +200,29 @@ void Imager::createPendingPixel(float2 position, uint32_t timeInImage) {
   #if 0
   Log::writeValuesWithFlags(
     /*flags=*/5,
-    float(id),
+    id,
     position.x,
     position.y,
     Application::state.piezoZVoltage * 0.320,
     Application::state.filteredCurrent);
   #else
+  uint32_t writeIterationID = KilohertzLoop::iterationID;
+  writeIterationID += settings.electronicTimeLag / KilohertzLoop::period;
+
   Serial.print("Writing pixel #");
   Serial.print(id);
   Serial.print(", current iteration ");
   Serial.print(KilohertzLoop::iterationID);
   Serial.print(", future iteration ");
-  Serial.print(0);
+  Serial.print(writeIterationID);
   Serial.println();
+
+  PixelBuffer::Pixel pixel;
+  pixel.writeIterationID = writeIterationID;
+  pixel.id = id;
+  pixel.x = position.x;
+  pixel.y = position.y;
+  pixel.z = Application::state.piezoZVoltage * 0.320;
+  pixelBuffer->addPixel(pixel);
   #endif
 }

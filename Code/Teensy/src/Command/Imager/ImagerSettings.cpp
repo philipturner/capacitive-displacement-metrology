@@ -56,6 +56,9 @@ void Imager::updatePendingSettings(Command command) {
 }
 
 void Imager::forwardSettings() {
+  Serial.println();
+  Serial.println("Forwarding settings:");
+
   Log::writeValuesWithFlags(
     /*flags=*/4,
     uint8_t(mode),
@@ -63,6 +66,13 @@ void Imager::forwardSettings() {
     imageSize,
     polynomialPeakTime,
     Feedback::setpointCurrent);
+
+  Serial.println();
+  Serial.println(uint8_t(mode));
+  Serial.println(resolution);
+  Serial.println(imageSize);
+  Serial.println(polynomialPeakTime);
+  Serial.println(Feedback::setpointCurrent);
   
   Log::writeValuesWithFlags(
     /*flags=*/4,
@@ -72,8 +82,20 @@ void Imager::forwardSettings() {
     settings.centers[1].x,
     settings.centers[1].y);
   
+  Serial.println();
+  Serial.println(settings.dominantAxis);
+  Serial.println(settings.centers[0].x);
+  Serial.println(settings.centers[0].y);
+  Serial.println(settings.centers[1].x);
+  Serial.println(settings.centers[1].y);
+  
   Log::writeValuesWithFlags(
     /*flags=*/4,
     settings.electronicTimeLag,
     settings.creepSettlingTime);
+  
+  Serial.println();
+  Serial.println(settings.electronicTimeLag);
+  Serial.println(settings.creepSettlingTime);
+  Serial.println();
 }

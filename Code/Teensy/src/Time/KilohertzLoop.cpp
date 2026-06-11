@@ -61,6 +61,7 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
       return;
     }
 
+    #if 0
     int32_t maxError = 10;
 
     int32_t differentialError = interval - period;
@@ -86,6 +87,7 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
         integralError);
       return;
     }
+    #endif
   }
 
   loopBody();

@@ -49,7 +49,8 @@ struct Command {
     // sN - wait ~N ms for creep settling in dual video mode
     imagingSettings = 9,
 
-    // cXXX,YYY - creep constants in %/decade
+    // aN,XXX - creep constant for axis N
+    // cXXX - creep constant for both axes in %/decade
     creepSettings = 10,
 
     NUM_MODES = 11,
