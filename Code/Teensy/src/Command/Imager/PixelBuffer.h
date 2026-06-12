@@ -4,7 +4,7 @@
 
 struct PixelBuffer {
   static constexpr uint32_t capacity = 100;
-
+  
   struct Pixel {
     uint32_t writeIterationID;
     uint32_t id;

@@ -3,13 +3,136 @@ import Foundation
 struct CreepFilter {
   static let logScaleResolution: Int = 4
   static let queueCount: Int = 33
-  static let supersamplingRate: Int = 10
+  static let supersamplingRate: Float = 10
   
-  static let timeOriginUpdateRate: Int = 100
-  static let maxShiftsPerCycle: Int = 6
+  static var creepConstants = SIMD2<Float>(1e-2, 1e-2) // per decade
   
-  static var creepConstantX: Float = 1e-2 // per decade
-  static var creepConstantY: Float = 1e-2 // per decade
+  var creepRateUpdated: Bool = false
+  var currentCreepRate = SIMD2<Float>(repeating: -1000)
+  var accumulatedDrift: SIMD2<Float> = .zero
+  var currentStimulus: SIMD2<Float> = .zero
+  var timeOrigin: Int = .zero
+  
+  var queues: [Queue] = []
+  
+  init() {
+    for queueID in 0..<Self.queueCount {
+      let shiftAmount = (Self.queueCount - 1) - queueID
+      let maxTime = Self.logScaleResolution * (1 << shiftAmount)
+      
+      let queue = Queue(maxTime: Float(maxTime))
+      queues.append(queue)
+    }
+  }
+  
+  func getRelativeTime(_ time: Int) -> Float {
+    return Float(time - timeOrigin)
+  }
+  
+  mutating func updateCreepRate(time: Int) {
+    let relativeTime = getRelativeTime(time)
+    
+    var accumulator: SIMD2<Float> = .zero
+    for queueID in queues.indices {
+      let startIndex = queues[queueID].startIndex
+      let endIndex = queues[queueID].endIndex
+      for sampleID in startIndex..<endIndex {
+        // This memory access can be merged with shifting the time origin of
+        // all samples. 'relativeTime' will always evaluate to zero. During the
+        // very first iteration, where t = 0, there are no samples.
+        //
+        // First, check correctness of the existing implementation. Record all
+        // simulation results to 8 decimal places. Implement the change, and
+        // check that the results do not change.
+        let sample = queues[queueID][sampleID]
+        
+        let dt = relativeTime - sample.time
+        let dt_recip = 1 / dt
+        
+        let sampleCount = Float(Self.supersamplingRate) * dt_recip
+        if sampleCount <= 1 {
+          accumulator += sample.dV * dt_recip
+        } else {
+          let loopSize = ceil(sampleCount)
+          let loopSize_recip = 1 / loopSize
+          var localAccumulator: Float = .zero
+          
+          // C++ for (float i = 0; i < sampleCount; ++i)
+          var i: Float = 0
+          while i < loopSize {
+            let offset = i * loopSize_recip
+            localAccumulator += 1 / (dt + offset)
+            i += 1
+          }
+          localAccumulator += loopSize_recip
+          
+          accumulator += sample.dV * localAccumulator
+        }
+      }
+    }
+    accumulator *= Self.creepConstants / log(10) // C++ M_LN10
+    
+    currentCreepRate = accumulator
+    creepRateUpdated = true
+  }
+  
+  mutating func shiftDelayLine(time: Int) {
+    let relativeTime = getRelativeTime(time)
+    
+    var removesDone: Int = 0
+    let maxQueueID = Self.queueCount - 1
+    for queueID in (0...maxQueueID).reversed() {
+      let ready = queues[queueID].hasReadySample(time: relativeTime)
+      guard ready else {
+        continue
+      }
+      
+      let removed = queues[queueID].removeReady(time: relativeTime)
+      
+      if queueID > 0 {
+        queues[queueID - 1].insert(removed)
+      }
+      
+      removesDone += 1
+    }
+    
+    if Self.logScaleResolution % 2 == 0 {
+      if removesDone > 1 {
+        fatalError("More than one remove happened.")
+      }
+    }
+  }
+  
+  mutating func shiftTimeOrigin() {
+    timeOrigin += 1
+    
+    for queueID in queues.indices {
+      queues[queueID].shiftTimeOrigin()
+    }
+  }
+  
+  mutating func update(stimulus: SIMD2<Float>, time: Int) {
+    guard creepRateUpdated else {
+      fatalError("Creep rate was not updated.")
+    }
+    accumulatedDrift += currentCreepRate
+    creepRateUpdated = false
+    currentCreepRate = SIMD2(repeating: -1000)
+    
+    let dV = stimulus - currentStimulus
+    currentStimulus = stimulus
+    
+    var sample = Sample()
+    sample.dV = dV
+    sample.time = getRelativeTime(time)
+    sample.queueTime = getRelativeTime(time)
+    
+    let queueID = Self.queueCount - 1
+    queues[queueID].insert(sample)
+    
+    shiftDelayLine(time: time)
+    shiftTimeOrigin()
+  }
 }
 
 extension CreepFilter {
@@ -71,11 +194,18 @@ extension CreepFilter {
         count: Self.capacity)
     }
     
-    // C++ const T& operator[](size_t index) const
+    // C++
+    // T& operator[](size_t index)
+    // const T& operator[](size_t index) const
+    // both: return m_data[index]
     subscript(index: Int) -> Sample {
       _read {
-        let slotID = (startIndex + index) % Self.capacity
+        let slotID = index % Self.capacity
         yield data[slotID]
+      }
+      _modify {
+        let slotID = index % Self.capacity
+        yield &data[slotID]
       }
     }
     
@@ -84,7 +214,7 @@ extension CreepFilter {
         fatalError("Exceeded capacity of ring buffer.")
       }
       
-      data[endIndex % Self.capacity] = sample
+      self[endIndex] = sample
       endIndex += 1
     }
     
@@ -93,8 +223,8 @@ extension CreepFilter {
         return false
       }
       
-      let queueTime0 = self[0].queueTime
-      let queueTime1 = self[1].queueTime
+      let queueTime0 = self[startIndex + 0].queueTime
+      let queueTime1 = self[startIndex + 1].queueTime
       let queueTimeCombined = (queueTime0 + queueTime1) / 2
       
       let dt = time - queueTimeCombined
@@ -105,9 +235,9 @@ extension CreepFilter {
       }
     }
     
-    mutating func removeReady(time: Float) -> Sample? {
-      let sample0 = self[0]
-      let sample1 = self[1]
+    mutating func removeReady(time: Float) -> Sample {
+      let sample0 = self[startIndex + 0]
+      let sample1 = self[startIndex + 1]
       startIndex += 2
       
       return Sample(sample0, sample1)
@@ -116,8 +246,8 @@ extension CreepFilter {
     mutating func shiftTimeOrigin() {
       for i in startIndex..<endIndex {
         let slotID = i % Self.capacity
-        data[slotID].time -= Float(CreepFilter.timeOriginUpdateRate)
-        data[slotID].queueTime -= Float(CreepFilter.timeOriginUpdateRate)
+        data[slotID].time -= 1
+        data[slotID].queueTime -= 1
       }
     }
   }
