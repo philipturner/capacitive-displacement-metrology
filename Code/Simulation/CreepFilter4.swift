@@ -1,7 +1,7 @@
 import Foundation
 
 let timeLimit: Int = 10000
-let displayResults: Bool = false
+let displayResults: Bool = true
 
 // MARK: - Data Type Switching
 
@@ -55,7 +55,6 @@ struct CreepFilter {
   var currentCreepRate = vectorInit(repeating: -1000)
   var accumulatedDrift: VectorType = .zero
   var currentStimulus: VectorType = .zero
-  var timeOrigin: Int = -1
   
   var queues: [Queue] = []
   
@@ -70,64 +69,45 @@ struct CreepFilter {
   }
   
   func getRelativeTime(_ time: Int) -> Float {
-//    return Float(time - timeOrigin)
-    return 0
+    0
   }
   
   mutating func updateCreepRateAndTime(time: Int) {
     if creepRateUpdated {
       fatalError("Previous update was not flushed.")
     }
-//    shiftTimeOrigin(time: time)
     
     let relativeTime = getRelativeTime(time)
-    
-    var sampleExists = false
-    var sampleHasTimeMinus1 = false
-    var sampleHasTime0 = false
     
     var accumulator: VectorType = .zero
     for queueID in queues.indices {
       let startIndex = queues[queueID].startIndex
       let endIndex = queues[queueID].endIndex
       for sampleID in startIndex..<endIndex {
-        // This memory access can be merged with shifting the time origin of
-        // all samples. 'relativeTime' will always evaluate to zero. During the
-        // very first iteration, where t = 0, there are no samples.
-        //
-        // First, check correctness of the existing implementation. Record all
-        // simulation results to 8 decimal places. Implement the change, and
-        // check that the results do not change.
         var sample = queues[queueID][sampleID]
-        sample.time -= 1
-        sample.queueTime -= 1
+        sample.time += 1
+        sample.queueTime += 1
         queues[queueID][sampleID] = sample
         
-        sampleExists = true
-        if sample.time >= 0 {
-          sampleHasTime0 = true
-        }
-        if sample.time == -1 {
-          sampleHasTimeMinus1 = true
-        }
-        
-        let dt = relativeTime - sample.time
-        let sampleCount = Float(Self.supersamplingRate) / dt
+        let dt = sample.time
+        let dtInv = 1 / dt
+        let sampleCount = Float(Self.supersamplingRate) * dtInv
         
         if sampleCount <= 1 {
-          accumulator += sample.dV / dt
+          accumulator += sample.dV * dtInv
         } else {
           let loopSize = ceil(sampleCount)
+          let loopSizeInv = 1 / loopSize
           var localAccumulator: Float = .zero
           
           // C++ for (float i = 0; i < sampleCount; ++i)
           var i: Float = 0
           while i < loopSize {
-            let offset = i / loopSize
+            let offset = i * loopSizeInv
             localAccumulator += 1 / (dt + offset)
             i += 1
           }
-          localAccumulator /= loopSize
+          localAccumulator *= loopSizeInv
           
           accumulator += sample.dV * localAccumulator
         }
@@ -137,19 +117,6 @@ struct CreepFilter {
     
     currentCreepRate = accumulator
     creepRateUpdated = true
-    
-    if sampleHasTime0 {
-      fatalError("Sample had a time of zero.")
-    }
-    
-    if sampleExists {
-      if sampleHasTimeMinus1 {
-//        print("all good")
-//        print(relativeTime)
-      } else {
-        fatalError("Unexpected condition")
-      }
-    }
   }
   
   mutating func shiftDelayLine(time: Int) {
@@ -179,40 +146,25 @@ struct CreepFilter {
     }
   }
   
-  mutating func shiftTimeOrigin(time: Int) {
-//    let relativeTime = getRelativeTime(time)
-//    guard relativeTime >= Float(Self.timeOriginUpdateRate) else {
-//      return
-//    }
-    
-    timeOrigin += Self.timeOriginUpdateRate
-    
-    for queueID in queues.indices {
-      queues[queueID].shiftTimeOrigin()
-    }
-  }
-  
   mutating func update(stimulus: VectorType, time: Int) {
     guard creepRateUpdated else {
       fatalError("Creep rate was not updated.")
     }
+    
+    var sample = Sample()
+    sample.dV = stimulus - currentStimulus
+    sample.time = 0
+    sample.queueTime = 0
+    
     accumulatedDrift += currentCreepRate
     creepRateUpdated = false
     currentCreepRate = vectorInit(repeating: -1000)
-    
-    let dV = stimulus - currentStimulus
     currentStimulus = stimulus
-    
-    var sample = Sample()
-    sample.dV = dV
-    sample.time = getRelativeTime(time)
-    sample.queueTime = getRelativeTime(time)
     
     let queueID = Self.queueCount - 1
     queues[queueID].insert(sample)
     
     shiftDelayLine(time: time)
-    
   }
 }
 
@@ -306,8 +258,7 @@ extension CreepFilter {
       let queueTime1 = self[startIndex + 1].queueTime
       let queueTimeCombined = (queueTime0 + queueTime1) / 2
       
-      let dt = time - queueTimeCombined
-      if dt > maxTime {
+      if queueTimeCombined > maxTime {
         return true
       } else {
         return false
@@ -320,19 +271,6 @@ extension CreepFilter {
       startIndex += 2
       
       return Sample(sample0, sample1)
-    }
-    
-    mutating func shiftTimeOrigin() {
-      for i in startIndex..<endIndex {
-        let slotID = i % Self.capacity
-        data[slotID].time -= Float(CreepFilter.timeOriginUpdateRate)
-        data[slotID].queueTime -= Float(CreepFilter.timeOriginUpdateRate)
-        
-//        var sample = data[slotID]
-//        sample.time -= Float(CreepFilter.timeOriginUpdateRate)
-//        sample.queueTime -= Float(CreepFilter.timeOriginUpdateRate)
-//        data[slotID] = sample
-      }
     }
   }
 }
