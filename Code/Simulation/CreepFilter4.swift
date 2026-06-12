@@ -77,41 +77,16 @@ struct CreepFilter {
     let queueID = Self.queueCount - 1
     queues[queueID].insert(sample)
     
-    shiftDelayLine()
-    
     // Preparing the state for the next loop iteration (don't access these
     // variables any more during the calling iteration).
-    updateCreepRateAndTime()
+    let accumulator = shiftSampleTimes()
+    updateCreepRate(accumulator: accumulator)
+    updateQueues()
     
     futureAccumulatedDrift += currentCreepRate
   }
   
-  private mutating func shiftDelayLine() {
-    var removesDone: Int = 0
-    let maxQueueID = Self.queueCount - 1
-    for queueID in (0...maxQueueID).reversed() {
-      let ready = queues[queueID].hasReadySample()
-      guard ready else {
-        continue
-      }
-      
-      let removed = queues[queueID].removeReady()
-      
-      if queueID > 0 {
-        queues[queueID - 1].insert(removed)
-      }
-      
-      removesDone += 1
-    }
-    
-    if Self.logScaleResolution % 2 == 0 {
-      if removesDone > 1 {
-        fatalError("More than one remove happened.")
-      }
-    }
-  }
-  
-  private mutating func updateCreepRateAndTime() {
+  private mutating func shiftSampleTimes() -> VectorType {
     var accumulator: VectorType = .zero
     for queueID in queues.indices {
       let startIndex = queues[queueID].startIndex
@@ -157,9 +132,35 @@ struct CreepFilter {
         }
       }
     }
-    
+    return accumulator
+  }
+  
+  private mutating func updateCreepRate(accumulator: VectorType) {
     let creepConstants = Self.creepConstants / log(10) // C++ M_LN10
     currentCreepRate = accumulator * creepConstants
+  }
+  
+  private mutating func updateQueues() {
+    var removesDone: Int = 0
+    let maxQueueID = Self.queueCount - 1
+    for queueID in (0...maxQueueID).reversed() {
+      let ready = queues[queueID].hasReadySample()
+      guard ready else {
+        continue
+      }
+      
+      let removed = queues[queueID].removeReady()
+      
+      if queueID > 0 {
+        queues[queueID - 1].insert(removed)
+      }
+      
+      removesDone += 1
+    }
+    
+    if removesDone > 1 {
+      fatalError("More than one remove happened.")
+    }
   }
 }
 
@@ -204,7 +205,7 @@ extension CreepFilter {
 
 extension CreepFilter {
   struct Queue {
-    static let capacity = CreepFilter.logScaleResolution + 2
+    static let capacity = CreepFilter.logScaleResolution + 1
     
     var maxTime: Float
     var data: [Sample]

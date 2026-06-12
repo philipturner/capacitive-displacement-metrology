@@ -23,11 +23,71 @@ void Filter::forwardState() const {
     /*flags=*/6,
     Settings::creepConstants.x,
     Settings::creepConstants.y,
-    accumulatedDrift.x,
-    accumulatedDrift.y);
+    futureAccumulatedDrift.x,
+    futureAccumulatedDrift.y);
 }
 
-void Filter::shiftDelayLine() {
+void Filter::update(float2 stimulus) {
+  // Responding to the DAC updates from the current iteration.
+  Sample sample;
+  sample.dV = stimulus + previousStimulus * -1;
+  sample.time = 0;
+  sample.queueTime = 0;
+  previousStimulus = stimulus;
+
+  uint32_t queueID = Settings::queueCount - 1;
+  queues[queueID].insert(sample);
+
+  // Preparing the state for the next loop iteration (don't access these
+  // variables any more during the calling iteration).
+  float2 accumulator = shiftSampleTimes();
+  updateCreepRate(accumulator);
+  updateQueues();
+
+  futureAccumulatedDrift += currentCreepRate;
+}
+
+float2 Filter::shiftSampleTimes() {
+  float2 accumulator = float2(0);
+  for (uint32_t queueID = 0; queueID < Settings::queueCount; ++queueID) {
+    uint32_t startIndex = queues[queueID].startIndex;
+    uint32_t endIndex = queues[queueID].endIndex;
+    for (uint32_t sampleID = startIndex; sampleID < endIndex; ++sampleID) {
+      Sample sample = queues[queueID][sampleID];
+      sample.time += 1;
+      sample.queueTime += 1;
+      queues[queueID][sampleID] = sample;
+
+      float dt = sample.time;
+      float dtInv = 1 / dt;
+      float sampleCount = Settings::supersamplingRate * dtInv;
+
+      if (sampleCount <= 1) {
+        accumulator += sample.dV * dtInv;
+      } else {
+        float loopSize = ceil(sampleCount);
+        float loopSizeInv = 1 / loopSize;
+        float localAccumulator = 0;
+
+        for (float i = 0; i < loopSize; ++i) {
+          float offset = i * loopSizeInv;
+          localAccumulator += 1 / (dt + offset);
+        }
+        localAccumulator *= loopSizeInv;
+
+        accumulator += sample.dV * localAccumulator;
+      }
+    }
+  }
+  return accumulator;
+}
+
+void Filter::updateCreepRate(float2 accumulator) {
+  float2 creepConstants = Settings::creepConstants * (1 / M_LN10);
+  currentCreepRate = accumulator * creepConstants;
+}
+
+void Filter::updateQueues() {
   uint32_t removesDone = 0;
   uint32_t maxQueueID = Settings::queueCount - 1;
   for (int32_t queueID = maxQueueID; queueID >= 0; --queueID) {

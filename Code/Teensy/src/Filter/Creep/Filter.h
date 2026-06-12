@@ -4,22 +4,20 @@
 
 namespace Creep {
   struct Filter {
-    bool creepRateUpdated = true;
+    float2 previousStimulus = float2(0);
     float2 currentCreepRate = float2(0);
-    float2 accumulatedDrift = float2(0);
-    float2 currentStimulus = float2(0);
+    float2 futureAccumulatedDrift = float2(0);
 
     Queue queues[Settings::queueCount];
 
     Filter();
     Filter(bool notDefaultConstructor);
     void forwardState() const;
-
-
-
-    static void runTestProgram();
+    void update(float2 stimulus);
 
   private:
-    void shiftDelayLine();
+    float2 shiftSampleTimes();
+    void updateCreepRate(float2 accumulator);
+    void updateQueues();
   };
 };

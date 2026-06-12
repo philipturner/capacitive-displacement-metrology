@@ -80,6 +80,8 @@ void kilohertzLoop() {
     if (CommandTracker::nextCommand(nextCommand)) {
       uint8_t modeCode = uint8_t(nextCommand.mode);
 
+      // Add branch to update Creep::Settings and forward the state of the
+      // creep filter.
       if (modeCode == uint8_t(Command::Mode::imagingSettings)) {
         Imager::updatePendingSettings(nextCommand);
       } else {
@@ -159,11 +161,12 @@ void kilohertzLoop() {
   Application::state.updateCurrent(useADC);
 
   // Send data to the real-time monitor.
-  if (ErrorMessage::hasError()) {
-    return;
+  if (!ErrorMessage::hasError()) {
+    uint32_t iterationsPerLog = Log::logPeriod / KilohertzLoop::period;
+    if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
+      //Application::logNormalMessage();
+    }
   }
-  uint32_t iterationsPerLog = Log::logPeriod / KilohertzLoop::period;
-  if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
-    //Application::logNormalMessage();
-  }
+  
+  // update the creep filter with the actual written X and Y voltage
 }

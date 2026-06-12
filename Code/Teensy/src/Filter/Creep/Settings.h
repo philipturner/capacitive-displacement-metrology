@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Command/Parsing/Command.h"
 #include "Util/Vector.h"
 #include <stdint.h>
 
@@ -10,5 +11,7 @@ namespace Creep {
     static constexpr float supersamplingRate = 10;
 
     static inline float2 creepConstants = float2(0);
+
+    static void update(Command command); // TODO
   };
 };
