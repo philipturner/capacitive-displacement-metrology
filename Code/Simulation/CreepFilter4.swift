@@ -1,7 +1,7 @@
 import Foundation
 
-let timeLimit: Int = 165
-let displayResults: Bool = true
+let timeLimit: Int = 10000
+let displayResults: Bool = false
 
 // MARK: - Data Type Switching
 
@@ -271,7 +271,7 @@ extension CreepFilter {
   }
 }
 
-#if false
+#if true
 
 var creepFilter = CreepFilter()
 let stepVoltageTime: Int = 10
@@ -396,7 +396,7 @@ let voltageSequence: [Float] = [
 
 var creepFilter = CreepFilter()
 
-for time in 0..<165 {
+for time in 0..<timeLimit {
   var voltage: SIMD2<Float>
 //  if time < voltageSequence.count {
 //    voltage = SIMD2(repeating: voltageSequence[time])
@@ -427,13 +427,6 @@ for time in 0..<165 {
     print("  - maxTime: \(queue.maxTime)")
     
     for sampleID in queue.startIndex..<queue.endIndex {
-      // This memory access can be merged with shifting the time origin of
-      // all samples. 'relativeTime' will always evaluate to zero. During the
-      // very first iteration, where t = 0, there are no samples.
-      //
-      // First, check correctness of the existing implementation. Record all
-      // simulation results to 8 decimal places. Implement the change, and
-      // check that the results do not change.
       let sample = queue[sampleID]
     
       print("  - samples[\(sampleID - queue.startIndex)]:", terminator: " ")

@@ -5,8 +5,8 @@
 
 using namespace Creep;
 
-uint32_t timeLimit = 10000;
-bool displayResults = true;
+uint32_t timeLimit = 100000;
+bool displayResults = false;
 
 void displayExecutionTime(uint32_t deltaMicros, uint32_t iters) {
   float deltaTime = float(deltaMicros) * 1e-6;
@@ -52,24 +52,70 @@ void Creep::runTestProgram() {
       creepRate = float2(creepConstant / dt);
     }
 
-    if (displayResults) {
-      Serial.print("t: ");
-      Serial.print(time);
-      Serial.print(" | ");
+    #if true
 
-      displayQuantity("V", voltage.x);
+    // if (displayResults) {
+    //   Serial.print("t: ");
+    //   Serial.print(time);
+    //   Serial.print(" | ");
 
-      auto simulatedPosition = voltage + filter.futureAccumulatedDrift;
-      displayQuantity("x", position.x);
-      displayQuantity("x", simulatedPosition.x);
+    //   displayQuantity("V", voltage.x);
 
-      auto simulatedCreepRate = filter.currentCreepRate;
-      displayQuantity("dx", creepRate.x);
-      displayQuantity("dx", simulatedCreepRate.x);
-      Serial.println();
-    }
+    //   auto simulatedPosition = voltage + filter.futureAccumulatedDrift;
+    //   displayQuantity("x", position.x);
+    //   displayQuantity("x", simulatedPosition.x);
+
+    //   auto simulatedCreepRate = filter.currentCreepRate;
+    //   displayQuantity("dx", creepRate.x);
+    //   displayQuantity("dx", simulatedCreepRate.x);
+    //   Serial.println();
+    // }
 
     filter.update(voltage);
+
+    #else
+
+    Serial.println();
+    Serial.print("time: ");
+    Serial.println(time);
+    Serial.print("voltage: ");
+    Serial.println(voltage.x);
+
+    filter.update(voltage);
+
+    Serial.println("creep filter:");
+    for (uint32_t queueID = 0; queueID < Settings::queueCount; ++queueID) {
+      if (queueID < 25) {
+        continue;
+      }
+      Serial.print("- queues[");
+      Serial.print(queueID);
+      Serial.print("]:");
+      Serial.println();
+
+      auto queue = filter.queues[queueID];
+      Serial.print("  - maxTime: ");
+      Serial.print(queue.maxTime);
+      Serial.println();
+
+      uint32_t startIndex = queue.startIndex;
+      uint32_t endIndex = queue.endIndex;
+      for (uint32_t sampleID = startIndex; sampleID < endIndex; ++sampleID) {
+        auto sample = queue[sampleID];
+
+        Serial.print("- samples[");
+        Serial.print(sampleID - startIndex);
+        Serial.print("]: ");
+        Serial.print(sample.dV.x);
+        Serial.print(", ");
+        Serial.print(sample.time);
+        Serial.print(", ");
+        Serial.print(sample.queueTime);
+        Serial.println();
+      }
+    }
+
+    #endif
   }
   uint32_t checkpoint2 = micros();
 
