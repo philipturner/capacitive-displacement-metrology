@@ -3,6 +3,8 @@
 #include <stdint.h>
 
 struct PixelBuffer {
+  static constexpr uint32_t capacity = 100;
+
   struct Pixel {
     uint32_t writeIterationID;
     uint32_t id;
@@ -10,18 +12,15 @@ struct PixelBuffer {
     float y; // units: nm
     float z; // units: nm
   };
-  Pixel *pixels;
+  Pixel pixels[capacity];
 
   PixelBuffer();
-  PixelBuffer(uint32_t capacity);
-  ~PixelBuffer();
 
   void addPixel(Pixel pixel);
   bool hasReadyPixel() const;
   void flushReadyPixel();
 
 private:
-  uint32_t capacity;
-  uint32_t startIndex;
-  uint32_t endIndex;
+  uint32_t startIndex = 0;
+  uint32_t endIndex = 0;
 };

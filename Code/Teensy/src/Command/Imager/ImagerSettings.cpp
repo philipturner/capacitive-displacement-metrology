@@ -29,7 +29,10 @@ void Imager::updatePendingSettings(Command command) {
       uint32_t time = command.attributes[0];
       time += KilohertzLoop::period - 1;
       time -= time % KilohertzLoop::period;
-      
+
+      uint32_t maxTime = (PixelBuffer::capacity - 1) * Imager::pixelTime;
+      time = min(time, maxTime);
+
       pendingSettings.electronicTimeLag = time;
       break;
     }
@@ -71,7 +74,7 @@ void Imager::forwardSettings() {
     settings.centers[0].y,
     settings.centers[1].x,
     settings.centers[1].y);
-  
+
   Log::writeValuesWithFlags(
     /*flags=*/4,
     settings.electronicTimeLag,

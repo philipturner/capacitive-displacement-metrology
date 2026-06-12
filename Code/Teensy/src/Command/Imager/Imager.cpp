@@ -30,9 +30,6 @@ Imager::Imager(Command command) {
     polynomialPeakTime = 2004;
   }
   
-  uint32_t capacity = (settings.electronicTimeLag / pixelTime) + 1;
-  pixelBuffer = std::make_shared<PixelBuffer>(capacity);
-
   adjustScanFrequency();
 }
 
@@ -72,8 +69,8 @@ void Imager::update() {
 
   float2 position = getPosition(timeInImage, imageID);
   createPendingPixel(position, timeInImage);
-  if (pixelBuffer->hasReadyPixel()) {
-    pixelBuffer->flushReadyPixel();
+  if (pixelBuffer.hasReadyPixel()) {
+    pixelBuffer.flushReadyPixel();
   }
 
   Application::updatePiezoVoltage(1, position.x / 0.320);
@@ -233,5 +230,5 @@ void Imager::createPendingPixel(float2 position, uint32_t timeInImage) {
   pixel.x = position.x;
   pixel.y = position.y;
   pixel.z = Application::state.piezoZVoltage * 0.320;
-  pixelBuffer->addPixel(pixel);
+  pixelBuffer.addPixel(pixel);
 }

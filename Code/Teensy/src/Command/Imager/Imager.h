@@ -47,7 +47,7 @@ private:
   float pixelDimension; // units: nm
   uint32_t polynomialPeakTime;
   Settings settings;
-  std::shared_ptr<PixelBuffer> pixelBuffer;
+  PixelBuffer pixelBuffer;
   
   uint32_t getRowTime() const;
   uint32_t getImageTime() const;
