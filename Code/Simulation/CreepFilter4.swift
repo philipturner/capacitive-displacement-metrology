@@ -5,7 +5,7 @@ struct CreepFilter {
   static let queueCount: Int = 33
   static let supersamplingRate: Float = 10
   
-  static var creepConstants = SIMD2<Float>(1e-2, 1e-2) // per decade
+  static var creepConstants = SIMD2<Float>(repeating: 0.85e-2) // per decade
   
   var creepRateUpdated: Bool = false
   var currentCreepRate = SIMD2<Float>(repeating: -1000)
@@ -47,24 +47,22 @@ struct CreepFilter {
         let sample = queues[queueID][sampleID]
         
         let dt = relativeTime - sample.time
-        let dt_recip = 1 / dt
+        let sampleCount = Float(Self.supersamplingRate) / dt
         
-        let sampleCount = Float(Self.supersamplingRate) * dt_recip
         if sampleCount <= 1 {
-          accumulator += sample.dV * dt_recip
+          accumulator += sample.dV / dt
         } else {
           let loopSize = ceil(sampleCount)
-          let loopSize_recip = 1 / loopSize
           var localAccumulator: Float = .zero
           
           // C++ for (float i = 0; i < sampleCount; ++i)
           var i: Float = 0
           while i < loopSize {
-            let offset = i * loopSize_recip
+            let offset = i / loopSize
             localAccumulator += 1 / (dt + offset)
             i += 1
           }
-          localAccumulator += loopSize_recip
+          localAccumulator /= loopSize
           
           accumulator += sample.dV * localAccumulator
         }
@@ -178,7 +176,7 @@ extension CreepFilter {
 
 extension CreepFilter {
   struct Queue {
-    static let capacity = CreepFilter.logScaleResolution + 1
+    static let capacity = CreepFilter.logScaleResolution + 2
     
     var maxTime: Float
     var data: [Sample]
@@ -252,3 +250,145 @@ extension CreepFilter {
     }
   }
 }
+
+#if true
+
+var creepFilter = CreepFilter()
+let stepVoltageTime: Int = 10
+let timeLimit: Int = 10000
+
+let checkpoint1 = Date().timeIntervalSince1970
+
+for time in 0..<timeLimit {
+  var voltage: SIMD2<Float> = .zero
+  var position: SIMD2<Float> = .zero
+  var creepRate: SIMD2<Float> = .zero
+  if time < stepVoltageTime {
+    voltage = .zero
+    position = .zero
+    creepRate = .zero
+  } else if time == stepVoltageTime {
+    voltage = SIMD2<Float>(repeating: 1)
+    position = .zero
+    creepRate = .zero
+  } else {
+    let dt = Float(time - stepVoltageTime)
+    let creepConstant = CreepFilter.creepConstants / log(10)
+    voltage = SIMD2<Float>(repeating: 1)
+    position = SIMD2<Float>(repeating: 1) * (1 + creepConstant * log(dt))
+    creepRate = SIMD2<Float>(repeating: 1) * (creepConstant / dt)
+  }
+  
+  func pad(_ string: String, length: Int) -> String {
+    var output = string
+    while output.count < length {
+      output = " " + output
+    }
+    return output
+  }
+  func display(_ number: SIMD2<Float>) -> String {
+    let output = String(format: "%.5f", number[0])
+    return output
+  }
+  
+  creepFilter.updateCreepRate(time: time)
+  
+  if true {
+    print("t:", pad("\(time)", length: 4), terminator: " | ")
+    print("V:", display(voltage), terminator: " | ")
+    
+    let simulatedPosition = voltage + creepFilter.accumulatedDrift
+    print("x:", display(position), terminator: " | ")
+    print("x:", display(simulatedPosition), terminator: " | ")
+    
+    let simulatedCreepRate = creepFilter.currentCreepRate
+    print("dx:", display(creepRate), terminator: " | ")
+    print("dx:", display(simulatedCreepRate), terminator: " | ")
+    print()
+  }
+  
+  creepFilter.update(stimulus: voltage, time: time)
+}
+
+let checkpoint2 = Date().timeIntervalSince1970
+
+func getFormattedTime(_ x: Double, _ int: Int) -> String {
+  var output: String = ""
+  output += String(format: "%.6f", x)
+  output += " "
+  output += String(format: "%.9f", x / Double(int))
+  return output
+}
+
+print(getFormattedTime(checkpoint2 - checkpoint1, timeLimit))
+
+// CreepFilter2.swift
+// t:   19 | V: 1.00000 | x: 1.00811 | x: 1.00842 | dx: 0.00041 | dx: 0.00040 |
+// t:   99 | V: 1.00000 | x: 1.01657 | x: 1.01706 | dx: 0.00004 | dx: 0.00004 |
+// t: 9999 | V: 1.00000 | x: 1.03400 |x: 1.03449 | dx: 0.00000 | dx: 0.00000 |
+// simple = 20, efficient = 1000
+// simple = 20, efficient = 10000
+// simple = 20, efficient = 100000
+//
+// CreepFilter4.swift
+// t:   19 | V: 1.00000 | x: 1.00811 | x: 1.00842 | dx: 0.00041 | dx: 0.00040 |
+// t:   99 | V: 1.00000 | x: 1.01657 | x: 1.01706 | dx: 0.00004 | dx: 0.00004 |
+// t: 9999 | V: 1.00000 | x: 1.03400 | x: 1.03451 | dx: 0.00000 | dx: 0.00000 |
+// t = 1000
+// t = 10000
+// t = 100000
+
+#else
+
+let voltageSequence: [Float] = [
+//  0, 0, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 20, 20,
+  0, 0, 0, 0, 1,
+]
+
+var creepFilter = CreepFilter()
+
+for time in 0..<100 {
+  var voltage: SIMD2<Float>
+  if time < voltageSequence.count {
+    voltage = SIMD2(repeating: voltageSequence[time])
+  } else {
+    voltage = SIMD2(repeating: voltageSequence.last!)
+  }
+  
+  print()
+  print("time:", time)
+  print("voltage:", voltage[0])
+  
+  creepFilter.updateCreepRate(time: time)
+  creepFilter.update(stimulus: voltage, time: time)
+  
+  print("creep filter:")
+  for queueID in creepFilter.queues.indices {
+    if queueID < 25 {
+      continue
+    }
+    print("- queues[\(queueID)]:")
+    
+    let queue = creepFilter.queues[queueID]
+    print("  - maxTime: \(queue.maxTime)")
+    
+    for sampleID in queue.startIndex..<queue.endIndex {
+      // This memory access can be merged with shifting the time origin of
+      // all samples. 'relativeTime' will always evaluate to zero. During the
+      // very first iteration, where t = 0, there are no samples.
+      //
+      // First, check correctness of the existing implementation. Record all
+      // simulation results to 8 decimal places. Implement the change, and
+      // check that the results do not change.
+      let sample = queue[sampleID]
+    
+      print("  - samples[\(sampleID - queue.startIndex)]:", terminator: " ")
+      print(sample.dV[0], terminator: ", ")
+      print(sample.time, terminator: ", ")
+      print(sample.queueTime, terminator: " ")
+      print()
+    }
+  }
+}
+
+#endif
