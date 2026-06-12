@@ -2,3 +2,7 @@
 
 #include "Queue.h"
 
+namespace Creep {
+
+}
+
