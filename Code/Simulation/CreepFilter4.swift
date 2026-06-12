@@ -47,7 +47,6 @@ struct CreepFilter {
   static let logScaleResolution: Int = 4
   static let queueCount: Int = 33
   static let supersamplingRate: Float = 10
-  static let timeOriginUpdateRate: Int = 1
   
   static var creepConstants = vectorInit(repeating: 0.85e-2) // per decade
   
@@ -68,16 +67,10 @@ struct CreepFilter {
     }
   }
   
-  func getRelativeTime(_ time: Int) -> Float {
-    0
-  }
-  
-  mutating func updateCreepRateAndTime(time: Int) {
+  mutating func updateCreepRateAndTime() {
     if creepRateUpdated {
       fatalError("Previous update was not flushed.")
     }
-    
-    let relativeTime = getRelativeTime(time)
     
     var accumulator: VectorType = .zero
     for queueID in queues.indices {
@@ -100,6 +93,7 @@ struct CreepFilter {
           let loopSizeInv = 1 / loopSize
           var localAccumulator: Float = .zero
           
+          #if false
           // C++ for (float i = 0; i < sampleCount; ++i)
           var i: Float = 0
           while i < loopSize {
@@ -107,6 +101,16 @@ struct CreepFilter {
             localAccumulator += 1 / (dt + offset)
             i += 1
           }
+          #else
+          
+          // Integer loop seems faster on Mac, but that's with a very different
+          // CPU architecture. We will only know for sure what's fastest when
+          // tested on the Teensy.
+          for i in 0..<Int(loopSize) {
+            let offset = Float(i) * loopSizeInv
+            localAccumulator += 1 / (dt + offset)
+          }
+          #endif
           localAccumulator *= loopSizeInv
           
           accumulator += sample.dV * localAccumulator
@@ -119,18 +123,16 @@ struct CreepFilter {
     creepRateUpdated = true
   }
   
-  mutating func shiftDelayLine(time: Int) {
-    let relativeTime = getRelativeTime(time)
-    
+  mutating func shiftDelayLine() {
     var removesDone: Int = 0
     let maxQueueID = Self.queueCount - 1
     for queueID in (0...maxQueueID).reversed() {
-      let ready = queues[queueID].hasReadySample(time: relativeTime)
+      let ready = queues[queueID].hasReadySample()
       guard ready else {
         continue
       }
       
-      let removed = queues[queueID].removeReady(time: relativeTime)
+      let removed = queues[queueID].removeReady()
       
       if queueID > 0 {
         queues[queueID - 1].insert(removed)
@@ -146,7 +148,7 @@ struct CreepFilter {
     }
   }
   
-  mutating func update(stimulus: VectorType, time: Int) {
+  mutating func update(stimulus: VectorType) {
     guard creepRateUpdated else {
       fatalError("Creep rate was not updated.")
     }
@@ -164,7 +166,7 @@ struct CreepFilter {
     let queueID = Self.queueCount - 1
     queues[queueID].insert(sample)
     
-    shiftDelayLine(time: time)
+    shiftDelayLine()
   }
 }
 
@@ -249,7 +251,7 @@ extension CreepFilter {
       endIndex += 1
     }
     
-    func hasReadySample(time: Float) -> Bool {
+    func hasReadySample() -> Bool {
       guard endIndex - startIndex >= 2 else {
         return false
       }
@@ -265,7 +267,7 @@ extension CreepFilter {
       }
     }
     
-    mutating func removeReady(time: Float) -> Sample {
+    mutating func removeReady() -> Sample {
       let sample0 = self[startIndex + 0]
       let sample1 = self[startIndex + 1]
       startIndex += 2
@@ -314,7 +316,7 @@ for time in 0..<timeLimit {
     return output
   }
   
-  creepFilter.updateCreepRateAndTime(time: time)
+  creepFilter.updateCreepRateAndTime()
   
   if displayResults {
     print("t:", pad("\(time)", length: 4), terminator: " | ")
@@ -330,7 +332,7 @@ for time in 0..<timeLimit {
     print()
   }
   
-  creepFilter.update(stimulus: voltage, time: time)
+  creepFilter.update(stimulus: voltage)
 }
 
 let checkpoint2 = Date().timeIntervalSince1970
@@ -358,6 +360,8 @@ print(getFormattedTime(checkpoint2 - checkpoint1, timeLimit))
 // updateRate = 100 | 150, 159, 174
 // updateRate = 1   | 227, 238, 258
 //
+//
+//
 // CreepFilter4.swift
 // t:   19 | V: 1.00000 | x: 1.00811 | x: 1.00842 | dx: 0.00041 | dx: 0.00040 |
 // t:   99 | V: 1.00000 | x: 1.01657 | x: 1.01706 | dx: 0.00004 | dx: 0.00004 |
@@ -372,6 +376,24 @@ print(getFormattedTime(checkpoint2 - checkpoint1, timeLimit))
 // scalar, updateRate = 100 | 144, 150, 160
 // SIMD2,  updateRate = 1   | 204, 224, 243
 // scalar, updateRate = 1   | 196, 212, 231
+//
+//
+//
+// CreepFilter.swift, after optimizations:
+// t:   19 | V: 1.00000 | x: 1.00811 | x: 1.00842 | dx: 0.00041 | dx: 0.00040 |
+// t:   99 | V: 1.00000 | x: 1.01657 | x: 1.01706 | dx: 0.00004 | dx: 0.00004 |
+// t: 9999 | V: 1.00000 | x: 1.03400 | x: 1.03451 | dx: 0.00000 | dx: 0.00000 |
+//
+// timings for performance:
+// t = 1000
+// t = 10000
+// t = 100000
+//
+// SIMD2  | 145, 162, 179
+// scalar | 178, 188, 195
+//
+// adding placeholder between dV and time for scalar, to make stride = 16 bytes:
+// scalar | 145, 157, 175
 
 #else
 
@@ -394,8 +416,8 @@ for time in 0..<100 {
   print("time:", time)
   print("voltage:", voltage[0])
   
-  creepFilter.updateCreepRateAndTime(time: time)
-  creepFilter.update(stimulus: voltage, time: time)
+  creepFilter.updateCreepRateAndTime()
+  creepFilter.update(stimulus: voltage)
   
   print("creep filter:")
   for queueID in creepFilter.queues.indices {
