@@ -99,7 +99,7 @@ void Filter::updateQueues() {
     Sample removed = queues[queueID].removeReady();
 
     if (queueID > 0) {
-      queues[queueID].insert(removed);
+      queues[queueID - 1].insert(removed);
     }
 
     removesDone += 1;

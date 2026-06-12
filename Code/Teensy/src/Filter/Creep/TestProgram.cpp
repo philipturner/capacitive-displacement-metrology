@@ -1,7 +1,77 @@
 #include "TestProgram.h"
 
+#include "Filter.h"
+#include <Arduino.h>
+
 using namespace Creep;
 
+uint32_t timeLimit = 10000;
+bool displayResults = true;
+
+void displayExecutionTime(uint32_t deltaMicros, uint32_t iters) {
+  float deltaTime = float(deltaMicros) * 1e-6;
+  Serial.print(deltaTime, 6);
+  Serial.print(" ");
+
+  float timePerIter = deltaTime / float(iters);
+  Serial.print(timePerIter, 9);
+  Serial.println();
+}
+
+void displayQuantity(const char *label, float value) {
+  Serial.print(label);
+  Serial.print(": ");
+  Serial.print(value, 6);
+  Serial.print(" | ");
+}
+
 void Creep::runTestProgram() {
-  // TODO
+  Settings::creepConstants = float2(0.0085);
+
+  auto filter = Filter(true);
+  uint32_t stepVoltageTime = 10;
+
+  uint32_t checkpoint1 = micros();
+  for (uint32_t time = 0; time < timeLimit; ++time) {
+    float2 voltage;
+    float2 position;
+    float2 creepRate;
+    if (time < stepVoltageTime) {
+      voltage = float2(0);
+      position = float2(0);
+      creepRate = float2(0);
+    } else if (time == stepVoltageTime) {
+      voltage = float2(1);
+      position = float2(0);
+      creepRate = float2(0);
+    } else {
+      float dt = float(time - stepVoltageTime);
+      float creepConstant = Settings::creepConstants.x / M_LN10;
+      voltage = float2(1);
+      position = float2(1 + creepConstant * log(dt));
+      creepRate = float2(creepConstant / dt);
+    }
+
+    if (displayResults) {
+      Serial.print("t: ");
+      Serial.print(time);
+      Serial.print(" | ");
+
+      displayQuantity("V", voltage.x);
+
+      auto simulatedPosition = voltage + filter.futureAccumulatedDrift;
+      displayQuantity("x", position.x);
+      displayQuantity("x", simulatedPosition.x);
+
+      auto simulatedCreepRate = filter.currentCreepRate;
+      displayQuantity("dx", creepRate.x);
+      displayQuantity("dx", simulatedCreepRate.x);
+      Serial.println();
+    }
+
+    filter.update(voltage);
+  }
+  uint32_t checkpoint2 = micros();
+
+  displayExecutionTime(checkpoint2 - checkpoint1, timeLimit);
 }

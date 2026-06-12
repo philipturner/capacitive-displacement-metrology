@@ -7,10 +7,16 @@
 #include "Util/WaveUtil.h"
 #include <Arduino.h>
 
+#include "Filter/Creep/TestProgram.h"
+
 void kilohertzLoop();
 
 void setup() {
   Application::initialize();
+
+  Creep::runTestProgram();
+  exit(0);
+
   KilohertzLoop::initialize(kilohertzLoop);
 }
 

@@ -1,6 +1,6 @@
 import Foundation
 
-let timeLimit: Int = 100
+let timeLimit: Int = 165
 let displayResults: Bool = true
 
 // MARK: - Data Type Switching
@@ -271,7 +271,7 @@ extension CreepFilter {
   }
 }
 
-#if true
+#if false
 
 var creepFilter = CreepFilter()
 let stepVoltageTime: Int = 10
@@ -306,7 +306,7 @@ for time in 0..<timeLimit {
     return output
   }
   func display(_ number: VectorType) -> String {
-    let output = String(format: "%.5f", vectorFirst(number))
+    let output = String(format: "%.6f", vectorFirst(number))
     return output
   }
   
@@ -396,12 +396,18 @@ let voltageSequence: [Float] = [
 
 var creepFilter = CreepFilter()
 
-for time in 0..<100 {
+for time in 0..<165 {
   var voltage: SIMD2<Float>
-  if time < voltageSequence.count {
-    voltage = SIMD2(repeating: voltageSequence[time])
+//  if time < voltageSequence.count {
+//    voltage = SIMD2(repeating: voltageSequence[time])
+//  } else {
+//    voltage = SIMD2(repeating: voltageSequence.last!)
+//  }
+  
+  if time < 10 {
+    voltage = SIMD2(repeating: 0)
   } else {
-    voltage = SIMD2(repeating: voltageSequence.last!)
+    voltage = SIMD2(repeating: 1)
   }
   
   print()
