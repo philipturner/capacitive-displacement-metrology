@@ -2,7 +2,7 @@ import Foundation
 
 let creepConstant: Float = 0.85e-2 / log(10)
 let logScaleResolution: Int = 4 // even numbers never have >1 transition/cycle
-let timeOriginUpdateRate: Int = 1
+let timeOriginUpdateRate: Int = 100
 typealias PreciseType = Float
 
 // t: 10000 | V: 1.0000 | x: 1.0340 | x: 1.0187 | x: 1.0361 | dx: 0.0000 | dx: 0.0000 |  0.002110 |  0.000161 |

@@ -1,16 +1,60 @@
 import Foundation
 
+let timeLimit: Int = 10000
+let displayResults: Bool = true
+
+// MARK: - Data Type Switching
+
+#if false
+
+typealias VectorType = SIMD2<Float>
+
+func vectorInit(repeating value: Float) -> VectorType {
+  return SIMD2(repeating: value)
+}
+
+func vectorFirst(_ value: VectorType) -> Float {
+  return value[0]
+}
+
+func vectorMagnitude(_ value: VectorType) -> Float {
+  let dV_squared = value * value
+  let accumulator = dV_squared[0] + dV_squared[1]
+  return accumulator
+}
+
+#else
+
+typealias VectorType = Float
+
+func vectorInit(repeating value: Float) -> VectorType {
+  return value
+}
+
+func vectorFirst(_ value: VectorType) -> Float {
+  return value
+}
+
+func vectorMagnitude(_ value: VectorType) -> Float {
+  return abs(value)
+}
+
+#endif
+
+// MARK: - Other Code
+
 struct CreepFilter {
   static let logScaleResolution: Int = 4
   static let queueCount: Int = 33
   static let supersamplingRate: Float = 10
+  static let timeOriginUpdateRate: Int = 1
   
-  static var creepConstants = SIMD2<Float>(repeating: 0.85e-2) // per decade
+  static var creepConstants = vectorInit(repeating: 0.85e-2) // per decade
   
   var creepRateUpdated: Bool = false
-  var currentCreepRate = SIMD2<Float>(repeating: -1000)
-  var accumulatedDrift: SIMD2<Float> = .zero
-  var currentStimulus: SIMD2<Float> = .zero
+  var currentCreepRate = vectorInit(repeating: -1000)
+  var accumulatedDrift: VectorType = .zero
+  var currentStimulus: VectorType = .zero
   var timeOrigin: Int = .zero
   
   var queues: [Queue] = []
@@ -32,7 +76,7 @@ struct CreepFilter {
   mutating func updateCreepRate(time: Int) {
     let relativeTime = getRelativeTime(time)
     
-    var accumulator: SIMD2<Float> = .zero
+    var accumulator: VectorType = .zero
     for queueID in queues.indices {
       let startIndex = queues[queueID].startIndex
       let endIndex = queues[queueID].endIndex
@@ -101,21 +145,26 @@ struct CreepFilter {
     }
   }
   
-  mutating func shiftTimeOrigin() {
-    timeOrigin += 1
+  mutating func shiftTimeOrigin(time: Int) {
+    let relativeTime = getRelativeTime(time)
+    guard relativeTime > Float(Self.timeOriginUpdateRate) else {
+      return
+    }
+    
+    timeOrigin += Self.timeOriginUpdateRate
     
     for queueID in queues.indices {
       queues[queueID].shiftTimeOrigin()
     }
   }
   
-  mutating func update(stimulus: SIMD2<Float>, time: Int) {
+  mutating func update(stimulus: VectorType, time: Int) {
     guard creepRateUpdated else {
       fatalError("Creep rate was not updated.")
     }
     accumulatedDrift += currentCreepRate
     creepRateUpdated = false
-    currentCreepRate = SIMD2(repeating: -1000)
+    currentCreepRate = vectorInit(repeating: -1000)
     
     let dV = stimulus - currentStimulus
     currentStimulus = stimulus
@@ -129,13 +178,13 @@ struct CreepFilter {
     queues[queueID].insert(sample)
     
     shiftDelayLine(time: time)
-    shiftTimeOrigin()
+    shiftTimeOrigin(time: time)
   }
 }
 
 extension CreepFilter {
   struct Sample {
-    var dV: SIMD2<Float> = .zero
+    var dV: VectorType = .zero
     var time: Float = .zero
     var queueTime: Float = .zero
     
@@ -150,9 +199,7 @@ extension CreepFilter {
     }
     
     static func getMagnitude(_ sample: Sample) -> Float {
-      let dV_squared = sample.dV * sample.dV
-      let accumulator = dV_squared[0] + dV_squared[1]
-      return accumulator
+      return vectorMagnitude(sample.dV)
     }
     
     static func getWeightedTime(
@@ -244,8 +291,8 @@ extension CreepFilter {
     mutating func shiftTimeOrigin() {
       for i in startIndex..<endIndex {
         let slotID = i % Self.capacity
-        data[slotID].time -= 1
-        data[slotID].queueTime -= 1
+        data[slotID].time -= Float(CreepFilter.timeOriginUpdateRate)
+        data[slotID].queueTime -= Float(CreepFilter.timeOriginUpdateRate)
       }
     }
   }
@@ -255,28 +302,27 @@ extension CreepFilter {
 
 var creepFilter = CreepFilter()
 let stepVoltageTime: Int = 10
-let timeLimit: Int = 10000
 
 let checkpoint1 = Date().timeIntervalSince1970
 
 for time in 0..<timeLimit {
-  var voltage: SIMD2<Float> = .zero
-  var position: SIMD2<Float> = .zero
-  var creepRate: SIMD2<Float> = .zero
+  var voltage: VectorType = .zero
+  var position: VectorType = .zero
+  var creepRate: VectorType = .zero
   if time < stepVoltageTime {
     voltage = .zero
     position = .zero
     creepRate = .zero
   } else if time == stepVoltageTime {
-    voltage = SIMD2<Float>(repeating: 1)
+    voltage = vectorInit(repeating: 1)
     position = .zero
     creepRate = .zero
   } else {
     let dt = Float(time - stepVoltageTime)
     let creepConstant = CreepFilter.creepConstants / log(10)
-    voltage = SIMD2<Float>(repeating: 1)
-    position = SIMD2<Float>(repeating: 1) * (1 + creepConstant * log(dt))
-    creepRate = SIMD2<Float>(repeating: 1) * (creepConstant / dt)
+    voltage = vectorInit(repeating: 1)
+    position = vectorInit(repeating: 1) * (1 + creepConstant * log(dt))
+    creepRate = vectorInit(repeating: 1) * (creepConstant / dt)
   }
   
   func pad(_ string: String, length: Int) -> String {
@@ -286,14 +332,14 @@ for time in 0..<timeLimit {
     }
     return output
   }
-  func display(_ number: SIMD2<Float>) -> String {
-    let output = String(format: "%.5f", number[0])
+  func display(_ number: VectorType) -> String {
+    let output = String(format: "%.5f", vectorFirst(number))
     return output
   }
   
   creepFilter.updateCreepRate(time: time)
   
-  if true {
+  if displayResults {
     print("t:", pad("\(time)", length: 4), terminator: " | ")
     print("V:", display(voltage), terminator: " | ")
     
@@ -326,17 +372,29 @@ print(getFormattedTime(checkpoint2 - checkpoint1, timeLimit))
 // t:   19 | V: 1.00000 | x: 1.00811 | x: 1.00842 | dx: 0.00041 | dx: 0.00040 |
 // t:   99 | V: 1.00000 | x: 1.01657 | x: 1.01706 | dx: 0.00004 | dx: 0.00004 |
 // t: 9999 | V: 1.00000 | x: 1.03400 |x: 1.03449 | dx: 0.00000 | dx: 0.00000 |
+//
+// timings for performance:
 // simple = 20, efficient = 1000
 // simple = 20, efficient = 10000
 // simple = 20, efficient = 100000
+//
+// updateRate = 100 | 150, 159, 174
+// updateRate = 1   | 227, 238, 258
 //
 // CreepFilter4.swift
 // t:   19 | V: 1.00000 | x: 1.00811 | x: 1.00842 | dx: 0.00041 | dx: 0.00040 |
 // t:   99 | V: 1.00000 | x: 1.01657 | x: 1.01706 | dx: 0.00004 | dx: 0.00004 |
 // t: 9999 | V: 1.00000 | x: 1.03400 | x: 1.03451 | dx: 0.00000 | dx: 0.00000 |
+//
+// timings for performance:
 // t = 1000
 // t = 10000
 // t = 100000
+//
+// SIMD2,  updateRate = 100 | 154, 159, 169
+// scalar, updateRate = 100 | 144, 150, 160
+// SIMD2,  updateRate = 1   | 204, 224, 243
+// scalar, updateRate = 1   | 196, 212, 231
 
 #else
 
