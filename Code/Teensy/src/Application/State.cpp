@@ -1,8 +1,8 @@
 #include "State.h"
 
+#include "Filter/FirstOrderLowpassFilter.h"
 #include "IC/ADC.h"
 #include "Time/KilohertzLoop.h"
-#include "Util/FilterUtil.h"
 #include <Arduino.h>
 
 void State::updateCurrent(bool useADC) {
@@ -13,7 +13,7 @@ void State::updateCurrent(bool useADC) {
     current = 0;
   }
 
-  float alpha = FilterUtil::getLowpassAlpha(10000, KilohertzLoop::period);
+  float alpha = FirstOrderLowpassFilter::getAlpha(10000, KilohertzLoop::period);
   filteredCurrent *= 1 - alpha;
   filteredCurrent += alpha * current;
 
@@ -28,7 +28,7 @@ void State::addSpike(float dV, float C) {
 }
 
 void State::updateCurrentSpike() {
-  float alpha = FilterUtil::getLowpassAlpha(15000, KilohertzLoop::period);
+  float alpha = FirstOrderLowpassFilter::getAlpha(15000, KilohertzLoop::period);
   filteredCurrentSpike *= 1 - alpha;
   filteredCurrentSpike += alpha * currentSpike[8];
 

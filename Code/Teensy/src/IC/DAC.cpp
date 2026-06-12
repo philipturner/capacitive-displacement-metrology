@@ -21,7 +21,7 @@ uint16_t DAC::transfer(
   bytes[0] = (input.command << 7) | input.registerAddress;
   bytes[1] = input.data >> 8;
   bytes[2] = input.data & 0xFF;
-  if (Validation::enableCRC && find(flags, CRC::Flags::MOSI)) {
+  if (IC::Validation::enableCRC && find(flags, CRC::Flags::MOSI)) {
     bytes[3] = CRC::calculate(bytes);
   }
   
@@ -33,7 +33,7 @@ uint16_t DAC::transfer(
   // DAC81404, SPI_MODE2, FSDO = 1 | 34-35 Mbps
   SPI.beginTransaction(SPISettings(34 * 1000000, MSBFIRST, SPI_MODE2));
   digitalWrite(CS, 0);
-  if (Validation::enableCRC && find(flags, CRC::Flags::MOSI)) {
+  if (IC::Validation::enableCRC && find(flags, CRC::Flags::MOSI)) {
     SPI.transfer(bytes, 4);
   } else {
     SPI.transfer(bytes, 3);
@@ -41,7 +41,7 @@ uint16_t DAC::transfer(
   digitalWrite(CS, 1);
   SPI.endTransaction();
 
-  if (Validation::enableCRC && find(flags, CRC::Flags::MISO_FLAG)) {
+  if (IC::Validation::enableCRC && find(flags, CRC::Flags::MISO_FLAG)) {
     uint8_t errorBit = bytes[0] & 0b01000000;
     if (errorBit) {
       Serial.println("DAC MOSI data was corrupted.");
@@ -49,7 +49,7 @@ uint16_t DAC::transfer(
     }
   }
 
-  if (Validation::enableCRC && find(flags, CRC::Flags::MISO_VALIDITY)) {
+  if (IC::Validation::enableCRC && find(flags, CRC::Flags::MISO_VALIDITY)) {
     uint8_t misoCode = bytes[3];
     uint8_t expectedMisoCode = CRC::calculate(bytes);
     uint8_t zeroMisoCode = CRC::calculate(bytes, misoCode);

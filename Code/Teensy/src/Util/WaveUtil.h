@@ -2,12 +2,10 @@
 
 #include <stdint.h>
 
-namespace FilterUtil {
+namespace WaveUtil {
   float sineWave(float phaseNormalized);
   float squareWave(float phaseNormalized);
   float triangleWave(float phaseNormalized);
-
-  float getLowpassAlpha(float frequency, uint32_t loopPeriodMicros);
 
   float thirdOrderSmoothstep(float x);
 

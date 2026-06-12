@@ -1,12 +1,12 @@
-#include "FilterUtil.h"
+#include "WaveUtil.h"
 
 #include <math.h>
 
-float FilterUtil::sineWave(float phaseNormalized) {
+float WaveUtil::sineWave(float phaseNormalized) {
   return sin(phaseNormalized * 2 * M_PI);
 }
 
-float FilterUtil::squareWave(float phaseNormalized) {
+float WaveUtil::squareWave(float phaseNormalized) {
   if (phaseNormalized < 0.5) {
     return 1.0;
   } else {
@@ -14,7 +14,7 @@ float FilterUtil::squareWave(float phaseNormalized) {
   }
 }
 
-float FilterUtil::triangleWave(float phaseNormalized) {
+float WaveUtil::triangleWave(float phaseNormalized) {
   float progress;
   if (phaseNormalized < 0.5) {
     progress = 2 * phaseNormalized;
@@ -25,16 +25,7 @@ float FilterUtil::triangleWave(float phaseNormalized) {
   return 2 * progress - 1;
 }
 
-float FilterUtil::getLowpassAlpha(
-  float frequency, 
-  uint32_t loopPeriodMicros
-) {
-  float sampleTimeSeconds = float(1e-6) * float(loopPeriodMicros);
-  float timeConstant = 1 / (2 * M_PI * frequency);
-  return sampleTimeSeconds / (timeConstant + sampleTimeSeconds);
-}
-
-float FilterUtil::thirdOrderSmoothstep(float x) {
+float WaveUtil::thirdOrderSmoothstep(float x) {
   if (x < 0) {
     return 0;
   }
@@ -51,7 +42,7 @@ float FilterUtil::thirdOrderSmoothstep(float x) {
   return output;
 }
 
-float FilterUtil::polynomialWaveOutskirt(float x) {
+float WaveUtil::polynomialWaveOutskirt(float x) {
   float x2 = x * x;
   float x3 = x2 * x;
   float x5 = x2 * x2 * x;
@@ -61,7 +52,7 @@ float FilterUtil::polynomialWaveOutskirt(float x) {
   return output;
 }
 
-float FilterUtil::polynomialWaveBend(float x) {
+float WaveUtil::polynomialWaveBend(float x) {
   float x2 = x * x;
   float x3 = x2 * x;
   float x5 = x2 * x2 * x;

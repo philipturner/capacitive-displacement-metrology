@@ -24,9 +24,9 @@ struct Flags {
           fatalError("Cannot discard lines once history has started.")
         }
       case 4:
-        output.imagingSettings.append(line)
-      case 5:
         output.pixel.append(line)
+      case 5:
+        output.imagingSettings.append(line)
       default:
         fatalError("Unexpected flags: \(line.flags)")
       }

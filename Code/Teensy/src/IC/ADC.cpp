@@ -7,7 +7,7 @@ ADCOutputConversion::ADCOutputConversion(uint32_t rawData) {
   integerValue = rawData >> 14;
   otherBits = rawData & 0x3FFF;
 
-  if (Validation::checkDeviceID) {
+  if (IC::Validation::checkDeviceID) {
     if (!checkParity(0b1101)) {
       Serial.println("ADC MISO data was corrupted.");
       exit(0);

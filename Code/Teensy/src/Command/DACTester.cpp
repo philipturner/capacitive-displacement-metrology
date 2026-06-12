@@ -3,7 +3,7 @@
 #include "Application/Application.h"
 #include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
-#include "Util/FilterUtil.h"
+#include "Util/WaveUtil.h"
 #include <Arduino.h>
 
 uint32_t decodeChannelID(char code) {
@@ -36,7 +36,7 @@ void DACTester::update() {
   uint32_t phase = deltaTime % wavePeriod;
 
   float phaseNormalized = float(phase) / float(wavePeriod);
-  float voltage = FilterUtil::triangleWave(phaseNormalized);
+  float voltage = WaveUtil::triangleWave(phaseNormalized);
   voltage *= bipolarAmplitude;
 
   if (channelID == 4) {

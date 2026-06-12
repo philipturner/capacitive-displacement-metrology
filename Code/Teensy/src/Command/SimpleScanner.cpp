@@ -2,7 +2,7 @@
 
 #include "Application/Application.h"
 #include "Util/Feedback.h"
-#include "Util/FilterUtil.h"
+#include "Util/WaveUtil.h"
 #include <Arduino.h>
 
 SimpleScanner::SimpleScanner() {
@@ -40,7 +40,7 @@ void SimpleScanner::update() {
     }
     
     float progress = float(time) / float(Imager::largeMoveRiseTime);
-    progress = FilterUtil::thirdOrderSmoothstep(progress);
+    progress = WaveUtil::thirdOrderSmoothstep(progress);
 
     float targetPosition = getPosition(0);
     position = progress * targetPosition;
@@ -58,7 +58,7 @@ float SimpleScanner::getPosition(uint32_t inputTime) const {
     uint32_t phase = time % wavePeriod;
     
     float phaseNormalized = float(phase) / float(wavePeriod);
-    float position = FilterUtil::sineWave(phaseNormalized);
+    float position = WaveUtil::sineWave(phaseNormalized);
     position *= peakPeakAmplitude / 2;
     return position;
   }
@@ -76,9 +76,9 @@ float SimpleScanner::getPosition(uint32_t inputTime) const {
       float timeProgress = float(time) / float(polynomialPeakTime);
       float peakValue;
       if (needsOutskirt) {
-        peakValue = FilterUtil::polynomialWaveOutskirt(timeProgress);
+        peakValue = WaveUtil::polynomialWaveOutskirt(timeProgress);
       } else {
-        peakValue = FilterUtil::polynomialWaveBend(timeProgress);
+        peakValue = WaveUtil::polynomialWaveBend(timeProgress);
       }
       float position = peakScaleFactor * (peakValue - 0.5);
 

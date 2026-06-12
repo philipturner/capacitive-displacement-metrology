@@ -3,7 +3,7 @@
 #include "Application/Application.h"
 #include "Time/KilohertzLoop.h"
 #include "Util/Feedback.h"
-#include "Util/FilterUtil.h"
+#include "Util/WaveUtil.h"
 #include "Util/Interpolate.h"
 #include <Arduino.h>
 
@@ -57,7 +57,7 @@ float2 Imager::getPosition(float2 localPosition, uint32_t imageID) {
 float2 Imager::getPosition(uint32_t timeInImage, uint32_t imageID) {
   uint32_t time = timeInImage;
   if (time < largeMoveRiseTime + settings.creepSettlingTime) {
-    float peakNormalized = FilterUtil::polynomialWaveOutskirt(0);
+    float peakNormalized = WaveUtil::polynomialWaveOutskirt(0);
     float peakValue = getPeakValue(peakNormalized);
 
     float2 targetLocal;
@@ -66,7 +66,7 @@ float2 Imager::getPosition(uint32_t timeInImage, uint32_t imageID) {
     float2 targetPosition = getPosition(targetLocal, imageID);
 
     float progress = float(time) / float(largeMoveRiseTime);
-    progress = FilterUtil::thirdOrderSmoothstep(progress);
+    progress = WaveUtil::thirdOrderSmoothstep(progress);
     return interpolate(previousImageEnd, targetPosition, progress);
   } else {
     time -= largeMoveRiseTime + settings.creepSettlingTime;
@@ -82,9 +82,9 @@ float2 Imager::getPosition(uint32_t timeInImage, uint32_t imageID) {
       float progress = float(time) / float(polynomialPeakTime);
       float peakNormalized;
       if (rowID == 0) {
-        peakNormalized = FilterUtil::polynomialWaveOutskirt(progress);
+        peakNormalized = WaveUtil::polynomialWaveOutskirt(progress);
       } else {
-        peakNormalized = FilterUtil::polynomialWaveBend(progress);
+        peakNormalized = WaveUtil::polynomialWaveBend(progress);
       }
       x = getPeakValue(peakNormalized);
       
@@ -107,7 +107,7 @@ float2 Imager::getPosition(uint32_t timeInImage, uint32_t imageID) {
     time = min(time, polynomialPeakTime);
 
     float progress = 1 - float(time) / float(polynomialPeakTime);
-    float peakNormalized = FilterUtil::polynomialWaveOutskirt(progress);
+    float peakNormalized = WaveUtil::polynomialWaveOutskirt(progress);
 
     x = getPeakValue(peakNormalized);
     y = (float(resolutionMinor) - 0.5) * pixelDimension;

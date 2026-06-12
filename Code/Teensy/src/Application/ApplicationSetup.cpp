@@ -60,13 +60,13 @@ void Application::setupSPI() {
   ADC::writeRegister(ADS8699_DATAOUT_CTL_REG, 0x4000 | 0b1000);
   ADC::writeRegister(ADS8699_DEVICE_ID_REG + 2, 0b1101);
   ADC::writeRegister(ADS8699_RANGE_SEL_REG, ADS8699_RANGE_12V_BIPOLAR);
-  if (Validation::checkDeviceID) {
+  if (IC::Validation::checkDeviceID) {
     uint32_t ADC_ID = ADC::readRegister(ADS8699_DEVICE_ID_REG) >> 16;
     checkDeviceID(ADC_ID, 0b1101);
   }
 
   uint16_t spiConfigFlags;
-  if (Validation::enableCRC) {
+  if (IC::Validation::enableCRC) {
     spiConfigFlags = 0b10010110;
   } else {
     spiConfigFlags = 0b10000110;
@@ -77,7 +77,7 @@ void Application::setupSPI() {
   DAC1::writeRegister(DAC81404_GENCONFIG, 0x0000, CRC::Flags::MOSI);
   DAC1::writeRegister(DAC81404_DACPWDWN, 0xFFF0);
   DAC1::writeRegister(DAC81404_DACRANGE, 0x1111 * DAC81404_RANGE_12V_BIPOLAR);
-  if (Validation::checkDeviceID) {
+  if (IC::Validation::checkDeviceID) {
     uint16_t DAC1_ID = DAC1::readRegister(DAC81404_DEVICEID) >> 2;
     checkDeviceID(DAC1_ID, 0x029C);
   }
@@ -92,7 +92,7 @@ void Application::setupSPI() {
   DAC2::writeRegister(DAC81404_GENCONFIG, 0x0000, CRC::Flags::MOSI);
   DAC2::writeRegister(DAC81404_DACPWDWN, 0xFFFE);
   DAC2::writeRegister(DAC81404_DACRANGE, 0x0001 * DAC81404_RANGE_12V_BIPOLAR);
-  if (Validation::checkDeviceID) {
+  if (IC::Validation::checkDeviceID) {
     uint16_t DAC2_ID = DAC2::readRegister(DAC81404_DEVICEID) >> 2;
     checkDeviceID(DAC2_ID, 0x029C);
   }

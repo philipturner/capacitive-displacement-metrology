@@ -45,7 +45,7 @@ void PixelBuffer::flushReadyPixel() {
   startIndex += 1;
 
   Log::writeValuesWithFlags(
-    /*flags=*/5,
+    /*flags=*/4,
     pixel.id,
     pixel.x,
     pixel.y,

@@ -4,7 +4,7 @@
 #include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
 #include "Util/Feedback.h"
-#include "Util/FilterUtil.h"
+#include "Util/WaveUtil.h"
 #include <Arduino.h>
 
 void kilohertzLoop();
@@ -112,7 +112,7 @@ void kilohertzLoop() {
         float deltaItersMax = (modeChangeEnd - feedbackStart) - 1;
         
         float progress = float(deltaIters) / float(deltaItersMax);
-        progress = FilterUtil::thirdOrderSmoothstep(progress);
+        progress = WaveUtil::thirdOrderSmoothstep(progress);
 
         float2 scannerVoltage = previousScannerVoltage * (1 - progress);
         Application::updatePiezoVoltage(1, scannerVoltage.x);

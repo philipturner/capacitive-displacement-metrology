@@ -4,7 +4,7 @@
 #include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
 #include "Util/Feedback.h"
-#include "Util/FilterUtil.h"
+#include "Util/WaveUtil.h"
 #include <Arduino.h>
 
 // HOPG I(V) spectroscopy
@@ -240,7 +240,7 @@ void Spectroscopy::update() {
     // 1471 Hz resonance
     // below 2000 μs rise time, a simple line is optimal
     // above 2000 μs rise time, a 3rd-order smoothstep attenuates overshoot better
-    positionProgress = FilterUtil::thirdOrderSmoothstep(positionProgress);
+    positionProgress = WaveUtil::thirdOrderSmoothstep(positionProgress);
 
     float biasVoltage = getBiasVoltage(voltageProgress);
     float piezoZVoltage = getPiezoZVoltage(positionProgress);

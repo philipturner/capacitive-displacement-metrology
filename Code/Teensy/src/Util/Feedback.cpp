@@ -2,7 +2,7 @@
 
 #include "Application/Application.h"
 #include "Time/KilohertzLoop.h"
-#include "Util/FilterUtil.h"
+#include "Util/WaveUtil.h"
 #include <Arduino.h>
 
 void updatePositionErrorDiagnostic() {
