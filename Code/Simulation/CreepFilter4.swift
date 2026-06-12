@@ -1,7 +1,7 @@
 import Foundation
 
 let timeLimit: Int = 10000
-let displayResults: Bool = true
+let displayResults: Bool = false
 
 // MARK: - Data Type Switching
 
@@ -20,7 +20,7 @@ func vectorFirst(_ value: VectorType) -> Float {
 func vectorMagnitude(_ value: VectorType) -> Float {
   let dV_squared = value * value
   let accumulator = dV_squared[0] + dV_squared[1]
-  return accumulator
+  return sqrt(accumulator)
 }
 
 #else
