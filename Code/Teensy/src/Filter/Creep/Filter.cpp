@@ -18,7 +18,7 @@ Filter::Filter(bool notDefaultConstructor) {
   }
 }
 
-void Filter::forwardState() {
+void Filter::forwardState() const {
   Log::writeValuesWithFlags(
     /*flags=*/6,
     Settings::creepConstants.x,

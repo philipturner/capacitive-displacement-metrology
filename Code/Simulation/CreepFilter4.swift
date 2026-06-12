@@ -1,7 +1,7 @@
 import Foundation
 
-let timeLimit: Int = 10000
-let displayResults: Bool = false
+let timeLimit: Int = 100
+let displayResults: Bool = true
 
 // MARK: - Data Type Switching
 
@@ -50,10 +50,9 @@ struct CreepFilter {
   
   static var creepConstants = vectorInit(repeating: 0.85e-2) // per decade
   
-  var creepRateUpdated: Bool = false
-  var currentCreepRate = vectorInit(repeating: -1000)
-  var accumulatedDrift: VectorType = .zero
-  var currentStimulus: VectorType = .zero
+  var previousStimulus: VectorType = .zero
+  var currentCreepRate : VectorType = .zero
+  var futureAccumulatedDrift: VectorType = .zero
   
   var queues: [Queue] = []
   
@@ -67,11 +66,52 @@ struct CreepFilter {
     }
   }
   
-  mutating func updateCreepRateAndTime() {
-    if creepRateUpdated {
-      fatalError("Previous update was not flushed.")
+  mutating func update(stimulus: VectorType) {
+    // Responding to the DAC updates from the current iteration.
+    var sample = Sample()
+    sample.dV = stimulus - previousStimulus
+    sample.time = 0
+    sample.queueTime = 0
+    previousStimulus = stimulus
+    
+    let queueID = Self.queueCount - 1
+    queues[queueID].insert(sample)
+    
+    shiftDelayLine()
+    
+    // Preparing the state for the next loop iteration (don't access these
+    // variables any more during the calling iteration).
+    updateCreepRateAndTime()
+    
+    futureAccumulatedDrift += currentCreepRate
+  }
+  
+  private mutating func shiftDelayLine() {
+    var removesDone: Int = 0
+    let maxQueueID = Self.queueCount - 1
+    for queueID in (0...maxQueueID).reversed() {
+      let ready = queues[queueID].hasReadySample()
+      guard ready else {
+        continue
+      }
+      
+      let removed = queues[queueID].removeReady()
+      
+      if queueID > 0 {
+        queues[queueID - 1].insert(removed)
+      }
+      
+      removesDone += 1
     }
     
+    if Self.logScaleResolution % 2 == 0 {
+      if removesDone > 1 {
+        fatalError("More than one remove happened.")
+      }
+    }
+  }
+  
+  private mutating func updateCreepRateAndTime() {
     var accumulator: VectorType = .zero
     for queueID in queues.indices {
       let startIndex = queues[queueID].startIndex
@@ -117,56 +157,9 @@ struct CreepFilter {
         }
       }
     }
-    accumulator *= Self.creepConstants / log(10) // C++ M_LN10
     
-    currentCreepRate = accumulator
-    creepRateUpdated = true
-  }
-  
-  mutating func shiftDelayLine() {
-    var removesDone: Int = 0
-    let maxQueueID = Self.queueCount - 1
-    for queueID in (0...maxQueueID).reversed() {
-      let ready = queues[queueID].hasReadySample()
-      guard ready else {
-        continue
-      }
-      
-      let removed = queues[queueID].removeReady()
-      
-      if queueID > 0 {
-        queues[queueID - 1].insert(removed)
-      }
-      
-      removesDone += 1
-    }
-    
-    if Self.logScaleResolution % 2 == 0 {
-      if removesDone > 1 {
-        fatalError("More than one remove happened.")
-      }
-    }
-  }
-  
-  mutating func update(stimulus: VectorType) {
-    guard creepRateUpdated else {
-      fatalError("Creep rate was not updated.")
-    }
-    
-    var sample = Sample()
-    sample.dV = stimulus - currentStimulus
-    sample.time = 0
-    sample.queueTime = 0
-    
-    accumulatedDrift += currentCreepRate
-    creepRateUpdated = false
-    currentCreepRate = vectorInit(repeating: -1000)
-    currentStimulus = stimulus
-    
-    let queueID = Self.queueCount - 1
-    queues[queueID].insert(sample)
-    
-    shiftDelayLine()
+    let creepConstants = Self.creepConstants / log(10) // C++ M_LN10
+    currentCreepRate = accumulator * creepConstants
   }
 }
 
@@ -316,13 +309,11 @@ for time in 0..<timeLimit {
     return output
   }
   
-  creepFilter.updateCreepRateAndTime()
-  
   if displayResults {
     print("t:", pad("\(time)", length: 4), terminator: " | ")
     print("V:", display(voltage), terminator: " | ")
     
-    let simulatedPosition = voltage + creepFilter.accumulatedDrift
+    let simulatedPosition = voltage + creepFilter.futureAccumulatedDrift
     print("x:", display(position), terminator: " | ")
     print("x:", display(simulatedPosition), terminator: " | ")
     
@@ -416,7 +407,6 @@ for time in 0..<100 {
   print("time:", time)
   print("voltage:", voltage[0])
   
-  creepFilter.updateCreepRateAndTime()
   creepFilter.update(stimulus: voltage)
   
   print("creep filter:")
@@ -446,6 +436,8 @@ for time in 0..<100 {
       print()
     }
   }
+  
+  
 }
 
 #endif

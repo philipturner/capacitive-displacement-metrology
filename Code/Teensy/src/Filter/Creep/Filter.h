@@ -4,8 +4,8 @@
 
 namespace Creep {
   struct Filter {
-    bool creepRateUpdated = false;
-    float2 currentCreepRate = float2(-1000);
+    bool creepRateUpdated = true;
+    float2 currentCreepRate = float2(0);
     float2 accumulatedDrift = float2(0);
     float2 currentStimulus = float2(0);
 
@@ -13,8 +13,11 @@ namespace Creep {
 
     Filter();
     Filter(bool notDefaultConstructor);
+    void forwardState() const;
 
-    void forwardState();
+
+
+    static void runTestProgram();
 
   private:
     void shiftDelayLine();

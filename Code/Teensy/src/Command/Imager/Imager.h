@@ -38,7 +38,7 @@ struct Imager {
 
   static Mode getMode(char code);
   static void updatePendingSettings(Command command);
-  void forwardSettings();
+  void forwardSettings() const;
 
 private:
   Mode mode;

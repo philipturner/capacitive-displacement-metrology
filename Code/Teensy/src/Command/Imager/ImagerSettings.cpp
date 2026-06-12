@@ -58,7 +58,7 @@ void Imager::updatePendingSettings(Command command) {
   }
 }
 
-void Imager::forwardSettings() {
+void Imager::forwardSettings() const {
   Log::writeValuesWithFlags(
     /*flags=*/5,
     uint8_t(mode),
