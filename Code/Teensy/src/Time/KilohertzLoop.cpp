@@ -61,7 +61,6 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
       return;
     }
 
-    // TODO: Ensure this is on after the recent changes.
     #if 1
     int32_t maxError = 10;
 

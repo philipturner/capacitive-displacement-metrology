@@ -18,9 +18,6 @@ struct KilohertzLoop {
 
   // Function to execute reliably with a consistent time
   // base in the multiple kHz band.
-  //
-  // Time fidelity: close to program startup, a few jumps
-  // can be larger or smaller than the expected duration.
   static void initialize(
     teensy::inplace_function<void(void), 16> loopBody);
 
