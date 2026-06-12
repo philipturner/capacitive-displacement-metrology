@@ -1,8 +1,8 @@
-#include "CreepFilter.h"
+#include "Harmonics.h"
 
 #include <math.h>
 
-bool CreepFilter::isRoundTripSafe(uint32_t iterations) {
+bool Creep::Harmonics::isRoundTripSafe(uint32_t iterations) {
   if (iterations <= 8) {
     return false;
   }
@@ -17,7 +17,7 @@ bool CreepFilter::isRoundTripSafe(uint32_t iterations) {
   return true;
 }
 
-uint32_t CreepFilter::nextSafeRoundTrip(uint32_t iterations) {
+uint32_t Creep::Harmonics::nextSafeRoundTrip(uint32_t iterations) {
   if (iterations <= 8) {
     return 9;
   }
