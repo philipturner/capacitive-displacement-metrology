@@ -8,11 +8,13 @@
 #include "Command/Spectroscopy.h"
 #include "Command/TipApproacher.h"
 #include "Diagnostics/CapacitanceTracker.h"
+#include "Filter/Creep/Filter.h"
 
 struct Application {
   static inline State state;
   static inline Command::Mode mode;
   static inline CapacitanceTracker capTracker;
+  static inline Creep::Filter creepFilter;
 
   static inline DACTester dacTester;
   static inline BlindStepper blindStepper;

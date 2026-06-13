@@ -29,10 +29,25 @@ void Filter::forwardState() const {
     futureAccumulatedDrift.y);
 }
 
-void Filter::registerSettingsCommand(Command command) {
-  // TODO: Implement
-
-  forwardState();
+void Filter::updateSettings(Command command) {
+  switch (command.alphaCode) {
+    case 'c': {
+      creepConstants = float2(command.attributes[0]);
+      break;
+    }
+    case 'r': {
+      futureAccumulatedDrift = float2(0);
+      break;
+    }
+    case 'x': {
+      creepConstants.x = command.attributes[0];
+      break;
+    }
+    case 'y': {
+      creepConstants.y = command.attributes[0];
+      break;
+    }
+  }
 }
 
 void Filter::update(float2 stimulus) {

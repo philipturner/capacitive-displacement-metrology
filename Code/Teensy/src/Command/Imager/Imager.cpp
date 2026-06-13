@@ -25,8 +25,6 @@ Imager::Imager(Command command) {
   }
   
   adjustScanFrequency();
-
-  forwardSettings();
 }
 
 void Imager::adjustScanFrequency() {

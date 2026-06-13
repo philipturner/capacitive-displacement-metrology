@@ -1,19 +1,18 @@
 #pragma once
 
+#include "Timestamp.h"
 #include <inplace_function.h>
 #include <IntervalTimer.h>
 
 struct KilohertzLoop {
   static inline IntervalTimer timer;
   static inline teensy::inplace_function<void(void), 16> loopBody;
-  static constexpr uint32_t period = 12;
+  static constexpr uint32_t period = 16;
 
-  // These will roll back to zero after 71 minutes. However, if we
-  // check for and handle a rollover event, the loop can run forever.
-  static inline uint32_t startTimestamp;
-  static inline uint32_t previousTimestamp;
-  static inline uint32_t latestTimestamp;
-  static inline uint32_t integrationStartTimestamp = 0;
+  static inline Timestamp startTimestamp;
+  static inline Timestamp previousTimestamp;
+  static inline Timestamp latestTimestamp;
+  static inline Timestamp integrationStartTimestamp;
   static inline uint32_t iterationID = 0;
 
   // Function to execute reliably with a consistent time
@@ -25,9 +24,9 @@ struct KilohertzLoop {
 
   static void throwError(
     const char *cString, 
-    int32_t number1,
-    int32_t number2,
-    int32_t number3);
+    int64_t number1,
+    int64_t number2,
+    int64_t number3);
 };
 
 constexpr uint32_t KilohertzLoopRound(uint32_t desired) {

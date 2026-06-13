@@ -19,6 +19,7 @@ void Imager::update() {
     float x = Application::state.piezoXVoltage * 0.320;
     float y = Application::state.piezoYVoltage * 0.320;
     previousImageEnd = float2(x, y);
+    Application::creepFilter.futureAccumulatedDrift = float2(0);
   }
 
   if (mode == Mode::image && imageID > 0) {
@@ -31,8 +32,10 @@ void Imager::update() {
     pixelBuffer.flushReadyPixel();
   }
 
-  Application::updatePiezoVoltage(1, position.x / 0.320);
-  Application::updatePiezoVoltage(2, position.y / 0.320);
+  float2 stimulus = position * float(1 / 0.320);
+  stimulus += -1 * Application::creepFilter.futureAccumulatedDrift;
+  Application::updatePiezoVoltage(1, stimulus.x);
+  Application::updatePiezoVoltage(2, stimulus.y);
 }
 
 float2 Imager::getPosition(float2 localPosition, uint32_t imageID) {

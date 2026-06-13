@@ -11,15 +11,6 @@ void kilohertzLoop();
 
 void setup() {
   Application::initialize();
-
-  Serial.println("Hello world.");
-  Serial.println(BlindStepper::wavePeriod);
-  Serial.println(Spectroscopy::voltageSlewPeriod);
-  Serial.println(Spectroscopy::positionSettlePeriod);
-  Serial.println(Spectroscopy::integratePeriod);
-  Serial.println(Imager::largeMoveRiseTime);
-  exit(0);
-
   KilohertzLoop::initialize(kilohertzLoop);
 }
 
@@ -76,17 +67,17 @@ void kilohertzLoop() {
     }
     if (Application::mode == Command::Mode::imaging) {
       Application::imager = Imager(nextCommand);
+      Application::imager.forwardSettings();
     }
 
     Log::writeValuesWithFlags(1, float(Application::mode));
   } else if (KilohertzLoop::iterationID > modeChangeEnd) {
     if (CommandTracker::nextCommand(nextCommand)) {
-      uint8_t modeCode = uint8_t(nextCommand.mode);
-
-      // Add branch to update Creep::Settings and forward the state of the
-      // creep filter.
-      if (modeCode == uint8_t(Command::Mode::imagingSettings)) {
+      if (nextCommand.mode == Command::Mode::imagingSettings) {
         Imager::updatePendingSettings(nextCommand);
+      } else if (nextCommand.mode == Command::Mode::creepSettings) {
+        Application::creepFilter.updateSettings(nextCommand);
+        Application::creepFilter.forwardState();
       } else {
         modeChangeStart = KilohertzLoop::iterationID;
         modeChangeEnd = modeChangeStart;
@@ -167,9 +158,23 @@ void kilohertzLoop() {
   if (!ErrorMessage::hasError()) {
     uint32_t iterationsPerLog = Log::logPeriod / KilohertzLoop::period;
     if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
-      //Application::logNormalMessage();
+      // Application::logNormalMessage();
     }
   }
+
+  /*
   
-  // update the creep filter with the actual written X and Y voltage
+  error message:
+  KilohertzLoop failed.
+  Integral error was too large.
+  408139904
+  408139893
+  -11
+
+  */
+
+  float2 stimulus;
+  stimulus.x = Application::state.piezoXVoltage;
+  stimulus.y = Application::state.piezoYVoltage;
+  Application::creepFilter.update(stimulus);
 }

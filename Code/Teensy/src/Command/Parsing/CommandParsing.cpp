@@ -68,6 +68,8 @@ bool CommandParsing::checkAlphaCode(Command command) {
     cString = "ivd";
   } else if (command.mode == Command::Mode::imagingSettings) {
     cString = "alors";
+  } else if (command.mode == Command::Mode::creepSettings) {
+    cString = "crxy";
   } else {
     if (command.alphaCode != 0) {
       CommandTracker::throwError("There should be no alpha code.");

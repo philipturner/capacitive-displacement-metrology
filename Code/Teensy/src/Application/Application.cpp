@@ -124,17 +124,15 @@ void Application::logNormalMessage() {
       state.positionError * 1e9);
   } else if (mode == Command::Mode::simpleScanning ||
              mode == Command::Mode::imaging) {
-    // TODO: Change this to the creep drift offset.
-    float errorTerm = 0;
-    if (mode == Command::Mode::simpleScanning) {
-      errorTerm = state.positionError * 1e9;
-    }
+    // Metric that doesn't lose sensitivity as its magnitude grows larger.
+    float2 drift = Application::creepFilter.futureAccumulatedDrift;
+    float dV = drift.x + drift.y;
     
     Log::writeValuesNormal(
       state.filteredCurrent,
       state.piezoXVoltage * 0.320,
       state.piezoYVoltage * 0.320,
       state.piezoZVoltage * 0.320,
-      errorTerm);
+      dV * 0.320);
   }
 }

@@ -70,6 +70,12 @@ uint32_t getExpectedNumAttributes(Command command, uint32_t numAttributes) {
         default: return 0;
       }
     }
+    case Command::Mode::creepSettings: {
+      switch (command.alphaCode) {
+        case 'c': return 0;
+        default: return 1;
+      }
+    }
     default: {
       return 0;
     }

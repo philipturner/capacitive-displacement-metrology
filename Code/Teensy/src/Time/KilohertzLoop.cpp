@@ -26,7 +26,7 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
   }
 
   previousTimestamp = latestTimestamp;
-  latestTimestamp = micros();
+  latestTimestamp.raiseLowerHalf(micros());
 
   // Failures from constantly stopping and restarting the serial connection,
   // while logging about 45 bytes every 100 us.
@@ -51,20 +51,12 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
   if (iterationID == 0) {
     integrationStartTimestamp = latestTimestamp;
   } else {
-    int32_t interval = latestTimestamp - previousTimestamp;
-    if (interval < 0) {
-      throwError(
-        "Microseconds counter overflowed.",
-        startTimestamp,
-        previousTimestamp,
-        latestTimestamp);
-      return;
-    }
+    int64_t interval = latestTimestamp.getLongValue() - previousTimestamp.getLongValue();
 
     #if 1
-    int32_t maxError = 10;
+    uint32_t maxError = 12;
 
-    int32_t differentialError = interval - period;
+    int64_t differentialError = interval - period;
     if (abs(differentialError) > maxError) {
       throwError(
         "Differential error was too large.",
@@ -74,11 +66,10 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
       return;
     }
     
-    uint32_t actualIntegrated = latestTimestamp - integrationStartTimestamp;
-    uint32_t expectedIntegrated = (iterationID - 1) * period;
-    expectedIntegrated += period;
+    int64_t actualIntegrated = latestTimestamp.getLongValue() - integrationStartTimestamp.getLongValue();
+    int64_t expectedIntegrated = int64_t(iterationID) * period;
     
-    int32_t integralError = actualIntegrated - expectedIntegrated;
+    int64_t integralError = actualIntegrated - expectedIntegrated;
     if (abs(integralError) > maxError) {
       throwError(
         "Integral error was too large.",
@@ -105,10 +96,10 @@ void KilohertzLoop::initialize(
   KilohertzLoop::loopBody = loopBody;
 
   uint32_t timestamp = micros();
-  startTimestamp = timestamp;
-  previousTimestamp = timestamp;
-  latestTimestamp = timestamp;
-  integrationStartTimestamp = 0;
+  startTimestamp.raiseLowerHalf(timestamp);
+  previousTimestamp.raiseLowerHalf(timestamp);
+  latestTimestamp.raiseLowerHalf(timestamp);
+  integrationStartTimestamp = Timestamp();
   iterationID = 0;
 
   timer.priority(0);
@@ -117,9 +108,9 @@ void KilohertzLoop::initialize(
 
 void KilohertzLoop::throwError(
   const char *cString, 
-  int32_t number1,
-  int32_t number2,
-  int32_t number3
+  int64_t number1,
+  int64_t number2,
+  int64_t number3
 ) {
   timer.end();
 
