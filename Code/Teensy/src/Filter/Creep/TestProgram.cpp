@@ -6,7 +6,7 @@
 using namespace Creep;
 
 uint32_t timeLimit = 10000;
-bool displayResults = false;
+bool displayResults = true;
 
 void displayExecutionTime(uint32_t deltaMicros, uint32_t iters) {
   float deltaTime = float(deltaMicros) * 1e-6;

@@ -1,7 +1,7 @@
 import Foundation
 
 let timeLimit: Int = 10000
-let displayResults: Bool = false
+let displayResults: Bool = true
 
 // MARK: - Data Type Switching
 
@@ -44,8 +44,8 @@ func vectorMagnitude(_ value: VectorType) -> Float {
 // MARK: - Other Code
 
 struct CreepFilter {
-  static let logScaleResolution: Int = 100 // 4
-  static let queueCount: Int = 1 // 33
+  static let logScaleResolution: Int = 4
+  static let queueCount: Int = 33
   static let supersamplingRate: Float = 10
   
   static var creepConstants = vectorInit(repeating: 0.85e-2) // per decade

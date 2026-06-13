@@ -11,11 +11,7 @@
 
 void kilohertzLoop();
 
-extern "C" uint32_t set_arm_clock(uint32_t frequency);
-
 void setup() {
-  set_arm_clock(600000000);
-  
   Application::initialize();
 
   Creep::runTestProgram();

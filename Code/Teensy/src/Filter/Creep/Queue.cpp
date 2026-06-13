@@ -8,24 +8,25 @@ Queue::Queue() {
 
 }
 
-Queue::Queue(float maxTime) {
+Queue::Queue(uint32_t id, float maxTime) {
+  this->bufferOffset = id * Settings::queueCapacity;
   this->maxTime = maxTime;
 }
 
 void Queue::insert(Sample sample) {
-  if (endIndex - startIndex >= capacity) {
-    // Serial.println("Exceeded capacity of ring buffer.");
-    // exit(0);
-    startIndex += 1;
+  uint32_t trueCapacity = Settings::logScaleResolution + 1;
+  if (endIndex - startIndex >= trueCapacity) {
+    Serial.println("Exceeded capacity of ring buffer.");
+    exit(0);
   }
 
-  (*this)[endIndex] = sample;
+  set(endIndex, sample);
   endIndex += 1;
 }
 
 Sample Queue::removeReady() {
-  auto sample0 = (*this)[startIndex + 0];
-  auto sample1 = (*this)[startIndex + 1];
+  auto sample0 = get(startIndex + 0);
+  auto sample1 = get(startIndex + 1);
   startIndex += 2;
 
   return Sample(sample0, sample1);
