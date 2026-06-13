@@ -109,28 +109,25 @@ float2 Filter::shiftSampleTimes() {
       // t: 199 | V: -0.156434 | x: -0.005129 | x: -0.161563 | dx: 0.000000 | dx: 0.000824 | 
       //
       // try a lookup table approach
-      float localAccumulator;
+      float localAccumulator = 0;
       if (sampleCount <= 1) {
         localAccumulator = dtInv;
       } else {
         float loopSize = ceil(sampleCount);
-        float loopSizeInv = 1 / loopSize;
-        localAccumulator = 0;
 
+        // Try changing this to an integer loop and seeing the change in performance.
+        //
+        // 10000 iterations with waveTypeStep
+        // before (float loop): 4899 ns
+        // after (uint32_t loop): 4720 ns
+        // optimization 1 (uint32_t loop): 4464 ns
+        // optimization 1 (float loop): 4422 ns
         for (float i = 0; i < loopSize; ++i) {
-          float offset = i * loopSizeInv;
-          localAccumulator += 1 / (dt + offset);
+          float denominator = dt * loopSize + i;
+          localAccumulator += 1 / denominator;
         }
-        localAccumulator *= loopSizeInv;
       }
-
-      /*
-      float dVx = Queue::buffer0[slotID];
-      float dVy = Queue::buffer1[slotID];
-      accumulator.x += dVx * localAccumulator;
-      accumulator.y += dVy * localAccumulator;
-      */
-     accumulator += sample.dV * localAccumulator;
+      accumulator += sample.dV * localAccumulator;
     }
   }
   return accumulator;

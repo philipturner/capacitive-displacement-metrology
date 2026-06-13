@@ -153,35 +153,17 @@ struct CreepFilter {
         let dtInv = 1 / dt
         let sampleCount = Float(Self.supersamplingRate) * dtInv
         
+        var localAccumulator: Float = 0
         if sampleCount <= 1 {
-          accumulator += sample.dV * dtInv
+          localAccumulator = dtInv
         } else {
           let loopSize = ceil(sampleCount)
-          let loopSizeInv = 1 / loopSize
-          var localAccumulator: Float = .zero
-          
-          #if false
-          // C++ for (float i = 0; i < sampleCount; ++i)
-          var i: Float = 0
-          while i < loopSize {
-            let offset = i * loopSizeInv
-            localAccumulator += 1 / (dt + offset)
-            i += 1
-          }
-          #else
-          
-          // Integer loop seems faster on Mac, but that's with a very different
-          // CPU architecture. We will only know for sure what's fastest when
-          // tested on the Teensy.
           for i in 0..<Int(loopSize) {
-            let offset = Float(i) * loopSizeInv
-            localAccumulator += 1 / (dt + offset)
+            let denominator = dt * loopSize + Float(i)
+            localAccumulator += 1 / denominator
           }
-          #endif
-          localAccumulator *= loopSizeInv
-          
-          accumulator += sample.dV * localAccumulator
         }
+        accumulator += sample.dV * localAccumulator
       }
     }
     return accumulator
