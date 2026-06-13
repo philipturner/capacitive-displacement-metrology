@@ -5,7 +5,7 @@
 
 using namespace Creep;
 
-uint32_t timeLimit = 20000;
+uint32_t timeLimit = 200;
 bool displayResults = true;
 bool waveTypeStep = false;
 
@@ -27,9 +27,8 @@ void displayQuantity(const char *label, float value) {
 }
 
 void Creep::runTestProgram() {
-  Settings::creepConstants = float2(0.0085);
-
   auto filter = Filter(true);
+  filter.creepConstants = float2(0.0085);
   uint32_t stepVoltageTime = 10;
 
   uint32_t checkpoint1 = micros();
@@ -48,7 +47,7 @@ void Creep::runTestProgram() {
         creepRate = float2(0);
       } else {
         float dt = float(time - stepVoltageTime);
-        float creepConstant = Settings::creepConstants.x / M_LN10;
+        float creepConstant = filter.creepConstants.x / M_LN10;
         voltage = float2(1);
         position = float2(1 + creepConstant * log(dt));
         creepRate = float2(creepConstant / dt);
@@ -135,6 +134,9 @@ void Creep::runTestProgram() {
   displayExecutionTime(checkpoint2 - checkpoint1, timeLimit);
 }
 
+// 10000 iterations with waveTypeStep: end sample count = 27 (avg. 26)
+// 20000 iterations with sine wave: end sample count = 29 (avg. 28)
+
 // Existing code:
 // 20000 iterations with period=40 sine wave
 // default compiler settings: 6191 ns
@@ -148,3 +150,38 @@ void Creep::runTestProgram() {
 //   without supersampling: 2926 ns
 //   optimization 1 to arithmetic: 4877 ns
 //   optimization 2 to arithmetic: 4696 ns
+//
+// after altering structure of Sample:
+// 10000 iterations with waveTypeStep: 4468 ns
+//   grouping into one buffer: 4448 ns
+//   32-byte alignment: 4448 ns
+//   removing the memory access entirely: 3649 ns
+//   instead, removing supersampling: 2695 ns
+//   removing supersampling and FP recip: 1987 ns
+// 20000 iterations with sine wave: 5058 ns
+//   grouping into one buffer: 4866 ns
+//   32-byte alignment: 4866 ns
+//   removing the memory access entirely: 4090 ns
+//   instead, removing supersampling: 3123 ns
+//   removing supersampling and FP recip: 2311 ns
+
+// Makeup of latency:
+// iterate through loop with single integer add: 2.35 cycles/iter
+// empty loop iterations = 2.15 cycles per iteration
+//
+// 10000, waveTypeStep: 4448 ns
+// - wave generation: 226 ns
+// - loop iteration: 102 ns
+// - memory: 799 ns
+// - FP recip: 708 ns
+// - supersampling: 1753 ns
+// - everything else: 860 ns
+//
+// 20000, sine wave: 4866 ns
+// - wave generation: 397 ns
+// - loop iteration: 110 ns
+// - memory: 776 ns
+// - FP recip: 812 ns
+// - supersampling: 1743 ns
+// - everything else: 1028 ns
+

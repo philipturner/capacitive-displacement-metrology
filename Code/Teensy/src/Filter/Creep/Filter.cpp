@@ -10,9 +10,9 @@ Filter::Filter() {
 }
 
 Filter::Filter(bool notDefaultConstructor) {
-  for (uint32_t queueID = 0; queueID < Settings::queueCount; ++queueID) {
-    uint32_t shiftAmount = (Settings::queueCount - 1) - queueID;
-    uint32_t maxTime = Settings::logScaleResolution * (1 << shiftAmount);
+  for (uint32_t queueID = 0; queueID < Queue::queueCount; ++queueID) {
+    uint32_t shiftAmount = (Queue::queueCount - 1) - queueID;
+    uint32_t maxTime = Queue::logScaleResolution * (1 << shiftAmount);
 
     queues[queueID] = Queue(queueID, maxTime);
   }
@@ -21,8 +21,8 @@ Filter::Filter(bool notDefaultConstructor) {
 void Filter::forwardState() const {
   Log::writeValuesWithFlags(
     /*flags=*/6,
-    Settings::creepConstants.x,
-    Settings::creepConstants.y,
+    creepConstants.x,
+    creepConstants.y,
     futureAccumulatedDrift.x,
     futureAccumulatedDrift.y);
 }
@@ -31,11 +31,11 @@ void Filter::update(float2 stimulus) {
   // Responding to the DAC updates from the current iteration.
   Sample sample;
   sample.dV = stimulus + previousStimulus * -1;
-  sample.time = 0;
-  sample.queueTime = 0;
+  sample.trueTimeOffset = 0;
+  sample.queueTime = timeOffset;
   previousStimulus = stimulus;
 
-  uint32_t queueID = Settings::queueCount - 1;
+  uint32_t queueID = Queue::queueCount - 1;
   queues[queueID].insert(sample);
 
   // Preparing the state for the next loop iteration (don't access these
@@ -47,48 +47,22 @@ void Filter::update(float2 stimulus) {
   futureAccumulatedDrift += currentCreepRate;
 }
 
-// Performance data
-// 6000 ns for the first version of the code
-//
-// The indices are spaced by 100
-// Nothing happens during inner loop: 258 ns
-// 50 iterations of integer add: 454 ns
-// 100 iterations of integer add: 620 ns
-// 100 iterations reading from stack buffer: 959 ns
-// 100 iterations with indices known at compile time: 613 ns
-// with integer modulus Queue::capacity: 2298 ns
-// changing Queue::capacity to 128: 1528 ns
-// not doing the above, but randomly changing Queue.data to have 128 size:
-// 958 -> 1286 ns
-// changing it to have size 500:
-// 958 ns
-// 511-513: 1284 ns
-// anything 510 and below: 956 ns
 float2 Filter::shiftSampleTimes() {
+  timeOffset += 1;
+
   float2 accumulator = float2(0);
-  for (uint32_t queueID = 0; queueID < Settings::queueCount; ++queueID) {
-    //uint32_t bufferOffset = queueID * Settings::queueCapacity;
-    uint32_t startIndex = queues[queueID].startIndex;
-    uint32_t endIndex = queues[queueID].endIndex;
+  for (uint32_t queueID = 0; queueID < Queue::queueCount; ++queueID) {
+    Queue queue = queues[queueID];
+    uint32_t startIndex = queue.startIndex;
+    uint32_t endIndex = queue.endIndex;
+
     for (uint32_t sampleID = startIndex; sampleID < endIndex; ++sampleID) {
-      /*
-      uint32_t slotID = bufferOffset + (sampleID % Settings::queueCapacity);
-      float time = Queue::buffer2[slotID];
-      float queueTime = Queue::buffer3[slotID];
-      time += 1;
-      queueTime += 1;
-      Queue::buffer2[slotID] = time;
-      Queue::buffer3[slotID] = queueTime;
-      */
-
-      Sample sample = queues[queueID].get(sampleID);
-      sample.time += 1;
-      sample.queueTime += 1;
-      queues[queueID].set(sampleID, sample);
-
-      float dt = sample.time;
-      float dtInv = 1 / dt;
+      Sample sample = queue.get(sampleID);
       
+      float dt = float(timeOffset - sample.queueTime);
+      dt -= sample.trueTimeOffset;
+      float dtInv = 1 / dt;
+
       // disparity from removing supersampling:
       //
       // expected:
@@ -109,12 +83,12 @@ float2 Filter::shiftSampleTimes() {
       //
       // try a lookup table approach
       float localAccumulator = 0;
-      if (dt >= Settings::supersamplingRate) {
+      if (dt >= float(LookupTable::supersamplingRate)) {
         localAccumulator = dtInv;
       } else {
-        float sampleCount = Settings::supersamplingRate * dtInv;
+        float sampleCount = float(LookupTable::supersamplingRate) * dtInv;
         float loopSize = ceil(sampleCount);
-        
+
         for (float i = 0; i < loopSize; ++i) {
           float denominator = dt * loopSize + i;
           localAccumulator += 1 / denominator;
@@ -123,19 +97,18 @@ float2 Filter::shiftSampleTimes() {
       accumulator += sample.dV * localAccumulator;
     }
   }
-  return accumulator;
+  return float2(accumulator);
 }
 
 void Filter::updateCreepRate(float2 accumulator) {
-  float2 creepConstants = Settings::creepConstants * (1 / M_LN10);
-  currentCreepRate = accumulator * creepConstants;
+  currentCreepRate = accumulator * creepConstants * (1 / M_LN10);
 }
 
 void Filter::updateQueues() {
   uint32_t removesDone = 0;
-  uint32_t maxQueueID = Settings::queueCount - 1;
+  uint32_t maxQueueID = Queue::queueCount - 1;
   for (int32_t queueID = maxQueueID; queueID >= 0; --queueID) {
-    bool ready = queues[queueID].hasReadySample();
+    bool ready = queues[queueID].hasReadySample(timeOffset);
     if (!ready) {
       continue;
     }

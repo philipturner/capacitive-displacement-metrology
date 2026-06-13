@@ -1,17 +1,22 @@
 #pragma once
 
+#include "Command/Parsing/Command.h"
+#include "LookupTable.h"
 #include "Queue.h"
 
 namespace Creep {
   struct Filter {
+    float2 creepConstants = float2(0);
     float2 previousStimulus = float2(0);
     float2 currentCreepRate = float2(0);
     float2 futureAccumulatedDrift = float2(0);
 
-    Queue queues[Settings::queueCount];
+    Queue queues[Queue::queueCount];
+    uint32_t timeOffset = 0;
     
     Filter();
     Filter(bool notDefaultConstructor);
+    void registerSettingsCommand(Command command); // TODO
     void forwardState() const;
     void update(float2 stimulus);
 

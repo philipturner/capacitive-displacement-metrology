@@ -49,10 +49,10 @@ float2 previousScannerVoltage;
 
 void kilohertzLoop() {
   if (KilohertzLoop::iterationID == modeChangeEnd) {
-    // Update application
     Application::mode = nextCommand.mode;
     Application::state.modeStartIterationID = KilohertzLoop::iterationID;
     Application::state.capacitanceUpdateCount = 0;
+    
     if (Application::mode == Command::Mode::dacTest) {
       Application::dacTester = DACTester(nextCommand);
     }
@@ -75,13 +75,7 @@ void kilohertzLoop() {
       Application::imager = Imager(nextCommand);
     }
 
-    // Forward necessary data to host program
-    if (Application::mode == Command::Mode::imaging) {
-      Application::imager.forwardSettings();
-    }
-    Log::writeValuesWithFlags(
-      /*flags=*/1,
-      float(Application::mode));
+    Log::writeValuesWithFlags(1, float(Application::mode));
   } else if (KilohertzLoop::iterationID > modeChangeEnd) {
     if (CommandTracker::nextCommand(nextCommand)) {
       uint8_t modeCode = uint8_t(nextCommand.mode);

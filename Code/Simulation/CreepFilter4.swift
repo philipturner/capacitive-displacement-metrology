@@ -67,16 +67,17 @@ func vectorMagnitude(_ value: VectorType) -> Float {
 struct CreepFilter {
   static let logScaleResolution: Int = 4
   static let queueCount: Int = 33
-  static let supersamplingRate: Float = 10
+  static let supersamplingRate: Int = 10
   
   static var creepConstants = vectorInit(repeating: 0.85e-2) // per decade
   
   var previousStimulus: VectorType = .zero
-  var currentCreepRate : VectorType = .zero
+  var currentCreepRate: VectorType = .zero
   var futureAccumulatedDrift: VectorType = .zero
   
   var queues: [Queue] = []
   var timeOffset: UInt32 = .zero
+  var lookupTable: LookupTable
   
   init() {
     for queueID in 0..<Self.queueCount {
@@ -86,6 +87,7 @@ struct CreepFilter {
       let queue = Queue(maxTime: maxTime)
       queues.append(queue)
     }
+    lookupTable = LookupTable()
   }
   
   mutating func update(stimulus: VectorType) {
@@ -152,15 +154,20 @@ struct CreepFilter {
         let dtInv = 1 / dt
         
         var localAccumulator: Float = 0
-        if dt >= Self.supersamplingRate {
+        if dt >= Float(Self.supersamplingRate) {
           localAccumulator = dtInv
         } else {
-          let sampleCount = Self.supersamplingRate * dtInv
+          #if false
+          let sampleCount = Float(Self.supersamplingRate) * dtInv
           let loopSize = ceil(sampleCount)
           for i in 0..<Int(loopSize) {
             let denominator = dt * loopSize + Float(i)
             localAccumulator += 1 / denominator
           }
+          #else
+          let binID = lookupTable.binID(dt: dt)
+          localAccumulator = lookupTable.bins[binID]
+          #endif
         }
         accumulator += sample.dV * localAccumulator
       }
@@ -311,6 +318,40 @@ extension CreepFilter {
       startIndex += 2
       
       return Sample(sample0, sample1)
+    }
+  }
+}
+
+extension CreepFilter {
+  struct LookupTable {
+    static let resolution: Int = 32
+    
+    var bins: [Float] = []
+    
+    init() {
+      let binCount = 1 + CreepFilter.supersamplingRate * Self.resolution
+      bins = Array(repeating: 0, count: binCount)
+      
+      for binID in Self.resolution..<binCount {
+        let dt = Float(binID) / Float(Self.resolution)
+        
+        let sampleCount = Float(CreepFilter.supersamplingRate) / dt
+        let loopSize = ceil(sampleCount)
+        
+        var weight: Float = 0
+        for i in 0..<Int(loopSize) {
+          let denominator = dt * loopSize + Float(i)
+          weight += 1 / denominator
+        }
+        bins[binID] = weight
+      }
+    }
+    
+    func binID(dt: Float) -> Int {
+      var rounded = dt
+      rounded *= Float(Self.resolution)
+      rounded += 0.5
+      return Int(rounded)
     }
   }
 }
