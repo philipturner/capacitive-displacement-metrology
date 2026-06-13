@@ -5,7 +5,7 @@
 
 namespace Creep {
   struct LookupTable {
-    static constexpr uint32_t supersamplingRate = 100;
+    static constexpr uint32_t supersamplingRate = 10;
     static constexpr uint32_t resolution = 32;
     static constexpr uint32_t binCount = 1 + supersamplingRate * resolution;
 

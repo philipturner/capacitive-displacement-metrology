@@ -1,5 +1,5 @@
 struct History {
-  static let logPeriodMicros: Int = 72
+  static let logPeriodMicros: Int = 64
   static let historyLengthSeconds: Int = 30
   static let triggerEventCacheSize: Int = 100
   

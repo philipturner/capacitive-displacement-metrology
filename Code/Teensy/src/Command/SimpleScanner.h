@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Command/Parsing/Command.h"
+#include "Time/KilohertzLoop.h"
 
 struct SimpleScanner {
   static constexpr bool usePolynomialWave = true;
-  static constexpr uint32_t polynomialPeakTime = 1008;
+  static constexpr uint32_t polynomialPeakTime = KilohertzLoopRound(1000);
 
   SimpleScanner();
   SimpleScanner(Command command);

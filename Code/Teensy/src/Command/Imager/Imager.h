@@ -2,8 +2,8 @@
 
 #include "Command/Imager/PixelBuffer.h"
 #include "Command/Parsing/Command.h"
+#include "Time/KilohertzLoop.h"
 #include "Util/Vector.h"
-#include <memory>
 
 struct Imager {
   enum class Mode {
@@ -28,7 +28,7 @@ struct Imager {
   // 1668 - 1e-3 resonant overshoot, 2.65 kHz
   // 3324 - 1e-4 resonant overshoot, 2.65 kHz
   // 5904 - 1e-5 resonant overshoot, 2.65 kHz
-  static constexpr uint32_t largeMoveRiseTime = 5904; 
+  static constexpr uint32_t largeMoveRiseTime = KilohertzLoopRound(5900); 
   static constexpr uint32_t pixelTime = 96;
   
   Imager();

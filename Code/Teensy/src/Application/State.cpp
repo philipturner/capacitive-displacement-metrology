@@ -13,7 +13,7 @@ void State::updateCurrent(bool useADC) {
     current = 0;
   }
 
-  float alpha = FirstOrderLowpassFilter::getAlpha(10000, KilohertzLoop::period);
+  float alpha = FirstOrderLowpassFilter::getAlpha(10000);
   filteredCurrent *= 1 - alpha;
   filteredCurrent += alpha * current;
 
@@ -28,7 +28,7 @@ void State::addSpike(float dV, float C) {
 }
 
 void State::updateCurrentSpike() {
-  float alpha = FirstOrderLowpassFilter::getAlpha(15000, KilohertzLoop::period);
+  float alpha = FirstOrderLowpassFilter::getAlpha(15000);
   filteredCurrentSpike *= 1 - alpha;
   filteredCurrentSpike += alpha * currentSpike[8];
 

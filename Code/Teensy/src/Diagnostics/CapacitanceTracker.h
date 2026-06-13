@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include "Time/KilohertzLoop.h"
 
 struct CapacitanceTracker {
   enum class State {
@@ -9,12 +9,13 @@ struct CapacitanceTracker {
     finished = 2,
   };
 
-  static constexpr uint32_t wavePeriod = 1008;
+  static constexpr uint32_t wavePeriod = KilohertzLoopRound(1000);
   static constexpr uint32_t waveCountPre = 1;
   static constexpr uint32_t waveCountPost = 10;
   static constexpr float stimulusAmplitude = 12;
 
   // Magnitude of accumulate(referenceSine * current) / n
+  // Optimized for kilohertz loop period = 12 μs
   //
   // 65: -4.3e-12
   // 64: -1.1e-12

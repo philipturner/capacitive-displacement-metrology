@@ -1,12 +1,10 @@
 #pragma once
 
-#include <stdint.h>
+#include "Time/KilohertzLoop.h"
 
 struct Log {
-  // TODO: Change this to 64 when the loop period is changed from 16 to 12.
-  // Change the logPeriod variable in the host program as well.
-  static constexpr uint32_t logPeriod = 72;
-  static constexpr uint32_t logSize = 9000;
+  static constexpr uint32_t logPeriod = KilohertzLoopRound(64);
+  static constexpr uint32_t logSize = 10000;
 
   // Mark special messages with a flag, but do not alter the ordering. This
   // makes it easier to detect corrupted data transmission. Instead, the

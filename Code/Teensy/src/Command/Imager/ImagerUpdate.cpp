@@ -16,7 +16,6 @@ void Imager::update() {
   uint32_t timeInImage = time % imageTime;
 
   if (timeInImage == 0) {
-    // Reset the creep drift accumulator here.
     float x = Application::state.piezoXVoltage * 0.320;
     float y = Application::state.piezoYVoltage * 0.320;
     previousImageEnd = float2(x, y);

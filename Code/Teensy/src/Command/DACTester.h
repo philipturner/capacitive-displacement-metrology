@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Command/Parsing/Command.h"
+#include "Time/KilohertzLoop.h"
 
 struct DACTester {
-  static constexpr uint32_t wavePeriod = 1008;
+  static constexpr uint32_t wavePeriod = KilohertzLoopRound(1000);
 
   DACTester();
   DACTester(Command command);

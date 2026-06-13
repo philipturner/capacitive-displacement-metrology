@@ -2,6 +2,7 @@
 
 #include "Command/Parsing/Command.h"
 #include "Diagnostics/CapacitanceTracker.h"
+#include "Time/KilohertzLoop.h"
 
 struct BlindStepper {
   enum class Mode {
@@ -17,7 +18,7 @@ struct BlindStepper {
     finished = 3,
   };
 
-  static constexpr uint32_t wavePeriod = 1200;
+  static constexpr uint32_t wavePeriod = 2 * KilohertzLoopRound(600);
 
   BlindStepper();
   BlindStepper(Command command);

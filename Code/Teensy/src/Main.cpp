@@ -7,14 +7,17 @@
 #include "Util/WaveUtil.h"
 #include <Arduino.h>
 
-#include "Filter/Creep/TestProgram.h"
-
 void kilohertzLoop();
 
 void setup() {
   Application::initialize();
 
-  Creep::runTestProgram();
+  Serial.println("Hello world.");
+  Serial.println(BlindStepper::wavePeriod);
+  Serial.println(Spectroscopy::voltageSlewPeriod);
+  Serial.println(Spectroscopy::positionSettlePeriod);
+  Serial.println(Spectroscopy::integratePeriod);
+  Serial.println(Imager::largeMoveRiseTime);
   exit(0);
 
   KilohertzLoop::initialize(kilohertzLoop);
@@ -52,7 +55,7 @@ void kilohertzLoop() {
     Application::mode = nextCommand.mode;
     Application::state.modeStartIterationID = KilohertzLoop::iterationID;
     Application::state.capacitanceUpdateCount = 0;
-    
+
     if (Application::mode == Command::Mode::dacTest) {
       Application::dacTester = DACTester(nextCommand);
     }

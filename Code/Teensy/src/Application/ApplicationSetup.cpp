@@ -10,7 +10,6 @@
 void Application::initialize() {
   setupSerial();
   setupSPI();
-  Spectroscopy::fillAutoVZPairs();
   Feedback::notchFilter = NotchFilter(true);
 }
 

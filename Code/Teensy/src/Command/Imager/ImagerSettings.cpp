@@ -27,8 +27,7 @@ void Imager::updatePendingSettings(Command command) {
     }
     case 'l': {
       uint32_t time = command.attributes[0];
-      time += KilohertzLoop::period - 1;
-      time -= time % KilohertzLoop::period;
+      time = KilohertzLoopRound(time);
 
       uint32_t maxTime = (PixelBuffer::capacity - 1) * Imager::pixelTime;
       time = min(time, maxTime);
@@ -49,9 +48,8 @@ void Imager::updatePendingSettings(Command command) {
     }
     case 's': {
       uint32_t time = command.attributes[0] * 1000;
-      time += KilohertzLoop::period - 1;
-      time -= time % KilohertzLoop::period;
-
+      time = KilohertzLoopRound(time);
+      
       pendingSettings.creepSettlingTime = time;
       break;
     }

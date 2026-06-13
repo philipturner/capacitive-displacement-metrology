@@ -3,8 +3,6 @@
 #include <inplace_function.h>
 #include <IntervalTimer.h>
 
-// TODO: Macro for rounding constexpr delays to a multiple of the loop period.
-
 struct KilohertzLoop {
   static inline IntervalTimer timer;
   static inline teensy::inplace_function<void(void), 16> loopBody;
@@ -31,3 +29,11 @@ struct KilohertzLoop {
     int32_t number2,
     int32_t number3);
 };
+
+constexpr uint32_t KilohertzLoopRound(uint32_t desired) {
+  uint32_t output = desired;
+  output += KilohertzLoop::period - 1;
+  output /= KilohertzLoop::period;
+  output *= KilohertzLoop::period;
+  return output;
+}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Command/Parsing/Command.h"
+#include "Time/KilohertzLoop.h"
 
 struct Spectroscopy {
   struct VZPair {
@@ -17,14 +18,14 @@ struct Spectroscopy {
     float signBallot[3] = { 0, 0, 0 };
   };
   
-  static constexpr uint32_t voltageSlewPeriod = 120;
-  static constexpr uint32_t positionSettlePeriod = 2496;
-  static constexpr uint32_t integratePeriod = 1008;
+  static constexpr uint32_t voltageSlewPeriod = KilohertzLoopRound(120);
+  static constexpr uint32_t positionSettlePeriod = KilohertzLoopRound(2500);
+  static constexpr uint32_t integratePeriod = KilohertzLoopRound(1000);
   static constexpr uint32_t feedbackTime = 30000;
   static constexpr uint32_t trialsPerResult = 10;
 
-  static constexpr bool autoTypeIsPosition = true;
-  static constexpr uint32_t numAutoVZPairs = 121;
+  static constexpr bool autoTypeIsPosition = false;
+  static constexpr uint32_t numAutoVZPairs = 1;
   static inline VZPair autoVZPairs[numAutoVZPairs];
   static void fillAutoVZPairs();
 

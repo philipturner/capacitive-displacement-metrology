@@ -96,7 +96,7 @@ void Creep::runTestProgram() {
     filter.update(voltage);
 
     Serial.println("creep filter:");
-    for (uint32_t queueID = 0; queueID < Settings::queueCount; ++queueID) {
+    for (uint32_t queueID = 0; queueID < Queue::queueCount; ++queueID) {
       if (queueID < 25) {
         continue;
       }
@@ -115,14 +115,14 @@ void Creep::runTestProgram() {
       for (uint32_t sampleID = startIndex; sampleID < endIndex; ++sampleID) {
         auto sample = queue.get(sampleID);
 
-        Serial.print("- samples[");
+        Serial.print("  - samples[");
         Serial.print(sampleID - startIndex);
         Serial.print("]: ");
         Serial.print(sample.dV.x);
         Serial.print(", ");
-        Serial.print(sample.time);
-        Serial.print(", ");
         Serial.print(sample.queueTime);
+        Serial.print(", ");
+        Serial.print(sample.trueTimeOffset);
         Serial.println();
       }
     }
@@ -133,60 +133,3 @@ void Creep::runTestProgram() {
 
   displayExecutionTime(checkpoint2 - checkpoint1, timeLimit);
 }
-
-// 10000 iterations with waveTypeStep: end sample count = 27 (avg. 26)
-// 20000 iterations with sine wave: end sample count = 29 (avg. 28)
-
-// Existing code:
-// 20000 iterations with period=40 sine wave
-// default compiler settings: 6191 ns
-// OPT_FASTEST_LTO: 5352 ns
-//
-// 10000 iterations with waveTypeStep: 4897 ns
-//   without supersampling: 2493 ns
-//   optimization 1 to arithmetic: 4420 ns
-//   optimization 2 to arithmetic: 4256 ns
-// 20000 iterations with sine wave: 5352 ns
-//   without supersampling: 2926 ns
-//   optimization 1 to arithmetic: 4877 ns
-//   optimization 2 to arithmetic: 4696 ns
-//
-// after altering structure of Sample:
-// 10000 iterations with waveTypeStep: 4468 ns
-//   grouping into one buffer: 4448 ns
-//   32-byte alignment: 4448 ns
-//   removing the memory access entirely: 3649 ns
-//   instead, removing supersampling: 2695 ns
-//   removing supersampling and FP recip: 1987 ns
-// 20000 iterations with sine wave: 5058 ns
-//   grouping into one buffer: 4866 ns
-//   32-byte alignment: 4866 ns
-//   removing the memory access entirely: 4090 ns
-//   instead, removing supersampling: 3123 ns
-//   removing supersampling and FP recip: 2311 ns
-
-// Makeup of latency:
-// iterate through loop with single integer add: 2.35 cycles/iter
-// empty loop iterations = 2.15 cycles per iteration
-//
-// 10000, waveTypeStep: 4448 ns
-// - wave generation: 226 ns
-// - loop iteration: 102 ns
-// - memory: 799 ns
-// - FP recip: 708 ns
-// - supersampling: 1753 ns
-// - everything else: 860 ns
-//
-// 20000, sine wave: 4866 ns
-// - wave generation: 397 ns
-// - loop iteration: 110 ns
-// - memory: 776 ns
-// - FP recip: 812 ns
-// - supersampling: 1743 ns
-// - everything else: 1028 ns
-
-// after adding lookup table:
-// 10000, waveTypeStep: 4500 -> 2998
-//   increasing supersamplingRate to 200: 2972
-// 20000, sine wave: 4938 -> 3449
-//   increasing supersamplingRate to 200: 3431

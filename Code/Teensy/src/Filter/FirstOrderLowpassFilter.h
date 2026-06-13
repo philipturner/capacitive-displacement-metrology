@@ -1,14 +1,11 @@
 #pragma once
 
+#include "Time/KilohertzLoop.h"
 #include <math.h>
-#include <stdint.h>
 
 struct FirstOrderLowpassFilter {
-  static float getAlpha(
-    float frequency,
-    uint32_t loopPeriodMicros
-  ) {
-    float sampleTimeSeconds = float(1e-6) * float(loopPeriodMicros);
+  static float getAlpha(float frequency) {
+    float sampleTimeSeconds = float(1e-6) * float(KilohertzLoop::period);
     float timeConstant = 1 / (2 * M_PI * frequency);
     return sampleTimeSeconds / (timeConstant + sampleTimeSeconds);
   }

@@ -13,9 +13,6 @@ namespace Creep {
     // performance degradation when reading from this.
     static inline Sample buffer[queueCapacity * queueCount];
 
-    // TODO: Attempt a memory optimization
-    // - bufferOffset -> recomputed
-    // - startIndex, endIndex -> uint16_t
     uint32_t bufferOffset;
     uint32_t maxTime;
     uint32_t startIndex = 0;

@@ -17,11 +17,11 @@ Imager::Imager(Command command) {
   settings = Imager::pendingSettings;
 
   if (resolutionMajor <= 32) {
-    polynomialPeakTime = 1008;
+    polynomialPeakTime = KilohertzLoopRound(1000);
   } else if (resolutionMajor <= 48) {
-    polynomialPeakTime = 1500;
+    polynomialPeakTime = KilohertzLoopRound(1500);
   } else {
-    polynomialPeakTime = 2004;
+    polynomialPeakTime = KilohertzLoopRound(2000);
   }
   
   adjustScanFrequency();
