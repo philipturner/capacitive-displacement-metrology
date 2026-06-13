@@ -9,7 +9,7 @@ namespace Creep {
     float2 futureAccumulatedDrift = float2(0);
 
     Queue queues[Settings::queueCount];
-
+    
     Filter();
     Filter(bool notDefaultConstructor);
     void forwardState() const;

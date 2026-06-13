@@ -5,7 +5,7 @@
 
 using namespace Creep;
 
-uint32_t timeLimit = 10000;
+uint32_t timeLimit = 20000;
 bool displayResults = true;
 
 void displayExecutionTime(uint32_t deltaMicros, uint32_t iters) {
@@ -33,9 +33,10 @@ void Creep::runTestProgram() {
 
   uint32_t checkpoint1 = micros();
   for (uint32_t time = 0; time < timeLimit; ++time) {
-    float2 voltage;
-    float2 position;
-    float2 creepRate;
+    float2 voltage = float2(0);
+    float2 position = float2(0);
+    float2 creepRate = float2(0);
+    /*
     if (time < stepVoltageTime) {
       voltage = float2(0);
       position = float2(0);
@@ -51,6 +52,13 @@ void Creep::runTestProgram() {
       position = float2(1 + creepConstant * log(dt));
       creepRate = float2(creepConstant / dt);
     }
+      */
+
+    uint32_t wavePeriod = 40;
+    uint32_t phase = time % wavePeriod;
+    float phaseNormalized = float(phase) / float(wavePeriod);
+    float sineValue = sin(2 * M_PI * phaseNormalized);
+    voltage = float2(sineValue);
 
     #if true
 
@@ -62,7 +70,7 @@ void Creep::runTestProgram() {
       displayQuantity("V", voltage.x);
 
       auto simulatedPosition = voltage + filter.futureAccumulatedDrift;
-      displayQuantity("x", position.x);
+      displayQuantity("x", filter.futureAccumulatedDrift.x);
       displayQuantity("x", simulatedPosition.x);
 
       auto simulatedCreepRate = filter.currentCreepRate;
@@ -101,7 +109,7 @@ void Creep::runTestProgram() {
       uint32_t startIndex = queue.startIndex;
       uint32_t endIndex = queue.endIndex;
       for (uint32_t sampleID = startIndex; sampleID < endIndex; ++sampleID) {
-        auto sample = queue[sampleID];
+        auto sample = queue.get(sampleID);
 
         Serial.print("- samples[");
         Serial.print(sampleID - startIndex);

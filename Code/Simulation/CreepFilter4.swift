@@ -1,6 +1,6 @@
 import Foundation
 
-let timeLimit: Int = 10000
+let timeLimit: Int = 20000
 let displayResults: Bool = true
 
 // MARK: - Data Type Switching
@@ -282,6 +282,7 @@ for time in 0..<timeLimit {
   var voltage: VectorType = .zero
   var position: VectorType = .zero
   var creepRate: VectorType = .zero
+  /*
   if time < stepVoltageTime {
     voltage = .zero
     position = .zero
@@ -297,6 +298,13 @@ for time in 0..<timeLimit {
     position = vectorInit(repeating: 1) * (1 + creepConstant * log(dt))
     creepRate = vectorInit(repeating: 1) * (creepConstant / dt)
   }
+   */
+  
+  let wavePeriod: Int = 40
+  let phase = time % wavePeriod
+  let phaseNormalized = Float(phase) / Float(wavePeriod)
+  let sineValue = sin(2 * Float.pi * phaseNormalized)
+  voltage = SIMD2<Float>(repeating: sineValue)
   
   func pad(_ string: String, length: Int) -> String {
     var output = string
@@ -315,7 +323,7 @@ for time in 0..<timeLimit {
     print("V:", display(voltage), terminator: " | ")
     
     let simulatedPosition = voltage + creepFilter.futureAccumulatedDrift
-    print("x:", display(position), terminator: " | ")
+    print("x:", display(creepFilter.futureAccumulatedDrift), terminator: " | ")
     print("x:", display(simulatedPosition), terminator: " | ")
     
     let simulatedCreepRate = creepFilter.currentCreepRate

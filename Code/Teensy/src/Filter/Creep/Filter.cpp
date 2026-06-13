@@ -67,9 +67,20 @@ void Filter::update(float2 stimulus) {
 float2 Filter::shiftSampleTimes() {
   float2 accumulator = float2(0);
   for (uint32_t queueID = 0; queueID < Settings::queueCount; ++queueID) {
+    //uint32_t bufferOffset = queueID * Settings::queueCapacity;
     uint32_t startIndex = queues[queueID].startIndex;
     uint32_t endIndex = queues[queueID].endIndex;
     for (uint32_t sampleID = startIndex; sampleID < endIndex; ++sampleID) {
+      /*
+      uint32_t slotID = bufferOffset + (sampleID % Settings::queueCapacity);
+      float time = Queue::buffer2[slotID];
+      float queueTime = Queue::buffer3[slotID];
+      time += 1;
+      queueTime += 1;
+      Queue::buffer2[slotID] = time;
+      Queue::buffer3[slotID] = queueTime;
+      */
+
       Sample sample = queues[queueID].get(sampleID);
       sample.time += 1;
       sample.queueTime += 1;
@@ -79,21 +90,47 @@ float2 Filter::shiftSampleTimes() {
       float dtInv = 1 / dt;
       float sampleCount = Settings::supersamplingRate * dtInv;
 
+      // disparity from removing supersampling:
+      //
+      // expected:
+      // t:  194 | V: -0.809017 | x: -0.005817 | x: -0.814834 | dx: 0.000000 | dx: -0.000262 | 
+      // t:  195 | V: -0.707107 | x: -0.005897 | x: -0.713004 | dx: 0.000000 | dx: -0.000080 | 
+      // t:  196 | V: -0.587786 | x: -0.005800 | x: -0.593586 | dx: 0.000000 | dx: 0.000097 | 
+      // t:  197 | V: -0.453991 | x: -0.005522 | x: -0.459512 | dx: 0.000000 | dx: 0.000279 | 
+      // t:  198 | V: -0.309017 | x: -0.005072 | x: -0.314089 | dx: 0.000000 | dx: 0.000450 | 
+      // t:  199 | V: -0.156435 | x: -0.004463 | x: -0.160898 | dx: 0.000000 | dx: 0.000609 | 
+      //
+      // actual:
+      // t: 194 | V: -0.809017 | x: -0.007299 | x: -0.816316 | dx: 0.000000 | dx: -0.000196 | 
+      // t: 195 | V: -0.707107 | x: -0.007278 | x: -0.714384 | dx: 0.000000 | dx: 0.000022 | 
+      // t: 196 | V: -0.587785 | x: -0.007043 | x: -0.594828 | dx: 0.000000 | dx: 0.000235 | 
+      // t: 197 | V: -0.453990 | x: -0.006596 | x: -0.460587 | dx: 0.000000 | dx: 0.000447 | 
+      // t: 198 | V: -0.309017 | x: -0.005953 | x: -0.314970 | dx: 0.000000 | dx: 0.000643 | 
+      // t: 199 | V: -0.156434 | x: -0.005129 | x: -0.161563 | dx: 0.000000 | dx: 0.000824 | 
+      //
+      // try a lookup table approach
+      float localAccumulator;
       if (sampleCount <= 1) {
-        accumulator += sample.dV * dtInv;
+        localAccumulator = dtInv;
       } else {
         float loopSize = ceil(sampleCount);
         float loopSizeInv = 1 / loopSize;
-        float localAccumulator = 0;
+        localAccumulator = 0;
 
         for (float i = 0; i < loopSize; ++i) {
           float offset = i * loopSizeInv;
           localAccumulator += 1 / (dt + offset);
         }
         localAccumulator *= loopSizeInv;
-
-        accumulator += sample.dV * localAccumulator;
       }
+
+      /*
+      float dVx = Queue::buffer0[slotID];
+      float dVy = Queue::buffer1[slotID];
+      accumulator.x += dVx * localAccumulator;
+      accumulator.y += dVy * localAccumulator;
+      */
+     accumulator += sample.dV * localAccumulator;
     }
   }
   return accumulator;
