@@ -6,7 +6,7 @@
 using namespace Creep;
 
 uint32_t timeLimit = 20000;
-bool displayResults = false;
+bool displayResults = true;
 bool waveTypeStep = false;
 
 void displayExecutionTime(uint32_t deltaMicros, uint32_t iters) {
@@ -143,6 +143,8 @@ void Creep::runTestProgram() {
 // 10000 iterations with waveTypeStep: 4897 ns
 //   without supersampling: 2493 ns
 //   optimization 1 to arithmetic: 4420 ns
+//   optimization 2 to arithmetic: 4256 ns
 // 20000 iterations with sine wave: 5352 ns
 //   without supersampling: 2926 ns
 //   optimization 1 to arithmetic: 4877 ns
+//   optimization 2 to arithmetic: 4696 ns

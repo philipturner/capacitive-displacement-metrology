@@ -88,8 +88,7 @@ float2 Filter::shiftSampleTimes() {
 
       float dt = sample.time;
       float dtInv = 1 / dt;
-      float sampleCount = Settings::supersamplingRate * dtInv;
-
+      
       // disparity from removing supersampling:
       //
       // expected:
@@ -110,18 +109,12 @@ float2 Filter::shiftSampleTimes() {
       //
       // try a lookup table approach
       float localAccumulator = 0;
-      if (sampleCount <= 1) {
+      if (dt >= Settings::supersamplingRate) {
         localAccumulator = dtInv;
       } else {
+        float sampleCount = Settings::supersamplingRate * dtInv;
         float loopSize = ceil(sampleCount);
-
-        // Try changing this to an integer loop and seeing the change in performance.
-        //
-        // 10000 iterations with waveTypeStep
-        // before (float loop): 4899 ns
-        // after (uint32_t loop): 4720 ns
-        // optimization 1 (uint32_t loop): 4464 ns
-        // optimization 1 (float loop): 4422 ns
+        
         for (float i = 0; i < loopSize; ++i) {
           float denominator = dt * loopSize + i;
           localAccumulator += 1 / denominator;

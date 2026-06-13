@@ -149,14 +149,13 @@ struct CreepFilter {
         
         var dt = Float(timeOffset - sample.queueTime)
         dt -= sample.trueTimeOffset
-        
         let dtInv = 1 / dt
-        let sampleCount = Float(Self.supersamplingRate) * dtInv
         
         var localAccumulator: Float = 0
-        if sampleCount <= 1 {
+        if dt >= Self.supersamplingRate {
           localAccumulator = dtInv
         } else {
+          let sampleCount = Self.supersamplingRate * dtInv
           let loopSize = ceil(sampleCount)
           for i in 0..<Int(loopSize) {
             let denominator = dt * loopSize + Float(i)
