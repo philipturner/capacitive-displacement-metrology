@@ -14,8 +14,9 @@ Queue::Queue(float maxTime) {
 
 void Queue::insert(Sample sample) {
   if (endIndex - startIndex >= capacity) {
-    Serial.println("Exceeded capacity of ring buffer.");
-    exit(0);
+    // Serial.println("Exceeded capacity of ring buffer.");
+    // exit(0);
+    startIndex += 1;
   }
 
   (*this)[endIndex] = sample;

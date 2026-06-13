@@ -48,12 +48,42 @@ void Filter::update(float2 stimulus) {
 }
 
 float2 Filter::shiftSampleTimes() {
-  float2 accumulator = float2(0);
+  uint32_t buffer[200];
+
+  uint32_t accumulator = 0;
   for (uint32_t queueID = 0; queueID < Settings::queueCount; ++queueID) {
-    uint32_t startIndex = queues[queueID].startIndex;
-    uint32_t endIndex = queues[queueID].endIndex;
+    
+    // uint32_t startIndex = queues[queueID].startIndex;
+    // uint32_t endIndex = queues[queueID].endIndex;
+
+    // The indices are spaced by 100
+    // Nothing happens during inner loop: 258 ns
+    // 50 iterations of integer add: 454 ns
+    // 100 iterations of integer add: 620 ns
+    // 100 iterations reading from stack buffer: 959 ns
+    // 100 iterations with indices known at compile time: 613 ns
+    // with integer modulus Queue::capacity: 2298 ns
+    // changing Queue::capacity to 128: 1528 ns
+    // not doing the above, but randomly changing Queue.data to have 128 size:
+    // 958 -> 1286 ns
+    // changing it to have size 500:
+    // 958 ns
+    // 511-513: 1284 ns
+    // anything 510 and below: 956 ns
+    auto queue = queues[queueID];
+    uint32_t startIndex = queue.startIndex;
+    uint32_t endIndex = queue.endIndex;
     for (uint32_t sampleID = startIndex; sampleID < endIndex; ++sampleID) {
-      Sample sample = queues[queueID][sampleID];
+    // for (uint32_t sampleID = 0; sampleID < 100; ++sampleID) {
+      // Sample sample = queue.data[sampleID % 4];
+      // accumulator += float(1 / (sample.time + 1));
+
+      //float time = buffer[(sampleID - startIndex) % 4];
+      //accumulator += buffer[sampleID % 64]; // float(1 / (time + 1));
+      // accumulator += buffer[sampleID % 64];
+      accumulator += buffer[sampleID % 128];
+
+      /*
       sample.time += 1;
       sample.queueTime += 1;
       queues[queueID][sampleID] = sample;
@@ -61,9 +91,11 @@ float2 Filter::shiftSampleTimes() {
       float dt = sample.time;
       float dtInv = 1 / dt;
       float sampleCount = Settings::supersamplingRate * dtInv;
+      */
 
-      if (sampleCount <= 1) {
-        accumulator += sample.dV * dtInv;
+      //if (sampleCount <= 1) {
+      //accumulator += sample.dV * dtInv;
+        /*
       } else {
         float loopSize = ceil(sampleCount);
         float loopSizeInv = 1 / loopSize;
@@ -77,9 +109,10 @@ float2 Filter::shiftSampleTimes() {
 
         accumulator += sample.dV * localAccumulator;
       }
+        */
     }
   }
-  return accumulator;
+  return float2(float(accumulator));
 }
 
 void Filter::updateCreepRate(float2 accumulator) {

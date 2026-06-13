@@ -6,11 +6,12 @@
 namespace Creep {
   struct Queue {
     static constexpr uint32_t capacity = Settings::logScaleResolution + 1;
+    // static constexpr uint32_t capacity = 128;
 
     float maxTime;
     uint32_t startIndex = 0;
     uint32_t endIndex = 0;
-    Sample data[capacity];
+    Sample data[506];
 
     Queue();
     Queue(float maxTime);

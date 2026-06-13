@@ -5,7 +5,7 @@
 
 using namespace Creep;
 
-uint32_t timeLimit = 100000;
+uint32_t timeLimit = 10000;
 bool displayResults = false;
 
 void displayExecutionTime(uint32_t deltaMicros, uint32_t iters) {
@@ -54,22 +54,22 @@ void Creep::runTestProgram() {
 
     #if true
 
-    // if (displayResults) {
-    //   Serial.print("t: ");
-    //   Serial.print(time);
-    //   Serial.print(" | ");
+    if (displayResults) {
+      Serial.print("t: ");
+      Serial.print(time);
+      Serial.print(" | ");
 
-    //   displayQuantity("V", voltage.x);
+      displayQuantity("V", voltage.x);
 
-    //   auto simulatedPosition = voltage + filter.futureAccumulatedDrift;
-    //   displayQuantity("x", position.x);
-    //   displayQuantity("x", simulatedPosition.x);
+      auto simulatedPosition = voltage + filter.futureAccumulatedDrift;
+      displayQuantity("x", position.x);
+      displayQuantity("x", simulatedPosition.x);
 
-    //   auto simulatedCreepRate = filter.currentCreepRate;
-    //   displayQuantity("dx", creepRate.x);
-    //   displayQuantity("dx", simulatedCreepRate.x);
-    //   Serial.println();
-    // }
+      auto simulatedCreepRate = filter.currentCreepRate;
+      displayQuantity("dx", creepRate.x);
+      displayQuantity("dx", simulatedCreepRate.x);
+      Serial.println();
+    }
 
     filter.update(voltage);
 
