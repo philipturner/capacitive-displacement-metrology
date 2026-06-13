@@ -6,8 +6,8 @@
 namespace Creep {
   struct Sample {
     float2 dV = 0;
-    float time = 0;
-    float queueTime = 0;
+    uint32_t twiceQueueTime = 0;
+    float trueTimeOffset = 0;
 
     Sample();
 
