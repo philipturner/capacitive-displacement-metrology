@@ -5,7 +5,7 @@
 
 using namespace Creep;
 
-uint32_t timeLimit = 200;
+uint32_t timeLimit = 20000;
 bool displayResults = true;
 bool waveTypeStep = false;
 
@@ -185,3 +185,8 @@ void Creep::runTestProgram() {
 // - supersampling: 1743 ns
 // - everything else: 1028 ns
 
+// after adding lookup table:
+// 10000, waveTypeStep: 4500 -> 2998
+//   increasing supersamplingRate to 200: 2972
+// 20000, sine wave: 4938 -> 3449
+//   increasing supersamplingRate to 200: 3431

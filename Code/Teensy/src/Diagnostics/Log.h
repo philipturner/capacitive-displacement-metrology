@@ -3,6 +3,8 @@
 #include <stdint.h>
 
 struct Log {
+  // TODO: Change this to 64 when the loop period is changed from 16 to 12.
+  // Change the logPeriod variable in the host program as well.
   static constexpr uint32_t logPeriod = 72;
   static constexpr uint32_t logSize = 9000;
 

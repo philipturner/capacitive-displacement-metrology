@@ -12,12 +12,13 @@ namespace Creep {
     float2 futureAccumulatedDrift = float2(0);
 
     Queue queues[Queue::queueCount];
+    LookupTable lookupTable;
     uint32_t timeOffset = 0;
     
     Filter();
     Filter(bool notDefaultConstructor);
-    void registerSettingsCommand(Command command); // TODO
     void forwardState() const;
+    void registerSettingsCommand(Command command); // TODO
     void update(float2 stimulus);
 
   private:

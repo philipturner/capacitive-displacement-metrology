@@ -16,6 +16,8 @@ Filter::Filter(bool notDefaultConstructor) {
 
     queues[queueID] = Queue(queueID, maxTime);
   }
+
+  lookupTable = LookupTable(true);
 }
 
 void Filter::forwardState() const {
@@ -25,6 +27,12 @@ void Filter::forwardState() const {
     creepConstants.y,
     futureAccumulatedDrift.x,
     futureAccumulatedDrift.y);
+}
+
+void Filter::registerSettingsCommand(Command command) {
+  // TODO: Implement
+
+  forwardState();
 }
 
 void Filter::update(float2 stimulus) {
@@ -61,38 +69,13 @@ float2 Filter::shiftSampleTimes() {
       
       float dt = float(timeOffset - sample.queueTime);
       dt -= sample.trueTimeOffset;
-      float dtInv = 1 / dt;
 
-      // disparity from removing supersampling:
-      //
-      // expected:
-      // t:  194 | V: -0.809017 | x: -0.005817 | x: -0.814834 | dx: 0.000000 | dx: -0.000262 | 
-      // t:  195 | V: -0.707107 | x: -0.005897 | x: -0.713004 | dx: 0.000000 | dx: -0.000080 | 
-      // t:  196 | V: -0.587786 | x: -0.005800 | x: -0.593586 | dx: 0.000000 | dx: 0.000097 | 
-      // t:  197 | V: -0.453991 | x: -0.005522 | x: -0.459512 | dx: 0.000000 | dx: 0.000279 | 
-      // t:  198 | V: -0.309017 | x: -0.005072 | x: -0.314089 | dx: 0.000000 | dx: 0.000450 | 
-      // t:  199 | V: -0.156435 | x: -0.004463 | x: -0.160898 | dx: 0.000000 | dx: 0.000609 | 
-      //
-      // actual:
-      // t: 194 | V: -0.809017 | x: -0.007299 | x: -0.816316 | dx: 0.000000 | dx: -0.000196 | 
-      // t: 195 | V: -0.707107 | x: -0.007278 | x: -0.714384 | dx: 0.000000 | dx: 0.000022 | 
-      // t: 196 | V: -0.587785 | x: -0.007043 | x: -0.594828 | dx: 0.000000 | dx: 0.000235 | 
-      // t: 197 | V: -0.453990 | x: -0.006596 | x: -0.460587 | dx: 0.000000 | dx: 0.000447 | 
-      // t: 198 | V: -0.309017 | x: -0.005953 | x: -0.314970 | dx: 0.000000 | dx: 0.000643 | 
-      // t: 199 | V: -0.156434 | x: -0.005129 | x: -0.161563 | dx: 0.000000 | dx: 0.000824 | 
-      //
-      // try a lookup table approach
-      float localAccumulator = 0;
+      float localAccumulator;
       if (dt >= float(LookupTable::supersamplingRate)) {
-        localAccumulator = dtInv;
+        localAccumulator = 1 / dt;
       } else {
-        float sampleCount = float(LookupTable::supersamplingRate) * dtInv;
-        float loopSize = ceil(sampleCount);
-
-        for (float i = 0; i < loopSize; ++i) {
-          float denominator = dt * loopSize + i;
-          localAccumulator += 1 / denominator;
-        }
+        uint32_t binID = lookupTable.getBinID(dt);
+        localAccumulator = lookupTable.bins[binID];
       }
       accumulator += sample.dV * localAccumulator;
     }

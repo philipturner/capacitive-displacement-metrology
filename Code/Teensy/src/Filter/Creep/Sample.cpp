@@ -2,8 +2,6 @@
 
 #include <math.h>
 
-#include <Arduino.h> // temp; debugging
-
 using namespace Creep;
 
 float getMagnitude(Sample sample) {
