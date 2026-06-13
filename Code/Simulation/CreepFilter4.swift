@@ -13,6 +13,17 @@ let waveTypeStep: Bool = false
 // t: 19999 | V: -0.156435 | x: 0.019107  | x: -0.137327 | dx: 0.000000 | dx: 0.000644 |
 
 
+
+// with latest changes:
+//
+// step voltage evolution:
+// t:   99 | V: 1.000000 | x: 1.016570 | x: 1.017102 | dx: 0.000041 | dx: 0.000041 |
+// t: 9999 | V: 1.000000 | x: 1.033996 | x: 1.034507 | dx: 0.000000 | dx: 0.000000 |
+//
+// sine stimulus evolution:
+// t:  199 | V: -0.156435 | x: -0.004463 | x: -0.160898 | dx: 0.000000 | dx: 0.000609 |
+// t: 19999 | V: -0.156435 | x: 0.019108 | x: -0.137327 | dx: 0.000000 | dx: 0.000644 |
+
 // MARK: - Data Type Switching
 
 #if true
@@ -65,7 +76,7 @@ struct CreepFilter {
   var futureAccumulatedDrift: VectorType = .zero
   
   var queues: [Queue] = []
-  var timeOffset: Int = .zero
+  var timeOffset: UInt32 = .zero
   
   init() {
     for queueID in 0..<Self.queueCount {
@@ -81,8 +92,8 @@ struct CreepFilter {
     // Responding to the DAC updates from the current iteration.
     var sample = Sample()
     sample.dV = stimulus - previousStimulus
-    sample.trueTimeOffset = Float(0)
-    sample.queueTime = Float(timeOffset)
+    sample.trueTimeOffset = 0
+    sample.queueTime = timeOffset
     previousStimulus = stimulus
     
     let queueID = Self.queueCount - 1
@@ -106,6 +117,7 @@ struct CreepFilter {
   // t: 19999 | V: -0.15643483 | x: 0.01913506 | x: -0.13729978 | dx: 0.00000000 | dx: 0.00064441 | (first shift to true time offset)
   // t: 19999 | V: -0.15643483 | x: 0.01912511 | x: -0.13730973 | dx: 0.00000000 | dx: 0.00064439 | (second modification)
   // t: 19999 | V: -0.15643483 | x: 0.01910781 | x: -0.13732703 | dx: 0.00000000 | dx: 0.00064441 | (third modification)
+  // t: 19999 | V: -0.15643483 | x: 0.01910785 | x: -0.13732699 | dx: 0.00000000 | dx: 0.00064441 |
   
   // queueTime with v1, time with v2:
   // t:  199 | V: -0.15643483 | x: -0.00446337 | x: -0.16089821 | dx: 0.00000000 | dx: 0.00060858 |
@@ -123,6 +135,7 @@ struct CreepFilter {
   // t: 19999 | V: -0.15643483 | x: 0.01910780 | x: -0.13732703 | dx: 0.00000000 | dx: 0.00064441 | (first shift to true time offset)
   // t: 19999 | V: -0.15643483 | x: 0.01910781 | x: -0.13732703 | dx: 0.00000000 | dx: 0.00064441 | (second modification)
   // t: 19999 | V: -0.15643483 | x: 0.01910781 | x: -0.13732703 | dx: 0.00000000 | dx: 0.00064441 | (third modification)
+  // t: 19999 | V: -0.15643483 | x: 0.01910785 | x: -0.13732699 | dx: 0.00000000 | dx: 0.00064441 | (fourth modification)
   
   private mutating func shiftSampleTimes() -> VectorType {
     timeOffset += 1
@@ -132,12 +145,9 @@ struct CreepFilter {
       let startIndex = queues[queueID].startIndex
       let endIndex = queues[queueID].endIndex
       for sampleID in startIndex..<endIndex {
-        var sample = queues[queueID][sampleID]
-//        sample.time -= 1
-//        sample.queueTime -= 1
-        queues[queueID][sampleID] = sample
+        let sample = queues[queueID][sampleID]
         
-        var dt = Float(timeOffset) - sample.queueTime
+        var dt = Float(timeOffset - sample.queueTime)
         dt -= sample.trueTimeOffset
         
         let dtInv = 1 / dt
@@ -209,7 +219,7 @@ struct CreepFilter {
 extension CreepFilter {
   struct Sample {
     var dV: VectorType = .zero
-    var queueTime: Float = .zero
+    var queueTime: UInt32 = .zero
     var trueTimeOffset: Float = .zero
     
     init() {
@@ -221,7 +231,7 @@ extension CreepFilter {
       queueTime = (source1.queueTime + source2.queueTime) / 2
       
       trueTimeOffset = Self.getWeightedTime(source1, source2)
-      trueTimeOffset += source1.queueTime - queueTime
+      trueTimeOffset -= Float(queueTime - source1.queueTime)
     }
     
     static func getMagnitude(_ sample: Sample) -> Float {
@@ -232,9 +242,13 @@ extension CreepFilter {
       _ source1: Sample,
       _ source2: Sample
     ) -> Float {
+      guard source1.queueTime < source2.queueTime else {
+        fatalError("Sources were not ordered.")
+      }
+      
       let relativeTime1 = source1.trueTimeOffset
       var relativeTime2 = source2.trueTimeOffset
-      relativeTime2 += source2.queueTime - source1.queueTime
+      relativeTime2 += Float(source2.queueTime - source1.queueTime)
       
       let magnitude1 = getMagnitude(source1)
       let magnitude2 = getMagnitude(source2)
@@ -293,7 +307,7 @@ extension CreepFilter {
       endIndex += 1
     }
     
-    func hasReadySample(timeOffset: Int) -> Bool {
+    func hasReadySample(timeOffset: UInt32) -> Bool {
       guard endIndex - startIndex >= 2 else {
         return false
       }
@@ -302,8 +316,8 @@ extension CreepFilter {
       let queueTime1 = self[startIndex + 1].queueTime
       let queueTimeCombined = (queueTime0 + queueTime1) / 2
       
-      let dt = Float(timeOffset) - Float(queueTimeCombined)
-      if dt > Float(maxTime) {
+      let dt = timeOffset - queueTimeCombined
+      if dt > maxTime {
         return true
       } else {
         return false
@@ -362,7 +376,7 @@ for time in 0..<timeLimit {
     return output
   }
   func display(_ number: VectorType) -> String {
-    let output = String(format: "%.8f", vectorFirst(number))
+    let output = String(format: "%.6f", vectorFirst(number))
     return output
   }
   
