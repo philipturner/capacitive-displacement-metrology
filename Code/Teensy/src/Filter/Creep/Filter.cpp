@@ -14,7 +14,7 @@ Filter::Filter(bool notDefaultConstructor) {
     uint32_t shiftAmount = (Settings::queueCount - 1) - queueID;
     uint32_t maxTime = Settings::logScaleResolution * (1 << shiftAmount);
 
-    queues[queueID] = Queue(queueID, float(maxTime));
+    queues[queueID] = Queue(queueID, maxTime);
   }
 }
 

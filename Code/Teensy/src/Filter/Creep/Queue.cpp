@@ -8,7 +8,7 @@ Queue::Queue() {
 
 }
 
-Queue::Queue(uint32_t id, float maxTime) {
+Queue::Queue(uint32_t id, uint32_t maxTime) {
   this->bufferOffset = id * Settings::queueCapacity;
   this->maxTime = maxTime;
 }

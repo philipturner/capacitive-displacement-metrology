@@ -33,5 +33,5 @@ Sample::Sample() {
 Sample::Sample(Sample source1, Sample source2) {
   dV = source1.dV + source2.dV;
   time = getWeightedTime(source1, source2);
-  queueTime = (source1.queueTime + source2.queueTime) / 2;
+  queueTime = (source1.queueTime + source2.queueTime + 1) / 2;
 }

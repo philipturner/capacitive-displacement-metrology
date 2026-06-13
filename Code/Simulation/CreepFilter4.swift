@@ -2,6 +2,7 @@ import Foundation
 
 let timeLimit: Int = 20000
 let displayResults: Bool = true
+let waveTypeStep: Bool = false
 
 // MARK: - Data Type Switching
 
@@ -276,35 +277,43 @@ extension CreepFilter {
 var creepFilter = CreepFilter()
 let stepVoltageTime: Int = 10
 
+// step voltage evolution:
+// t:   99 | V: 1.000000 | x: 1.016570 | x: 1.017102 | dx: 0.000041 | dx: 0.000041 |
+// t: 9999 | V: 1.000000 | x: 1.033996 | x: 1.034507 | dx: 0.000000 | dx: 0.000000 |
+//
+// sine stimulus evolution:
+// t:  199 | V: -0.156435 | x: -0.004463 | x: -0.160898 | dx: 0.000000 | dx: 0.000609 |
+// t: 19999 | V: -0.156435 | x: 0.019107 | x: -0.137327 | dx: 0.000000 | dx: 0.000644 |
+
 let checkpoint1 = Date().timeIntervalSince1970
 
 for time in 0..<timeLimit {
   var voltage: VectorType = .zero
   var position: VectorType = .zero
   var creepRate: VectorType = .zero
-  /*
-  if time < stepVoltageTime {
-    voltage = .zero
-    position = .zero
-    creepRate = .zero
-  } else if time == stepVoltageTime {
-    voltage = vectorInit(repeating: 1)
-    position = .zero
-    creepRate = .zero
+  if waveTypeStep {
+    if time < stepVoltageTime {
+      voltage = .zero
+      position = .zero
+      creepRate = .zero
+    } else if time == stepVoltageTime {
+      voltage = vectorInit(repeating: 1)
+      position = .zero
+      creepRate = .zero
+    } else {
+      let dt = Float(time - stepVoltageTime)
+      let creepConstant = CreepFilter.creepConstants / log(10)
+      voltage = vectorInit(repeating: 1)
+      position = vectorInit(repeating: 1) * (1 + creepConstant * log(dt))
+      creepRate = vectorInit(repeating: 1) * (creepConstant / dt)
+    }
   } else {
-    let dt = Float(time - stepVoltageTime)
-    let creepConstant = CreepFilter.creepConstants / log(10)
-    voltage = vectorInit(repeating: 1)
-    position = vectorInit(repeating: 1) * (1 + creepConstant * log(dt))
-    creepRate = vectorInit(repeating: 1) * (creepConstant / dt)
+    let wavePeriod: Int = 40
+    let phase = time % wavePeriod
+    let phaseNormalized = Float(phase) / Float(wavePeriod)
+    let sineValue = sin(2 * Float.pi * phaseNormalized)
+    voltage = SIMD2<Float>(repeating: sineValue)
   }
-   */
-  
-  let wavePeriod: Int = 40
-  let phase = time % wavePeriod
-  let phaseNormalized = Float(phase) / Float(wavePeriod)
-  let sineValue = sin(2 * Float.pi * phaseNormalized)
-  voltage = SIMD2<Float>(repeating: sineValue)
   
   func pad(_ string: String, length: Int) -> String {
     var output = string
@@ -323,7 +332,11 @@ for time in 0..<timeLimit {
     print("V:", display(voltage), terminator: " | ")
     
     let simulatedPosition = voltage + creepFilter.futureAccumulatedDrift
-    print("x:", display(creepFilter.futureAccumulatedDrift), terminator: " | ")
+    if waveTypeStep {
+      print("x:", display(position), terminator: " | ")
+    } else {
+      print("x:", display(creepFilter.futureAccumulatedDrift), terminator: " | ")
+    }
     print("x:", display(simulatedPosition), terminator: " | ")
     
     let simulatedCreepRate = creepFilter.currentCreepRate
@@ -347,71 +360,12 @@ func getFormattedTime(_ x: Double, _ int: Int) -> String {
 
 print(getFormattedTime(checkpoint2 - checkpoint1, timeLimit))
 
-// CreepFilter2.swift
-// t:   19 | V: 1.00000 | x: 1.00811 | x: 1.00842 | dx: 0.00041 | dx: 0.00040 |
-// t:   99 | V: 1.00000 | x: 1.01657 | x: 1.01706 | dx: 0.00004 | dx: 0.00004 |
-// t: 9999 | V: 1.00000 | x: 1.03400 |x: 1.03449 | dx: 0.00000 | dx: 0.00000 |
-//
-// timings for performance:
-// simple = 20, efficient = 1000
-// simple = 20, efficient = 10000
-// simple = 20, efficient = 100000
-//
-// updateRate = 100 | 150, 159, 174
-// updateRate = 1   | 227, 238, 258
-//
-//
-//
-// CreepFilter4.swift
-// t:   19 | V: 1.00000 | x: 1.00811 | x: 1.00842 | dx: 0.00041 | dx: 0.00040 |
-// t:   99 | V: 1.00000 | x: 1.01657 | x: 1.01706 | dx: 0.00004 | dx: 0.00004 |
-// t: 9999 | V: 1.00000 | x: 1.03400 | x: 1.03451 | dx: 0.00000 | dx: 0.00000 |
-//
-// timings for performance:
-// t = 1000
-// t = 10000
-// t = 100000
-//
-// SIMD2,  updateRate = 100 | 154, 159, 169
-// scalar, updateRate = 100 | 144, 150, 160
-// SIMD2,  updateRate = 1   | 204, 224, 243
-// scalar, updateRate = 1   | 196, 212, 231
-//
-//
-//
-// CreepFilter.swift, after optimizations:
-// t:   19 | V: 1.00000 | x: 1.00811 | x: 1.00842 | dx: 0.00041 | dx: 0.00040 |
-// t:   99 | V: 1.00000 | x: 1.01657 | x: 1.01706 | dx: 0.00004 | dx: 0.00004 |
-// t: 9999 | V: 1.00000 | x: 1.03400 | x: 1.03451 | dx: 0.00000 | dx: 0.00000 |
-//
-// timings for performance:
-// t = 1000
-// t = 10000
-// t = 100000
-//
-// SIMD2  | 145, 162, 179
-// scalar | 178, 188, 195
-//
-// adding placeholder between dV and time for scalar, to make stride = 16 bytes:
-// scalar | 145, 157, 175
-
 #else
-
-let voltageSequence: [Float] = [
-//  0, 0, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 20, 20,
-  0, 0, 0, 0, 1,
-]
 
 var creepFilter = CreepFilter()
 
 for time in 0..<timeLimit {
   var voltage: SIMD2<Float>
-//  if time < voltageSequence.count {
-//    voltage = SIMD2(repeating: voltageSequence[time])
-//  } else {
-//    voltage = SIMD2(repeating: voltageSequence.last!)
-//  }
-  
   if time < 10 {
     voltage = SIMD2(repeating: 0)
   } else {

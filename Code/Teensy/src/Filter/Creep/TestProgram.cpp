@@ -5,8 +5,9 @@
 
 using namespace Creep;
 
-uint32_t timeLimit = 20000;
+uint32_t timeLimit = 10000;
 bool displayResults = true;
+bool waveTypeStep = true;
 
 void displayExecutionTime(uint32_t deltaMicros, uint32_t iters) {
   float deltaTime = float(deltaMicros) * 1e-6;
@@ -36,29 +37,29 @@ void Creep::runTestProgram() {
     float2 voltage = float2(0);
     float2 position = float2(0);
     float2 creepRate = float2(0);
-    /*
-    if (time < stepVoltageTime) {
-      voltage = float2(0);
-      position = float2(0);
-      creepRate = float2(0);
-    } else if (time == stepVoltageTime) {
-      voltage = float2(1);
-      position = float2(0);
-      creepRate = float2(0);
+    if (waveTypeStep) {
+      if (time < stepVoltageTime) {
+        voltage = float2(0);
+        position = float2(0);
+        creepRate = float2(0);
+      } else if (time == stepVoltageTime) {
+        voltage = float2(1);
+        position = float2(0);
+        creepRate = float2(0);
+      } else {
+        float dt = float(time - stepVoltageTime);
+        float creepConstant = Settings::creepConstants.x / M_LN10;
+        voltage = float2(1);
+        position = float2(1 + creepConstant * log(dt));
+        creepRate = float2(creepConstant / dt);
+      }
     } else {
-      float dt = float(time - stepVoltageTime);
-      float creepConstant = Settings::creepConstants.x / M_LN10;
-      voltage = float2(1);
-      position = float2(1 + creepConstant * log(dt));
-      creepRate = float2(creepConstant / dt);
+      uint32_t wavePeriod = 40;
+      uint32_t phase = time % wavePeriod;
+      float phaseNormalized = float(phase) / float(wavePeriod);
+      float sineValue = sin(2 * M_PI * phaseNormalized);
+      voltage = float2(sineValue);
     }
-      */
-
-    uint32_t wavePeriod = 40;
-    uint32_t phase = time % wavePeriod;
-    float phaseNormalized = float(phase) / float(wavePeriod);
-    float sineValue = sin(2 * M_PI * phaseNormalized);
-    voltage = float2(sineValue);
 
     #if true
 
@@ -70,7 +71,11 @@ void Creep::runTestProgram() {
       displayQuantity("V", voltage.x);
 
       auto simulatedPosition = voltage + filter.futureAccumulatedDrift;
-      displayQuantity("x", filter.futureAccumulatedDrift.x);
+      if (waveTypeStep) {
+        displayQuantity("x", position.x);
+      } else {
+        displayQuantity("x", filter.futureAccumulatedDrift.x);
+      }
       displayQuantity("x", simulatedPosition.x);
 
       auto simulatedCreepRate = filter.currentCreepRate;
@@ -129,3 +134,12 @@ void Creep::runTestProgram() {
 
   displayExecutionTime(checkpoint2 - checkpoint1, timeLimit);
 }
+
+// Existing code:
+// 20000 iterations with period=40 sine wave
+// default compiler settings: 6191 ns
+// OPT_FASTEST_LTO: 5352 ns
+//
+// 10000 iterations with waveTypeStep: 4897 ns
+// 20000 iterations with sine wave: 5352 ns
+//

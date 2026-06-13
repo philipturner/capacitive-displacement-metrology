@@ -47,12 +47,12 @@ namespace Creep {
     static inline uint32_t buffer3[Settings::queueCapacity * Settings::queueCount];
 
     uint32_t bufferOffset;
-    float maxTime;
+    uint32_t maxTime;
     uint32_t startIndex = 0;
     uint32_t endIndex = 0;
 
     Queue();
-    Queue(uint32_t id, float maxTime);
+    Queue(uint32_t id, uint32_t maxTime);
 
     /*
     Sample& operator[](uint32_t index) {
@@ -66,39 +66,24 @@ namespace Creep {
     }
       */
 
-    float getQuantizationFactor() const {
-      if (maxTime < 500) {
-        return 1000;
-      } else {
-        return 10;
-      }
-    }
-
     Sample get(uint32_t index) const {
       uint32_t slotID = bufferOffset + (index % Settings::queueCapacity);
-
-      float queueTimeRounded = float(Queue::buffer3[slotID]) * 0.5;
-      float dt = Queue::buffer2[slotID];
 
       Sample output;
       output.dV.x = Queue::buffer0[slotID];
       output.dV.y = Queue::buffer1[slotID];
-      output.time = dt + queueTimeRounded;
-      output.queueTime = queueTimeRounded;
+      output.time = Queue::buffer2[slotID];
+      output.queueTime = Queue::buffer3[slotID];
       return output;
     }
 
     void set(uint32_t index, Sample input) {
       uint32_t slotID = bufferOffset + (index % Settings::queueCapacity);
 
-      uint32_t queueTimeInt = uint32_t(input.queueTime * 2);
-      float queueTimeRounded = float(queueTimeInt) * 0.5;
-      float dt = input.time - queueTimeRounded;
-
       Queue::buffer0[slotID] = input.dV.x;
       Queue::buffer1[slotID] = input.dV.y;
-      Queue::buffer2[slotID] = dt;
-      Queue::buffer3[slotID] = uint32_t(input.queueTime * 2);
+      Queue::buffer2[slotID] = input.time;
+      Queue::buffer3[slotID] = input.queueTime;
     }
 
     void insert(Sample sample);
@@ -108,9 +93,9 @@ namespace Creep {
         return false;
       }
 
-      float queueTime0 = get(startIndex + 0).queueTime;
-      float queueTime1 = get(startIndex + 1).queueTime;
-      float queueTimeCombined = (queueTime0 + queueTime1) / 2;
+      uint32_t queueTime0 = get(startIndex + 0).queueTime;
+      uint32_t queueTime1 = get(startIndex + 1).queueTime;
+      uint32_t queueTimeCombined = (queueTime0 + queueTime1 + 1) / 2;
 
       return (queueTimeCombined > maxTime);
     }
