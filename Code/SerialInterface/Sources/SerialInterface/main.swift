@@ -18,6 +18,7 @@ func createApplication() -> Application {
   applicationDesc.pythonLibraryPath = "/Users/philipturner/miniforge3/bin/python"
   applicationDesc.trajectoryLagTime = 0.1
   applicationDesc.triggers = [createTrigger1()]
+  applicationDesc.useEmulator = true
   return Application(descriptor: applicationDesc)
 }
 let application = createApplication()
