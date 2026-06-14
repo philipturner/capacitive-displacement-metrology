@@ -61,7 +61,7 @@ extension LineParser {
           "centers[1] - Y (nm)",
           
           "electronic time lag (μs)",
-          "creep setting time (μs)",
+          "creep setting time (ms)",
           "setpoint current (pA)",
         ]
         
@@ -78,6 +78,7 @@ extension LineParser {
         
         print()
         print("imaging settings:")
+        Self.displayTabulated(labels: labels, values: values)
         print()
       }
       
@@ -99,6 +100,7 @@ extension LineParser {
         
         print()
         print("creep settings:")
+        Self.displayTabulated(labels: labels, values: values)
         print()
       }
     }
@@ -152,28 +154,83 @@ extension LineParser.Splitting {
     values: [Float]
   ) {
     guard labels.count == values.count else {
-      fatalError("Invalid table.")
+      fatalError("Invalid array lengths.")
     }
     
-    var parsedValues: [(repr: String, decimalPlaces: Int)] = []
-    for rowID in values.indices {
-      func getDecimalPlaces() -> Int {
+    func createParsedLabels() -> [(repr: String, decimalPlaces: Int)] {
+      var output: [(repr: String, decimalPlaces: Int)] = []
+      for rowID in labels.indices {
         let label = labels[rowID]
-        guard label.count > 0 else {
-          fatalError("No ending character.")
-        }
-        let lastCharacter = label.last!
         
-        if let numberValue = lastCharacter.wholeNumberValue {
-          return numberValue
+        func createNumberValue() -> Int? {
+          guard label.count > 0 else {
+            fatalError("No ending character.")
+          }
+          let lastCharacter = label.last!
+          return lastCharacter.wholeNumberValue
+        }
+        
+        if let numberValue = createNumberValue() {
+          var truncatedLabel = label
+          truncatedLabel.removeLast()
+          output.append((truncatedLabel, numberValue))
         } else {
-          return 1
+          output.append((label, 1))
         }
       }
+      return output
     }
+    let parsedLabels = createParsedLabels()
     
-    for character in labels[0] {
-      if character.isNumber
+    func createParsedValues() -> [String] {
+      let maxDecimalPlaces = parsedLabels.map(\.decimalPlaces).max()!
+      
+      var output: [String] = []
+      for rowID in values.indices {
+        let parsedLabel = parsedLabels[rowID]
+        let value = values[rowID]
+        
+        let formatString = "%.\(parsedLabel.decimalPlaces)f"
+        let repr = String(format: formatString, value)
+        
+        let paddingSize = maxDecimalPlaces - parsedLabel.decimalPlaces
+        let padding = String(repeating: " ", count: paddingSize)
+        output.append(repr + padding)
+      }
+      return output
+    }
+    let parsedValues = createParsedValues()
+    
+    func createColumnWidths() -> SIMD2<Int> {
+      var output: SIMD2<Int> = .zero
+      for rowID in parsedLabels.indices {
+        let parsedLabel = parsedLabels[rowID]
+        let parsedValue = parsedValues[rowID]
+        
+        output[0] = max(output[0], parsedLabel.repr.count)
+        output[1] = max(output[1], parsedValue.count)
+      }
+      return output
+    }
+    let columnWidths = createColumnWidths()
+    
+    for rowID in parsedLabels.indices {
+      let parsedLabel = parsedLabels[rowID]
+      let parsedValue = parsedValues[rowID]
+      
+      let labelPaddingSize = parsedLabel.repr.count - columnWidths[0]
+      let numberPaddingSize = parsedValue.count - columnWidths[1]
+      
+      func createString() -> String {
+        var output = ""
+        output += parsedLabel.repr
+        output += String(repeating: " ", count: labelPaddingSize)
+        output += " | "
+        output += String(repeating: " ", count: numberPaddingSize)
+        output += parsedValue
+        return output
+      }
+      print(createString())
     }
   }
 }

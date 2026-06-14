@@ -76,6 +76,6 @@ void Imager::forwardSettings() const {
   Log::writeValuesWithFlags(
     /*flags=*/5,
     settings.electronicTimeLag,
-    settings.creepSettlingTime,
-    Feedback::setpointCurrent);
+    float(settings.creepSettlingTime) / 1000,
+    Feedback::setpointCurrent * 1e12);
 }

@@ -162,17 +162,6 @@ void kilohertzLoop() {
     }
   }
 
-  /*
-  
-  error message:
-  KilohertzLoop failed.
-  Integral error was too large.
-  408139904
-  408139893
-  -11
-
-  */
-
   float2 stimulus;
   stimulus.x = Application::state.piezoXVoltage;
   stimulus.y = Application::state.piezoYVoltage;

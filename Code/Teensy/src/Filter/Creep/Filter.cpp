@@ -23,10 +23,10 @@ Filter::Filter(bool notDefaultConstructor) {
 void Filter::forwardState() const {
   Log::writeValuesWithFlags(
     /*flags=*/6,
-    creepConstants.x,
-    creepConstants.y,
-    futureAccumulatedDrift.x,
-    futureAccumulatedDrift.y);
+    creepConstants.x * 100,
+    creepConstants.y * 100,
+    futureAccumulatedDrift.x * 0.320,
+    futureAccumulatedDrift.y * 0.320);
 }
 
 void Filter::updateSettings(Command command) {

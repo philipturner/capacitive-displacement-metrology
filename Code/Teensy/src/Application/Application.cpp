@@ -129,7 +129,7 @@ void Application::logNormalMessage() {
     float dV = drift.x + drift.y;
     
     Log::writeValuesNormal(
-      state.filteredCurrent,
+      state.filteredCurrent * 1e12,
       state.piezoXVoltage * 0.320,
       state.piezoYVoltage * 0.320,
       state.piezoZVoltage * 0.320,

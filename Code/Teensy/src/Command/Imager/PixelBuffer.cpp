@@ -50,5 +50,5 @@ void PixelBuffer::flushReadyPixel() {
     pixel.x,
     pixel.y,
     pixel.z,
-    Application::state.filteredCurrent);
+    Application::state.filteredCurrent * 1e12);
 }
