@@ -1,25 +1,22 @@
 struct PixelTracker {
-  var settings: ImagingSettings
+  static let enforceAlignedPositions: Bool = true
+  static let rejectOddRows: Bool = true
   
-  // TODO: Initialize empty pixels to [-100_000, -1000]
-  // TODO: Invert Y axis and convert from A to pA here
-  // TODO: Accumulate the min, max, mean, variance (<x^2> - <x>^2) on
-  // the fly as pixels are added
+  var settings: ImagingSettings
   var dataBuffer: [SIMD2<Float>]
-  var occupiedBuffer: [Bool]
   var receivedPixelCount: Int = 0
+  var statistics: Statistics?
   
   init(settings: ImagingSettings) {
     self.settings = settings
-    self.dataBuffer = Array(
-      repeating: .zero,
-      count: settings.pixelsPerImage)
-    self.occupiedBuffer = Array(
-      repeating: false,
+    
+    let fillerPixel = SIMD2<Float>(-100_000, -1000)
+    dataBuffer = Array(
+      repeating: fillerPixel,
       count: settings.pixelsPerImage)
   }
   
-  var finishedRowCount: Int {
+  var receivedRowCount: Int {
     receivedPixelCount / settings.resolution
   }
   
@@ -37,50 +34,117 @@ struct PixelTracker {
     }
     
     for line in lines {
-      let pixel = line.values
-      guard let pixelID = Int(exactly: pixel[0]) else {
-        fatalError("Invalid pixel ID.")
+      let pixelID = Int(exactly: line.values[0])
+      guard let pixelID else {
+        fatalError("Malformatted pixel ID.")
       }
       
-      guard pixelID >= 0, pixelID < dataBuffer.count else {
-        fatalError("Pixel ID is out of bounds.")
+      func createExpectedPixelID() -> Int {
+        if receivedRowCount % 2 == 0 {
+          return receivedPixelCount
+        } else {
+          let floor = receivedRowCount * settings.resolution
+          let indexInRow = receivedPixelCount - receivedRowCount
+          return floor + (settings.resolution - 1 - indexInRow)
+        }
       }
-      guard occupiedBuffer[pixelID] == false else {
-        fatalError("Pixel is already occupied.")
-      }
-      
-      let rowID = pixelID / settings.resolution
-      guard rowID == finishedRowCount else {
-        fatalError("Incorrect row for pixel.")
-      }
-      
-      let expectedPosition = settings.expectedPosition(
-        pixelID: pixelID,
-        imageID: imageID)
-      let actualPosition = SIMD2(pixel[1], pixel[2])
-      let error = expectedPosition - actualPosition
-      let errorMagnitude = (error * error).sum().squareRoot()
-      
-      #if false
-      let pixelSize = Float(settings.size) / Float(settings.resolution)
-      if errorMagnitude < 0.1 * pixelSize {
-        
-      } else {
+      let expectedPixelID = createExpectedPixelID()
+      guard pixelID == expectedPixelID else {
         fatalError("""
-          Pixel was invalid.
-          \(pixel)
-          \(imageID)
+          Incorrect pixel ID.
+          expected: \(expectedPixelID)
+          got: \(pixelID)
           """)
       }
-      #endif
       
-      let data = SIMD2(abs(pixel[4]), pixel[3])
-      if rowID % 2 == 0 {
-        dataBuffer[pixelID] = data
-        dataBuffer[pixelID + settings.resolution] = data
+      func checkErrorMagnitude() {
+        let expectedPosition = settings.expectedPosition(
+          pixelID: pixelID,
+          imageID: imageID)
+        let actualPosition = SIMD2(line.values[1], line.values[2])
+        let error = actualPosition - expectedPosition
+        let errorMagnitude = (error * error).sum().squareRoot()
+        
+        if errorMagnitude > 0.1 * settings.pixelDimension {
+          fatalError("""
+            Incorrect pixel position.
+            expected: \(expectedPosition)
+            got: \(actualPosition)
+            """)
+        }
       }
-      occupiedBuffer[pixelID] = true
+      if Self.enforceAlignedPositions {
+        checkErrorMagnitude()
+      }
+      
       receivedPixelCount += 1
+      
+      if Self.rejectOddRows {
+        let rowID = pixelID / settings.resolution
+        guard rowID % 2 == 0 else {
+          continue
+        }
+      }
+      
+      let data = SIMD2(line.values[4], line.values[3])
+      let slotID = settings.bufferSlotID(pixelID: pixelID)
+      dataBuffer[slotID] = data
+      
+      if Self.rejectOddRows {
+        let overwrittenPixelID = pixelID + settings.resolution
+        let slotID = settings.bufferSlotID(pixelID: overwrittenPixelID)
+        dataBuffer[slotID] = data
+      }
     }
+  }
+}
+
+extension PixelTracker {
+  struct Statistics {
+    var average: SIMD2<Float>
+    var stddev: SIMD2<Float>
+    var minimum: SIMD2<Float>
+    var maximum: SIMD2<Float>
+  }
+  
+  mutating func updateStatistics() {
+    guard receivedRowCount > 0 else {
+      return
+    }
+    let maxPixelID = receivedRowCount * settings.resolution
+    
+    var sum: SIMD2<Double> = .zero
+    var minimum = SIMD2<Float>(repeating: .greatestFiniteMagnitude)
+    var maximum = SIMD2<Float>(repeating: -.greatestFiniteMagnitude)
+    for pixelID in 0..<maxPixelID {
+      let data = dataBuffer[pixelID]
+      sum += SIMD2<Double>(data)
+      minimum.replace(with: data, where: data .< minimum)
+      maximum.replace(with: data, where: data .> maximum)
+    }
+    
+    let average = SIMD2<Float>(sum) / Float(maxPixelID)
+    
+    func createStandardDeviation() -> SIMD2<Float> {
+      var accumulator: SIMD2<Double> = .zero
+      for pixelID in 0..<maxPixelID {
+        let data = dataBuffer[pixelID]
+        let deviation = data - average
+        let deviationSquared = deviation * deviation
+        accumulator += SIMD2<Double>(deviationSquared)
+      }
+      
+      var output = SIMD2<Float>(accumulator)
+      output /= Float(maxPixelID)
+      output.formSquareRoot()
+      return output
+    }
+    let stddev = createStandardDeviation()
+    
+    statistics = Statistics(
+      average: average,
+      stddev: stddev,
+      minimum: minimum,
+      maximum: maximum)
   }
 }

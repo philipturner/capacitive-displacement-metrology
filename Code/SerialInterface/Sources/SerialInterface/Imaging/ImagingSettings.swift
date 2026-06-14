@@ -73,6 +73,17 @@ struct ImagingSettings {
     position += center(channelID: imageID % 2)
     return position
   }
+  
+  func bufferSlotID(pixelID: Int) -> Int {
+    let rowID = pixelID / resolution
+    let columnID = pixelID % resolution
+    
+    if dominantAxis == 0 {
+      return rowID * resolution + columnID
+    } else {
+      return columnID * resolution + rowID
+    }
+  }
 }
 
 extension ImagingSettings {

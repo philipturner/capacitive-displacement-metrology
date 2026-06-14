@@ -3,7 +3,7 @@ struct ImagingState {
   var pixelTracker: PixelTracker
   
   var receivedPixelCount: Int = 0
-  var pendingImages: [[SIMD2<Float>]?] // overwrite to 'nil' after retrieving
+  var pendingImages: [PixelTracker?]
   var freezeTrajectory = false
   var trajectorySynchronization: (timestamp: Double, lineID: Int)?
   var deletedHistoryLineCount: Int = 0
@@ -23,9 +23,9 @@ struct ImagingState {
     }
     
     func createRowID(line: LineParser.Line) -> Int {
-      let pixel = line.values
-      guard let pixelID = Int(exactly: pixel[0]) else {
-        fatalError("Invalid pixel ID.")
+      let pixelID = Int(exactly: line.values[0])
+      guard let pixelID else {
+        fatalError("Malformatted pixel ID.")
       }
       return pixelID / settings.resolution
     }
@@ -75,6 +75,7 @@ struct ImagingState {
       pixelTracker.receive(
         lines: segment,
         imageID: imageID)
+      pixelTracker.updateStatistics()
       receivedPixelCount += segment.count
       
       if segmentID < segments.count - 1 {

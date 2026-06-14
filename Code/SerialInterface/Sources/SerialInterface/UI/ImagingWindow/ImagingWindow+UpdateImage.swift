@@ -19,8 +19,8 @@ extension ImagingWindow {
   }
   
   private static func safeLog10(_ input: PythonObject) -> PythonObject {
-    let output = np.zeros_like(input, dtype: np.float32) - 1000 / 20
     let mask = np.greater(input, Float(0))
+    let output = np.zeros_like(input, dtype: np.float32) - 1000 / 20
     np.log10(input, where: mask, out: output)
     return output
   }
@@ -37,6 +37,8 @@ extension ImagingWindow {
   }
   
   // Returns a replacement image only when the image views need to be reset.
+  // Find a more elegant way to incorporate this
+  #if false
   func emptyImage() -> [SIMD2<Float>]? {
     if plotDataValid {
       return nil
@@ -46,6 +48,7 @@ extension ImagingWindow {
     let pixel = SIMD2<Float>(0, 0)
     return Array(repeating: pixel, count: pixelsPerImage)
   }
+  #endif
   
   func fillRemainingRows(_ image: [SIMD2<Float>]) -> [SIMD2<Float>] {
     if image.count == state.settings.pixelsPerImage {
@@ -130,17 +133,11 @@ extension ImagingWindow {
             partialData, columnCount: state.settings.resolution)
           
           if rowID == 0 {
-            #if true
             let mean = Float(np.mean(partialDataNumpy))!
             let stddev = Float(np.std(partialDataNumpy))!
             return SIMD2<Float>(
               mean - stddev * 3,
               mean + stddev * 3)
-            #else
-            return SIMD2<Float>(
-              0.5 * state.settings.setpointCurrent * 1e12,
-              1.5 * state.settings.setpointCurrent * 1e12)
-            #endif
           } else {
             let levels = Self.levels(data: partialDataNumpy)
             let dz = levels[1] - levels[0]

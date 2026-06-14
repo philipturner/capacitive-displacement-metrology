@@ -159,15 +159,6 @@ extension ImagingWindow {
       for sample in output.longTimeData {
         x.append(sample.time)
         
-        func getMultiplier() -> Float {
-          if plotID == 0 {
-            return 1e12
-          } else {
-            return 1
-          }
-        }
-        let multiplier = getMultiplier()
-        
         minimumPoints.append(sample.minimum[laneID] * multiplier)
         averagePoints.append(sample.average[laneID] * multiplier)
         maximumPoints.append(sample.maximum[laneID] * multiplier)

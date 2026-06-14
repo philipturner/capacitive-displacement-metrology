@@ -169,6 +169,6 @@ void Imager::createPendingPixel(float2 position, uint32_t timeInImage) {
   pixel.id = id;
   pixel.x = position.x;
   pixel.y = position.y;
-  pixel.z = Application::state.piezoZVoltage * 0.320;
+  pixel.z = -Application::state.piezoZVoltage * 0.320;
   pixelBuffer.addPixel(pixel);
 }
