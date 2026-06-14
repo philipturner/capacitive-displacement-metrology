@@ -1,6 +1,8 @@
 import PythonKit
 
 extension UI {
+  static let thicknessFactor: Int = 1
+  
   struct TimeAxisDescriptor {
     /// Required. The start of the time interval.
     var minimum: Double?

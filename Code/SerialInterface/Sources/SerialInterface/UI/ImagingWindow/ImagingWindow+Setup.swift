@@ -11,6 +11,8 @@ private let yAxisWidthHistory: Int = 100
 private let yAxisWidthImage: Int = 50
 
 extension ImagingWindow {
+  static let maxImagesPerFrame: Int = 5
+  
   func setWindowSize() {
     var x: Int = .zero
     x += yAxisWidthHistory + columnWidthHistory

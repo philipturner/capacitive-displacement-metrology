@@ -1,12 +1,9 @@
-struct ImagingState {
+struct ImageHistory {
   var settings: ImagingSettings
   var pixelTracker: PixelTracker
   
   var receivedPixelCount: Int = 0
   var pendingImages: [PixelTracker?]
-  var freezeTrajectory = false
-  var trajectorySynchronization: (timestamp: Double, lineID: Int)?
-  var deletedHistoryLineCount: Int = 0
   
   init(settings: ImagingSettings) {
     self.settings = settings
@@ -93,7 +90,7 @@ struct ImagingState {
       
       if pixelTracker.isFinished {
         let ringIndex = imageID % pendingImages.count
-        pendingImages[ringIndex] = pixelTracker.dataBuffer
+        pendingImages[ringIndex] = pixelTracker
         pixelTracker = PixelTracker(settings: settings)
       }
     }

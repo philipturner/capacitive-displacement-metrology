@@ -1,13 +1,15 @@
 import PythonKit
 
 class UI {
+  enum Mode {
+    case history
+    case imaging
+  }
+  
   let app: PythonObject
-  
-  var imagingModeActive: Bool = false
-  var historyWindow: HistoryWindow
-  var imagingWindow: ImagingWindow
-  
-  static let thicknessFactor: Int = 1
+  let historyWindow: HistoryWindow
+  let imagingWindow: ImagingWindow
+  private(set) var mode: Mode = .history
   
   init(trajectoryLagTime: Double?) {
     pg.setConfigOptions(useOpenGL: true)
@@ -36,11 +38,33 @@ class UI {
     win.closeEvent = closeEvent
   }
   
+  func changeMode(_ mode: Mode) {
+    if mode == .history {
+      historyWindow.plotsInitialized = false
+    }
+  }
+  
   func showActiveWindows() {
-    if !imagingModeActive, historyWindow.plotDataValid {
+    var showHistoryWindow = false
+    var showImagingWindow = false
+    
+    if imagingModeActive {
+      
+    } else {
+      if historyWindow.plotsInitialized {
+        showHistoryWindow = true
+      }
+    }
+    
+    
+    if !imagingModeActive, historyWindow.plotsInitialized {
       historyWindow.win.show()
     } else {
       historyWindow.win.hide()
+    }
+    
+    func canShowImagingWindow() {
+      
     }
     
     if imagingModeActive, imagingWindow.plotDataValid {

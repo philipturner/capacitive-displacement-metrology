@@ -2,7 +2,7 @@ import Foundation
 import PythonKit
 
 extension ImagingWindow {
-  func update(output: History.Output) {
+  func updatePlots(output: History.Output) {
     guard output.longTimeData.count > 0 else {
       return
     }

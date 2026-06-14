@@ -117,6 +117,6 @@ extension HistoryWindow {
       updateShortPlots(data: output.shortTimeData)
     }
     
-    plotDataValid = true
+    plotsInitialized = true
   }
 }

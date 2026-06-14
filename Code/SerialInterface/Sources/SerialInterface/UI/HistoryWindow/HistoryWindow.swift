@@ -2,12 +2,12 @@ import PythonKit
 
 class HistoryWindow {
   let win: PythonObject
-  var plotDataValid = false
   
-  static let rowCount: Int = 5
   var plots: [[PythonObject]] = []
   var curveSets: [[PythonObject]] = []
   var labels: [PythonObject] = []
+  
+  var plotsInitialized: Bool = false
   
   init() {
     win = pg.GraphicsLayoutWidget(show: true)

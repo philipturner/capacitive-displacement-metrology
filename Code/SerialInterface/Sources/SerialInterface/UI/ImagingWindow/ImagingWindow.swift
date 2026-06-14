@@ -2,12 +2,6 @@ import Foundation
 import PythonKit
 
 class ImagingWindow {
-  static let maxImagesPerFrame: Int = 5
-  var trajectoryLagTime: Double?
-  
-  let win: PythonObject
-  var plotDataValid = false
-  
   struct HistoryPlot {
     var plot: PythonObject
     var curves: [PythonObject]
@@ -19,12 +13,22 @@ class ImagingWindow {
     var colorBar: PythonObject
   }
   
+  struct State {
+    var deletedHistoryLineCount: Int = 0
+    var freezeTrajectory = false
+    var trajectorySynchronization: (timestamp: Double, lineID: Int)?
+  }
+  
+  let win: PythonObject
+  let trajectoryLagTime: Double?
+  var state = State()
+  
   var historyPlots: [HistoryPlot]
   var scanImages: [[Image]]
   var fourierImage: Image
   var labels: [PythonObject]
   
-  var state: ImagingState!
+  var imageHistory: ImageHistory!
   var pendingHistoryLines: [LineParser.Line] = []
   var pendingPixelLines: [LineParser.Line] = []
   
@@ -44,28 +48,25 @@ class ImagingWindow {
     setWindowSize()
   }
   
-  func reset(settingsLines: [LineParser.Line]) {
-    guard pendingSettingsLines.count == 2 else {
-      let lineCount = pendingSettingsLines.count
-      fatalError(
-        "Invalid number of pending settings lines: \(lineCount)")
+  func stop() {
+    state = State()
+    imageHistory = nil
+  }
+  
+  func start(settingsLines: [LineParser.Line]) {
+    guard !active else {
+      fatalError("Attempted to activate when already activated.")
     }
+    active = true
     
-    var values: [Float] = []
-    for i in 0..<5 {
-      let line = pendingSettingsLines[0]
-      values.append(line.values[i])
-    }
-    for i in 0..<3 {
-      let line = pendingSettingsLines[1]
-      values.append(line.values[i])
-    }
-    
-    let settings = ImagingSettings(values: values)
-    state = ImagingState(settings: settings)
-    
-    pendingSettingsLines = []
+    let settings = ImagingSettings(settingsLines: settingsLines)
+    windowState = ImagingWindowState()
+    imagingState = ImagingState(settings: settings)
     pendingHistoryLines = []
     pendingPixelLines = []
+    
+    // Do not access Python from the background thread.
+    // updateFourierImageVisibility()
+    // resetImages()
   }
 }

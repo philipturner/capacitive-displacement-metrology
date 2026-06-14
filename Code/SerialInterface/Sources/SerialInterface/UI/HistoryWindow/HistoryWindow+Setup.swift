@@ -17,6 +17,8 @@ private let yAxisWidth: Int = 120
 #endif
 
 extension HistoryWindow {
+  static let rowCount: Int = 5
+  
   func setWindowSize() {
     var x: Int = .zero
     x += yAxisWidth

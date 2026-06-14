@@ -1,6 +1,7 @@
 struct PixelTracker {
   static let enforceAlignedPositions: Bool = true
   static let rejectOddRows: Bool = true
+  static let overrideCurrentData: Bool = true
   
   var settings: ImagingSettings
   var dataBuffer: [SIMD2<Float>]
@@ -77,6 +78,13 @@ struct PixelTracker {
         checkErrorMagnitude()
       }
       
+      var data = SIMD2(line.values[4], line.values[3])
+      if Self.overrideCurrentData {
+        let position = SIMD2(line.values[1], line.values[2])
+        let normalizedCurrent = Emulator.normalizedCurrent(position: position)
+        let current = normalizedCurrent * settings.setpointCurrent
+        data[0] = current
+      }
       receivedPixelCount += 1
       
       if Self.rejectOddRows {
@@ -85,8 +93,6 @@ struct PixelTracker {
           continue
         }
       }
-      
-      let data = SIMD2(line.values[4], line.values[3])
       let slotID = settings.bufferSlotID(pixelID: pixelID)
       dataBuffer[slotID] = data
       
@@ -117,7 +123,8 @@ extension PixelTracker {
     var minimum = SIMD2<Float>(repeating: .greatestFiniteMagnitude)
     var maximum = SIMD2<Float>(repeating: -.greatestFiniteMagnitude)
     for pixelID in 0..<maxPixelID {
-      let data = dataBuffer[pixelID]
+      let slotID = settings.bufferSlotID(pixelID: pixelID)
+      let data = dataBuffer[slotID]
       sum += SIMD2<Double>(data)
       minimum.replace(with: data, where: data .< minimum)
       maximum.replace(with: data, where: data .> maximum)
@@ -128,7 +135,8 @@ extension PixelTracker {
     func createStandardDeviation() -> SIMD2<Float> {
       var accumulator: SIMD2<Double> = .zero
       for pixelID in 0..<maxPixelID {
-        let data = dataBuffer[pixelID]
+        let slotID = settings.bufferSlotID(pixelID: pixelID)
+        let data = dataBuffer[slotID]
         let deviation = data - average
         let deviationSquared = deviation * deviation
         accumulator += SIMD2<Double>(deviationSquared)
