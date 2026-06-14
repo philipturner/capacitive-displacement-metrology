@@ -25,12 +25,6 @@ let application = createApplication()
 
 application.run {
   Application.queue.sync {
-    let output = application.history.getOutput()
-    if application.ui.imagingModeActive {
-      application.ui.imagingWindow.update(output: output)
-    } else {
-      application.ui.historyWindow.update(output: output)
-    }
-    application.ui.showActiveWindows()
+    application.ui.update()
   }
 }

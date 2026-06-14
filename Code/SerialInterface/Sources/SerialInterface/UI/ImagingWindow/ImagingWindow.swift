@@ -14,6 +14,9 @@ class ImagingWindow {
   }
   
   struct State {
+    var plotsInitialized = false
+    var imagesInitialized = false
+    
     var deletedHistoryLineCount: Int = 0
     var freezeTrajectory = false
     var trajectorySynchronization: (timestamp: Double, lineID: Int)?
@@ -54,13 +57,8 @@ class ImagingWindow {
   }
   
   func start(settingsLines: [LineParser.Line]) {
-    guard !active else {
-      fatalError("Attempted to activate when already activated.")
-    }
-    active = true
-    
     let settings = ImagingSettings(settingsLines: settingsLines)
-    windowState = ImagingWindowState()
+    s = ImagingWindowState()
     imagingState = ImagingState(settings: settings)
     pendingHistoryLines = []
     pendingPixelLines = []

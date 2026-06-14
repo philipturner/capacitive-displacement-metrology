@@ -7,7 +7,6 @@ struct ApplicationDescriptor {
   var trajectoryLagTime: Double?
   var triggers: [Trigger] = []
   var useEmulator: Bool = false
-  var useImagingWindow: Bool = false
 }
 
 class Application: @unchecked Sendable {
@@ -18,30 +17,25 @@ class Application: @unchecked Sendable {
   nonisolated(unsafe)
   static var nextPauseTime: Double?
   
-  var useEmulator: Bool
-  var useImagingWindow: Bool
-  
-  let ui: UI
-  let port: SerialPort
+  let useEmulator: Bool
   var lineParser: LineParser
-  var history: History
+  let port: SerialPort
+  let ui: UI
   
   init(descriptor: ApplicationDescriptor) {
     guard let pythonLibraryPath = descriptor.pythonLibraryPath else {
       fatalError("Descriptor was incomplete.")
     }
-    
     PythonLibrary.useLibrary(at: pythonLibraryPath)
-    self.useEmulator = descriptor.useEmulator
     
-    self.ui = UI(trajectoryLagTime: descriptor.trajectoryLagTime)
+    self.useEmulator = descriptor.useEmulator
+    self.lineParser = LineParser()
     if useEmulator {
       self.port = SerialPort(path: "/dev/cu.debug-console")
     } else {
       self.port = SerialPort(path: "/dev/cu.usbmodem182280901")
     }
-    self.lineParser = LineParser()
-    self.history = History(triggers: descriptor.triggers)
+    self.ui = UI(descriptor: descriptor)
     
     try! port.open(
       receiveRate: .baud115200,

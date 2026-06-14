@@ -29,11 +29,11 @@ extension Application {
       }
     }
     
-    let splitting = Flags.split(lines: lines)
+    let splitting = lineParser.split(lines: lines)
     Application.queue.sync { [self] in
-      // Update the imaging window.
-      ui.imagingWindow.pendingSettingsLines += splitting.imagingSettings
       if let newMode = splitting.newMode {
+        history = History(copying: history)
+        
         if useImagingWindow, newMode == 8 {
           ui.imagingModeActive = true
           ui.imagingWindow.reset()
@@ -44,6 +44,10 @@ extension Application {
         ui.imagingWindow.plotDataValid = false
         ui.historyWindow.plotDataValid = false
       }
+      if mode == .imaging {
+        imagingWindow.start(settingsLines: imagingSettingsLines)
+      }
+      
       if ui.imagingModeActive {
         if let pauseTime = Application.nextPauseTime {
           let currentTime = Date().timeIntervalSince1970
@@ -59,7 +63,7 @@ extension Application {
       
       // Update the history.
       if splitting.newMode != nil {
-        history = History(copying: history)
+        
       }
       history.addLines(splitting.history)
     }
@@ -100,11 +104,11 @@ extension Application {
     func reset(error: LocalizedError) {
       lineParser = LineParser()
       Application.queue.sync {
-        if ui.imagingModeActive {
+        if ui.mode == .imaging {
           fatalError(
             "Encountered corrupted data while imaging mode was active.")
         } else {
-          history = History(copying: history)
+          ui.history = History(copying: ui.history)
         }
       }
     }

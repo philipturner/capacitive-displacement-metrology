@@ -1,14 +1,15 @@
 import PythonKit
 
 class UI {
+  let app: PythonObject
+  let historyWindow: HistoryWindow
+  let imagingWindow: ImagingWindow
+  var history: History
+  
   enum Mode {
     case history
     case imaging
   }
-  
-  let app: PythonObject
-  let historyWindow: HistoryWindow
-  let imagingWindow: ImagingWindow
   private(set) var mode: Mode = .history
   
   init(trajectoryLagTime: Double?) {
@@ -37,11 +38,25 @@ class UI {
     // window.
     win.closeEvent = closeEvent
   }
-  
+}
+
+extension UI {
   func changeMode(_ mode: Mode) {
-    if mode == .history {
-      historyWindow.plotsInitialized = false
+    self.mode = mode
+    
+    historyWindow.plotsInitialized = false
+    imagingWindow.stop()
+    history = History(copying: history)
+  }
+  
+  func update() {
+    let output = application.history.getOutput()
+    if application.ui.imagingModeActive {
+      application.ui.imagingWindow.update(output: output)
+    } else {
+      application.ui.historyWindow.update(output: output)
     }
+    application.ui.showActiveWindows()
   }
   
   func showActiveWindows() {
