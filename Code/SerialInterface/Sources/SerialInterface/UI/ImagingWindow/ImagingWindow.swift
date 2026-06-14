@@ -15,7 +15,6 @@ class ImagingWindow {
   
   struct TrajectoryState {
     var deletedLineCount: Int = 0
-    var frozen: Bool = false
     var synchronization: (timestamp: Double, lineID: Int)?
     var historyLines: [LineParser.Line] = []
     var pixelLines: [LineParser.Line] = []
@@ -31,12 +30,13 @@ class ImagingWindow {
   let trajectoryLagTime: Double?
   var state = State()
   
-  var historyPlots: [HistoryPlot]
+  var plots: [HistoryPlot]
   var scanImages: [[Image]]
   var fourierImage: Image
   var labels: [PythonObject]
   
   var imageHistory: ImageHistory!
+  var settings: ImagingSettings { imageHistory.settings }
   
   init(trajectoryLagTime: Double?) {
     self.trajectoryLagTime = trajectoryLagTime
@@ -54,24 +54,62 @@ class ImagingWindow {
     setWindowSize()
   }
   
-  func stop() {
-    state = State()
-    imageHistory = nil
+  func update(historyOutput: History.Output) {
+    if historyOutput.longTimeData.count > 0 {
+      updatePlots(data: historyOutput.longTimeData)
+      state.plotsInitialized = true
+    }
+    
+    if !state.imagesInitialized {
+      updateFourierImageVisibility()
+      resetImages()
+      state.imagesInitialized = true
+    }
+    
+    imageHistory.update(lines: state.trajectory.pixelLines)
+    updateScanImages()
+    updateFourierImage()
+    
+    let pixelSegments = state.split(lines: pendingPixelLines)
+    state.update(lines: pixelSegments)
+    for i in state.pendingImages.indices {
+      state.pendingImages[i] = nil
+    }
+    
+    if let trajectoryLagTime {
+      removeOldHistoryLines(lagTime: trajectoryLagTime)
+    } else {
+      state.trajectory.historyLines = []
+    }
+    state.trajectory.pixelLines = []
+    
   }
   
-  func start(settingsLines: [LineParser.Line]) {
-    let settings = ImagingSettings(settingsLines: settingsLines)
-    s = ImagingWindowState()
-    imagingState = ImagingState(settings: settings)
-    pendingHistoryLines = []
-    pendingPixelLines = []
+  func removeOldHistoryLines(lagTime: Double) {
+    if state.trajectory.synchronization == nil {
+      if state.trajectory.historyLines.count > 0 {
+        let timestamp = Date().timeIntervalSince1970
+        let lineID = state.trajectory.historyLines.count
+        state.trajectory.synchronization = (timestamp, lineID)
+      }
+    }
     
-    // Do not access Python from the background thread.
-    // updateFourierImageVisibility()
-    // resetImages()
-  }
-  
-  func update() {
-    
+    if let synchronization = state.trajectory.synchronization {
+      let currentTime = Date().timeIntervalSince1970
+      let pastTime = currentTime - lagTime
+      let deltaTime = pastTime - synchronization.timestamp
+      
+      let timePerLine = 1e-6 * Double(History.logPeriodMicros)
+      let deltaLines = Int(deltaTime / timePerLine)
+      var maxLineID = synchronization.lineID + deltaLines
+      maxLineID -= state.trajectory.deletedLineCount
+      
+      if maxLineID > 0 {
+        let currentLineCount = state.trajectory.historyLines.count
+        let deletedLineCount = min(maxLineID, currentLineCount)
+        state.trajectory.historyLines.removeFirst(deletedLineCount)
+        state.trajectory.deletedLineCount += deletedLineCount
+      }
+    }
   }
 }

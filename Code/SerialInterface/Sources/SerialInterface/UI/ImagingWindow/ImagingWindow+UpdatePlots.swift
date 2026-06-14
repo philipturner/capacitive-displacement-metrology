@@ -2,145 +2,105 @@ import Foundation
 import PythonKit
 
 extension ImagingWindow {
-  func updatePlots(longTimeData: [History.TimedAverage]) {
-    guard output.longTimeData.count > 0 else {
-      return
-    }
+  func updatePlots(data: [History.TimedAverage]) {
+    let axisBounds = UI.axisBounds(data: data)
+    updateTimeAxis(data: data)
+    updateCurrentRange(axisBounds[0])
+    updateZRange(axisBounds[3])
     
-    updateHistoryRanges(output: output)
-    updateHistoryPlots(output: output)
-    
-    if state.trajectorySynchronization == nil {
-      if pendingHistoryLines.count > 0 {
-        let timestamp = Date().timeIntervalSince1970
-        let lineID = pendingHistoryLines.count
-        state.trajectorySynchronization = (timestamp, lineID)
+    func trajectoryIsFrozen() -> Bool {
+      guard settings.mode == .image else {
+        return false
+      }
+      
+      if imageHistory.receivedPixelCount >= settings.pixelsPerImage {
+        return true
+      } else {
+        return false
       }
     }
     
-    let historyLines = pendingHistoryLines
-    if let trajectoryLagTime = trajectoryLagTime {
-      if let synchronization = state.trajectorySynchronization {
-        let currentTime = Date().timeIntervalSince1970
-        let pastTime = currentTime - trajectoryLagTime
-        let deltaTime = pastTime - synchronization.timestamp
-        
-        let timePerLine = 1e-6 * Double(History.logPeriodMicros)
-        let deltaLines = Int(deltaTime / timePerLine)
-        var maxLineID = synchronization.lineID + deltaLines
-        maxLineID -= state.deletedHistoryLineCount
-        
-        if maxLineID > 0 {
-          let deletedLineCount = min(maxLineID, pendingHistoryLines.count)
-          pendingHistoryLines = Array(pendingHistoryLines[deletedLineCount...])
-          state.deletedHistoryLineCount += deletedLineCount
-        }
-      }
-    } else {
-      pendingHistoryLines = []
+    if !trajectoryIsFrozen() {
+      updateTrajectoryRange(x: axisBounds[1], y: axisBounds[2])
+      updateTrajectoryCurve()
+      updatePixelCurves()
     }
     
-    let pixelSegments = state.split(lines: pendingPixelLines)
-    pendingPixelLines = []
-    
-    updateTrajectoryPlot(
-      historyLines: historyLines,
-      pixelSegments: pixelSegments)
-    
-    state.update(segments: pixelSegments)
+    do {
+      let pixelSegments = state.split(lines: pendingPixelLines)
+      state.update(segments: pixelSegments)
+    }
     updateScanImages()
     updateFourierImage()
     
-    if state.settings.mode == .image {
-      if state.pendingImages[0] != nil {
-        state.freezeTrajectory = true
-      }
-    }
     
-    for i in state.pendingImages.indices {
-      state.pendingImages[i] = nil
-    }
-    
-    plotDataValid = true
+
   }
   
-  func updateHistoryRanges(output: History.Output) {
-    func updateLongTime() {
-      let maximum = output.longTimeData.last!.time
-      
-      var longTimeDesc = UI.TimeAxisDescriptor()
-      longTimeDesc.minimum = maximum - TimeAxis.longLength
-      longTimeDesc.maximum = maximum
-      longTimeDesc.majorTick = TimeAxis.longMajorTick
-      
-      let plots = [
-        historyPlots[0].plot,
-        historyPlots[1].plot,
-      ]
-      UI.updateTimeAxis(
-        plots: plots,
-        descriptor: longTimeDesc)
-    }
+  func updateTimeAxis(data: [History.TimedAverage]) {
+    let maximum = data.last!.time
     
-    func updateYAxis() {
-      let axisBounds = UI.axisBounds(data: output.longTimeData)
-      
-      let rangeCurrent = axisBounds[0] * 1e12
-      let rangeX = axisBounds[1]
-      let rangeY = axisBounds[2]
-      let rangeZ = axisBounds[3]
-      
-      let plotCurrent = historyPlots[0].plot
-      let plotZ = historyPlots[1].plot
-      let plotXY = historyPlots[2].plot
-      
-      plotCurrent.setYRange(
-        rangeCurrent[0],
-        rangeCurrent[1],
-        padding: 0)
-      plotZ.setYRange(
-        rangeZ[0],
-        rangeZ[1],
-        padding: 0)
-      
-      if !state.freezeTrajectory {
-        let centerX = rangeX.sum() / 2
-        let centerY = rangeY.sum() / 2
-        let spanX = rangeX[1] - rangeX[0]
-        let spanY = rangeY[1] - rangeY[0]
-        let maxSpan = max(spanX, spanY)
-        
-        let newRangeX = SIMD2(
-          centerX - maxSpan / 2,
-          centerX + maxSpan / 2)
-        let newRangeY = SIMD2(
-          centerY - maxSpan / 2,
-          centerY + maxSpan / 2)
-        
-        plotXY.setXRange(
-          newRangeX[0],
-          newRangeX[1],
-          padding: 0)
-        plotXY.setYRange(
-          newRangeY[0],
-          newRangeY[1],
-          padding: 0)
-        
-        let majorTick = maxSpan / 5
-        let minorTick = majorTick / 5
-        
-        let xAxis = plotXY.getAxis("bottom")
-        let yAxis = plotXY.getAxis("left")
-        xAxis.setTickSpacing(majorTick, minorTick)
-        yAxis.setTickSpacing(majorTick, minorTick)
-      }
-    }
+    var longTimeDesc = UI.TimeAxisDescriptor()
+    longTimeDesc.minimum = maximum - TimeAxis.longLength
+    longTimeDesc.maximum = maximum
+    longTimeDesc.majorTick = TimeAxis.longMajorTick
     
-    updateLongTime()
-    updateYAxis()
+    let plots = [
+      self.plots[0].plot,
+      self.plots[1].plot,
+    ]
+    UI.updateTimeAxis(
+      plots: plots,
+      descriptor: longTimeDesc)
   }
   
-  func updateHistoryPlots(output: History.Output) {
+  func updateCurrentRange(_ range: SIMD2<Float>) {
+    let plot = plots[0].plot
+    plot.setYRange(range[0], range[1], padding: 0)
+  }
+  
+  func updateZRange(_ range: SIMD2<Float>) {
+    let plot = plots[1].plot
+    plot.setYRange(range[0], range[1], padding: 0)
+  }
+  
+  func updateTrajectoryRange(
+    x rangeX: SIMD2<Float>,
+    y rangeY: SIMD2<Float>
+  ) {
+    let centerX = rangeX.sum() / 2
+    let centerY = rangeY.sum() / 2
+    let spanX = rangeX[1] - rangeX[0]
+    let spanY = rangeY[1] - rangeY[0]
+    let maxSpan = max(spanX, spanY)
+    
+    let newRangeX = SIMD2(
+      centerX - maxSpan / 2,
+      centerX + maxSpan / 2)
+    let newRangeY = SIMD2(
+      centerY - maxSpan / 2,
+      centerY + maxSpan / 2)
+    
+    let plotXY = plots[2].plot
+    plotXY.setXRange(
+      newRangeX[0],
+      newRangeX[1],
+      padding: 0)
+    plotXY.setYRange(
+      newRangeY[0],
+      newRangeY[1],
+      padding: 0)
+    
+    let majorTick = maxSpan / 5
+    let minorTick = majorTick / 5
+    
+    let xAxis = plotXY.getAxis("bottom")
+    let yAxis = plotXY.getAxis("left")
+    xAxis.setTickSpacing(majorTick, minorTick)
+    yAxis.setTickSpacing(majorTick, minorTick)
+  }
+  
+  func updateHistoryPlots(data: [History.TimedAverage]) {
     for plotID in 0..<2 {
       func getLaneID() -> Int {
         if plotID == 0 {
@@ -156,7 +116,7 @@ extension ImagingWindow {
       var averagePoints: [Float] = []
       var maximumPoints: [Float] = []
       
-      for sample in output.longTimeData {
+      for sample in data {
         x.append(sample.time)
         
         minimumPoints.append(sample.minimum[laneID] * multiplier)
@@ -172,46 +132,38 @@ extension ImagingWindow {
     }
   }
   
-  func updateTrajectoryPlot(
-    historyLines: [LineParser.Line],
-    pixelSegments: [[LineParser.Line]]
-  ) {
-    func updateHistoryCurve() {
+  func updateTrajectoryCurve() {
+    var x: [Float] = []
+    var y: [Float] = []
+    for line in state.trajectory.historyLines {
+      x.append(line.values[1])
+      y.append(line.values[2])
+    }
+    
+    let curve = plots[2].curves[0]
+    curve.setData(np.array(x), np.array(y))
+  }
+  
+  func updatePixelCurves() {
+    let lines = state.trajectory.pixelLines
+    let segments = settings.split(lines: lines)
+    if segments.count > Self.maxImagesPerFrame {
+      fatalError("Exceeded allowed number of images per frame.")
+    }
+    
+    for segmentID in 0..<Self.maxImagesPerFrame {
       var x: [Float] = []
       var y: [Float] = []
-      for line in historyLines {
-        x.append(line.values[1])
-        y.append(line.values[2])
-      }
-      
-      let curve = historyPlots[2].curves[0]
-      curve.setData(np.array(x), np.array(y))
-    }
-    
-    func updatePixelCurves() {
-      if pixelSegments.count > Self.maxImagesPerFrame {
-        fatalError("Exceeded allowed number of images per frame.")
-      }
-      
-      for segmentID in 0..<Self.maxImagesPerFrame {
-        var x: [Float] = []
-        var y: [Float] = []
-        if segmentID < pixelSegments.count {
-          let segment = pixelSegments[segmentID]
-          for line in segment {
-            x.append(line.values[1])
-            y.append(line.values[2])
-          }
+      if segmentID < segments.count {
+        let segment = segments[segmentID]
+        for line in segment {
+          x.append(line.values[1])
+          y.append(line.values[2])
         }
-        
-        let curve = historyPlots[2].curves[1 + segmentID]
-        curve.setData(np.array(x), np.array(y))
       }
-    }
-    
-    if !state.freezeTrajectory {
-      updateHistoryCurve()
-      updatePixelCurves()
+      
+      let curve = plots[2].curves[1 + segmentID]
+      curve.setData(np.array(x), np.array(y))
     }
   }
 }

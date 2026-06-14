@@ -35,18 +35,27 @@ class UI {
     }
   }
   
-  func changeMode(_ mode: Mode) {
-    self.mode = mode
+  func reset(modeCode: Int, settingsLines: [LineParser.Line]) {
+    if modeCode == 8 {
+      mode = .imaging
+    } else {
+      mode = .history
+    }
     
-    historyWindow.plotsInitialized = false
-    imagingWindow.stop()
     history = History(copying: history)
+    historyWindow.plotsInitialized = false
+    imagingWindow.state = ImagingWindow.State()
+    
+    if mode == .imaging {
+      let settings = ImagingSettings(settingsLines: settingsLines)
+      imagingWindow.imageHistory = ImageHistory(settings: settings)
+    } else {
+      imagingWindow.imageHistory = nil
+    }
   }
   
+  // Must be called on the main thread.
   func update() {
-    // register splitings
-    
-    
     let historyOutput = history.getOutput()
     if historyOutput.longTimeData.count > 0 {
       switch mode {

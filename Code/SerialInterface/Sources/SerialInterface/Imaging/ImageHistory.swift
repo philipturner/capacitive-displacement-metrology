@@ -13,6 +13,44 @@ struct ImageHistory {
     self.pendingImages = Array(repeating: nil, count: ringBufferSize)
   }
   
+  mutating func update(lines: [LineParser.Line]) {
+    let segments = settings.split(lines: lines)
+    for segmentID in segments.indices {
+      guard !pixelTracker.isFinished else {
+        fatalError("This should never happen.")
+      }
+      
+      let segment = segments[segmentID]
+      let imageID = receivedPixelCount / settings.pixelsPerImage
+      pixelTracker.receive(
+        lines: segment,
+        imageID: imageID)
+      pixelTracker.updateStatistics()
+      receivedPixelCount += segment.count
+      
+      if segmentID < segments.count - 1 {
+        guard pixelTracker.isFinished else {
+          fatalError("This should never happen.")
+        }
+        guard receivedPixelCount % settings.pixelsPerImage == 0 else {
+          fatalError("Received pixel count not divisible by pixels per image.")
+        }
+      } else if receivedPixelCount % settings.pixelsPerImage == 0 {
+        guard pixelTracker.isFinished else {
+          fatalError("This should never happen.")
+        }
+      }
+      
+      if pixelTracker.isFinished {
+        let ringIndex = imageID % pendingImages.count
+        pendingImages[ringIndex] = pixelTracker
+        pixelTracker = PixelTracker(settings: settings)
+      }
+    }
+  }
+}
+
+extension ImagingSettings {
   // Returns a division of lines into different images.
   func split(lines: [LineParser.Line]) -> [[LineParser.Line]] {
     guard lines.count > 0 else {
@@ -24,7 +62,7 @@ struct ImageHistory {
       guard let pixelID else {
         fatalError("Malformatted pixel ID.")
       }
-      return pixelID / settings.resolution
+      return pixelID / resolution
     }
     var previousRowID = createRowID(line: lines[0])
     
@@ -59,40 +97,5 @@ struct ImageHistory {
       fatalError("Something went wrong.")
     }
     return outputSegments
-  }
-  
-  mutating func update(segments: [[LineParser.Line]]) {
-    for segmentID in segments.indices {
-      guard !pixelTracker.isFinished else {
-        fatalError("This should never happen.")
-      }
-      
-      let segment = segments[segmentID]
-      let imageID = receivedPixelCount / settings.pixelsPerImage
-      pixelTracker.receive(
-        lines: segment,
-        imageID: imageID)
-      pixelTracker.updateStatistics()
-      receivedPixelCount += segment.count
-      
-      if segmentID < segments.count - 1 {
-        guard pixelTracker.isFinished else {
-          fatalError("This should never happen.")
-        }
-        guard receivedPixelCount % settings.pixelsPerImage == 0 else {
-          fatalError("Received pixel count not divisible by pixels per image.")
-        }
-      } else if receivedPixelCount % settings.pixelsPerImage == 0 {
-        guard pixelTracker.isFinished else {
-          fatalError("This should never happen.")
-        }
-      }
-      
-      if pixelTracker.isFinished {
-        let ringIndex = imageID % pendingImages.count
-        pendingImages[ringIndex] = pixelTracker
-        pixelTracker = PixelTracker(settings: settings)
-      }
-    }
   }
 }

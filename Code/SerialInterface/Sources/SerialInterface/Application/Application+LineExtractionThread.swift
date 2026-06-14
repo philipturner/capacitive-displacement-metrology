@@ -34,15 +34,8 @@ extension Application {
     
     Application.queue.sync { [self] in
       if let modeCode = splitting.newModeCode {
-        if modeCode == 8 {
-          ui.changeMode(.imaging)
-        } else {
-          ui.changeMode(.history)
-        }
-        
-        if ui.mode == .imaging {
-          ui.imagingWindow.start(settingsLines: splitting[.imagingSettings])
-        }
+        let settingsLines = splitting[.imagingSettings]
+        ui.reset(modeCode: modeCode, settingsLines: settingsLines)
       }
       
       ui.history.addLines(splitting[.history])

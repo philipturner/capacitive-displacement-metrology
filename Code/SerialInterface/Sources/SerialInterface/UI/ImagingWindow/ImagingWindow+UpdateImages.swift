@@ -176,9 +176,7 @@ extension ImagingWindow {
     
     let image = fourierImage
     image.imageItem.setImage(finalData, autoLevels: false)
-    
-    let transform = state.settings.fourierSpaceTransform()
-    image.imageItem.setTransform(transform)
+    image.imageItem.setTransform(settings.fourierSpaceTransform())
     
     let minimum = Float(np.nanmin(data))!
     let maximum = Float(np.nanmax(data))!
