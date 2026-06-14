@@ -7,6 +7,7 @@ struct ApplicationDescriptor {
   var trajectoryLagTime: Double?
   var triggers: [Trigger] = []
   var useEmulator: Bool = false
+  var useImagingWindow: Bool = false
 }
 
 class Application: @unchecked Sendable {
@@ -18,6 +19,7 @@ class Application: @unchecked Sendable {
   static var nextPauseTime: Double?
   
   var useEmulator: Bool
+  var useImagingWindow: Bool
   
   let ui: UI
   let port: SerialPort

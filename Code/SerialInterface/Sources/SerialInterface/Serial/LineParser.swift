@@ -5,6 +5,7 @@ struct LineParser {
   var previousPendingBytes: [UInt8] = []
   var totalLineCount: Int = .zero
   var previousLineID: Int?
+  var pendingImagingSettingsLines: [Line] = []
   
   static func getValidBytes(port: SerialPort) throws -> [UInt8] {
     let data = try Application.queue.sync {

@@ -25,7 +25,6 @@ class ImagingWindow {
   var labels: [PythonObject]
   
   var state: ImagingState!
-  var pendingSettingsLines: [LineParser.Line] = []
   var pendingHistoryLines: [LineParser.Line] = []
   var pendingPixelLines: [LineParser.Line] = []
   
@@ -45,7 +44,7 @@ class ImagingWindow {
     setWindowSize()
   }
   
-  func reset() {
+  func reset(settingsLines: [LineParser.Line]) {
     guard pendingSettingsLines.count == 2 else {
       let lineCount = pendingSettingsLines.count
       fatalError(
