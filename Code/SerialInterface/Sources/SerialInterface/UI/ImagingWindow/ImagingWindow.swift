@@ -7,7 +7,7 @@ class ImagingWindow {
     var curves: [PythonObject]
   }
   
-  struct Image {
+  struct ImagePlot {
     var plot: PythonObject
     var imageItem: PythonObject
     var colorBar: PythonObject
@@ -30,9 +30,9 @@ class ImagingWindow {
   let trajectoryLagTime: Double?
   var state = State()
   
-  var plots: [HistoryPlot]
-  var scanImages: [[Image]]
-  var fourierImage: Image
+  var historyPlots: [HistoryPlot]
+  var scanImagePlots: [[ImagePlot]]
+  var fourierImagePlot: ImagePlot
   var labels: [PythonObject]
   
   var imageHistory: ImageHistory!
@@ -46,8 +46,8 @@ class ImagingWindow {
     UI.connectCloseShortcut(win: win)
     
     historyPlots = Self.createHistoryPlots(win: win)
-    scanImages = Self.createScanImages(win: win)
-    fourierImage = Self.createFourierImage(win: win)
+    scanImagePlots = Self.createScanImagePlots(win: win)
+    fourierImagePlot = Self.createFourierImagePlot(win: win)
     labels = Self.createPlotLabels(win: win)
     
     linkPlots()
@@ -67,22 +67,9 @@ class ImagingWindow {
     }
     
     imageHistory.update(lines: state.trajectory.pixelLines)
-    updateScanImages()
-    updateFourierImage()
+    updateImages()
     
-    let pixelSegments = state.split(lines: pendingPixelLines)
-    state.update(lines: pixelSegments)
-    for i in state.pendingImages.indices {
-      state.pendingImages[i] = nil
-    }
-    
-    if let trajectoryLagTime {
-      removeOldHistoryLines(lagTime: trajectoryLagTime)
-    } else {
-      state.trajectory.historyLines = []
-    }
-    state.trajectory.pixelLines = []
-    
+    removePendingData()
   }
   
   func removeOldHistoryLines(lagTime: Double) {
@@ -110,6 +97,19 @@ class ImagingWindow {
         state.trajectory.historyLines.removeFirst(deletedLineCount)
         state.trajectory.deletedLineCount += deletedLineCount
       }
+    }
+  }
+  
+  func removePendingData() {
+    if let trajectoryLagTime {
+      removeOldHistoryLines(lagTime: trajectoryLagTime)
+    } else {
+      state.trajectory.historyLines = []
+    }
+    state.trajectory.pixelLines = []
+    
+    for i in imageHistory.pendingImages.indices {
+      imageHistory.pendingImages[i] = nil
     }
   }
 }

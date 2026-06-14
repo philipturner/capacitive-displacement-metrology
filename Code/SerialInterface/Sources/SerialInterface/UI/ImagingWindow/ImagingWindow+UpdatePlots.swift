@@ -7,6 +7,7 @@ extension ImagingWindow {
     updateTimeAxis(data: data)
     updateCurrentRange(axisBounds[0])
     updateZRange(axisBounds[3])
+    updateCurrentAndZCurves(data: data)
     
     func trajectoryIsFrozen() -> Bool {
       guard settings.mode == .image else {
@@ -25,16 +26,6 @@ extension ImagingWindow {
       updateTrajectoryCurve()
       updatePixelCurves()
     }
-    
-    do {
-      let pixelSegments = state.split(lines: pendingPixelLines)
-      state.update(segments: pixelSegments)
-    }
-    updateScanImages()
-    updateFourierImage()
-    
-    
-
   }
   
   func updateTimeAxis(data: [History.TimedAverage]) {
@@ -46,8 +37,8 @@ extension ImagingWindow {
     longTimeDesc.majorTick = TimeAxis.longMajorTick
     
     let plots = [
-      self.plots[0].plot,
-      self.plots[1].plot,
+      self.historyPlots[0].plot,
+      self.historyPlots[1].plot,
     ]
     UI.updateTimeAxis(
       plots: plots,
@@ -55,12 +46,12 @@ extension ImagingWindow {
   }
   
   func updateCurrentRange(_ range: SIMD2<Float>) {
-    let plot = plots[0].plot
+    let plot = historyPlots[0].plot
     plot.setYRange(range[0], range[1], padding: 0)
   }
   
   func updateZRange(_ range: SIMD2<Float>) {
-    let plot = plots[1].plot
+    let plot = historyPlots[1].plot
     plot.setYRange(range[0], range[1], padding: 0)
   }
   
@@ -81,7 +72,7 @@ extension ImagingWindow {
       centerY - maxSpan / 2,
       centerY + maxSpan / 2)
     
-    let plotXY = plots[2].plot
+    let plotXY = historyPlots[2].plot
     plotXY.setXRange(
       newRangeX[0],
       newRangeX[1],
@@ -100,7 +91,7 @@ extension ImagingWindow {
     yAxis.setTickSpacing(majorTick, minorTick)
   }
   
-  func updateHistoryPlots(data: [History.TimedAverage]) {
+  func updateCurrentAndZCurves(data: [History.TimedAverage]) {
     for plotID in 0..<2 {
       func getLaneID() -> Int {
         if plotID == 0 {
@@ -119,9 +110,9 @@ extension ImagingWindow {
       for sample in data {
         x.append(sample.time)
         
-        minimumPoints.append(sample.minimum[laneID] * multiplier)
-        averagePoints.append(sample.average[laneID] * multiplier)
-        maximumPoints.append(sample.maximum[laneID] * multiplier)
+        minimumPoints.append(sample.minimum[laneID])
+        averagePoints.append(sample.average[laneID])
+        maximumPoints.append(sample.maximum[laneID])
       }
       
       let xArray = np.array(x)
@@ -140,7 +131,7 @@ extension ImagingWindow {
       y.append(line.values[2])
     }
     
-    let curve = plots[2].curves[0]
+    let curve = historyPlots[2].curves[0]
     curve.setData(np.array(x), np.array(y))
   }
   
@@ -162,7 +153,7 @@ extension ImagingWindow {
         }
       }
       
-      let curve = plots[2].curves[1 + segmentID]
+      let curve = historyPlots[2].curves[1 + segmentID]
       curve.setData(np.array(x), np.array(y))
     }
   }

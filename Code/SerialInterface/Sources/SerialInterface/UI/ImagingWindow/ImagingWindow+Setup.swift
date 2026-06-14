@@ -98,10 +98,10 @@ extension ImagingWindow {
     return output
   }
   
-  static func createScanImages(win: PythonObject) -> [[Image]] {
-    var output: [[Image]] = []
+  static func createScanImagePlots(win: PythonObject) -> [[ImagePlot]] {
+    var output: [[ImagePlot]] = []
     for rowID in 0..<2 {
-      var imageRow: [Image] = []
+      var imageRow: [ImagePlot] = []
       
       for columnID in 0..<2 {
         let plot = win.addPlot(
@@ -121,7 +121,7 @@ extension ImagingWindow {
         colorBar.setImageItem(imageItem, insert_in: plot)
         colorBar.axis.setWidth(colorBarAxisWidth)
         
-        let image = Image(
+        let image = ImagePlot(
           plot: plot,
           imageItem: imageItem,
           colorBar: colorBar)
@@ -132,7 +132,7 @@ extension ImagingWindow {
     return output
   }
   
-  static func createFourierImage(win: PythonObject) -> Image {
+  static func createFourierImagePlot(win: PythonObject) -> ImagePlot {
     let plot = win.addPlot(row: 2, col: 2)
     plot.getViewBox().setAspectLocked(true)
     setSize(plot: plot, isHistory: false)
@@ -148,7 +148,7 @@ extension ImagingWindow {
     colorBar.setImageItem(imageItem, insert_in: plot)
     colorBar.axis.setWidth(colorBarAxisWidth)
     
-    let image = Image(
+    let image = ImagePlot(
       plot: plot,
       imageItem: imageItem,
       colorBar: colorBar)
