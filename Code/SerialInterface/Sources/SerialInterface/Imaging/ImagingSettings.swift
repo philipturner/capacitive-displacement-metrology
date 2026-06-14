@@ -3,45 +3,56 @@ import PythonKit
 struct ImagingSettings {
   var mode: ImagingMode
   var resolution: Int
-  var size: Float
+  var pixelDimension: Float
+  var dominantAxis: Int
   var centers: [SIMD2<Float>]
   var setpointCurrent: Float
   
-  init(values: [Float]) {
-    guard values.count == 8 else {
-      fatalError("Invalid number of values.")
+  init(settingsLines: [LineParser.Line]) {
+    guard settingsLines.count == 3 else {
+      fatalError(
+        "Invalid number of imaging settings lines: \(settingsLines.count)")
     }
     
-    guard let rawValue = UInt8(exactly: values[0]),
-          let mode = ImagingMode(rawValue: rawValue) else {
-      fatalError("Invalid mode.")
+    func createMode() -> ImagingMode {
+      let value = UInt8(exactly: settingsLines[0].values[0])!
+      guard let mode = ImagingMode(rawValue: value) else {
+        fatalError("Invalid mode.")
+      }
+      return mode
     }
-    self.mode = mode
+    self.mode = createMode()
+    self.resolution = Int(exactly: settingsLines[0].values[2])!
+    self.pixelDimension = settingsLines[0].values[3]
+    self.dominantAxis = Int(exactly: settingsLines[1].values[0])!
     
-    guard let resolution = Int(exactly: values[1]),
-          resolution > 0,
-          resolution % 2 == 0 else {
-      fatalError("Invalid resolution.")
+    func createCenters() -> [SIMD2<Float>] {
+      var output: [SIMD2<Float>] = []
+      for centerID in 0..<2 {
+        let laneOffset = 1 + centerID * 2
+        
+        let x = settingsLines[1].values[laneOffset + 0]
+        let y = settingsLines[1].values[laneOffset + 1]
+        let center = SIMD2(x, y)
+        output.append(center)
+      }
+      return output
     }
-    self.resolution = resolution
-    
-    self.size = values[2]
-    
-    self.centers = [
-      SIMD2(values[3], values[4]),
-      SIMD2(values[5], values[6]),
-    ]
-    
-    self.setpointCurrent = values[7]
+    self.centers = createCenters()
+    self.setpointCurrent = settingsLines[2].values[2]
   }
   
   var pixelsPerImage: Int {
     resolution * resolution
   }
   
-  func currentImageCenter(imageID: Int) -> SIMD2<Float> {
-    if mode == .dualVideo, imageID % 2 == 1 {
-      return centers[1]
+  func center(channelID: Int) -> SIMD2<Float> {
+    guard channelID >= 0, channelID < 2 else {
+      fatalError("Invalid channel ID.")
+    }
+    
+    if mode == .dualVideo {
+      return centers[channelID]
     } else {
       return centers[0]
     }
@@ -52,45 +63,41 @@ struct ImagingSettings {
     let columnID = pixelID % resolution
     
     var position = SIMD2(Float(columnID), Float(rowID))
-    position = (position + 0.5) * size / Float(resolution)
-    position -= size / 2
-    position += currentImageCenter(imageID: imageID)
+    position += 0.5
+    position -= 0.5 * Float(resolution) * pixelDimension
+    
+    if dominantAxis == 1 {
+      position = SIMD2(position.y, position.x)
+    }
+    
+    position += center(channelID: imageID % 2)
     return position
   }
 }
 
 extension ImagingSettings {
-  func realSpaceTransform(videoChannelID: Int) -> PythonObject {
-    guard videoChannelID == 0 || videoChannelID == 1 else {
-      fatalError("This should never happen.")
-    }
-    
-    let pixelSize = size / Float(resolution)
-    
-    var position: SIMD2<Float> = .zero
-    position -= size / 2
-    position += currentImageCenter(imageID: videoChannelID)
+  func realSpaceTransform(channelID: Int) -> PythonObject {
+    var offset: SIMD2<Float> = .zero
+    offset -= 0.5 * Float(resolution) * pixelDimension
+    offset += center(channelID: channelID)
+    offset /= pixelDimension
     
     let transform = QtGui.QTransform()
-    transform.scale(pixelSize, pixelSize)
-    transform.translate(
-      position[0] / pixelSize,
-      position[1] / pixelSize)
+    transform.scale(pixelDimension, pixelDimension)
+    transform.translate(offset.x, offset.y)
     return transform
   }
   
   func fourierSpaceTransform() -> PythonObject {
-    let realSpacePixelSize = size / Float(resolution)
-    let pixelSize = (1 / realSpacePixelSize) / Float(resolution)
+    let fourierPixelDimension = (1 / pixelDimension) / Float(resolution)
     
-    let offset = -Float(resolution) / 2 * pixelSize
-    let position = SIMD2(repeating: offset)
+    var offset: SIMD2<Float> = .zero
+    offset -= 0.5 * Float(resolution) * fourierPixelDimension
+    offset /= fourierPixelDimension
     
     let transform = QtGui.QTransform()
-    transform.scale(pixelSize, pixelSize)
-    transform.translate(
-      position[0] / pixelSize,
-      position[1] / pixelSize)
+    transform.scale(fourierPixelDimension, fourierPixelDimension)
+    transform.translate(offset.x, offset.y)
     return transform
   }
 }
