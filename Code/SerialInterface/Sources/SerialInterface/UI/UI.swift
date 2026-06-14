@@ -12,8 +12,6 @@ class UI {
   }
   private(set) var mode: Mode = .history
   
-  var pendingSplittings: [LineParser.Splitting] = []
-  
   init(descriptor: ApplicationDescriptor) {
     pg.setConfigOptions(useOpenGL: true)
     pg.setConfigOptions(antialias: true)
@@ -56,51 +54,46 @@ class UI {
   
   // Must be called on the main thread.
   func update() {
-    let historyOutput = history.getOutput()
-    if historyOutput.longTimeData.count > 0 {
-      switch mode {
-      case .history:
-        historyWindow.update(historyOutput: historyOutput)
-      case .imaging:
-        let data = historyOutput.longTimeData
-        imagingWindow.updateHistoryRanges
-        imagingWindow.updatePlots
+    let output = history.getOutput()
+    switch mode {
+    case .history:
+      historyWindow.update(historyOutput: output)
+    case .imaging:
+      imagingWindow.update(historyOutput: output)
+    }
+    
+    func canShowHistoryWindow() -> Bool {
+      guard mode == .history else {
+        return false
       }
-    }
-    
-    let output = application.history.getOutput()
-    if application.ui.imagingModeActive {
-      application.ui.imagingWindow.update(output: output)
-    } else {
-      application.ui.historyWindow.update(output: output)
-    }
-    application.ui.showActiveWindows()
-  }
-  
-  func showActiveWindows() {
-    var showHistoryWindow = false
-    var showImagingWindow = false
-    
-    if imagingModeActive {
       
-    } else {
       if historyWindow.plotsInitialized {
-        showHistoryWindow = true
+        return true
+      } else {
+        return false
       }
     }
     
+    func canShowImagingWindow() -> Bool {
+      guard mode == .imaging else {
+        return false
+      }
+      
+      if imagingWindow.state.plotsInitialized,
+         imagingWindow.state.imagesInitialized {
+        return true
+      } else {
+        return false
+      }
+    }
     
-    if !imagingModeActive, historyWindow.plotsInitialized {
+    if canShowHistoryWindow() {
       historyWindow.win.show()
     } else {
       historyWindow.win.hide()
     }
     
-    func canShowImagingWindow() {
-      
-    }
-    
-    if imagingModeActive, imagingWindow.plotDataValid {
+    if canShowImagingWindow() {
       imagingWindow.win.show()
     } else {
       imagingWindow.win.hide()

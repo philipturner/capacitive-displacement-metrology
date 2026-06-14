@@ -1,25 +1,6 @@
 import PythonKit
 
 extension UI {
-  static let thicknessFactor: Int = 1
-  
-  static func connectCloseShortcut(win: PythonObject) {
-    let shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+W"), win)
-    
-    let closeEvent = PythonFunction { args in
-      Application.needsToClose = true
-      return Python.None
-    }.pythonObject
-    
-    // Makes the application close when "Ctrl + W" is typed, and the window
-    // 'win' is in focus.
-    shortcut.activated.connect(closeEvent)
-    
-    // Makes the application close after pressing the red button to close the
-    // window.
-    win.closeEvent = closeEvent
-  }
-  
   struct TimeAxisDescriptor {
     /// Required. The start of the time interval.
     var minimum: Double?
@@ -113,6 +94,8 @@ extension UI {
 }
 
 extension UI {
+  static let thicknessFactor: Int = 1
+  
   static func setThickness(axis: PythonObject) {
     let pen = axis.pen()
     pen.setWidth(Self.thicknessFactor)
@@ -166,5 +149,22 @@ extension UI {
         }
       ]
     ).pythonObject
+  }
+  
+  static func connectCloseShortcut(win: PythonObject) {
+    let shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+W"), win)
+    
+    let closeEvent = PythonFunction { args in
+      Application.needsToClose = true
+      return Python.None
+    }.pythonObject
+    
+    // Makes the application close when "Ctrl + W" is typed, and the window
+    // 'win' is in focus.
+    shortcut.activated.connect(closeEvent)
+    
+    // Makes the application close after pressing the red button to close the
+    // window.
+    win.closeEvent = closeEvent
   }
 }
