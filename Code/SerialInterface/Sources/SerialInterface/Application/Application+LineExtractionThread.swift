@@ -30,58 +30,28 @@ extension Application {
     }
     
     let splitting = lineParser.split(lines: lines)
-    Application.queue.sync { [self] in
-      if let newMode = splitting.newMode {
-        history = History(copying: history)
-        
-        if useImagingWindow, newMode == 8 {
-          ui.imagingModeActive = true
-          ui.imagingWindow.reset()
-        } else {
-          ui.imagingModeActive = false
-          ui.imagingWindow.state = nil
-        }
-        ui.imagingWindow.plotDataValid = false
-        ui.historyWindow.plotDataValid = false
-      }
-      if mode == .imaging {
-        imagingWindow.start(settingsLines: imagingSettingsLines)
-      }
-      
-      if ui.imagingModeActive {
-        if let pauseTime = Application.nextPauseTime {
-          let currentTime = Date().timeIntervalSince1970
-          if pauseTime < currentTime {
-            fatalError(
-              "Pausing during imaging would overwhelm the current code.")
-          }
-        }
-        
-        ui.imagingWindow.pendingHistoryLines += splitting.history
-        ui.imagingWindow.pendingPixelLines += splitting.pixel
-      }
-      
-      // Update the history.
-      if splitting.newMode != nil {
-        
-      }
-      history.addLines(splitting.history)
-    }
+    splitting.display()
     
-    func display(lines: [LineParser.Line], label: String?) {
-      for line in lines {
-        if let label {
-          print(label, terminator: ": ")
+    Application.queue.sync { [self] in
+      if let modeCode = splitting.newModeCode {
+        if modeCode == 8 {
+          ui.changeMode(.imaging)
+        } else {
+          ui.changeMode(.history)
         }
-        for laneID in 0..<5 {
-          let value = line.values[laneID]
-          print(value, terminator: ", ")
+        
+        if ui.mode == .imaging {
+          ui.imagingWindow.start(settingsLines: splitting[.imagingSettings])
         }
-        print()
+      }
+      
+      ui.history.addLines(splitting[.history])
+      
+      if ui.mode == .imaging {
+        ui.imagingWindow.state.trajectory.historyLines += splitting[.history]
+        ui.imagingWindow.state.trajectory.pixelLines += splitting[.pixel]
       }
     }
-    display(lines: splitting.spectroscopy, label: nil)
-    display(lines: splitting.imagingSettings, label: "imaging settings")
   }
   
   private func processSerialInput() {
@@ -104,12 +74,7 @@ extension Application {
     func reset(error: LocalizedError) {
       lineParser = LineParser()
       Application.queue.sync {
-        if ui.mode == .imaging {
-          fatalError(
-            "Encountered corrupted data while imaging mode was active.")
-        } else {
-          ui.history = History(copying: ui.history)
-        }
+        ui.registerDataCorruptionError()
       }
     }
     

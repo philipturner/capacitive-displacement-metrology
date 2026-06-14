@@ -12,35 +12,29 @@ class UI {
   }
   private(set) var mode: Mode = .history
   
-  init(trajectoryLagTime: Double?) {
+  var pendingSplittings: [LineParser.Splitting] = []
+  
+  init(descriptor: ApplicationDescriptor) {
     pg.setConfigOptions(useOpenGL: true)
     pg.setConfigOptions(antialias: true)
     pg.setConfigOption("imageAxisOrder", "row-major")
     app = QtWidgets.QApplication([String]())
     
     historyWindow = HistoryWindow()
-    imagingWindow = ImagingWindow(trajectoryLagTime: trajectoryLagTime)
+    imagingWindow = ImagingWindow(
+      trajectoryLagTime: descriptor.trajectoryLagTime)
+    history = History(triggers: descriptor.triggers)
   }
   
-  static func connectCloseShortcut(win: PythonObject) {
-    let shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+W"), win)
-    
-    let closeEvent = PythonFunction { args in
-      Application.needsToClose = true
-      return Python.None
-    }.pythonObject
-    
-    // Makes the application close when "Ctrl + W" is typed, and the window
-    // 'win' is in focus.
-    shortcut.activated.connect(closeEvent)
-    
-    // Makes the application close after pressing the red button to close the
-    // window.
-    win.closeEvent = closeEvent
+  func registerDataCorruptionError() {
+    if mode == .imaging {
+      fatalError(
+        "Encountered corrupted data while imaging mode was active.")
+    } else {
+      history = History(copying: history)
+    }
   }
-}
-
-extension UI {
+  
   func changeMode(_ mode: Mode) {
     self.mode = mode
     
@@ -50,6 +44,21 @@ extension UI {
   }
   
   func update() {
+    // register splitings
+    
+    
+    let historyOutput = history.getOutput()
+    if historyOutput.longTimeData.count > 0 {
+      switch mode {
+      case .history:
+        historyWindow.update(historyOutput: historyOutput)
+      case .imaging:
+        let data = historyOutput.longTimeData
+        imagingWindow.updateHistoryRanges
+        imagingWindow.updatePlots
+      }
+    }
+    
     let output = application.history.getOutput()
     if application.ui.imagingModeActive {
       application.ui.imagingWindow.update(output: output)
@@ -89,3 +98,4 @@ extension UI {
     }
   }
 }
+

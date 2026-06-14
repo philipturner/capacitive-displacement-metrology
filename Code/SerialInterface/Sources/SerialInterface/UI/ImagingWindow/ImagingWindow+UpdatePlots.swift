@@ -2,7 +2,7 @@ import Foundation
 import PythonKit
 
 extension ImagingWindow {
-  func updatePlots(output: History.Output) {
+  func updatePlots(longTimeData: [History.TimedAverage]) {
     guard output.longTimeData.count > 0 else {
       return
     }

@@ -10,7 +10,7 @@ extension LineParser {
   }
   
   struct Splitting {
-    var newMode: Int?
+    var newModeCode: Int?
     var data: [[Line]]
     
     init() {
@@ -120,7 +120,7 @@ extension LineParser {
         splitting[.history].append(line)
       case .newMode:
         let modeCode = Int(line.values[0])
-        splitting.newMode = modeCode
+        splitting.newModeCode = modeCode
         splitting[.history] = []
         splitting[.pixel] = []
         

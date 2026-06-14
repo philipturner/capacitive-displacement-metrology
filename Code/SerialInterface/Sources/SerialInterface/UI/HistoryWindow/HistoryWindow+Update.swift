@@ -61,7 +61,7 @@ extension HistoryWindow {
 }
 
 extension HistoryWindow {
-  func update(output: History.Output) {
+  func update(historyOutput output: History.Output) {
     guard output.shortTimeData.count > 0,
           output.longTimeData.count > 0 else {
       return

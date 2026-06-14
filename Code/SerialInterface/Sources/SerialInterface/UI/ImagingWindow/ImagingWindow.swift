@@ -13,13 +13,18 @@ class ImagingWindow {
     var colorBar: PythonObject
   }
   
+  struct TrajectoryState {
+    var deletedLineCount: Int = 0
+    var frozen: Bool = false
+    var synchronization: (timestamp: Double, lineID: Int)?
+    var historyLines: [LineParser.Line] = []
+    var pixelLines: [LineParser.Line] = []
+  }
+  
   struct State {
     var plotsInitialized = false
     var imagesInitialized = false
-    
-    var deletedHistoryLineCount: Int = 0
-    var freezeTrajectory = false
-    var trajectorySynchronization: (timestamp: Double, lineID: Int)?
+    var trajectory = TrajectoryState()
   }
   
   let win: PythonObject
@@ -32,8 +37,6 @@ class ImagingWindow {
   var labels: [PythonObject]
   
   var imageHistory: ImageHistory!
-  var pendingHistoryLines: [LineParser.Line] = []
-  var pendingPixelLines: [LineParser.Line] = []
   
   init(trajectoryLagTime: Double?) {
     self.trajectoryLagTime = trajectoryLagTime
@@ -66,5 +69,9 @@ class ImagingWindow {
     // Do not access Python from the background thread.
     // updateFourierImageVisibility()
     // resetImages()
+  }
+  
+  func update() {
+    
   }
 }

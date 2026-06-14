@@ -64,6 +64,11 @@ class Application: @unchecked Sendable {
       
       if let pauseTime = Application.nextPauseTime {
         if pauseTime < currentTime {
+          Application.queue.sync {
+            if ui.mode == .imaging {
+              fatalError("Cannot pause while in imaging mode.")
+            }
+          }
           continue
         }
       }
