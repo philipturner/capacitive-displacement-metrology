@@ -43,15 +43,6 @@ class ImagingWindow {
     
     linkPlots()
     setWindowSize()
-    
-    #if false
-    for imageRow in scanImages {
-      for image in imageRow {
-        Self.updateScanImageWithTest(image: image)
-      }
-    }
-    Self.updateFourierImageWithTest(image: fourierImage)
-    #endif
   }
   
   func reset() {

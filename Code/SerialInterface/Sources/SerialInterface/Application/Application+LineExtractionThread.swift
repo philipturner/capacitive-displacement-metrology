@@ -34,7 +34,7 @@ extension Application {
       // Update the imaging window.
       ui.imagingWindow.pendingSettingsLines += splitting.imagingSettings
       if let newMode = splitting.newMode {
-        if newMode == 8 {
+        if newMode == 8 && false {
           ui.imagingModeActive = true
           ui.imagingWindow.reset()
         } else {

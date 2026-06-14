@@ -22,7 +22,7 @@ extension ImagingWindow {
     if let trajectoryLagTime = trajectoryLagTime {
       if let synchronization = state.trajectorySynchronization {
         let currentTime = Date().timeIntervalSince1970
-        let pastTime = currentTime - 0.1
+        let pastTime = currentTime - trajectoryLagTime
         let deltaTime = pastTime - synchronization.timestamp
         
         let timePerLine = 1e-6 * Double(History.logPeriodMicros)
@@ -128,12 +128,7 @@ extension ImagingWindow {
         
         let majorTick = maxSpan / 5
         let minorTick = majorTick / 5
-        let offset: Float = 1.0
         
-        let levels: [PythonObject] = [
-          PythonObject(tupleOf: majorTick, offset),
-          PythonObject(tupleOf: minorTick, offset),
-        ]
         let xAxis = plotXY.getAxis("bottom")
         let yAxis = plotXY.getAxis("left")
         xAxis.setTickSpacing(majorTick, minorTick)

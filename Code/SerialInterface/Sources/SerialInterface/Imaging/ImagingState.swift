@@ -65,7 +65,6 @@ struct ImagingState {
   }
   
   mutating func update(segments: [[LineParser.Line]]) {
-    var imageCompleted = false
     for segmentID in segments.indices {
       guard !pixelTracker.isFinished else {
         fatalError("This should never happen.")

@@ -1,75 +1,15 @@
 import Foundation
 
 extension Emulator {
-  static let pixelPeriodMicros: Int = 144
-  static let atomSpacing: Float = 0.246 // units: nm
-  
-  static let imagingMode: ImagingMode = .video
-  static let imageResolution: Int = 96
-  static let imageSize: Float = 0.040 * Float(imageResolution)
-  static let imageCenters: [SIMD2<Float>] = [
-    SIMD2<Float>(0, 0),
-    SIMD2<Float>(10, 10),
-  ]
-  
-  mutating func increaseDriftOffset() {
-    let u1 = Float.random(in: 0.001...1.0)
-    let u2 = Float.random(in: 0.001...1.0)
-    let standardNormal1 = sqrt(-2.0 * log(u1)) * sin(2.0 * Float.pi * u2)
-    let standardNormal2 = sqrt(-2.0 * log(u1)) * cos(2.0 * Float.pi * u2)
-    
-    let speedTarget: Float = 0.05
-    var velocity = SIMD2<Float>(standardNormal1, standardNormal2)
-    velocity *= speedTarget
-    
-    let dt = Float(1e-6) * Float(Self.pixelPeriodMicros)
-    driftOffset += sqrt(dt) * velocity
-  }
-  
-  mutating func createImagingParameterLines() -> [LineParser.Line] {
-    var output: [LineParser.Line] = []
-    for i in 0..<2 {
-      var line = LineParser.Line()
-      line.flags = 4
-      line.id = idCursor
-      idCursor += 1
-      
-      if i == 0 {
-        line.values[0] = Float(Self.imagingMode.rawValue)
-        line.values[1] = Float(Self.imageResolution)
-        line.values[2] = Self.imageSize
-        line.values[3] = Self.imageCenters[0].x
-        line.values[4] = Self.imageCenters[0].y
-      } else {
-        if Self.imagingMode == .dualVideo {
-          line.values[0] = Self.imageCenters[1].x
-          line.values[1] = Self.imageCenters[1].y
-        } else {
-          line.values[0] = -100
-          line.values[1] = -100
-        }
-        line.values[2] = 1000e-12
-      }
-      output.append(line)
-    }
-    return output
-  }
-  
-  static func getImageCenter(imageID: Int) -> SIMD2<Float> {
-    if Self.imagingMode == .dualVideo, imageID % 2 == 1 {
-      return Self.imageCenters[1]
-    } else {
-      return Self.imageCenters[0]
-    }
-  }
-  
-  static func getCurrent(position: SIMD2<Float>) -> Float {
+  // Returns the current relative to the setpoint.
+  static func normalizedCurrent(position: SIMD2<Float>) -> Float {
     // min: -0.5
     // avg: 0.0
     // max: 1.0
     func getCorrugationAmplitude() -> Float {
-      let x = position[0] / Self.atomSpacing
-      let y = position[1] / Self.atomSpacing
+      let atomSpacing: Float = 0.246 // units: nm
+      let x = position[0] / atomSpacing
+      let y = position[1] / atomSpacing
       
       var phases: SIMD3<Float> = .zero
       phases[0] = x
@@ -98,86 +38,9 @@ extension Emulator {
       return sqrt(-2.0 * log(u1)) * cos(2.0 * Float.pi * u2)
     }
     
-    var output: Float = 1e-9
-    output += 0.2e-9 * getCorrugationAmplitude()
-    output += 0.03e-9 * randomGaussian()
-    return output
-  }
-  
-  private func createPixel(
-    imageID: Int,
-    rowID: Int,
-    columnID: Int
-  ) -> SIMD8<Float> {
-    var position = SIMD2(Float(columnID), Float(rowID))
-    position = (position + 0.5) * Self.imageSize / Float(Self.imageResolution)
-    position -= Self.imageSize / 2
-    position += Self.getImageCenter(imageID: imageID)
-    
-    let driftedPosition = position + driftOffset
-    
-    let pixelID = rowID * Self.imageResolution + columnID
-    let z = driftedPosition.x / 10 + driftedPosition.y / 10
-    let current = Self.getCurrent(position: driftedPosition)
-    
-    var output: SIMD8<Float> = .zero
-    output[0] = Float(pixelID)
-    output[1] = position.x
-    output[2] = position.y
-    output[3] = z
-    output[4] = current
-    return output
-  }
-  
-  mutating func createImagingLines(currentTime: Double) -> [LineParser.Line] {
-    let pixelCursorPrevious = Self
-      .elapsedMicros(modeStartTime, previousTime) / Self.pixelPeriodMicros
-    let pixelCursorNext = Self
-      .elapsedMicros(modeStartTime, currentTime) / Self.pixelPeriodMicros
-    
-    var output: [LineParser.Line] = []
-    for var time in pixelCursorPrevious..<pixelCursorNext {
-      let imageID = time / (Self.imageResolution * Self.imageResolution)
-      if Self.imagingMode == .image, imageID > 0 {
-        break
-      }
-      time = time % (Self.imageResolution * Self.imageResolution)
-      
-      let rowID = time / Self.imageResolution
-      time = time % Self.imageResolution
-      
-      var columnID = time
-      if rowID % 2 == 1 {
-        columnID = (Self.imageResolution - 1) - columnID
-      }
-      
-      if (rowID * Self.imageResolution + columnID) < 0 {
-        fatalError("""
-          This should never happen.
-          \(pixelCursorPrevious)
-          \(pixelCursorNext)
-          \(time)
-          \(imageID)
-          \(rowID)
-          \(columnID)
-          """)
-      }
-      
-      increaseDriftOffset()
-      let values = createPixel(
-        imageID: imageID,
-        rowID: rowID,
-        columnID: columnID)
-      
-      var line = LineParser.Line()
-      line.flags = 5
-      line.id = idCursor
-      idCursor += 1
-      
-      line.values = values
-      output.append(line)
-    }
+    var output: Float = 1
+    output += 0.2 * getCorrugationAmplitude()
+    output += 0.03 * randomGaussian()
     return output
   }
 }
-
