@@ -37,8 +37,8 @@ void loop() {
 Command nextCommand;
 uint32_t modeChangeStart = 0;
 uint32_t modeChangeEnd = 0;
-bool modeChangeNeedsFeedback = false;
-bool modeChangePreservesZ = false;
+bool modeChangeContinuesFeedback = false;
+bool modeChangeRetractsZ = false;
 float2 previousScannerVoltage;
 
 void kilohertzLoop() {
@@ -83,15 +83,15 @@ void kilohertzLoop() {
         modeChangeEnd = modeChangeStart;
         modeChangeEnd += Imager::largeMoveRiseTime / KilohertzLoop::period;
 
-        modeChangeNeedsFeedback = false;
-        modeChangePreservesZ = false;
+        modeChangeContinuesFeedback = false;
+        modeChangeRetractsZ = false;
         previousScannerVoltage.x = Application::state.piezoXVoltage;
         previousScannerVoltage.y = Application::state.piezoYVoltage;
 
         if (nextCommand.mode >= Command::Mode::idleFeedback) {
-          modeChangeNeedsFeedback = true;
+          modeChangeContinuesFeedback = true;
         } else if (nextCommand.mode >= Command::Mode::blindStepping) {
-          modeChangePreservesZ = true;
+          modeChangeRetractsZ = true;
         }
       }
     }
@@ -99,7 +99,7 @@ void kilohertzLoop() {
 
   bool useADC = true;
   if (KilohertzLoop::iterationID < modeChangeEnd) {
-    if (modeChangeNeedsFeedback) {
+    if (modeChangeContinuesFeedback) {
       uint32_t feedbackStart = modeChangeStart + 500 / KilohertzLoop::period;
       if (KilohertzLoop::iterationID < feedbackStart) {
         Application::updateBiasVoltage(Feedback::setpointVoltage);
@@ -115,13 +115,30 @@ void kilohertzLoop() {
         Application::updatePiezoVoltage(2, scannerVoltage.y);
         Feedback::updatePiezoZ(false);
       }
+    } else if (modeChangeRetractsZ) {
+      uint32_t turningPointIter = modeChangeStart + 600 / KilohertzLoop::period;
+      if (KilohertzLoop::iterationID < turningPointIter) {
+        float currentVoltage = Application::state.piezoZVoltage;
+        if (currentVoltage > -270) {
+          float dVdt = float(840) / float(600);
+          float dV = -dVdt * float(KilohertzLoop::period);
+
+          float newVoltage = max(currentVoltage + dV, -270);
+          Application::updatePiezoVoltage(3, newVoltage);
+        }        
+      } else if (KilohertzLoop::iterationID == turningPointIter) {
+        Application::updateBiasVoltage(0);
+        Application::updatePiezoVoltage(1, 0);
+        Application::updatePiezoVoltage(2, 0);
+        Application::updatePiezoVoltage(3, -270);
+        
+        useADC = false;
+      }
     } else {
       Application::updateBiasVoltage(0);
       Application::updatePiezoVoltage(1, 0);
       Application::updatePiezoVoltage(2, 0);
-      if (!modeChangePreservesZ) {
-        Application::updatePiezoVoltage(3, 0);
-      }
+      Application::updatePiezoVoltage(3, 0);
 
       useADC = false;
     }

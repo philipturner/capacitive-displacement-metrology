@@ -141,12 +141,18 @@ extension ImagingWindow {
       
       func createLevels() -> SIMD2<Float> {
         if rowID == 0 {
+          #if true
           let usedStatistics = overridingStatistics ?? statistics
           let average = usedStatistics.average[rowID]
           let stddev = usedStatistics.stddev[rowID]
           return SIMD2<Float>(
             average - stddev * 3,
             average + stddev * 3)
+          #else
+          return SIMD2<Float>(
+            0.4 * settings.setpointCurrent,
+            1.8 * settings.setpointCurrent)
+          #endif
         } else {
           let minimum = statistics.minimum[rowID]
           let maximum = statistics.maximum[rowID]
