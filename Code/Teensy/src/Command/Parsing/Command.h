@@ -46,7 +46,7 @@ struct Command {
     // lN - wait ~N μs for fixed time lag of electronics
     // oI,X,Y - center #I, position (X, Y) in nm
     // r - reset to defaults
-    // sN - wait ~N ms for creep settling in dual video mode
+    // sN - wait ~N ms for creep settling
     imagingSettings = 9,
 
     // cCCC - set creep constant for both axes

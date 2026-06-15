@@ -5,7 +5,7 @@
 
 struct SimpleScanner {
   static constexpr bool usePolynomialWave = true;
-  static constexpr uint32_t polynomialPeakTime = KilohertzLoopRound(10);
+  static constexpr uint32_t polynomialPeakTime = KilohertzLoopRound(1000);
 
   SimpleScanner();
   SimpleScanner(Command command);

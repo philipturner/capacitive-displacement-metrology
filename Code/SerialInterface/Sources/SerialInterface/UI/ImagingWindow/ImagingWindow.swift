@@ -24,6 +24,7 @@ class ImagingWindow {
     var plotsInitialized = false
     var imagesInitialized = false
     var trajectory = TrajectoryState()
+    var lastImageStatistics: PixelTracker.Statistics?
   }
   
   let win: PythonObject

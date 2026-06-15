@@ -1,3 +1,4 @@
+import Foundation
 import PythonKit
 
 extension ImagingWindow {
@@ -86,6 +87,10 @@ extension ImagingWindow {
       setScanImage(imageHistory.pendingImages[0], columnID: 0)
       setScanImage(imageHistory.pendingImages[1], columnID: 1)
     } else {
+      if let pendingImage = imageHistory.pendingImages[0] {
+        state.lastImageStatistics = pendingImage.statistics
+      }
+      
       func shouldFillFirst() -> Bool {
         let newPixelTracker = imageHistory.pixelTracker
         let oldImage = imageHistory.pendingImages[0]
@@ -103,14 +108,21 @@ extension ImagingWindow {
       if shouldFillFirst() {
         setScanImage(imageHistory.pendingImages[0], columnID: 0)
       } else {
-        setScanImage(imageHistory.pixelTracker, columnID: 0)
+        setScanImage(
+          imageHistory.pixelTracker,
+          columnID: 0,
+          overridingStatistics: state.lastImageStatistics)
       }
       setScanImage(imageHistory.pendingImages[0], columnID: 1)
       setFourierImage(imageHistory.pendingImages[0])
     }
   }
   
-  func setScanImage(_ pixelTracker: PixelTracker?, columnID: Int) {
+  func setScanImage(
+    _ pixelTracker: PixelTracker?,
+    columnID: Int,
+    overridingStatistics: PixelTracker.Statistics? = nil
+  ) {
     guard let pixelTracker else {
       return
     }
@@ -129,8 +141,9 @@ extension ImagingWindow {
       
       func createLevels() -> SIMD2<Float> {
         if rowID == 0 {
-          let average = statistics.average[rowID]
-          let stddev = statistics.stddev[rowID]
+          let usedStatistics = overridingStatistics ?? statistics
+          let average = usedStatistics.average[rowID]
+          let stddev = usedStatistics.stddev[rowID]
           return SIMD2<Float>(
             average - stddev * 3,
             average + stddev * 3)
