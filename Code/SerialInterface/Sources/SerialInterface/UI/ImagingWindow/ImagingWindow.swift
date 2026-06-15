@@ -108,8 +108,10 @@ class ImagingWindow {
     }
     state.trajectory.pixelLines = []
     
-    for i in imageHistory.pendingImages.indices {
-      imageHistory.pendingImages[i] = nil
+    if imageHistory.settings.mode != .image {
+      for i in imageHistory.pendingImages.indices {
+        imageHistory.pendingImages[i] = nil
+      }
     }
   }
 }

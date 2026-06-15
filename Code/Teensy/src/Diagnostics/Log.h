@@ -12,6 +12,8 @@ struct Log {
   static inline uint32_t transmittedLogID = 0;
   static inline uint32_t unsafeBufferedLogID = 0;
 
+  static void reset();
+
   static void transmitBufferedSamples();
 
   static void throwError(

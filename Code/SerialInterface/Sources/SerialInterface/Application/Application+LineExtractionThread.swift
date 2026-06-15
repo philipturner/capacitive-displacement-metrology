@@ -11,7 +11,7 @@ extension Application {
   }
   
   private func lineExtractionLoop(emulator: inout Emulator) {
-    usleep(10_000)
+    usleep(5_000)
     Watchdog.notify(threadID: 1, code: 0)
     
     processSerialInput()
@@ -84,7 +84,10 @@ extension Application {
     do {
       try lineParser.count(lines: lines)
     } catch let error as LineParser.NonContiguousError {
+      let pendingBytes = lineParser.previousPendingBytes
       reset(error: error)
+      lineParser.previousPendingBytes = pendingBytes
+      
       try! lineParser.count(lines: error.uncorruptedLines)
       lines = error.uncorruptedLines
     } catch {

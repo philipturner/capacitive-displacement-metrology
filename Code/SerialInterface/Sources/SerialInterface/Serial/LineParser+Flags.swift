@@ -51,7 +51,7 @@ extension LineParser {
           "mode",
           "resolution major (px)",
           "resolution minor (px)",
-          "pixel dimension (nm)",
+          "pixel dimension (nm)3",
           "polynomial peak time (μs)",
           
           "dominant axis",
@@ -218,8 +218,8 @@ extension LineParser.Splitting {
       let parsedLabel = parsedLabels[rowID]
       let parsedValue = parsedValues[rowID]
       
-      let labelPaddingSize = parsedLabel.repr.count - columnWidths[0]
-      let numberPaddingSize = parsedValue.count - columnWidths[1]
+      let labelPaddingSize = columnWidths[0] - parsedLabel.repr.count
+      let numberPaddingSize = columnWidths[1] - parsedValue.count
       
       func createString() -> String {
         var output = ""

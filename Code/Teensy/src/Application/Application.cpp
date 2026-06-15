@@ -132,7 +132,7 @@ void Application::logNormalMessage() {
       abs(state.filteredCurrent * 1e12),
       state.piezoXVoltage * 0.320,
       state.piezoYVoltage * 0.320,
-      -state.piezoZVoltage * 0.320,
+      state.piezoZVoltage * -0.320,
       dV * 0.320);
   }
 }

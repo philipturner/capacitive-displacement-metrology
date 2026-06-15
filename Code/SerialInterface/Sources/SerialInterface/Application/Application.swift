@@ -54,7 +54,7 @@ class Application: @unchecked Sendable {
       let currentTime = Date().timeIntervalSince1970
       if currentTime > nextLoopTime {
         while currentTime > nextLoopTime {
-          nextLoopTime += 16.666e-3
+          nextLoopTime += 8.333e-3
         }
       } else {
         usleep(1_000)

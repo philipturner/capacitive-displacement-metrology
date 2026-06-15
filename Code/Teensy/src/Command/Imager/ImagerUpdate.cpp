@@ -121,10 +121,10 @@ float2 Imager::getPosition(uint32_t timeInImage, uint32_t imageID) {
 
 void Imager::createPendingPixel(float2 position, uint32_t timeInImage) {
   uint32_t time = timeInImage;
-  if (time < largeMoveRiseTime) {
+  if (time < largeMoveRiseTime + settings.creepSettlingTime) {
     return;
   } else {
-    time -= largeMoveRiseTime;
+    time -= largeMoveRiseTime + settings.creepSettlingTime;
   }
 
   if (time >= resolutionMinor * getRowTime()) {
@@ -169,6 +169,6 @@ void Imager::createPendingPixel(float2 position, uint32_t timeInImage) {
   pixel.id = id;
   pixel.x = position.x;
   pixel.y = position.y;
-  pixel.z = -Application::state.piezoZVoltage * 0.320;
+  pixel.z = Application::state.piezoZVoltage * -0.320;
   pixelBuffer.addPixel(pixel);
 }

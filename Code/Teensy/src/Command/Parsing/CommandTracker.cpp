@@ -2,6 +2,7 @@
 
 #include "Command/Parsing/CommandParsing.h"
 #include "Diagnostics/ErrorMessage.h"
+#include "Diagnostics/Log.h"
 #include <Arduino.h>
 
 void extractInput(uint32_t& length) {
@@ -72,7 +73,7 @@ uint32_t getExpectedNumAttributes(Command command, uint32_t numAttributes) {
     }
     case Command::Mode::creepSettings: {
       switch (command.alphaCode) {
-        case 'c': return 0;
+        case 'r': return 0;
         default: return 1;
       }
     }
@@ -178,6 +179,7 @@ void CommandTracker::processSerialInput() {
     if (isRecoverCommand(length)) {
       if (ErrorMessage::errorType == ErrorMessage::Type::recoverable) {
         ErrorMessage::reset();
+        Log::reset();
       }
       return;
     }

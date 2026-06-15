@@ -30,6 +30,11 @@ void base64Encode(uint32_t value, char* buffer, uint32_t encodedLength) {
   }
 }
 
+void Log::reset() {
+  transmittedLogID = 0;
+  unsafeBufferedLogID = 0;
+}
+
 void Log::transmitBufferedSamples() {
   uint32_t bufferedLogID = unsafeBufferedLogID;
   if (bufferedLogID - transmittedLogID >= logSize - 2) {
@@ -93,7 +98,7 @@ void Log::throwError(
   }
 
   ErrorMessage::reset();
-  ErrorMessage::errorType = ErrorMessage::Type::fatal;
+  ErrorMessage::errorType = ErrorMessage::Type::recoverable;
 
   ErrorMessage::addString("Log failed.");
   ErrorMessage::addNewline();

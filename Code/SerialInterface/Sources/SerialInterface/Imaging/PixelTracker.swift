@@ -35,18 +35,20 @@ struct PixelTracker {
     }
     
     for line in lines {
-      let pixelID = Int(exactly: line.values[0])
-      guard let pixelID else {
-        fatalError("Malformatted pixel ID.")
+      func createPixelID() -> Int {
+        let bitPattern = line.values[0].bitPattern
+        return Int(bitPattern >> 8)
       }
+      let pixelID = createPixelID()
       
       func createExpectedPixelID() -> Int {
         if receivedRowCount % 2 == 0 {
           return receivedPixelCount
         } else {
           let floor = receivedRowCount * settings.resolution
-          let indexInRow = receivedPixelCount - receivedRowCount
-          return floor + (settings.resolution - 1 - indexInRow)
+          let indexInRow = receivedPixelCount - floor
+          let output = floor + (settings.resolution - 1 - indexInRow)
+          return output
         }
       }
       let expectedPixelID = createExpectedPixelID()

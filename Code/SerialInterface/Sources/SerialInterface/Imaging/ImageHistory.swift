@@ -58,10 +58,11 @@ extension ImagingSettings {
     }
     
     func createRowID(line: LineParser.Line) -> Int {
-      let pixelID = Int(exactly: line.values[0])
-      guard let pixelID else {
-        fatalError("Malformatted pixel ID.")
+      func createPixelID() -> Int {
+        let bitPattern = line.values[0].bitPattern
+        return Int(bitPattern >> 8)
       }
+      let pixelID = createPixelID()
       return pixelID / resolution
     }
     var previousRowID = createRowID(line: lines[0])

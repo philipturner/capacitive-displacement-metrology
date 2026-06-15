@@ -15,7 +15,7 @@ void setup() {
 }
 
 void loop() {
-  delay(50);
+  delay(5);
 
   if (ErrorMessage::hasError()) {
     ErrorMessage::nullTerminate();
@@ -158,7 +158,7 @@ void kilohertzLoop() {
   if (!ErrorMessage::hasError()) {
     uint32_t iterationsPerLog = Log::logPeriod / KilohertzLoop::period;
     if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
-      // Application::logNormalMessage();
+      Application::logNormalMessage();
     }
   }
 

@@ -54,10 +54,11 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
     int64_t interval = latestTimestamp.getLongValue() - previousTimestamp.getLongValue();
 
     #if 1
-    uint32_t maxError = 12;
+    uint32_t maxDifferentialError = 15;
+    uint32_t maxIntegralError = 16;
 
     int64_t differentialError = interval - period;
-    if (abs(differentialError) > maxError) {
+    if (abs(differentialError) > maxDifferentialError) {
       throwError(
         "Differential error was too large.",
         period,
@@ -70,7 +71,7 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
     int64_t expectedIntegrated = int64_t(iterationID) * period;
     
     int64_t integralError = actualIntegrated - expectedIntegrated;
-    if (abs(integralError) > maxError) {
+    if (abs(integralError) > maxIntegralError) {
       throwError(
         "Integral error was too large.",
         expectedIntegrated,

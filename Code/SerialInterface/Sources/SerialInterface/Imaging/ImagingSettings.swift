@@ -64,6 +64,7 @@ struct ImagingSettings {
     
     var position = SIMD2(Float(columnID), Float(rowID))
     position += 0.5
+    position *= pixelDimension
     position -= 0.5 * Float(resolution) * pixelDimension
     
     if dominantAxis == 1 {
