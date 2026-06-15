@@ -17,6 +17,8 @@ void Application::initialize() {
 extern "C" void usb_init();
 
 void Application::setupSerial() {
+  // entry into function: t = 536 ms
+
   // More robust solution:
   //
   // https://community.platformio.org/t/how-to-modify-teensy-core-files/7425/5
@@ -30,13 +32,17 @@ void Application::setupSerial() {
   #if 1
   USB1_USBCMD = 0; // turn off USB controller
   USB1_USBCMD = 2; // begin USB controller reset
-  delay(250);
-  usb_init();
+  delay(250); // +250 ms
+  usb_init(); // +0 ms
   USB1_PORTSC1 |= USB_PORTSC1_PFSC; // force 12 Mbit/sec
   #endif
-  
-  Serial.begin(0);
-  Serial.println(); // allow easy distinction of different program runs
+
+  Serial.begin(0); // +431-479 ms
+
+  // Only responds after another +11 ms.
+  delay(50);
+
+  Serial.println();
   Serial.println("Serial Monitor has initialized.");
 }
 

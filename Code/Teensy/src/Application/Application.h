@@ -11,6 +11,10 @@
 #include "Filter/Creep/Filter.h"
 
 struct Application {
+  static inline uint32_t startTime = 0;
+  static inline uint32_t midTime = 0;
+  static inline uint32_t endTime = 0;
+
   static inline State state;
   static inline Command::Mode mode;
   static inline CapacitanceTracker capTracker;

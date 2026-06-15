@@ -1,6 +1,7 @@
 #include "PixelBuffer.h"
 
 #include "Application/Application.h"
+#include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
 #include <Arduino.h>
@@ -48,11 +49,13 @@ void PixelBuffer::flushReadyPixel() {
   float floatValue;
   memcpy(&floatValue, &uintValue, 4);
 
-  Log::writeValuesWithFlags(
-    /*flags=*/4,
-    floatValue,
-    pixel.x,
-    pixel.y,
-    pixel.z,
-    abs(Application::state.filteredCurrent * 1e12));
+  if (!ErrorMessage::hasError()) {
+    Log::writeValuesWithFlags(
+      /*flags=*/4,
+      floatValue,
+      pixel.x,
+      pixel.y,
+      pixel.z,
+      abs(Application::state.filteredCurrent * 1e12));
+  }
 }

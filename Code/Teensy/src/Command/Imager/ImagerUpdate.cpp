@@ -15,15 +15,18 @@ void Imager::update() {
   uint32_t imageID = time / imageTime;
   uint32_t timeInImage = time % imageTime;
 
+  if (mode == Mode::image && imageID > 0) {
+    return;
+  }
+
   if (timeInImage == 0) {
     float x = Application::state.piezoXVoltage * 0.320;
     float y = Application::state.piezoYVoltage * 0.320;
     previousImageEnd = float2(x, y);
-    Application::creepFilter.futureAccumulatedDrift = float2(0);
   }
-
-  if (mode == Mode::image && imageID > 0) {
-    return;
+  
+  if (timeInImage < largeMoveRiseTime + settings.creepSettlingTime) {
+    Application::creepFilter.futureAccumulatedDrift = float2(0);
   }
 
   float2 position = getPosition(timeInImage, imageID);
