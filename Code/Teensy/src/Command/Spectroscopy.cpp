@@ -187,7 +187,7 @@ void Spectroscopy::update() {
 
   if (pairID >= getPairCount()) {
     Application::updateBiasVoltage(Feedback::setpointVoltage);
-    Feedback::updatePiezoZ();
+    Application::updatePiezoVoltage(3, Feedback::getVoltage());
     return;
   }
 
@@ -231,7 +231,7 @@ void Spectroscopy::update() {
     if (time < positionSettlePeriod) {
       Application::updateBiasVoltage(biasVoltage);
       Application::updatePiezoVoltage(3, piezoZVoltage);
-      Application::state.positionError = triggerSignal;
+      Application::state.spectroscopyTrigger = triggerSignal;
       return;
     } else {
       time -= positionSettlePeriod;
@@ -250,5 +250,5 @@ void Spectroscopy::update() {
   }
 
   Application::updateBiasVoltage(Feedback::setpointVoltage);
-  Feedback::updatePiezoZ();
+  Application::updatePiezoVoltage(3, Feedback::getVoltage());
 }

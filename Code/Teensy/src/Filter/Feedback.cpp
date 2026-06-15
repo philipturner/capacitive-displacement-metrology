@@ -5,21 +5,6 @@
 #include "Util/WaveUtil.h"
 #include <Arduino.h>
 
-void updatePositionErrorDiagnostic() {
-  float current = Application::state.filteredCurrent;
-  if (Feedback::setpointVoltage < 0) {
-    current = -current;
-  }
-  current = max(current, 2e-12);
-  float dlnI = log(current / Feedback::setpointCurrent);
-
-  // Position error in meters. Positive means you're too close, correct it
-  // by moving backward (more negative voltage).
-  float dlnI_dz = 1.025e10 * sqrt(Feedback::tunnelingBarrierHeight);
-  float dz = dlnI / dlnI_dz;
-  Application::state.positionError = dz;
-}
-
 float getFeedbackErrorTerm() {
   float expectedCurrent = abs(Feedback::setpointCurrent);
   if (Feedback::setpointVoltage < 0) {
@@ -34,19 +19,12 @@ float getFeedbackErrorTerm() {
   return kΔz / k;
 }
 
-void Feedback::updatePiezoZ(bool updatePositionError) {
-  // This takes too many clock cycles in certain modes, pushing it over the
-  // threshold for integral error.
-  if (updatePositionError) {
-    updatePositionErrorDiagnostic();
-  }
-
+float Feedback::getVoltage() {
   float dz = getFeedbackErrorTerm();
   if (useNotchFilter) {
     notchFilter.update(dz);
     dz = notchFilter.getOutput();
   }
-  Application::state.feedbackErrorTerm = dz;
   
   float timeProgress = float(KilohertzLoop::period) / float(integratorTimeLag);
   float correctionInMeters = -dz * timeProgress;
@@ -72,5 +50,5 @@ void Feedback::updatePiezoZ(bool updatePositionError) {
   voltage += correctionInMeters / 0.320e-9;
   voltage = min(voltage, 270);
   voltage = max(voltage, -80);
-  Application::updatePiezoVoltage(3, voltage);
+  return voltage;
 }

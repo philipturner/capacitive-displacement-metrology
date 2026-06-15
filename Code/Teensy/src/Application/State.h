@@ -12,8 +12,7 @@ struct State {
   float phaseShift = 0; // units: °
   uint32_t capacitanceUpdateCount = 0;
 
-  float positionError = 0; // units: m
-  float feedbackErrorTerm = 0; // units: m
+  float spectroscopyTrigger = 0;
 
   float biasVoltage = 0; // units: V
   float piezoXVoltage = 0; // units: V

@@ -10,8 +10,8 @@ TipApproacher::TipApproacher() {
 }
 
 TipApproacher::TipApproacher(bool notDefaultConstructor) {
-  currentState = State::preWait;
-  segmentStartIterationID = KilohertzLoop::iterationID;
+  currentState = State::waitBeforeApproach;
+  stateStartIterationID = KilohertzLoop::iterationID;
 }
 
 bool isRetracted(float voltageZ) {
@@ -37,102 +37,87 @@ void TipApproacher::update() {
 
   Application::updateBiasVoltage(Feedback::setpointVoltage);
 
-  if (currentState == State::finished) {
-    Feedback::updatePiezoZ();
-  } else {
-    float voltageZ = getPiezoVoltage();
-    Application::updatePiezoVoltage(3, voltageZ);
-  }
+  float voltageZ = getPiezoVoltage();
+  Application::updatePiezoVoltage(3, voltageZ);
+}
+
+uint32_t TipApproacher::getIterationsSinceStateStart() {
+  uint32_t deltaIters = KilohertzLoop::iterationID;
+  deltaIters -= stateStartIterationID;
+  return deltaIters;
 }
 
 void TipApproacher::updateState() {
   previousState = currentState;
 
-  uint32_t deltaIters = getIterationsSinceStart();
+  uint32_t deltaIters = getIterationsSinceStateStart();
   uint32_t time = deltaIters * KilohertzLoop::period;
-  float voltageZ = Application::state.piezoZVoltage;
 
   switch (previousState) {
-    case State::preWait: {
-      if (isRetracted(voltageZ)) {
-        currentState = State::wait;
-      }
-      break;
-    }
-    case State::wait: {
-      if (time >= 1000) {
+    case State::waitBeforeApproach: {
+      if (time >= 1250) {
         currentState = State::approach;
       }
       break;
     }
     case State::approach: {
-      if (voltageZ >= 270) {
-        currentState = State::preStep;
-      }
-      break;
-    }
-    case State::preStep: {
-      if (voltageZ <= preStepVoltage) {
-        currentState = State::stepAndWait;
-      }
-      break;
-    }
-    case State::stepAndWait: {
-      if (time >= 600) {
-        currentState = State::preWait;
-      }
-      break;
-    };
-    case State::retract: {
-      if (isRetracted(voltageZ)) {
-        currentState = State::finished;
-      }
-      break;
-    }
-    case State::finished: {
-      if (voltageZ >= 210) {
-        if (time >= 100000) {
-          currentState = State::preStep;
+      if (Application::state.piezoZVoltage >= 270) {
+        currentState = State::stepUp;
+      } else {
+        float current = Application::state.current;
+        float setpoint = Feedback::setpointCurrent;
+        if (abs(current) >= setpoint) {
+          currentState = State::feedback;
+          didContact = true;
         }
       }
       break;
     }
+    case State::stepUp: {
+      if (time >= 800) {
+        currentState = State::waitBeforeApproach;
+      }
+      break;
+    }
+    case State::stepDown: {
+      if (time >= 1600) {
+        currentState = State::approach;
+      }
+      break;
+    }
+    case State::feedback: {
+      break;
+    }
   }
 
-  if (currentState == State::approach) {
-    float current = Application::state.current;
-    float setpoint = Feedback::setpointCurrent;
-    if (abs(current) >= setpoint) {
-      currentState = State::retract;
-      preStepVoltage = 20;
+  if (currentState == State::feedback) {
+    float voltageZ = Application::state.piezoZVoltage;
+    if (voltageZ >= 240) {
+      currentState = State::stepUp;
+    } else if (voltageZ <= -50) {
+      currentState = State::stepDown;
     }
   }
 
   if (currentState != previousState) {
-    segmentStartIterationID = KilohertzLoop::iterationID;
+    stateStartIterationID = KilohertzLoop::iterationID;
   }
 }
 
-uint32_t TipApproacher::getIterationsSinceStart() {
-  uint32_t deltaIters = KilohertzLoop::iterationID;
-  deltaIters -= segmentStartIterationID;
-  return deltaIters;
-}
-
 float TipApproacher::getPiezoVoltage() {
-  float dt = float(KilohertzLoop::period) * 1e-6;
+  uint32_t deltaIters = getIterationsSinceStateStart();
   float voltageZ = Application::state.piezoZVoltage;
 
   switch (currentState) {
-    case State::preWait: {
-      float dVdt = float(840) / float(600e-6);
-      float dV = dVdt * dt;
-      voltageZ = retract(voltageZ, dV);
-      break;
-    }
-    case State::wait: {
-      voltageZ = -80;
-      break;
+    case State::waitBeforeApproach: {
+      float dV = 1.4 * float(KilohertzLoop::period);
+      if (voltageZ < -80) {
+        return min(voltageZ + dV, -80);
+      } else if (voltageZ > -80) {
+        return max(voltageZ - dV, -80);
+      } else {
+        return -80;
+      }
     }
     case State::approach: {
       // Retracting at 840 V / 600 μs
@@ -140,34 +125,39 @@ float TipApproacher::getPiezoVoltage() {
       // acceleration reaches -0.46 m/s^2 at 1.47 kHz resonance
       // 1000 nm/s velocity comes to a stop in 2.2 μs
       float speed = float(50e-12) / float(64e-6 + 12e-6 + 2.2e-6);
-      speed *= 0.80; // 80% derating factor
       
       float dVdt = speed / float(0.320e-9);
-      voltageZ += dVdt * dt;
-      voltageZ = min(voltageZ, 270);
-      break;
+      float dt = float(KilohertzLoop::period) * 1e-6;
+      return min(voltageZ + dVdt * dt, 270);
     }
-    case State::preStep: {
-      float dVdt = float(840) / float(600e-6);
-      voltageZ += -dVdt * dt;
-      voltageZ = max(voltageZ, preStepVoltage);
-      break;
+    case State::stepUp: {
+      float startVoltage = (didContact ? 20 : 80);
+
+      if (voltageZ > startVoltage) {
+        float dV = 1.4 * float(KilohertzLoop::period);
+        return max(voltageZ - dV, startVoltage);
+      } else {
+        return -270;
+      }
     }
-    case State::stepAndWait: {
-      voltageZ = -270;
-      break;
+    case State::stepDown: {
+      uint32_t time = deltaIters * KilohertzLoop::period;
+      if (time < 600) {
+        float dV = 1.4 * float(KilohertzLoop::period);
+        return max(voltageZ - dV, -270);
+      } else {
+        return -80;
+      }
     }
-    case State::retract: {
-      float dVdt = float(840) / float(600e-6);
-      float dV = dVdt * dt;
-      voltageZ = retract(voltageZ, dV);
-      break;
-    }
-    case State::finished: {
-      voltageZ = -80;
-      break;
+    case State::feedback: {
+      if (deltaIters < 4) {
+        return max(voltageZ - 15, -80);
+      } else {
+        return Feedback::getVoltage();
+      }
     }
   }
 
-  return voltageZ;
+  Serial.println("This should never happen.");
+  exit(0);
 }

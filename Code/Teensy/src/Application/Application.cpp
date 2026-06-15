@@ -112,16 +112,14 @@ void Application::logNormalMessage() {
     Log::writeValuesNormal(
       currentMaximum,
       currentSpikePrediction,
-      state.piezoZVoltage * 0.320,
-      state.positionError * 1e9,
-      state.feedbackErrorTerm * 1e9);
+      state.piezoZVoltage * 0.320);
   } else if (mode == Command::Mode::spectroscopy) {
     Log::writeValuesNormal(
       state.filteredCurrent,
       currentSpikePrediction,
       state.piezoZVoltage * 0.320,
       state.biasVoltage,
-      state.positionError * 1e9);
+      state.spectroscopyTrigger);
   } else if (mode == Command::Mode::simpleScanning ||
              mode == Command::Mode::imaging) {
     // Metric that doesn't lose sensitivity as its magnitude grows larger.

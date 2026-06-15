@@ -11,5 +11,5 @@ struct Feedback {
   static constexpr bool useNotchFilter = false;
   static inline NotchFilter notchFilter;
 
-  static void updatePiezoZ(bool updatePositionError = true);
+  static float getVoltage();
 };

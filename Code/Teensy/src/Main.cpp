@@ -113,15 +113,14 @@ void kilohertzLoop() {
         float2 scannerVoltage = previousScannerVoltage * (1 - progress);
         Application::updatePiezoVoltage(1, scannerVoltage.x);
         Application::updatePiezoVoltage(2, scannerVoltage.y);
-        Feedback::updatePiezoZ(false);
+        Application::updatePiezoVoltage(3, Feedback::getVoltage());
       }
     } else if (modeChangeRetractsZ) {
       uint32_t turningPointIter = modeChangeStart + 600 / KilohertzLoop::period;
       if (KilohertzLoop::iterationID < turningPointIter) {
         float currentVoltage = Application::state.piezoZVoltage;
         if (currentVoltage > -270) {
-          float dVdt = float(840) / float(600);
-          float dV = -dVdt * float(KilohertzLoop::period);
+          float dV = -1.4 * float(KilohertzLoop::period);
 
           float newVoltage = max(currentVoltage + dV, -270);
           Application::updatePiezoVoltage(3, newVoltage);
@@ -156,7 +155,7 @@ void kilohertzLoop() {
       Application::tipApproacher.update();
     }
     if (Application::mode == Command::Mode::idleFeedback) {
-      Feedback::updatePiezoZ();
+      Application::updatePiezoVoltage(3, Feedback::getVoltage());
     }
     if (Application::mode == Command::Mode::spectroscopy) {
       Application::spectroscopy.update();
