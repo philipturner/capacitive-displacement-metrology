@@ -12,15 +12,16 @@ struct TipApproacher {
   };
 
   TipApproacher();
-  TipApproacher(bool notDefaultConstructor);
+  TipApproacher(State startingState);
 
-  void update();
+  void updatePiezoZ();
 
 private:
   State previousState;
   State currentState;
   uint32_t stateStartIterationID;
   bool didContact = false;
+  bool skipRetractBeforeFeedback = false;
 
   uint32_t getIterationsSinceStateStart();
   void updateState();

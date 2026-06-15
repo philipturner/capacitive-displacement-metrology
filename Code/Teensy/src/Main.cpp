@@ -57,19 +57,28 @@ void kilohertzLoop() {
       Application::blindStepper = BlindStepper(nextCommand);
     }
     if (Application::mode == Command::Mode::tipApproach) {
-      Application::tipApproacher = TipApproacher(true);
+      Application::tipApproacher = TipApproacher(
+        TipApproacher::State::waitBeforeApproach);
+    }
+    if (Application::mode == Command::Mode::idleFeedback) {
+      Application::tipApproacher = TipApproacher(
+        TipApproacher::State::feedback);
     }
     if (Application::mode == Command::Mode::spectroscopy) {
       Application::spectroscopy = Spectroscopy(nextCommand);
     }
     if (Application::mode == Command::Mode::simpleScanning) {
       Application::simpleScanner = SimpleScanner(nextCommand);
+      Application::tipApproacher = TipApproacher(
+        TipApproacher::State::feedback);
     }
     if (Application::mode == Command::Mode::imaging) {
       Application::imager = Imager(nextCommand);
       Application::imager.forwardSettings();
+      Application::tipApproacher = TipApproacher(
+        TipApproacher::State::feedback);
     }
-
+    
     Log::writeValuesWithFlags(1, float(Application::mode));
   } else if (KilohertzLoop::iterationID > modeChangeEnd) {
     if (CommandTracker::nextCommand(nextCommand)) {
@@ -151,11 +160,10 @@ void kilohertzLoop() {
     if (Application::mode == Command::Mode::blindStepping) {
       Application::blindStepper.update();
     }
-    if (Application::mode == Command::Mode::tipApproach) {
-      Application::tipApproacher.update();
-    }
-    if (Application::mode == Command::Mode::idleFeedback) {
-      Application::updatePiezoVoltage(3, Feedback::getVoltage());
+    if (Application::mode == Command::Mode::tipApproach ||
+        Application::mode == Command::Mode::idleFeedback) {
+      Application::updateBiasVoltage(Feedback::setpointVoltage);
+      Application::tipApproacher.updatePiezoZ();
     }
     if (Application::mode == Command::Mode::spectroscopy) {
       Application::spectroscopy.update();

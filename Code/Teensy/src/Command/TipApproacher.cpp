@@ -9,8 +9,12 @@ TipApproacher::TipApproacher() {
 
 }
 
-TipApproacher::TipApproacher(bool notDefaultConstructor) {
-  currentState = State::waitBeforeApproach;
+TipApproacher::TipApproacher(TipApproacher::State startingState) {
+  if (startingState == State::feedback) {
+    didContact = true;
+    skipRetractBeforeFeedback = true;
+  }
+  currentState = startingState;
   stateStartIterationID = KilohertzLoop::iterationID;
 }
 
@@ -32,10 +36,8 @@ float retract(float input, float dV) {
   return output;
 }
 
-void TipApproacher::update() {
+void TipApproacher::updatePiezoZ() {
   updateState();
-
-  Application::updateBiasVoltage(Feedback::setpointVoltage);
 
   float voltageZ = getPiezoVoltage();
   Application::updatePiezoVoltage(3, voltageZ);
@@ -92,15 +94,16 @@ void TipApproacher::updateState() {
 
   if (currentState == State::feedback) {
     float voltageZ = Application::state.piezoZVoltage;
-    if (voltageZ >= 240) {
+    if (voltageZ >= 250) {
       currentState = State::stepUp;
-    } else if (voltageZ <= -50) {
+    } else if (voltageZ <= -60) {
       currentState = State::stepDown;
     }
   }
 
   if (currentState != previousState) {
     stateStartIterationID = KilohertzLoop::iterationID;
+    skipRetractBeforeFeedback = false;
   }
 }
 
@@ -150,7 +153,7 @@ float TipApproacher::getPiezoVoltage() {
       }
     }
     case State::feedback: {
-      if (deltaIters < 4) {
+      if (!skipRetractBeforeFeedback && deltaIters < 4) {
         return max(voltageZ - 15, -80);
       } else {
         return Feedback::getVoltage();
