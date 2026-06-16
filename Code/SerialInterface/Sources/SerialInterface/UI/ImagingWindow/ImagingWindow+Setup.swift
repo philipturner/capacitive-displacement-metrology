@@ -1,3 +1,4 @@
+import func Foundation.pow
 import PythonKit
 
 private let colorBarAxisWidth: Int = 50
@@ -113,11 +114,37 @@ extension ImagingWindow {
         let imageItem = pg.ImageItem()
         plot.addItem(imageItem)
         
-        let colorMap = pg.colormap.get("CET-L3")
+        func getColorMap() -> PythonObject {
+          if Self.logScaleCurrentPlotting, rowID == 0 {
+            return PythonObject("viridis")
+          } else {
+            return pg.colormap.get("CET-L3")
+          }
+        }
+        
         let colorBar = pg.ColorBarItem(
           width: 10,
-          colorMap: colorMap,
+          colorMap: getColorMap(),
           interactive: false)
+        
+        if rowID == 0 {
+          let oldAxis = colorBar.axes["right"]["item"]
+          colorBar.layout.removeItem(oldAxis)
+          oldAxis.unlinkFromView()
+          
+          let customAxis = PreLoggedAxisItem(
+            orientation: "right", parent: colorBar)
+          customAxis.linkToView(colorBar.vb)
+          
+          colorBar.layout.addItem(customAxis, 2, 2)
+          customAxis.setZValue(0.5)
+          customAxis.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemNegativeZStacksBehindParent)
+          colorBar.showAxis("right", false)
+          
+          colorBar.axis = customAxis
+          colorBar.axis.setStyle(showValues: true)
+          colorBar.axis.unlinkFromView()
+        }
         colorBar.setImageItem(imageItem, insert_in: plot)
         colorBar.axis.setWidth(colorBarAxisWidth)
         
@@ -217,5 +244,59 @@ extension ImagingWindow {
       output.append(label)
     }
     return output
+  }
+}
+
+extension ImagingWindow {
+  static let logScaleCurrentPlotting: Bool = true
+  
+  static let PreLoggedAxisItem = createPreLoggedAxisItem()
+  
+  nonisolated(unsafe)
+  static var axisItemSetpointCurrent: Float?
+  
+  static func createPreLoggedAxisItem() -> PythonObject {
+    PythonClass(
+      "PreLoggedAxisItem",
+      superclasses: [pg.AxisItem],
+      members: [
+        "tickStrings": PythonInstanceMethod { args in
+          let `self` = args[0]
+          let values = args[1]
+          let scale = args[2]
+          let spacing = args[3]
+          
+          if !logScaleCurrentPlotting {
+            return pg.AxisItem.tickStrings(`self`, values, scale, spacing)
+          }
+          
+          let valuesDouble = [Double](values)
+          guard let valuesDouble else {
+            fatalError("Failed data type conversion")
+          }
+          
+          return valuesDouble.map { originalValue in
+            let exponentValue = pow(10, originalValue)
+            
+            func getAddExtraDecimalPlace() -> Bool {
+              guard let axisItemSetpointCurrent else {
+                return false
+              }
+              if axisItemSetpointCurrent < 100 {
+                return true
+              } else {
+                return false
+              }
+            }
+            if getAddExtraDecimalPlace() {
+              return String(format: "%.1f", exponentValue)
+            } else {
+              let rounded = Int(exponentValue.rounded(.toNearestOrEven))
+              return String(rounded)
+            }
+          }
+        }
+      ]
+    ).pythonObject
   }
 }

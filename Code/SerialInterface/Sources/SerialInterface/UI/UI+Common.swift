@@ -109,7 +109,7 @@ extension UI {
       "VerticalLabel",
       superclasses: [QtWidgets.QLabel],
       members: [
-        "__init__": PythonInstanceMethod { [QtWidgets] args in
+        "__init__": PythonInstanceMethod { args in
           let `self` = args[0]
           guard args.count == 3 else {
             fatalError("Was expecting just the text as an argument.")
@@ -119,7 +119,7 @@ extension UI {
           return Python.None
         },
         
-        "paintEvent": PythonInstanceMethod { [QtGui, QtCore] args in
+        "paintEvent": PythonInstanceMethod { args in
           let `self` = args[0]
           guard args.count == 2 else {
             fatalError("Was expecting just the event as an argument.")
@@ -136,13 +136,13 @@ extension UI {
           return Python.None
         },
         
-        "minimumSizeHint": PythonInstanceMethod { [QtWidgets, QtCore] args in
+        "minimumSizeHint": PythonInstanceMethod { args in
           let `self` = args[0]
           let size = QtWidgets.QLabel.minimumSizeHint(`self`)
           return QtCore.QSize(size.height(), size.width())
         },
         
-        "sizeHint": PythonInstanceMethod { [QtWidgets, QtCore] args in
+        "sizeHint": PythonInstanceMethod { args in
           let `self` = args[0]
           let size = QtWidgets.QLabel.sizeHint(`self`)
           return QtCore.QSize(size.height(), size.width())

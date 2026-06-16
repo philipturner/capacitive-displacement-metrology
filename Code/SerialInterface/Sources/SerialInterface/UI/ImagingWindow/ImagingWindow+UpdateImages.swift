@@ -131,8 +131,18 @@ extension ImagingWindow {
     }
     
     for rowID in 0..<2 {
-      let data = pixelTracker.dataBuffer.map { $0[rowID] }
+      let data = pixelTracker.dataBuffer.map {
+        let value = $0[rowID]
+        guard Self.logScaleCurrentPlotting, rowID == 0 else {
+          return value
+        }
+        
+        var output = max(0.001, value)
+        output = log10(output)
+        return output
+      }
       let dataNumpy = castToNumpy(data)
+      
       let imagePlot = scanImagePlots[rowID][columnID]
       imagePlot.imageItem.setImage(dataNumpy, autoLevels: false)
       
@@ -141,18 +151,21 @@ extension ImagingWindow {
       
       func createLevels() -> SIMD2<Float> {
         if rowID == 0 {
-          #if true
-          let usedStatistics = overridingStatistics ?? statistics
-          let average = usedStatistics.average[rowID]
-          let stddev = usedStatistics.stddev[rowID]
-          return SIMD2<Float>(
-            average - stddev * 3,
-            average + stddev * 3)
-          #else
-          return SIMD2<Float>(
-            0.4 * settings.setpointCurrent,
-            1.8 * settings.setpointCurrent)
-          #endif
+          if Self.logScaleCurrentPlotting {
+            let multiplicativeDeviation: Float = 3
+            let minimum = settings.setpointCurrent / multiplicativeDeviation
+            let maximum = settings.setpointCurrent * multiplicativeDeviation
+            return SIMD2<Float>(
+              log10(minimum),
+              log10(maximum))
+          } else {
+            let usedStatistics = overridingStatistics ?? statistics
+            let average = usedStatistics.average[rowID]
+            let stddev = usedStatistics.stddev[rowID]
+            return SIMD2<Float>(
+              average - stddev * 3,
+              average + stddev * 3)
+          }
         } else {
           let minimum = statistics.minimum[rowID]
           let maximum = statistics.maximum[rowID]
@@ -168,6 +181,7 @@ extension ImagingWindow {
       }
       let levels = createLevels()
       
+      Self.axisItemSetpointCurrent = settings.setpointCurrent
       imagePlot.colorBar.setLevels(
         low: levels[0],
         high: levels[1])
