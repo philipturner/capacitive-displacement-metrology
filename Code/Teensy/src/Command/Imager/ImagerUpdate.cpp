@@ -9,7 +9,7 @@
 
 void Imager::update() {
   uint32_t time = Application::state.getTimeSinceModeStart();
-  Application::tipApproacher.updatePiezoZ();
+  Application::updatePiezoVoltage(3, Feedback::getVoltage());
 
   uint32_t imageTime = getImageTime();
   uint32_t imageID = time / imageTime;

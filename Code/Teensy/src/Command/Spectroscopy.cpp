@@ -57,7 +57,7 @@ void Spectroscopy::update() {
     updateForTrial();
   } else {
     Application::updateBiasVoltage(Feedback::setpointVoltage);
-    Application::tipApproacher.updatePiezoZ();
+    Application::updatePiezoVoltage(3, Feedback::getVoltage());
   }
 }
 
@@ -71,6 +71,7 @@ uint32_t Spectroscopy::getTimePerTrial() {
   uint32_t output = 0;
   output += integratePeriod;
   output += 2 * (positionSettlePeriod + integratePeriod);
+  output += delayBeforeFeedback;
   output += feedbackTime;
   return output;
 }
@@ -228,8 +229,12 @@ void Spectroscopy::updateForTrial() {
     }
   }
 
-  Serial.println("This should never happen.");
-  exit(0);
+  if (time < delayBeforeFeedback) {
+    return;
+  } else {
+    Serial.println("This should never happen.");
+    exit(0);
+  }
 }
 
 void Spectroscopy::accumulate(uint32_t index) {

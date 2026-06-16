@@ -19,8 +19,9 @@ struct Spectroscopy {
   };
   
   static constexpr uint32_t voltageSlewPeriod = KilohertzLoopRound(120);
-  static constexpr uint32_t positionSettlePeriod = KilohertzLoopRound(2500); // 2500
+  static constexpr uint32_t positionSettlePeriod = KilohertzLoopRound(150); // 2500
   static constexpr uint32_t integratePeriod = KilohertzLoopRound(1000);
+  static constexpr uint32_t delayBeforeFeedback = KilohertzLoopRound(5000);
   static constexpr uint32_t feedbackTime = KilohertzLoopRound(30000);
   static constexpr uint32_t trialsPerResult = 10;
 
@@ -46,7 +47,7 @@ private:
   Result pendingResult1 = Result();
   Result pendingResult2 = Result();
   float restPiezoZVoltage = -270;
-  
+
   void pushResult(uint32_t sampleCount, Result& result);
   void updateState();
   bool shouldUpdateForTrial();
