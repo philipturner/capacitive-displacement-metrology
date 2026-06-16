@@ -7,14 +7,14 @@ func createTrigger1() -> Trigger {
 //  trigger.type = .timeInterval(period: 0.5, offset: 0)
 //  trigger.polarity = .signAgnostic
 //  trigger.channel = 0
-  trigger.type = .level(0)
-  trigger.polarity = .negative
-  trigger.channel = 4
+  trigger.type = .level(-4.9)
+  trigger.polarity = .positive
+  trigger.channel = 2
   return trigger
 }
 
 func createApplication() -> Application {
-  TimeAxis.shortLength = 0.030 // 0.010
+  TimeAxis.shortLength = 0.030
   TimeAxis.longLength = 2.5
   
   var applicationDesc = ApplicationDescriptor()

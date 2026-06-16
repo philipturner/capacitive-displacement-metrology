@@ -51,7 +51,7 @@ void PixelBuffer::flushReadyPixel() {
 
   if (!ErrorMessage::hasError()) {
     Log::writeValuesWithFlags(
-      /*flags=*/4,
+      4, // flags
       floatValue,
       pixel.x,
       pixel.y,

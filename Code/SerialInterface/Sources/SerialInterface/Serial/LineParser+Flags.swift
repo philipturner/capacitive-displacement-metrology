@@ -128,6 +128,10 @@ extension LineParser {
           splitting[.imagingSettings] = pendingImagingSettingsLines
           pendingImagingSettingsLines = []
         }
+        
+        if line.values[1] == 1 {
+          print("Forced mode change to \(modeCode)")
+        }
       case .spectroscopy:
         splitting[.spectroscopy].append(line)
       case .discard:

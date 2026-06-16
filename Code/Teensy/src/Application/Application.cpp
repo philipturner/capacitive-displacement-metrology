@@ -85,7 +85,7 @@ void Application::logNormalMessage() {
     }
 
     Log::writeValuesWithFlags(
-      /*flags=*/flags,
+      flags, // flags
       state.filteredCurrent,
       state.biasVoltage,
       state.capacitance,
@@ -102,7 +102,7 @@ void Application::logNormalMessage() {
     }
 
     Log::writeValuesWithFlags(
-      /*flags=*/flags,
+      flags, // flags
       currentMaximum,
       currentSpikePrediction,
       state.piezoZVoltage * 0.320,

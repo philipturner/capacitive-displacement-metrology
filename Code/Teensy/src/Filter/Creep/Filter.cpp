@@ -22,7 +22,7 @@ Filter::Filter(bool notDefaultConstructor) {
 
 void Filter::forwardState() const {
   Log::writeValuesWithFlags(
-    /*flags=*/6,
+    6, // flags
     creepConstants.x * 100,
     creepConstants.y * 100,
     futureAccumulatedDrift.x * 0.320,

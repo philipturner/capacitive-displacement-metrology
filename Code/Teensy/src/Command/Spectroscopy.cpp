@@ -119,7 +119,7 @@ void Spectroscopy::pushResult(uint32_t sampleCount, Result& result) {
   }
 
   Log::writeValuesWithFlags(
-    /*flags=*/2,
+    2, // flags
     pair.voltage,
     pair.position * 1e12,
     result.accumulators[0] * 1e12,

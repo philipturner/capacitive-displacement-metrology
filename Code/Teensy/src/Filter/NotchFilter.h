@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 struct NotchFilter {
-  static constexpr float resonanceFrequency = 1470;
+  static constexpr float resonanceFrequency = 1626;
   static constexpr float Q = 1.0;
   
   NotchFilter();

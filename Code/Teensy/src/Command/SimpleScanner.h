@@ -4,8 +4,8 @@
 #include "Time/KilohertzLoop.h"
 
 struct SimpleScanner {
-  static constexpr bool usePolynomialWave = true;
-  static constexpr uint32_t polynomialPeakTime = KilohertzLoopRound(1000);
+  static constexpr bool usePolynomialWave = false;
+  static constexpr uint32_t polynomialPeakTime = KilohertzLoopRound(5000);
 
   SimpleScanner();
   SimpleScanner(Command command);

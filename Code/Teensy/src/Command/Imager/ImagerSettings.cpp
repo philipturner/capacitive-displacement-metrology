@@ -58,7 +58,7 @@ void Imager::updatePendingSettings(Command command) {
 
 void Imager::forwardSettings() const {
   Log::writeValuesWithFlags(
-    /*flags=*/5,
+    5, // flags
     uint8_t(mode),
     resolutionMajor,
     resolutionMinor,
@@ -66,7 +66,7 @@ void Imager::forwardSettings() const {
     polynomialPeakTime);
 
   Log::writeValuesWithFlags(
-    /*flags=*/5,
+    5, // flags
     settings.dominantAxis,
     settings.centers[0].x,
     settings.centers[0].y,
@@ -74,7 +74,7 @@ void Imager::forwardSettings() const {
     settings.centers[1].y);
 
   Log::writeValuesWithFlags(
-    /*flags=*/5,
+    5, // flags
     settings.electronicTimeLag,
     float(settings.creepSettlingTime) / 1000,
     Feedback::setpointCurrent * 1e12);

@@ -58,7 +58,7 @@ float SimpleScanner::getPosition(uint32_t inputTime) const {
     uint32_t phase = time % wavePeriod;
     
     float phaseNormalized = float(phase) / float(wavePeriod);
-    float position = WaveUtil::sineWave(phaseNormalized);
+    float position = WaveUtil::triangleWave(phaseNormalized);
     position *= peakPeakAmplitude / 2;
     return position;
   }

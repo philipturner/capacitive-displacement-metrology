@@ -21,7 +21,7 @@ struct Spectroscopy {
   static constexpr uint32_t voltageSlewPeriod = KilohertzLoopRound(120);
   static constexpr uint32_t positionSettlePeriod = KilohertzLoopRound(150); // 2500
   static constexpr uint32_t integratePeriod = KilohertzLoopRound(1000);
-  static constexpr uint32_t delayBeforeFeedback = KilohertzLoopRound(5000);
+  static constexpr uint32_t delayBeforeFeedback = KilohertzLoopRound(15000);
   static constexpr uint32_t feedbackTime = KilohertzLoopRound(30000);
   static constexpr uint32_t trialsPerResult = 10;
 
