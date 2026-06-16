@@ -248,7 +248,7 @@ extension ImagingWindow {
 }
 
 extension ImagingWindow {
-  static let logScaleCurrentPlotting: Bool = true
+  static let logScaleCurrentPlotting: Bool = false
   
   static let PreLoggedAxisItem = createPreLoggedAxisItem()
   

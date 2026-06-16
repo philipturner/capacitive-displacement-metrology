@@ -16,9 +16,18 @@ float getFeedbackErrorTerm() {
 
   float k = 1.025e10 * sqrt(Feedback::tunnelingBarrierHeight);
   float kΔz = x - 1;
+
+  // Make it even more repulsive at high currents.
+  float F = exp(k * 50e-12);
+  if (x > F) {
+    kΔz += (x - F) * (x - F);
+  }
   return kΔz / k;
 }
 
+// Separate the two functionalities:
+// - get dz
+// - get absolute z
 float Feedback::getVoltage() {
   float dz = getFeedbackErrorTerm();
   if (useNotchFilter) {
@@ -43,7 +52,7 @@ float Feedback::getVoltage() {
   // enforcing the +4.4 pm limit will not change anything
   correctionInMeters = min(correctionInMeters, 4.4e-12);
 
-  // Limit slew rate to 0.52 V/μs.  
+  // Limit slew rate to ~0.5 V/μs.  
   correctionInMeters = max(correctionInMeters, -2e-9);
 
   float voltage = Application::state.piezoZVoltage;

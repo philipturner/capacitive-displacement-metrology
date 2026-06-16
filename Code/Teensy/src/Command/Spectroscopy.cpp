@@ -50,6 +50,17 @@ Spectroscopy::Spectroscopy(Command command) {
   trialStartIterationID = KilohertzLoop::iterationID;
 }
 
+void Spectroscopy::update() {
+  updateState();
+
+  if (shouldUpdateForTrial()) {
+    updateForTrial();
+  } else {
+    Application::updateBiasVoltage(Feedback::setpointVoltage);
+    Application::tipApproacher.updatePiezoZ();
+  }
+}
+
 uint32_t Spectroscopy::getTimeSinceTrialStart() {
   uint32_t deltaIters = KilohertzLoop::iterationID;
   deltaIters -= trialStartIterationID;
@@ -144,53 +155,21 @@ void Spectroscopy::updateState() {
   }
 }
 
-void Spectroscopy::accumulate(uint32_t index) {
-  float current = Application::state.filteredCurrent;
-  pendingResult1.accumulators[index] += log(abs(current));
-  pendingResult1.sampleCount[index] += 1;
-  pendingResult1.signBallot[index] += (current > 0) ? 1 : -1;
-  pendingResult2.accumulators[index] += log(abs(current));
-  pendingResult2.sampleCount[index] += 1;
-  pendingResult2.signBallot[index] += (current > 0) ? 1 : -1;
-}
-
-float linearInterpolate(float start, float end, float t) {
-  float output = 0;
-  output += start * (1 - t);
-  output += end * t;
-  return output;
-}
-
-float Spectroscopy::getBiasVoltage(float progress) {
-  auto pair = getCurrentVZPair();
-
-  float start = Feedback::setpointVoltage;
-  float end = pair.voltage;
-  return linearInterpolate(start, end, progress);
-}
-
-float Spectroscopy::getPiezoZVoltage(float progress) {
-  auto pair = getCurrentVZPair();
-  float dV = pair.position / 0.320e-9;
-
-  float start = restPiezoZVoltage;
-  float end = start + dV;
-  
-  float output = linearInterpolate(start, end, progress);
-  output = min(output, 270);
-  output = max(output, -80);
-  return output;
-}
-
-void Spectroscopy::update() {
-  updateState();
-
+bool Spectroscopy::shouldUpdateForTrial() {
   if (pairID >= getPairCount()) {
-    Application::updateBiasVoltage(Feedback::setpointVoltage);
-    Application::updatePiezoVoltage(3, Feedback::getVoltage());
-    return;
+    return false;
   }
 
+  uint32_t time = getTimeSinceTrialStart();
+  uint32_t maxTime = getTimePerTrial() - feedbackTime;
+  if (time < maxTime) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void Spectroscopy::updateForTrial() {
   uint32_t time = getTimeSinceTrialStart();
   if (time < integratePeriod) {
     accumulate(0);
@@ -249,6 +228,44 @@ void Spectroscopy::update() {
     }
   }
 
-  Application::updateBiasVoltage(Feedback::setpointVoltage);
-  Application::updatePiezoVoltage(3, Feedback::getVoltage());
+  Serial.println("This should never happen.");
+  exit(0);
+}
+
+void Spectroscopy::accumulate(uint32_t index) {
+  float current = Application::state.filteredCurrent;
+  pendingResult1.accumulators[index] += log(abs(current));
+  pendingResult1.sampleCount[index] += 1;
+  pendingResult1.signBallot[index] += (current > 0) ? 1 : -1;
+  pendingResult2.accumulators[index] += log(abs(current));
+  pendingResult2.sampleCount[index] += 1;
+  pendingResult2.signBallot[index] += (current > 0) ? 1 : -1;
+}
+
+float linearInterpolate(float start, float end, float t) {
+  float output = 0;
+  output += start * (1 - t);
+  output += end * t;
+  return output;
+}
+
+float Spectroscopy::getBiasVoltage(float progress) {
+  auto pair = getCurrentVZPair();
+
+  float start = Feedback::setpointVoltage;
+  float end = pair.voltage;
+  return linearInterpolate(start, end, progress);
+}
+
+float Spectroscopy::getPiezoZVoltage(float progress) {
+  auto pair = getCurrentVZPair();
+  float dV = pair.position / 0.320e-9;
+
+  float start = restPiezoZVoltage;
+  float end = start + dV;
+  
+  float output = linearInterpolate(start, end, progress);
+  output = min(output, 270);
+  output = max(output, -80);
+  return output;
 }

@@ -1,7 +1,7 @@
 struct PixelTracker {
   static let enforceAlignedPositions: Bool = true
   static let rejectOddRows: Bool = true
-  static let overrideCurrentData: Bool = true
+  static let overrideCurrentData: Bool = false
   
   var settings: ImagingSettings
   var dataBuffer: [SIMD2<Float>]

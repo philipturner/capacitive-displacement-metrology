@@ -69,12 +69,15 @@ void kilohertzLoop() {
     }
     if (Application::mode == Command::Mode::simpleScanning) {
       Application::simpleScanner = SimpleScanner(nextCommand);
-      Application::tipApproacher = TipApproacher(
-        TipApproacher::State::feedback);
     }
     if (Application::mode == Command::Mode::imaging) {
       Application::imager = Imager(nextCommand);
       Application::imager.forwardSettings();
+    }
+
+    uint8_t modeCode = uint8_t(Application::mode);
+    uint8_t thresholdModeCode =  uint8_t(Command::Mode::idleFeedback);
+    if (modeCode >= thresholdModeCode) {
       Application::tipApproacher = TipApproacher(
         TipApproacher::State::feedback);
     }

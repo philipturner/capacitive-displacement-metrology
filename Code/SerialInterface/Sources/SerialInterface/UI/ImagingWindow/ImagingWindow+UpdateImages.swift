@@ -152,9 +152,8 @@ extension ImagingWindow {
       func createLevels() -> SIMD2<Float> {
         if rowID == 0 {
           if Self.logScaleCurrentPlotting {
-            let multiplicativeDeviation: Float = 3
-            let minimum = settings.setpointCurrent / multiplicativeDeviation
-            let maximum = settings.setpointCurrent * multiplicativeDeviation
+            let minimum = settings.setpointCurrent * 0.4
+            let maximum = settings.setpointCurrent * 1.5
             return SIMD2<Float>(
               log10(minimum),
               log10(maximum))
