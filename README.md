@@ -1322,14 +1322,50 @@ usePolynomialPeak = true
 
 usePolynomialPeak = false
 
+<details>
+<summary>oscilloscope trace</summary>
+
 ![](./Documentation//June17/DS1Z_QuickPrint8.png)
+
+</details>
+
+<details>
+<summary>SerialInterface screenshot</summary>
+
+![](./Documentation/June17/Screenshot2.png)
+
+</details>
 
 ### Simple scanning, command "7y10,10", 700 ns delay between DAC commands
 
 usePolynomialPeak = true
 
+<details>
+<summary>oscilloscope trace</summary>
+
 ![](./Documentation//June17/DS1Z_QuickPrint10.png)
+
+</details>
+
+<details>
+<summary>SerialInterface screenshot</summary>
+
+![](./Documentation/June17/Screenshot3.png)
+
+</details>
 
 usePolynomialPeak = false
 
+<details>
+<summary>oscilloscope trace</summary>
+
 ![](./Documentation//June17/DS1Z_QuickPrint11.png)
+
+</details>
+
+<details>
+<summary>SerialInterface screenshot</summary>
+
+![](./Documentation/June17/Screenshot4.png)
+
+</details>
