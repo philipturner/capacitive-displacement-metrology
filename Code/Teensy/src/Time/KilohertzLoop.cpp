@@ -5,22 +5,6 @@
 #include "Diagnostics/Log.h"
 #include <Arduino.h>
 
-bool shouldWarn(int64_t differentialError, int64_t integralError) {
-  if (KilohertzLoop::iterationID % 1997 == 0) {
-    return true;
-  } else {
-    return false;
-  }
-
-  if (abs(differentialError) > KilohertzLoop::differentialErrorWarning) {
-    return true;
-  }
-  if (abs(integralError) > KilohertzLoop::integralErrorWarning) {
-    return true;
-  }
-  return false;
-}
-
 // Timing limits:
 //
 // 4 us - DAC
@@ -34,6 +18,23 @@ bool shouldWarn(int64_t differentialError, int64_t integralError) {
 // 9 us - DAC (4x)
 // 11 us - DAC (5x)
 
+// Integral error as a function of start time % loop period, with the costly
+// creep filter enabled.
+//
+// When sampling every 1997 iterations, error alternates between two values
+// every ~22 samples.
+//
+// 50000 - -1 or -10 (imaging), 0 or -5 (idle)
+// 50001 - -2 or -11 (imaging), 0 or -6 (idle)
+// 50002 - -3 or -12 (imaging), 0 or -7 (idle)
+// 50003 - -4 or -13 (imaging), 0 or -8 (idle)
+// 50004 - -5 or -14 (imaging), -1 or -9 (idle)
+// 50005 - 0 or -7 (imaging), 0 or -2 (idle)
+// 50006 - 0 or -7 (imaging), 0 or -3 (idle)
+// 50008 - -1 or -10 (imaging), 0 or -5 (idle)
+// 50010 - -3 or -12 (imaging), 0 or -7 (idle)
+// 50012 - -5 or -14 (imaging), -1 or -9 (idle)
+
 void KilohertzLoop::_kilohertzLoopBodyInner() {
   // During a fatal error condition, code in the fast loop should be prevented
   // from being called. We achieve this by ending the kilohertz loop. However,
@@ -45,37 +46,10 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
 
   previousTimestamp = latestTimestamp;
   latestTimestamp.raiseLowerHalf(micros());
-
-  // Failures from constantly stopping and restarting the serial connection,
-  // while logging about 45 bytes every 100 us.
-
-  // timer.priority(0)
-  // 20 us: fail with -4 error
-  // 10 us: fail with -2 error
-  // 9 us: fail with -5 error
-  // 8 us: fail with +1 error
-  // 7 us: fail with -5 error
-  // 6 us: fail with -5 error
-  //
-  // with recent changes to code:
-  // 12 us: fail with -7 error
-  // 7 us: fail with -7 error
-  // 6 us: fail with -11 error
-
-  // no priority
-  // 20 us: fail with +23 error
-  // 6 us: fail with +14 error
   
   if (iterationID == 0) {
     integrationStartTimestamp = latestTimestamp;
   } else {
-    if (iterationID == 1) {
-      integrationTimestamp2 = latestTimestamp;
-    }
-    if (iterationID == 2) {
-      integrationTimestamp3 = latestTimestamp;
-    }
-
     int64_t interval = latestTimestamp.getLongValue() - previousTimestamp.getLongValue();
     int64_t differentialError = interval - period;
 
@@ -84,7 +58,7 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
     int64_t integralError = actualIntegrated - expectedIntegrated;
 
     if (enableFatalErrors) {
-      if (abs(differentialError) > differentialErrorFatal) {
+      if (abs(differentialError) >= differentialErrorFatal) {
         throwError(
           "Differential error was too large.",
           period,
@@ -93,7 +67,7 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
         return;
       }
       
-      if (abs(integralError) > integralErrorFatal) {
+      if (abs(integralError) >= integralErrorFatal) {
         throwError(
           "Integral error was too large.",
           expectedIntegrated,
@@ -104,19 +78,17 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
     }
 
     if (enableWarnings) {
-      if (shouldWarn(differentialError, integralError)) {
-        uint64_t absoluteTime = latestTimestamp.getLongValue();
+      if (abs(differentialError) >= KilohertzLoop::differentialErrorWarning ||
+          abs(integralError) >= KilohertzLoop::integralErrorWarning)
+      {
         uint32_t relativeIterationID = iterationID;
         relativeIterationID -= Application::state.modeStartIterationID;
         
         Log::writeValuesWithFlags(
           7, // flags
-          // Log::encodeRawBits(absoluteTime & 0xFFFFFF),
-          // Log::encodeRawBits(iterationID),
-          // Log::encodeRawBits(relativeIterationID),
-          Log::encodeRawBits(integrationStartTimestamp.lowerHalf),
-          Log::encodeRawBits(integrationTimestamp2.lowerHalf),
-          Log::encodeRawBits(integrationTimestamp3.lowerHalf),
+          Log::encodeRawBits(latestTimestamp.lowerHalf),
+          Log::encodeRawBits(iterationID),
+          Log::encodeRawBits(relativeIterationID),
           Log::encodeRawBits(interval),
           Log::encodeRawBits(integralError));
       }
@@ -144,6 +116,25 @@ void KilohertzLoop::initialize(
   integrationStartTimestamp = Timestamp();
   iterationID = 0;
 
+  // Failures from constantly stopping and restarting the serial connection,
+  // while logging about 45 bytes every 100 us.
+
+  // timer.priority(0)
+  // 20 us: fail with -4 error
+  // 10 us: fail with -2 error
+  // 9 us: fail with -5 error
+  // 8 us: fail with +1 error
+  // 7 us: fail with -5 error
+  // 6 us: fail with -5 error
+  //
+  // with recent changes to code:
+  // 12 us: fail with -7 error
+  // 7 us: fail with -7 error
+  // 6 us: fail with -11 error
+
+  // no priority
+  // 20 us: fail with +23 error
+  // 6 us: fail with +14 error
   timer.priority(0);
   timer.begin(_kilohertzLoopBodyOuter, period);
 }

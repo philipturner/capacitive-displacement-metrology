@@ -95,11 +95,16 @@ struct PixelTracker {
           continue
         }
       }
+      
+      // If rejecting even rows, write the latest row and then overwrite data
+      // on the next odd row.
       let slotID = settings.bufferSlotID(pixelID: pixelID)
       dataBuffer[slotID] = data
       
+      // [move the above guard statement here]
+      
       if Self.rejectOddRows {
-        let overwrittenPixelID = pixelID + settings.resolution
+        let overwrittenPixelID = pixelID - settings.resolution
         let slotID = settings.bufferSlotID(pixelID: overwrittenPixelID)
         dataBuffer[slotID] = data
       }

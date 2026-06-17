@@ -14,7 +14,7 @@ func createTrigger1() -> Trigger {
 }
 
 func createApplication() -> Application {
-  TimeAxis.shortLength = 0.010 // 0.030, 0.10
+  TimeAxis.shortLength = 0.010 // 0.030, 0.010
   TimeAxis.longLength = 2.5
   
   var applicationDesc = ApplicationDescriptor()

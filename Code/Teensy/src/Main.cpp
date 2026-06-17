@@ -1,5 +1,6 @@
 #include "Application/Application.h"
 #include "Command/Parsing/CommandTracker.h"
+#include "IC/DAC.h"
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
@@ -115,7 +116,9 @@ void kilohertzLoop() {
 
         float2 scannerVoltage = previousScannerVoltage * (1 - progress);
         Application::updatePiezoVoltage(1, scannerVoltage.x);
+        DAC::enableSafeWait = false;
         Application::updatePiezoVoltage(2, scannerVoltage.y);
+        DAC::enableSafeWait = true;
         Application::updatePiezoVoltage(3, Feedback::getVoltage());
       }
     } else if (modeChangeRetractsZ) {
