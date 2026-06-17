@@ -46,6 +46,7 @@ Table of Contents:
 - [May 4, 2026](#may-4-2026)
 - [Jun 1, 2026](#jun-1-2026)
 - [Jun 7, 2026](#jun-7-2026)
+- [Jun 17, 2026](#jun-17-2026)
 
 ## December 15, 2025
 
@@ -1288,3 +1289,47 @@ I have sent off some emails to prepare for the second design iteration of the ST
 ## Jun 7, 2026
 
 [Creep Quantification (Google Sheets)](https://docs.google.com/spreadsheets/d/1sMFUhWJW1PjHLAMwuU-sI6h_4UuGs7WQjF9z8UE9yGs/edit?usp=sharing)
+
+## Jun 17, 2026
+
+Oscilloscope traces were taken from the PA95 output voltage for the Y piezo.
+
+### Imaging mode, actual scan waveform when dominant axis = Y
+
+![](./Documentation/June17/DS1Z_QuickPrint5.png)
+
+### Imaging mode, expected scan waveform when dominant axis = Y
+
+![](./Documentation/June17/DS1Z_QuickPrint6.png)
+
+### Simple scanning, command "7y10,10", no delay between DAC commands
+
+usePolynomialPeak = true
+
+<details>
+<summary>oscilloscope trace</summary>
+
+![](./Documentation//June17/DS1Z_QuickPrint7.png)
+
+</details>
+
+<details>
+<summary>SerialInterface screenshot</summary>
+
+![](./Documentation/June17/Screenshot1.png)
+
+</details>
+
+usePolynomialPeak = false
+
+![](./Documentation//June17/DS1Z_QuickPrint8.png)
+
+### Simple scanning, command "7y10,10", 700 ns delay between DAC commands
+
+usePolynomialPeak = true
+
+![](./Documentation//June17/DS1Z_QuickPrint10.png)
+
+usePolynomialPeak = false
+
+![](./Documentation//June17/DS1Z_QuickPrint11.png)
