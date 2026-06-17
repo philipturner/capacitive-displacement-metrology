@@ -31,9 +31,9 @@ void Application::updatePiezoVoltage(uint32_t channelID, float voltage) {
     previousVoltage = state.piezoZVoltage;
     state.piezoZVoltage = voltage;
   }
-  if (channelID != 3) {
+  //if (channelID != 3) {
     PA95::writeVoltage(channelID, voltage);
-  }
+  //}
 
   float dV = voltage - previousVoltage;
   state.addSpike(dV, C);

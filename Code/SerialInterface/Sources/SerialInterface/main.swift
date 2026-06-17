@@ -4,17 +4,17 @@ import SwiftSerial
 
 func createTrigger1() -> Trigger {
   var trigger = Trigger()
-//  trigger.type = .timeInterval(period: 0.5, offset: 0)
-//  trigger.polarity = .signAgnostic
-//  trigger.channel = 0
-  trigger.type = .level(-4.99)
-  trigger.polarity = .negative
-  trigger.channel = 2
+  trigger.type = .timeInterval(period: 0.5, offset: 0)
+  trigger.polarity = .signAgnostic
+  trigger.channel = 0
+//  trigger.type = .level(-4.99)
+//  trigger.polarity = .negative
+//  trigger.channel = 2
   return trigger
 }
 
 func createApplication() -> Application {
-  TimeAxis.shortLength = 0.030
+  TimeAxis.shortLength = 0.010 // 0.030, 0.10
   TimeAxis.longLength = 2.5
   
   var applicationDesc = ApplicationDescriptor()

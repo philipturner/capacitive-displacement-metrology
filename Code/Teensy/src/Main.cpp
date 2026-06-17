@@ -98,7 +98,7 @@ void kilohertzLoop() {
     } else {
       if (uint8_t(Application::mode) >= uint8_t(Command::Mode::idleFeedback)) {
         auto restorationState = TipApproacher::rangeRestorationState();
-        if (false && restorationState != TipApproacher::State::feedback) {
+        if (restorationState != TipApproacher::State::feedback) {
           Application::mode = Command::Mode::tipApproach;
           Application::state.modeStartIterationID = KilohertzLoop::iterationID;
           Application::state.capacitanceUpdateCount = 0;
@@ -144,8 +144,6 @@ void kilohertzLoop() {
         }
       } else if (KilohertzLoop::iterationID == turningPointIter) {
         Application::updatePiezoVoltage(3, -270);
-        
-        useADC = false;
       }
     } else {
       Application::updateBiasVoltage(0);
