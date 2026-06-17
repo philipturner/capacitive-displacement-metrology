@@ -44,6 +44,8 @@ struct DACInput {
 };
 
 struct DAC {
+  static inline bool enableSafeWait = true;
+
   static uint16_t transfer(
     uint8_t CS,
     DACInput input,

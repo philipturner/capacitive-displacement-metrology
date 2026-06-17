@@ -11,10 +11,6 @@
 #include "Filter/Creep/Filter.h"
 
 struct Application {
-  static inline uint32_t startTime = 0;
-  static inline uint32_t midTime = 0;
-  static inline uint32_t endTime = 0;
-
   static inline State state;
   static inline Command::Mode mode;
   static inline CapacitanceTracker capTracker;
@@ -35,9 +31,11 @@ struct Application {
 
   static void setupI2C();
 
+  static void updateBiasVoltage(float voltage);
+
   static void updatePiezoVoltage(uint32_t channelID, float voltage);
 
-  static void updateBiasVoltage(float voltage);
+  static void updatePiezoZDeferred();
 
   static void updateCapacitanceTracker(bool regenerate);
 

@@ -4,6 +4,17 @@
 #include "IC/DAC.h"
 #include "IC/PA95.h"
 
+void Application::updateBiasVoltage(float voltage) {
+  float dV = voltage - state.biasVoltage;
+  float C = 50e-15;
+  state.addSpike(dV, C);
+
+  state.biasVoltage = voltage;
+  DAC::enableSafeWait = false;
+  DAC2::writeVoltage(0, voltage);
+  DAC::enableSafeWait = true;
+}
+
 void Application::updatePiezoVoltage(uint32_t channelID, float voltage) {
   float C = 0;
   float previousVoltage = 0;
@@ -20,19 +31,18 @@ void Application::updatePiezoVoltage(uint32_t channelID, float voltage) {
     previousVoltage = state.piezoZVoltage;
     state.piezoZVoltage = voltage;
   }
-  PA95::writeVoltage(channelID, voltage);
+  if (channelID != 3) {
+    PA95::writeVoltage(channelID, voltage);
+  }
 
   float dV = voltage - previousVoltage;
   state.addSpike(dV, C);
 }
 
-void Application::updateBiasVoltage(float voltage) {
-  float dV = voltage - state.biasVoltage;
-  float C = 50e-15;
-  state.addSpike(dV, C);
-
-  state.biasVoltage = voltage;
-  DAC2::writeVoltage(0, voltage);
+void Application::updatePiezoZDeferred() {
+  DAC::enableSafeWait = false;
+  PA95::writeVoltage(3, state.piezoZVoltage);
+  DAC::enableSafeWait = true;
 }
 
 void Application::updateCapacitanceTracker(bool regenerate) {
@@ -131,7 +141,6 @@ void Application::logNormalMessage() {
       state.piezoXVoltage * 0.320,
       state.piezoYVoltage * 0.320,
       state.piezoZVoltage * -0.320,
-      // dV * 0.320);
-      state.spectroscopyTrigger);
+      dV * 0.320);
   }
 }

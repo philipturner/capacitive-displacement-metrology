@@ -157,8 +157,7 @@ void kilohertzLoop() {
     }
   } else {
     if (Application::mode == Command::Mode::dacTest) {
-      //Application::dacTester.update();
-      Application::updatePiezoVoltage(2, 40);
+      Application::dacTester.update();
     }
     if (Application::mode == Command::Mode::capacitanceReporting) {
       Application::updateCapacitanceTracker(/*regenerate=*/true);
@@ -177,10 +176,7 @@ void kilohertzLoop() {
       Application::spectroscopy.update();
     }
     if (Application::mode == Command::Mode::simpleScanning) {
-      Application::state.spectroscopyTrigger = Application::state.piezoYVoltage;
-      Application::simpleScanner.update();
-      //Application::updatePiezoVoltage(2, -40);
-      
+      Application::simpleScanner.update();      
     }
     if (Application::mode == Command::Mode::imaging) {
       Application::imager.update();
@@ -188,6 +184,10 @@ void kilohertzLoop() {
   }
 
   Application::state.updateCurrent(useADC);
+  if (!useADC) {
+    delayNanoseconds(700);
+  }
+  Application::updatePiezoZDeferred();
 
   // Send data to the real-time monitor.
   if (!ErrorMessage::hasError()) {
@@ -200,5 +200,5 @@ void kilohertzLoop() {
   float2 stimulus;
   stimulus.x = Application::state.piezoXVoltage;
   stimulus.y = Application::state.piezoYVoltage;
-  //Application::creepFilter.update(stimulus);
+  Application::creepFilter.update(stimulus);
 }

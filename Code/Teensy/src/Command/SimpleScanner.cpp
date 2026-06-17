@@ -26,30 +26,6 @@ SimpleScanner::SimpleScanner(Command command) {
 }
 
 void SimpleScanner::update() {
-  // Periods of loop destabilization correlate with systematic current jumps to
-  // +10 nA.
-  //
-  // Try removing notch filter and slowing down feedback.
-  if (false) {
-    uint32_t currentTime = micros();
-    uint32_t deltaTime = currentTime - previousTime;
-    previousTime = currentTime;
-
-    int32_t deltaExpected = int32_t(deltaTime) - 16;
-    int32_t threshold = 1;
-
-    if (abs(deltaExpected) >= threshold) {
-      timingDisturance = deltaExpected;
-      timeOfTimingDisturbance = KilohertzLoop::iterationID;
-    }
-
-    if (KilohertzLoop::iterationID - timeOfTimingDisturbance > 10) {
-      timingDisturance = 0;
-    }
-
-    Application::state.spectroscopyTrigger = float(timingDisturance);
-  }
-
   uint32_t time = Application::state.getTimeSinceModeStart();
   Application::updatePiezoVoltage(3, Feedback::getVoltage());
 
@@ -71,8 +47,7 @@ void SimpleScanner::update() {
   } else {
     position = getPosition(time - Imager::largeMoveRiseTime);
   }
-  //Application::updatePiezoVoltage(2, position / 0.320);
-  Application::updatePiezoVoltage(2, -40);
+  Application::updatePiezoVoltage(channelID, position / 0.320);
 }
 
 float SimpleScanner::getPosition(uint32_t inputTime) const {

@@ -67,7 +67,9 @@ uint16_t DAC::transfer(
   digitalWrite(CS, 1);
   SPI.endTransaction();
 
-  delayNanoseconds(1000);
+  if (enableSafeWait) {
+    delayNanoseconds(700);
+  }
 
   if (IC::Validation::enableCRC && find(flags, CRC::Flags::MISO_FLAG)) {
     uint8_t errorBit = bytes[0] & 0b01000000;

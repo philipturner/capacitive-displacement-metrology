@@ -3,6 +3,7 @@
 #include "Application/Application.h"
 #include "Filter/Feedback.h"
 #include "Time/KilohertzLoop.h"
+#include "IC/DAC.h"
 #include "Util/WaveUtil.h"
 #include "Util/Interpolate.h"
 #include <Arduino.h>
@@ -38,7 +39,9 @@ void Imager::update() {
   float2 stimulus = position * float(1 / 0.320);
   stimulus += -1 * Application::creepFilter.futureAccumulatedDrift;
   Application::updatePiezoVoltage(1, stimulus.x);
+  DAC::enableSafeWait = false;
   Application::updatePiezoVoltage(2, stimulus.y);
+  DAC::enableSafeWait = true;
 }
 
 float2 Imager::getPosition(float2 localPosition, uint32_t imageID) {
