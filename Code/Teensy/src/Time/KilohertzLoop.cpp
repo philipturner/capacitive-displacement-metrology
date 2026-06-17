@@ -1,7 +1,25 @@
 #include "KilohertzLoop.h"
 
+#include "Application/Application.h"
 #include "Diagnostics/ErrorMessage.h"
+#include "Diagnostics/Log.h"
 #include <Arduino.h>
+
+bool shouldWarn(int64_t differentialError, int64_t integralError) {
+  if (KilohertzLoop::iterationID % 1997 == 0) {
+    return true;
+  } else {
+    return false;
+  }
+
+  if (abs(differentialError) > KilohertzLoop::differentialErrorWarning) {
+    return true;
+  }
+  if (abs(integralError) > KilohertzLoop::integralErrorWarning) {
+    return true;
+  }
+  return false;
+}
 
 // Timing limits:
 //
@@ -51,35 +69,58 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
   if (iterationID == 0) {
     integrationStartTimestamp = latestTimestamp;
   } else {
-    int64_t interval = latestTimestamp.getLongValue() - previousTimestamp.getLongValue();
-
-    #if 1
-    uint32_t maxDifferentialError = 15;
-    uint32_t maxIntegralError = 16;
-
-    int64_t differentialError = interval - period;
-    if (abs(differentialError) > maxDifferentialError) {
-      throwError(
-        "Differential error was too large.",
-        period,
-        interval,
-        differentialError);
-      return;
+    if (iterationID == 1) {
+      integrationTimestamp2 = latestTimestamp;
     }
-    
+    if (iterationID == 2) {
+      integrationTimestamp3 = latestTimestamp;
+    }
+
+    int64_t interval = latestTimestamp.getLongValue() - previousTimestamp.getLongValue();
+    int64_t differentialError = interval - period;
+
     int64_t actualIntegrated = latestTimestamp.getLongValue() - integrationStartTimestamp.getLongValue();
     int64_t expectedIntegrated = int64_t(iterationID) * period;
-    
     int64_t integralError = actualIntegrated - expectedIntegrated;
-    if (abs(integralError) > maxIntegralError) {
-      throwError(
-        "Integral error was too large.",
-        expectedIntegrated,
-        actualIntegrated,
-        integralError);
-      return;
+
+    if (enableFatalErrors) {
+      if (abs(differentialError) > differentialErrorFatal) {
+        throwError(
+          "Differential error was too large.",
+          period,
+          interval,
+          differentialError);
+        return;
+      }
+      
+      if (abs(integralError) > integralErrorFatal) {
+        throwError(
+          "Integral error was too large.",
+          expectedIntegrated,
+          actualIntegrated,
+          integralError);
+        return;
+      }      
     }
-    #endif
+
+    if (enableWarnings) {
+      if (shouldWarn(differentialError, integralError)) {
+        uint64_t absoluteTime = latestTimestamp.getLongValue();
+        uint32_t relativeIterationID = iterationID;
+        relativeIterationID -= Application::state.modeStartIterationID;
+        
+        Log::writeValuesWithFlags(
+          7, // flags
+          // Log::encodeRawBits(absoluteTime & 0xFFFFFF),
+          // Log::encodeRawBits(iterationID),
+          // Log::encodeRawBits(relativeIterationID),
+          Log::encodeRawBits(integrationStartTimestamp.lowerHalf),
+          Log::encodeRawBits(integrationTimestamp2.lowerHalf),
+          Log::encodeRawBits(integrationTimestamp3.lowerHalf),
+          Log::encodeRawBits(interval),
+          Log::encodeRawBits(integralError));
+      }
+    }
   }
 
   loopBody();

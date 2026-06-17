@@ -160,7 +160,8 @@ extension ImagingWindow {
           } else {
             let usedStatistics = overridingStatistics ?? statistics
             let average = usedStatistics.average[rowID]
-            let stddev = usedStatistics.stddev[rowID]
+            var stddev = usedStatistics.stddev[rowID]
+            stddev = max(stddev, 0.1)
             return SIMD2<Float>(
               average - stddev * 3,
               average + stddev * 3)

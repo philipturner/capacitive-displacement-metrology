@@ -80,6 +80,13 @@ void Log::transmitBufferedSamples() {
   transmittedLogID = bufferedLogID;
 }
 
+float Log::encodeRawBits(uint32_t bits) {
+  uint32_t uintValue = bits << 8;
+  float floatValue;
+  memcpy(&floatValue, &uintValue, 4);
+  return floatValue;
+}
+
 void Log::throwError(
   const char *cString, 
   int64_t number1,

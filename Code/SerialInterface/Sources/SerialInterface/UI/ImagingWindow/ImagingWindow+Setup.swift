@@ -1,7 +1,7 @@
 import func Foundation.pow
 import PythonKit
 
-private let colorBarAxisWidth: Int = 50
+private let colorBarTextWidth: Int = 55
 private let rowHeight: Int = 320
 private let rowSpacing: Int = 10
 private let columnWidthHistory: Int = 420
@@ -146,7 +146,7 @@ extension ImagingWindow {
           colorBar.axis.unlinkFromView()
         }
         colorBar.setImageItem(imageItem, insert_in: plot)
-        colorBar.axis.setWidth(colorBarAxisWidth)
+        colorBar.axis.setWidth(colorBarTextWidth)
         
         let image = ImagePlot(
           plot: plot,
@@ -173,7 +173,7 @@ extension ImagingWindow {
       colorMap: colorMap,
       interactive: false)
     colorBar.setImageItem(imageItem, insert_in: plot)
-    colorBar.axis.setWidth(colorBarAxisWidth)
+    colorBar.axis.setWidth(colorBarTextWidth)
     
     let image = ImagePlot(
       plot: plot,

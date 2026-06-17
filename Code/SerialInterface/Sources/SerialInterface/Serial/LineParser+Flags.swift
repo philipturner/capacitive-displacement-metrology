@@ -7,6 +7,7 @@ extension LineParser {
     case pixel = 4
     case imagingSettings = 5
     case creepSettings = 6
+    case kilohertzLoop = 7
   }
   
   struct Splitting {
@@ -82,8 +83,7 @@ extension LineParser {
         print()
       }
       
-      let creepSettingsLines = self[.creepSettings]
-      for line in creepSettingsLines {
+      for line in self[.creepSettings] {
         let labels: [String] = [
           "creep constants - X (%/decade)2",
           "creep constants - Y (%/decade)2",
@@ -103,6 +103,31 @@ extension LineParser {
         Self.displayTabulated(labels: labels, values: values)
         print()
       }
+      
+      for line in self[.newMode] {
+        let modeCode = Int(line.values[0])
+        if line.values[1] == 1 {
+          print("Forced mode change to \(modeCode)")
+        }
+      }
+      
+      for line in self[.kilohertzLoop] {
+        print("kilohertz loop warning:", terminator: " ")
+        
+        for laneID in 0..<3 {
+          let floatValue = line.values[laneID]
+          let uintValue = floatValue.bitPattern >> 8
+          print(uintValue, terminator: " ")
+        }
+        for laneID in 3..<5 {
+          let floatValue = line.values[laneID]
+          var intValue = Int32(truncatingIfNeeded: floatValue.bitPattern)
+          intValue >>= 8
+          print(intValue, terminator: " ")
+        }
+        
+        print()
+      }
     }
   }
   
@@ -119,6 +144,8 @@ extension LineParser {
       case .history:
         splitting[.history].append(line)
       case .newMode:
+        splitting[.newMode].append(line)
+        
         let modeCode = Int(line.values[0])
         splitting.newModeCode = modeCode
         splitting[.history] = []
@@ -127,10 +154,6 @@ extension LineParser {
         if modeCode == 8 {
           splitting[.imagingSettings] = pendingImagingSettingsLines
           pendingImagingSettingsLines = []
-        }
-        
-        if line.values[1] == 1 {
-          print("Forced mode change to \(modeCode)")
         }
       case .spectroscopy:
         splitting[.spectroscopy].append(line)
@@ -145,6 +168,8 @@ extension LineParser {
         pendingImagingSettingsLines.append(line)
       case .creepSettings:
         splitting[.creepSettings].append(line)
+      case .kilohertzLoop:
+        splitting[.kilohertzLoop].append(line)
       }
     }
     

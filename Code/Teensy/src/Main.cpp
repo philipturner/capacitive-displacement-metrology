@@ -95,22 +95,8 @@ void kilohertzLoop() {
           modeChangeRetractsZ = true;
         }
       }
-    } else {
-      if (false && uint8_t(Application::mode) >= uint8_t(Command::Mode::idleFeedback)) {
-        auto restorationState = TipApproacher::rangeRestorationState();
-        if (restorationState != TipApproacher::State::feedback) {
-          Application::mode = Command::Mode::tipApproach;
-          Application::state.modeStartIterationID = KilohertzLoop::iterationID;
-          Application::state.capacitanceUpdateCount = 0;
-
-          Application::tipApproacher = TipApproacher(restorationState, true);
-
-          Log::writeValuesWithFlags(
-            1, // flags
-            float(Command::Mode::tipApproach),
-            float(1));
-        }
-      }
+    } else if (TipApproacher::modeShouldChange()) {
+      TipApproacher::forceModeChange();
     }
   }
 

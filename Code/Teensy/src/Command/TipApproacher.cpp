@@ -1,6 +1,7 @@
 #include "TipApproacher.h"
 
 #include "Application/Application.h"
+#include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
 #include "Filter/Feedback.h"
 #include <Arduino.h>
@@ -25,6 +26,38 @@ TipApproacher::State TipApproacher::rangeRestorationState() {
   } else {
     return State::feedback;
   }
+}
+
+bool TipApproacher::modeShouldChange() {
+  if (!forceModeChanges) {
+    return false;
+  }
+  
+  uint8_t currentMode = uint8_t(Application::mode);
+  uint8_t thresholdMode = uint8_t(Command::Mode::idleFeedback);
+  if (currentMode < thresholdMode) {
+    return false;
+  }
+
+  if (rangeRestorationState() != State::feedback) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void TipApproacher::forceModeChange() {
+  Application::mode = Command::Mode::tipApproach;
+  Application::state.modeStartIterationID = KilohertzLoop::iterationID;
+  Application::state.capacitanceUpdateCount = 0;
+
+  auto state = rangeRestorationState();
+  Application::tipApproacher = TipApproacher(state, true);
+
+  Log::writeValuesWithFlags(
+    1, // flags
+    float(Command::Mode::tipApproach),
+    float(1));
 }
 
 void TipApproacher::update() {

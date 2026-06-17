@@ -16,6 +16,8 @@ struct Log {
 
   static void transmitBufferedSamples();
 
+  static float encodeRawBits(uint32_t bits);
+
   static void throwError(
     const char *cString, 
     int64_t number1,

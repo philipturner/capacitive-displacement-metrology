@@ -44,15 +44,11 @@ bool PixelBuffer::hasReadyPixel() const {
 void PixelBuffer::flushReadyPixel() {
   Pixel pixel = pixels[startIndex % capacity];
   startIndex += 1;
-
-  uint32_t uintValue = pixel.id << 8;
-  float floatValue;
-  memcpy(&floatValue, &uintValue, 4);
-
+  
   if (!ErrorMessage::hasError()) {
     Log::writeValuesWithFlags(
       4, // flags
-      floatValue,
+      Log::encodeRawBits(pixel.id),
       pixel.x,
       pixel.y,
       pixel.z,

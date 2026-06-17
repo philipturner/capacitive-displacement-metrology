@@ -3,6 +3,8 @@
 #include <stdint.h>
 
 struct TipApproacher {
+  static constexpr bool forceModeChanges = false;
+
   enum class State {
     waitBeforeApproach = 0,
     approach = 1,
@@ -14,6 +16,8 @@ struct TipApproacher {
   TipApproacher();
   TipApproacher(State startingState, bool didContact);
   static State rangeRestorationState();
+  static bool modeShouldChange();
+  static void forceModeChange();
 
   void update();
 

@@ -13,7 +13,17 @@ struct KilohertzLoop {
   static inline Timestamp previousTimestamp;
   static inline Timestamp latestTimestamp;
   static inline Timestamp integrationStartTimestamp;
+  static inline Timestamp integrationTimestamp2;
+  static inline Timestamp integrationTimestamp3;
   static inline uint32_t iterationID = 0;
+
+  // An error is thrown when timing error > limit specified below.
+  static constexpr bool enableWarnings = true;
+  static constexpr bool enableFatalErrors = true;
+  static constexpr uint32_t differentialErrorWarning = 13;
+  static constexpr uint32_t differentialErrorFatal = 15;
+  static constexpr uint32_t integralErrorWarning = 13;
+  static constexpr uint32_t integralErrorFatal = 30;
 
   // Function to execute reliably with a consistent time
   // base in the multiple kHz band.

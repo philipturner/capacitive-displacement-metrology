@@ -40,7 +40,44 @@ void Application::setupSerial() {
   Serial.begin(0); // +431-479 ms
 
   // Only responds after another +11 ms.
-  delay(50);
+  delayMicroseconds(50005);
+
+  // creep filter updates every iteration
+  //
+  // 50000 - 2834033, 0 off
+  // 50002 - 2834035, 0 off
+  // 50004 - 2834037, 0 off
+  // 50006 - 2834039, 0 or -9 off
+  // 50008 - 2834041, -2 off
+  // 50010 - 2834043, -4 off
+  // 50012 - 2834045, -6 off
+  // 50014 - 2834047, -8 or -9 off
+  // 50015 - 2834048, 0 off
+  // 50016 - 2834049, 0 off
+  //
+  // creep filter does not update, but not optimized away by compiler
+  //
+  // ...
+  //
+  // This is just a spurious pattern in KilohertzLoop integral error caused by
+  // reporting only every 1000 iterations and reporting what timings produce
+  // certain consistent offsets.
+  
+  // Integral error as a function of start time % loop period
+  // When sampling every 1997 iterations, it alternates between two values every
+  // ~22 samples.
+  // This with the costly creep filter enabled.
+  //
+  // 50000 - -1 or -10 (imaging), 0 or -5 (idle)
+  // 50001 - -2 or -11 (imaging), 0 or -6 (idle)
+  // 50002 - -3 or -12 (imaging), 0 or -7 (idle)
+  // 50003 - -4 or -13 (imaging), 0 or -8 (idle)
+  // 50004 - -5 or -14 (imaging), -1 or -9 (idle)
+  // 50005 - 0 or -7 (imaging), 0 or -2 (idle)
+  // 50006 - 0 or -7 (imaging), 0 or -3 (idle)
+  // 50008 - -1 or -10 (imaging), 0 or -5 (idle)
+  // 50010 - -3 or -12 (imaging), 0 or -7 (idle)
+  // 50012 - -5 or -14 (imaging), -1 or -9 (idle)
 
   Serial.println();
   Serial.println("Serial Monitor has initialized.");
@@ -102,7 +139,7 @@ void Application::setupSPI() {
     uint16_t DAC2_ID = DAC2::readRegister(DAC81404_DEVICEID) >> 2;
     checkDeviceID(DAC2_ID, 0x029C);
   }
-
+  
   DAC2::writeVoltage(0, 0.0);
 }
 
