@@ -131,6 +131,7 @@ void Application::logNormalMessage() {
       state.piezoXVoltage * 0.320,
       state.piezoYVoltage * 0.320,
       state.piezoZVoltage * -0.320,
-      dV * 0.320);
+      // dV * 0.320);
+      state.spectroscopyTrigger);
   }
 }

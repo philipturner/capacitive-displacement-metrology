@@ -31,7 +31,33 @@ uint16_t DAC::transfer(
   // DAC81401, SPI_MODE2, FSDO = 0 | 15-16 Mbps
   // DAC81401, SPI_MODE2, FSDO = 1 | 34-35 Mbps
   // DAC81404, SPI_MODE2, FSDO = 1 | 34-35 Mbps
-  SPI.beginTransaction(SPISettings(34 * 1000000, MSBFIRST, SPI_MODE2));
+  //
+  // Revised stability criterion: actually zeroes in Application::setupSPI()
+  //
+  // FSDO = 1, SPI_MODE2
+  // CRC on: 26 Mbps okay
+  // CRC off: 17 Mbps okay
+  //
+  // FSDO = 1, SPI_MODE2, delayMicroseconds(1) after SPI.endTransaction();
+  // CRC on: 34 Mbps okay
+  // CRC off: 34 Mbps okay
+  //
+  // Solution: reorganize compute work to maintain +1 microsecond delays
+  // between sequential writes to DAC81404
+  // Application startup: 1-microsecond delays by default
+  // fast feedback loop: figure out best order of DAC writes and computations
+  // relative to ADC read
+  //
+  // New rule: for any modes or transitions that write to more than one piezo channel:
+  // Z DAC -> ADC -> X DAC -> creep filter -> Y DAC
+  //
+  // Actually, how much delay is just enough? Do we really need 1 microsecond?
+  //
+  // CRC on  @ 34 Mbps: 0 ns [0/2], 50 ns [1/3], 100 ns [3/3], 200 ns [2/2]
+  // CRC off @ 34 Mbps: 500 ns [0/2], 530 ns [0/1], 540 ns [1/3], 550 ns [4/4]
+  //
+  // Can we reach 40 Mbps with careful delays? No
+  SPI.beginTransaction(SPISettings(37 * 1000000, MSBFIRST, SPI_MODE2));
   digitalWrite(CS, 0);
   if (IC::Validation::enableCRC && find(flags, CRC::Flags::MOSI)) {
     SPI.transfer(bytes, 4);
@@ -40,6 +66,8 @@ uint16_t DAC::transfer(
   }
   digitalWrite(CS, 1);
   SPI.endTransaction();
+
+  delayNanoseconds(1000);
 
   if (IC::Validation::enableCRC && find(flags, CRC::Flags::MISO_FLAG)) {
     uint8_t errorBit = bytes[0] & 0b01000000;

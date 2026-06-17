@@ -7,8 +7,8 @@ func createTrigger1() -> Trigger {
 //  trigger.type = .timeInterval(period: 0.5, offset: 0)
 //  trigger.polarity = .signAgnostic
 //  trigger.channel = 0
-  trigger.type = .level(-4.9)
-  trigger.polarity = .positive
+  trigger.type = .level(-4.99)
+  trigger.polarity = .negative
   trigger.channel = 2
   return trigger
 }

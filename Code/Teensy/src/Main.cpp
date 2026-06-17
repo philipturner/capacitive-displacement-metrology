@@ -98,7 +98,7 @@ void kilohertzLoop() {
     } else {
       if (uint8_t(Application::mode) >= uint8_t(Command::Mode::idleFeedback)) {
         auto restorationState = TipApproacher::rangeRestorationState();
-        if (restorationState != TipApproacher::State::feedback) {
+        if (false && restorationState != TipApproacher::State::feedback) {
           Application::mode = Command::Mode::tipApproach;
           Application::state.modeStartIterationID = KilohertzLoop::iterationID;
           Application::state.capacitanceUpdateCount = 0;
@@ -157,7 +157,8 @@ void kilohertzLoop() {
     }
   } else {
     if (Application::mode == Command::Mode::dacTest) {
-      Application::dacTester.update();
+      //Application::dacTester.update();
+      Application::updatePiezoVoltage(2, 40);
     }
     if (Application::mode == Command::Mode::capacitanceReporting) {
       Application::updateCapacitanceTracker(/*regenerate=*/true);
@@ -176,7 +177,10 @@ void kilohertzLoop() {
       Application::spectroscopy.update();
     }
     if (Application::mode == Command::Mode::simpleScanning) {
+      Application::state.spectroscopyTrigger = Application::state.piezoYVoltage;
       Application::simpleScanner.update();
+      //Application::updatePiezoVoltage(2, -40);
+      
     }
     if (Application::mode == Command::Mode::imaging) {
       Application::imager.update();
@@ -196,5 +200,5 @@ void kilohertzLoop() {
   float2 stimulus;
   stimulus.x = Application::state.piezoXVoltage;
   stimulus.y = Application::state.piezoYVoltage;
-  Application::creepFilter.update(stimulus);
+  //Application::creepFilter.update(stimulus);
 }
