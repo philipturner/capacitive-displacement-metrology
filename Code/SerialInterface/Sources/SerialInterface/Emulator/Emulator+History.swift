@@ -45,7 +45,7 @@ extension Emulator {
     for lineID in lineCursorPrevious..<lineCursorNext {
       var line = LineParser.Line()
       line.flags = 0
-      line.id = idCursor
+      line.id = UInt64(idCursor)
       idCursor += 1
       
       let elapsedTimeMicros = lineID * History.logPeriodMicros

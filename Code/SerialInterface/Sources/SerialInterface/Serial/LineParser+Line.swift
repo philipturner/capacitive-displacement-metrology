@@ -3,10 +3,10 @@ import func Foundation.atan2
 extension LineParser {
   struct Line {
     var flags: UInt8
-    var id: Int
+    var id: UInt64
     var values: SIMD8<Float>
     
-    static let messageLength: Int = 27
+    static let messageLength: Int = 28
     static let messageStartCode: UInt8 = Character(">").asciiValue!
     
     init() {
@@ -20,27 +20,26 @@ extension LineParser {
         fatalError("Invalid message.")
       }
       
-      var numbers: [UInt32]
+      var bitPatterns: [UInt64]
       do {
-        numbers = [
-          try Self.base64Decode(buffer + 1, encodedLength: 6),
-          try Self.base64Decode(buffer + 7, encodedLength: 4),
-          try Self.base64Decode(buffer + 11, encodedLength: 4),
-          try Self.base64Decode(buffer + 15, encodedLength: 4),
-          try Self.base64Decode(buffer + 19, encodedLength: 4),
-          try Self.base64Decode(buffer + 23, encodedLength: 4),
+        flags = UInt8(try Self.base64Decode(buffer + 1, encodedLength: 1))
+        id = try Self.base64Decode(buffer + 2, encodedLength: 6)
+        
+        bitPatterns = [
+          try Self.base64Decode(buffer + 8, encodedLength: 4),
+          try Self.base64Decode(buffer + 12, encodedLength: 4),
+          try Self.base64Decode(buffer + 16, encodedLength: 4),
+          try Self.base64Decode(buffer + 20, encodedLength: 4),
+          try Self.base64Decode(buffer + 24, encodedLength: 4),
         ]
       } catch {
         let string = Line.display(buffer)
         fatalError("Failed to decode. Contents of buffer: \(string)")
       }
       
-      self.id = Int(numbers[0] & 0x1FFF_FFFF)
-      self.flags = UInt8(numbers[0] >> 29)
-      self.values = .zero
-      
+      values = .zero
       for laneID in 0..<5 {
-        var bitPattern = numbers[1 + laneID]
+        var bitPattern = UInt32(bitPatterns[laneID])
         bitPattern <<= 8
         let floatValue = Float(bitPattern: bitPattern)
         values[laneID] = floatValue
@@ -58,8 +57,8 @@ extension LineParser {
     static func base64Decode(
       _ buffer: UnsafePointer<UInt8>,
       encodedLength: Int
-    ) throws -> UInt32 {
-      var value: UInt32 = .zero
+    ) throws -> UInt64 {
+      var value: UInt64 = .zero
       for i in 0..<encodedLength {
         let character = buffer[i]
         
@@ -84,8 +83,8 @@ extension LineParser {
           throw Base64Error()
         }
         
-        let leftShiftAmount = UInt32(6 * i)
-        value |= UInt32(sixBits) << leftShiftAmount
+        let leftShiftAmount = UInt64(6 * i)
+        value |= UInt64(sixBits) << leftShiftAmount
       }
       return value
     }
@@ -95,7 +94,7 @@ extension LineParser {
       length: Int = Line.messageLength
     ) -> String {
       var string: String = ""
-      for i in 0..<27 {
+      for i in 0..<Self.messageLength {
         let code = buffer[i]
         let character = Character(Unicode.Scalar(code))
         string.append(character)

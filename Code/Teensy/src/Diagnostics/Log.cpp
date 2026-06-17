@@ -6,7 +6,7 @@
 EXTMEM float valuesBuffer[Log::logSize * 5];
 EXTMEM uint8_t flagsBuffer[Log::logSize];
 
-void base64Encode(uint32_t value, char* buffer, uint32_t encodedLength) {
+void base64Encode(char* buffer, uint32_t encodedLength, uint32_t value) {
   for (uint32_t i = 0; i < encodedLength; ++i) {
     uint32_t rightShiftAmount = 6 * i;
     uint32_t sixBits = (value >> rightShiftAmount) & 0b111111;
@@ -36,9 +36,9 @@ void Log::reset() {
 }
 
 void Log::transmitBufferedSamples() {
-  uint32_t bufferedLogID = unsafeBufferedLogID;
+  uint64_t bufferedLogID = unsafeBufferedLogID;
   if (bufferedLogID - transmittedLogID >= logSize - 2) {
-    uint32_t difference = bufferedLogID - transmittedLogID;
+    int64_t difference = bufferedLogID - transmittedLogID;
     throwError(
       "First part of transmitBufferedSamples",
       transmittedLogID,
@@ -47,29 +47,22 @@ void Log::transmitBufferedSamples() {
     return;
   }
 
-  for (uint32_t i = transmittedLogID; i < bufferedLogID; ++i) {
-    uint8_t flags = flagsBuffer[i % logSize];
-    uint32_t firstWord = (i & 0x1FFFFFFF) | (uint32_t(flags) << 29);
-
-    uint32_t numbers[6];
-    numbers[0] = firstWord;
-    memcpy(
-      /*dst=*/numbers + 1, 
-      /*src=*/valuesBuffer + (i % logSize) * 5,
-      /*size=*/4 * 5);
-    for (uint32_t j = 1; j < 6; ++j) {
-      numbers[j] >>= 8;
-    }
-
-    char cString[27 + 1];
+  for (uint64_t i = transmittedLogID; i < bufferedLogID; ++i) {
+    char cString[28 + 1];
     cString[0] = '>';
-    base64Encode(numbers[0], cString + 1, 6);
-    base64Encode(numbers[1], cString + 7, 4);
-    base64Encode(numbers[2], cString + 11, 4);
-    base64Encode(numbers[3], cString + 15, 4);
-    base64Encode(numbers[4], cString + 19, 4);
-    base64Encode(numbers[5], cString + 23, 4);
-    cString[27] = 0;
+    base64Encode(cString + 1, 1, flagsBuffer[i % logSize]);
+    base64Encode(cString + 2, 5, i & 0x3FFFFFFF);
+    base64Encode(cString + 7, 1, i >> 30);
+
+    float* floatValues = valuesBuffer + (i % logSize) * 5;
+    uint32_t uintValues[5];
+    memcpy(uintValues, floatValues, 20);
+    for (uint32_t j = 0; j < 5; ++j) {
+      uint32_t value = uintValues[j] >> 8;
+      auto destination = cString + 8 + 4 * j;
+      base64Encode(destination, 4, value);
+    }
+    cString[28] = 0;
 
     Serial.print(cString);
   }
@@ -89,9 +82,9 @@ void Log::transmitBufferedSamples() {
 
 void Log::throwError(
   const char *cString, 
-  int32_t number1,
-  int32_t number2,
-  int32_t number3
+  int64_t number1,
+  int64_t number2,
+  int64_t number3
 ) {
   if (ErrorMessage::errorType == ErrorMessage::Type::fatal) {
     return;

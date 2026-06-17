@@ -4,7 +4,7 @@ import SwiftSerial
 struct LineParser {
   var previousPendingBytes: [UInt8] = []
   var totalLineCount: Int = .zero
-  var previousLineID: Int?
+  var previousLineID: UInt64?
   var pendingImagingSettingsLines: [Line] = []
   
   static func getValidBytes(port: SerialPort) throws -> [UInt8] {

@@ -96,7 +96,7 @@ void kilohertzLoop() {
         }
       }
     } else {
-      if (uint8_t(Application::mode) >= uint8_t(Command::Mode::idleFeedback)) {
+      if (false && uint8_t(Application::mode) >= uint8_t(Command::Mode::idleFeedback)) {
         auto restorationState = TipApproacher::rangeRestorationState();
         if (restorationState != TipApproacher::State::feedback) {
           Application::mode = Command::Mode::tipApproach;
