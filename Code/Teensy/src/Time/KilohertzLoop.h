@@ -13,8 +13,6 @@ struct KilohertzLoop {
   static inline Timestamp previousTimestamp;
   static inline Timestamp latestTimestamp;
   static inline Timestamp integrationStartTimestamp;
-  static inline Timestamp integrationTimestamp2;
-  static inline Timestamp integrationTimestamp3;
   static inline uint32_t iterationID = 0;
 
   // An error is thrown when timing error >= limit specified below.
