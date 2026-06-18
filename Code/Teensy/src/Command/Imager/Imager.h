@@ -29,7 +29,7 @@ struct Imager {
   // 3324 - 1e-4 resonant overshoot, 2.65 kHz
   // 5904 - 1e-5 resonant overshoot, 2.65 kHz
   static constexpr uint32_t largeMoveRiseTime = KilohertzLoopRound(5900); 
-  static constexpr uint32_t pixelTime = KilohertzLoopRound(96);
+  static constexpr uint32_t pixelTime = KilohertzLoopRound(100);
 
   // TODO: 
   // - Clone the previous state and interpolate pixels halfway in time

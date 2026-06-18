@@ -8,41 +8,48 @@
 #include "Util/Interpolate.h"
 #include <Arduino.h>
 
+void shouldContinueImaging(Imager::Mode mode, uint32_t imageID) {
+  if (mode == Mode::image && imageID > 0) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 void Imager::update() {
   uint32_t time = Application::state.getTimeSinceModeStart();
-  Application::updatePiezoVoltage(3, Feedback::getVoltage());
-
+  
   uint32_t imageTime = getImageTime();
   uint32_t imageID = time / imageTime;
   uint32_t timeInImage = time % imageTime;
 
-  if (mode == Mode::image && imageID > 0) {
-    return;
+  if (shouldContinueImaging(mode, imageID)) {
+    if (timeInImage == 0) {
+      float x = Application::state.piezoXVoltage * 0.320;
+      float y = Application::state.piezoYVoltage * 0.320;
+      previousImageEnd = float2(x, y);
+    }
+    
+    if (timeInImage < largeMoveRiseTime + settings.creepSettlingTime) {
+      Application::creepFilter.futureAccumulatedDrift = float2(0);
+    }
+
+    float2 position = getPosition(timeInImage, imageID);
+    createPendingPixel(position, timeInImage);
+    if (pixelBuffer.hasReadyPixel()) {
+      // forward the copy of the previous XYZI state
+      pixelBuffer.flushReadyPixel();
+    }
+
+    float2 stimulus = position * float(1 / 0.320);
+    stimulus += -1 * Application::creepFilter.futureAccumulatedDrift;
+    Application::updatePiezoVoltage(1, stimulus.x);
+    DAC::enableSafeWait = false;
+    Application::updatePiezoVoltage(2, stimulus.y);
+    DAC::enableSafeWait = true;
   }
 
-  if (timeInImage == 0) {
-    float x = Application::state.piezoXVoltage * 0.320;
-    float y = Application::state.piezoYVoltage * 0.320;
-    previousImageEnd = float2(x, y);
-  }
-  
-  if (timeInImage < largeMoveRiseTime + settings.creepSettlingTime) {
-    Application::creepFilter.futureAccumulatedDrift = float2(0);
-  }
-
-  float2 position = getPosition(timeInImage, imageID);
-  createPendingPixel(position, timeInImage);
-  if (pixelBuffer.hasReadyPixel()) {
-    // forward the copy of the previous XYZI state
-    pixelBuffer.flushReadyPixel();
-  }
-
-  float2 stimulus = position * float(1 / 0.320);
-  stimulus += -1 * Application::creepFilter.futureAccumulatedDrift;
-  Application::updatePiezoVoltage(1, stimulus.x);
-  DAC::enableSafeWait = false;
-  Application::updatePiezoVoltage(2, stimulus.y);
-  DAC::enableSafeWait = true;
+  Application::updatePiezoVoltage(3, Feedback::getVoltage());
 }
 
 float2 Imager::getPosition(float2 localPosition, uint32_t imageID) {

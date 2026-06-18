@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Util/Vector/Vector.h"
 #include <stdint.h>
 
 struct ApplicationState {
@@ -20,6 +21,15 @@ struct ApplicationState {
   float piezoXVoltage = 0; // units: V
   float piezoYVoltage = 0; // units: V
   float piezoZVoltage = 0; // units: V
+
+  float4 abbreviated() const {
+    float4 output;
+    output.x = piezoXVoltage;
+    output.y = piezoYVoltage;
+    output.z = piezoZVoltage;
+    output.w = filteredCurrent;
+    return output;
+  }
 
 private:
   // Delay line for 10 loop iterations.

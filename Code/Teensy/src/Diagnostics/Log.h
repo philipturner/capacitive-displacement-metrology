@@ -3,7 +3,7 @@
 #include "Time/KilohertzLoop.h"
 
 struct Log {
-  static constexpr uint32_t logPeriod = KilohertzLoopRound(64);
+  static constexpr uint32_t logPeriod = KilohertzLoopRound(80);
   static constexpr uint32_t logSize = 16384;
 
   // Mark special messages with a flag, but do not alter the ordering. This
