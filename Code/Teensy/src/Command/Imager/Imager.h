@@ -29,7 +29,19 @@ struct Imager {
   // 3324 - 1e-4 resonant overshoot, 2.65 kHz
   // 5904 - 1e-5 resonant overshoot, 2.65 kHz
   static constexpr uint32_t largeMoveRiseTime = KilohertzLoopRound(5900); 
-  static constexpr uint32_t pixelTime = 96;
+  static constexpr uint32_t pixelTime = KilohertzLoopRound(96);
+
+  // TODO: 
+  // - Clone the previous state and interpolate pixels halfway in time
+  // - Make electronic time lag no longer restricted to multiples of loop period
+  // - Make it so that evenly divisible pixel times have a weight of 0 for the
+  //   contribution from the past pixel
+  // - This impact both XYZ when registering the pixel and current when actually
+  //   writing the pixel after a time lag.
+  //
+  // Writing stuff into the tilt tracker is decoupled from the time lag for
+  // DACs -> current response, because tilt just tracks a relation between X/Y/Z
+  // and Z feedback is way too slow to be characterized by electronic time lag.
   
   Imager();
   Imager(Command command);

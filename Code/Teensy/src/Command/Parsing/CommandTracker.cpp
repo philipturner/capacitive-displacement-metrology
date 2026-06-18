@@ -108,8 +108,10 @@ bool checkAttributes(Command command) {
       break;
     }
     case Command::Mode::imaging: {
+      // Currently limit of 256 to put a cap on memory allocation size for tilt
+      // samples, while keeping them in RAM2.
       uint32_t resolution = command.attributes[0];
-      if (resolution == 0 || resolution > 1024 || (resolution % 2 != 0)) {
+      if (resolution == 0 || resolution > 256 || (resolution % 2 != 0)) {
         CommandTracker::throwError("Invalid resolution.");
         return false;
       }

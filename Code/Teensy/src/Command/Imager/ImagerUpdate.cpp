@@ -33,6 +33,7 @@ void Imager::update() {
   float2 position = getPosition(timeInImage, imageID);
   createPendingPixel(position, timeInImage);
   if (pixelBuffer.hasReadyPixel()) {
+    // forward the copy of the previous XYZI state
     pixelBuffer.flushReadyPixel();
   }
 
