@@ -113,9 +113,9 @@ void DAC::writeVoltage(
   float floatValue = (voltage + 12.0f) / 24.0f;
 
   uint16_t integerValue;
-  if (floatValue <= 0) {
+  if (floatValue <= 0.0f) {
     integerValue = 0;
-  } else if (floatValue >= 1) {
+  } else if (floatValue >= 1.0f) {
     integerValue = UINT16_MAX;
   } else {
     integerValue = uint16_t(floatValue * float(1 << 16));

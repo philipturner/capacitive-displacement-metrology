@@ -3,10 +3,16 @@
 #include "Filter/FirstOrderLowpassFilter.h"
 #include "IC/ADC.h"
 #include "Time/KilohertzLoop.h"
+#include "Util/Emulation.h"
 #include <Arduino.h>
 
 void ApplicationState::updateCurrent(bool useADC) {
-  if (useADC) {
+  if (emulateCurrent) {
+    current = Emulation::getCurrent(
+      piezoXVoltage,
+      piezoYVoltage,
+      piezoZVoltage);
+  } else if (useADC) {
     auto conversion = ADC::readVoltage();
     current = -conversion.voltage / 1e9f;
   } else {
