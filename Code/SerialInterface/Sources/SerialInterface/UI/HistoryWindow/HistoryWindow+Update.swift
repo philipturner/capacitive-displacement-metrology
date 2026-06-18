@@ -19,11 +19,7 @@ extension HistoryWindow {
     for rowID in 0..<Self.rowCount {
       let range = axisBounds[rowID]
       let plotLeft = plots[rowID][0]
-//      if rowID == 2 {
-//        plotLeft.setYRange(Float(-5.1), Float(-4.9), padding: 0)
-//      } else {
-        plotLeft.setYRange(range[0], range[1], padding: 0)
-//      }
+      plotLeft.setYRange(range[0], range[1], padding: 0)
     }
   }
   

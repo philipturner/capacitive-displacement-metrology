@@ -12,6 +12,7 @@
 
 struct Application {
   static inline ApplicationState state;
+  static inline float4 previousState;
   static inline Command::Mode mode;
   static inline CapacitanceTracker capTracker;
   static inline Creep::Filter creepFilter;

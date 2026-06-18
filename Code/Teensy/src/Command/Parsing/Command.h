@@ -55,32 +55,11 @@ struct Command {
     // yCCC - set creep constant for Y only
     creepSettings = 10,
 
-    // a - calculate tilt during imaging; set tilt to 0
-    // x - set for X axis
-    // y - set for Y axis
-    //
-    // tilt samples are pushed the moment the relevant pixel is received
-    // tilt settings take effect when the next image starts (they are actually
-    // part of imaging settings, just a separate command for sensibility)
-    // major and minor axis will have asymmetric memory footprint for tilt
-    // gradually accumulate an average as each pixel comes in, to prevent
-    // explosion of latency for any single iteration
-    // don't sample major-axis tilt for the first and last rows
-    // to prevent any sign ambiguity, use the ratio of voltage changes between
-    // Z and X/Y
-    //
-    // tiltSettings mode
+    // cDDD - calculate; move DDD nm to measure tilt
+    // tXXX,YYY - set tilt for each axis, sign matches piezo voltages
+    tilt = 11,
 
-    // dDDD - displacement to move when measuring tilt
-    // r - reset settings except tilt for each axis
-    // tXXX,YYY - tilt for each axis, sign matches piezo voltages
-    //
-    // tilt mode
-    //
-    // to prevent any sign ambiguity, use the ratio of voltage changes between
-    // Z and X/Y
-
-    NUM_MODES = 11,
+    NUM_MODES = 12,
   };
   
   Mode mode = Mode::idle;

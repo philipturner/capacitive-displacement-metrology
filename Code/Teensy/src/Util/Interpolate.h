@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vector/Vector.h"
+#include "Util/Vector/Vector.h"
 
 float interpolate(float start, float end, float t) {
   return start * (1 - t) + end * t;

@@ -62,3 +62,26 @@ float Imager::getPeakValue(float amplitudeNormalized) const {
 
   return peakScaleFactor * (amplitudeNormalized - 0.5);
 }
+
+uint32_t Imager::getMidPixelTime() {
+  uint32_t divisibility = Imager::pixelTime / KilohertzLoop::period;
+  if (divisibility % 2 == 0) {
+    return pixelTime / 2;
+  } else {
+    uint32_t upperIteration = (divisibility / 2) + 1;
+    return upperIteration * KilohertzLoop::period;
+  }
+}
+
+float Imager::getCurrentStateWeight() {
+  uint32_t divisibility = Imager::pixelTime / KilohertzLoop::period;
+  if (divisibility % 2 == 0) {
+    return 1.0;
+  } else {
+    return 0.5;
+  }
+}
+
+float Imager::transformVoltageZ(float original) {
+  return original;
+}

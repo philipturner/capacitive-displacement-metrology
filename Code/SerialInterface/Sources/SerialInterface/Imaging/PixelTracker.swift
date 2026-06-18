@@ -1,5 +1,4 @@
 struct PixelTracker {
-  static let enforceAlignedPositions: Bool = true
   static let rejectOddRows: Bool = true
   static let overrideCurrentData: Bool = false
   
@@ -76,9 +75,7 @@ struct PixelTracker {
             """)
         }
       }
-      if Self.enforceAlignedPositions {
-        checkErrorMagnitude()
-      }
+      checkErrorMagnitude()
       
       var data = SIMD2(line.values[4], line.values[3])
       if Self.overrideCurrentData {

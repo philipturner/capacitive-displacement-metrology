@@ -27,17 +27,16 @@ SimpleScanner::SimpleScanner(Command command) {
 
 void SimpleScanner::update() {
   uint32_t time = Application::state.getTimeSinceModeStart();
+  if (time == 0) {
+    if (Application::state.piezoXVoltage != 0 ||
+        Application::state.piezoYVoltage != 0) {
+      Serial.println("Wrong starting position.");
+      exit(0);
+    }
+  }
   
   float position;
   if (time < Imager::largeMoveRiseTime) {
-    if (time == 0) {
-      if (Application::state.piezoXVoltage != 0 ||
-          Application::state.piezoYVoltage != 0) {
-        Serial.println("Wrong starting position.");
-        exit(0);
-      }
-    }
-    
     float progress = float(time) / float(Imager::largeMoveRiseTime);
     progress = WaveUtil::thirdOrderSmoothstep(progress);
 

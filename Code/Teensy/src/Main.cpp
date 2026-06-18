@@ -170,6 +170,7 @@ void kilohertzLoop() {
     }
   }
 
+  Application::previousState = Application::state.abbreviated();
   Application::state.updateCurrent(useADC);
   if (!useADC) {
     delayNanoseconds(700);

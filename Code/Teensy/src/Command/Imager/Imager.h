@@ -3,7 +3,7 @@
 #include "Command/Imager/PixelBuffer.h"
 #include "Command/Parsing/Command.h"
 #include "Time/KilohertzLoop.h"
-#include "Util/Vector.h"
+#include "Util/Vector/Vector.h"
 
 struct Imager {
   enum class Mode {
@@ -52,6 +52,10 @@ struct Imager {
   static void updatePendingSettings(Command command);
   void forwardSettings() const;
 
+  static uint32_t getMidPixelTime();
+  static float getCurrentStateWeight();
+  static float transformVoltageZ(float original);
+
 private:
   Mode mode;
   uint32_t resolutionMajor;
@@ -65,10 +69,12 @@ private:
   uint32_t getImageTime() const;
   float getPeakValue(float amplitudeNormalized) const;
 
-  // image tilt: clone the latest tilt settings every frame
   float2 previousImageEnd;
+  float2 previousVoltageXY = float2(0);
+  float2 currentVoltageXY = float2(0);
   float2 getPosition(float2 localPosition, uint32_t imageID);
-  float2 getPosition(uint32_t timeInImage, uint32_t imageID);
+  float2 getVoltageXY(uint32_t timeInImage, uint32_t imageID);
 
-  void createPendingPixel(float2 position, uint32_t timeInImage);
+  int32_t getPixelID(uint32_t timeInImage);
+  void addPixel(uint32_t pixelID);
 };

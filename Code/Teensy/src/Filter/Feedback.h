@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Filter/NotchFilter.h"
+#include "Util/Vector/Vector.h"
 
 struct Feedback {
   static constexpr float setpointVoltage = 0.050;
@@ -12,4 +13,5 @@ struct Feedback {
   static inline NotchFilter notchFilter;
 
   static float getVoltage();
+  static float getVoltage(float2 dXY);
 };

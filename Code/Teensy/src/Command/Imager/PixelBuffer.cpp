@@ -1,9 +1,11 @@
 #include "PixelBuffer.h"
 
 #include "Application/Application.h"
+#include "Command/Imager/Imager.h"
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
+#include "Util/Interpolate.h"
 #include <Arduino.h>
 
 PixelBuffer::PixelBuffer() {
@@ -44,14 +46,19 @@ bool PixelBuffer::hasReadyPixel() const {
 void PixelBuffer::flushReadyPixel() {
   Pixel pixel = pixels[startIndex % capacity];
   startIndex += 1;
+
+  float oldCurrent = Application::previousState.w;
+  float newCurrent = Application::state.filteredCurrent;
+  float progress = Imager::getCurrentStateWeight();
+  float current = interpolate(oldCurrent, newCurrent, progress);
   
   if (!ErrorMessage::hasError()) {
     Log::writeValuesWithFlags(
       4, // flags
       Log::encodeRawBits(pixel.id),
-      pixel.x,
-      pixel.y,
-      pixel.z,
-      abs(Application::state.filteredCurrent * 1e12));
+      pixel.voltageX * 0.320,
+      pixel.voltageY * 0.320,
+      Imager::transformVoltageZ(pixel.voltageZ) * 0.320,
+      abs(current * 1e12));
   }
 }

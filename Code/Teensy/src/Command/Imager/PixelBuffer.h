@@ -8,9 +8,9 @@ struct PixelBuffer {
   struct Pixel {
     uint32_t writeIterationID;
     uint32_t id;
-    float x; // units: nm
-    float y; // units: nm
-    float z; // units: nm
+    float voltageX; // units: nm
+    float voltageY; // units: nm
+    float voltageZ; // units: nm
   };
   Pixel pixels[capacity];
 

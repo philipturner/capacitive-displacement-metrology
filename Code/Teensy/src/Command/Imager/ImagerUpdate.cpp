@@ -18,12 +18,20 @@ void shouldContinueImaging(Imager::Mode mode, uint32_t imageID) {
 
 void Imager::update() {
   uint32_t time = Application::state.getTimeSinceModeStart();
+  if (time == 0) {
+    if (Application::state.piezoXVoltage != 0 ||
+        Application::state.piezoYVoltage != 0) {
+      Serial.println("Wrong starting position.");
+      exit(0);
+    }
+  }
   
   uint32_t imageTime = getImageTime();
   uint32_t imageID = time / imageTime;
   uint32_t timeInImage = time % imageTime;
+  bool continueImaging = shouldContinueImaging(mode, imageID);
 
-  if (shouldContinueImaging(mode, imageID)) {
+  if (continueImaging) {
     if (timeInImage == 0) {
       float x = Application::state.piezoXVoltage * 0.320;
       float y = Application::state.piezoYVoltage * 0.320;
@@ -34,22 +42,30 @@ void Imager::update() {
       Application::creepFilter.futureAccumulatedDrift = float2(0);
     }
 
-    float2 position = getPosition(timeInImage, imageID);
-    createPendingPixel(position, timeInImage);
-    if (pixelBuffer.hasReadyPixel()) {
-      // forward the copy of the previous XYZI state
-      pixelBuffer.flushReadyPixel();
-    }
-
-    float2 stimulus = position * float(1 / 0.320);
-    stimulus += -1 * Application::creepFilter.futureAccumulatedDrift;
-    Application::updatePiezoVoltage(1, stimulus.x);
-    DAC::enableSafeWait = false;
-    Application::updatePiezoVoltage(2, stimulus.y);
-    DAC::enableSafeWait = true;
+    currentVoltageXY = getVoltageXY(timeInImage, imageID);
   }
 
-  Application::updatePiezoVoltage(3, Feedback::getVoltage());
+  float2 creepCorrectedVoltageXY = currentVoltageXY;
+  creepCorrectedVoltageXY += -1 * Application::creepFilter.futureAccumulatedDrift;
+  Application::updatePiezoVoltage(1, creepCorrectedVoltageXY.x);
+  DAC::enableSafeWait = false;
+  Application::updatePiezoVoltage(2, creepCorrectedVoltageXY.y);
+  DAC::enableSafeWait = true;
+
+  float2 dXY = currentVoltageXY - previousVoltageXY;
+  Application::updatePiezoVoltage(3, Feedback::getVoltage(dXY));
+
+  if (continueImaging) {
+    int32_t pixelID = getPixelID(timeInImage);
+    if (pixelID != -1) {
+      createPendingPixel(timeInImage);
+    }
+    if (pixelBuffer.hasReadyPixel()) {
+      pixelBuffer.flushReadyPixel();
+    }
+  }
+
+  previousVoltageXY = currentVoltageXY;
 }
 
 float2 Imager::getPosition(float2 localPosition, uint32_t imageID) {
@@ -70,7 +86,7 @@ float2 Imager::getPosition(float2 localPosition, uint32_t imageID) {
   return output;
 }
 
-float2 Imager::getPosition(uint32_t timeInImage, uint32_t imageID) {
+float2 Imager::getVoltageXY(uint32_t timeInImage, uint32_t imageID) {
   uint32_t time = timeInImage;
   if (time < largeMoveRiseTime + settings.creepSettlingTime) {
     float peakNormalized = WaveUtil::polynomialWaveOutskirt(0);
@@ -130,34 +146,35 @@ float2 Imager::getPosition(uint32_t timeInImage, uint32_t imageID) {
   }
 
   float2 localPosition = float2(x, y);
-  return getPosition(localPosition, imageID);
+  float2 position = getPosition(localPosition, imageID);
+  return position * float(1 / 0.320);
 }
 
-void Imager::createPendingPixel(float2 position, uint32_t timeInImage) {
+int32_t Imager::getPixelID(uint32_t timeInImage) {
   uint32_t time = timeInImage;
   if (time < largeMoveRiseTime + settings.creepSettlingTime) {
-    return;
+    return -1;
   } else {
     time -= largeMoveRiseTime + settings.creepSettlingTime;
   }
 
   if (time >= resolutionMinor * getRowTime()) {
-    return;
+    return -1;
   }
 
   uint32_t rowID = time / getRowTime();
   time = time % getRowTime();
 
   if (time < polynomialPeakTime) {
-    return;
+    return -1;
   } else {
     time -= polynomialPeakTime;
   }
 
   uint32_t columnID = time / pixelTime;
   time = time % pixelTime;
-  if (time != pixelTime / 2) {
-    return;
+  if (time != Imager::getMidPixelTime()) {
+    return -1;
   }
 
   if (rowID % 2 == 1) {
@@ -166,23 +183,33 @@ void Imager::createPendingPixel(float2 position, uint32_t timeInImage) {
 
   uint32_t majorBoundary = (resolutionMajor - resolutionMinor) / 2;
   if (columnID < majorBoundary) {
-    return;
+    return -1;
   } else {
     columnID -= majorBoundary;
   }
   if (columnID >= resolutionMinor) {
-    return;
+    return -1;
   }
 
-  uint32_t id = rowID * resolutionMinor + columnID;
+  return rowID * resolutionMinor + columnID;
+}
+
+void Imager::addPixel(uint32_t pixelID) {
+  PixelBuffer::Pixel pixel;
+  pixel.id = pixelID;
+
   uint32_t writeIterationID = KilohertzLoop::iterationID;
   writeIterationID += settings.electronicTimeLag / KilohertzLoop::period;
-  
-  PixelBuffer::Pixel pixel;
   pixel.writeIterationID = writeIterationID;
-  pixel.id = id;
-  pixel.x = position.x;
-  pixel.y = position.y;
-  pixel.z = Application::state.piezoZVoltage * -0.320;
+
+  float progress = Imager::getCurrentStateWeight();
+  float voltageXY = interpolate(previousVoltageXY, currentVoltageXY, progress);
+  pixel.voltageX = voltageXY.x;
+  pixel.voltageY = voltageXY.y;
+
+  float previousZ = Application::previousState.z;
+  float currentZ = Application::state.piezoZVoltage;
+  pixel.voltageZ = interpolate(previousZ, currentZ, progress);
+  
   pixelBuffer.addPixel(pixel);
 }
