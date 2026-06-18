@@ -8,8 +8,8 @@
 #include "Util/Interpolate.h"
 #include <Arduino.h>
 
-void shouldContinueImaging(Imager::Mode mode, uint32_t imageID) {
-  if (mode == Mode::image && imageID > 0) {
+bool shouldContinueImaging(Imager::Mode mode, uint32_t imageID) {
+  if (mode == Imager::Mode::image && imageID > 0) {
     return false;
   } else {
     return true;
@@ -42,7 +42,8 @@ void Imager::update() {
       Application::creepFilter.futureAccumulatedDrift = float2(0);
     }
 
-    currentVoltageXY = getVoltageXY(timeInImage, imageID);
+    currentVoltageXY = getPosition(timeInImage, imageID);
+    currentVoltageXY *= float(1 / 0.320);
   }
 
   float2 creepCorrectedVoltageXY = currentVoltageXY;
@@ -52,13 +53,13 @@ void Imager::update() {
   Application::updatePiezoVoltage(2, creepCorrectedVoltageXY.y);
   DAC::enableSafeWait = true;
 
-  float2 dXY = currentVoltageXY - previousVoltageXY;
+  float2 dXY = currentVoltageXY + (-1 * previousVoltageXY);
   Application::updatePiezoVoltage(3, Feedback::getVoltage(dXY));
 
   if (continueImaging) {
     int32_t pixelID = getPixelID(timeInImage);
     if (pixelID != -1) {
-      createPendingPixel(timeInImage);
+      addPixel(pixelID);
     }
     if (pixelBuffer.hasReadyPixel()) {
       pixelBuffer.flushReadyPixel();
@@ -86,7 +87,7 @@ float2 Imager::getPosition(float2 localPosition, uint32_t imageID) {
   return output;
 }
 
-float2 Imager::getVoltageXY(uint32_t timeInImage, uint32_t imageID) {
+float2 Imager::getPosition(uint32_t timeInImage, uint32_t imageID) {
   uint32_t time = timeInImage;
   if (time < largeMoveRiseTime + settings.creepSettlingTime) {
     float peakNormalized = WaveUtil::polynomialWaveOutskirt(0);
@@ -146,8 +147,7 @@ float2 Imager::getVoltageXY(uint32_t timeInImage, uint32_t imageID) {
   }
 
   float2 localPosition = float2(x, y);
-  float2 position = getPosition(localPosition, imageID);
-  return position * float(1 / 0.320);
+  return getPosition(localPosition, imageID);
 }
 
 int32_t Imager::getPixelID(uint32_t timeInImage) {
@@ -203,7 +203,7 @@ void Imager::addPixel(uint32_t pixelID) {
   pixel.writeIterationID = writeIterationID;
 
   float progress = Imager::getCurrentStateWeight();
-  float voltageXY = interpolate(previousVoltageXY, currentVoltageXY, progress);
+  float2 voltageXY = interpolate(previousVoltageXY, currentVoltageXY, progress);
   pixel.voltageX = voltageXY.x;
   pixel.voltageY = voltageXY.y;
 

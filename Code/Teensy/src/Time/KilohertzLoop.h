@@ -19,7 +19,7 @@ struct KilohertzLoop {
   static constexpr bool enableWarnings = true;
   static constexpr bool enableFatalErrors = true;
   static constexpr uint32_t differentialErrorWarning = 12;
-  static constexpr uint32_t differentialErrorFatal = 19;
+  static constexpr uint32_t differentialErrorFatal = 20;
   static constexpr uint32_t integralErrorWarning = 16;
   static constexpr uint32_t integralErrorFatal = 38;
 

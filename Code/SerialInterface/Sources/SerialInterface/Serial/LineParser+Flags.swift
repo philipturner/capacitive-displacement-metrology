@@ -104,6 +104,10 @@ extension LineParser {
         print()
       }
       
+      // tilt settings:
+      // dZ / dX3
+      // dZ / dY3
+      
       for line in self[.newMode] {
         let modeCode = Int(line.values[0])
         if line.values[1] == 1 {

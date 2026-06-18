@@ -4,6 +4,7 @@
 #include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
 #include "Filter/Feedback.h"
+#include "Util/Interpolate.h"
 #include "Util/WaveUtil.h"
 #include <Arduino.h>
 
@@ -247,19 +248,12 @@ void Spectroscopy::accumulate(uint32_t index) {
   pendingResult2.signBallot[index] += (current > 0) ? 1 : -1;
 }
 
-float linearInterpolate(float start, float end, float t) {
-  float output = 0;
-  output += start * (1 - t);
-  output += end * t;
-  return output;
-}
-
 float Spectroscopy::getBiasVoltage(float progress) {
   auto pair = getCurrentVZPair();
 
   float start = Feedback::setpointVoltage;
   float end = pair.voltage;
-  return linearInterpolate(start, end, progress);
+  return interpolate(start, end, progress);
 }
 
 float Spectroscopy::getPiezoZVoltage(float progress) {
@@ -269,7 +263,7 @@ float Spectroscopy::getPiezoZVoltage(float progress) {
   float start = restPiezoZVoltage;
   float end = start + dV;
   
-  float output = linearInterpolate(start, end, progress);
+  float output = interpolate(start, end, progress);
   output = min(output, 270);
   output = max(output, -80);
   return output;

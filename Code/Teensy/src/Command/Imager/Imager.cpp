@@ -85,3 +85,7 @@ float Imager::getCurrentStateWeight() {
 float Imager::transformVoltageZ(float original) {
   return original;
 }
+
+float Imager::transformCurrent(float original) {
+  return abs(original * 1e12);
+}

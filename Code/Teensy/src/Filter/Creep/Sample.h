@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Util/Vector.h"
+#include "Util/Vector/Vector.h"
 #include <stdint.h>
 
 namespace Creep {

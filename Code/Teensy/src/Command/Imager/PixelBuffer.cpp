@@ -59,6 +59,6 @@ void PixelBuffer::flushReadyPixel() {
       pixel.voltageX * 0.320,
       pixel.voltageY * 0.320,
       Imager::transformVoltageZ(pixel.voltageZ) * 0.320,
-      abs(current * 1e12));
+      Imager::transformCurrent(current));
   }
 }

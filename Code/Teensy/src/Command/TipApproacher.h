@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 struct TipApproacher {
-  static constexpr bool forceModeChanges = true;
+  static constexpr bool forceModeChanges = false;
 
   enum class State {
     waitBeforeApproach = 0,

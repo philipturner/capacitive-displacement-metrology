@@ -55,6 +55,7 @@ struct Imager {
   static uint32_t getMidPixelTime();
   static float getCurrentStateWeight();
   static float transformVoltageZ(float original);
+  static float transformCurrent(float original);
 
 private:
   Mode mode;
@@ -73,7 +74,7 @@ private:
   float2 previousVoltageXY = float2(0);
   float2 currentVoltageXY = float2(0);
   float2 getPosition(float2 localPosition, uint32_t imageID);
-  float2 getVoltageXY(uint32_t timeInImage, uint32_t imageID);
+  float2 getPosition(uint32_t timeInImage, uint32_t imageID);
 
   int32_t getPixelID(uint32_t timeInImage);
   void addPixel(uint32_t pixelID);

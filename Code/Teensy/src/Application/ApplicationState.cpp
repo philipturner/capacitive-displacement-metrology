@@ -7,8 +7,12 @@
 
 void ApplicationState::updateCurrent(bool useADC) {
   if (useADC) {
-    auto conversion = ADC::readVoltage();
-    current = -conversion.voltage / 1e9;
+    // auto conversion = ADC::readVoltage();
+    // current = -conversion.voltage / 1e9;
+
+    uint32_t phase = KilohertzLoop::iterationID % 5;
+    float currentInPA = 2 + float(phase) * 1;
+    current = currentInPA * 1e-12;
   } else {
     current = 0;
   }

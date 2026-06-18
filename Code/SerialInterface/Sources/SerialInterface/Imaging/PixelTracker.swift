@@ -101,7 +101,8 @@ struct PixelTracker {
       // [move the above guard statement here]
       
       if Self.rejectOddRows {
-        let overwrittenPixelID = pixelID - settings.resolution
+        // Also, flip the sign of the slot ID offset.
+        let overwrittenPixelID = pixelID + settings.resolution
         let slotID = settings.bufferSlotID(pixelID: overwrittenPixelID)
         dataBuffer[slotID] = data
       }
