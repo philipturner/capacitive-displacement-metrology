@@ -47,7 +47,7 @@ void PixelBuffer::flushReadyPixel() {
   Pixel pixel = pixels[startIndex % capacity];
   startIndex += 1;
 
-  float oldCurrent = Application::previousState.w;
+  float oldCurrent = Application::state.previous.w;
   float newCurrent = Application::state.filteredCurrent;
   float progress = Imager::getCurrentStateWeight();
   float current = interpolate(oldCurrent, newCurrent, progress);

@@ -12,6 +12,5 @@ struct Feedback {
   static constexpr bool useNotchFilter = true;
   static inline NotchFilter notchFilter;
 
-  static float getVoltage();
-  static float getVoltage(float2 dXY);
+  static float getVoltageCorrection();
 };

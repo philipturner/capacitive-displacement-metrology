@@ -77,6 +77,12 @@ uint32_t getExpectedNumAttributes(Command command, uint32_t numAttributes) {
         default: return 1;
       }
     }
+    case Command::Mode::tilt: {
+      switch (command.alphaCode) {
+        case 'c': return 1;
+        case 't': return 2;
+      }
+    }
     default: {
       return 0;
     }
@@ -152,7 +158,18 @@ bool checkAttributes(Command command) {
           break;
         }
       }
-
+      break;
+    }
+    case Command::Mode::tilt: {
+      if (command.alphaCode == 't') {
+        float dzdx = command.attributes[0];
+        float dzdy = command.attributes[1];
+        float greatestMagnitude = max(abs(dzdx), abs(dzdy));
+        if (greatestMagnitude > 0.5) {
+          CommandTracker::throwError("Invalid slope.");
+          return false;
+        }
+      }
       break;
     }
     default: {

@@ -1,8 +1,10 @@
 #include "Application.h"
 
+#include "Command/Tilt/Settings.h"
 #include "Diagnostics/Log.h"
 #include "IC/DAC.h"
 #include "IC/PA95.h"
+#include "Util/Feedback.h"
 
 void Application::updateBiasVoltage(float voltage) {
   float dV = voltage - state.biasVoltage;
@@ -143,4 +145,20 @@ void Application::logNormalMessage() {
       Imager::transformVoltageZ(state.piezoZVoltage) * 0.320,
       dV * 0.320);
   }
+}
+
+void Application:setBiasForFeedback() {
+  updateBiasVoltage(Feedback::setpointVoltage);
+}
+
+void Application::correctZVoltage() {
+  float2 dXY;
+  dXY.x = state.piezoXVoltage - state.previous.x;
+  dXY.y = state.piezoYVoltage - state.previous.y;
+  correctZVoltage(dXY);
+}
+
+void Application::correctZVoltage(float2 dXY) {
+  float newVoltageZ = state.piezoZVoltage;
+  newVoltageZ += Feedback::getVoltageCorrection();
 }

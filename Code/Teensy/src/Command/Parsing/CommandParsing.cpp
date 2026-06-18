@@ -70,6 +70,8 @@ bool CommandParsing::checkAlphaCode(Command command) {
     cString = "alors";
   } else if (command.mode == Command::Mode::creepSettings) {
     cString = "crxy";
+  } else if (command.mode == Command::Mode::tilt) {
+    cString = "ct"
   } else {
     if (command.alphaCode != 0) {
       CommandTracker::throwError("There should be no alpha code.");

@@ -4,8 +4,6 @@
 #include <stdint.h>
 
 struct ApplicationState {
-  // TODO: Functionality to simulate a surface and constexpr bool to enable it.
-
   uint32_t modeStartIterationID = 0;
 
   float current = 0; // units: A
@@ -30,6 +28,7 @@ struct ApplicationState {
     output.w = filteredCurrent;
     return output;
   }
+  float4 previous = float4(0);
 
 private:
   // Delay line for 10 loop iterations.

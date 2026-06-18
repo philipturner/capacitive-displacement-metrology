@@ -3,7 +3,6 @@
 #include "Application/Application.h"
 #include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
-#include "Filter/Feedback.h"
 #include <Arduino.h>
 
 TipApproacher::TipApproacher() {
@@ -63,9 +62,14 @@ void TipApproacher::forceModeChange() {
 void TipApproacher::update() {
   updateState();
 
+  Application::setBiasForFeedback();
+
   float voltageZ = getPiezoVoltage();
-  Application::updateBiasVoltage(Feedback::setpointVoltage);
-  Application::updatePiezoVoltage(3, voltageZ);
+  if (voltageZ == -1000) {
+    Application::correctZVoltage();
+  } else {
+    Application::updatePiezoVoltage(3, voltageZ);
+  }
 }
 
 uint32_t TipApproacher::getIterationsSinceStateStart() {
@@ -175,7 +179,7 @@ float TipApproacher::getPiezoVoltage() {
       if (deltaIters < 4) {
         return max(voltageZ - 15, -80);
       } else {
-        return Feedback::getVoltage();
+        return -1000;
       }
     }
   }

@@ -1,7 +1,6 @@
 #include "Imager.h"
 
 #include "Application/Application.h"
-#include "Filter/Feedback.h"
 #include "Time/KilohertzLoop.h"
 #include "IC/DAC.h"
 #include "Util/WaveUtil.h"
@@ -54,7 +53,7 @@ void Imager::update() {
   DAC::enableSafeWait = true;
 
   float2 dXY = currentVoltageXY + (-1 * previousVoltageXY);
-  Application::updatePiezoVoltage(3, Feedback::getVoltage(dXY));
+  Application::correctZVoltage(dXY);
 
   if (continueImaging) {
     int32_t pixelID = getPixelID(timeInImage);
@@ -207,9 +206,9 @@ void Imager::addPixel(uint32_t pixelID) {
   pixel.voltageX = voltageXY.x;
   pixel.voltageY = voltageXY.y;
 
-  float previousZ = Application::previousState.z;
+  float previousZ = Application::state.previous.z;
   float currentZ = Application::state.piezoZVoltage;
   pixel.voltageZ = interpolate(previousZ, currentZ, progress);
-  
+
   pixelBuffer.addPixel(pixel);
 }

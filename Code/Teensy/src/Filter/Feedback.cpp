@@ -1,7 +1,6 @@
 #include "Feedback.h"
 
 #include "Application/Application.h"
-#include "Command/Tilt/TiltSettings.h"
 #include "Time/KilohertzLoop.h"
 #include "Util/WaveUtil.h"
 #include <Arduino.h>
@@ -13,7 +12,7 @@ float getFeedbackErrorTerm() {
   }
 
   float x = Application::state.current / expectedCurrent;
-  x = max(x, -0.5); // cleanly average -5 pA noise limit when setpoint is 10 pA
+  x = max(x, -0.5); // cleanly average -5 pA noise band when setpoint is 10 pA
 
   float k = 1.025e10 * sqrt(Feedback::tunnelingBarrierHeight);
   float kΔz = x - 1;
@@ -26,14 +25,7 @@ float getFeedbackErrorTerm() {
   return kΔz / k;
 }
 
-float Feedback::getVoltage() {
-  float2 dXY;
-  dXY.x = Application::state.piezoXVoltage - Application::previousState.x;
-  dXY.y = Application::state.piezoYVoltage - Application::previousState.y;
-  return getVoltage(dXY);
-}
-
-float Feedback::getVoltage(float2 dXY) {
+float Feedback::getVoltageCorrection() {
   float dz = getFeedbackErrorTerm();
   if (useNotchFilter) {
     notchFilter.update(dz);

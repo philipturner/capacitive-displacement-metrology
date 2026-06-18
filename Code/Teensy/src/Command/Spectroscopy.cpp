@@ -2,8 +2,8 @@
 
 #include "Application/Application.h"
 #include "Diagnostics/Log.h"
-#include "Time/KilohertzLoop.h"
 #include "Filter/Feedback.h"
+#include "Time/KilohertzLoop.h"
 #include "Util/Interpolate.h"
 #include "Util/WaveUtil.h"
 #include <Arduino.h>
@@ -41,7 +41,7 @@ Spectroscopy::Spectroscopy(Command command) {
     autoScaleFactor = command.attributes[0];
   } else if (command.alphaCode == 'c') {
     useCustomVZPair = true;
-    customVZPair.voltage = command.attributes[0];
+    customVZPair.voltage = command.attributes[0] * 1e-3;
     customVZPair.position = command.attributes[1] * 1e-12;
   } else {
     Serial.println("This should never happen.");
@@ -57,8 +57,8 @@ void Spectroscopy::update() {
   if (shouldUpdateForTrial()) {
     updateForTrial();
   } else {
-    Application::updateBiasVoltage(Feedback::setpointVoltage);
-    Application::updatePiezoVoltage(3, Feedback::getVoltage());
+    Application::setBiasForFeedback();
+    Application::correctZVoltage();
   }
 }
 
@@ -177,7 +177,7 @@ void Spectroscopy::updateForTrial() {
     accumulate(0);
 
     if (time == 0) {
-      Application::updateBiasVoltage(Feedback::setpointVoltage);
+      Application::setBiasForFeedback();
     }
     restPiezoZVoltage = Application::state.piezoZVoltage;
     return;

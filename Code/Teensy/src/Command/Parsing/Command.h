@@ -26,7 +26,7 @@ struct Command {
     idleFeedback = 5,
 
     // aFFF - auto; scale list in memory by factor of FFF
-    // cVVV,ZZZ - custom; change bias to VVV volts, move ZZZ pm from setpoint
+    // cVVV,ZZZ - custom; change bias to VVV mV, move ZZZ pm from setpoint
     spectroscopy = 6,
 
     // xFFF,AAA - x axis
@@ -55,8 +55,8 @@ struct Command {
     // yCCC - set creep constant for Y only
     creepSettings = 10,
 
-    // cDDD - calculate; move DDD nm to measure tilt
-    // tXXX,YYY - set tilt for each axis, sign matches piezo voltages
+    // cDDD - calculate; move DDD nm to measure
+    // tXXX, YYY - set slope for each axis
     tilt = 11,
 
     NUM_MODES = 12,

@@ -1,10 +1,10 @@
 #include "Application/Application.h"
 #include "Command/Parsing/CommandTracker.h"
+#include "Command/Tilt/Settings.h"
 #include "IC/DAC.h"
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
-#include "Filter/Feedback.h"
 #include "Util/WaveUtil.h"
 #include <Arduino.h>
 
@@ -71,6 +71,9 @@ void kilohertzLoop() {
       Application::imager = Imager(nextCommand);
       Application::imager.forwardSettings();
     }
+    if (Application::mode == Command::Mode::tilt) {
+      Application::tiltCalculator = Tilt::Calculator(nextCommand);
+    }
 
     Log::writeValuesWithFlags(1, float(Application::mode));
   } else if (KilohertzLoop::iterationID > modeChangeEnd) {
@@ -80,6 +83,10 @@ void kilohertzLoop() {
       } else if (nextCommand.mode == Command::Mode::creepSettings) {
         Application::creepFilter.updateSettings(nextCommand);
         Application::creepFilter.forwardState();
+      } else if (nextCommand.mode == Command::Mode::tilt &&
+                 nextCommand.alphaCode == 't') {
+        Tilt::Settings::update(nextCommand);
+        Tilt::Settings::forwardState();
       } else {
         modeChangeStart = KilohertzLoop::iterationID;
         modeChangeEnd = modeChangeStart;
@@ -106,7 +113,7 @@ void kilohertzLoop() {
     if (modeChangeContinuesFeedback) {
       uint32_t feedbackStart = modeChangeStart + 500 / KilohertzLoop::period;
       if (KilohertzLoop::iterationID < feedbackStart) {
-        Application::updateBiasVoltage(Feedback::setpointVoltage);
+        Application::setBiasForFeedback();
       } else {
         float deltaIters = KilohertzLoop::iterationID - feedbackStart;
         float deltaItersMax = (modeChangeEnd - feedbackStart) - 1;
@@ -119,7 +126,7 @@ void kilohertzLoop() {
         DAC::enableSafeWait = false;
         Application::updatePiezoVoltage(2, scannerVoltage.y);
         DAC::enableSafeWait = true;
-        Application::updatePiezoVoltage(3, Feedback::getVoltage());
+        Application::correctZVoltage();
       }
     } else if (modeChangeRetractsZ) {
       uint32_t turningPointIter = modeChangeStart + 600 / KilohertzLoop::period;
@@ -156,8 +163,8 @@ void kilohertzLoop() {
       Application::tipApproacher.update();
     }
     if (Application::mode == Command::Mode::idleFeedback) {
-      Application::updateBiasVoltage(Feedback::setpointVoltage);
-      Application::updatePiezoVoltage(3, Feedback::getVoltage());
+      Application::setBiasForFeedback();
+      Application::correctZVoltage();
     }
     if (Application::mode == Command::Mode::spectroscopy) {
       Application::spectroscopy.update();
@@ -168,9 +175,12 @@ void kilohertzLoop() {
     if (Application::mode == Command::Mode::imaging) {
       Application::imager.update();
     }
+    if (Application::mode == Command::Mode::tilt) {
+      Application::tiltCalculator.update();
+    }
   }
 
-  Application::previousState = Application::state.abbreviated();
+  Application::state.previous = Application::state.abbreviated();
   Application::state.updateCurrent(useADC);
   if (!useADC) {
     delayNanoseconds(700);
