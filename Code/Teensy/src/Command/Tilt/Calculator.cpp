@@ -41,7 +41,7 @@ void Calculator::update() {
 
   if (timeInTrial == 0 && time > 0) {
     float2 dz = pendingTrial.getDifference();
-    float dxy = displacementSize / 0.320;
+    float dxy = displacementSize / 0.320f;
     float2 slope = dz / dxy;
 
     pendingResult.update(slope);
@@ -93,7 +93,7 @@ void Calculator::updateForTrial(uint32_t timeInTrial) {
         }
 
         float position = displacementSize * progress;
-        float voltage = position / 0.320;
+        float voltage = position / 0.320f;
         uint32_t channelID = 1 + axisID;
         Application::updatePiezoVoltage(channelID, voltage);
         return;

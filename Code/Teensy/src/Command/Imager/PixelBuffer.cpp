@@ -2,6 +2,7 @@
 
 #include "Application/Application.h"
 #include "Command/Imager/Imager.h"
+#include "Command/Tilt/Settings.h"
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
@@ -47,6 +48,11 @@ void PixelBuffer::flushReadyPixel() {
   Pixel pixel = pixels[startIndex % capacity];
   startIndex += 1;
 
+  float relativeZVoltage = Tilt::Settings::getRelativeZ(
+    pixel.voltageX,
+    pixel.voltageY,
+    pixel.voltageZ);
+
   float oldCurrent = Application::state.previous.w;
   float newCurrent = Application::state.filteredCurrent;
   float progress = Imager::getCurrentStateWeight();
@@ -56,9 +62,9 @@ void PixelBuffer::flushReadyPixel() {
     Log::writeValuesWithFlags(
       4, // flags
       Log::encodeRawBits(pixel.id),
-      pixel.voltageX * 0.320,
-      pixel.voltageY * 0.320,
-      Imager::transformVoltageZ(pixel.voltageZ) * 0.320,
+      pixel.voltageX * 0.320f,
+      pixel.voltageY * 0.320f,
+      Imager::transformVoltageZ(relativeZVoltage) * 0.320f,
       Imager::transformCurrent(current));
   }
 }

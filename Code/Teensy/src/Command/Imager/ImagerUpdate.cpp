@@ -24,8 +24,8 @@ void Imager::update() {
 
   if (continueImaging) {
     if (timeInImage == 0) {
-      float x = Application::state.piezoXVoltage * 0.320;
-      float y = Application::state.piezoYVoltage * 0.320;
+      float x = Application::state.piezoXVoltage * 0.320f;
+      float y = Application::state.piezoYVoltage * 0.320f;
       previousImageEnd = float2(x, y);
     }
     
@@ -34,7 +34,7 @@ void Imager::update() {
     }
 
     currentVoltageXY = getPosition(timeInImage, imageID);
-    currentVoltageXY /= float(0.320);
+    currentVoltageXY /= float(0.320f);
   }
 
   float2 creepCorrectedVoltageXY = currentVoltageXY;
@@ -62,8 +62,8 @@ void Imager::update() {
 
 float2 Imager::getPosition(float2 localPosition, uint32_t imageID) {
   float2 output = localPosition;
-  output.x += -0.5 * float(resolutionMajor) * pixelDimension;
-  output.y += -0.5 * float(resolutionMinor) * pixelDimension;
+  output.x += -0.5f * float(resolutionMajor) * pixelDimension;
+  output.y += -0.5f * float(resolutionMinor) * pixelDimension;
 
   if (settings.dominantAxis == 1) {
     output = float2(output.y, output.x);
@@ -86,7 +86,7 @@ float2 Imager::getPosition(uint32_t timeInImage, uint32_t imageID) {
 
     float2 targetLocal;
     targetLocal.x = peakValue;
-    targetLocal.y = 0.5 * pixelDimension;
+    targetLocal.y = 0.5f * pixelDimension;
     float2 targetPosition = getPosition(targetLocal, imageID);
 
     float progress = float(time) / float(largeMoveRiseTime);
@@ -112,15 +112,15 @@ float2 Imager::getPosition(uint32_t timeInImage, uint32_t imageID) {
       }
       x = getPeakValue(peakNormalized);
       
-      float startRow = max(0, float(rowID) - 1);
+      float startRow = max(0.0f, float(rowID) - 1.0f);
       float endRow = float(rowID);
       float row = interpolate(startRow, endRow, progress);
-      y = (row + 0.5) * pixelDimension;
+      y = (row + 0.5f) * pixelDimension;
     } else {
       time -= polynomialPeakTime;
 
       x = float(time) / float(pixelTime) * pixelDimension;
-      y = (float(rowID) + 0.5) * pixelDimension;
+      y = (float(rowID) + 0.5f) * pixelDimension;
     }
 
     if (rowID % 2 == 1) {
@@ -130,11 +130,11 @@ float2 Imager::getPosition(uint32_t timeInImage, uint32_t imageID) {
     time -= resolutionMinor * getRowTime();
     time = min(time, polynomialPeakTime);
 
-    float progress = 1 - float(time) / float(polynomialPeakTime);
+    float progress = 1.0f - float(time) / float(polynomialPeakTime);
     float peakNormalized = WaveUtil::polynomialWaveOutskirt(progress);
 
     x = getPeakValue(peakNormalized);
-    y = (float(resolutionMinor) - 0.5) * pixelDimension;
+    y = (float(resolutionMinor) - 0.5f) * pixelDimension;
   }
 
   float2 localPosition = float2(x, y);

@@ -1,9 +1,12 @@
 #pragma once
 
+#include "Util/Offline.h"
 #include "Util/Vector/Vector.h"
 #include <stdint.h>
 
 struct ApplicationState {
+  static constexpr bool emulateCurrent = Offline::isOffline;
+
   uint32_t modeStartIterationID = 0;
 
   float current = 0; // units: A

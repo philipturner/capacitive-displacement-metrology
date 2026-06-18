@@ -57,6 +57,9 @@ struct Imager {
   static float transformVoltageZ(float original);
   static float transformCurrent(float original);
 
+  // The XY voltage before creep correction.
+  float2 getUncorrectedVoltageXY() const;
+
 private:
   Mode mode;
   uint32_t resolutionMajor;

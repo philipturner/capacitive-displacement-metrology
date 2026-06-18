@@ -1,9 +1,10 @@
 #pragma once
 
+#include "Util/Offline.h"
 #include <stdint.h>
 
 struct TipApproacher {
-  static constexpr bool forceModeChanges = false;
+  static constexpr bool forceModeChanges = Offline::isOnline;
 
   enum class State {
     waitBeforeApproach = 0,

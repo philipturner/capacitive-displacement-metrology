@@ -38,7 +38,7 @@ void SimpleScanner::update() {
   } else {
     position = getPosition(time - Imager::largeMoveRiseTime);
   }
-  Application::updatePiezoVoltage(channelID, position / 0.320);
+  Application::updatePiezoVoltage(channelID, position / 0.320f);
   Application::correctZVoltage();
 }
 

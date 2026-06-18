@@ -117,33 +117,47 @@ void Application::logNormalMessage() {
       flags, // flags
       currentMaximum,
       currentSpikePrediction,
-      state.piezoZVoltage * 0.320,
+      state.piezoZVoltage * 0.320f,
       state.capacitance);
   } else if (mode == Command::Mode::tipApproach ||
              mode == Command::Mode::idleFeedback) {
     Log::writeValuesNormal(
       currentMaximum,
       currentSpikePrediction,
-      state.piezoZVoltage * 0.320);
+      state.piezoZVoltage * 0.320f);
   } else if (mode == Command::Mode::spectroscopy) {
     Log::writeValuesNormal(
       state.filteredCurrent,
       currentSpikePrediction,
-      state.piezoZVoltage * 0.320,
+      state.piezoZVoltage * 0.320f,
       state.biasVoltage,
       state.spectroscopyTrigger);
   } else if (mode == Command::Mode::simpleScanning ||
-             mode == Command::Mode::imaging) {
+             mode == Command::Mode::imaging ||
+             mode == Command::Mode::tilt) {
+    float2 voltageXY;
+    if (mode == Command::Mode::imaging) {
+      voltageXY = imager.getUncorrectedVoltageXY();
+    } else {
+      voltageXY.x = state.piezoXVoltage;
+      voltageXY.y = state.piezoYVoltage;
+    }
+    
+    float relativeZVoltage = Tilt::Settings::getRelativeZ(
+      voltageXY.x,
+      voltageXY.y,
+      state.piezoZVoltage);
+    
     // Metric that doesn't lose sensitivity as its magnitude grows larger.
     float2 drift = Application::creepFilter.futureAccumulatedDrift;
     float dV = drift.x + drift.y;
     
     Log::writeValuesNormal(
       Imager::transformCurrent(state.filteredCurrent),
-      state.piezoXVoltage * 0.320,
-      state.piezoYVoltage * 0.320,
-      Imager::transformVoltageZ(state.piezoZVoltage) * 0.320,
-      dV * 0.320);
+      state.piezoXVoltage * 0.320f,
+      state.piezoYVoltage * 0.320f,
+      Imager::transformVoltageZ(relativeZVoltage) * 0.320f,
+      dV * 0.320f);
   }
 }
 

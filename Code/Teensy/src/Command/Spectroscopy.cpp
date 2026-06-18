@@ -258,7 +258,7 @@ float Spectroscopy::getBiasVoltage(float progress) {
 
 float Spectroscopy::getPiezoZVoltage(float progress) {
   auto pair = getCurrentVZPair();
-  float dV = pair.position / 0.320e-9;
+  float dV = pair.position / 0.320e-9f;
 
   float start = restPiezoZVoltage;
   float end = start + dV;

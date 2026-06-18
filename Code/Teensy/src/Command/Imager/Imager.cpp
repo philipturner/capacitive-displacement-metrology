@@ -60,7 +60,7 @@ float Imager::getPeakValue(float amplitudeNormalized) const {
   float peakDefaultVelocity = 1 / float(polynomialPeakTime);
   float peakScaleFactor = linearPartVelocity / peakDefaultVelocity;
 
-  return peakScaleFactor * (amplitudeNormalized - 0.5);
+  return peakScaleFactor * (amplitudeNormalized - 0.5f);
 }
 
 uint32_t Imager::getMidPixelTime() {
@@ -87,5 +87,9 @@ float Imager::transformVoltageZ(float original) {
 }
 
 float Imager::transformCurrent(float original) {
-  return abs(original * 1e12);
+  return abs(original * 1e12f);
+}
+
+float2 Imager::getUncorrectedVoltageXY() const {
+  return currentVoltageXY;
 }

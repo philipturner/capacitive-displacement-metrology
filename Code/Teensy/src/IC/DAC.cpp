@@ -110,7 +110,7 @@ void DAC::writeVoltage(
   uint8_t channelID,
   float voltage
 ) {
-  float floatValue = (voltage + 12) / 24;
+  float floatValue = (voltage + 12.0f) / 24.0f;
 
   uint16_t integerValue;
   if (floatValue <= 0) {

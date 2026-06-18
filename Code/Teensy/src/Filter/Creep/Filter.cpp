@@ -25,8 +25,8 @@ void Filter::forwardState() const {
     6, // flags
     creepConstants.x * 100,
     creepConstants.y * 100,
-    futureAccumulatedDrift.x * 0.320,
-    futureAccumulatedDrift.y * 0.320);
+    futureAccumulatedDrift.x * 0.320f,
+    futureAccumulatedDrift.y * 0.320f);
 }
 
 void Filter::updateSettings(Command command) {
@@ -87,7 +87,7 @@ float2 Filter::shiftSampleTimes() {
 
       float localAccumulator;
       if (dt >= float(LookupTable::supersamplingRate)) {
-        localAccumulator = 1 / dt;
+        localAccumulator = 1.0f / dt;
       } else {
         uint32_t binID = lookupTable.getBinID(dt);
         localAccumulator = lookupTable.bins[binID];

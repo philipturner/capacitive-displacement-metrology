@@ -15,8 +15,8 @@ ADCOutputConversion::ADCOutputConversion(uint32_t rawData) {
   }
 
   float floatValue = float(integerValue) / float(1 << 18);
-  voltage = 2 * floatValue - 1;
-  voltage *= 12.288;
+  voltage = 2.0f * floatValue - 1.0f;
+  voltage *= 12.288f;
 }
 
 bool ADCOutputConversion::checkParity(uint8_t deviceID) {
