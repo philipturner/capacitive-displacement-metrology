@@ -2,6 +2,7 @@
 
 #include "Application/Application.h"
 #include "Command/Tilt/Settings.h"
+#include "Diagnostics/Log.h"
 #include <Arduino.h>
 
 using namespace Tilt;
@@ -31,6 +32,36 @@ Calculator::Calculator(Command command) {
 }
 
 void Calculator::update() {
+  uint32_t time = Application::state.getTimeSinceModeStart();
+  uint32_t trialTime = getTimePerTrial();
+  uint32_t resultTime = trialsPerResult * trialTime;
+  uint32_t resultID = time / resultTime;
+  uint32_t timeInResult = time % resultTime;
+  uint32_t timeInTrial = timeInResult % trialTime;
+
+  if (timeInTrial == 0 && time > 0) {
+    float2 dz = pendingTrial.getDifference();
+    float dxy = displacementSize / 0.320;
+    float2 slope = dz / dxy;
+
+    pendingResult.update(slope);
+    pendingTrial = Trial();
+  }
+
+  if (timeInResult == 0 && resultID > 0) {
+    float2 avg = pendingResult.mean;
+    float2 stddev = pendingResult.getStddev();
+    Log::writeValuesWithFlags(
+      9, // flags
+      avg.x,
+      avg.y,
+      stddev.x,
+      stddev.y,
+      pendingResult.count);
+    
+    pendingResult = Result();
+  }
+
   Application::correctZVoltage();
 }
 
@@ -54,13 +85,13 @@ void Calculator::updateForTrial(uint32_t timeInTrial) {
     }
 
     for (uint32_t i = 0; i < 2; ++i) {
-      float progress = float(time) / float(movementTime);
-      progress = min(progress, 1);
-      if (i == 1) {
-        progress = 1 - progress;
-      }
-
       if (time <= movementTime + settleTime) {
+        float progress = float(time) / float(movementTime);
+        progress = min(progress, 1);
+        if (i == 1) {
+          progress = 1 - progress;
+        }
+
         float position = displacementSize * progress;
         float voltage = position / 0.320;
         uint32_t channelID = 1 + axisID;

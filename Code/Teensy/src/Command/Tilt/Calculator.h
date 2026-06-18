@@ -3,6 +3,7 @@
 #include "Command/Parsing/Command.h"
 #include "Time/KilohertzLoop.h"
 #include "Util/Vector/Vector.h"
+#include <math.h>
 
 namespace Tilt {
   struct Calculator {
@@ -35,8 +36,13 @@ namespace Tilt {
         M2 += (x - oldMean) * (x - mean);
       }
 
-      float2 getVariance() const {
-        return M2 / count;
+      float2 getStddev() const {
+        float2 variance = M2 / count;
+
+        float2 stddev;
+        stddev.x = sqrt(variance.x);
+        stddev.y = sqrt(variance.y);
+        return stddev;
       }
     };
 
@@ -55,8 +61,8 @@ namespace Tilt {
     uint32_t movementTime;
     uint32_t trialsPerResult;
 
-    Trial pendingTrial;
-    Result pendingResult;
+    Trial pendingTrial = Trial();
+    Result pendingResult = Result();
     uint32_t getTimePerTrial();
 
     void updateForTrial(uint32_t timeInTrial);

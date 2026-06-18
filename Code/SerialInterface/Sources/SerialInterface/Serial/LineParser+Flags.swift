@@ -8,6 +8,8 @@ extension LineParser {
     case imagingSettings = 5
     case creepSettings = 6
     case kilohertzLoop = 7
+    case tiltSettings = 8
+    case tilt = 9
   }
   
   struct Splitting {
@@ -34,11 +36,16 @@ extension LineParser {
     // Displays a subset of the lines.
     func display() {
       for line in self[.spectroscopy] {
+        print("spectroscopy", terminator: ", ")
         for laneID in 0..<5 {
           let value = line.values[laneID]
           print(value, terminator: ", ")
         }
         print()
+      }
+      
+      for line in self[.tilt] {
+        Self.displayTilt(line: line)
       }
       
       let imagingSettingsLines = self[.imagingSettings]
@@ -104,9 +111,22 @@ extension LineParser {
         print()
       }
       
-      // tilt settings:
-      // dz/dx3
-      // dZ/dy3
+      for line in self[.tiltSettings] {
+        let labels: [String] = [
+          "dz/dx3",
+          "dz/dy3",
+        ]
+        
+        let values: [Float] = [
+          line.values[0],
+          line.values[1]
+        ]
+        
+        print()
+        print("tilt settings:")
+        Self.displayTabulated(labels: labels, values: values)
+        print()
+      }
       
       for line in self[.newMode] {
         let modeCode = Int(line.values[0])
@@ -174,6 +194,10 @@ extension LineParser {
         splitting[.creepSettings].append(line)
       case .kilohertzLoop:
         splitting[.kilohertzLoop].append(line)
+      case .tiltSettings:
+        splitting[.tiltSettings].append(line)
+      case .tilt:
+        splitting[.tilt].append(line)
       }
     }
     
@@ -265,5 +289,45 @@ extension LineParser.Splitting {
       }
       print(createString())
     }
+  }
+  
+  static func displayTilt(line: LineParser.Line) {
+    let avg = SIMD2<Float>(line.values[0], line.values[1])
+    let stddev = SIMD2<Float>(line.values[2], line.values[3])
+    guard let n = Int(exactly: line.values[4]) else {
+      fatalError("Malformatted sample count.")
+    }
+    
+    // Report a 99% confidence interval.
+    let interval = 2.576 * stddev / Float(n).squareRoot()
+    
+    var output: String = ""
+    output += "tilt | "
+    
+    func formatAverage(_ x: Float) -> String {
+      var output = String(format: "%.3f", x)
+      if x >= 0 {
+        output = " " + output
+      }
+      return output
+    }
+    output += formatAverage(avg[0])
+    output += ", "
+    output += formatAverage(avg[1])
+    output += " | "
+    
+    func formatUncertainty(_ x: Float) -> String {
+      var output = String(format: "%.3f", x)
+      output += "±"
+      return output
+    }
+    output += formatUncertainty(interval[0])
+    output += ", "
+    output += formatUncertainty(interval[1])
+    output += " | "
+    
+    output += "\(n) samples"
+    
+    print(output)
   }
 }
