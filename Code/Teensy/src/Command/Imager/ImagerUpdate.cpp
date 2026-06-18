@@ -16,15 +16,7 @@ bool shouldContinueImaging(Imager::Mode mode, uint32_t imageID) {
 }
 
 void Imager::update() {
-  uint32_t time = Application::state.getTimeSinceModeStart();
-  if (time == 0) {
-    if (Application::state.piezoXVoltage != 0 ||
-        Application::state.piezoYVoltage != 0) {
-      Serial.println("Wrong starting position.");
-      exit(0);
-    }
-  }
-  
+  uint32_t time = Application::state.getTimeSinceModeStart();  
   uint32_t imageTime = getImageTime();
   uint32_t imageID = time / imageTime;
   uint32_t timeInImage = time % imageTime;

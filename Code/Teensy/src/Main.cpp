@@ -5,6 +5,7 @@
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
+#include "Util/Interpolate.h"
 #include "Util/WaveUtil.h"
 #include <Arduino.h>
 
@@ -121,10 +122,10 @@ void kilohertzLoop() {
         float progress = float(deltaIters) / float(deltaItersMax);
         progress = WaveUtil::thirdOrderSmoothstep(progress);
 
-        float2 scannerVoltage = previousScannerVoltage * (1 - progress);
-        Application::updatePiezoVoltage(1, scannerVoltage.x);
+        float2 xy = interpolate(previousScannerVoltage, float2(0), progress);
+        Application::updatePiezoVoltage(1, xy.x);
         DAC::enableSafeWait = false;
-        Application::updatePiezoVoltage(2, scannerVoltage.y);
+        Application::updatePiezoVoltage(2, xy.y);
         DAC::enableSafeWait = true;
         Application::correctZVoltage();
       }
@@ -134,7 +135,6 @@ void kilohertzLoop() {
         float currentVoltage = Application::state.piezoZVoltage;
         if (currentVoltage > -270) {
           float dV = -1.4 * float(KilohertzLoop::period);
-
           float newVoltage = max(currentVoltage + dV, -270);
           Application::updatePiezoVoltage(3, newVoltage);
         }

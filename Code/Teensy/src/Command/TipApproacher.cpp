@@ -2,6 +2,7 @@
 
 #include "Application/Application.h"
 #include "Diagnostics/Log.h"
+#include "Filter/Feedback.h"
 #include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 

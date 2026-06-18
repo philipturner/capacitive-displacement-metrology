@@ -2,9 +2,9 @@
 
 #include "Command/Tilt/Settings.h"
 #include "Diagnostics/Log.h"
+#include "Filter/Feedback.h"
 #include "IC/DAC.h"
 #include "IC/PA95.h"
-#include "Util/Feedback.h"
 
 void Application::updateBiasVoltage(float voltage) {
   float dV = voltage - state.biasVoltage;
@@ -147,7 +147,7 @@ void Application::logNormalMessage() {
   }
 }
 
-void Application:setBiasForFeedback() {
+void Application::setBiasForFeedback() {
   updateBiasVoltage(Feedback::setpointVoltage);
 }
 
@@ -160,5 +160,11 @@ void Application::correctZVoltage() {
 
 void Application::correctZVoltage(float2 dXY) {
   float newVoltageZ = state.piezoZVoltage;
-  newVoltageZ += Feedback::getVoltageCorrection();
+  newVoltageZ += Feedback::getVoltageCorrection(state.current);
+  newVoltageZ += Tilt::Settings::slope.x * dXY.x;
+  newVoltageZ += Tilt::Settings::slope.y * dXY.y;
+
+  newVoltageZ = min(newVoltageZ, 270);
+  newVoltageZ = max(newVoltageZ, -80);
+  updatePiezoVoltage(3, newVoltageZ);
 }

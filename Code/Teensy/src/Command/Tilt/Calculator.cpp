@@ -20,5 +20,7 @@ Calculator::Calculator(Command command) {
 }
 
 void Calculator::update() {
+  uint32_t time = Application::state.getTimeSinceModeStart();
+  
   Application::correctZVoltage();
 }

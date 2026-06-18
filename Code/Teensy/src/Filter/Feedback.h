@@ -12,5 +12,6 @@ struct Feedback {
   static constexpr bool useNotchFilter = true;
   static inline NotchFilter notchFilter;
 
-  static float getVoltageCorrection();
+  // Enter the raw current signal, with as little filtering as possible.
+  static float getVoltageCorrection(float current);
 };

@@ -1,6 +1,7 @@
 #include "SimpleScanner.h"
 
 #include "Application/Application.h"
+#include "Util/Interpolate.h"
 #include "Util/WaveUtil.h"
 #include <Arduino.h>
 
@@ -26,13 +27,6 @@ SimpleScanner::SimpleScanner(Command command) {
 
 void SimpleScanner::update() {
   uint32_t time = Application::state.getTimeSinceModeStart();
-  if (time == 0) {
-    if (Application::state.piezoXVoltage != 0 ||
-        Application::state.piezoYVoltage != 0) {
-      Serial.println("Wrong starting position.");
-      exit(0);
-    }
-  }
   
   float position;
   if (time < Imager::largeMoveRiseTime) {
@@ -40,7 +34,7 @@ void SimpleScanner::update() {
     progress = WaveUtil::thirdOrderSmoothstep(progress);
 
     float targetPosition = getPosition(0);
-    position = progress * targetPosition;
+    position = interpolate(float(0), targetPosition, progress);
   } else {
     position = getPosition(time - Imager::largeMoveRiseTime);
   }

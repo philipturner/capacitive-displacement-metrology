@@ -1,32 +1,39 @@
 #include "Feedback.h"
 
-#include "Application/Application.h"
 #include "Time/KilohertzLoop.h"
 #include "Util/WaveUtil.h"
 #include <Arduino.h>
 
-float getFeedbackErrorTerm() {
-  float expectedCurrent = abs(Feedback::setpointCurrent);
-  if (Feedback::setpointVoltage < 0) {
-    expectedCurrent = -expectedCurrent;
+float getFeedbackErrorTerm(float current) {
+  float expectedCurrent;
+  if (Feedback::setpointVoltage >= 0) {
+    expectedCurrent = Feedback::setpointCurrent;
+  } else {
+    expectedCurrent = -Feedback::setpointCurrent;
   }
 
-  float x = Application::state.current / expectedCurrent;
-  x = max(x, -0.5); // cleanly average -5 pA noise band when setpoint is 10 pA
+  // Cleanly average -5 pA noise band when setpoint is 10 pA
+  float clampedCurrent;
+  if (Feedback::setpointVoltage >= 0) {
+    clampedCurrent = max(current, -5e-12);
+  } else {
+    clampedCurrent = min(current, 5e-12);
+  }
 
+  float ratio = clampedCurrent / expectedCurrent;
   float k = 1.025e10 * sqrt(Feedback::tunnelingBarrierHeight);
-  float kΔz = x - 1;
+  float kΔz = ratio - 1;
 
   // Make it even more repulsive at high currents.
   float F = exp(k * 50e-12);
-  if (x > F) {
-    kΔz += (x - F) * (x - F);
+  if (ratio > F) {
+    kΔz += (ratio - F) * (ratio - F);
   }
   return kΔz / k;
 }
 
-float Feedback::getVoltageCorrection() {
-  float dz = getFeedbackErrorTerm();
+float Feedback::getVoltageCorrection(float current) {
+  float dz = getFeedbackErrorTerm(current);
   if (useNotchFilter) {
     notchFilter.update(dz);
     dz = notchFilter.getOutput();
@@ -46,16 +53,9 @@ float Feedback::getVoltageCorrection() {
   float correctionInMeters = -dz * timeProgress;
   float correctionInVolts = correctionInMeters / 0.320e-9;
 
-  // TODO: Calculate tilt correction.
-
   // Limit slew rate to 0.5 V/μs.
   float maxVoltageChange = 0.5 * float(KilohertzLoop::period);
   correctionInVolts = max(correctionInVolts, -maxVoltageChange);
   correctionInVolts = min(correctionInVolts, maxVoltageChange);
-
-  float voltage = Application::state.piezoZVoltage;
-  voltage += correctionInVolts;
-  voltage = min(voltage, 270);
-  voltage = max(voltage, -80);
-  return voltage;
+  return correctionInVolts;
 }
