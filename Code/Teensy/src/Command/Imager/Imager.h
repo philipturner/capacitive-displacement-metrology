@@ -65,6 +65,7 @@ private:
   uint32_t getImageTime() const;
   float getPeakValue(float amplitudeNormalized) const;
 
+  // image tilt: clone the latest tilt settings every frame
   float2 previousImageEnd;
   float2 getPosition(float2 localPosition, uint32_t imageID);
   float2 getPosition(uint32_t timeInImage, uint32_t imageID);

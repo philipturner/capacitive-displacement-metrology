@@ -1,11 +1,11 @@
-#include "State.h"
+#include "ApplicationState.h"
 
 #include "Filter/FirstOrderLowpassFilter.h"
 #include "IC/ADC.h"
 #include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
-void State::updateCurrent(bool useADC) {
+void ApplicationState::updateCurrent(bool useADC) {
   if (useADC) {
     auto conversion = ADC::readVoltage();
     current = -conversion.voltage / 1e9;
@@ -21,13 +21,13 @@ void State::updateCurrent(bool useADC) {
   updateCurrentSpike();
 }
 
-void State::addSpike(float dV, float C) {
+void ApplicationState::addSpike(float dV, float C) {
   float dt = float(KilohertzLoop::period) * 1e-6;
   float I = C * (dV / dt);
   currentSpike[9] += abs(I);
 }
 
-void State::updateCurrentSpike() {
+void ApplicationState::updateCurrentSpike() {
   float alpha = FirstOrderLowpassFilter::getAlpha(15000);
   filteredCurrentSpike *= 1 - alpha;
   filteredCurrentSpike += alpha * currentSpike[8];
@@ -38,7 +38,7 @@ void State::updateCurrentSpike() {
   currentSpike[9] = 0;
 }
 
-float State::getPredictedCurrentSpike() const {
+float ApplicationState::getPredictedCurrentSpike() const {
   float maxCurrent = 0;
   for (uint32_t i = 0; i < 9; ++i) {
     float historyCurrent = currentSpike[i];
@@ -48,13 +48,13 @@ float State::getPredictedCurrentSpike() const {
   return maxCurrent;
 }
 
-float State::extractCurrentMaximum() {
+float ApplicationState::extractCurrentMaximum() {
   float output = currentMaximum;
   currentMaximum = 0;
   return output;
 }
 
-uint32_t State::getTimeSinceModeStart() {
+uint32_t ApplicationState::getTimeSinceModeStart() {
   uint32_t deltaIters = KilohertzLoop::iterationID;
   deltaIters -= modeStartIterationID;
   return deltaIters * KilohertzLoop::period;

@@ -71,6 +71,15 @@ struct Command {
     //
     // tiltSettings mode
 
+    // dDDD - displacement to move when measuring tilt
+    // r - reset settings except tilt for each axis
+    // tXXX,YYY - tilt for each axis, sign matches piezo voltages
+    //
+    // tilt mode
+    //
+    // to prevent any sign ambiguity, use the ratio of voltage changes between
+    // Z and X/Y
+
     NUM_MODES = 11,
   };
   

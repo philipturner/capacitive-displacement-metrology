@@ -2,7 +2,9 @@
 
 #include <stdint.h>
 
-struct State {
+struct ApplicationState {
+  // TODO: Functionality to simulate a surface and constexpr bool to enable it.
+
   uint32_t modeStartIterationID = 0;
 
   float current = 0; // units: A

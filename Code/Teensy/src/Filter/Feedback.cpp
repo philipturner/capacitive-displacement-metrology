@@ -12,7 +12,7 @@ float getFeedbackErrorTerm() {
   }
 
   float x = Application::state.current / expectedCurrent;
-  x = max(x, -0.5);
+  x = max(x, -0.5); // cleanly average -5 pA noise limit when setpoint is 10 pA
 
   float k = 1.025e10 * sqrt(Feedback::tunnelingBarrierHeight);
   float kΔz = x - 1;
@@ -25,9 +25,6 @@ float getFeedbackErrorTerm() {
   return kΔz / k;
 }
 
-// Separate the two functionalities:
-// - get dz
-// - get absolute z
 float Feedback::getVoltage() {
   float dz = getFeedbackErrorTerm();
   if (useNotchFilter) {
@@ -41,22 +38,21 @@ float Feedback::getVoltage() {
   // v_max = 2 π f_0 A_max
   // v_max = 2 π 1470 Hz * 50e-12 m
   // v_max = 462 nm/s
-  // Δx = vΔt = (462 nm/s) * (12 μs)
-  // Δx = 5.5e-12 m
-  // 80% derated: 4.4e-12 m
+  // Δx = vΔt = (462 nm/s) * (20 μs)
+  // Δx = 9.2e-12 m
   //
   // max dz registered: 
   // -1 / (1.025e10 * sqrt(barrier height)) = -98 pm
-  // -(-98 pm) * 12e-6 / 1e-3 = 1.2 pm
-  // -(-98 pm) * 12e-6 / 300e-6 = 3.9 pm
-  // enforcing the +4.4 pm limit will not change anything
-  correctionInMeters = min(correctionInMeters, 4.4e-12);
+  // -(-98 pm) * 20e-6 / 500e-6 = 3.9 pm
+  // enforcing a positive limit will not change anything
 
-  // Limit slew rate to ~0.5 V/μs.  
-  correctionInMeters = max(correctionInMeters, -2e-9);
+  // Limit slew rate to ~0.5 V/μs.
+  float correctionInVolts = correctionInMeters / 0.320e-9;
+  float maxVoltageChange = 0.5 * float(KilohertzLoop::period);
+  correctionInVolts = max(correctionInVolts, -maxVoltageChange);
 
   float voltage = Application::state.piezoZVoltage;
-  voltage += correctionInMeters / 0.320e-9;
+  voltage += correctionInVolts;
   voltage = min(voltage, 270);
   voltage = max(voltage, -80);
   return voltage;

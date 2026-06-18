@@ -27,8 +27,7 @@ SimpleScanner::SimpleScanner(Command command) {
 
 void SimpleScanner::update() {
   uint32_t time = Application::state.getTimeSinceModeStart();
-  Application::updatePiezoVoltage(3, Feedback::getVoltage());
-
+  
   float position;
   if (time < Imager::largeMoveRiseTime) {
     if (time == 0) {
@@ -48,6 +47,7 @@ void SimpleScanner::update() {
     position = getPosition(time - Imager::largeMoveRiseTime);
   }
   Application::updatePiezoVoltage(channelID, position / 0.320);
+  Application::updatePiezoVoltage(3, Feedback::getVoltage());
 }
 
 float SimpleScanner::getPosition(uint32_t inputTime) const {

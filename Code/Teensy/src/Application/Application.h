@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Application/State.h"
+#include "Application/ApplicationState.h"
 #include "Command/BlindStepper.h"
 #include "Command/DACTester.h"
 #include "Command/Imager/Imager.h"
@@ -11,7 +11,7 @@
 #include "Filter/Creep/Filter.h"
 
 struct Application {
-  static inline State state;
+  static inline ApplicationState state;
   static inline Command::Mode mode;
   static inline CapacitanceTracker capTracker;
   static inline Creep::Filter creepFilter;

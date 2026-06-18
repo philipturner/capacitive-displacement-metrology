@@ -146,7 +146,7 @@ float TipApproacher::getPiezoVoltage() {
       // Δx_equilibrium reaches -5.4 nm in 12 μs
       // acceleration reaches -0.46 m/s^2 at 1.47 kHz resonance
       // 1000 nm/s velocity comes to a stop in 2.2 μs
-      float speed = float(50e-12) / float(64e-6 + 12e-6 + 2.2e-6);
+      float speed = float(50e-12) / float(64e-6 + 20e-6 + 2.2e-6);
       
       float dVdt = speed / float(0.320e-9);
       float dt = float(KilohertzLoop::period) * 1e-6;
