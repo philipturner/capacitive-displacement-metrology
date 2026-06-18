@@ -55,7 +55,7 @@ struct Command {
     // yCCC - set creep constant for Y only
     creepSettings = 10,
 
-    // cDDD - calculate; move DDD nm to measure
+    // cDDD,TTT - calculate; move DDD nm to measure, TTT ms per displacement
     // tXXX, YYY - set slope for each axis
     tilt = 11,
 

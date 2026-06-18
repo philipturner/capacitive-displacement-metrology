@@ -16,7 +16,7 @@ bool shouldContinueImaging(Imager::Mode mode, uint32_t imageID) {
 }
 
 void Imager::update() {
-  uint32_t time = Application::state.getTimeSinceModeStart();  
+  uint32_t time = Application::state.getTimeSinceModeStart();
   uint32_t imageTime = getImageTime();
   uint32_t imageID = time / imageTime;
   uint32_t timeInImage = time % imageTime;
@@ -34,17 +34,17 @@ void Imager::update() {
     }
 
     currentVoltageXY = getPosition(timeInImage, imageID);
-    currentVoltageXY *= float(1 / 0.320);
+    currentVoltageXY /= float(0.320);
   }
 
   float2 creepCorrectedVoltageXY = currentVoltageXY;
-  creepCorrectedVoltageXY += -1 * Application::creepFilter.futureAccumulatedDrift;
+  creepCorrectedVoltageXY -= Application::creepFilter.futureAccumulatedDrift;
   Application::updatePiezoVoltage(1, creepCorrectedVoltageXY.x);
   DAC::enableSafeWait = false;
   Application::updatePiezoVoltage(2, creepCorrectedVoltageXY.y);
   DAC::enableSafeWait = true;
 
-  float2 dXY = currentVoltageXY + (-1 * previousVoltageXY);
+  float2 dXY = currentVoltageXY - previousVoltageXY;
   Application::correctZVoltage(dXY);
 
   if (continueImaging) {

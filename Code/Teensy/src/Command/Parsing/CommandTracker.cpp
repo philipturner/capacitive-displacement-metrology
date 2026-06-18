@@ -79,7 +79,7 @@ uint32_t getExpectedNumAttributes(Command command, uint32_t numAttributes) {
     }
     case Command::Mode::tilt: {
       switch (command.alphaCode) {
-        case 'c': return 1;
+        case 'c': return 2;
         case 't': return 2;
       }
     }
@@ -114,10 +114,8 @@ bool checkAttributes(Command command) {
       break;
     }
     case Command::Mode::imaging: {
-      // Currently limit of 256 to put a cap on memory allocation size for tilt
-      // samples, while keeping them in RAM2.
       uint32_t resolution = command.attributes[0];
-      if (resolution == 0 || resolution > 256 || (resolution % 2 != 0)) {
+      if (resolution == 0 || resolution > 1024 || (resolution % 2 != 0)) {
         CommandTracker::throwError("Invalid resolution.");
         return false;
       }
@@ -161,13 +159,31 @@ bool checkAttributes(Command command) {
       break;
     }
     case Command::Mode::tilt: {
-      if (command.alphaCode == 't') {
-        float dzdx = command.attributes[0];
-        float dzdy = command.attributes[1];
-        float greatestMagnitude = max(abs(dzdx), abs(dzdy));
-        if (greatestMagnitude > 0.5) {
-          CommandTracker::throwError("Invalid slope.");
-          return false;
+      switch (command.alphaCode) {
+        case 'c': {
+          float displacement = command.attributes[0];
+          if (abs(displacement) < 0.1 || abs(displacement) > 135) {
+            CommandTracker::throwError("Invalid displacement.");
+            return false;
+          }
+
+          float millisecondsPerDisplacement = command.attributes[1];
+          if (millisecondsPerDisplacement < 2) {
+            CommandTracker::throwError("Invalid time.");
+            return false;
+          }
+
+          break;
+        }
+        case 't': {
+          float dzdx = command.attributes[0];
+          float dzdy = command.attributes[1];
+          float greatestMagnitude = max(abs(dzdx), abs(dzdy));
+          if (greatestMagnitude > 0.5) {
+            CommandTracker::throwError("Invalid slope.");
+            return false;
+          }
+          break;
         }
       }
       break;

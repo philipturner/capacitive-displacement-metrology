@@ -25,9 +25,21 @@ struct float2 {
     return *this;
   }
 
+  float2& operator-=(float2 rhs) {
+    this->x -= rhs.x;
+    this->y -= rhs.y;
+    return *this;
+  }
+
   float2& operator*=(float2 rhs) {
     this->x *= rhs.x;
     this->y *= rhs.y;
+    return *this;
+  }
+
+  float2& operator/=(float rhs) {
+    this->x /= rhs;
+    this->y /= rhs;
     return *this;
   }
 };
@@ -46,6 +58,8 @@ inline float2 operator+(float lhs, float2 rhs) {
   return float2(lhs) + rhs;
 }
 
+
+
 inline float2 operator*(float2 lhs, float2 rhs) {
   float2 output = lhs;
   output *= rhs;
@@ -58,4 +72,18 @@ inline float2 operator*(float2 lhs, float rhs) {
 
 inline float2 operator*(float lhs, float2 rhs) {
   return float2(lhs) * rhs;
+}
+
+
+
+inline float2 operator-(float2 lhs, float2 rhs) {
+  float2 output = lhs;
+  output -= rhs;
+  return output;
+}
+
+inline float2 operator/(float2 lhs, float rhs) {
+  float2 output = lhs;
+  output /= rhs;
+  return output;
 }
