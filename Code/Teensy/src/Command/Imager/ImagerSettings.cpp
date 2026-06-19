@@ -77,5 +77,6 @@ void Imager::forwardSettings() const {
     5, // flags
     settings.electronicTimeLag,
     float(settings.creepSettlingTime) / 1000,
+    float(getImageTime()) / 1000,
     Feedback::setpointCurrent * 1e12);
 }
