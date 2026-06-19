@@ -41,7 +41,8 @@ class UI {
     }
     
     history = History(copying: history)
-    historyWindow.plotsInitialized = false
+    historyWindow.longPlotsInitialized = false
+    historyWindow.shortPlotsInitialized = false
     imagingWindow.state = ImagingWindow.State()
     
     if mode == .imaging {
@@ -58,8 +59,7 @@ class UI {
     case .history:
       historyWindow.update(history: history)
     case .imaging:
-      let output = history.getOutput()
-      imagingWindow.update(historyOutput: output)
+      imagingWindow.update(history: history)
     }
     
     func canShowHistoryWindow() -> Bool {
@@ -67,7 +67,8 @@ class UI {
         return false
       }
       
-      if historyWindow.plotsInitialized {
+      if historyWindow.longPlotsInitialized,
+         historyWindow.shortPlotsInitialized {
         return true
       } else {
         return false
@@ -79,7 +80,8 @@ class UI {
         return false
       }
       
-      if imagingWindow.state.plotsInitialized,
+      if imagingWindow.state.currentAndZPlotsInitialized,
+         imagingWindow.state.trajectoryPlotInitialized,
          imagingWindow.state.imagesInitialized {
         return true
       } else {

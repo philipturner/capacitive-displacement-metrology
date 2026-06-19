@@ -2,12 +2,35 @@ import Foundation
 import PythonKit
 
 extension ImagingWindow {
-  func updatePlots(data: [History.TimedAverage]) {
-    let axisBounds = UI.axisBounds(data: data)
-    updateTimeAxis(data: data)
+  func drawCurrentAndZPlots(history: History) {
+    let longTimeData = history.averages(time: TimeAxis.longLength)
+    guard longTimeData.count > 0 else {
+      return
+    }
+    
+    let axisBounds = UI.axisBounds(data: longTimeData)
+    updateTimeAxis(data: longTimeData)
     updateCurrentRange(axisBounds[0])
     updateZRange(axisBounds[3])
-    updateCurrentAndZCurves(data: data)
+    updateCurrentAndZCurves(data: longTimeData)
+    
+    state.currentAndZPlotsInitialized = true
+  }
+  
+  func drawTrajectoryPlot(history: History) {
+    func createHistoryTime() -> Double {
+      var output = Double(settings.imageTime) * 1e-6
+      if settings.mode == .dualVideo {
+        output *= 2.5
+      } else {
+        output *= 1.5
+      }
+      return output
+    }
+    let longTimeData = history.averages(time: createHistoryTime())
+    guard longTimeData.count > 0 else {
+      return
+    }
     
     func trajectoryIsFrozen() -> Bool {
       guard settings.mode == .image else {
@@ -20,34 +43,23 @@ extension ImagingWindow {
         return false
       }
     }
-    
-    if !trajectoryIsFrozen() {
-      func createHistoryTime() -> Double {
-        var output = Double(settings.imageTime) * 1e-6
-        if settings.mode == .dualVideo {
-          output *= 2.5
-        } else {
-          output *= 1.5
-        }
-        return output
-      }
-      
-      let startTime = Date().timeIntervalSince1970
-      let data = 
-      let endTime = Date().timeIntervalSince1970
-      updateTrajectoryRange(x: axisBounds[1], y: axisBounds[2])
-      updateTrajectoryCurve()
-      updatePixelCurves()
+    if trajectoryIsFrozen() {
+      return
     }
+    
+    let axisBounds = UI.axisBounds(data: longTimeData)
+    updateTrajectoryRange(x: axisBounds[1], y: axisBounds[2])
+    updateTrajectoryCurve()
+    updatePixelCurves()
+    
+    state.trajectoryPlotInitialized = true
   }
   
   func updateTimeAxis(data: [History.TimedAverage]) {
-    let maximum = data.last!.time
-    
-    var longTimeDesc = UI.TimeAxisDescriptor()
-    longTimeDesc.minimum = maximum - TimeAxis.longLength
-    longTimeDesc.maximum = maximum
-    longTimeDesc.majorTick = TimeAxis.longMajorTick
+    var timeAxisDesc = UI.TimeAxisDescriptor()
+    timeAxisDesc.duration = TimeAxis.longLength
+    timeAxisDesc.endTime = data.last!.time
+    timeAxisDesc.majorTick = TimeAxis.longMajorTick
     
     let plots = [
       self.historyPlots[0].plot,
@@ -55,7 +67,7 @@ extension ImagingWindow {
     ]
     UI.updateTimeAxis(
       plots: plots,
-      descriptor: longTimeDesc)
+      descriptor: timeAxisDesc)
   }
   
   func updateCurrentRange(_ range: SIMD2<Float>) {

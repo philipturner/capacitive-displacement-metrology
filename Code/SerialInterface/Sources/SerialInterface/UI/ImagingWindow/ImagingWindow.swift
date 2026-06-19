@@ -25,7 +25,8 @@ class ImagingWindow {
   }
   
   struct State {
-    var plotsInitialized = false
+    var currentAndZPlotsInitialized = false
+    var trajectoryPlotInitialized = false
     var imagesInitialized = false
     var trajectory = TrajectoryState()
     var lastImageStatistics: PixelTracker.Statistics?
@@ -59,11 +60,9 @@ class ImagingWindow {
     setWindowSize()
   }
   
-  func update(historyOutput: History.Output) {
-    if historyOutput.longTimeData.count > 0 {
-      updatePlots(data: historyOutput.longTimeData)
-      state.plotsInitialized = true
-    }
+  func update(history: History) {
+    drawCurrentAndZPlots(history: history)
+    drawTrajectoryPlot(history: history)
     
     if !state.imagesInitialized {
       updateFourierImageVisibility()

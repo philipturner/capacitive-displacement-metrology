@@ -1,6 +1,53 @@
 import PythonKit
 
 extension HistoryWindow {
+  func update(history: History) {
+    let longTimeData = history.averages(time: TimeAxis.longLength)
+    if longTimeData.count > 0 {
+      var timeAxisDesc = UI.TimeAxisDescriptor()
+      timeAxisDesc.duration = TimeAxis.longLength
+      timeAxisDesc.endTime = longTimeData.last!.time
+      timeAxisDesc.majorTick = TimeAxis.longMajorTick
+      updateTimeAxis(columnID: 1, descriptor: timeAxisDesc)
+      
+      updateYAxis(data: longTimeData)
+      
+      updateLongPlots(data: longTimeData)
+    }
+    guard longPlotsInitialized else {
+      return
+    }
+    
+    let shortTimeData = history.samples(time: TimeAxis.shortLength)
+    let trace = history.triggerEventTrace(
+      bipolarHistoryTime: TimeAxis.shortLength / 2)
+    
+    if let trace {
+      var timeAxisDesc = UI.TimeAxisDescriptor()
+      timeAxisDesc.duration = trace.timeInterval[1] - trace.timeInterval[0]
+      timeAxisDesc.endTime = trace.timeInterval[1]
+      timeAxisDesc.majorTick = TimeAxis.shortMajorTick
+      
+      if case .timeInterval(_, let offset) = trace.trigger.type {
+        timeAxisDesc.offset = offset
+      } else {
+        let offset = (trace.timeInterval[0] + trace.timeInterval[1]) / 2
+        timeAxisDesc.offset = offset
+      }
+      updateTimeAxis(columnID: 0, descriptor: timeAxisDesc)
+      
+      updateShortPlots(data: trace.data)
+    } else if shortTimeData.count > 0 {
+      var timeAxisDesc = UI.TimeAxisDescriptor()
+      timeAxisDesc.duration = TimeAxis.shortLength
+      timeAxisDesc.endTime = shortTimeData.last!.time
+      timeAxisDesc.majorTick = TimeAxis.shortMajorTick
+      updateTimeAxis(columnID: 0, descriptor: timeAxisDesc)
+      
+      updateShortPlots(data: shortTimeData)
+    }
+  }
+  
   func updateTimeAxis(columnID: Int, descriptor: UI.TimeAxisDescriptor) {
     var extractedPlots: [PythonObject] = []
     for rowID in 0..<Self.rowCount {
@@ -61,54 +108,5 @@ extension HistoryWindow {
     }
     
     shortPlotsInitialized = true
-  }
-}
-
-extension HistoryWindow {
-  func update(history: History) {
-    let longTimeData = history.averages(time: TimeAxis.longLength)
-    if longTimeData.count > 0 {
-      var timeAxisDesc = UI.TimeAxisDescriptor()
-      timeAxisDesc.duration = TimeAxis.longLength
-      timeAxisDesc.endTime = longTimeData.last!.time
-      timeAxisDesc.majorTick = TimeAxis.longMajorTick
-      updateTimeAxis(columnID: 1, descriptor: timeAxisDesc)
-      
-      updateYAxis(data: longTimeData)
-      
-      updateLongPlots(data: longTimeData)
-    }
-    guard longPlotsInitialized else {
-      return
-    }
-    
-    let shortTimeData = history.samples(time: TimeAxis.shortLength)
-    let trace = history.triggerEventTrace(
-      bipolarHistoryTime: TimeAxis.shortLength / 2)
-    
-    if let trace {
-      var timeAxisDesc = UI.TimeAxisDescriptor()
-      timeAxisDesc.duration = trace.timeInterval[1] - trace.timeInterval[0]
-      timeAxisDesc.endTime = trace.timeInterval[1]
-      timeAxisDesc.majorTick = TimeAxis.shortMajorTick
-      
-      if case .timeInterval(_, let offset) = trace.trigger.type {
-        timeAxisDesc.offset = offset
-      } else {
-        let offset = (trace.timeInterval[0] + trace.timeInterval[1]) / 2
-        timeAxisDesc.offset = offset
-      }
-      updateTimeAxis(columnID: 0, descriptor: timeAxisDesc)
-      
-      updateShortPlots(data: trace.data)
-    } else if shortTimeData.count > 0 {
-      var timeAxisDesc = UI.TimeAxisDescriptor()
-      timeAxisDesc.duration = TimeAxis.shortLength
-      timeAxisDesc.endTime = shortTimeData.last!.time
-      timeAxisDesc.majorTick = TimeAxis.shortMajorTick
-      updateTimeAxis(columnID: 0, descriptor: timeAxisDesc)
-      
-      updateShortPlots(data: shortTimeData)
-    }
   }
 }
