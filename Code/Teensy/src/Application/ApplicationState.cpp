@@ -7,19 +7,24 @@
 #include <Arduino.h>
 
 void ApplicationState::updateCurrent(bool useADC) {
-  if (emulateCurrent) {
-    Emulation::updateSecondOrderFilter(piezoZVoltage);
-    current = Emulation::getCurrent(piezoXVoltage, piezoYVoltage);
-  } else if (useADC) {
-    auto conversion = ADC::readVoltage();
-    current = -conversion.voltage / 1e9f;
-  } else {
-    current = 0;
-  }
+  // if (emulateCurrent) {
+  //   Emulation::updateSecondOrderFilter(piezoZVoltage);
+  //   current = Emulation::getCurrent(piezoXVoltage, piezoYVoltage);
+  // } else if (useADC) {
+  //   auto conversion = ADC::readVoltage();
+  //   current = -conversion.voltage / 1e9f;
+  // } else {
+  //   current = 0;
+  // }
+
+  
 
   float alpha = FirstOrderLowpassFilter::getAlpha(10000);
   filteredCurrent *= 1 - alpha;
   filteredCurrent += alpha * current;
+
+  current = (float(KilohertzLoop::iterationID % 100) + 1.5) * 1e-12;
+  filteredCurrent = current;
 
   currentMaximum = max(currentMaximum, abs(current));
   updateCurrentSpike();

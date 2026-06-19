@@ -16,11 +16,17 @@ struct PixelBuffer {
 
   PixelBuffer();
 
+  void updateCurrent();
   void addPixel(Pixel pixel);
   bool hasReadyPixel() const;
-  void flushReadyPixel();
+  void flushReadyPixel(uint32_t timeLag);
+
+  // TODO: Move to private properties.
+  float laggedCurrent = 0;
+  float latestCurrent = 0;
 
 private:
   uint32_t startIndex = 0;
   uint32_t endIndex = 0;
+  
 };

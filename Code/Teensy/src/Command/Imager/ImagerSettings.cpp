@@ -32,10 +32,8 @@ void Imager::updatePendingSettings(Command command) {
       break;
     }
     case 'l': {
-      uint32_t time = command.attributes[0];
-      time = KilohertzLoopRound(time);
-
-      uint32_t maxTime = (PixelBuffer::capacity - 1) * Imager::pixelTime;
+      uint32_t time = rint(command.attributes[0]);
+      uint32_t maxTime = (PixelBuffer::capacity - 2) * Imager::pixelTime;
       time = min(time, maxTime);
 
       pendingSettings.electronicTimeLag = time;

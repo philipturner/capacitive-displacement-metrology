@@ -49,13 +49,14 @@ void Imager::update() {
   Application::correctZVoltage(dXY);
   Feedback::timeConstant = Feedback::defaultTimeConstant;
 
+  pixelBuffer.updateCurrent();
   if (continueImaging) {
     int32_t pixelID = getPixelID(timeInImage);
     if (pixelID != -1) {
       addPixel(pixelID);
     }
     if (pixelBuffer.hasReadyPixel()) {
-      pixelBuffer.flushReadyPixel();
+      pixelBuffer.flushReadyPixel(settings.electronicTimeLag);
     }
   }
 
@@ -192,7 +193,7 @@ void Imager::addPixel(uint32_t pixelID) {
   pixel.id = pixelID;
 
   uint32_t writeIterationID = KilohertzLoop::iterationID;
-  writeIterationID += settings.electronicTimeLag / KilohertzLoop::period;
+  writeIterationID += KilohertzLoopRound(settings.electronicTimeLag) / KilohertzLoop::period;
   pixel.writeIterationID = writeIterationID;
 
   float progress = Imager::getCurrentStateWeight();
@@ -205,4 +206,10 @@ void Imager::addPixel(uint32_t pixelID) {
   pixel.voltageZ = interpolate(previousZ, currentZ, progress);
 
   pixelBuffer.addPixel(pixel);
+
+  Serial.print(KilohertzLoop::iterationID);
+  Serial.print(" ");
+  Serial.print(pixelBuffer.latestCurrent * 1e12, 3);
+  Serial.print(" ");
+  Serial.println();
 }

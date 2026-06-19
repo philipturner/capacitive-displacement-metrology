@@ -13,6 +13,16 @@ PixelBuffer::PixelBuffer() {
 
 }
 
+void PixelBuffer::updateCurrent() {
+  float oldCurrent = Application::state.previous.w;
+  float newCurrent = Application::state.filteredCurrent;
+  float progress = Imager::getCurrentStateWeight();
+  float current = interpolate(oldCurrent, newCurrent, progress);
+
+  laggedCurrent = latestCurrent;
+  latestCurrent = current;
+}
+
 void PixelBuffer::addPixel(Pixel pixel) {
   if (startIndex > endIndex) {
     Serial.println("Unexpected behavior regarding indices.");
@@ -51,7 +61,7 @@ float encodeHighPrecision(float scannerCoordinate) {
   return Log::encodeRawBits(uint32_t(quantized));
 }
 
-void PixelBuffer::flushReadyPixel() {
+void PixelBuffer::flushReadyPixel(uint32_t timeLag) {
   Pixel pixel = pixels[startIndex % capacity];
   startIndex += 1;
 
@@ -60,18 +70,23 @@ void PixelBuffer::flushReadyPixel() {
     pixel.voltageY,
     pixel.voltageZ);
 
-  float oldCurrent = Application::state.previous.w;
-  float newCurrent = Application::state.filteredCurrent;
-  float progress = Imager::getCurrentStateWeight();
-  float current = interpolate(oldCurrent, newCurrent, progress);
+  int32_t relativeLag = timeLag - KilohertzLoopRound(timeLag);
+  float weight = 1 + float(relativeLag) / float(KilohertzLoop::period);
+  float current = interpolate(laggedCurrent, latestCurrent, weight);
   
+  Serial.print(KilohertzLoop::iterationID);
+  Serial.print(" ");
+  Serial.print(current * 1e12, 3);
+  Serial.print(" ");
+  Serial.println();
+
   if (!ErrorMessage::hasError()) {
-    Log::writeValuesWithFlags(
-      4, // flags
-      Log::encodeRawBits(pixel.id),
-      encodeHighPrecision(pixel.voltageX * 0.320f),
-      encodeHighPrecision(pixel.voltageY * 0.320f),
-      Imager::transformVoltageZ(relativeZVoltage) * 0.320f,
-      Imager::transformCurrent(current));
+    // Log::writeValuesWithFlags(
+    //   4, // flags
+    //   Log::encodeRawBits(pixel.id),
+    //   encodeHighPrecision(pixel.voltageX * 0.320f),
+    //   encodeHighPrecision(pixel.voltageY * 0.320f),
+    //   Imager::transformVoltageZ(relativeZVoltage) * 0.320f,
+    //   Imager::transformCurrent(current));
   }
 }
