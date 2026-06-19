@@ -2,6 +2,8 @@ import Foundation
 import PythonKit
 
 class ImagingWindow {
+  static let useSplitImages: Bool = true
+  
   struct HistoryPlot {
     var plot: PythonObject
     var curves: [PythonObject]
@@ -33,7 +35,7 @@ class ImagingWindow {
   
   var historyPlots: [HistoryPlot]
   var scanImagePlots: [[ImagePlot]]
-  var fourierImagePlot: ImagePlot
+  var fourierImagePlots: [ImagePlot]
   var labels: [PythonObject]
   
   var imageHistory: ImageHistory!
@@ -48,7 +50,7 @@ class ImagingWindow {
     
     historyPlots = Self.createHistoryPlots(win: win)
     scanImagePlots = Self.createScanImagePlots(win: win)
-    fourierImagePlot = Self.createFourierImagePlot(win: win)
+    fourierImagePlots = Self.createFourierImagePlots(win: win)
     labels = Self.createPlotLabels(win: win)
     
     linkPlots()
@@ -63,6 +65,7 @@ class ImagingWindow {
     
     if !state.imagesInitialized {
       updateFourierImageVisibility()
+      updateGridVisibility()
       resetImages()
       state.imagesInitialized = true
     }

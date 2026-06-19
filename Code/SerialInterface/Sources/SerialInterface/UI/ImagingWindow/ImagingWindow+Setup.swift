@@ -114,6 +114,9 @@ extension ImagingWindow {
         let imageItem = pg.ImageItem()
         plot.addItem(imageItem)
         
+        let gridItem = ImageRelativeGridItem(imageItem)
+        plot.getViewBox().addItem(gridItem)
+        
         func getColorMap() -> PythonObject {
           if Self.logScaleCurrentPlotting, rowID == 0 {
             return PythonObject("viridis")
@@ -159,27 +162,33 @@ extension ImagingWindow {
     return output
   }
   
-  static func createFourierImagePlot(win: PythonObject) -> ImagePlot {
-    let plot = win.addPlot(row: 2, col: 2)
-    plot.getViewBox().setAspectLocked(true)
-    setSize(plot: plot, isHistory: false)
-    
-    let imageItem = pg.ImageItem()
-    plot.addItem(imageItem)
-    
-    let colorMap = pg.colormap.get("CET-L7")
-    let colorBar = pg.ColorBarItem(
-      width: 10,
-      colorMap: colorMap,
-      interactive: false)
-    colorBar.setImageItem(imageItem, insert_in: plot)
-    colorBar.axis.setWidth(colorBarTextWidth)
-    
-    let image = ImagePlot(
-      plot: plot,
-      imageItem: imageItem,
-      colorBar: colorBar)
-    return image
+  static func createFourierImagePlots(win: PythonObject) -> [ImagePlot] {
+    var output: [ImagePlot] = []
+    for columnID in 0..<2 {
+      let plot = win.addPlot(
+        row: 2,
+        col: 1 + columnID)
+      plot.getViewBox().setAspectLocked(true)
+      setSize(plot: plot, isHistory: false)
+      
+      let imageItem = pg.ImageItem()
+      plot.addItem(imageItem)
+      
+      let colorMap = pg.colormap.get("CET-L7")
+      let colorBar = pg.ColorBarItem(
+        width: 10,
+        colorMap: colorMap,
+        interactive: false)
+      colorBar.setImageItem(imageItem, insert_in: plot)
+      colorBar.axis.setWidth(colorBarTextWidth)
+      
+      let image = ImagePlot(
+        plot: plot,
+        imageItem: imageItem,
+        colorBar: colorBar)
+      output.append(image)
+    }
+    return output
   }
   
   func linkPlots() {

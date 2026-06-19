@@ -1,5 +1,5 @@
 struct PixelTracker {
-  static let rejectOddRows: Bool = true
+  static let rejectOddRows: Bool = false
   static let overrideCurrentData: Bool = false
   
   var settings: ImagingSettings
@@ -159,5 +159,30 @@ extension PixelTracker {
       stddev: stddev,
       minimum: minimum,
       maximum: maximum)
+  }
+  
+  func split() -> (even: PixelTracker, odd: PixelTracker) {
+    var even = self
+    var odd = self
+    
+    for rowID in 0..<settings.resolution {
+      for columnID in 0..<settings.resolution {
+        let slotID = rowID * settings.resolution + columnID
+        let data = dataBuffer[slotID]
+        
+        if rowID % 2 == 0 {
+          let overwrittenSlotID = slotID + settings.resolution
+          even.dataBuffer[overwrittenSlotID] = data
+        } else {
+          let overwrittenSlotID = slotID - settings.resolution
+          odd.dataBuffer[overwrittenSlotID] = data
+        }
+      }
+    }
+    
+    even.updateStatistics()
+    odd.updateStatistics()
+    
+    return (even, odd)
   }
 }

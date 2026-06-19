@@ -94,7 +94,7 @@ extension UI {
 }
 
 extension UI {
-  static let thicknessFactor: Int = 1
+  static let thicknessFactor: Int = 2
   
   static func setThickness(axis: PythonObject) {
     let pen = axis.pen()

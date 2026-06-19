@@ -36,18 +36,52 @@ extension ImagingWindow {
 extension ImagingWindow {
   func updateFourierImageVisibility() {
     if settings.mode == .dualVideo {
-      fourierImagePlot.plot.hide()
+      fourierImagePlots[0].plot.hide()
+      fourierImagePlots[1].plot.hide()
+      labels[3].hide()
+    } else if Self.useSplitImages {
+      fourierImagePlots[0].plot.show()
+      fourierImagePlots[1].plot.show()
       labels[3].hide()
     } else {
-      fourierImagePlot.plot.show()
+      fourierImagePlots[0].plot.hide()
+      fourierImagePlots[1].plot.show()
       labels[3].show()
     }
+  }
+  
+  func updateGridVisibility() {
+    /*
+    for rowID in 0..<2 {
+      for columnID in 0..<2 {
+        let imagePlot = scanImagePlots[rowID][columnID]
+        
+        func shouldShowGrid() -> Bool {
+          if settings.mode == .dualVideo {
+            return false
+          } else if Self.useSplitImages {
+            return true
+          } else {
+            return false
+          }
+        }
+        
+        let alpha: Float = 1.0
+        if shouldShowGrid() {
+          imagePlot.plot.showGrid(x: true, y: true, alpha: alpha)
+        } else {
+          imagePlot.plot.showGrid(x: false, y: false, alpha: alpha)
+        }
+      }
+    }
+     */
   }
   
   func resetImages() {
     resetScanImage(columnID: 0)
     resetScanImage(columnID: 1)
-    resetFourierImage()
+    resetFourierImage(columnID: 0)
+    resetFourierImage(columnID: 1)
   }
   
   func resetScanImage(columnID: Int) {
@@ -66,10 +100,10 @@ extension ImagingWindow {
     }
   }
   
-  func resetFourierImage() {
+  func resetFourierImage(columnID: Int) {
     let emptyData = [Float](repeating: 0, count: settings.pixelsPerImage)
     let dataNumpy = castToNumpy(emptyData)
-    let imagePlot = fourierImagePlot
+    let imagePlot = fourierImagePlots[columnID]
     imagePlot.imageItem.setImage(dataNumpy, autoLevels: false)
     
     let transform = settings.fourierSpaceTransform()
@@ -86,6 +120,17 @@ extension ImagingWindow {
     if settings.mode == .dualVideo {
       setScanImage(imageHistory.pendingImages[0], columnID: 0)
       setScanImage(imageHistory.pendingImages[1], columnID: 1)
+    } else if Self.useSplitImages {
+      let image = imageHistory.pendingImages[0]
+      guard let image else {
+        return
+      }
+      
+      let (even, odd) = image.split()
+      setScanImage(even, columnID: 0)
+      setScanImage(odd, columnID: 1)
+      setFourierImage(even, columnID: 0)
+      setFourierImage(odd, columnID: 1)
     } else {
       if let pendingImage = imageHistory.pendingImages[0] {
         state.lastImageStatistics = pendingImage.statistics
@@ -114,7 +159,7 @@ extension ImagingWindow {
           overridingStatistics: state.lastImageStatistics)
       }
       setScanImage(imageHistory.pendingImages[0], columnID: 1)
-      setFourierImage(imageHistory.pendingImages[0])
+      setFourierImage(imageHistory.pendingImages[0], columnID: 1)
     }
   }
   
@@ -196,7 +241,10 @@ extension ImagingWindow {
     }
   }
   
-  func setFourierImage(_ pixelTracker: PixelTracker?) {
+  func setFourierImage(
+    _ pixelTracker: PixelTracker?,
+    columnID: Int
+  ) {
     guard let pixelTracker else {
       return
     }
@@ -205,13 +253,15 @@ extension ImagingWindow {
       $0[0] / settings.setpointCurrent
     }
     let fourierSpaceData = Self.fourierTransform(castToNumpy(realSpaceData))
-    fourierImagePlot.imageItem.setImage(fourierSpaceData, autoLevels: false)
+    
+    let imagePlot = fourierImagePlots[columnID]
+    imagePlot.imageItem.setImage(fourierSpaceData, autoLevels: false)
     
     let transform = settings.fourierSpaceTransform()
-    fourierImagePlot.imageItem.setTransform(transform)
+    imagePlot.imageItem.setTransform(transform)
     
     let maximum = Float(np.nanmax(fourierSpaceData))!
-    fourierImagePlot.colorBar.setLevels(
+    imagePlot.colorBar.setLevels(
       low: maximum - 40,
       high: maximum)
   }
