@@ -2,7 +2,8 @@ import Foundation
 import PythonKit
 
 class ImagingWindow {
-  static let useSplitImages: Bool = true
+  static let useLogScaleCurrentImage: Bool = false
+  static let useSplitImages: Bool = false
   
   struct HistoryPlot {
     var plot: PythonObject
@@ -13,6 +14,7 @@ class ImagingWindow {
     var plot: PythonObject
     var imageItem: PythonObject
     var colorBar: PythonObject
+    var gridItem: PythonObject?
   }
   
   struct TrajectoryState {
@@ -66,6 +68,7 @@ class ImagingWindow {
     if !state.imagesInitialized {
       updateFourierImageVisibility()
       updateGridVisibility()
+      updateColorBarAxes()
       resetImages()
       state.imagesInitialized = true
     }

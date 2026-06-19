@@ -51,30 +51,31 @@ extension ImagingWindow {
   }
   
   func updateGridVisibility() {
-    /*
     for rowID in 0..<2 {
       for columnID in 0..<2 {
         let imagePlot = scanImagePlots[rowID][columnID]
-        
-        func shouldShowGrid() -> Bool {
-          if settings.mode == .dualVideo {
-            return false
-          } else if Self.useSplitImages {
-            return true
-          } else {
-            return false
-          }
+        guard let gridItem = imagePlot.gridItem else {
+          fatalError("Grid item was not initialized.")
         }
         
-        let alpha: Float = 1.0
-        if shouldShowGrid() {
-          imagePlot.plot.showGrid(x: true, y: true, alpha: alpha)
+        if settings.mode == .dualVideo {
+          gridItem.hide()
+        } else if Self.useSplitImages {
+          gridItem.show()
         } else {
-          imagePlot.plot.showGrid(x: false, y: false, alpha: alpha)
+          gridItem.hide()
         }
       }
     }
-     */
+  }
+  
+  func updateColorBarAxes() {
+    for columnID in 0..<2 {
+      let imagePlot = scanImagePlots[0][columnID]
+      let axisItem = imagePlot.colorBar.axis
+      axisItem.useLogScale = PythonObject(Self.useLogScaleCurrentImage)
+      axisItem.setpoint = PythonObject(settings.setpointCurrent)
+    }
   }
   
   func resetImages() {
@@ -178,7 +179,7 @@ extension ImagingWindow {
     for rowID in 0..<2 {
       let data = pixelTracker.dataBuffer.map {
         let value = $0[rowID]
-        guard Self.logScaleCurrentPlotting, rowID == 0 else {
+        guard Self.useLogScaleCurrentImage, rowID == 0 else {
           return value
         }
         
@@ -194,17 +195,9 @@ extension ImagingWindow {
       let transform = settings.realSpaceTransform(channelID: columnID)
       imagePlot.imageItem.setTransform(transform)
       
-      // TODO: Final piece of functionality needed: Option to split the fully
-      // received current image into even and odd rows, overwriting the space
-      // for the incoming image. This is disallowed in dual video mode.
-      //
-      // Track the Fourier transform of left and right current images
-      // separately in this mode, and hide the label for the Fourier plot.
-      //
-      // Add gridlines for aligning offsets of individual atoms.
       func createLevels() -> SIMD2<Float> {
         if rowID == 0 {
-          if Self.logScaleCurrentPlotting {
+          if Self.useLogScaleCurrentImage {
             let minimum = settings.setpointCurrent * 0.4
             let maximum = settings.setpointCurrent * 1.5
             return SIMD2<Float>(
@@ -234,7 +227,6 @@ extension ImagingWindow {
       }
       let levels = createLevels()
       
-      Self.axisItemSetpointCurrent = settings.setpointCurrent
       imagePlot.colorBar.setLevels(
         low: levels[0],
         high: levels[1])

@@ -1,6 +1,33 @@
 import PythonKit
 
 extension UI {
+  static let thicknessFactor: Int = 1
+  
+  static func setThickness(axis: PythonObject) {
+    let pen = axis.pen()
+    pen.setWidth(Self.thicknessFactor)
+    axis.setPen(pen)
+  }
+  
+  static func connectCloseShortcut(win: PythonObject) {
+    let shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+W"), win)
+    
+    let closeEvent = PythonFunction { args in
+      Application.needsToClose = true
+      return Python.None
+    }.pythonObject
+    
+    // Makes the application close when "Ctrl + W" is typed, and the window
+    // 'win' is in focus.
+    shortcut.activated.connect(closeEvent)
+    
+    // Makes the application close after pressing the red button to close the
+    // window.
+    win.closeEvent = closeEvent
+  }
+}
+
+extension UI {
   struct TimeAxisDescriptor {
     /// Required. The start of the time interval.
     var minimum: Double?
@@ -93,78 +120,4 @@ extension UI {
   }
 }
 
-extension UI {
-  static let thicknessFactor: Int = 2
-  
-  static func setThickness(axis: PythonObject) {
-    let pen = axis.pen()
-    pen.setWidth(Self.thicknessFactor)
-    axis.setPen(pen)
-  }
-  
-  static let VerticalLabel = createVerticalLabel()
-  
-  private static func createVerticalLabel() -> PythonObject {
-    PythonClass(
-      "VerticalLabel",
-      superclasses: [QtWidgets.QLabel],
-      members: [
-        "__init__": PythonInstanceMethod { args in
-          let `self` = args[0]
-          guard args.count == 3 else {
-            fatalError("Was expecting just the text as an argument.")
-          }
-          QtWidgets.QLabel.__init__(`self`, args[1], args[2])
-          
-          return Python.None
-        },
-        
-        "paintEvent": PythonInstanceMethod { args in
-          let `self` = args[0]
-          guard args.count == 2 else {
-            fatalError("Was expecting just the event as an argument.")
-          }
-          
-          let painter = QtGui.QPainter(`self`)
-          `self`.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-          
-          painter.translate(`self`.rect().center())
-          painter.rotate(-90)
-          painter.translate(-`self`.rect().center())
-          painter.drawText(`self`.rect(), QtCore.Qt.AlignCenter, `self`.text())
-          
-          return Python.None
-        },
-        
-        "minimumSizeHint": PythonInstanceMethod { args in
-          let `self` = args[0]
-          let size = QtWidgets.QLabel.minimumSizeHint(`self`)
-          return QtCore.QSize(size.height(), size.width())
-        },
-        
-        "sizeHint": PythonInstanceMethod { args in
-          let `self` = args[0]
-          let size = QtWidgets.QLabel.sizeHint(`self`)
-          return QtCore.QSize(size.height(), size.width())
-        }
-      ]
-    ).pythonObject
-  }
-  
-  static func connectCloseShortcut(win: PythonObject) {
-    let shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+W"), win)
-    
-    let closeEvent = PythonFunction { args in
-      Application.needsToClose = true
-      return Python.None
-    }.pythonObject
-    
-    // Makes the application close when "Ctrl + W" is typed, and the window
-    // 'win' is in focus.
-    shortcut.activated.connect(closeEvent)
-    
-    // Makes the application close after pressing the red button to close the
-    // window.
-    win.closeEvent = closeEvent
-  }
-}
+
