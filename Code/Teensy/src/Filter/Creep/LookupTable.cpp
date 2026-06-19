@@ -13,12 +13,12 @@ LookupTable::LookupTable(bool notDefaultConstructor) {
     float dt = float(binID) / float(resolution);
 
     float sampleCount = float(supersamplingRate) / float(dt);
-    float loopSize = ceil(sampleCount);
+    float loopSize = ceilf(sampleCount);
 
     float weight = 0;
     for (float i = 0; i < loopSize; ++i) {
       float denominator = dt * loopSize + i;
-      weight += 1 / denominator;
+      weight += 1.0f / denominator;
     }
     bins[binID] = weight;
   }

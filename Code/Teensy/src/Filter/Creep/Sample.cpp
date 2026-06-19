@@ -34,7 +34,7 @@ Sample::Sample() {
 
 Sample::Sample(Sample source1, Sample source2) {
   dV = source1.dV + source2.dV;
-  queueTime = (source1.queueTime + source2.queueTime) / 2.0f;
+  queueTime = (source1.queueTime + source2.queueTime) / 2;
 
   trueTimeOffset = getWeightedTime(source1, source2);
   trueTimeOffset -= float(queueTime - source1.queueTime);
