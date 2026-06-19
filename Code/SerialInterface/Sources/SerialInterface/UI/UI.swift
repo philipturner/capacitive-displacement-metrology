@@ -19,8 +19,7 @@ class UI {
     app = QtWidgets.QApplication([String]())
     
     historyWindow = HistoryWindow()
-    imagingWindow = ImagingWindow(
-      trajectoryLagTime: descriptor.trajectoryLagTime)
+    imagingWindow = ImagingWindow()
     history = History(triggers: descriptor.triggers)
   }
   

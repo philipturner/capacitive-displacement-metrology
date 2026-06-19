@@ -2,8 +2,21 @@ import Foundation
 import PythonKit
 
 class ImagingWindow {
-  static let useLogScaleCurrentImage: Bool = false
-  static let useSplitImages: Bool = true
+  enum AuxiliaryImageType {
+    case incoming
+    case splitCurrent
+    case splitHeight
+  }
+  static let auxiliaryImageType: AuxiliaryImageType = .splitCurrent
+  
+  enum DualImageType {
+    case allLines
+    case even
+    case odd
+  }
+  static let dualImageType: DualImageType = .even
+  
+  static let trajectoryLagTime: Double? = 0.1
   
   struct HistoryPlot {
     var plot: PythonObject
@@ -33,7 +46,6 @@ class ImagingWindow {
   }
   
   let win: PythonObject
-  let trajectoryLagTime: Double?
   var state = State()
   
   var historyPlots: [HistoryPlot]
@@ -44,9 +56,7 @@ class ImagingWindow {
   var imageHistory: ImageHistory!
   var settings: ImagingSettings { imageHistory.settings }
   
-  init(trajectoryLagTime: Double?) {
-    self.trajectoryLagTime = trajectoryLagTime
-    
+  init() {
     win = pg.GraphicsLayoutWidget(show: true)
     win.move(Int(0), Int(0))
     UI.connectCloseShortcut(win: win)
@@ -67,7 +77,6 @@ class ImagingWindow {
     if !state.imagesInitialized {
       updateFourierImageVisibility()
       updateGridVisibility()
-      updateColorBarAxes()
       resetImages()
       state.imagesInitialized = true
     }
@@ -107,7 +116,7 @@ class ImagingWindow {
   }
   
   func removePendingData() {
-    if let trajectoryLagTime {
+    if let trajectoryLagTime = Self.trajectoryLagTime {
       removeOldHistoryLines(lagTime: trajectoryLagTime)
     } else {
       state.trajectory.historyLines = []

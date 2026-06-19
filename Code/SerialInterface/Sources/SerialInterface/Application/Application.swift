@@ -4,7 +4,6 @@ import SwiftSerial
 
 struct ApplicationDescriptor {
   var pythonLibraryPath: String?
-  var trajectoryLagTime: Double?
   var triggers: [Trigger] = []
   var useEmulator: Bool = false
 }

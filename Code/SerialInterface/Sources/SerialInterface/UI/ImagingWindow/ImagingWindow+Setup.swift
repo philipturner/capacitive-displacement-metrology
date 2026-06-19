@@ -114,20 +114,14 @@ extension ImagingWindow {
         let imageItem = pg.ImageItem()
         plot.addItem(imageItem)
         
-        func getColorMap() -> PythonObject {
-          if Self.useLogScaleCurrentImage, rowID == 0 {
-            return PythonObject("viridis")
-          } else {
-            return pg.colormap.get("CET-L3")
-          }
-        }
-        
+        // Log scale: "viridis" looks better
         let colorBar = pg.ColorBarItem(
           width: 10,
-          colorMap: getColorMap(),
+          colorMap: pg.colormap.get("CET-L3"),
           interactive: false)
         
-        if rowID == 0 {
+        #if false
+        do {
           let oldAxis = colorBar.axes["right"]["item"]
           colorBar.layout.removeItem(oldAxis)
           oldAxis.unlinkFromView()
@@ -145,6 +139,7 @@ extension ImagingWindow {
           colorBar.axis.setStyle(showValues: true)
           colorBar.axis.unlinkFromView()
         }
+        #endif
         colorBar.setImageItem(imageItem, insert_in: plot)
         colorBar.axis.setWidth(colorBarTextWidth)
         

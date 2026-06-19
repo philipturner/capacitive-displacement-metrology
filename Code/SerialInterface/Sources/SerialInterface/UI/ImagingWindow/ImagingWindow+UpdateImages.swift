@@ -39,10 +39,6 @@ extension ImagingWindow {
       fourierImagePlots[0].plot.hide()
       fourierImagePlots[1].plot.hide()
       labels[3].hide()
-    } else if Self.useSplitImages {
-      fourierImagePlots[0].plot.show()
-      fourierImagePlots[1].plot.show()
-      labels[3].hide()
     } else {
       fourierImagePlots[0].plot.hide()
       fourierImagePlots[1].plot.show()
@@ -54,27 +50,20 @@ extension ImagingWindow {
     for rowID in 0..<2 {
       for columnID in 0..<2 {
         let imagePlot = scanImagePlots[rowID][columnID]
-        guard let gridItem = imagePlot.gridItem else {
-          fatalError("Grid item was not initialized.")
-        }
+        let gridItem = imagePlot.gridItem!
         
         if settings.mode == .dualVideo {
           gridItem.hide()
-        } else if Self.useSplitImages {
-          gridItem.show()
-        } else {
+        } else if Self.auxiliaryImageType == .incoming {
           gridItem.hide()
+        } else {
+          if columnID == 0 {
+            gridItem.show()
+          } else {
+            gridItem.hide()
+          }
         }
       }
-    }
-  }
-  
-  func updateColorBarAxes() {
-    for columnID in 0..<2 {
-      let imagePlot = scanImagePlots[0][columnID]
-      let axisItem = imagePlot.colorBar.axis
-      axisItem.useLogScale = PythonObject(Self.useLogScaleCurrentImage)
-      axisItem.setpoint = PythonObject(settings.setpointCurrent)
     }
   }
   
@@ -119,20 +108,34 @@ extension ImagingWindow {
 extension ImagingWindow {
   func updateImages() {
     if settings.mode == .dualVideo {
-      setScanImagePair(imageHistory.pendingImages[0], columnID: 0)
-      setScanImagePair(imageHistory.pendingImages[1], columnID: 1)
-    } else if Self.useSplitImages {
-      let image = imageHistory.pendingImages[0]
-      guard let image else {
-        return
+      for channelID in 0..<2 {
+        let image = imageHistory.pendingImages[channelID]
+        guard let image else {
+          continue
+        }
+        
+        let (even, odd) = image.split()
+        func getSplitImage() -> PixelTracker {
+          switch Self.dualImageType {
+          case .allLines:
+            return image
+          case .even:
+            return even
+          case .odd:
+            return odd
+          }
+        }
+        setScanImagePair(getSplitImage(), columnID: channelID)
       }
-      
-      let (even, odd) = image.split()
-      setScanImagePair(even, columnID: 0)
-      setScanImagePair(odd, columnID: 1)
-      setFourierImage(even, columnID: 0)
-      setFourierImage(odd, columnID: 1)
     } else {
+      setAuxiliaryImage()
+      setScanImagePair(imageHistory.pendingImages[0], columnID: 1)
+      setFourierImage(imageHistory.pendingImages[0], columnID: 1)
+    }
+  }
+  
+  func setAuxiliaryImage() {
+    if Self.auxiliaryImageType == .incoming {
       if let pendingImage = imageHistory.pendingImages[0] {
         state.lastImageStatistics = pendingImage.statistics
       }
@@ -152,15 +155,44 @@ extension ImagingWindow {
       }
       
       if shouldOverwriteIncomingImage() {
-        setScanImagePair(imageHistory.pendingImages[0], columnID: 0)
+        setScanImagePair(
+          imageHistory.pendingImages[0],
+          columnID: 0)
       } else {
         setScanImagePair(
           imageHistory.pixelTracker,
           columnID: 0,
           overridingStatistics: state.lastImageStatistics)
       }
-      setScanImagePair(imageHistory.pendingImages[0], columnID: 1)
-      setScanImagePair(imageHistory.pendingImages[0], columnID: 1)
+    } else {
+      let image = imageHistory.pendingImages[0]
+      guard let image else {
+        return
+      }
+      
+      func getLaneID() -> Int {
+        switch Self.auxiliaryImageType {
+        case .incoming:
+          fatalError("This should never happen.")
+        case .splitCurrent:
+          return 0
+        case .splitHeight:
+          return 1
+        }
+      }
+      
+      let (even, odd) = image.split()
+      let laneID = getLaneID()
+      setScanImage(
+        even,
+        pixelLaneID: laneID,
+        rowID: 0,
+        columnID: 0)
+      setScanImage(
+        odd,
+        pixelLaneID: laneID,
+        rowID: 1,
+        columnID: 0)
     }
   }
   
@@ -194,16 +226,7 @@ extension ImagingWindow {
       return
     }
     
-    let data = pixelTracker.dataBuffer.map {
-      let value = $0[pixelLaneID]
-      guard Self.useLogScaleCurrentImage, pixelLaneID == 0 else {
-        return value
-      }
-      
-      var output = max(0.001, value)
-      output = log10(output)
-      return output
-    }
+    let data = pixelTracker.dataBuffer.map { $0[pixelLaneID] }
     let dataNumpy = castToNumpy(data)
     
     let imagePlot = scanImagePlots[rowID][columnID]
@@ -216,20 +239,13 @@ extension ImagingWindow {
       let statistics = overridingStatistics ?? pixelTracker.statistics!
       
       if pixelLaneID == 0 {
-        if Self.useLogScaleCurrentImage {
-          let minimum = settings.setpointCurrent * 0.4
-          let maximum = settings.setpointCurrent * 1.5
-          return SIMD2<Float>(
-            log10(minimum),
-            log10(maximum))
-        } else {
-          let average = statistics.average[0]
-          var stddev = statistics.stddev[0]
-          stddev = max(stddev, 0.1)
-          return SIMD2<Float>(
-            average - stddev * 3,
-            average + stddev * 3)
-        }
+        let average = statistics.average[0]
+        var stddev = statistics.stddev[0]
+        stddev = max(stddev, 0.1)
+        
+        return SIMD2<Float>(
+          average - stddev * 3,
+          average + stddev * 3)
       } else {
         let minimum = statistics.minimum[1]
         let maximum = statistics.maximum[1]
@@ -243,8 +259,8 @@ extension ImagingWindow {
         }
       }
     }
-    let levels = createLevels()
     
+    let levels = createLevels()
     imagePlot.colorBar.setLevels(
       low: levels[0],
       high: levels[1])

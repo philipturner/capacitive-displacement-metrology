@@ -1,7 +1,4 @@
 struct PixelTracker {
-  static let rejectOddRows: Bool = false
-  static let overrideCurrentData: Bool = false
-  
   var settings: ImagingSettings
   var dataBuffer: [SIMD2<Float>]
   var receivedPixelCount: Int = 0
@@ -77,35 +74,10 @@ struct PixelTracker {
       }
       checkErrorMagnitude()
       
-      var data = SIMD2(line.values[4], line.values[3])
-      if Self.overrideCurrentData {
-        let position = SIMD2(line.values[1], line.values[2])
-        let normalizedCurrent = Emulator.normalizedCurrent(position: position)
-        let current = normalizedCurrent * settings.setpointCurrent
-        data[0] = current
-      }
-      receivedPixelCount += 1
-      
-      if Self.rejectOddRows {
-        let rowID = pixelID / settings.resolution
-        guard rowID % 2 == 0 else {
-          continue
-        }
-      }
-      
-      // If rejecting even rows, write the latest row and then overwrite data
-      // on the next odd row.
+      let data = SIMD2(line.values[4], line.values[3])
       let slotID = settings.bufferSlotID(pixelID: pixelID)
       dataBuffer[slotID] = data
-      
-      // [move the above guard statement here]
-      
-      if Self.rejectOddRows {
-        // Also, flip the sign of the slot ID offset.
-        let overwrittenPixelID = pixelID + settings.resolution
-        let slotID = settings.bufferSlotID(pixelID: overwrittenPixelID)
-        dataBuffer[slotID] = data
-      }
+      receivedPixelCount += 1
     }
   }
 }
