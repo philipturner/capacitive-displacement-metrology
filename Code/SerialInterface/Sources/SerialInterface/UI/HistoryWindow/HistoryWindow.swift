@@ -7,7 +7,8 @@ class HistoryWindow {
   var curveSets: [[PythonObject]] = []
   var labels: [PythonObject] = []
   
-  var plotsInitialized: Bool = false
+  var shortPlotsInitialized: Bool = false
+  var longPlotsInitialized: Bool = false
   
   init() {
     win = pg.GraphicsLayoutWidget(show: true)

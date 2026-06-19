@@ -121,8 +121,6 @@ extension ImagingWindow {
     if settings.mode == .dualVideo {
       setScanImagePair(imageHistory.pendingImages[0], columnID: 0)
       setScanImagePair(imageHistory.pendingImages[1], columnID: 1)
-//      setFourierImage(imageHistory.pendingImages[0], columnID: 0)
-//      setFourierImage(imageHistory.pendingImages[1], columnID: 0)
     } else if Self.useSplitImages {
       let image = imageHistory.pendingImages[0]
       guard let image else {

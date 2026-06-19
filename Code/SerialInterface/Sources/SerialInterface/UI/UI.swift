@@ -54,11 +54,11 @@ class UI {
   
   // Must be called on the main thread.
   func update() {
-    let output = history.getOutput()
     switch mode {
     case .history:
-      historyWindow.update(historyOutput: output)
+      historyWindow.update(history: history)
     case .imaging:
+      let output = history.getOutput()
       imagingWindow.update(historyOutput: output)
     }
     

@@ -2,10 +2,17 @@ import PythonKit
 
 struct ImagingSettings {
   var mode: ImagingMode
+  var resolutionMajor: Int
   var resolution: Int
   var pixelDimension: Float
+  var polynomialPeakTime: Int
+  
   var dominantAxis: Int
   var centers: [SIMD2<Float>]
+  
+  var electronicTimeLag: Int // μs
+  var creepSettlingTime: Int // μs
+  var imageTime: Int // μs
   var setpointCurrent: Float
   
   init(settingsLines: [LineParser.Line]) {
@@ -15,16 +22,17 @@ struct ImagingSettings {
     }
     
     func createMode() -> ImagingMode {
-      let value = UInt8(exactly: settingsLines[0].values[0])!
+      let value = UInt8(settingsLines[0].values[0])
       guard let mode = ImagingMode(rawValue: value) else {
         fatalError("Invalid mode.")
       }
       return mode
     }
     self.mode = createMode()
-    self.resolution = Int(exactly: settingsLines[0].values[2])!
+    self.resolutionMajor = Int(settingsLines[0].values[1])
+    self.resolution = Int(settingsLines[0].values[2])
     self.pixelDimension = settingsLines[0].values[3]
-    self.dominantAxis = Int(exactly: settingsLines[1].values[0])!
+    self.polynomialPeakTime = Int(settingsLines[0].values[4])
     
     func createCenters() -> [SIMD2<Float>] {
       var output: [SIMD2<Float>] = []
@@ -38,8 +46,13 @@ struct ImagingSettings {
       }
       return output
     }
+    self.dominantAxis = Int(settingsLines[1].values[0])
     self.centers = createCenters()
-    self.setpointCurrent = settingsLines[2].values[2]
+    
+    self.electronicTimeLag = Int(settingsLines[2].values[0])
+    self.creepSettlingTime = Int(settingsLines[2].values[1] * 1000)
+    self.imageTime = Int(settingsLines[2].values[2] * 1000)
+    self.setpointCurrent = settingsLines[2].values[3]
   }
   
   var pixelsPerImage: Int {

@@ -22,6 +22,19 @@ extension ImagingWindow {
     }
     
     if !trajectoryIsFrozen() {
+      func createHistoryTime() -> Double {
+        var output = Double(settings.imageTime) * 1e-6
+        if settings.mode == .dualVideo {
+          output *= 2.5
+        } else {
+          output *= 1.5
+        }
+        return output
+      }
+      
+      let startTime = Date().timeIntervalSince1970
+      let data = 
+      let endTime = Date().timeIntervalSince1970
       updateTrajectoryRange(x: axisBounds[1], y: axisBounds[2])
       updateTrajectoryCurve()
       updatePixelCurves()

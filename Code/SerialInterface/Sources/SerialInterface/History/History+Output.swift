@@ -1,28 +1,11 @@
 extension History {
-  struct Output {
-    var shortTimeData: [TimedSample] = []
-    var longTimeData: [TimedAverage] = []
-    var trace: TriggerEventTrace?
-  }
-  
   struct TriggerEventTrace {
     var data: [TimedSample]
     var timeInterval: SIMD2<Double>
     var trigger: Trigger
   }
   
-  func getOutput() -> Output {
-    var output = Output()
-    output.shortTimeData = sampleHistory(time: TimeAxis.shortLength)
-    output.longTimeData = averageHistory(time: TimeAxis.longLength)
-    
-    let bipolarHistoryTime = TimeAxis.shortLength / 2
-    let trace = triggerEventTrace(bipolarHistoryTime: bipolarHistoryTime)
-    output.trace = trace
-    return output
-  }
-  
-  private func sampleHistory(
+  func samples(
     time historyTime: Double
   ) -> [TimedSample] {
     guard historyTime >= 0 else {
@@ -51,7 +34,7 @@ extension History {
     return output
   }
   
-  private func averageHistory(
+  func averages(
     time historyTime: Double
   ) -> [TimedAverage] {
     guard historyTime >= 0 else {
@@ -80,7 +63,7 @@ extension History {
     return output
   }
   
-  private func triggerEventTrace(
+  func triggerEventTrace(
     bipolarHistoryTime: Double
   ) -> TriggerEventTrace? {
     let validEvents = triggerEvents.filter(isValid(event:))

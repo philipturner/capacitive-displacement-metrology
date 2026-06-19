@@ -29,11 +29,11 @@ extension UI {
 
 extension UI {
   struct TimeAxisDescriptor {
-    /// Required. The start of the time interval.
-    var minimum: Double?
+    /// Required. The duration of the time interval.
+    var duration: Double?
     
     /// Required. The end of the time interval.
-    var maximum: Double?
+    var endTime: Double?
     
     /// Required. Spacing for major ticks.
     var majorTick: Double?
@@ -46,12 +46,12 @@ extension UI {
     plots: [PythonObject],
     descriptor: TimeAxisDescriptor
   ) {
-    guard let minimum = descriptor.minimum,
-          let maximum = descriptor.maximum,
+    guard let duration = descriptor.duration,
+          let endTime = descriptor.endTime,
           let majorTick = descriptor.majorTick else {
       fatalError("Descriptor was incomplete.")
     }
-    plots[0].setXRange(minimum, maximum, padding: 0)
+    plots[0].setXRange(endTime - duration, endTime, padding: 0)
     
     for plotID in plots.indices {
       let plot = plots[plotID]
