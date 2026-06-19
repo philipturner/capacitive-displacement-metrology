@@ -119,8 +119,10 @@ extension ImagingWindow {
 extension ImagingWindow {
   func updateImages() {
     if settings.mode == .dualVideo {
-      setScanImage(imageHistory.pendingImages[0], columnID: 0)
-      setScanImage(imageHistory.pendingImages[1], columnID: 1)
+      setScanImagePair(imageHistory.pendingImages[0], columnID: 0)
+      setScanImagePair(imageHistory.pendingImages[1], columnID: 1)
+//      setFourierImage(imageHistory.pendingImages[0], columnID: 0)
+//      setFourierImage(imageHistory.pendingImages[1], columnID: 0)
     } else if Self.useSplitImages {
       let image = imageHistory.pendingImages[0]
       guard let image else {
@@ -128,8 +130,8 @@ extension ImagingWindow {
       }
       
       let (even, odd) = image.split()
-      setScanImage(even, columnID: 0)
-      setScanImage(odd, columnID: 1)
+      setScanImagePair(even, columnID: 0)
+      setScanImagePair(odd, columnID: 1)
       setFourierImage(even, columnID: 0)
       setFourierImage(odd, columnID: 1)
     } else {
@@ -137,100 +139,117 @@ extension ImagingWindow {
         state.lastImageStatistics = pendingImage.statistics
       }
       
-      func shouldFillFirst() -> Bool {
-        let newPixelTracker = imageHistory.pixelTracker
+      func shouldOverwriteIncomingImage() -> Bool {
         let oldImage = imageHistory.pendingImages[0]
         guard oldImage != nil else {
           return false
         }
         
-        if newPixelTracker.statistics == nil {
+        let newImage = imageHistory.pixelTracker
+        if newImage.statistics == nil {
           return true
         } else {
           return false
         }
       }
       
-      if shouldFillFirst() {
-        setScanImage(imageHistory.pendingImages[0], columnID: 0)
+      if shouldOverwriteIncomingImage() {
+        setScanImagePair(imageHistory.pendingImages[0], columnID: 0)
       } else {
-        setScanImage(
+        setScanImagePair(
           imageHistory.pixelTracker,
           columnID: 0,
           overridingStatistics: state.lastImageStatistics)
       }
-      setScanImage(imageHistory.pendingImages[0], columnID: 1)
-      setFourierImage(imageHistory.pendingImages[0], columnID: 1)
+      setScanImagePair(imageHistory.pendingImages[0], columnID: 1)
+      setScanImagePair(imageHistory.pendingImages[0], columnID: 1)
     }
   }
   
-  func setScanImage(
+  func setScanImagePair(
     _ pixelTracker: PixelTracker?,
     columnID: Int,
     overridingStatistics: PixelTracker.Statistics? = nil
   ) {
-    guard let pixelTracker else {
-      return
-    }
-    guard let statistics = pixelTracker.statistics else {
+    setScanImage(
+      pixelTracker,
+      pixelLaneID: 0,
+      rowID: 0,
+      columnID: columnID,
+      overridingStatistics: overridingStatistics)
+    setScanImage(
+      pixelTracker,
+      pixelLaneID: 1,
+      rowID: 1,
+      columnID: columnID,
+      overridingStatistics: overridingStatistics)
+  }
+  
+  func setScanImage(
+    _ pixelTracker: PixelTracker?,
+    pixelLaneID: Int,
+    rowID: Int,
+    columnID: Int,
+    overridingStatistics: PixelTracker.Statistics? = nil
+  ) {
+    guard let pixelTracker, pixelTracker.receivedRowCount > 0 else {
       return
     }
     
-    for rowID in 0..<2 {
-      let data = pixelTracker.dataBuffer.map {
-        let value = $0[rowID]
-        guard Self.useLogScaleCurrentImage, rowID == 0 else {
-          return value
-        }
-        
-        var output = max(0.001, value)
-        output = log10(output)
-        return output
+    let data = pixelTracker.dataBuffer.map {
+      let value = $0[pixelLaneID]
+      guard Self.useLogScaleCurrentImage, pixelLaneID == 0 else {
+        return value
       }
-      let dataNumpy = castToNumpy(data)
       
-      let imagePlot = scanImagePlots[rowID][columnID]
-      imagePlot.imageItem.setImage(dataNumpy, autoLevels: false)
-      
-      let transform = settings.realSpaceTransform(channelID: columnID)
-      imagePlot.imageItem.setTransform(transform)
-      
-      func createLevels() -> SIMD2<Float> {
-        if rowID == 0 {
-          if Self.useLogScaleCurrentImage {
-            let minimum = settings.setpointCurrent * 0.4
-            let maximum = settings.setpointCurrent * 1.5
-            return SIMD2<Float>(
-              log10(minimum),
-              log10(maximum))
-          } else {
-            let usedStatistics = overridingStatistics ?? statistics
-            let average = usedStatistics.average[rowID]
-            var stddev = usedStatistics.stddev[rowID]
-            stddev = max(stddev, 0.1)
-            return SIMD2<Float>(
-              average - stddev * 3,
-              average + stddev * 3)
-          }
-        } else {
-          let minimum = statistics.minimum[rowID]
-          let maximum = statistics.maximum[rowID]
-          let dz = maximum - minimum
-          
-          if dz < 0.01 {
-            let center = (minimum + maximum) / 2
-            return SIMD2(center - 0.005, center + 0.005)
-          } else {
-            return SIMD2(minimum, maximum)
-          }
-        }
-      }
-      let levels = createLevels()
-      
-      imagePlot.colorBar.setLevels(
-        low: levels[0],
-        high: levels[1])
+      var output = max(0.001, value)
+      output = log10(output)
+      return output
     }
+    let dataNumpy = castToNumpy(data)
+    
+    let imagePlot = scanImagePlots[rowID][columnID]
+    imagePlot.imageItem.setImage(dataNumpy, autoLevels: false)
+    
+    let transform = settings.realSpaceTransform(channelID: columnID)
+    imagePlot.imageItem.setTransform(transform)
+    
+    func createLevels() -> SIMD2<Float> {
+      let statistics = overridingStatistics ?? pixelTracker.statistics!
+      
+      if pixelLaneID == 0 {
+        if Self.useLogScaleCurrentImage {
+          let minimum = settings.setpointCurrent * 0.4
+          let maximum = settings.setpointCurrent * 1.5
+          return SIMD2<Float>(
+            log10(minimum),
+            log10(maximum))
+        } else {
+          let average = statistics.average[0]
+          var stddev = statistics.stddev[0]
+          stddev = max(stddev, 0.1)
+          return SIMD2<Float>(
+            average - stddev * 3,
+            average + stddev * 3)
+        }
+      } else {
+        let minimum = statistics.minimum[1]
+        let maximum = statistics.maximum[1]
+        let dz = maximum - minimum
+        
+        if dz < 0.01 {
+          let center = (minimum + maximum) / 2
+          return SIMD2(center - 0.005, center + 0.005)
+        } else {
+          return SIMD2(minimum, maximum)
+        }
+      }
+    }
+    let levels = createLevels()
+    
+    imagePlot.colorBar.setLevels(
+      low: levels[0],
+      high: levels[1])
   }
   
   func setFourierImage(

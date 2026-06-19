@@ -3,7 +3,7 @@ import PythonKit
 
 class ImagingWindow {
   static let useLogScaleCurrentImage: Bool = false
-  static let useSplitImages: Bool = false
+  static let useSplitImages: Bool = true
   
   struct HistoryPlot {
     var plot: PythonObject
