@@ -74,19 +74,13 @@ void PixelBuffer::flushReadyPixel(uint32_t timeLag) {
   float weight = 1 + float(relativeLag) / float(KilohertzLoop::period);
   float current = interpolate(laggedCurrent, latestCurrent, weight);
   
-  Serial.print(KilohertzLoop::iterationID);
-  Serial.print(" ");
-  Serial.print(current * 1e12, 3);
-  Serial.print(" ");
-  Serial.println();
-
   if (!ErrorMessage::hasError()) {
-    // Log::writeValuesWithFlags(
-    //   4, // flags
-    //   Log::encodeRawBits(pixel.id),
-    //   encodeHighPrecision(pixel.voltageX * 0.320f),
-    //   encodeHighPrecision(pixel.voltageY * 0.320f),
-    //   Imager::transformVoltageZ(relativeZVoltage) * 0.320f,
-    //   Imager::transformCurrent(current));
+    Log::writeValuesWithFlags(
+      4, // flags
+      Log::encodeRawBits(pixel.id),
+      encodeHighPrecision(pixel.voltageX * 0.320f),
+      encodeHighPrecision(pixel.voltageY * 0.320f),
+      Imager::transformVoltageZ(relativeZVoltage) * 0.320f,
+      Imager::transformCurrent(current));
   }
 }

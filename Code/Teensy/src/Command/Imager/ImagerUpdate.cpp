@@ -206,10 +206,4 @@ void Imager::addPixel(uint32_t pixelID) {
   pixel.voltageZ = interpolate(previousZ, currentZ, progress);
 
   pixelBuffer.addPixel(pixel);
-
-  Serial.print(KilohertzLoop::iterationID);
-  Serial.print(" ");
-  Serial.print(pixelBuffer.latestCurrent * 1e12, 3);
-  Serial.print(" ");
-  Serial.println();
 }
