@@ -7,7 +7,7 @@ struct ImagingSettings {
   var pixelDimension: Float
   var polynomialPeakTime: Int
   
-  var dominantAxis: Int
+  var majorAxis: Int
   var centers: [SIMD2<Float>]
   
   var electronicTimeLag: Int // μs
@@ -47,7 +47,7 @@ struct ImagingSettings {
       }
       return output
     }
-    self.dominantAxis = Int(settingsLines[1].values[0])
+    self.majorAxis = Int(settingsLines[1].values[0])
     self.centers = createCenters()
     
     func convertTime(_ milliseconds: Float) -> Int {
@@ -87,7 +87,7 @@ struct ImagingSettings {
     position *= pixelDimension
     position -= 0.5 * Float(resolution) * pixelDimension
     
-    if dominantAxis == 1 {
+    if majorAxis == 1 {
       position = SIMD2(position.y, position.x)
     }
     
@@ -99,7 +99,7 @@ struct ImagingSettings {
     let rowID = pixelID / resolution
     let columnID = pixelID % resolution
     
-    if dominantAxis == 0 {
+    if majorAxis == 0 {
       return rowID * resolution + columnID
     } else {
       return columnID * resolution + rowID

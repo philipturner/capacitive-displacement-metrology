@@ -62,7 +62,7 @@ extension LineParser {
           "pixel dimension (nm)3",
           "polynomial peak time (μs)",
           
-          "dominant axis",
+          "major axis",
           "centers[0] - X (nm)",
           "centers[0] - Y (nm)",
           "centers[1] - X (nm)",

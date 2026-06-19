@@ -14,7 +14,7 @@ struct Imager {
   };
 
   struct Settings {
-    uint8_t dominantAxis = 0; // either 0 or 1
+    uint8_t majorAxis = 0; // either 0 or 1
     float2 centers[2] = {
       float2(), 
       float2(),
@@ -54,7 +54,7 @@ struct Imager {
 
 private:
   Mode mode;
-  uint32_t resolutionMajor;
+  uint32_t resolutionMajor; // "trueResolutionMajor" vs "resolutionMajor"
   uint32_t resolutionMinor;
   float pixelDimension; // units: nm
   uint32_t polynomialPeakTime;

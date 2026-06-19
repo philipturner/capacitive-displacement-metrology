@@ -35,6 +35,17 @@ struct Command {
     // ~FFF Hz scan wave, AAA nm peak to peak
     simpleScanning = 7,
 
+    // TODO: Change to generate rectangular images
+    // major axis, minor axis, size of major axis
+    //
+    // - This is important to maximally reject thermal drift interference while
+    //   getting high spatial resolution along one axis.
+    // - Scanned major and stored major resolutions are different, and must be
+    //   transmitted to the PC: thus, 3 pixel resolutions in total.
+    // - When major and minor resolutions differ, there are complications with
+    //   the Fourier transform. Handle these gracefully and resample the 
+    //   Fourier image to avoid distortions.
+    //
     // iRRR,SSS - single image
     // vRRR,SSS - repeating video at single spot
     // dRRR,SSS - dual; video alternating between two spots
@@ -42,7 +53,7 @@ struct Command {
     // RRRxRRR image, SSS nm width
     imaging = 8,
 
-    // aN - dominant scan axis, 0 = x, 1 = y
+    // aN - major axis, 0 = x, 1 = y
     // fN - set feedback time constant to N ms while scanning
     // lN - wait ~N μs for fixed time lag of electronics
     // oI,X,Y - center #I, position (X, Y) in nm

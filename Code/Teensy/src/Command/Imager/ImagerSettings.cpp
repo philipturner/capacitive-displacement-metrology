@@ -22,7 +22,7 @@ void Imager::updatePendingSettings(Command command) {
   switch (command.alphaCode) {
     case 'a': {
       uint8_t axisCode = command.attributes[0];
-      pendingSettings.dominantAxis = axisCode;
+      pendingSettings.majorAxis = axisCode;
       break;
     }
     case 'f': {
@@ -71,7 +71,7 @@ void Imager::forwardSettings() const {
 
   Log::writeValuesWithFlags(
     5, // flags
-    settings.dominantAxis,
+    settings.majorAxis,
     settings.centers[0].x,
     settings.centers[0].y,
     settings.centers[1].x,

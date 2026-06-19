@@ -68,7 +68,7 @@ float2 Imager::getPosition(float2 localPosition, uint32_t imageID) {
   output.x += -0.5f * float(resolutionMajor) * pixelDimension;
   output.y += -0.5f * float(resolutionMinor) * pixelDimension;
 
-  if (settings.dominantAxis == 1) {
+  if (settings.majorAxis == 1) {
     output = float2(output.y, output.x);
   }
 
