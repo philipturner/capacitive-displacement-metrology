@@ -1,6 +1,5 @@
 #include "Application.h"
 
-#include "Filter/Feedback.h"
 #include "IC/ADC.h"
 #include "IC/CDC.h"
 #include "IC/DAC.h"
@@ -10,7 +9,6 @@
 void Application::initialize() {
   setupSerial();
   setupSPI();
-  Feedback::notchFilter = NotchFilter(true);
   creepFilter = Creep::Filter(true);
 }
 

@@ -3,6 +3,10 @@
 #include "Filter/Feedback.h"
 #include <Arduino.h>
 
+void Emulation::updateSecondOrderFilter(float voltageZ) {
+  secondOrderFilter.update(voltageZ);
+}
+
 float getRelativeZ(float positionX, float positionY, float positionZ) {
   float predictedZ = Emulation::zeroPositionZ;
   predictedZ += Emulation::slopeX * positionX;
@@ -52,7 +56,8 @@ float getCorrugationAmplitude(float positionX, float positionY) {
   return accumulator / 3.0f;
 }
 
-float Emulation::getCurrent(float voltageX, float voltageY, float voltageZ) {
+float Emulation::getCurrent(float voltageX, float voltageY) {
+  float voltageZ = secondOrderFilter.getOutput();
   float positionX = voltageX * 0.320f;
   float positionY = voltageY * 0.320f;
   float positionZ = voltageZ * 0.320f;

@@ -2,12 +2,14 @@
 
 #include <stdint.h>
 
-struct NotchFilter {
-  static constexpr float resonanceFrequency = 1626;
-  static constexpr float Q = 1.0;
+struct BiquadFilter {
+  enum Type {
+    secondOrderLowpass = 0,
+    notch = 1,
+  };
   
-  NotchFilter();
-  NotchFilter(bool notDefaultConstructor);
+  BiquadFilter();
+  BiquadFilter(float resonanceFrequency, float Q, Type type);
   
   float getOutput() const;
 

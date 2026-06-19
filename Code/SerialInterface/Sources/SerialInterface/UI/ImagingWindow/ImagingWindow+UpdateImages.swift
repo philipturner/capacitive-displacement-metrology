@@ -149,6 +149,14 @@ extension ImagingWindow {
       let transform = settings.realSpaceTransform(channelID: columnID)
       imagePlot.imageItem.setTransform(transform)
       
+      // TODO: Final piece of functionality needed: Option to split the fully
+      // received current image into even and odd rows, overwriting the space
+      // for the incoming image. This is disallowed in dual video mode.
+      //
+      // Track the Fourier transform of left and right current images
+      // separately in this mode, and hide the label for the Fourier plot.
+      //
+      // Add gridlines for aligning offsets of individual atoms.
       func createLevels() -> SIMD2<Float> {
         if rowID == 0 {
           if Self.logScaleCurrentPlotting {
@@ -171,9 +179,9 @@ extension ImagingWindow {
           let maximum = statistics.maximum[rowID]
           let dz = maximum - minimum
           
-          if dz < 0.1 {
+          if dz < 0.01 {
             let center = (minimum + maximum) / 2
-            return SIMD2(center - 0.05, center + 0.05)
+            return SIMD2(center - 0.005, center + 0.005)
           } else {
             return SIMD2(minimum, maximum)
           }

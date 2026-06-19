@@ -8,10 +8,8 @@
 
 void ApplicationState::updateCurrent(bool useADC) {
   if (emulateCurrent) {
-    current = Emulation::getCurrent(
-      piezoXVoltage,
-      piezoYVoltage,
-      piezoZVoltage);
+    Emulation::updateSecondOrderFilter(piezoZVoltage);
+    current = Emulation::getCurrent(piezoXVoltage, piezoYVoltage);
   } else if (useADC) {
     auto conversion = ADC::readVoltage();
     current = -conversion.voltage / 1e9f;

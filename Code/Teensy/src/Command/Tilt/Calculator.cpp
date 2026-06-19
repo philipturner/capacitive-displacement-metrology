@@ -35,7 +35,6 @@ void Calculator::update() {
   uint32_t time = Application::state.getTimeSinceModeStart();
   uint32_t trialTime = getTimePerTrial();
   uint32_t resultTime = trialsPerResult * trialTime;
-  uint32_t resultID = time / resultTime;
   uint32_t timeInResult = time % resultTime;
   uint32_t timeInTrial = timeInResult % trialTime;
 
@@ -43,12 +42,12 @@ void Calculator::update() {
     float2 dz = pendingTrial.getDifference();
     float dxy = displacementSize / 0.320f;
     float2 slope = dz / dxy;
-
+    
     pendingResult.update(slope);
     pendingTrial = Trial();
   }
 
-  if (timeInResult == 0 && resultID > 0) {
+  if (timeInResult == 0 && time > 0) {
     float2 avg = pendingResult.mean;
     float2 stddev = pendingResult.getStddev();
     Log::writeValuesWithFlags(
@@ -61,6 +60,8 @@ void Calculator::update() {
     
     pendingResult = Result();
   }
+
+  updateForTrial(timeInTrial);
 
   Application::correctZVoltage();
 }
