@@ -23,8 +23,8 @@ Filter::Filter(bool notDefaultConstructor) {
 void Filter::forwardState() const {
   Log::writeValuesWithFlags(
     6, // flags
-    creepConstants.x * 100,
-    creepConstants.y * 100,
+    creepConstants.x * 100.0f,
+    creepConstants.y * 100.0f,
     futureAccumulatedDrift.x * 0.320f,
     futureAccumulatedDrift.y * 0.320f);
 }
@@ -53,7 +53,7 @@ void Filter::updateSettings(Command command) {
 void Filter::update(float2 stimulus) {
   // Responding to the DAC updates from the current iteration.
   Sample sample;
-  sample.dV = stimulus + previousStimulus * -1;
+  sample.dV = stimulus - previousStimulus;
   sample.trueTimeOffset = 0;
   sample.queueTime = timeOffset;
   previousStimulus = stimulus;
@@ -99,7 +99,7 @@ float2 Filter::shiftSampleTimes() {
 }
 
 void Filter::updateCreepRate(float2 accumulator) {
-  currentCreepRate = accumulator * creepConstants * (1 / M_LN10);
+  currentCreepRate = accumulator * creepConstants * float(1 / M_LN10);
 }
 
 void Filter::updateQueues() {

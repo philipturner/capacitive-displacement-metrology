@@ -7,10 +7,10 @@ bool Creep::Harmonics::isRoundTripSafe(uint32_t iterations) {
     return false;
   }
 
-  float power2 = log2(float(iterations));
-  float nearestPower2 = round(power2);
+  float power2 = log2f(float(iterations));
+  float nearestPower2 = roundf(power2);
   float difference = abs(power2 - nearestPower2);
-  if (difference < 0.10) {
+  if (difference < 0.10f) {
     return false;
   }
 
@@ -22,10 +22,10 @@ uint32_t Creep::Harmonics::nextSafeRoundTrip(uint32_t iterations) {
     return 9;
   }
 
-  float power2 = log2(float(iterations));
-  float nearestPower2 = round(power2);
+  float power2 = log2f(float(iterations));
+  float nearestPower2 = roundf(power2);
 
-  float output = exp2(nearestPower2 + 0.1);
-  output = ceil(output);
+  float output = exp2f(nearestPower2 + 0.1f);
+  output = ceilf(output);
   return uint32_t(output);
 }

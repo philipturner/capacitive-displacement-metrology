@@ -45,7 +45,9 @@ void Imager::update() {
   DAC::enableSafeWait = true;
 
   float2 dXY = currentVoltageXY - previousVoltageXY;
+  Feedback::timeConstant = settings.feedbackTimeConstant;
   Application::correctZVoltage(dXY);
+  Feedback::timeConstant = Feedback::defaultTimeConstant;
 
   if (continueImaging) {
     int32_t pixelID = getPixelID(timeInImage);

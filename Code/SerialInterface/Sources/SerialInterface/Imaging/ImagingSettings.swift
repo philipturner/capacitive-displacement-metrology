@@ -13,6 +13,7 @@ struct ImagingSettings {
   var electronicTimeLag: Int // μs
   var creepSettlingTime: Int // μs
   var imageTime: Int // μs
+  var feedbackTimeConstant: Int // μs
   var setpointCurrent: Float
   
   init(settingsLines: [LineParser.Line]) {
@@ -49,10 +50,16 @@ struct ImagingSettings {
     self.dominantAxis = Int(settingsLines[1].values[0])
     self.centers = createCenters()
     
+    func convertTime(_ milliseconds: Float) -> Int {
+      var microseconds = (milliseconds * 1000)
+      microseconds.round(.toNearestOrEven)
+      return Int(microseconds)
+    }
     self.electronicTimeLag = Int(settingsLines[2].values[0])
-    self.creepSettlingTime = Int(settingsLines[2].values[1] * 1000)
-    self.imageTime = Int(settingsLines[2].values[2] * 1000)
-    self.setpointCurrent = settingsLines[2].values[3]
+    self.creepSettlingTime = convertTime(settingsLines[2].values[1])
+    self.imageTime = convertTime(settingsLines[2].values[2])
+    self.feedbackTimeConstant = convertTime(settingsLines[2].values[3])
+    self.setpointCurrent = settingsLines[2].values[4]
   }
   
   var pixelsPerImage: Int {

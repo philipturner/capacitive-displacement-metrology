@@ -17,8 +17,8 @@ float getWeightedTime(Sample source1, Sample source2) {
 
   float magnitude1 = getMagnitude(source1);
   float magnitude2 = getMagnitude(source2);
-  if (magnitude1 + magnitude2 < 1e-6) {
-    return (relativeTime1 + relativeTime2) / 2;
+  if (magnitude1 + magnitude2 < 1e-6f) {
+    return (relativeTime1 + relativeTime2) / 2.0f;
   }
 
   float accumulator = 0;
@@ -34,7 +34,7 @@ Sample::Sample() {
 
 Sample::Sample(Sample source1, Sample source2) {
   dV = source1.dV + source2.dV;
-  queueTime = (source1.queueTime + source2.queueTime) / 2;
+  queueTime = (source1.queueTime + source2.queueTime) / 2.0f;
 
   trueTimeOffset = getWeightedTime(source1, source2);
   trueTimeOffset -= float(queueTime - source1.queueTime);

@@ -43,6 +43,7 @@ struct Command {
     imaging = 8,
 
     // aN - dominant scan axis, 0 = x, 1 = y
+    // fN - set feedback time constant to N ms while scanning
     // lN - wait ~N μs for fixed time lag of electronics
     // oI,X,Y - center #I, position (X, Y) in nm
     // r - reset to defaults

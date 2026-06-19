@@ -1,14 +1,28 @@
 #include "Emulation.h"
 
 #include "Filter/Feedback.h"
+#include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
 void Emulation::updateSecondOrderFilter(float voltageZ) {
   secondOrderFilter.update(voltageZ);
 }
 
+float getDriftOffset() {
+  uint32_t periodMicros = float(1e6 / Emulation::driftFrequency);
+  uint32_t periodIters = periodMicros / KilohertzLoop::period;
+
+  uint32_t phase = KilohertzLoop::iterationID % periodIters;
+  float phaseNormalized = float(phase) / float(periodIters);
+
+  float amplitude = Emulation::driftRate / (float(2 * M_PI) * Emulation::driftFrequency);
+  float amplitudeNormalized = sinf(phaseNormalized * float(2 * M_PI));
+  return amplitude * amplitudeNormalized;
+}
+
 float getRelativeZ(float positionX, float positionY, float positionZ) {
   float predictedZ = Emulation::zeroPositionZ;
+  predictedZ += getDriftOffset();
   predictedZ += Emulation::slopeX * positionX;
   predictedZ += Emulation::slopeY * positionY;
   return positionZ - predictedZ;
@@ -18,6 +32,11 @@ float getBaseCurrent(float relativePositionZ) {
   float distanceFromAtom = -relativePositionZ * 1e-9f; // units: m
   float k = 1.025e10f * sqrt(Feedback::tunnelingBarrierHeight);
   float kΔz = k * distanceFromAtom;
+  if (kΔz < 0) {
+    // HOPG elastic deformation causing apparent 0.01 V barrier height
+    // (2250 pm/decade) instead of expected 1.0 V (225 pm/decade).
+    kΔz /= 10;
+  }
   kΔz = min(kΔz, 13.0f);
   kΔz = max(kΔz, -13.0f);
 

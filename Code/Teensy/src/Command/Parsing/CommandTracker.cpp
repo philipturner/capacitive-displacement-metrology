@@ -3,6 +3,7 @@
 #include "Command/Parsing/CommandParsing.h"
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
+#include "Filter/Feedback.h"
 #include <Arduino.h>
 
 void extractInput(uint32_t& length) {
@@ -64,6 +65,7 @@ uint32_t getExpectedNumAttributes(Command command, uint32_t numAttributes) {
     case Command::Mode::imagingSettings: {
       switch (command.alphaCode) {
         case 'a': return 1;
+        case 'f': return 1;
         case 'l': return 1;
         case 'o': return 3;
         case 'r': return 0;
@@ -134,6 +136,15 @@ bool checkAttributes(Command command) {
           uint8_t axisCode = command.attributes[0];
           if (axisCode != 0 && axisCode != 1) {
             CommandTracker::throwError("Invalid axis code.");
+            return false;
+          }
+          break;
+        }
+        case 'f': {
+          float timeConstant = command.attributes[0];
+          float limit = float(Feedback::defaultTimeConstant) * 1e-3;
+          if (timeConstant < limit) {
+            CommandTracker::throwError("Invalid feedback time constant.");
             return false;
           }
           break;

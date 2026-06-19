@@ -2,6 +2,7 @@
 
 #include "Command/Imager/PixelBuffer.h"
 #include "Command/Parsing/Command.h"
+#include "Filter/Feedback.h"
 #include "Time/KilohertzLoop.h"
 #include "Util/Vector/Vector.h"
 
@@ -20,6 +21,7 @@ struct Imager {
     };
     uint32_t electronicTimeLag = 0; // μs
     uint32_t creepSettlingTime = 0; // μs
+    uint32_t feedbackTimeConstant = Feedback::defaultTimeConstant;
     
     Settings() { }
   };

@@ -25,6 +25,12 @@ void Imager::updatePendingSettings(Command command) {
       pendingSettings.dominantAxis = axisCode;
       break;
     }
+    case 'f': {
+      float timeConstantMillis = command.attributes[0];
+      uint32_t timeConstantMicros = ceil(timeConstantMillis * 1000);
+      pendingSettings.feedbackTimeConstant = timeConstantMicros;
+      break;
+    }
     case 'l': {
       uint32_t time = command.attributes[0];
       time = KilohertzLoopRound(time);
@@ -78,5 +84,6 @@ void Imager::forwardSettings() const {
     settings.electronicTimeLag,
     float(settings.creepSettlingTime) / 1000,
     float(getImageTime()) / 1000,
+    float(settings.feedbackTimeConstant) / 1000,
     Feedback::setpointCurrent * 1e12);
 }

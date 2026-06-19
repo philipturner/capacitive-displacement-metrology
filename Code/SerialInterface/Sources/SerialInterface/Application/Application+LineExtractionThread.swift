@@ -67,7 +67,7 @@ extension Application {
     func reset(error: LocalizedError) {
       lineParser = LineParser()
       Application.queue.sync {
-        ui.registerDataCorruptionError()
+        ui.registerDataCorruptionError(error)
       }
     }
     

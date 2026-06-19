@@ -71,13 +71,14 @@ extension LineParser {
           "electronic time lag (μs)",
           "creep setting time (ms)",
           "image time (ms)",
+          "feedback time constant (ms)",
           "setpoint current (pA)",
         ]
         
         var values: [Float] = []
         for lineID in imagingSettingsLines.indices {
           let line = imagingSettingsLines[lineID]
-          let laneCount = (lineID == 2) ? 4 : 5
+          let laneCount = 5
           
           for laneID in 0..<laneCount {
             let value = line.values[laneID]

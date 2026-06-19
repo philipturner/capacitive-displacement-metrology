@@ -10,8 +10,8 @@ struct Feedback {
   
   // suppresses f0 = 1400 Hz, Q = 17
   // suppresses f0 = 1458 Hz, Q = 68
-  static constexpr uint32_t integratorTimeLag = 500; // μs
-  static constexpr bool useNotchFilter = true;
+  static constexpr uint32_t defaultTimeConstant = 500; // μs
+  static inline uint32_t timeConstant = defaultTimeConstant;
   static inline BiquadFilter notchFilter = BiquadFilter(
     1626, 1.0, BiquadFilter::Type::notch);
 
