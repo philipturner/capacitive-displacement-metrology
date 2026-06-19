@@ -44,6 +44,13 @@ bool PixelBuffer::hasReadyPixel() const {
   }
 }
 
+float encodeHighPrecision(float scannerCoordinate) {
+  float normalized = (scannerCoordinate + 256.0f) / 512.0f;
+  float quantized = normalized * float(uint32_t(1 << 24));
+  quantized = rint(quantized);
+  return Log::encodeRawBits(uint32_t(quantized));
+}
+
 void PixelBuffer::flushReadyPixel() {
   Pixel pixel = pixels[startIndex % capacity];
   startIndex += 1;
@@ -62,8 +69,8 @@ void PixelBuffer::flushReadyPixel() {
     Log::writeValuesWithFlags(
       4, // flags
       Log::encodeRawBits(pixel.id),
-      pixel.voltageX * 0.320f,
-      pixel.voltageY * 0.320f,
+      encodeHighPrecision(pixel.voltageX * 0.320f),
+      encodeHighPrecision(pixel.voltageY * 0.320f),
       Imager::transformVoltageZ(relativeZVoltage) * 0.320f,
       Imager::transformCurrent(current));
   }

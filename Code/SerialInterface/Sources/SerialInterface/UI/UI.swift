@@ -27,7 +27,6 @@ class UI {
   func registerDataCorruptionError(_ error: LocalizedError) {
     if mode == .imaging {
       print("Encountered corrupted data while imaging mode was active.")
-      print(error.errorDescription ?? "nil")
       reset(modeCode: 1, settingsLines: [])
     } else {
       history = History(copying: history)

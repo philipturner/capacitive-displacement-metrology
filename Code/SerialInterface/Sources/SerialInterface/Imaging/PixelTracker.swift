@@ -60,7 +60,7 @@ struct PixelTracker {
         let expectedPosition = settings.expectedPosition(
           pixelID: pixelID,
           imageID: imageID)
-        let actualPosition = SIMD2(line.values[1], line.values[2])
+        let actualPosition = Self.decodePosition(line: line)
         let error = actualPosition - expectedPosition
         let errorMagnitude = (error * error).sum().squareRoot()
         
@@ -79,6 +79,19 @@ struct PixelTracker {
       dataBuffer[slotID] = data
       receivedPixelCount += 1
     }
+  }
+  
+  static func decodePosition(line: LineParser.Line) -> SIMD2<Float> {
+    let encoded = SIMD2<UInt32>(
+      line.values[1].bitPattern,
+      line.values[2].bitPattern)
+    let quantized = SIMD2<Float>(encoded &>> 8)
+    
+    var output = quantized
+    output /= Float(UInt32(1 << 24))
+    output *= 512
+    output -= 256
+    return output
   }
 }
 

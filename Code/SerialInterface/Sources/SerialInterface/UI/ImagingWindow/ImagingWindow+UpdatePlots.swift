@@ -173,8 +173,9 @@ extension ImagingWindow {
       if segmentID < segments.count {
         let segment = segments[segmentID]
         for line in segment {
-          x.append(line.values[1])
-          y.append(line.values[2])
+          let position = PixelTracker.decodePosition(line: line)
+          x.append(position[0])
+          y.append(position[1])
         }
       }
       
