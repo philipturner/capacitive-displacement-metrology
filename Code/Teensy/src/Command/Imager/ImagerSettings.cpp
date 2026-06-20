@@ -61,31 +61,31 @@ void Imager::updatePendingSettings(Command command) {
 }
 
 void Imager::forwardSettings() const {
-  Log::writeValuesWithFlags(
-    5, // flags
+  Log::write(
+    Log::Flags::imagingSettings,
     uint8_t(mode),
     _trueResolutionMajor,
     _resolutionMajor,
     _resolutionMinor,
     pixelDimension);
 
-  Log::writeValuesWithFlags(
-    5, // flags
+  Log::write(
+    Log::Flags::imagingSettings,
     settings.majorAxis,
     settings.centers[0].x,
     settings.centers[0].y,
     settings.centers[1].x,
     settings.centers[1].y);
 
-  Log::writeValuesWithFlags(
-    5, // flags
+  Log::write(
+    Log::Flags::imagingSettings,
     polynomialPeakTime,
     settings.electronicTimeLag,
     float(settings.creepSettlingTime) / 1000,
     float(getImageTime()) / 1000,
     float(settings.feedbackTimeConstant) / 1000);
   
-  Log::writeValuesWithFlags(
-    5, // flags
+  Log::write(
+    Log::Flags::imagingSettings,
     Imager::transformCurrent(Feedback::setpointCurrent * 1e12));
 }

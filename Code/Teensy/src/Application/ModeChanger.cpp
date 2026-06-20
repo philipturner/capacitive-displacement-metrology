@@ -115,19 +115,19 @@ void ModeChanger::end() const {
       break;
   }
 
-  Log::writeValuesWithFlags(
-    1, // flags
+  Log::write(
+    Log::Flags::modeChange,
     float(Application::mode));
 }
 
-void ModeChanger::forceModeChange() const {
+void ModeChanger::forceModeChange() {
   modeChangeCommon(Command::Mode::tipApproach);
 
   auto state = TipApproacher::rangeRestorationState();
   Application::tipApproacher = TipApproacher(state, true);
 
-  Log::writeValuesWithFlags(
-    1, // flags
+  Log::write(
+    Log::Flags::modeChange,
     float(Command::Mode::tipApproach),
-    float(1));
+    1);
 }

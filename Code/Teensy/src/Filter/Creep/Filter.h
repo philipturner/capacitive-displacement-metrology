@@ -6,11 +6,6 @@
 
 namespace Creep {
   struct Filter {
-    // TODO: Make creepConstants 'static inline' and make the forwardSettings()
-    // command 'static'.
-    //
-    // Change to a dedicated 'Settings' type
-    float2 creepConstants = float2(0);
     float2 previousStimulus = float2(0);
     float2 currentCreepRate = float2(0);
     float2 futureAccumulatedDrift = float2(0);
@@ -21,8 +16,6 @@ namespace Creep {
     
     Filter();
     Filter(bool notDefaultConstructor);
-    void forwardSettings() const;
-    void updateSettings(Command command);
     void update(float2 stimulus);
 
   private:

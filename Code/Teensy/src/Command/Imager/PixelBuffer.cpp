@@ -75,8 +75,8 @@ void PixelBuffer::flushReadyPixel(uint32_t timeLag) {
   float current = interpolate(laggedCurrent, latestCurrent, weight);
   
   if (!ErrorMessage::hasError()) {
-    Log::writeValuesWithFlags(
-      4, // flags
+    Log::write(
+      Log::Flags::imaging,
       Log::encodeRawBits(pixel.id),
       encodeHighPrecision(pixel.voltageX * 0.320f),
       encodeHighPrecision(pixel.voltageY * 0.320f),

@@ -77,10 +77,7 @@ struct Command {
   };
 
   bool isValid = true;
-  
   Mode mode = Mode::idle;
-
   char alphaCode = 0;
-  
   float attributes[10];
 };

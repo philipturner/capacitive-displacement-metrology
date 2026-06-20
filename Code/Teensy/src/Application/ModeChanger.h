@@ -11,7 +11,7 @@ struct ModeChanger {
   void update(bool &useADC) const;
   void end() const;
 
-  void forceModeChange() const;
+  static void forceModeChange();
 
 private:
   Command command;

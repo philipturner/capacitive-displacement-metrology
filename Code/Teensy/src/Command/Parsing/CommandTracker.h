@@ -21,6 +21,11 @@ struct CommandTracker {
   // This is for the fast loop to invoke.
   static bool nextCommand(Command &nextCommand);
 
+  static void bounceError(
+    const char *reason,
+    int32_t number1 = 0,
+    int32_t number2 = 0);
+
   static void throwError(
     const char *reason,
     int32_t number1 = 0,

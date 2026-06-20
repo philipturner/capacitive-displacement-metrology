@@ -84,8 +84,8 @@ void KilohertzLoop::_kilohertzLoopBodyInner() {
         uint32_t relativeIterationID = iterationID;
         relativeIterationID -= Application::state.modeStartIterationID;
         
-        Log::writeValuesWithFlags(
-          7, // flags
+        Log::write(
+          Log::Flags::kilohertzLoopWarning,
           Log::encodeRawBits(latestTimestamp.lowerHalf),
           Log::encodeRawBits(iterationID),
           Log::encodeRawBits(relativeIterationID),

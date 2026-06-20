@@ -6,14 +6,16 @@ struct Log {
   enum class Flags: uint8_t {
     modeChange = 0,
     kilohertzLoopWarning = 1,
-    history = 2,
-    historyDiscard = 3,
-    spectroscopy = 4,
-    imaging = 5,
-    imagingSettings = 6,
-    creepSettings = 7,
-    tiltCalculation = 8,
-    tiltSettings = 9,
+    invalidCommand = 2,
+
+    history = 10,
+    historyDiscard = 11,
+    spectroscopy = 12,
+    imaging = 13,
+    imagingSettings = 14,
+    creepSettings = 15,
+    tiltCalculation = 16,
+    tiltSettings = 17,
   };
 
   static constexpr uint32_t logPeriod = KilohertzLoopRound(80);

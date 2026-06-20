@@ -48,8 +48,8 @@ void Calculator::update() {
     if (timeInResult == 0 && time > 0) {
       float2 avg = pendingResult.mean;
       float2 stddev = pendingResult.getStddev();
-      Log::writeValuesWithFlags(
-        9, // flags
+      Log::write(
+        Log::Flags::tiltCalculation,
         avg.x,
         avg.y,
         stddev.x,

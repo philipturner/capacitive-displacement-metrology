@@ -2,14 +2,16 @@ extension LineParser {
   enum Flags: UInt8, CaseIterable {
     case modeChange = 0
     case kilohertzLoopWarning = 1
-    case history = 2
-    case historyDiscard = 3
-    case spectroscopy = 4
-    case imaging = 5
-    case imagingSettings = 6
-    case creepSettings = 7
-    case tiltCalculation = 8
-    case tiltSettings = 9
+    case invalidCommand = 2
+    
+    case history = 10
+    case historyDiscard = 11
+    case spectroscopy = 12
+    case imaging = 13
+    case imagingSettings = 14
+    case creepSettings = 15
+    case tiltCalculation = 16
+    case tiltSettings = 17
   }
   
   struct Splitting {
@@ -131,7 +133,7 @@ extension LineParser {
       for line in self[.newMode] {
         let modeCode = Int(line.values[0])
         if line.values[1] == 1 {
-          print("Forced mode change to \(modeCode)")
+          print("forced mode change to \(modeCode)")
         }
       }
       
@@ -152,10 +154,6 @@ extension LineParser {
         
         print()
       }
-      
-      // flush pending error lines when the first \0 is received
-      // use blue text and [ERROR] for every newline-separated
-      // line of the error message
     }
   }
   

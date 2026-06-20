@@ -4,6 +4,7 @@
 #include "Command/Tilt/Settings.h"
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
+#include "Filter/Creep/Settings.h"
 #include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
@@ -37,13 +38,13 @@ void loop() {
 ModeChanger modeChanger;
 
 void kilohertzLoop() {
-  if (KilohertzLoop::iterationID == modeChanger.transitionEnd) {
-    
-  } else if (KilohertzLoop::iterationID > modeChanger.transitionEnd) {
+  if (KilohertzLoop::iterationID == modeChanger.endIteration) {
+    modeChanger.end();
+  } else if (KilohertzLoop::iterationID > modeChanger.endIteration) {
     Command command;
     if (CommandTracker::nextCommand(command)) {
       if (!command.isValid) {
-        // Forward input error.
+        Log::write(Log::Flags::invalidCommand);
       } else if (command.mode == Command::Mode::imagingSettings) {
         Imager::updatePendingSettings(command);
       } else if (command.mode == Command::Mode::creepSettings) {
@@ -53,47 +54,51 @@ void kilohertzLoop() {
         Tilt::Settings::update(command);
         Tilt::Settings::forward();
       } else {
-        
+        modeChanger.start(command);
       }
     } else if (TipApproacher::modeShouldChange()) {
-      TipApproacher::forceModeChange();
+      ModeChanger::forceModeChange();
     }
   }
 
   bool useADC = true;
-  if (KilohertzLoop::iterationID < modeChangeEnd) {
-    
+  if (KilohertzLoop::iterationID < modeChanger.endIteration) {
+    modeChanger.update(useADC);
   } else {
     switch (Application::mode) {
-
-    }
-    if (Application::mode == Command::Mode::dacTest) {
-      Application::dacTester.update();
-    }
-    if (Application::mode == Command::Mode::capacitanceReporting) {
-      Application::updateCapacitanceTracker(/*regenerate=*/true);
-    }
-    if (Application::mode == Command::Mode::blindStepping) {
-      Application::blindStepper.update();
-    }
-    if (Application::mode == Command::Mode::tipApproach) {
-      Application::tipApproacher.update();
-    }
-    if (Application::mode == Command::Mode::idleFeedback) {
-      Application::setBiasForFeedback();
-      Application::correctZVoltage();
-    }
-    if (Application::mode == Command::Mode::spectroscopy) {
-      Application::spectroscopy.update();
-    }
-    if (Application::mode == Command::Mode::simpleScanning) {
-      Application::simpleScanner.update();      
-    }
-    if (Application::mode == Command::Mode::imaging) {
-      Application::imager.update();
-    }
-    if (Application::mode == Command::Mode::tilt) {
-      Application::tiltCalculator.update();
+      case Command::Mode::idle:
+        break;
+      case Command::Mode::dacTest:
+        Application::dacTester.update();
+        break;
+      case Command::Mode::capacitanceReporting:
+        Application::updateCapacitanceTracker(/*regenerate=*/true);
+        break;
+      case Command::Mode::blindStepping:
+        Application::blindStepper.update();
+        break;
+      case Command::Mode::tipApproach:
+        Application::tipApproacher.update();
+        break;
+      case Command::Mode::idleFeedback:
+        Application::correctZVoltage();
+        break;
+      case Command::Mode::spectroscopy:
+        Application::spectroscopy.update();
+        break;
+      case Command::Mode::simpleScanning:
+        Application::simpleScanner.update();
+        break;
+      case Command::Mode::imaging:
+        Application::imager.update();
+        break;
+      case Command::Mode::tiltCalculation:
+        Application::tiltCalculator.update();
+        break;
+      default:
+        Serial.println("Unexpected mode.");
+        exit(0);
+        break;
     }
   }
 
@@ -108,7 +113,7 @@ void kilohertzLoop() {
   if (!ErrorMessage::hasError()) {
     uint32_t iterationsPerLog = Log::logPeriod / KilohertzLoop::period;
     if (KilohertzLoop::iterationID % iterationsPerLog == 0) {
-      Application::logNormalMessage();
+      Application::logHistoryMessage();
     }
   }
 

@@ -32,7 +32,7 @@ bool CommandParsing::parseModeCode(
   if (isDigit(CommandTracker::buffer[0])) {
     remainderOffset += 1;
   } else {
-    CommandTracker::throwError("First character not digit.");
+    CommandTracker::bounceError("First character not digit.");
     return false;
   }
 
@@ -46,7 +46,7 @@ bool CommandParsing::parseModeCode(
     accumulator = accumulator * 10 + digit;
   }
   if (accumulator >= uint8_t(Command::Mode::NUM_MODES)) {
-    CommandTracker::throwError("Invalid mode code.");
+    CommandTracker::bounceError("Invalid mode code.");
     return false;
   }
   modeCode = accumulator;
@@ -70,11 +70,13 @@ bool CommandParsing::checkAlphaCode(Command command) {
     cString = "aflors";
   } else if (command.mode == Command::Mode::creepSettings) {
     cString = "cxy";
-  } else if (command.mode == Command::Mode::tilt) {
-    cString = "ct";
+  } else if (command.mode == Command::Mode::tiltCalculation) {
+    cString = "co";
+  } else if (command.mode == Command::Mode::tiltSettings) {
+    cString = "t";
   } else {
     if (command.alphaCode != 0) {
-      CommandTracker::throwError("There should be no alpha code.");
+      CommandTracker::bounceError("There should be no alpha code.");
       return false;
     }
     return true;
@@ -89,7 +91,7 @@ bool CommandParsing::checkAlphaCode(Command command) {
     }
   }
 
-  CommandTracker::throwError("Invalid alphabetic code.");
+  CommandTracker::bounceError("Invalid alphabetic code.");
   return false;
 }
 
@@ -115,14 +117,14 @@ bool CommandParsing::parseAttributes(
   for (uint32_t i = 0; i <= stringLength; ++i) {
     if (stringBuffer[i] == ',' || i == stringLength) {
       if (!number.digitSeen) {
-        CommandTracker::throwError("No digits in number.");
+        CommandTracker::bounceError("No digits in number.");
         return false;
       }
 
       float fraction = number.decimalNumerator;
       fraction /= float(number.decimalDenominator);
       if (fraction < -1 || fraction > 1) {
-        CommandTracker::throwError("Failed to decode fraction correctly.");
+        CommandTracker::bounceError("Failed to decode fraction correctly.");
         return false;
       }
 
@@ -139,13 +141,13 @@ bool CommandParsing::parseAttributes(
 
     if (stringBuffer[i] == '-') {
       if (number.signSeen || number.decimalSeen || number.digitSeen) {
-        CommandTracker::throwError("Invalid sign.");
+        CommandTracker::bounceError("Invalid sign.");
         return false;
       }
       number.signSeen = true;
     } else if (stringBuffer[i] == '.') {
       if (number.decimalSeen) {
-        CommandTracker::throwError("Invalid decimal.");
+        CommandTracker::bounceError("Invalid decimal.");
         return false;
       }
       number.decimalSeen = true;
@@ -159,8 +161,7 @@ bool CommandParsing::parseAttributes(
       }
       number.digitSeen = true;
     } else {
-      CommandTracker::throwError(
-        "Unexpected character type.", i, stringBuffer[i]);
+      CommandTracker::bounceError("Unexpected character type.");
       return false;
     }
   }

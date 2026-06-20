@@ -76,11 +76,14 @@ uint32_t getExpectedNumAttributes(Command command, uint32_t numAttributes) {
     case Command::Mode::creepSettings: {
       return 1;
     }
-    case Command::Mode::tilt: {
+    case Command::Mode::tiltCalculation: {
       switch (command.alphaCode) {
         case 'c': return 2;
-        case 't': return 2;
+        case 'o': return 4;
       }
+    }
+    case Command::Mode::tiltSettings: {
+      return 2;
     }
     default: {
       return 0;
@@ -92,13 +95,13 @@ bool checkAttributes(Command command) {
   switch (command.mode) {
     case Command::Mode::blindStepping: {
       if (command.attributes[0] < 0) {
-        CommandTracker::throwError("Invalid step count.");
+        CommandTracker::bounceError("Invalid step count.");
         return false;
       }
       if (command.alphaCode == 'c') {
         float capacitance = command.attributes[1];
         if (capacitance <= 0) {
-          CommandTracker::throwError("Invalid capacitance.");
+          CommandTracker::bounceError("Invalid capacitance.");
           return false;
         }
       }
@@ -107,7 +110,7 @@ bool checkAttributes(Command command) {
     case Command::Mode::simpleScanning: {
       float frequency = command.attributes[0];
       if (frequency <= 0) {
-        CommandTracker::throwError("Invalid frequency.");
+        CommandTracker::bounceError("Invalid frequency.");
         return false;
       }
       break;
@@ -115,13 +118,13 @@ bool checkAttributes(Command command) {
     case Command::Mode::imaging: {
       uint32_t resolution = command.attributes[0];
       if (resolution == 0 || resolution > 1024 || (resolution % 2 != 0)) {
-        CommandTracker::throwError("Invalid resolution.");
+        CommandTracker::bounceError("Invalid resolution.");
         return false;
       }
 
       float size = command.attributes[1];
       if (size <= 0 || size > 270) {
-        CommandTracker::throwError("Invalid image size.");
+        CommandTracker::bounceError("Invalid image size.");
         return false;
       }
 
@@ -132,7 +135,7 @@ bool checkAttributes(Command command) {
         case 'a': {
           uint8_t axisCode = command.attributes[0];
           if (axisCode != 0 && axisCode != 1) {
-            CommandTracker::throwError("Invalid axis code.");
+            CommandTracker::bounceError("Invalid axis code.");
             return false;
           }
           break;
@@ -141,7 +144,7 @@ bool checkAttributes(Command command) {
           float timeConstant = command.attributes[0];
           float limit = float(Feedback::defaultTimeConstant) * 1e-3;
           if (timeConstant < limit) {
-            CommandTracker::throwError("Invalid feedback time constant.");
+            CommandTracker::bounceError("Invalid feedback time constant.");
             return false;
           }
           break;
@@ -149,7 +152,7 @@ bool checkAttributes(Command command) {
         case 'o': {
           uint8_t centerID = command.attributes[0];
           if (centerID != 0 && centerID != 1) {
-            CommandTracker::throwError("Invalid center ID.");
+            CommandTracker::bounceError("Invalid center ID.");
             return false;
           }
           break;
@@ -158,7 +161,7 @@ bool checkAttributes(Command command) {
         case 's': {
           float time = command.attributes[0];
           if (time < 0) {
-            CommandTracker::throwError("Invalid time.");
+            CommandTracker::bounceError("Invalid time.");
             return false;
           }
           break;
@@ -166,33 +169,28 @@ bool checkAttributes(Command command) {
       }
       break;
     }
-    case Command::Mode::tilt: {
-      switch (command.alphaCode) {
-        case 'c': {
-          float displacement = command.attributes[0];
-          if (abs(displacement) < 0.1 || abs(displacement) > 135) {
-            CommandTracker::throwError("Invalid displacement.");
-            return false;
-          }
+    case Command::Mode::tiltCalculation: {
+      float displacement = command.attributes[0];
+      if (abs(displacement) < 0.1 || abs(displacement) > 135) {
+        CommandTracker::bounceError("Invalid displacement.");
+        return false;
+      }
 
-          float millisecondsPerDisplacement = command.attributes[1];
-          if (millisecondsPerDisplacement < 2) {
-            CommandTracker::throwError("Invalid time.");
-            return false;
-          }
+      float millisecondsPerDisplacement = command.attributes[1];
+      if (millisecondsPerDisplacement < 2) {
+        CommandTracker::bounceError("Invalid time.");
+        return false;
+      }
 
-          break;
-        }
-        case 't': {
-          float dzdx = command.attributes[0];
-          float dzdy = command.attributes[1];
-          float greatestMagnitude = max(abs(dzdx), abs(dzdy));
-          if (greatestMagnitude > 0.5) {
-            CommandTracker::throwError("Invalid slope.");
-            return false;
-          }
-          break;
-        }
+      break;
+    }
+    case Command::Mode::tiltSettings: {
+      float dzdx = command.attributes[0];
+      float dzdy = command.attributes[1];
+      float greatestMagnitude = max(abs(dzdx), abs(dzdy));
+      if (greatestMagnitude > 0.5) {
+        CommandTracker::bounceError("Invalid slope.");
+        return false;
       }
       break;
     }
@@ -209,8 +207,8 @@ void CommandTracker::processSerialInput() {
   uint32_t length = 0;
   extractInput(length);
   if (length >= 50) {
-    Serial.println("Command tracker was overloaded with input commands.");
-    exit(0);
+    throwError("Command tracker was overloaded with input commands.");
+    return;
   }
   if (length == 0) {
     return;
@@ -260,7 +258,7 @@ void CommandTracker::processSerialInput() {
   uint32_t expectedNumAttributes = getExpectedNumAttributes(
     command, numAttributes);
   if (numAttributes != expectedNumAttributes) {
-    CommandTracker::throwError(
+    CommandTracker::bounceError(
       "Unexpected number of attributes.",
       numAttributes,
       expectedNumAttributes);
@@ -272,11 +270,8 @@ void CommandTracker::processSerialInput() {
 
   // Register the new command.
   lock = true;
-  bool registerCommandWorked = registerCommand(command);
+  registerCommand(command);
   lock = false;
-  if (!registerCommandWorked) {
-    return;
-  }
 }
 
 bool CommandTracker::registerCommand(Command command) {
@@ -305,6 +300,20 @@ bool CommandTracker::nextCommand(Command &nextCommand) {
   nextCommand = latestCommand;
   acknowledgedCommandID += 1;
   return true;
+}
+
+void CommandTracker::bounceError(
+  const char *reason,
+  int32_t number1,
+  int32_t number2
+) {
+  Command command;
+  command.isValid = false;
+
+  // Register the new command.
+  lock = true;
+  registerCommand(command);
+  lock = false;
 }
 
 void CommandTracker::throwError(

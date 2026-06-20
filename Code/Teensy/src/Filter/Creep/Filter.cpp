@@ -20,30 +20,6 @@ Filter::Filter(bool notDefaultConstructor) {
   lookupTable = LookupTable(true);
 }
 
-void Filter::forwardSettings() const {
-  Log::writeValuesWithFlags(
-    6, // flags
-    creepConstants.x * 100.0f,
-    creepConstants.y * 100.0f);
-}
-
-void Filter::updateSettings(Command command) {
-  switch (command.alphaCode) {
-    case 'c': {
-      creepConstants = float2(command.attributes[0]);
-      break;
-    }
-    case 'x': {
-      creepConstants.x = command.attributes[0];
-      break;
-    }
-    case 'y': {
-      creepConstants.y = command.attributes[0];
-      break;
-    }
-  }
-}
-
 void Filter::update(float2 stimulus) {
   // Responding to the DAC updates from the current iteration.
   Sample sample;
