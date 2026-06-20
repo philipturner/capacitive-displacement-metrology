@@ -57,10 +57,7 @@ extension LineParser.Splitting {
         }
       }
       
-      print()
-      print("imaging settings:")
-      Self.displayTabulated(labels: labels, values: values)
-      print()
+      Self.displaySettings(labels: labels, values: values)
     }
     
     for line in self[.creepSettings] {
@@ -74,10 +71,7 @@ extension LineParser.Splitting {
         line.values[1],
       ]
       
-      print()
-      print("creep settings:")
-      Self.displayTabulated(labels: labels, values: values)
-      print()
+      Self.displaySettings(labels: labels, values: values)
     }
     
     for line in self[.tiltSettings] {
@@ -91,10 +85,7 @@ extension LineParser.Splitting {
         line.values[1]
       ]
       
-      print()
-      print("tilt settings:")
-      Self.displayTabulated(labels: labels, values: values)
-      print()
+      Self.displaySettings(labels: labels, values: values)
     }
     
     // warnings and errors
@@ -128,7 +119,7 @@ extension LineParser.Splitting {
       print()
     }
     
-    for line in self[.invalidCommand] {
+    for _ in self[.invalidCommand] {
       print(EscapeCodeFormat.red.apply(to: "[ERROR]"), terminator: " ")
       print("invalid command", terminator: " ")
       print()
@@ -175,7 +166,7 @@ extension LineParser.Splitting {
     print(output)
   }
   
-  static func displayTabulated(
+  static func displaySettings(
     labels: [String],
     values: [Float]
   ) {
@@ -243,6 +234,7 @@ extension LineParser.Splitting {
     for rowID in parsedLabels.indices {
       if rowID % 5 == 0 && rowID != 0 {
         var separatorLine = ""
+        separatorLine += String(repeating: " ", count: "[Settings] ".count)
         separatorLine += String(repeating: " ", count: columnWidths[0])
         separatorLine += " | "
         separatorLine += String(repeating: " ", count: columnWidths[1])
@@ -257,6 +249,8 @@ extension LineParser.Splitting {
       
       func createString() -> String {
         var output = ""
+        output += EscapeCodeFormat.cyan.apply(to: "[Settings]")
+        output += " "
         output += parsedLabel.repr
         output += String(repeating: " ", count: labelPaddingSize)
         output += " | "
@@ -266,5 +260,6 @@ extension LineParser.Splitting {
       }
       print(createString())
     }
+    print()
   }
 }

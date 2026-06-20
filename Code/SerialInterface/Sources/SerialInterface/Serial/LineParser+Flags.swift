@@ -1,5 +1,5 @@
 extension LineParser {
-  enum Flags: UInt8, CaseIterable {
+  enum Flags: UInt8 {
     case modeChange = 0
     case kilohertzLoopWarning = 1
     case invalidCommand = 2
@@ -12,5 +12,5 @@ extension LineParser {
     case creepSettings = 15
     case tiltCalculation = 16
     case tiltSettings = 17
-  }  
+  }
 }

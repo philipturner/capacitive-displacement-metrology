@@ -5,8 +5,7 @@ extension LineParser {
     
     init() {
       let element = [Line]()
-      let count = Flags.allCases.count
-      data = Array(repeating: element, count: count)
+      data = Array(repeating: element, count: 100)
     }
     
     subscript(index: Flags) -> [Line] {

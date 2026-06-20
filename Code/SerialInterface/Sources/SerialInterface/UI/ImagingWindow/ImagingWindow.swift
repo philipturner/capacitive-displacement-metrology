@@ -7,7 +7,7 @@ class ImagingWindow {
     case splitCurrent
     case splitHeight
   }
-  static let auxiliaryImageType: AuxiliaryImageType = .splitCurrent
+  static let auxiliaryImageType: AuxiliaryImageType = .incoming
   
   enum DualImageType {
     case allLines
@@ -15,6 +15,8 @@ class ImagingWindow {
     case odd
   }
   static let dualImageType: DualImageType = .even
+  
+  static let useZeroPaddedFourierImage: Bool = false
   
   static let trajectoryLagTime: Double? = 0.1
   

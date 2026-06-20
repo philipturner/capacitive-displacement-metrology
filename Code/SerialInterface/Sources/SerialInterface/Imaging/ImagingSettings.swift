@@ -70,12 +70,6 @@ struct ImagingSettings {
     _resolutionMajor * _resolutionMinor
   }
   
-  var resolutionVector: SIMD2<Float> {
-    SIMD2(
-      Float(_resolutionMajor),
-      Float(_resolutionMinor))
-  }
-  
   func center(channelID: Int) -> SIMD2<Float> {
     guard channelID >= 0, channelID < 2 else {
       fatalError("Invalid channel ID.")
@@ -91,6 +85,9 @@ struct ImagingSettings {
   func expectedPosition(pixelID: Int, imageID: Int) -> SIMD2<Float> {
     let rowID = pixelID / _resolutionMajor
     let columnID = pixelID % _resolutionMajor
+    let resolutionVector = SIMD2(
+      Float(_resolutionMajor),
+      Float(_resolutionMinor))
     
     var position = SIMD2(Float(columnID), Float(rowID))
     position += 0.5
@@ -111,7 +108,7 @@ extension ImagingSettings {
   // images have the same spatial footprint as square images.
   func realSpaceTransform(channelID: Int) -> PythonObject {
     var offset: SIMD2<Float> = .zero
-    offset -= 0.5 * resolutionVector * pixelDimension
+    offset -= 0.5 * Float(_resolutionMajor) * pixelDimension
     offset += center(channelID: channelID)
     offset /= pixelDimension
     
@@ -119,36 +116,45 @@ extension ImagingSettings {
     transform.scale(pixelDimension, pixelDimension)
     transform.translate(offset.x, offset.y)
     
-    // not yet; this is surely incorrect
-//    if majorAxis == 1 {
-//      transform.setMatrix(
-//        0, 1, 0,
-//        1, 0, 1,
-//        0, 0, 1)
-//    }
-    
     return transform
   }
   
   func fourierSpaceTransform() -> PythonObject {
-    let fourierPixelDimension = (1 / pixelDimension) / resolutionVector
-    
-    var offset: SIMD2<Float> = .zero
-    offset -= 0.5 * resolutionVector * fourierPixelDimension
-    offset /= fourierPixelDimension
-    
-    let transform = QtGui.QTransform()
-    transform.scale(fourierPixelDimension.x, fourierPixelDimension.y)
-    transform.translate(offset.x, offset.y)
-    
-    // not yet; this is surely incorrect
-//    if majorAxis == 1 {
-//      transform.setMatrix(
-//        0, 1, 0,
-//        1, 0, 1,
-//        0, 0, 1)
-//    }
-    
-    return transform
+    if ImagingWindow.useZeroPaddedFourierImage {
+      let fourierPixelDimension = (1 / pixelDimension) / Float(_resolutionMajor)
+      
+      var offset: SIMD2<Float> = .zero
+      offset -= 0.5 * Float(_resolutionMajor) * fourierPixelDimension
+      offset /= fourierPixelDimension
+      
+      let transform = QtGui.QTransform()
+      transform.scale(fourierPixelDimension, fourierPixelDimension)
+      transform.translate(offset.x, offset.y)
+      return transform
+    } else {
+      func createResolutionVector() -> SIMD2<Float> {
+        if majorAxis == 0 {
+          return SIMD2(
+            Float(_resolutionMajor),
+            Float(_resolutionMinor))
+        } else {
+          return SIMD2(
+            Float(_resolutionMinor),
+            Float(_resolutionMajor))
+        }
+      }
+      
+      let resolutionVector = createResolutionVector()
+      let fourierPixelDimension = (1 / pixelDimension) / resolutionVector
+      
+      var offset: SIMD2<Float> = .zero
+      offset -= 0.5 * resolutionVector * fourierPixelDimension
+      offset /= fourierPixelDimension
+      
+      let transform = QtGui.QTransform()
+      transform.scale(fourierPixelDimension.x, fourierPixelDimension.y)
+      transform.translate(offset.x, offset.y)
+      return transform
+    }
   }
 }

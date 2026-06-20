@@ -98,7 +98,8 @@ struct History {
     }
     
     for line in input {
-      guard line.flags == 0 else {
+      let expectedCode = LineParser.Flags.history.rawValue
+      guard line.flags == expectedCode else {
         fatalError("This should never happen.")
       }
       

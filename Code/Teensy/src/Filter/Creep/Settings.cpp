@@ -23,7 +23,7 @@ void Settings::update(Command command) {
 
 void Settings::forward() {
   Log::write(
-    Log::Flags::tiltSettings,
+    Log::Flags::creepSettings,
     creepConstants.x * 100.0f,
     creepConstants.y * 100.0f);
 }
