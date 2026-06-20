@@ -49,6 +49,7 @@ namespace Tilt {
     // This is optimized for feedback with 500 μs integrator lag time.
     static constexpr uint32_t settleTime = KilohertzLoopRound(2000);
     static constexpr uint32_t paddingTime = KilohertzLoopRound(50);
+    static constexpr uint32_t stopTime = 5000000;
     static constexpr float reportPeriodSeconds = 1.0;
 
     Calculator();
@@ -60,6 +61,7 @@ namespace Tilt {
     float displacementSize;
     uint32_t movementTime;
     uint32_t trialsPerResult;
+    bool isFinished = false;
 
     Trial pendingTrial = Trial();
     Result pendingResult = Result();

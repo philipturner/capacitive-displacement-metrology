@@ -1,15 +1,19 @@
 extension LineParser {
+  // TODO: Create an enumeration for flags in the Teensy code, making it easier
+  // to refactor and manage.
   enum Flags: UInt8, CaseIterable {
     case history = 0
     case newMode = 1
     case spectroscopy = 2
-    case discard = 3
+    case historyDiscard = 3
     case pixel = 4
     case imagingSettings = 5
     case creepSettings = 6
     case kilohertzLoop = 7
-    case tiltSettings = 8
-    case tilt = 9
+    case tilt = 8 // <- these just swapped places
+    case tiltSettings = 9 // <- these just swapped places
+    // error = 10
+    // errorDiscarded = 11
   }
   
   struct Splitting {
@@ -57,10 +61,10 @@ extension LineParser {
         
         let labels: [String] = [
           "mode",
+          "true resolution major (px)",
           "resolution major (px)",
           "resolution minor (px)",
           "pixel dimension (nm)3",
-          "polynomial peak time (μs)",
           
           "major axis",
           "centers[0] - X (nm)",
@@ -68,17 +72,19 @@ extension LineParser {
           "centers[1] - X (nm)",
           "centers[1] - Y (nm)",
           
+          "polynomial peak time (μs)",
           "electronic time lag (μs)",
           "creep setting time (ms)",
           "image time (ms)",
           "feedback time constant (ms)",
+          
           "setpoint current (pA)",
         ]
         
         var values: [Float] = []
         for lineID in imagingSettingsLines.indices {
           let line = imagingSettingsLines[lineID]
-          let laneCount = 5
+          let laneCount = (lineID == 3) ? 1 : 5
           
           for laneID in 0..<laneCount {
             let value = line.values[laneID]
@@ -96,15 +102,11 @@ extension LineParser {
         let labels: [String] = [
           "creep constants - X (%/decade)2",
           "creep constants - Y (%/decade)2",
-          "drift - X (nm)",
-          "drift - Y (nm)",
         ]
         
         let values: [Float] = [
           line.values[0],
           line.values[1],
-          line.values[2],
-          line.values[3],
         ]
         
         print()
@@ -154,6 +156,10 @@ extension LineParser {
         
         print()
       }
+      
+      // flush pending error lines when the first \0 is received
+      // use blue text and [ERROR] for every newline-separated
+      // line of the error message
     }
   }
   
@@ -183,7 +189,7 @@ extension LineParser {
         }
       case .spectroscopy:
         splitting[.spectroscopy].append(line)
-      case .discard:
+      case .historyDiscard:
         let historyLineCount = splitting[.history].count
         guard historyLineCount == 0 else {
           fatalError("Cannot discard lines once history has started.")

@@ -69,7 +69,7 @@ bool CommandParsing::checkAlphaCode(Command command) {
   } else if (command.mode == Command::Mode::imagingSettings) {
     cString = "aflors";
   } else if (command.mode == Command::Mode::creepSettings) {
-    cString = "crxy";
+    cString = "cxy";
   } else if (command.mode == Command::Mode::tilt) {
     cString = "ct";
   } else {

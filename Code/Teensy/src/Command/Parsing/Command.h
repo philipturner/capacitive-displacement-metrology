@@ -11,7 +11,7 @@ struct Command {
     // zAAA - Z axis
     // bAAA - bias
     //
-    // 992.1 Hz triangle wave, +/-AAA volts
+    // ~1 kHz triangle wave, +/-AAA volts
     dacTest = 1,
     
     capacitanceReporting = 2,
@@ -46,29 +46,31 @@ struct Command {
     //   the Fourier transform. Handle these gracefully and resample the 
     //   Fourier image to avoid distortions.
     //
-    // iRRR,SSS - single image
-    // vRRR,SSS - repeating video at single spot
-    // dRRR,SSS - dual; video alternating between two spots
+    // iM,N,S - single image
+    // vM,N,S - repeating video at single spot
+    // dM,N,S - dual video, alternating between two spots
     //
-    // RRRxRRR image, SSS nm width
+    // M (major) x N (minor) image, S nm along major axis
     imaging = 8,
 
-    // aN - major axis, 0 = x, 1 = y
+    // aN - major axis index
     // fN - set feedback time constant to N ms while scanning
-    // lN - wait ~N μs for fixed time lag of electronics
+    // lN - wait N μs for fixed time lag of electronics
     // oI,X,Y - center #I, position (X, Y) in nm
     // r - reset to defaults
-    // sN - wait ~N ms for creep settling
+    // sN - wait N ms for creep settling
     imagingSettings = 9,
 
-    // cCCC - set creep constant for both axes
-    // r - reset accumulated drift
-    // xCCC - set creep constant for X only
-    // yCCC - set creep constant for Y only
+    // cN - set creep constant for both axes
+    // xN - set creep constant for X only
+    // yN - set creep constant for Y only
     creepSettings = 10,
 
-    // cDDD,TTT - calculate; move DDD nm to measure, TTT ms per displacement
-    // tXXX, YYY - set slope for each axis
+    // TODO: Separate tilt calculation from tilt settings mode.
+
+    // cD,T - calculate with D nm, T ms per displacement
+    // oX,Y - set origin for calculation (TODO)
+    // tX,Y - set slope for each axis
     tilt = 11,
 
     NUM_MODES = 12,

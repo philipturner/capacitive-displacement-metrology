@@ -17,7 +17,7 @@ namespace Creep {
     
     Filter();
     Filter(bool notDefaultConstructor);
-    void forwardState() const;
+    void forwardSettings() const;
     void updateSettings(Command command);
     void update(float2 stimulus);
 

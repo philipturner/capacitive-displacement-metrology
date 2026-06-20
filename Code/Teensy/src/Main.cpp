@@ -19,6 +19,15 @@ void setup() {
 void loop() {
   delay(5);
 
+  // TODO: Display error messages in a way more compatible with serial input.
+  // - Spam the console every 0.5 seconds.
+  // - Start the spam time at the 1st iteration after the message changes.
+  // - Establish thread safety to transfer data from the fast loop to the slow
+  //   loop, via a 10-wide ring buffer and an increasing thread-safe index.
+  // - Very first message gets a special flag.
+  //
+  // True fatal error messages (with hard exits) should be shown explicitly as
+  // corrupted data every time.
   if (ErrorMessage::hasError()) {
     ErrorMessage::nullTerminate();
 
@@ -36,6 +45,7 @@ void loop() {
   }
 }
 
+// TODO: Encapsulate mode change logic in other code.
 Command nextCommand;
 uint32_t modeChangeStart = 0;
 uint32_t modeChangeEnd = 0;
@@ -48,6 +58,7 @@ void kilohertzLoop() {
     Application::mode = nextCommand.mode;
     Application::state.modeStartIterationID = KilohertzLoop::iterationID;
     Application::state.capacitanceUpdateCount = 0;
+    Application::creepFilter.futureAccumulatedDrift = float2(0);
 
     if (Application::mode == Command::Mode::dacTest) {
       Application::dacTester = DACTester(nextCommand);

@@ -38,30 +38,36 @@ void Calculator::update() {
   uint32_t timeInResult = time % resultTime;
   uint32_t timeInTrial = timeInResult % trialTime;
 
-  if (timeInTrial == 0 && time > 0) {
-    float2 dz = pendingTrial.getDifference();
-    float dxy = displacementSize / 0.320f;
-    float2 slope = dz / dxy;
-    
-    pendingResult.update(slope);
-    pendingTrial = Trial();
-  }
+  if (!isFinished) {
+    if (timeInTrial == 0 && time > 0) {
+      float2 dz = pendingTrial.getDifference();
+      float dxy = displacementSize / 0.320f;
+      float2 slope = dz / dxy;
+      
+      pendingResult.update(slope);
+      pendingTrial = Trial();
+    }
 
-  if (timeInResult == 0 && time > 0) {
-    float2 avg = pendingResult.mean;
-    float2 stddev = pendingResult.getStddev();
-    Log::writeValuesWithFlags(
-      9, // flags
-      avg.x,
-      avg.y,
-      stddev.x,
-      stddev.y,
-      pendingResult.count);
-    
-    pendingResult = Result();
-  }
+    if (timeInResult == 0 && time > 0) {
+      float2 avg = pendingResult.mean;
+      float2 stddev = pendingResult.getStddev();
+      Log::writeValuesWithFlags(
+        9, // flags
+        avg.x,
+        avg.y,
+        stddev.x,
+        stddev.y,
+        pendingResult.count);
+      
+      pendingResult = Result();
 
-  updateForTrial(timeInTrial);
+      if (time > stopTime) {
+        isFinished = true;
+      }
+    }
+
+    updateForTrial(timeInTrial);
+  }
 
   Application::correctZVoltage();
 }

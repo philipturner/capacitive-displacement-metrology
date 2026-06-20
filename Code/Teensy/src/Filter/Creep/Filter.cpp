@@ -20,23 +20,17 @@ Filter::Filter(bool notDefaultConstructor) {
   lookupTable = LookupTable(true);
 }
 
-void Filter::forwardState() const {
+void Filter::forwardSettings() const {
   Log::writeValuesWithFlags(
     6, // flags
     creepConstants.x * 100.0f,
-    creepConstants.y * 100.0f,
-    futureAccumulatedDrift.x * 0.320f,
-    futureAccumulatedDrift.y * 0.320f);
+    creepConstants.y * 100.0f);
 }
 
 void Filter::updateSettings(Command command) {
   switch (command.alphaCode) {
     case 'c': {
       creepConstants = float2(command.attributes[0]);
-      break;
-    }
-    case 'r': {
-      futureAccumulatedDrift = float2(0);
       break;
     }
     case 'x': {

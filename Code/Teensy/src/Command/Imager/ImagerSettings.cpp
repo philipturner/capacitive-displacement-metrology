@@ -64,10 +64,10 @@ void Imager::forwardSettings() const {
   Log::writeValuesWithFlags(
     5, // flags
     uint8_t(mode),
-    resolutionMajor,
-    resolutionMinor,
-    pixelDimension,
-    polynomialPeakTime);
+    _trueResolutionMajor,
+    _resolutionMajor,
+    _resolutionMinor,
+    pixelDimension);
 
   Log::writeValuesWithFlags(
     5, // flags
@@ -79,9 +79,13 @@ void Imager::forwardSettings() const {
 
   Log::writeValuesWithFlags(
     5, // flags
+    polynomialPeakTime,
     settings.electronicTimeLag,
     float(settings.creepSettlingTime) / 1000,
     float(getImageTime()) / 1000,
-    float(settings.feedbackTimeConstant) / 1000,
-    Feedback::setpointCurrent * 1e12);
+    float(settings.feedbackTimeConstant) / 1000);
+  
+  Log::writeValuesWithFlags(
+    5, // flags
+    Imager::transformCurrent(Feedback::setpointCurrent * 1e12));
 }
