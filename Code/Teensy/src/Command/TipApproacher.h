@@ -18,7 +18,6 @@ struct TipApproacher {
   TipApproacher(State startingState, bool didContact);
   static State rangeRestorationState();
   static bool modeShouldChange();
-  static void forceModeChange();
 
   void update();
 

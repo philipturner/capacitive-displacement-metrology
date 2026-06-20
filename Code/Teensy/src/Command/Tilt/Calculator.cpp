@@ -20,12 +20,9 @@ Calculator::Calculator() {
 }
 
 Calculator::Calculator(Command command) {
-  if (command.alphaCode != 'c') {
-    Serial.println("This should never happen.");
-    exit(0);
-  }
-
   displacementSize = command.attributes[0];
+  originScannerVoltage = getOriginScannerVoltage(command);
+
   movementTime = uint32_t(command.attributes[1] * 1000);
   movementTime = KilohertzLoopRound(movementTime);
   trialsPerResult = getTrialsPerResult(reportPeriodSeconds, getTimePerTrial());

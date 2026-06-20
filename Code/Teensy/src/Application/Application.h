@@ -36,9 +36,9 @@ struct Application {
 
   static void updateCapacitanceTracker(bool regenerate);
 
-  static void logNormalMessage();
-
   static void setBiasForFeedback();
   static void correctZVoltage();
   static void correctZVoltage(float2 dXY);
+
+  static void logHistoryMessage();
 };

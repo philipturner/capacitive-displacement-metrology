@@ -1,17 +1,15 @@
 extension LineParser {
-  // TODO: Create an enumeration for flags in the Teensy code, making it easier
-  // to refactor and manage.
   enum Flags: UInt8, CaseIterable {
-    case history = 0
-    case newMode = 1
-    case spectroscopy = 2
+    case modeChange = 0
+    case kilohertzLoopWarning = 1
+    case history = 2
     case historyDiscard = 3
-    case pixel = 4
-    case imagingSettings = 5
-    case creepSettings = 6
-    case kilohertzLoop = 7
-    case tilt = 8 // <- these just swapped places
-    case tiltSettings = 9 // <- these just swapped places
+    case spectroscopy = 4
+    case imaging = 5
+    case imagingSettings = 6
+    case creepSettings = 7
+    case tiltCalculation = 8
+    case tiltSettings = 9
   }
   
   struct Splitting {

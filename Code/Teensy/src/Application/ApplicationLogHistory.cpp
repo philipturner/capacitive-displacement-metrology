@@ -1,0 +1,95 @@
+#include "Application.h"
+
+#include "Command/Tilt/Settings.h"
+#include "Diagnostics/Log.h"
+
+bool needsCapacitanceUpdate() {
+  if (Application::mode == Command::Mode::capacitanceReporting) {
+    return true;
+  } else if (Application::mode == Command::Mode::blindStepping) {
+    if (Application::blindStepper.mode == BlindStepper::Mode::capacitance) {
+      return true;
+    }
+  }
+  return false;
+}
+
+float2 getScannerVoltageForTilt() {
+  if (Application::mode == Command::Mode::imaging) {
+    return Application::imager.getUncorrectedVoltageXY();
+  } else {
+    return float2(
+      Application::state.piezoXVoltage,
+      Application::state.piezoYVoltage);
+  }
+}
+
+void Application::logHistoryMessage() {
+  float currentMaximum = state.extractCurrentMaximum();
+  float currentSpikePrediction = state.getPredictedCurrentSpike();
+
+  auto flags = Log::Flags::history;
+  if (needsCapacitanceUpdate()) {
+    if (state.capacitanceUpdateCount == 0) {
+      flags = Log::Flags::historyDiscard;
+    }
+  }
+
+  if (mode == Command::Mode::idle) {
+    Log::write(flags,
+      state.filteredCurrent,
+      currentMaximum,
+      currentSpikePrediction);
+  } else if (mode == Command::Mode::dacTest) {
+    Log::write(flags,
+      state.filteredCurrent,
+      currentMaximum,
+      currentSpikePrediction,
+      dacTester.getActiveChannelVoltage(),
+      dacTester.channelID);
+  } else if (mode == Command::Mode::capacitanceReporting) {
+    Log::write(flags,
+      state.filteredCurrent,
+      state.biasVoltage,
+      state.capacitance,
+      state.phaseShift);
+  } else if (mode == Command::Mode::blindStepping) {
+    Log::write(flags,
+      currentMaximum,
+      currentSpikePrediction,
+      state.piezoZVoltage * 0.320f,
+      state.capacitance);
+  } else if (mode == Command::Mode::tipApproach ||
+             mode == Command::Mode::idleFeedback) {
+    Log::write(flags,
+      currentMaximum,
+      currentSpikePrediction,
+      state.piezoZVoltage * 0.320f);
+  } else if (mode == Command::Mode::spectroscopy) {
+    Log::write(flags,
+      state.filteredCurrent,
+      currentSpikePrediction,
+      state.piezoZVoltage * 0.320f,
+      state.biasVoltage,
+      state.spectroscopyTrigger);
+  } else if (mode == Command::Mode::simpleScanning ||
+             mode == Command::Mode::imaging ||
+             mode == Command::Mode::tiltCalculation) {
+    float2 scannerVoltageForTilt = getScannerVoltageForTilt();
+    float relativeZVoltage = Tilt::Settings::getRelativeZ(
+      scannerVoltageForTilt.x,
+      scannerVoltageForTilt.y,
+      state.piezoZVoltage);
+    
+    // Metric that doesn't lose sensitivity as its magnitude grows larger.
+    float2 drift = Application::creepFilter.futureAccumulatedDrift;
+    float dV = drift.x + drift.y;
+    
+    Log::write(flags,
+      Imager::transformCurrent(state.filteredCurrent),
+      state.piezoXVoltage * 0.320f,
+      state.piezoYVoltage * 0.320f,
+      Imager::transformVoltageZ(relativeZVoltage) * 0.320f,
+      dV * 0.320f);
+  }
+}

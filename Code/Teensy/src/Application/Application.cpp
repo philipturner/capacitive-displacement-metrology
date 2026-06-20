@@ -1,7 +1,6 @@
 #include "Application.h"
 
 #include "Command/Tilt/Settings.h"
-#include "Diagnostics/Log.h"
 #include "Filter/Feedback.h"
 #include "IC/DAC.h"
 #include "IC/PA95.h"
@@ -67,98 +66,6 @@ void Application::updateCapacitanceTracker(bool regenerate) {
 
   float filteredCurrent = Application::state.filteredCurrent;
   capTracker.integrate(filteredCurrent);
-}
-
-void Application::logNormalMessage() {
-  bool capacitanceDidChange = false;
-  if (state.capacitanceUpdateCount > 0) {
-    capacitanceDidChange = true;
-  }
-
-  float currentMaximum = state.extractCurrentMaximum();
-  float currentSpikePrediction = state.getPredictedCurrentSpike();
-
-  if (mode == Command::Mode::idle) {
-    Log::writeValuesNormal(
-      state.filteredCurrent,
-      currentMaximum,
-      currentSpikePrediction);
-  } else if (mode == Command::Mode::dacTest) {
-    Log::writeValuesNormal(
-      state.filteredCurrent,
-      currentMaximum,
-      currentSpikePrediction,
-      dacTester.getActiveChannelVoltage(),
-      dacTester.channelID);
-  } else if (mode == Command::Mode::capacitanceReporting) {
-    uint8_t flags = 3;
-    if (capacitanceDidChange) {
-      flags = 0;
-    }
-
-    Log::writeValuesWithFlags(
-      flags, // flags
-      state.filteredCurrent,
-      state.biasVoltage,
-      state.capacitance,
-      state.phaseShift);
-  } else if (mode == Command::Mode::blindStepping) {
-    uint8_t flags;
-    if (blindStepper.mode == BlindStepper::Mode::capacitance) {
-      flags = 3;
-      if (capacitanceDidChange) {
-        flags = 0;
-      }
-    } else {
-      flags = 0;
-    }
-
-    Log::writeValuesWithFlags(
-      flags, // flags
-      currentMaximum,
-      currentSpikePrediction,
-      state.piezoZVoltage * 0.320f,
-      state.capacitance);
-  } else if (mode == Command::Mode::tipApproach ||
-             mode == Command::Mode::idleFeedback) {
-    Log::writeValuesNormal(
-      currentMaximum,
-      currentSpikePrediction,
-      state.piezoZVoltage * 0.320f);
-  } else if (mode == Command::Mode::spectroscopy) {
-    Log::writeValuesNormal(
-      state.filteredCurrent,
-      currentSpikePrediction,
-      state.piezoZVoltage * 0.320f,
-      state.biasVoltage,
-      state.spectroscopyTrigger);
-  } else if (mode == Command::Mode::simpleScanning ||
-             mode == Command::Mode::imaging ||
-             mode == Command::Mode::tilt) {
-    float2 voltageXY;
-    if (mode == Command::Mode::imaging) {
-      voltageXY = imager.getUncorrectedVoltageXY();
-    } else {
-      voltageXY.x = state.piezoXVoltage;
-      voltageXY.y = state.piezoYVoltage;
-    }
-    
-    float relativeZVoltage = Tilt::Settings::getRelativeZ(
-      voltageXY.x,
-      voltageXY.y,
-      state.piezoZVoltage);
-    
-    // Metric that doesn't lose sensitivity as its magnitude grows larger.
-    float2 drift = Application::creepFilter.futureAccumulatedDrift;
-    float dV = drift.x + drift.y;
-    
-    Log::writeValuesNormal(
-      Imager::transformCurrent(state.filteredCurrent),
-      state.piezoXVoltage * 0.320f,
-      state.piezoYVoltage * 0.320f,
-      Imager::transformVoltageZ(relativeZVoltage) * 0.320f,
-      dV * 0.320f);
-  }
 }
 
 void Application::setBiasForFeedback() {

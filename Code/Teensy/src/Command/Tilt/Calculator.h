@@ -57,12 +57,12 @@ namespace Tilt {
 
     void update();
 
-    static void getOriginScannerVoltage(Command command);
+    static float2 getOriginScannerVoltage(Command command);
 
   private:
     float displacementSize;
-    uint32_t movementTime;
     float2 originScannerVoltage;
+    uint32_t movementTime;
     uint32_t trialsPerResult;
     bool isFinished = false;
 

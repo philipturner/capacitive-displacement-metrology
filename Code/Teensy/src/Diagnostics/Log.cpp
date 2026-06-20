@@ -80,13 +80,6 @@ void Log::transmitBufferedSamples() {
   transmittedLogID = bufferedLogID;
 }
 
-float Log::encodeRawBits(uint32_t bits) {
-  uint32_t uintValue = bits << 8;
-  float floatValue;
-  memcpy(&floatValue, &uintValue, 4);
-  return floatValue;
-}
-
 void Log::throwError(
   const char *cString, 
   int64_t number1,
@@ -113,8 +106,15 @@ void Log::throwError(
   ErrorMessage::addNewline();
 }
 
-void Log::writeValuesWithFlags(
-  uint8_t flags,
+float Log::encodeRawBits(uint32_t bits) {
+  uint32_t uintValue = bits << 8;
+  float floatValue;
+  memcpy(&floatValue, &uintValue, 4);
+  return floatValue;
+}
+
+void Log::write(
+  Flags flags,
   float lane0,
   float lane1,
   float lane2,
@@ -130,7 +130,7 @@ void Log::writeValuesWithFlags(
   valuesBuffer[offset + 3] = lane3;
   valuesBuffer[offset + 4] = lane4;
 
-  flagsBuffer[slotID] = flags;
+  flagsBuffer[slotID] = uint8_t(flags);
 
   Log::unsafeBufferedLogID += 1;
 }

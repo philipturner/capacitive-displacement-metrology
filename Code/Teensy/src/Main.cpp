@@ -5,8 +5,6 @@
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
-#include "Util/Interpolate.h"
-#include "Util/WaveUtil.h"
 #include <Arduino.h>
 
 void kilohertzLoop();
@@ -66,6 +64,9 @@ void kilohertzLoop() {
   if (KilohertzLoop::iterationID < modeChangeEnd) {
     
   } else {
+    switch (Application::mode) {
+
+    }
     if (Application::mode == Command::Mode::dacTest) {
       Application::dacTester.update();
     }
