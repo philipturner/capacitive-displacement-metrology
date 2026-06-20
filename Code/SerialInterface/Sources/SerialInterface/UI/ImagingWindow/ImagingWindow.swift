@@ -34,7 +34,7 @@ class ImagingWindow {
     var deletedLineCount: Int = 0
     var synchronization: (timestamp: Double, lineID: Int)?
     var historyLines: [LineParser.Line] = []
-    var pixelLines: [LineParser.Line] = []
+    var imagingLines: [LineParser.Line] = []
   }
   
   struct State {
@@ -81,7 +81,7 @@ class ImagingWindow {
       state.imagesInitialized = true
     }
     
-    imageHistory.update(lines: state.trajectory.pixelLines)
+    imageHistory.update(lines: state.trajectory.imagingLines)
     updateImages()
     
     removePendingData()
@@ -121,7 +121,7 @@ class ImagingWindow {
     } else {
       state.trajectory.historyLines = []
     }
-    state.trajectory.pixelLines = []
+    state.trajectory.imagingLines = []
     
     if imageHistory.settings.mode != .image {
       for i in imageHistory.pendingImages.indices {

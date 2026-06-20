@@ -42,7 +42,7 @@ extension Application {
       
       if ui.mode == .imaging {
         ui.imagingWindow.state.trajectory.historyLines += splitting[.history]
-        ui.imagingWindow.state.trajectory.pixelLines += splitting[.pixel]
+        ui.imagingWindow.state.trajectory.imagingLines += splitting[.imaging]
       }
     }
   }

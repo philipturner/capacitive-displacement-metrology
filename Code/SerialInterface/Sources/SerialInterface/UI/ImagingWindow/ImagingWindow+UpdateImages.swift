@@ -3,12 +3,14 @@ import PythonKit
 
 extension ImagingWindow {
   func castToNumpy(_ data: [Float]) -> PythonObject {
-    guard data.count == settings.pixelsPerImage else {
+    guard data.count == settings._pixelsPerImage else {
       fatalError("Incorrectly sized data array.")
     }
     
     var ndarray = data.makeNumpyArray()
-    ndarray = ndarray.reshape(settings.resolution, settings.resolution)
+    ndarray = ndarray.reshape(
+      settings._resolutionMinor,
+      settings._resolutionMajor)
     return ndarray
   }
   
@@ -23,7 +25,7 @@ extension ImagingWindow {
     }
     
     var output = image
-    output -= np.mean(output)
+    // output -= np.mean(output) // reimplement this later after handling zero padding
     output = np.fft.fft2(output)
     output = np.fft.fftshift(output)
     output = np.abs(output)
@@ -76,7 +78,7 @@ extension ImagingWindow {
   
   func resetScanImage(columnID: Int) {
     for rowID in 0..<2 {
-      let emptyData = [Float](repeating: 0, count: settings.pixelsPerImage)
+      let emptyData = [Float](repeating: 0, count: settings._pixelsPerImage)
       let dataNumpy = castToNumpy(emptyData)
       let imagePlot = scanImagePlots[rowID][columnID]
       imagePlot.imageItem.setImage(dataNumpy, autoLevels: false)
@@ -91,7 +93,7 @@ extension ImagingWindow {
   }
   
   func resetFourierImage(columnID: Int) {
-    let emptyData = [Float](repeating: 0, count: settings.pixelsPerImage)
+    let emptyData = [Float](repeating: 0, count: settings._pixelsPerImage)
     let dataNumpy = castToNumpy(emptyData)
     let imagePlot = fourierImagePlots[columnID]
     imagePlot.imageItem.setImage(dataNumpy, autoLevels: false)

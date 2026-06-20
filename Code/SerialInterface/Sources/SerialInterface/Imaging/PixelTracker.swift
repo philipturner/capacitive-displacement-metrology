@@ -10,23 +10,23 @@ struct PixelTracker {
     let fillerPixel = SIMD2<Float>(-100_000, -1000)
     dataBuffer = Array(
       repeating: fillerPixel,
-      count: settings.pixelsPerImage)
+      count: settings._pixelsPerImage)
   }
   
   var receivedRowCount: Int {
-    receivedPixelCount / settings.resolution
+    receivedPixelCount / settings._resolutionMajor
   }
   
   var isFinished: Bool {
-    guard receivedPixelCount <= settings.pixelsPerImage else {
+    guard receivedPixelCount <= settings._pixelsPerImage else {
       fatalError("Received pixel count was too large.")
     }
-    return (receivedPixelCount == settings.pixelsPerImage)
+    return (receivedPixelCount == settings._pixelsPerImage)
   }
   
   mutating func receive(lines: [LineParser.Line], imageID: Int) {
     let nextPixelCount = receivedPixelCount + lines.count
-    if nextPixelCount > settings.pixelsPerImage {
+    if nextPixelCount > settings._pixelsPerImage {
       fatalError("Requesting too many lines for pixel tracker.")
     }
     
@@ -41,9 +41,9 @@ struct PixelTracker {
         if receivedRowCount % 2 == 0 {
           return receivedPixelCount
         } else {
-          let floor = receivedRowCount * settings.resolution
+          let floor = receivedRowCount * settings._resolutionMinor
           let indexInRow = receivedPixelCount - floor
-          let output = floor + (settings.resolution - 1 - indexInRow)
+          let output = floor + (settings._resolutionMajor - 1 - indexInRow)
           return output
         }
       }
@@ -75,8 +75,7 @@ struct PixelTracker {
       checkErrorMagnitude()
       
       let data = SIMD2(line.values[4], line.values[3])
-      let slotID = settings.bufferSlotID(pixelID: pixelID)
-      dataBuffer[slotID] = data
+      dataBuffer[pixelID] = data
       receivedPixelCount += 1
     }
   }
@@ -107,14 +106,13 @@ extension PixelTracker {
     guard receivedRowCount > 0 else {
       return
     }
-    let maxPixelID = receivedRowCount * settings.resolution
+    let maxPixelID = receivedRowCount * settings._resolutionMajor
     
     var sum: SIMD2<Double> = .zero
     var minimum = SIMD2<Float>(repeating: .greatestFiniteMagnitude)
     var maximum = SIMD2<Float>(repeating: -.greatestFiniteMagnitude)
     for pixelID in 0..<maxPixelID {
-      let slotID = settings.bufferSlotID(pixelID: pixelID)
-      let data = dataBuffer[slotID]
+      let data = dataBuffer[pixelID]
       sum += SIMD2<Double>(data)
       minimum.replace(with: data, where: data .< minimum)
       maximum.replace(with: data, where: data .> maximum)
@@ -125,8 +123,7 @@ extension PixelTracker {
     func createStandardDeviation() -> SIMD2<Float> {
       var accumulator: SIMD2<Double> = .zero
       for pixelID in 0..<maxPixelID {
-        let slotID = settings.bufferSlotID(pixelID: pixelID)
-        let data = dataBuffer[slotID]
+        let data = dataBuffer[pixelID]
         let deviation = data - average
         let deviationSquared = deviation * deviation
         accumulator += SIMD2<Double>(deviationSquared)
@@ -150,17 +147,17 @@ extension PixelTracker {
     var even = self
     var odd = self
     
-    for rowID in 0..<settings.resolution {
-      for columnID in 0..<settings.resolution {
-        let slotID = rowID * settings.resolution + columnID
-        let data = dataBuffer[slotID]
+    for rowID in 0..<settings._resolutionMinor {
+      for columnID in 0..<settings._resolutionMajor {
+        let pixelID = rowID * settings._resolutionMajor + columnID
+        let data = dataBuffer[pixelID]
         
         if rowID % 2 == 0 {
-          let overwrittenSlotID = slotID + settings.resolution
-          even.dataBuffer[overwrittenSlotID] = data
+          let overwrittenID = pixelID + settings._resolutionMajor
+          even.dataBuffer[overwrittenID] = data
         } else {
-          let overwrittenSlotID = slotID - settings.resolution
-          odd.dataBuffer[overwrittenSlotID] = data
+          let overwrittenID = pixelID - settings._resolutionMajor
+          even.dataBuffer[overwrittenID] = data
         }
       }
     }

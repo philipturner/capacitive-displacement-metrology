@@ -66,8 +66,14 @@ struct ImagingSettings {
     self.setpointCurrent = settingsLines[3].values[0]
   }
   
-  var pixelsPerImage: Int {
-    resolution * resolution
+  var _pixelsPerImage: Int {
+    _resolutionMajor * _resolutionMinor
+  }
+  
+  var resolutionVector: SIMD2<Float> {
+    SIMD2(
+      Float(_resolutionMajor),
+      Float(_resolutionMinor))
   }
   
   func center(channelID: Int) -> SIMD2<Float> {
@@ -83,13 +89,13 @@ struct ImagingSettings {
   }
   
   func expectedPosition(pixelID: Int, imageID: Int) -> SIMD2<Float> {
-    let rowID = pixelID / resolution
-    let columnID = pixelID % resolution
+    let rowID = pixelID / _resolutionMajor
+    let columnID = pixelID % _resolutionMajor
     
     var position = SIMD2(Float(columnID), Float(rowID))
     position += 0.5
     position *= pixelDimension
-    position -= 0.5 * Float(resolution) * pixelDimension
+    position -= 0.5 * resolutionVector * pixelDimension
     
     if majorAxis == 1 {
       position = SIMD2(position.y, position.x)
@@ -98,42 +104,51 @@ struct ImagingSettings {
     position += center(channelID: imageID % 2)
     return position
   }
-  
-  func bufferSlotID(pixelID: Int) -> Int {
-    let rowID = pixelID / resolution
-    let columnID = pixelID % resolution
-    
-    if majorAxis == 0 {
-      return rowID * resolution + columnID
-    } else {
-      return columnID * resolution + rowID
-    }
-  }
 }
 
 extension ImagingSettings {
+  // Probably need to pad with zeroes before entering, so that rectangular
+  // images have the same spatial footprint as square images.
   func realSpaceTransform(channelID: Int) -> PythonObject {
     var offset: SIMD2<Float> = .zero
-    offset -= 0.5 * Float(resolution) * pixelDimension
+    offset -= 0.5 * resolutionVector * pixelDimension
     offset += center(channelID: channelID)
     offset /= pixelDimension
     
     let transform = QtGui.QTransform()
     transform.scale(pixelDimension, pixelDimension)
     transform.translate(offset.x, offset.y)
+    
+    // not yet; this is surely incorrect
+//    if majorAxis == 1 {
+//      transform.setMatrix(
+//        0, 1, 0,
+//        1, 0, 1,
+//        0, 0, 1)
+//    }
+    
     return transform
   }
   
   func fourierSpaceTransform() -> PythonObject {
-    let fourierPixelDimension = (1 / pixelDimension) / Float(resolution)
+    let fourierPixelDimension = (1 / pixelDimension) / resolutionVector
     
     var offset: SIMD2<Float> = .zero
-    offset -= 0.5 * Float(resolution) * fourierPixelDimension
+    offset -= 0.5 * resolutionVector * fourierPixelDimension
     offset /= fourierPixelDimension
     
     let transform = QtGui.QTransform()
-    transform.scale(fourierPixelDimension, fourierPixelDimension)
+    transform.scale(fourierPixelDimension.x, fourierPixelDimension.y)
     transform.translate(offset.x, offset.y)
+    
+    // not yet; this is surely incorrect
+//    if majorAxis == 1 {
+//      transform.setMatrix(
+//        0, 1, 0,
+//        1, 0, 1,
+//        0, 0, 1)
+//    }
+    
     return transform
   }
 }

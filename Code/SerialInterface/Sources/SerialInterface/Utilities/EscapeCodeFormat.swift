@@ -1,19 +1,17 @@
-extension String {
-    // Escape character prefix
-    private var esc: String { "\u{001B}[" }
-    
-    // Foreground colors
-    var red: String     { "\(esc)31m\(self)\(esc)0m" }
-    var green: String   { "\(esc)32m\(self)\(esc)0m" }
-    var yellow: String  { "\(esc)33m\(self)\(esc)0m" }
-    var blue: String    { "\(esc)34m\(self)\(esc)0m" }
-    var cyan: String    { "\(esc)36m\(self)\(esc)0m" }
-    
-    // Text styles
-    var bold: String    { "\(esc)1m\(self)\(esc)0m" }
-    
-    // Custom RGB (True Color)
-    func rgb(r: Int, g: Int, b: Int) -> String {
-        return "\(esc)38;2;\(r);\(g);\(b)m\(self)\(esc)0m"
-    }
+enum EscapeCodeFormat: String {
+  case bold = "1"
+  case black = "30"
+  case red = "31"
+  case green = "32"
+  case yellow = "33"
+  case blue = "34"
+  case magenta = "35"
+  case cyan = "36"
+  case white = "37"
+  
+  static let reset = "\u{001B}[0m"
+  
+  func apply(to text: String) -> String {
+    return "\u{001B}[\(self.rawValue)m\(text)\(Self.reset)"
+  }
 }

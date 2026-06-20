@@ -1,9 +1,7 @@
-extension LineParser {
-  
-}
-
 extension LineParser.Splitting {
   func display() {
+    // measurement data
+    
     for line in self[.spectroscopy] {
       print("spectroscopy", terminator: ", ")
       for laneID in 0..<5 {
@@ -13,15 +11,17 @@ extension LineParser.Splitting {
       print()
     }
     
-    for line in self[.tilt] {
-      Self.displayTilt(line: line)
+    for line in self[.tiltCalculation] {
+      Self.displaySlope(line: line)
     }
     
-    let imagingSettingsLines = self[.imagingSettings]
-    if imagingSettingsLines.count > 0 {
-      guard imagingSettingsLines.count == 4 else {
+    // settings
+    
+    if self[.imagingSettings].count > 0 {
+      let lineCount = self[.imagingSettings].count
+      guard lineCount == 4 else {
         fatalError(
-          "Invalid number of imaging settings lines: \(imagingSettingsLines.count)")
+          "Invalid number of imaging settings lines: \(lineCount)")
       }
       
       let labels: [String] = [
@@ -47,8 +47,8 @@ extension LineParser.Splitting {
       ]
       
       var values: [Float] = []
-      for lineID in imagingSettingsLines.indices {
-        let line = imagingSettingsLines[lineID]
+      for lineID in self[.imagingSettings].indices {
+        let line = self[.imagingSettings][lineID]
         let laneCount = (lineID == 3) ? 1 : 5
         
         for laneID in 0..<laneCount {
@@ -97,15 +97,22 @@ extension LineParser.Splitting {
       print()
     }
     
-    for line in self[.newMode] {
-      let modeCode = Int(line.values[0])
-      if line.values[1] == 1 {
-        print("forced mode change to \(modeCode)")
+    // warnings and errors
+    
+    for line in self[.modeChange] {
+      guard line.values[1] == 1 else {
+        continue
       }
+      
+      let modeCode = Int(line.values[0])
+      print(EscapeCodeFormat.yellow.apply(to: "[WARNING]"), terminator: " ")
+      print("forced mode change to \(modeCode)", terminator: " ")
+      print()
     }
     
-    for line in self[.kilohertzLoop] {
-      print("kilohertz loop warning:", terminator: " ")
+    for line in self[.kilohertzLoopWarning] {
+      print(EscapeCodeFormat.yellow.apply(to: "[WARNING]"), terminator: " ")
+      print("kilohertz loop:", terminator: " ")
       
       for laneID in 0..<3 {
         let floatValue = line.values[laneID]
@@ -118,9 +125,54 @@ extension LineParser.Splitting {
         intValue >>= 8
         print(intValue, terminator: " ")
       }
-      
       print()
     }
+    
+    for line in self[.invalidCommand] {
+      print(EscapeCodeFormat.red.apply(to: "[ERROR]"), terminator: " ")
+      print("invalid command", terminator: " ")
+      print()
+    }
+  }
+  
+  static func displaySlope(line: LineParser.Line) {
+    let avg = SIMD2<Float>(line.values[0], line.values[1])
+    let stddev = SIMD2<Float>(line.values[2], line.values[3])
+    guard let n = Int(exactly: line.values[4]) else {
+      fatalError("Malformatted sample count.")
+    }
+    
+    // Report a 99% confidence interval.
+    let interval = 2.576 * stddev / Float(n).squareRoot()
+    
+    var output: String = ""
+    output += "slope | "
+    
+    func formatAverage(_ x: Float) -> String {
+      var output = String(format: "%.3f", x)
+      if x >= 0 {
+        output = " " + output
+      }
+      return output
+    }
+    output += formatAverage(avg[0])
+    output += ", "
+    output += formatAverage(avg[1])
+    output += " | "
+    
+    func formatUncertainty(_ x: Float) -> String {
+      var output = String(format: "%.3f", x)
+      output += "±"
+      return output
+    }
+    output += formatUncertainty(interval[0])
+    output += ", "
+    output += formatUncertainty(interval[1])
+    output += " | "
+    
+    output += "\(n) samples"
+    
+    print(output)
   }
   
   static func displayTabulated(
@@ -214,45 +266,5 @@ extension LineParser.Splitting {
       }
       print(createString())
     }
-  }
-  
-  static func displayTilt(line: LineParser.Line) {
-    let avg = SIMD2<Float>(line.values[0], line.values[1])
-    let stddev = SIMD2<Float>(line.values[2], line.values[3])
-    guard let n = Int(exactly: line.values[4]) else {
-      fatalError("Malformatted sample count.")
-    }
-    
-    // Report a 99% confidence interval.
-    let interval = 2.576 * stddev / Float(n).squareRoot()
-    
-    var output: String = ""
-    output += "tilt | "
-    
-    func formatAverage(_ x: Float) -> String {
-      var output = String(format: "%.3f", x)
-      if x >= 0 {
-        output = " " + output
-      }
-      return output
-    }
-    output += formatAverage(avg[0])
-    output += ", "
-    output += formatAverage(avg[1])
-    output += " | "
-    
-    func formatUncertainty(_ x: Float) -> String {
-      var output = String(format: "%.3f", x)
-      output += "±"
-      return output
-    }
-    output += formatUncertainty(interval[0])
-    output += ", "
-    output += formatUncertainty(interval[1])
-    output += " | "
-    
-    output += "\(n) samples"
-    
-    print(output)
   }
 }

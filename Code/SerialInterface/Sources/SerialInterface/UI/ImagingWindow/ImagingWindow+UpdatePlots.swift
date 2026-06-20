@@ -37,7 +37,7 @@ extension ImagingWindow {
         return false
       }
       
-      if imageHistory.receivedPixelCount >= settings.pixelsPerImage {
+      if imageHistory.receivedPixelCount >= settings._pixelsPerImage {
         return true
       } else {
         return false
@@ -161,7 +161,7 @@ extension ImagingWindow {
   }
   
   func updatePixelCurves() {
-    let lines = state.trajectory.pixelLines
+    let lines = state.trajectory.imagingLines
     let segments = settings.split(lines: lines)
     if segments.count > Self.maxImagesPerFrame {
       fatalError("Exceeded allowed number of images per frame.")
