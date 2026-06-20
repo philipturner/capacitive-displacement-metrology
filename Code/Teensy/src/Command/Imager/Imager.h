@@ -14,13 +14,13 @@ struct Imager {
   };
 
   struct Settings {
-    uint8_t majorAxis = 0; // either 0 or 1
+    uint8_t majorAxis = 0;
     float2 centers[2] = {
       float2(), 
       float2(),
     };
-    uint32_t electronicTimeLag = 0; // μs
-    uint32_t creepSettlingTime = 0; // μs
+    uint32_t electronicTimeLag = 0; // units: μs
+    uint32_t creepSettlingTime = 0; // units: μs
     uint32_t feedbackTimeConstant = Feedback::defaultTimeConstant;
     
     Settings() { }
@@ -35,7 +35,7 @@ struct Imager {
   
   Imager();
   Imager(Command command);
-  void adjustScanFrequency();
+  
   void update();
 
   static Mode getMode(char code);
@@ -62,6 +62,9 @@ private:
   Settings settings;
   PixelBuffer pixelBuffer;
   
+  static uint32_t getTrueResolutionMajor(
+    uint32_t resolutionMajor, 
+    uint32_t polynomialPeakTime);
   uint32_t getRowTime() const;
   uint32_t getImageTime() const;
   float getPeakValue(float amplitudeNormalized) const;

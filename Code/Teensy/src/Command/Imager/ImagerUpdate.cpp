@@ -34,7 +34,7 @@ void Imager::update() {
     }
 
     currentVoltageXY = getPosition(timeInImage, imageID);
-    currentVoltageXY /= float(0.320f);
+    currentVoltageXY /= 0.320f;
   }
 
   float2 creepCorrectedVoltageXY = currentVoltageXY;
@@ -65,8 +65,8 @@ void Imager::update() {
 
 float2 Imager::getPosition(float2 localPosition, uint32_t imageID) {
   float2 output = localPosition;
-  output.x += -0.5f * float(resolutionMajor) * pixelDimension;
-  output.y += -0.5f * float(resolutionMinor) * pixelDimension;
+  output.x += -0.5f * float(_trueResolutionMajor) * pixelDimension;
+  output.y += -0.5f * float(_resolutionMinor) * pixelDimension;
 
   if (settings.majorAxis == 1) {
     output = float2(output.y, output.x);
@@ -101,7 +101,7 @@ float2 Imager::getPosition(uint32_t timeInImage, uint32_t imageID) {
 
   float x;
   float y;
-  if (time < resolutionMinor * getRowTime()) {
+  if (time < _resolutionMinor * getRowTime()) {
     uint32_t rowID = time / getRowTime();
     time = time % getRowTime();
 
@@ -127,17 +127,17 @@ float2 Imager::getPosition(uint32_t timeInImage, uint32_t imageID) {
     }
 
     if (rowID % 2 == 1) {
-      x = float(resolutionMajor) * pixelDimension - x;
+      x = float(_trueResolutionMajor) * pixelDimension - x;
     }
   } else {
-    time -= resolutionMinor * getRowTime();
+    time -= _resolutionMinor * getRowTime();
     time = min(time, polynomialPeakTime);
 
     float progress = 1.0f - float(time) / float(polynomialPeakTime);
     float peakNormalized = WaveUtil::polynomialWaveOutskirt(progress);
 
     x = getPeakValue(peakNormalized);
-    y = (float(resolutionMinor) - 0.5f) * pixelDimension;
+    y = (float(_resolutionMinor) - 0.5f) * pixelDimension;
   }
 
   float2 localPosition = float2(x, y);
@@ -152,7 +152,7 @@ int32_t Imager::getPixelID(uint32_t timeInImage) {
     time -= largeMoveRiseTime + settings.creepSettlingTime;
   }
 
-  if (time >= resolutionMinor * getRowTime()) {
+  if (time >= _resolutionMinor * getRowTime()) {
     return -1;
   }
 
@@ -172,20 +172,20 @@ int32_t Imager::getPixelID(uint32_t timeInImage) {
   }
 
   if (rowID % 2 == 1) {
-    columnID = (resolutionMajor - 1) - columnID;
+    columnID = (_trueResolutionMajor - 1) - columnID;
   }
 
-  uint32_t majorBoundary = (resolutionMajor - resolutionMinor) / 2;
+  uint32_t majorBoundary = (_trueResolutionMajor - _resolutionMajor) / 2;
   if (columnID < majorBoundary) {
     return -1;
   } else {
     columnID -= majorBoundary;
   }
-  if (columnID >= resolutionMinor) {
+  if (columnID >= _resolutionMajor) {
     return -1;
   }
 
-  return rowID * resolutionMinor + columnID;
+  return rowID * _resolutionMajor + columnID;
 }
 
 void Imager::addPixel(uint32_t pixelID) {

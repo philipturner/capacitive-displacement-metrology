@@ -94,10 +94,11 @@ void ModeChanger::end() const {
     case Command::Mode::blindStepping:
       Application::blindStepper = BlindStepper(command);
       break;
-    case Command::Mode::tipApproach:
+    case Command::Mode::tipApproach: {
       auto state = TipApproacher::State::waitBeforeApproach;
       Application::tipApproacher = TipApproacher(state, false);
       break;
+    }
     case Command::Mode::spectroscopy:
       Application::spectroscopy = Spectroscopy(command);
       break;

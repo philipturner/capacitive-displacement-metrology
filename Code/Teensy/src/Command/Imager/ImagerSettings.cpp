@@ -81,11 +81,11 @@ void Imager::forwardSettings() const {
     Log::Flags::imagingSettings,
     polynomialPeakTime,
     settings.electronicTimeLag,
-    float(settings.creepSettlingTime) / 1000,
-    float(getImageTime()) / 1000,
-    float(settings.feedbackTimeConstant) / 1000);
+    float(settings.creepSettlingTime) / 1000.0f,
+    float(getImageTime()) / 1000.0f,
+    float(settings.feedbackTimeConstant) / 1000.0f);
   
   Log::write(
     Log::Flags::imagingSettings,
-    Imager::transformCurrent(Feedback::setpointCurrent * 1e12));
+    Feedback::setpointCurrent * 1e12f);
 }

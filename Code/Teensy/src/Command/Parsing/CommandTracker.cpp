@@ -60,7 +60,7 @@ uint32_t getExpectedNumAttributes(Command command, uint32_t numAttributes) {
       return 2;
     }
     case Command::Mode::imaging: {
-      return 2;
+      return 3;
     }
     case Command::Mode::imagingSettings: {
       switch (command.alphaCode) {
@@ -116,13 +116,15 @@ bool checkAttributes(Command command) {
       break;
     }
     case Command::Mode::imaging: {
-      uint32_t resolution = command.attributes[0];
-      if (resolution == 0 || resolution > 1024 || (resolution % 2 != 0)) {
-        CommandTracker::bounceError("Invalid resolution.");
-        return false;
+      for (uint32_t i = 0; i < 2; ++i) {
+        uint32_t resolution = command.attributes[i];
+        if (resolution == 0 || resolution > 1024 || (resolution % 2 != 0)) {
+          CommandTracker::bounceError("Invalid resolution.");
+          return false;
+        }
       }
 
-      float size = command.attributes[1];
+      float size = command.attributes[2];
       if (size <= 0 || size > 270) {
         CommandTracker::bounceError("Invalid image size.");
         return false;

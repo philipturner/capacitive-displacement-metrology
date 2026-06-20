@@ -28,6 +28,22 @@ Calculator::Calculator(Command command) {
   trialsPerResult = getTrialsPerResult(reportPeriodSeconds, getTimePerTrial());
 }
 
+float2 Calculator::getOriginScannerVoltage(Command command) {
+  float2 position;
+  if (command.alphaCode == 'c') {
+    position = float2(0);
+  } else if (command.alphaCode == 'o') {
+    position = float2(
+      command.attributes[2],
+      command.attributes[3]);
+  } else {
+    Serial.println("Invalid alpha code.");
+    exit(0);
+  }
+
+  return position / 0.320f;
+}
+
 void Calculator::update() {
   uint32_t time = Application::state.getTimeSinceModeStart();
   uint32_t trialTime = getTimePerTrial();
@@ -87,7 +103,7 @@ void Calculator::updateForTrial(uint32_t timeInTrial) {
     } else {
       time -= paddingTime;
     }
-
+    
     for (uint32_t i = 0; i < 2; ++i) {
       if (time <= movementTime + settleTime) {
         float progress = float(time) / float(movementTime);
@@ -98,6 +114,12 @@ void Calculator::updateForTrial(uint32_t timeInTrial) {
 
         float position = displacementSize * progress;
         float voltage = position / 0.320f;
+        if (axisID == 0) {
+          voltage += originScannerVoltage.x;
+        } else {
+          voltage += originScannerVoltage.y;
+        }
+
         uint32_t channelID = 1 + axisID;
         Application::updatePiezoVoltage(channelID, voltage);
         return;

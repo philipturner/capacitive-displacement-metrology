@@ -52,7 +52,7 @@ extension LineParser {
       
       let imagingSettingsLines = self[.imagingSettings]
       if imagingSettingsLines.count > 0 {
-        guard imagingSettingsLines.count == 3 else {
+        guard imagingSettingsLines.count == 4 else {
           fatalError(
             "Invalid number of imaging settings lines: \(imagingSettingsLines.count)")
         }
@@ -274,6 +274,14 @@ extension LineParser.Splitting {
     let columnWidths = createColumnWidths()
     
     for rowID in parsedLabels.indices {
+      if rowID % 5 == 0 && rowID != 0 {
+        var separatorLine = ""
+        separatorLine += String(repeating: " ", count: columnWidths[0])
+        separatorLine += " | "
+        separatorLine += String(repeating: " ", count: columnWidths[1])
+        print(separatorLine)
+      }
+      
       let parsedLabel = parsedLabels[rowID]
       let parsedValue = parsedValues[rowID]
       

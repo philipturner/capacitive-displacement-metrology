@@ -54,10 +54,9 @@ namespace Tilt {
 
     Calculator();
     Calculator(Command command);
+    static float2 getOriginScannerVoltage(Command command);
 
     void update();
-
-    static float2 getOriginScannerVoltage(Command command);
 
   private:
     float displacementSize;

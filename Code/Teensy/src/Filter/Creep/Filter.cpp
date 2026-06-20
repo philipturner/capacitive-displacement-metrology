@@ -1,6 +1,7 @@
 #include "Filter.h"
 
 #include "Diagnostics/Log.h"
+#include "Filter/Creep/Settings.h"
 #include <Arduino.h>
 
 using namespace Creep;
@@ -69,6 +70,7 @@ float2 Filter::shiftSampleTimes() {
 }
 
 void Filter::updateCreepRate(float2 accumulator) {
+  float2 creepConstants = Settings::creepConstants;
   currentCreepRate = accumulator * creepConstants * float(1 / M_LN10);
 }
 

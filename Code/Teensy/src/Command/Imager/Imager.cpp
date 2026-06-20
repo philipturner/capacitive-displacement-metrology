@@ -9,48 +9,52 @@ Imager::Imager() {
 
 Imager::Imager(Command command) {
   mode = getMode(command.alphaCode);
-  resolutionMajor = uint32_t(command.attributes[0]);
-  resolutionMinor = uint32_t(command.attributes[0]);
+  _resolutionMajor = command.attributes[0];
+  _resolutionMinor = command.attributes[1];
+  pixelDimension = command.attributes[2] / float(_resolutionMajor);
 
-  float imageSize = command.attributes[1];
-  pixelDimension = imageSize / float(resolutionMajor);
-  settings = Imager::pendingSettings;
-
-  if (resolutionMajor <= 32) {
+  if (_resolutionMajor <= 32) {
     polynomialPeakTime = KilohertzLoopRound(1000);
-  } else if (resolutionMajor <= 48) {
+  } else if (_resolutionMajor <= 48) {
     polynomialPeakTime = KilohertzLoopRound(1500);
   } else {
     polynomialPeakTime = KilohertzLoopRound(2000);
   }
+
+  _trueResolutionMajor = getTrueResolutionMajor(
+    _resolutionMajor, polynomialPeakTime);
   
-  adjustScanFrequency();
+  settings = Imager::pendingSettings;
 }
 
-void Imager::adjustScanFrequency() {
-  uint32_t iterationsPerRow = getRowTime() / KilohertzLoop::period;
+uint32_t Imager::getTrueResolutionMajor(
+  uint32_t resolutionMajor,
+  uint32_t polynomialPeakTime
+) {
+  uint32_t timePerRow = polynomialPeakTime + resolutionMajor * pixelTime;
+  uint32_t iterationsPerRow = timePerRow / KilohertzLoop::period;
   if (Creep::Harmonics::isRoundTripSafe(iterationsPerRow)) {
-    return;
+    return resolutionMajor;
   }
 
   uint32_t adjustedIterations = Creep::Harmonics::nextSafeRoundTrip(iterationsPerRow);
   uint32_t scanLineTime = adjustedIterations * KilohertzLoop::period;
   scanLineTime -= polynomialPeakTime;
-  scanLineTime += pixelTime - 1;
 
-  resolutionMajor = scanLineTime / pixelTime;
-  resolutionMajor = ((resolutionMajor + 1) / 2) * 2;
+  uint32_t output = (scanLineTime + pixelTime - 1) / pixelTime;
+  output = ((output + 1) / 2) * 2;
+  return output;
 }
 
 uint32_t Imager::getRowTime() const {
-  return polynomialPeakTime + resolutionMajor * pixelTime;
+  return polynomialPeakTime + _trueResolutionMajor * pixelTime;
 }
 
 uint32_t Imager::getImageTime() const {
   uint32_t output = 0;
   output += largeMoveRiseTime;
   output += settings.creepSettlingTime;
-  output += resolutionMinor * getRowTime();
+  output += _resolutionMinor * getRowTime();
   output += polynomialPeakTime;
   return output;
 }

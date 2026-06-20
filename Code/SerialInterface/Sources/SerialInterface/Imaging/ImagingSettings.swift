@@ -2,22 +2,24 @@ import PythonKit
 
 struct ImagingSettings {
   var mode: ImagingMode
-  var resolutionMajor: Int
-  var resolution: Int
+  var _trueResolutionMajor: Int
+  var _resolutionMajor: Int
+  var _resolutionMinor: Int
   var pixelDimension: Float
-  var polynomialPeakTime: Int
   
   var majorAxis: Int
   var centers: [SIMD2<Float>]
   
-  var electronicTimeLag: Int // μs
-  var creepSettlingTime: Int // μs
-  var imageTime: Int // μs
-  var feedbackTimeConstant: Int // μs
+  var polynomialPeakTime: Int
+  var electronicTimeLag: Int
+  var creepSettlingTime: Int
+  var imageTime: Int
+  var feedbackTimeConstant: Int
+  
   var setpointCurrent: Float
   
   init(settingsLines: [LineParser.Line]) {
-    guard settingsLines.count == 3 else {
+    guard settingsLines.count == 4 else {
       fatalError(
         "Invalid number of imaging settings lines: \(settingsLines.count)")
     }
@@ -30,10 +32,10 @@ struct ImagingSettings {
       return mode
     }
     self.mode = createMode()
-    self.resolutionMajor = Int(settingsLines[0].values[1])
-    self.resolution = Int(settingsLines[0].values[2])
-    self.pixelDimension = settingsLines[0].values[3]
-    self.polynomialPeakTime = Int(settingsLines[0].values[4])
+    self._trueResolutionMajor = Int(settingsLines[0].values[1])
+    self._resolutionMajor = Int(settingsLines[0].values[2])
+    self._resolutionMinor = Int(settingsLines[0].values[3])
+    self.pixelDimension = settingsLines[0].values[4]
     
     func createCenters() -> [SIMD2<Float>] {
       var output: [SIMD2<Float>] = []
@@ -55,11 +57,13 @@ struct ImagingSettings {
       microseconds.round(.toNearestOrEven)
       return Int(microseconds)
     }
-    self.electronicTimeLag = Int(settingsLines[2].values[0])
-    self.creepSettlingTime = convertTime(settingsLines[2].values[1])
-    self.imageTime = convertTime(settingsLines[2].values[2])
-    self.feedbackTimeConstant = convertTime(settingsLines[2].values[3])
-    self.setpointCurrent = settingsLines[2].values[4]
+    self.polynomialPeakTime = Int(settingsLines[2].values[0])
+    self.electronicTimeLag = Int(settingsLines[2].values[1])
+    self.creepSettlingTime = convertTime(settingsLines[2].values[2])
+    self.imageTime = convertTime(settingsLines[2].values[3])
+    self.feedbackTimeConstant = convertTime(settingsLines[2].values[4])
+    
+    self.setpointCurrent = settingsLines[3].values[0]
   }
   
   var pixelsPerImage: Int {
