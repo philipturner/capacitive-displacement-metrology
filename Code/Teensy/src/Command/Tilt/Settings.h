@@ -7,7 +7,7 @@ namespace Tilt {
   struct Settings {
     static inline float2 slope = float2(0);
 
-    static void forwardState();
+    static void forwardState(); // forwardSettings
     static void update(Command command);
 
     static float getRelativeZ(float x, float y, float z);

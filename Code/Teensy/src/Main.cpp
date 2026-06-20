@@ -1,7 +1,7 @@
 #include "Application/Application.h"
+#include "Application/ModeChanger.h"
 #include "Command/Parsing/CommandTracker.h"
 #include "Command/Tilt/Settings.h"
-#include "IC/DAC.h"
 #include "Diagnostics/ErrorMessage.h"
 #include "Diagnostics/Log.h"
 #include "Time/KilohertzLoop.h"
@@ -19,15 +19,6 @@ void setup() {
 void loop() {
   delay(5);
 
-  // TODO: Display error messages in a way more compatible with serial input.
-  // - Spam the console every 0.5 seconds.
-  // - Start the spam time at the 1st iteration after the message changes.
-  // - Establish thread safety to transfer data from the fast loop to the slow
-  //   loop, via a 10-wide ring buffer and an increasing thread-safe index.
-  // - Very first message gets a special flag.
-  //
-  // True fatal error messages (with hard exits) should be shown explicitly as
-  // corrupted data every time.
   if (ErrorMessage::hasError()) {
     ErrorMessage::nullTerminate();
 
@@ -45,75 +36,26 @@ void loop() {
   }
 }
 
-// TODO: Encapsulate mode change logic in other code.
-Command nextCommand;
-uint32_t modeChangeStart = 0;
-uint32_t modeChangeEnd = 0;
-bool modeChangeContinuesFeedback = false;
-bool modeChangeRetractsZ = false;
-float2 previousScannerVoltage;
+ModeChanger modeChanger;
 
 void kilohertzLoop() {
-  if (KilohertzLoop::iterationID == modeChangeEnd) {
-    Application::mode = nextCommand.mode;
-    Application::state.modeStartIterationID = KilohertzLoop::iterationID;
-    Application::state.capacitanceUpdateCount = 0;
-    Application::creepFilter.futureAccumulatedDrift = float2(0);
-
-    if (Application::mode == Command::Mode::dacTest) {
-      Application::dacTester = DACTester(nextCommand);
-    }
-    if (Application::mode == Command::Mode::capacitanceReporting) {
-      Application::capTracker = CapacitanceTracker(true);
-    }
-    if (Application::mode == Command::Mode::blindStepping) {
-      Application::blindStepper = BlindStepper(nextCommand);
-    }
-    if (Application::mode == Command::Mode::tipApproach) {
-      Application::tipApproacher = TipApproacher(
-        TipApproacher::State::waitBeforeApproach, false);
-    }
-    if (Application::mode == Command::Mode::spectroscopy) {
-      Application::spectroscopy = Spectroscopy(nextCommand);
-    }
-    if (Application::mode == Command::Mode::simpleScanning) {
-      Application::simpleScanner = SimpleScanner(nextCommand);
-    }
-    if (Application::mode == Command::Mode::imaging) {
-      Application::imager = Imager(nextCommand);
-      Application::imager.forwardSettings();
-    }
-    if (Application::mode == Command::Mode::tilt) {
-      Application::tiltCalculator = Tilt::Calculator(nextCommand);
-    }
-
-    Log::writeValuesWithFlags(1, float(Application::mode));
-  } else if (KilohertzLoop::iterationID > modeChangeEnd) {
-    if (CommandTracker::nextCommand(nextCommand)) {
-      if (nextCommand.mode == Command::Mode::imagingSettings) {
-        Imager::updatePendingSettings(nextCommand);
-      } else if (nextCommand.mode == Command::Mode::creepSettings) {
-        Application::creepFilter.updateSettings(nextCommand);
-        Application::creepFilter.forwardState();
-      } else if (nextCommand.mode == Command::Mode::tilt &&
-                 nextCommand.alphaCode == 't') {
-        Tilt::Settings::update(nextCommand);
-        Tilt::Settings::forwardState();
+  if (KilohertzLoop::iterationID == modeChanger.transitionEnd) {
+    
+  } else if (KilohertzLoop::iterationID > modeChanger.transitionEnd) {
+    Command command;
+    if (CommandTracker::nextCommand(command)) {
+      if (!command.isValid) {
+        // Forward input error.
+      } else if (command.mode == Command::Mode::imagingSettings) {
+        Imager::updatePendingSettings(command);
+      } else if (command.mode == Command::Mode::creepSettings) {
+        Creep::Settings::update(command);
+        Creep::Settings::forward();
+      } else if (command.mode == Command::Mode::tiltSettings) {
+        Tilt::Settings::update(command);
+        Tilt::Settings::forward();
       } else {
-        modeChangeStart = KilohertzLoop::iterationID;
-        modeChangeEnd = modeChangeStart;
-        modeChangeEnd += Imager::largeMoveRiseTime / KilohertzLoop::period;
-
-        modeChangeContinuesFeedback = false;
-        modeChangeRetractsZ = false;
-        previousScannerVoltage.x = Application::state.piezoXVoltage;
-        previousScannerVoltage.y = Application::state.piezoYVoltage;
-
-        if (nextCommand.mode >= Command::Mode::idleFeedback) {
-          modeChangeContinuesFeedback = true;
-        } else if (nextCommand.mode >= Command::Mode::blindStepping) {
-          modeChangeRetractsZ = true;
-        }
+        
       }
     } else if (TipApproacher::modeShouldChange()) {
       TipApproacher::forceModeChange();
@@ -122,44 +64,7 @@ void kilohertzLoop() {
 
   bool useADC = true;
   if (KilohertzLoop::iterationID < modeChangeEnd) {
-    if (modeChangeContinuesFeedback) {
-      uint32_t feedbackStart = modeChangeStart + 500 / KilohertzLoop::period;
-      if (KilohertzLoop::iterationID < feedbackStart) {
-        Application::setBiasForFeedback();
-      } else {
-        float deltaIters = KilohertzLoop::iterationID - feedbackStart;
-        float deltaItersMax = (modeChangeEnd - feedbackStart) - 1;
-        
-        float progress = float(deltaIters) / float(deltaItersMax);
-        progress = WaveUtil::thirdOrderSmoothstep(progress);
-
-        float2 xy = interpolate(previousScannerVoltage, float2(0), progress);
-        Application::updatePiezoVoltage(1, xy.x);
-        DAC::enableSafeWait = false;
-        Application::updatePiezoVoltage(2, xy.y);
-        DAC::enableSafeWait = true;
-        Application::correctZVoltage();
-      }
-    } else if (modeChangeRetractsZ) {
-      uint32_t turningPointIter = modeChangeStart + 600 / KilohertzLoop::period;
-      if (KilohertzLoop::iterationID < turningPointIter) {
-        float currentVoltage = Application::state.piezoZVoltage;
-        if (currentVoltage > -270) {
-          float dV = -1.4 * float(KilohertzLoop::period);
-          float newVoltage = max(currentVoltage + dV, -270);
-          Application::updatePiezoVoltage(3, newVoltage);
-        }
-      } else if (KilohertzLoop::iterationID == turningPointIter) {
-        Application::updatePiezoVoltage(3, -270);
-      }
-    } else {
-      Application::updateBiasVoltage(0);
-      Application::updatePiezoVoltage(1, 0);
-      Application::updatePiezoVoltage(2, 0);
-      Application::updatePiezoVoltage(3, 0);
-
-      useADC = false;
-    }
+    
   } else {
     if (Application::mode == Command::Mode::dacTest) {
       Application::dacTester.update();

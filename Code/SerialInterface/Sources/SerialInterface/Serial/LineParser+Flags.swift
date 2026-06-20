@@ -12,8 +12,6 @@ extension LineParser {
     case kilohertzLoop = 7
     case tilt = 8 // <- these just swapped places
     case tiltSettings = 9 // <- these just swapped places
-    // error = 10
-    // errorDiscarded = 11
   }
   
   struct Splitting {

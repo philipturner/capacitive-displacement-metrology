@@ -66,15 +66,17 @@ struct Command {
     // yN - set creep constant for Y only
     creepSettings = 10,
 
-    // TODO: Separate tilt calculation from tilt settings mode.
-
     // cD,T - calculate with D nm, T ms per displacement
-    // oX,Y - set origin for calculation (TODO)
-    // tX,Y - set slope for each axis
-    tilt = 11,
+    // oD,T,X,Y - calculate with origin specified
+    tiltCalculation = 11,
 
-    NUM_MODES = 12,
+    // tX,Y - set slope for each axis
+    tiltSettings = 12,
+
+    NUM_MODES = 13,
   };
+
+  bool isValid = true;
   
   Mode mode = Mode::idle;
 
