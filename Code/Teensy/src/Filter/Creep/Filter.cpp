@@ -45,7 +45,7 @@ void Filter::update(float2 stimulus) {
   updateQueues();
 
   float2 creepConstants = Settings::creepConstants;
-  //scaleCorrectionDrift += sample.dV * creepConstants * scaleChange;
+  scaleCorrectionDrift += sample.dV * creepConstants * scaleChange;
   futureAccumulatedDrift += currentCreepRate;
 }
 
