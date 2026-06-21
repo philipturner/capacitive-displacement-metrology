@@ -1,5 +1,6 @@
 #include "ApplicationState.h"
 
+#include "Application/Application.h"
 #include "Filter/FirstOrderLowpassFilter.h"
 #include "IC/ADC.h"
 #include "Time/KilohertzLoop.h"
@@ -21,14 +22,20 @@ void ApplicationState::updateCurrent(bool useADC) {
   filteredCurrent *= 1 - alpha;
   filteredCurrent += alpha * current;
 
-  currentMaximum = max(currentMaximum, abs(current));
-  updateCurrentSpike();
+  // 1.972-2.000 us
+  // eliding spike for imaging mode: 1.764-1.869 us
+  if (uint8_t(Application::mode) < uint8_t(Command::Mode::simpleScanning)) {
+    currentMaximum = max(currentMaximum, abs(current));
+    updateCurrentSpike();
+  }
 }
 
 void ApplicationState::addSpike(float dV, float C) {
-  float dt = float(KilohertzLoop::period) * 1e-6f;
-  float I = C * (dV / dt);
-  currentSpike[9] += abs(I);
+  if (uint8_t(Application::mode) < uint8_t(Command::Mode::simpleScanning)) {
+    float dt = float(KilohertzLoop::period) * 1e-6f;
+    float I = C * (dV / dt);
+    currentSpike[9] += abs(I);
+  }
 }
 
 void ApplicationState::updateCurrentSpike() {

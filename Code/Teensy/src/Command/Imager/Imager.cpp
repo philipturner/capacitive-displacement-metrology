@@ -97,3 +97,28 @@ float Imager::transformCurrent(float original) {
 float2 Imager::getUncorrectedVoltageXY() const {
   return currentVoltageXY;
 }
+
+Imager::TimeDecomposition
+Imager::getTimeDecomposition(uint32_t timeInImage) const {
+  TimeDecomposition output;
+  output.timeLeft = timeInImage;
+
+  uint32_t settleTime = largeMoveRiseTime + settings.creepSettlingTime;
+  if (output.timeLeft < settleTime) {
+    output.inSettlePeriod = true;
+    return output;
+  } else {
+    output.timeLeft -= settleTime;
+  }
+
+  uint32_t rowTime = getRowTime();
+  output.rowID = output.timeLeft / rowTime;
+  output.timeLeft -= output.rowID * rowTime;
+
+  if (output.timeLeft < polynomialPeakTime) {
+    output.inPolynomialPeak = true;
+  } else {
+    output.timeLeft -= polynomialPeakTime;
+  }
+  return output;
+}

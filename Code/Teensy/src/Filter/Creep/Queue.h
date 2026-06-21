@@ -7,7 +7,7 @@ namespace Creep {
     // minimum required: logScaleResolution + 1
     static constexpr uint32_t queueCapacity = 8;
     static constexpr uint32_t logScaleResolution = 4;
-    static constexpr uint32_t queueCount = 33;
+    static constexpr uint32_t queueCount = 33; // TODO: optimize to 2 hrs history length
 
     // This is stored in RAM1, and memory bandwidth does not contribute to the
     // performance degradation when reading from this.

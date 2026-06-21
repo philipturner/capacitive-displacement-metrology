@@ -13,6 +13,13 @@ struct Imager {
     dualVideo = 2,
   };
 
+  struct TimeDecomposition {
+    bool inSettlePeriod = false;
+    uint32_t rowID = 0;
+    bool inPolynomialPeak = false;
+    uint32_t timeLeft;
+  };
+
   struct Settings {
     uint8_t majorAxis = 0;
     float2 centers[2] = {
@@ -65,16 +72,18 @@ private:
   static uint32_t getTrueResolutionMajor(
     uint32_t resolutionMajor, 
     uint32_t polynomialPeakTime);
+  
   uint32_t getRowTime() const;
   uint32_t getImageTime() const;
   float getPeakValue(float amplitudeNormalized) const;
+  TimeDecomposition getTimeDecomposition(uint32_t timeInImage) const;
 
   float2 previousImageEnd;
   float2 previousVoltageXY = float2(0);
   float2 currentVoltageXY = float2(0);
   float2 getPosition(float2 localPosition, uint32_t imageID);
-  float2 getPosition(uint32_t timeInImage, uint32_t imageID);
+  float2 getPosition(TimeDecomposition decomposition, uint32_t imageID);
 
-  int32_t getPixelID(uint32_t timeInImage);
+  int32_t getPixelID(TimeDecomposition decomposition);
   void addPixel(uint32_t pixelID);
 };

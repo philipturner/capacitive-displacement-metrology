@@ -8,6 +8,8 @@
 #include "Time/KilohertzLoop.h"
 #include <Arduino.h>
 
+#include "Time/Profiling.h"
+
 void kilohertzLoop();
 
 void setup() {
@@ -39,7 +41,13 @@ ModeChanger modeChanger;
 
 void kilohertzLoop() {
   if (KilohertzLoop::iterationID == modeChanger.endIteration) {
+    uint32_t time0 = ARM_DWT_CYCCNT;
     modeChanger.end();
+    uint32_t time1 = ARM_DWT_CYCCNT;
+
+    Serial.print("modeChanger.end() ");
+    Profiling::display(time0, time1);
+    Serial.println();
   } else if (KilohertzLoop::iterationID > modeChanger.endIteration) {
     Command command;
     if (CommandTracker::nextCommand(command)) {
@@ -54,7 +62,13 @@ void kilohertzLoop() {
         Tilt::Settings::update(command);
         Tilt::Settings::forward();
       } else {
+        uint32_t time5 = ARM_DWT_CYCCNT;
         modeChanger.start(command);
+        uint32_t time6 = ARM_DWT_CYCCNT;
+
+        Serial.print("modeChanger.start() ");
+        Profiling::display(time5, time6);
+        Serial.println();
       }
     } else if (TipApproacher::modeShouldChange()) {
       ModeChanger::forceModeChange();
@@ -63,7 +77,16 @@ void kilohertzLoop() {
 
   bool useADC = true;
   if (KilohertzLoop::iterationID < modeChanger.endIteration) {
+    uint32_t time5 = ARM_DWT_CYCCNT;
     modeChanger.update(useADC);
+    uint32_t time6 = ARM_DWT_CYCCNT;
+
+    if (KilohertzLoop::iterationID % 25 == 0 || KilohertzLoop::iterationID == modeChanger.startIteration) {
+        Serial.print("modeChanger.update() ");
+        Profiling::display(time5, time6);
+        Serial.print(KilohertzLoop::iterationID - modeChanger.startIteration);
+        Serial.println();
+    }
   } else {
     switch (Application::mode) {
       case Command::Mode::idle:
@@ -103,11 +126,19 @@ void kilohertzLoop() {
   }
 
   Application::state.previous = Application::state.abbreviated();
+
+  uint32_t time7 = ARM_DWT_CYCCNT;
+
   Application::state.updateCurrent(useADC);
   if (!useADC) {
     delayNanoseconds(700);
   }
+
+  uint32_t time8 = ARM_DWT_CYCCNT;
+
   Application::updatePiezoZDeferred();
+
+  uint32_t time9 = ARM_DWT_CYCCNT;
 
   // Send data to the real-time monitor.
   if (!ErrorMessage::hasError()) {
@@ -117,8 +148,21 @@ void kilohertzLoop() {
     }
   }
 
+  uint32_t time10 = ARM_DWT_CYCCNT;
+
   float2 stimulus;
   stimulus.x = Application::state.piezoXVoltage;
   stimulus.y = Application::state.piezoYVoltage;
   Application::creepFilter.update(stimulus);
+
+  uint32_t time11 = ARM_DWT_CYCCNT;
+
+  // if (KilohertzLoop::iterationID % 1997 == 0 && Application::mode == Command::Mode::imaging) {
+  //   Serial.print("kilohertzLoop ");
+  //   Profiling::display(time7, time8);
+  //   Profiling::display(time8, time9);
+  //   Profiling::display(time9, time10);
+  //   Profiling::display(time10, time11);
+  //   Serial.println();
+  // }
 }

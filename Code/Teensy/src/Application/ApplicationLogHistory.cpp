@@ -24,9 +24,14 @@ float2 getScannerVoltageForTilt() {
   }
 }
 
+// 0.227-0.280 us
+// without current spike calculation: 0.077-0.132 us
 void Application::logHistoryMessage() {
   float currentMaximum = state.extractCurrentMaximum();
-  float currentSpikePrediction = state.getPredictedCurrentSpike();
+  float currentSpikePrediction = 0;
+  if (uint8_t(mode) < uint8_t(Command::Mode::simpleScanning)) {
+    currentSpikePrediction = state.getPredictedCurrentSpike();
+  }
 
   auto flags = Log::Flags::history;
   if (needsCapacitanceUpdate()) {

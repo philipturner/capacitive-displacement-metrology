@@ -45,8 +45,32 @@ float getBaseCurrent(float relativePositionZ) {
   return output;
 }
 
+int32_t _seed = 0;
+
+int32_t _random()
+{
+	int32_t hi, lo, x;
+
+	// the algorithm used in avr-libc 1.6.4
+	x = _seed;
+	if (x == 0) x = 123459876;
+	hi = x / 127773;
+	lo = x % 127773;
+	x = 16807 * lo - 2836 * hi;
+	if (x < 0) x += 0x7FFFFFFF;
+  _seed = x;
+	return x;
+}
+
+// no random, no math: 1.450 us
+// no random, math: 1.450 us
+// random, no math: 1.579 us
+// random, math: 1.962 us
+// - no natural log: 1.73-1.85 us
+// - no cosine: 1.73-1.81 us
+// - no square root: 1.87-1.92 us
 float getRandomGaussian() {
-  uint32_t randomNumber = random() << 1;
+  uint32_t randomNumber = uint32_t(random()) << 1;
   uint16_t lowerBits = randomNumber & 0xFFFF;
   uint16_t upperBits = randomNumber >> 16;
 

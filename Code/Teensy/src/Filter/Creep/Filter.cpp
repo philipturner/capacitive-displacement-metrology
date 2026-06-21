@@ -22,8 +22,8 @@ Filter::Filter(bool notDefaultConstructor) {
 }
 
 float getScaleChange() {
-  float loopPeriod = float(KilohertzLoop::period * 1e-6);
-  return log10f(0.01) - log10f(loopPeriod);
+  float loopPeriod = float(KilohertzLoop::period) * 1e-6f;
+  return log10f(0.01f) - log10f(loopPeriod);
 }
 inline float scaleChange = getScaleChange();
 

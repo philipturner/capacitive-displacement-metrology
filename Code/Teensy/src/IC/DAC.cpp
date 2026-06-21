@@ -7,6 +7,8 @@ bool find(CRC::Flags flags, CRC::Flags lookingFor) {
   return uint8_t(flags & lookingFor) != 0;
 }
 
+// no CRC, no safe-wait: 1.475 us
+// digitalWriteFast: 1.447 us
 uint16_t DAC::transfer(
   uint8_t CS,
   DACInput input,
