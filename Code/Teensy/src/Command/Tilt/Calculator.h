@@ -8,6 +8,7 @@
 namespace Tilt {
   struct Calculator {
     struct Trial {
+      float2 rotationConstants;
       float start[2];
       float middle[2];
       float end[2];

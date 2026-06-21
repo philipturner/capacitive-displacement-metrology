@@ -8,12 +8,14 @@
 
 using namespace Tilt;
 
-uint32_t getTrialsPerResult(float reportPeriodSeconds, uint32_t trialTime) {
-  float reportPeriodMicros = reportPeriodSeconds * 1e6;
-  float output = reportPeriodMicros / float(trialTime);
-  output = ceil(output);
-  output = max(output, 0);
-  return uint32_t(output);
+float2 rotate(float2 input, float2 rotationConstants) {
+  float cosAngle = rotationConstants.x;
+  float sinAngle = rotationConstants.y;
+
+  float2 output;
+  output.x = input.x * cosAngle - input.y * sinAngle;
+  output.y = input.x * sinAngle + input.y * cosAngle;
+  return output;
 }
 
 Calculator::Calculator() {
@@ -26,7 +28,7 @@ Calculator::Calculator(Command command) {
 
   movementTime = uint32_t(command.attributes[1] * 1000);
   movementTime = KilohertzLoopRound(movementTime);
-  trialsPerResult = 36;
+  trialsPerResult = 20;
 }
 
 float2 Calculator::getOriginScannerVoltage(Command command) {
@@ -57,7 +59,8 @@ void Calculator::update() {
     if (timeInTrial == 0 && time > 0) {
       float2 dz = pendingTrial.getDifference();
       float2 slope = dz / displacementSize;
-      
+      slope = rotate(slope, pendingTrial.rotationConstants);
+
       pendingResult.update(slope);
       pendingTrial = Trial();
     }
@@ -96,10 +99,14 @@ uint32_t Calculator::getTimePerTrial() {
 
 void Calculator::updateForTrial(uint32_t timeInTrial, uint32_t trialID) {
   uint32_t time = timeInTrial;
-  float z = Application::state.piezoZVoltage * 0.320f;
+  
+  float angle = float(trialID) / float(trialsPerResult) * float(2 * M_PI);
+  float2 rotationConstants = float2(cosf(angle), sinf(angle));
+  pendingTrial.rotationConstants = rotationConstants;
 
   for (uint32_t axisID = 0; axisID < 2; ++axisID) {
     if (time < paddingTime) {
+      float z = Application::state.piezoZVoltage * 0.320f;
       pendingTrial.start[axisID] = z;
       return;
     } else {
@@ -131,21 +138,7 @@ void Calculator::updateForTrial(uint32_t timeInTrial, uint32_t trialID) {
     } else {
       dxy.y = dl;
     }
-    
-    if (time == 0 && i == 1) {
-      // Best settings: 11c10,50
-      Serial.print(trialID);
-      Serial.print(" ");
-      Serial.print(axisID);
-      Serial.print(" ");
-      Serial.print(dxy.x);
-      Serial.print(" ");
-      Serial.print(dxy.y);
-      Serial.print(" ");
-      Serial.print(z);
-      Serial.print(" ");
-      Serial.println();
-    }
+    dxy = rotate(dxy, rotationConstants);
 
     float2 scannerVoltage = dxy / 0.320f;
     scannerVoltage += originScannerVoltage;
@@ -156,6 +149,7 @@ void Calculator::updateForTrial(uint32_t timeInTrial, uint32_t trialID) {
       Application::updatePiezoVoltage(2, scannerVoltage.y);
       DAC::enableSafeWait = true;
     } else {
+      float z = Application::state.piezoZVoltage * 0.320f;
       if (i == 0) {
         pendingTrial.middle[axisID] = z;
       } else {

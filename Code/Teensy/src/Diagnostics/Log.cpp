@@ -64,7 +64,7 @@ void Log::transmitBufferedSamples() {
     }
     cString[28] = 0;
 
-    //Serial.print(cString);
+    Serial.print(cString);
   }
 
   // Check that the transmitted data was valid.

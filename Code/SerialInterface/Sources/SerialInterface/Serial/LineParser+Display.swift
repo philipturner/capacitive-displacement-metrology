@@ -153,7 +153,7 @@ extension LineParser.Splitting {
     
     func formatUncertainty(_ x: Float) -> String {
       var output = String(format: "%.3f", x)
-      output += "±"
+      output = "±" + output
       return output
     }
     output += formatUncertainty(interval[0])
