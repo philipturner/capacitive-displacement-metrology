@@ -30,7 +30,7 @@ void Imager::update() {
     }
     
     if (timeInImage < largeMoveRiseTime + settings.creepSettlingTime) {
-      Application::creepFilter.futureAccumulatedDrift = float2(0);
+      Application::creepFilter.resetDrift();
     }
 
     currentVoltageXY = getPosition(timeInImage, imageID);
@@ -38,7 +38,7 @@ void Imager::update() {
   }
 
   float2 creepCorrectedVoltageXY = currentVoltageXY;
-  creepCorrectedVoltageXY -= Application::creepFilter.futureAccumulatedDrift;
+  creepCorrectedVoltageXY += Application::creepFilter.getDriftCorrection();
   Application::updatePiezoVoltage(1, creepCorrectedVoltageXY.x);
   DAC::enableSafeWait = false;
   Application::updatePiezoVoltage(2, creepCorrectedVoltageXY.y);

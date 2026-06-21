@@ -21,6 +21,12 @@ Filter::Filter(bool notDefaultConstructor) {
   lookupTable = LookupTable(true);
 }
 
+float getScaleChange() {
+  float loopPeriod = float(KilohertzLoop::period * 1e-6);
+  return log10f(0.01) - log10f(loopPeriod);
+}
+inline float scaleChange = getScaleChange();
+
 void Filter::update(float2 stimulus) {
   // Responding to the DAC updates from the current iteration.
   Sample sample;
@@ -38,7 +44,18 @@ void Filter::update(float2 stimulus) {
   updateCreepRate(accumulator);
   updateQueues();
 
+  float2 creepConstants = Settings::creepConstants;
+  //scaleCorrectionDrift += sample.dV * creepConstants * scaleChange;
   futureAccumulatedDrift += currentCreepRate;
+}
+
+void Filter::resetDrift() {
+  scaleCorrectionDrift = float2(0);
+  futureAccumulatedDrift = float2(0);
+}
+
+float2 Filter::getDriftCorrection() {
+  return scaleCorrectionDrift - futureAccumulatedDrift;
 }
 
 float2 Filter::shiftSampleTimes() {
