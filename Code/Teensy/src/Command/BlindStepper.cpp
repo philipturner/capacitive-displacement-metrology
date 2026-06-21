@@ -70,8 +70,9 @@ void BlindStepper::update() {
   // This can only happen if the mode is 'capacitance'.
   if (currentState == State::measuring) {
     // Does not update the bias voltage if the capacitance tracker finishes.
+    float capacitanceBefore = Application::state.capacitance;
     Application::updateCapacitanceTracker(/*regenerate=*/false);
-
+    
     auto state = Application::capTracker.getCurrentState();
     if (state == CapacitanceTracker::State::finished) {
       float capacitance = Application::state.capacitance;
@@ -81,6 +82,10 @@ void BlindStepper::update() {
         currentState = State::stepping;
       }
       waveStartIterationID = KilohertzLoop::iterationID;
+
+      float dC = capacitance - capacitanceBefore;
+      float dstep = float(stepsPerCheck);
+      Application::state.dC_dstep = dC / dstep;
     }
   }
 

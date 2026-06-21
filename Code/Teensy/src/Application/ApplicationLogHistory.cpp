@@ -3,15 +3,18 @@
 #include "Command/Tilt/Settings.h"
 #include "Diagnostics/Log.h"
 
-bool needsCapacitanceUpdate() {
+uint32_t requiredCapacitanceUpdateCount() {
   if (Application::mode == Command::Mode::capacitanceReporting) {
-    return true;
+    return 1;
   } else if (Application::mode == Command::Mode::blindStepping) {
     if (Application::blindStepper.mode == BlindStepper::Mode::capacitance) {
-      return true;
+      auto state = Application::blindStepper.getCurrentState();
+      if (state != BlindStepper::State::finished) {
+        return 2;
+      }
     }
   }
-  return false;
+  return 0;
 }
 
 float2 getScannerVoltageForTilt() {
@@ -34,10 +37,8 @@ void Application::logHistoryMessage() {
   }
 
   auto flags = Log::Flags::history;
-  if (needsCapacitanceUpdate()) {
-    if (state.capacitanceUpdateCount == 0) {
-      flags = Log::Flags::historyDiscard;
-    }
+  if (state.capacitanceUpdateCount < requiredCapacitanceUpdateCount()) {
+    flags = Log::Flags::historyDiscard;
   }
 
   if (mode == Command::Mode::idle) {
@@ -59,11 +60,17 @@ void Application::logHistoryMessage() {
       state.capacitance,
       state.phaseShift);
   } else if (mode == Command::Mode::blindStepping) {
+    float fifthValue = 0;
+    if (Application::blindStepper.mode == BlindStepper::Mode::capacitance) {
+      float dx = 100e-9f;
+      fifthValue = Application::state.dC_dstep / dx;
+    }
     Log::write(flags,
       currentMaximum,
       currentSpikePrediction,
       state.piezoZVoltage * 0.320f,
-      state.capacitance);
+      state.capacitance,
+      fifthValue);
   } else if (mode == Command::Mode::tipApproach ||
              mode == Command::Mode::idleFeedback) {
     Log::write(flags,

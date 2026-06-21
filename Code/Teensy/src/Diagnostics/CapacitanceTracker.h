@@ -14,16 +14,17 @@ struct CapacitanceTracker {
   static constexpr uint32_t waveCountPost = 10;
   static constexpr float stimulusAmplitude = 12;
 
-  // Magnitude of accumulate(referenceSine * current) / n
-  // Optimized for kilohertz loop period = 12 μs
+  // Fine-tune this by checking the ratio of sineMixed / cosineMixed and
+  // zeroing it out.
   //
-  // 65: -4.3e-12
-  // 64: -1.1e-12
-  // 63.8: -5e-13, -6.5e-13
-  // 63.6: 5e-14
-  // 63.4: 6e-13
-  // 63: 2e12
-  static constexpr float loopTimeLag = 63.6; // μs
+  // Adding the piezos into the loop would theoretically add <10 μs
+  // 2.65 kHz, Q = 18 (higher Q is faster):
+  // 3.337 μs [0-43 Hz]
+  // 3.350 μs [170 Hz]
+  // 3.507 μs [580 Hz]
+  // 4.000 μs [1080 Hz]
+  // 5.050 μs [1544 Hz]
+  static constexpr float loopTimeLag = 87; // μs
 
   CapacitanceTracker();
   CapacitanceTracker(bool notDefaultConstructor);

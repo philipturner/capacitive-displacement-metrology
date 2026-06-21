@@ -14,6 +14,7 @@ struct ApplicationState {
 
   float capacitance = 0; // units: F
   float phaseShift = 0; // units: °
+  float dC_dstep = 0; // units: F
   uint32_t capacitanceUpdateCount = 0;
 
   float spectroscopyTrigger = 0;
