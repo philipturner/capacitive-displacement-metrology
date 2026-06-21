@@ -220,7 +220,7 @@ extension PixelTracker {
             if settings.majorAxis == 0 {
               return rowID * settings._resolutionMajor + columnID
             } else {
-              return columnID * settings._resolutionMinor + columnID
+              return columnID * settings._resolutionMinor + rowID
             }
           } else {
             let mappedRowID = boundary + rowID

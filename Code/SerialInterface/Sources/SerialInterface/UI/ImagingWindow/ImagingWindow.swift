@@ -16,7 +16,7 @@ class ImagingWindow {
   }
   static let dualImageType: DualImageType = .even
   
-  static let useZeroPaddedFourierImage: Bool = false
+  static let useZeroPaddedFourierImage: Bool = true
   
   static let trajectoryLagTime: Double? = 0.1
   

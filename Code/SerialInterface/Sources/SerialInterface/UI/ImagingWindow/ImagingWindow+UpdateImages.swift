@@ -270,6 +270,7 @@ extension ImagingWindow {
       let statistics = overridingStatistics ?? pixelTracker.statistics!
       
       if pixelLaneID == 0 {
+        let statistics = overridingStatistics ?? pixelTracker.statistics!
         let average = statistics.average[0]
         var stddev = statistics.stddev[0]
         stddev = max(stddev, 0.1)
@@ -278,15 +279,26 @@ extension ImagingWindow {
           average - stddev * 3,
           average + stddev * 3)
       } else {
-        let minimum = statistics.minimum[1]
-        let maximum = statistics.maximum[1]
-        let dz = maximum - minimum
+        func createRange() -> SIMD2<Float> {
+          let defaultStatistics = pixelTracker.statistics!
+          var minimum = defaultStatistics.minimum[1]
+          var maximum = defaultStatistics.maximum[1]
+          
+          let minimum2 = statistics.minimum[1]
+          let maximum2 = statistics.maximum[1]
+          
+          minimum = min(minimum, minimum2)
+          maximum = max(maximum, maximum2)
+          return SIMD2(minimum, maximum)
+        }
+        let range = createRange()
+        let dz = range[1] - range[0]
         
         if dz < 0.01 {
-          let center = (minimum + maximum) / 2
+          let center = (range[0] + range[1]) / 2
           return SIMD2(center - 0.005, center + 0.005)
         } else {
-          return SIMD2(minimum, maximum)
+          return range
         }
       }
     }

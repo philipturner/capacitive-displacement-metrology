@@ -58,8 +58,14 @@ float getRandomGaussian() {
 }
 
 float getCorrugationAmplitude(float positionX, float positionY) {
-  float x = positionX / Emulation::atomSpacing;
-  float y = positionY / Emulation::atomSpacing;
+  float oldX = positionX / Emulation::atomSpacing;
+  float oldY = positionY / Emulation::atomSpacing;
+
+  constexpr float angleRadians = Emulation::latticeRotation * float(M_PI / 180);
+  constexpr float cosA = cosf(angleRadians);
+  constexpr float sinA = sinf(angleRadians);
+  float x = oldX * cosA - oldY * sinA;
+  float y = oldX * sinA + oldY * cosA;
 
   float phases[3];
   phases[0] = x;
