@@ -3,6 +3,7 @@
 #include "Application/Application.h"
 #include "Command/Tilt/Settings.h"
 #include "Diagnostics/Log.h"
+#include "IC/DAC.h"
 #include <Arduino.h>
 
 using namespace Tilt;
@@ -25,7 +26,7 @@ Calculator::Calculator(Command command) {
 
   movementTime = uint32_t(command.attributes[1] * 1000);
   movementTime = KilohertzLoopRound(movementTime);
-  trialsPerResult = getTrialsPerResult(reportPeriodSeconds, getTimePerTrial());
+  trialsPerResult = 36;
 }
 
 float2 Calculator::getOriginScannerVoltage(Command command) {
@@ -49,13 +50,13 @@ void Calculator::update() {
   uint32_t trialTime = getTimePerTrial();
   uint32_t resultTime = trialsPerResult * trialTime;
   uint32_t timeInResult = time % resultTime;
+  uint32_t trialID = timeInResult / trialTime;
   uint32_t timeInTrial = timeInResult % trialTime;
 
   if (!isFinished) {
     if (timeInTrial == 0 && time > 0) {
       float2 dz = pendingTrial.getDifference();
-      float dxy = displacementSize / 0.320f;
-      float2 slope = dz / dxy;
+      float2 slope = dz / displacementSize;
       
       pendingResult.update(slope);
       pendingTrial = Trial();
@@ -79,7 +80,7 @@ void Calculator::update() {
       }
     }
 
-    updateForTrial(timeInTrial);
+    updateForTrial(timeInTrial, trialID);
   }
 
   Application::correctZVoltage();
@@ -93,52 +94,76 @@ uint32_t Calculator::getTimePerTrial() {
   return output;
 }
 
-void Calculator::updateForTrial(uint32_t timeInTrial) {
+void Calculator::updateForTrial(uint32_t timeInTrial, uint32_t trialID) {
   uint32_t time = timeInTrial;
+  float z = Application::state.piezoZVoltage * 0.320f;
 
   for (uint32_t axisID = 0; axisID < 2; ++axisID) {
     if (time < paddingTime) {
-      pendingTrial.start[axisID] = Application::state.piezoZVoltage;
+      pendingTrial.start[axisID] = z;
       return;
     } else {
       time -= paddingTime;
     }
+
+    uint32_t loopTime = movementTime + settleTime + paddingTime;
+    if (time >= 2 * loopTime) {
+      time -= 2 * loopTime;
+      continue;
+    }
+
+    uint32_t i = 0;
+    if (time >= loopTime) {
+      time -= loopTime;
+      i = 1;
+    }
+
+    float progress = float(time) / float(movementTime);
+    progress = min(progress, 1);
+    if (i == 1) {
+      progress = 1 - progress;
+    }
+
+    float dl = displacementSize * progress;
+    float2 dxy = float2(0);
+    if (axisID == 0) {
+      dxy.x = dl;
+    } else {
+      dxy.y = dl;
+    }
     
-    for (uint32_t i = 0; i < 2; ++i) {
-      if (time <= movementTime + settleTime) {
-        float progress = float(time) / float(movementTime);
-        progress = min(progress, 1);
-        if (i == 1) {
-          progress = 1 - progress;
-        }
+    if (time == 0 && i == 1) {
+      // Best settings: 11c10,50
+      Serial.print(trialID);
+      Serial.print(" ");
+      Serial.print(axisID);
+      Serial.print(" ");
+      Serial.print(dxy.x);
+      Serial.print(" ");
+      Serial.print(dxy.y);
+      Serial.print(" ");
+      Serial.print(z);
+      Serial.print(" ");
+      Serial.println();
+    }
 
-        float position = displacementSize * progress;
-        float voltage = position / 0.320f;
-        if (axisID == 0) {
-          voltage += originScannerVoltage.x;
-        } else {
-          voltage += originScannerVoltage.y;
-        }
-
-        uint32_t channelID = 1 + axisID;
-        Application::updatePiezoVoltage(channelID, voltage);
-        return;
+    float2 scannerVoltage = dxy / 0.320f;
+    scannerVoltage += originScannerVoltage;
+    
+    if (time <= movementTime + settleTime) {
+      Application::updatePiezoVoltage(1, scannerVoltage.x);
+      DAC::enableSafeWait = false;
+      Application::updatePiezoVoltage(2, scannerVoltage.y);
+      DAC::enableSafeWait = true;
+    } else {
+      if (i == 0) {
+        pendingTrial.middle[axisID] = z;
       } else {
-        time -= movementTime + settleTime;
-      }
-
-      if (time < paddingTime) {
-        float voltageZ = Application::state.piezoZVoltage;
-        if (i == 0) {
-          pendingTrial.middle[axisID] = voltageZ;
-        } else {
-          pendingTrial.end[axisID] = voltageZ;
-        }
-        return;
-      } else {
-        time -= paddingTime;
+        pendingTrial.end[axisID] = z;
       }
     }
+
+    return;
   }
 
   Serial.println("This should never happen.");

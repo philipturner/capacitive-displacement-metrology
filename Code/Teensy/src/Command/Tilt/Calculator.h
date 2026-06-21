@@ -11,7 +11,7 @@ namespace Tilt {
       float start[2];
       float middle[2];
       float end[2];
-
+      
       float2 getDifference() {
         float2 startVec = float2(start[0], start[1]);
         float2 middleVec = float2(middle[0], middle[1]);
@@ -50,7 +50,6 @@ namespace Tilt {
     static constexpr uint32_t settleTime = KilohertzLoopRound(2000);
     static constexpr uint32_t paddingTime = KilohertzLoopRound(50);
     static constexpr uint32_t stopTime = 5000000;
-    static constexpr float reportPeriodSeconds = 1.0;
 
     Calculator();
     Calculator(Command command);
@@ -69,6 +68,6 @@ namespace Tilt {
     Result pendingResult = Result();
     uint32_t getTimePerTrial();
 
-    void updateForTrial(uint32_t timeInTrial);
+    void updateForTrial(uint32_t timeInTrial, uint32_t trialID);
   };
 };
