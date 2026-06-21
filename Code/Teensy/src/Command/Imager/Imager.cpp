@@ -9,20 +9,20 @@ Imager::Imager() {
 
 Imager::Imager(Command command) {
   mode = getMode(command.alphaCode);
-  _resolutionMajor = command.attributes[0];
-  _resolutionMinor = command.attributes[1];
-  pixelDimension = command.attributes[2] / float(_resolutionMajor);
+  resolutionMajor = command.attributes[0];
+  resolutionMinor = command.attributes[1];
+  pixelDimension = command.attributes[2] / float(resolutionMajor);
 
-  if (_resolutionMajor <= 32) {
+  if (resolutionMajor <= 32) {
     polynomialPeakTime = KilohertzLoopRound(1000);
-  } else if (_resolutionMajor <= 48) {
+  } else if (resolutionMajor <= 48) {
     polynomialPeakTime = KilohertzLoopRound(1500);
   } else {
     polynomialPeakTime = KilohertzLoopRound(2000);
   }
 
-  _trueResolutionMajor = getTrueResolutionMajor(
-    _resolutionMajor, polynomialPeakTime);
+  trueResolutionMajor = getTrueResolutionMajor(
+    resolutionMajor, polynomialPeakTime);
   
   settings = Imager::pendingSettings;
 }
@@ -47,14 +47,14 @@ uint32_t Imager::getTrueResolutionMajor(
 }
 
 uint32_t Imager::getRowTime() const {
-  return polynomialPeakTime + _trueResolutionMajor * pixelTime;
+  return polynomialPeakTime + trueResolutionMajor * pixelTime;
 }
 
 uint32_t Imager::getImageTime() const {
   uint32_t output = 0;
   output += largeMoveRiseTime;
   output += settings.creepSettlingTime;
-  output += _resolutionMinor * getRowTime();
+  output += resolutionMinor * getRowTime();
   output += polynomialPeakTime;
   return output;
 }

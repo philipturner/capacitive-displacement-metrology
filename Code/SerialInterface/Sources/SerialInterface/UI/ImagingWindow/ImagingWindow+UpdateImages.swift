@@ -3,30 +3,33 @@ import PythonKit
 
 extension ImagingWindow {
   func squareNumpyArray(_ data: [Float]) -> PythonObject {
-    let resolution = settings._resolutionMajor
-    guard data.count == resolution * resolution else {
+    let pixelCount = settings.maxResolution * settings.maxResolution
+    guard data.count == pixelCount else {
       fatalError("Incorrectly sized data array.")
     }
     
     var ndarray = data.makeNumpyArray()
-    ndarray = ndarray.reshape(resolution, resolution)
+    ndarray = ndarray.reshape(
+      settings.maxResolution,
+      settings.maxResolution)
     return ndarray
   }
   
   func rectangularNumpyArray(_ data: [Float]) -> PythonObject {
-    guard data.count == settings._pixelsPerImage else {
+    let pixelCount = settings.resolutionMajor * settings.resolutionMinor
+    guard data.count == pixelCount else {
       fatalError("Incorrectly sized data array.")
     }
     
     var ndarray = data.makeNumpyArray()
     if settings.majorAxis == 0 {
       ndarray = ndarray.reshape(
-        settings._resolutionMinor,
-        settings._resolutionMajor)
+        settings.resolutionMinor,
+        settings.resolutionMajor)
     } else {
       ndarray = ndarray.reshape(
-        settings._resolutionMajor,
-        settings._resolutionMinor)
+        settings.resolutionMajor,
+        settings.resolutionMinor)
     }
     return ndarray
   }
@@ -94,8 +97,8 @@ extension ImagingWindow {
   
   func resetScanImage(columnID: Int) {
     for rowID in 0..<2 {
-      let resolution = settings._resolutionMajor
-      let emptyData = [Float](repeating: 0, count: resolution * resolution)
+      let pixelCount = settings.maxResolution * settings.maxResolution
+      let emptyData = [Float](repeating: 0, count: pixelCount)
       let dataNumpy = squareNumpyArray(emptyData)
       
       let imagePlot = scanImagePlots[rowID][columnID]
@@ -113,11 +116,12 @@ extension ImagingWindow {
   func resetFourierImage(columnID: Int) {
     func createDataNumpy() -> PythonObject {
       if ImagingWindow.useZeroPaddedFourierImage {
-        let resolution = settings._resolutionMajor
-        let emptyData = [Float](repeating: 0, count: resolution * resolution)
+        let pixelCount = settings.maxResolution * settings.maxResolution
+        let emptyData = [Float](repeating: 0, count: pixelCount)
         return squareNumpyArray(emptyData)
       } else {
-        let emptyData = [Float](repeating: 0, count: settings._pixelsPerImage)
+        let pixelCount = settings.resolutionMajor * settings.resolutionMinor
+        let emptyData = [Float](repeating: 0, count: pixelCount)
         return rectangularNumpyArray(emptyData)
       }
     }

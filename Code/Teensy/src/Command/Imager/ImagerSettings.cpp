@@ -64,9 +64,9 @@ void Imager::forwardSettings() const {
   Log::write(
     Log::Flags::imagingSettings,
     uint8_t(mode),
-    _trueResolutionMajor,
-    _resolutionMajor,
-    _resolutionMinor,
+    trueResolutionMajor,
+    resolutionMajor,
+    resolutionMinor,
     pixelDimension);
 
   Log::write(

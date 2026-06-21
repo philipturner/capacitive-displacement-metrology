@@ -2,9 +2,9 @@ import PythonKit
 
 struct ImagingSettings {
   var mode: ImagingMode
-  var _trueResolutionMajor: Int
-  var _resolutionMajor: Int
-  var _resolutionMinor: Int
+  var trueResolutionMajor: Int
+  var resolutionMajor: Int
+  var resolutionMinor: Int
   var pixelDimension: Float
   
   var majorAxis: Int
@@ -32,9 +32,9 @@ struct ImagingSettings {
       return mode
     }
     self.mode = createMode()
-    self._trueResolutionMajor = Int(settingsLines[0].values[1])
-    self._resolutionMajor = Int(settingsLines[0].values[2])
-    self._resolutionMinor = Int(settingsLines[0].values[3])
+    self.trueResolutionMajor = Int(settingsLines[0].values[1])
+    self.resolutionMajor = Int(settingsLines[0].values[2])
+    self.resolutionMinor = Int(settingsLines[0].values[3])
     self.pixelDimension = settingsLines[0].values[4]
     
     func createCenters() -> [SIMD2<Float>] {
@@ -66,8 +66,12 @@ struct ImagingSettings {
     self.setpointCurrent = settingsLines[3].values[0]
   }
   
-  var _pixelsPerImage: Int {
-    _resolutionMajor * _resolutionMinor
+  var pixelsPerImage: Int {
+    resolutionMajor * resolutionMinor
+  }
+  
+  var maxResolution: Int {
+    max(resolutionMajor, resolutionMinor)
   }
   
   func center(channelID: Int) -> SIMD2<Float> {
@@ -83,11 +87,11 @@ struct ImagingSettings {
   }
   
   func expectedPosition(pixelID: Int, imageID: Int) -> SIMD2<Float> {
-    let rowID = pixelID / _resolutionMajor
-    let columnID = pixelID % _resolutionMajor
+    let rowID = pixelID / resolutionMajor
+    let columnID = pixelID % resolutionMajor
     let resolutionVector = SIMD2(
-      Float(_resolutionMajor),
-      Float(_resolutionMinor))
+      Float(resolutionMajor),
+      Float(resolutionMinor))
     
     var position = SIMD2(Float(columnID), Float(rowID))
     position += 0.5
@@ -108,7 +112,7 @@ extension ImagingSettings {
   // images have the same spatial footprint as square images.
   func realSpaceTransform(channelID: Int) -> PythonObject {
     var offset: SIMD2<Float> = .zero
-    offset -= 0.5 * Float(_resolutionMajor) * pixelDimension
+    offset -= 0.5 * Float(maxResolution) * pixelDimension
     offset += center(channelID: channelID)
     offset /= pixelDimension
     
@@ -121,10 +125,11 @@ extension ImagingSettings {
   
   func fourierSpaceTransform() -> PythonObject {
     if ImagingWindow.useZeroPaddedFourierImage {
-      let fourierPixelDimension = (1 / pixelDimension) / Float(_resolutionMajor)
+      let resolution = max(resolutionMajor, resolutionMinor)
+      let fourierPixelDimension = (1 / pixelDimension) / Float(resolution)
       
       var offset: SIMD2<Float> = .zero
-      offset -= 0.5 * Float(_resolutionMajor) * fourierPixelDimension
+      offset -= 0.5 * Float(resolution) * fourierPixelDimension
       offset /= fourierPixelDimension
       
       let transform = QtGui.QTransform()
@@ -135,12 +140,12 @@ extension ImagingSettings {
       func createResolutionVector() -> SIMD2<Float> {
         if majorAxis == 0 {
           return SIMD2(
-            Float(_resolutionMajor),
-            Float(_resolutionMinor))
+            Float(resolutionMajor),
+            Float(resolutionMinor))
         } else {
           return SIMD2(
-            Float(_resolutionMinor),
-            Float(_resolutionMajor))
+            Float(resolutionMinor),
+            Float(resolutionMajor))
         }
       }
       

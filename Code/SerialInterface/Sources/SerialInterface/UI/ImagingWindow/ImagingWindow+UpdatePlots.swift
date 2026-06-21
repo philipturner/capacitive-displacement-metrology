@@ -37,7 +37,7 @@ extension ImagingWindow {
         return false
       }
       
-      if imageHistory.receivedPixelCount >= settings._pixelsPerImage {
+      if imageHistory.receivedPixelCount >= settings.pixelsPerImage {
         return true
       } else {
         return false

@@ -8,23 +8,23 @@ struct PixelTracker {
     self.settings = settings
     self.dataBuffer = Array(
       repeating: SIMD2<Float>(-100_000, -1000),
-      count: settings._pixelsPerImage)
+      count: settings.pixelsPerImage)
   }
   
   var receivedRowCount: Int {
-    receivedPixelCount / settings._resolutionMajor
+    receivedPixelCount / settings.resolutionMajor
   }
   
   var isFinished: Bool {
-    guard receivedPixelCount <= settings._pixelsPerImage else {
+    guard receivedPixelCount <= settings.pixelsPerImage else {
       fatalError("Received pixel count was too large.")
     }
-    return (receivedPixelCount == settings._pixelsPerImage)
+    return (receivedPixelCount == settings.pixelsPerImage)
   }
   
   mutating func receive(lines: [LineParser.Line], imageID: Int) {
     let nextPixelCount = receivedPixelCount + lines.count
-    if nextPixelCount > settings._pixelsPerImage {
+    if nextPixelCount > settings.pixelsPerImage {
       fatalError("Requesting too many lines for pixel tracker.")
     }
     
@@ -39,9 +39,9 @@ struct PixelTracker {
         if receivedRowCount % 2 == 0 {
           return receivedPixelCount
         } else {
-          let floor = receivedRowCount * settings._resolutionMajor
+          let floor = receivedRowCount * settings.resolutionMajor
           let indexInRow = receivedPixelCount - floor
-          let output = floor + (settings._resolutionMajor - 1 - indexInRow)
+          let output = floor + (settings.resolutionMajor - 1 - indexInRow)
           return output
         }
       }
@@ -104,7 +104,7 @@ extension PixelTracker {
     guard receivedRowCount > 0 else {
       return
     }
-    let maxPixelID = receivedRowCount * settings._resolutionMajor
+    let maxPixelID = receivedRowCount * settings.resolutionMajor
     
     var sum: SIMD2<Double> = .zero
     var minimum = SIMD2<Float>(repeating: .greatestFiniteMagnitude)
@@ -145,16 +145,16 @@ extension PixelTracker {
     var even = self
     var odd = self
     
-    for rowID in 0..<settings._resolutionMinor {
-      for columnID in 0..<settings._resolutionMajor {
-        let pixelID = rowID * settings._resolutionMajor + columnID
+    for rowID in 0..<settings.resolutionMinor {
+      for columnID in 0..<settings.resolutionMajor {
+        let pixelID = rowID * settings.resolutionMajor + columnID
         let data = dataBuffer[pixelID]
         
         if rowID % 2 == 0 {
-          let overwrittenID = pixelID + settings._resolutionMajor
+          let overwrittenID = pixelID + settings.resolutionMajor
           even.dataBuffer[overwrittenID] = data
         } else {
-          let overwrittenID = pixelID - settings._resolutionMajor
+          let overwrittenID = pixelID - settings.resolutionMajor
           odd.dataBuffer[overwrittenID] = data
         }
       }
@@ -195,39 +195,47 @@ extension PixelTracker {
     
     func getPixelsPerImage() -> Int {
       if basis == .fourierSpace, !ImagingWindow.useZeroPaddedFourierImage {
-        return settings._pixelsPerImage
+        return settings.resolutionMajor * settings.resolutionMinor
       } else {
-        let resolution = settings._resolutionMajor
-        return resolution * resolution
+        return settings.maxResolution * settings.maxResolution
       }
+    }
+    
+    func getBoundaries() -> SIMD2<Int> {
+      let dimensions = SIMD2(
+        settings.resolutionMajor,
+        settings.resolutionMinor)
+      return (settings.maxResolution &- dimensions) / 2
     }
     
     var output = [SIMD2<Float>](
       repeating: getFillerPixel(),
       count: getPixelsPerImage())
     
-    let boundary = (settings._resolutionMajor - settings._resolutionMinor) / 2
+    let boundaries = getBoundaries()
     let subtractionPixel = getSubtractionPixel()
     
-    for rowID in 0..<settings._resolutionMinor {
-      for columnID in 0..<settings._resolutionMajor {
-        let pixelID = rowID * settings._resolutionMajor + columnID
+    for rowID in 0..<settings.resolutionMinor {
+      for columnID in 0..<settings.resolutionMajor {
+        let pixelID = rowID * settings.resolutionMajor + columnID
         var data = dataBuffer[pixelID]
         data -= subtractionPixel
         
         func getSlotID() -> Int {
           if basis == .fourierSpace, !ImagingWindow.useZeroPaddedFourierImage {
             if settings.majorAxis == 0 {
-              return rowID * settings._resolutionMajor + columnID
+              return rowID * settings.resolutionMajor + columnID
             } else {
-              return columnID * settings._resolutionMinor + rowID
+              return columnID * settings.resolutionMinor + rowID
             }
           } else {
-            let mappedRowID = boundary + rowID
+            let mappedRowID = boundaries[1] + rowID
+            let mappedColumnID = boundaries[0] + columnID
+            
             if settings.majorAxis == 0 {
-              return mappedRowID * settings._resolutionMajor + columnID
+              return mappedRowID * settings.maxResolution + mappedColumnID
             } else {
-              return columnID * settings._resolutionMajor + mappedRowID
+              return mappedColumnID * settings.maxResolution  + mappedRowID
             }
           }
         }

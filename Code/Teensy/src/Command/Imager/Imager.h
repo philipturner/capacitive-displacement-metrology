@@ -54,9 +54,9 @@ struct Imager {
 
 private:
   Mode mode;
-  uint32_t _trueResolutionMajor;
-  uint32_t _resolutionMajor;
-  uint32_t _resolutionMinor;
+  uint32_t trueResolutionMajor;
+  uint32_t resolutionMajor;
+  uint32_t resolutionMinor;
   float pixelDimension; // units: nm
   uint32_t polynomialPeakTime;
   Settings settings;

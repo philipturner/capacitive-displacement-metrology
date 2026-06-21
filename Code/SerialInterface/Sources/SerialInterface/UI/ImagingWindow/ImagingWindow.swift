@@ -7,7 +7,7 @@ class ImagingWindow {
     case splitCurrent
     case splitHeight
   }
-  static let auxiliaryImageType: AuxiliaryImageType = .incoming
+  static let auxiliaryImageType: AuxiliaryImageType = .splitCurrent
   
   enum DualImageType {
     case allLines
