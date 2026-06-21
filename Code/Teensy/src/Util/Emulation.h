@@ -5,10 +5,10 @@
 struct Emulation {
   static constexpr float atomSpacing = 0.246; // units: nm
   static constexpr float latticeRotation = 10; // units: °
-  static constexpr float slopeX = 0.05;
-  static constexpr float slopeY = -0.02;
+  static constexpr float slopeX = 0; // 0.05;
+  static constexpr float slopeY = 0; // -0.02;
   static constexpr float zeroPositionZ = 10; // units: nm, sign convention of voltage
-  static constexpr float driftRate = 0.3; // nm/s
+  static constexpr float driftRate = 0; // 0.3; // nm/s
   static constexpr float driftFrequency = 0.1;
   
   static inline BiquadFilter secondOrderFilter = BiquadFilter(

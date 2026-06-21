@@ -7,8 +7,6 @@
 #include "Util/Interpolate.h"
 #include <Arduino.h>
 
-#include "Time/Profiling.h"
-
 bool shouldContinueImaging(Imager::Mode mode, uint32_t imageID) {
   if (mode == Imager::Mode::image && imageID > 0) {
     return false;
@@ -18,9 +16,7 @@ bool shouldContinueImaging(Imager::Mode mode, uint32_t imageID) {
 }
 
 void Imager::update() {
-  uint32_t time1 = ARM_DWT_CYCCNT;
-
-  // 4.439-4.679, most common: 4.448
+  // 4.439-4.679, most common: 4.448 (repeated this and got most common: 4.429)
   // cache imageTime only: 4.418-4.673, most common: 4.428
   // cache rowTime only: most common: 4.431
   // cache both: most common: 4.426
@@ -76,15 +72,6 @@ void Imager::update() {
   }
 
   previousVoltageXY = currentVoltageXY;
-
-  uint32_t time5 = ARM_DWT_CYCCNT;
-
-  if (KilohertzLoop::iterationID % 1997 == 0 || time == 0) {
-    Serial.print("imager.update() ");
-    Profiling::display(time1, time5);
-    Serial.print(time);
-    Serial.println();
-  }
 }
 
 float2 Imager::getPosition(float2 localPosition, uint32_t imageID) {
