@@ -94,7 +94,10 @@ void Application::logHistoryMessage() {
       state.piezoZVoltage);
     
     // Metric that doesn't lose sensitivity as its magnitude grows larger.
-    float2 drift = Application::creepFilter.getDriftCorrection();
+    float2 drift = float(0);
+    drift += Application::creepFilter.scaleError;
+    drift += Application::creepFilter.futureAccumulatedDrift;
+    drift += Application::creepFilter.earlyScaleError;
     float dV = drift.x + drift.y;
     
     Log::write(flags,

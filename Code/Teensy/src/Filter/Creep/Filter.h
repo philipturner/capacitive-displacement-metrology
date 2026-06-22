@@ -16,15 +16,14 @@ namespace Creep {
     Filter();
     Filter(bool notDefaultConstructor);
     void update(float2 stimulus);
-    void resetDrift();
-    float2 getDriftCorrection() const;
+    void resetError();
 
-    // This must be added to the stimulus before entering into 'update', which
-    // will subtract it before storing the voltage in the history.
-    void setEarlyScaleCorrection(float2 stimulus);
+    // This must be subtracted from the stimulus before entering into 'update',
+    // which will add it before storing the voltage in the history.
+    void setEarlyScaleError(float2 stimulus);
 
-    float2 earlyScaleCorrection = float2(0);  
-    float2 scaleCorrection = float2(0);
+    float2 earlyScaleError = float2(0);  
+    float2 scaleError = float2(0);
     float2 futureAccumulatedDrift = float2(0);
     
   private:

@@ -78,7 +78,7 @@ void modeChangeCommon(Command::Mode mode) {
   Application::mode = mode;
   Application::state.modeStartIterationID = KilohertzLoop::iterationID;
   Application::state.capacitanceUpdateCount = 0;
-  Application::creepFilter.resetDrift();
+  Application::creepFilter.resetError();
 }
 
 void ModeChanger::end() const {

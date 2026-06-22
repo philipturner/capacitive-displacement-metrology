@@ -71,6 +71,8 @@ private:
 
   // debugging; calibrating hysteresis width
   float previousRowMidPosition;
+  float previous_dx;
+  float max_dx = 0;
   
   static uint32_t getTrueResolutionMajor(
     uint32_t resolutionMajor, 
