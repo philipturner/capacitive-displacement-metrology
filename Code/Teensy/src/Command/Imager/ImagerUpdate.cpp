@@ -7,9 +7,6 @@
 #include "Util/Interpolate.h"
 #include <Arduino.h>
 
-#include "Filter/Creep/Settings.h"
-#include "Diagnostics/Log.h" // debugging; calibrating hysteresis width
-
 bool shouldContinueImaging(Imager::Mode mode, uint32_t imageID) {
   if (mode == Imager::Mode::image && imageID > 0) {
     return false;
@@ -55,46 +52,6 @@ void Imager::update() {
       correctedVoltageXY -= Application::creepFilter.futureAccumulatedDrift;
       Application::creepFilter.setEarlyScaleError(correctedVoltageXY);
       correctedVoltageXY -= Application::creepFilter.earlyScaleError;
-    }
-
-    if (mode == Imager::Mode::image) {
-      if (!decomposition.inSettlePeriod &&
-          !decomposition.inPolynomialPeak &&
-          decomposition.rowID < resolutionMinor) {
-        uint32_t halfTime = pixelTime * (trueResolutionMajor / 2);
-        if (decomposition.timeLeft == 0 || decomposition.timeLeft == halfTime) {
-          float midPosition = correctedVoltageXY.x * 0.320f;
-
-          if (decomposition.timeLeft == halfTime) {
-            if (trueResolutionMajor == resolutionMajor) {
-              if (decomposition.rowID >= 1) {
-                float dx = midPosition - previousRowMidPosition;
-                Log::write(
-                  Log::Flags::spectroscopy,
-                  float(decomposition.rowID),
-                  correctedVoltageXY.x * 0.320f,
-                  dx);
-                
-                if (decomposition.rowID >= 5) {
-                  max_dx = max(max_dx, abs(dx));
-                }
-
-                if (decomposition.rowID == resolutionMinor - 1) {
-                  Log::write(
-                    Log::Flags::spectroscopy,
-                    float(resolutionMajor),
-                    float(resolutionMinor),
-                    Creep::Settings::creepConstants.x,
-                    max_dx);
-                }
-
-                previous_dx = dx;
-              }
-            }
-            previousRowMidPosition = midPosition;
-          }
-        }
-      }
     }
 
     Application::updatePiezoVoltage(1, correctedVoltageXY.x);
