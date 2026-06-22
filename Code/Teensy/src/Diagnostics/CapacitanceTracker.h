@@ -24,6 +24,7 @@ struct CapacitanceTracker {
   // 3.507 μs [580 Hz]
   // 4.000 μs [1080 Hz]
   // 5.050 μs [1544 Hz]
+  // 0.570 μs lag from PA95 with 280 kHz bandwidth at |gain| = 35.7
   static constexpr float loopTimeLag = 87; // μs
 
   CapacitanceTracker();

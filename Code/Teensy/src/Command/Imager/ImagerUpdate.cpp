@@ -7,6 +7,8 @@
 #include "Util/Interpolate.h"
 #include <Arduino.h>
 
+#include "Diagnostics/Log.h" // debugging; calibrating hysteresis width
+
 bool shouldContinueImaging(Imager::Mode mode, uint32_t imageID) {
   if (mode == Imager::Mode::image && imageID > 0) {
     return false;
@@ -28,27 +30,108 @@ void Imager::update() {
   bool continueImaging = shouldContinueImaging(mode, imageID);
   auto decomposition = getTimeDecomposition(timeInImage);
 
-  if (continueImaging) {
-    if (timeInImage == 0) {
-      float x = Application::state.piezoXVoltage * 0.320f;
-      float y = Application::state.piezoYVoltage * 0.320f;
-      previousImageEnd = float2(x, y);
-    }
-    
-    if (decomposition.inSettlePeriod) {
-      Application::creepFilter.resetDrift();
-    }
+  if (timeInImage == 0) {
+    float x = Application::state.piezoXVoltage * 0.320f;
+    float y = Application::state.piezoYVoltage * 0.320f;
+    previousImageEnd = float2(x, y);
+  }
+  
+  if (decomposition.inSettlePeriod) {
+    Application::creepFilter.resetDrift();
+  }
 
+  if (continueImaging) {
     currentVoltageXY = getPosition(decomposition, imageID);
     currentVoltageXY /= 0.320f;
   }
 
-  float2 creepCorrectedVoltageXY = currentVoltageXY;
-  creepCorrectedVoltageXY += Application::creepFilter.getDriftCorrection();
-
   // latency to initialize Imager is 1.6-2.5 us
   // latency of the code below is 3.67 us
-  if (time > 0) {
+  if (time > 0 && continueImaging) {
+    float2 creepCorrectedVoltageXY = currentVoltageXY;
+    if (continueImaging && !decomposition.inSettlePeriod) {
+      creepCorrectedVoltageXY += Application::creepFilter.getDriftCorrection();
+      Application::creepFilter.setEarlyScaleCorrection(creepCorrectedVoltageXY);
+      creepCorrectedVoltageXY += Application::creepFilter.earlyScaleCorrection;
+    }
+
+    if (false) {
+      if (!decomposition.inSettlePeriod &&
+          !decomposition.inPolynomialPeak &&
+          decomposition.rowID < resolutionMinor) {
+        uint32_t halfTime = pixelTime * (trueResolutionMajor / 2);
+        if (decomposition.timeLeft == 0 || decomposition.timeLeft == halfTime) {
+          float2 corrected = creepCorrectedVoltageXY;
+          corrected += Application::creepFilter.getDriftCorrection();
+
+  /*
+  spectroscopy, 18.0, 0.5, -0.048452377, -0.04305458, 0.0, 
+  spectroscopy, 19.0, 0.5, 0.049901962, 0.044504166, 0.0, 
+
+  spectroscopy, 18.0, 0.5, -0.048817635, -0.043419838, 0.0, 
+  spectroscopy, 19.0, 0.5, 0.050914764, 0.045516014, 0.0, 
+
+  spectroscopy, 18.0, 0.5, -0.046614647, -0.04121685, 0.0, 
+  spectroscopy, 19.0, 0.5, 0.049035072, 0.043636322, 0.0, 
+
+  spectroscopy, 18.0, 0.5, -0.047104836, -0.04170704, 0.0, 
+  spectroscopy, 19.0, 0.5, 0.049146652, 0.043748856, 0.0, 
+
+
+
+  spectroscopy, 18.0, 0.5, -0.047520638, -0.047520638, 0.0, 
+  spectroscopy, 19.0, 0.5, 0.04938984, 0.04938984, 0.0, 
+
+  spectroscopy, 18.0, 0.5, -0.04759693, -0.04759693, 0.0, 
+  spectroscopy, 19.0, 0.5, 0.052124977, 0.052124977, 0.0, 
+
+  spectroscopy, 18.0, 0.5, -0.048395157, -0.048395157, 0.0, 
+  spectroscopy, 19.0, 0.5, 0.051628113, 0.051628113, 0.0, 
+
+  spectroscopy, 18.0, 0.5, -0.048401833, -0.048401833, 0.0, 
+  spectroscopy, 19.0, 0.5, 0.04969406, 0.04969406, 0.0, 
+
+  spectroscopy, 18.0, 0.5, -0.04820156, -0.04820156, -0.002698958, 
+  spectroscopy, 19.0, 0.5, 0.050121307, 0.050121307, 0.002698958, 
+
+
+
+  spectroscopy, 18.0, 0.4972992, -0.053388596, -0.0479908, 0.0, 
+  spectroscopy, 19.0, 0.50268555, 0.055295944, 0.049897194, 0.0,
+
+  spectroscopy, 18.0, 0.4972992, -0.05293274, -0.047534943, -0.002698958, 
+  spectroscopy, 19.0, 0.50268555, 0.05379486, 0.048397064, 0.002698958, 
+
+  spectroscopy, 18.0, 0.4972992, -0.052775383, -0.047377586, -0.002698958, 
+  spectroscopy, 19.0, 0.50268555, 0.05762291, 0.052225113, 0.002698958, 
+
+  spectroscopy, 18.0, 0.4972992, -0.05162716, -0.04622841, -0.002698958, 
+  spectroscopy, 19.0, 0.50268555, 0.056581497, 0.051182747, 0.002698958, 
+
+  spectroscopy, 18.0, 0.4972992, -0.052754402, -0.047356606, -0.002698958, 
+  spectroscopy, 19.0, 0.50268555, 0.05486393, 0.049466133, 0.002698958, 
+  */
+
+          float midPosition = corrected.x * 0.320f;
+
+          if (decomposition.timeLeft == halfTime) {
+            if (trueResolutionMajor == resolutionMajor) {
+              if (decomposition.rowID >= 1) {
+                float dx = midPosition - previousRowMidPosition;
+                Log::write(
+                  Log::Flags::spectroscopy,
+                  float(decomposition.rowID),
+                  creepCorrectedVoltageXY.x * 0.320f,
+                  dx,
+                  Application::creepFilter.earlyScaleCorrection.x * 0.320f);
+              }
+            }
+            previousRowMidPosition = midPosition;
+          }
+        }
+      }
+    }
+
     Application::updatePiezoVoltage(1, creepCorrectedVoltageXY.x);
     DAC::enableSafeWait = false;
     Application::updatePiezoVoltage(2, creepCorrectedVoltageXY.y);

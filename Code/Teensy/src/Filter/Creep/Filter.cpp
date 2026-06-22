@@ -28,12 +28,15 @@ float getScaleChange() {
 inline float scaleChange = getScaleChange();
 
 void Filter::update(float2 stimulus) {
+  // TODO: Subtract away the early scale correction.
+  float2 trueStimulus = stimulus - earlyScaleCorrection;
+
   // Responding to the DAC updates from the current iteration.
   Sample sample;
-  sample.dV = stimulus - previousStimulus;
+  sample.dV = trueStimulus - previousStimulus;
   sample.trueTimeOffset = 0;
   sample.queueTime = timeOffset;
-  previousStimulus = stimulus;
+  previousStimulus = trueStimulus;
 
   uint32_t queueID = Queue::queueCount - 1;
   queues[queueID].insert(sample);
@@ -44,18 +47,23 @@ void Filter::update(float2 stimulus) {
   updateCreepRate(accumulator);
   updateQueues();
 
-  float2 creepConstants = Settings::creepConstants;
-  scaleCorrectionDrift += sample.dV * creepConstants * scaleChange;
+  earlyScaleCorrection = float2(0);
+  scaleCorrection -= sample.dV * Settings::creepConstants * scaleChange;
   futureAccumulatedDrift += currentCreepRate;
 }
 
 void Filter::resetDrift() {
-  scaleCorrectionDrift = float2(0);
+  scaleCorrection = float2(0);
   futureAccumulatedDrift = float2(0);
 }
 
-float2 Filter::getDriftCorrection() {
-  return scaleCorrectionDrift - futureAccumulatedDrift;
+float2 Filter::getDriftCorrection() const {
+  return scaleCorrection + futureAccumulatedDrift;
+}
+
+void Filter::setEarlyScaleCorrection(float2 stimulus) {
+  float2 dV = stimulus - previousStimulus;
+  earlyScaleCorrection = -1 * dV * Settings::creepConstants * scaleChange;
 }
 
 float2 Filter::shiftSampleTimes() {

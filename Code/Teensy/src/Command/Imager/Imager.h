@@ -68,6 +68,9 @@ private:
   uint32_t polynomialPeakTime;
   Settings settings;
   PixelBuffer pixelBuffer;
+
+  // debugging; calibrating hysteresis width
+  float previousRowMidPosition;
   
   static uint32_t getTrueResolutionMajor(
     uint32_t resolutionMajor, 
