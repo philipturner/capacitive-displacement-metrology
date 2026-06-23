@@ -39,7 +39,7 @@ extension LineParser.Splitting {
         
         "polynomial peak time (μs)",
         "electronic time lag (μs)",
-        "creep setting time (ms)",
+        "creep settling time (ms)",
         "image time (ms)",
         "feedback time constant (ms)",
         
