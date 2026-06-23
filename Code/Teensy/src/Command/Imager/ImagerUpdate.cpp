@@ -61,7 +61,9 @@ void Imager::update() {
   }
 
   float2 dXY = currentVoltageXY - previousVoltageXY;
-  Feedback::timeConstant = settings.feedbackTimeConstant;
+  if (!decomposition.inSettlePeriod) {
+    Feedback::timeConstant = settings.feedbackTimeConstant;
+  }
   Application::correctZVoltage(dXY);
   Feedback::timeConstant = Feedback::defaultTimeConstant;
 
