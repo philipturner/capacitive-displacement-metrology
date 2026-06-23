@@ -280,8 +280,8 @@ extension ImagingWindow {
         stddev = max(stddev, 0.1)
         
         return SIMD2<Float>(
-          average - stddev * 3,
-          average + stddev * 3)
+          average - stddev * 2,
+          average + stddev * 2)
       } else {
         func createRange() -> SIMD2<Float> {
           let defaultStatistics = pixelTracker.statistics!

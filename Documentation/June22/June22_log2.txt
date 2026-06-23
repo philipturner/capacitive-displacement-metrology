@@ -1,0 +1,1010 @@
+Last login: Mon Jun 22 19:44:44 on ttys001
+cd /Users/philipturner/Documents/STM/capacitive-displacement-metrology/Code/SerialInterface && swift run -Xswiftc -Ounchecked SerialInterface
+(base) philipturner@M1-Max-MacBook-Pro ~ % cd /Users/philipturner/Documents/STM/capacitive-displacement-metrology/Code/SerialInterface && swift run -Xswiftc -Ounchecked SerialInterface
+[1/1] Planning build
+Building for debugging...
+[1/1] Write swift-version--58304C5D6DBC2206.txt
+Build of product 'SerialInterface' complete! (0.13s)
+2
+Transmitted serial input: 2
+4
+Transmitted serial input: 4
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |    0.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |    0.5  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+11c2,5
+Transmitted serial input: 11c2,5
+slope | -0.102,  0.043 | ±0.014, ±0.012 | 20 samples
+slope | -0.099,  0.045 | ±0.011, ±0.012 | 20 samples
+slope | -0.105,  0.047 | ±0.013, ±0.014 | 20 samples
+slope | -0.107,  0.044 | ±0.014, ±0.013 | 20 samples
+slope | -0.106,  0.045 | ±0.014, ±0.013 | 20 samples
+slope | -0.101,  0.044 | ±0.012, ±0.012 | 20 samples
+slope | -0.094,  0.043 | ±0.012, ±0.012 | 20 samples
+slope | -0.100,  0.044 | ±0.013, ±0.013 | 20 samples
+slope | -0.106,  0.044 | ±0.014, ±0.011 | 20 samples
+11c3,5
+Transmitted serial input: 11c3,5
+slope | -0.106,  0.047 | ±0.012, ±0.011 | 20 samples
+slope | -0.106,  0.047 | ±0.013, ±0.012 | 20 samples
+slope | -0.101,  0.039 | ±0.011, ±0.011 | 20 samples
+slope | -0.139,  0.039 | ±0.108, ±0.013 | 20 samples
+slope | -0.108,  0.046 | ±0.011, ±0.011 | 20 samples
+slope | -0.107,  0.046 | ±0.013, ±0.012 | 20 samples
+slope | -0.109,  0.046 | ±0.010, ±0.011 | 20 samples
+slope | -0.117,  0.050 | ±0.011, ±0.012 | 20 samples
+slope | -0.117,  0.055 | ±0.012, ±0.014 | 20 samples
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |    0.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |    0.5  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+11c4,5
+Transmitted serial input: 11c4,5
+slope | -0.132,  0.058 | ±0.010, ±0.009 | 20 samples
+slope | -0.139,  0.061 | ±0.010, ±0.011 | 20 samples
+slope | -0.139,  0.060 | ±0.010, ±0.011 | 20 samples
+slope | -0.140,  0.058 | ±0.011, ±0.012 | 20 samples
+slope | -0.137,  0.060 | ±0.010, ±0.010 | 20 samples
+slope | -0.136,  0.061 | ±0.013, ±0.012 | 20 samples
+slope | -0.127,  0.056 | ±0.011, ±0.011 | 20 samples
+slope | -0.139,  0.060 | ±0.011, ±0.011 | 20 samples
+slope | -0.136,  0.060 | ±0.011, ±0.010 | 20 samples
+12t-0.136,0.060
+Transmitted serial input: 12t-0.136,0.060
+[Settings] dz/dx | -0.136
+[Settings] dz/dy |  0.060
+
+11c4,5
+Transmitted serial input: 11c4,5
+slope | -0.180,  0.078 | ±0.005, ±0.007 | 20 samples
+slope | -0.180,  0.078 | ±0.006, ±0.006 | 20 samples
+slope | -0.182,  0.077 | ±0.006, ±0.005 | 20 samples
+slope | -0.182,  0.080 | ±0.005, ±0.004 | 20 samples
+slope | -0.185,  0.078 | ±0.005, ±0.005 | 20 samples
+slope | -0.181,  0.077 | ±0.005, ±0.005 | 20 samples
+slope | -0.179,  0.076 | ±0.004, ±0.005 | 20 samples
+slope | -0.180,  0.076 | ±0.004, ±0.005 | 20 samples
+slope | -0.180,  0.079 | ±0.004, ±0.004 | 20 samples
+12t-0.180,0.080
+Transmitted serial input: 12t-0.180,0.080
+[Settings] dz/dx | -0.180
+[Settings] dz/dy |  0.080
+
+11c4,5
+Transmitted serial input: 11c4,5
+slope | -0.201,  0.086 | ±0.003, ±0.003 | 20 samples
+slope | -0.197,  0.086 | ±0.004, ±0.003 | 20 samples
+slope | -0.200,  0.085 | ±0.004, ±0.005 | 20 samples
+slope | -0.199,  0.087 | ±0.004, ±0.004 | 20 samples
+slope | -0.199,  0.086 | ±0.004, ±0.003 | 20 samples
+slope | -0.198,  0.087 | ±0.003, ±0.003 | 20 samples
+slope | -0.202,  0.088 | ±0.005, ±0.004 | 20 samples
+slope | -0.200,  0.086 | ±0.003, ±0.003 | 20 samples
+slope | -0.199,  0.084 | ±0.003, ±0.003 | 20 samples
+11c8,5
+Transmitted serial input: 11c8,5
+slope | -0.199,  0.086 | ±0.002, ±0.002 | 20 samples
+slope | -0.200,  0.087 | ±0.002, ±0.002 | 20 samples
+slope | -0.200,  0.087 | ±0.003, ±0.002 | 20 samples
+slope | -0.199,  0.084 | ±0.003, ±0.002 | 20 samples
+slope | -0.198,  0.086 | ±0.002, ±0.002 | 20 samples
+slope | -0.199,  0.087 | ±0.002, ±0.002 | 20 samples
+slope | -0.200,  0.086 | ±0.002, ±0.002 | 20 samples
+slope | -0.199,  0.085 | ±0.002, ±0.002 | 20 samples
+slope | -0.200,  0.085 | ±0.002, ±0.002 | 20 samples
+11c16,5
+Transmitted serial input: 11c16,5
+slope | -0.201,  0.086 | ±0.002, ±0.002 | 20 samples
+slope | -0.200,  0.086 | ±0.002, ±0.002 | 20 samples
+slope | -0.201,  0.086 | ±0.002, ±0.002 | 20 samples
+slope | -0.200,  0.086 | ±0.002, ±0.001 | 20 samples
+slope | -0.200,  0.085 | ±0.001, ±0.001 | 20 samples
+slope | -0.201,  0.086 | ±0.001, ±0.002 | 20 samples
+slope | -0.201,  0.085 | ±0.002, ±0.001 | 20 samples
+slope | -0.202,  0.085 | ±0.002, ±0.001 | 20 samples
+slope | -0.200,  0.087 | ±0.002, ±0.002 | 20 samples
+12t-0.200,0.085
+Transmitted serial input: 12t-0.200,0.085
+[Settings] dz/dx | -0.200
+[Settings] dz/dy |  0.085
+
+11c4,5
+Transmitted serial input: 11c4,5
+slope | -0.208,  0.091 | ±0.003, ±0.003 | 20 samples
+slope | -0.209,  0.090 | ±0.004, ±0.002 | 20 samples
+slope | -0.210,  0.090 | ±0.004, ±0.003 | 20 samples
+slope | -0.210,  0.090 | ±0.003, ±0.003 | 20 samples
+slope | -0.210,  0.089 | ±0.003, ±0.003 | 20 samples
+slope | -0.209,  0.089 | ±0.004, ±0.003 | 20 samples
+slope | -0.209,  0.089 | ±0.003, ±0.002 | 20 samples
+slope | -0.208,  0.089 | ±0.005, ±0.004 | 20 samples
+slope | -0.211,  0.087 | ±0.003, ±0.004 | 20 samples
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |    0.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |    0.5  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+12t0,0
+Transmitted serial input: 12t0,0
+[Settings] dz/dx | 0.000
+[Settings] dz/dy | 0.000
+
+12t-0.100,0
+Transmitted serial input: 12t-0.100,0
+[Settings] dz/dx | -0.100
+[Settings] dz/dy |  0.000
+
+12t-0.200,0
+Transmitted serial input: 12t-0.200,0
+[Settings] dz/dx | -0.200
+[Settings] dz/dy |  0.000
+
+12t-0.200,0.085
+Transmitted serial input: 12t-0.200,0.085
+[Settings] dz/dx | -0.200
+[Settings] dz/dy |  0.085
+
+9f20
+Transmitted serial input: 9f20
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |    0.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+9l50 
+Transmitted serial input: 9l50
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   50.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+9l100
+Transmitted serial input: 9l100
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |  100.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+9l150
+Transmitted serial input: 9l150
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |  150.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+2026-06-22 19:52:51.984 SerialInterface[5412:54764165] Warning: Window move completed without beginning
+9l200
+Transmitted serial input: 9l200
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |  200.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+9l250
+Transmitted serial input: 9l250
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |  250.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+9l300
+Transmitted serial input: 9l300
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |  300.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+9l0
+Transmitted serial input: 9l0
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |    0.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+9l90
+Transmitted serial input: 9l90
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v64,64,1.33
+Transmitted serial input: 8v64,64,1.33
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   64.0  
+[Settings] resolution major (px)       |   64.0  
+[Settings] resolution minor (px)       |   64.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  545.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v32,32,0.67
+Transmitted serial input: 8v32,32,0.67
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   32.0  
+[Settings] resolution major (px)       |   32.0  
+[Settings] resolution minor (px)       |   32.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 1000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  141.3  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v48,48,0.67
+Transmitted serial input: 8v48,48,0.67
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   48.0  
+[Settings] resolution major (px)       |   48.0  
+[Settings] resolution minor (px)       |   48.0  
+[Settings] pixel dimension (nm)        |    0.014
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 1500.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  309.8  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+10c0.005
+Transmitted serial input: 10c0.005
+[Settings] creep constants - X (%/decade) | 0.50
+[Settings] creep constants - Y (%/decade) | 0.50
+
+10c0.01
+Transmitted serial input: 10c0.01
+[Settings] creep constants - X (%/decade) | 1.00
+[Settings] creep constants - Y (%/decade) | 1.00
+
+10c0.02
+Transmitted serial input: 10c0.02
+[Settings] creep constants - X (%/decade) | 2.00
+[Settings] creep constants - Y (%/decade) | 2.00
+
+10c0.05
+Transmitted serial input: 10c0.05
+[Settings] creep constants - X (%/decade) | 5.00
+[Settings] creep constants - Y (%/decade) | 5.00
+
+10c0.1
+Transmitted serial input: 10c0.1
+[Settings] creep constants - X (%/decade) | 10.00
+[Settings] creep constants - Y (%/decade) | 10.00
+
+10c0.005
+Transmitted serial input: 10c0.005
+[Settings] creep constants - X (%/decade) | 0.50
+[Settings] creep constants - Y (%/decade) | 0.50
+
+10c0
+Transmitted serial input: 10c0
+[Settings] creep constants - X (%/decade) | 0.00
+[Settings] creep constants - Y (%/decade) | 0.00
+
+8v160,32,2
+Transmitted serial input: 8v160,32,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |  160.0  
+[Settings] resolution major (px)       |  160.0  
+[Settings] resolution minor (px)       |   32.0  
+[Settings] pixel dimension (nm)        |    0.012
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  583.9  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+10c0.005
+Transmitted serial input: 10c0.005
+[Settings] creep constants - X (%/decade) | 0.50
+[Settings] creep constants - Y (%/decade) | 0.50
+
+10c0.01
+Transmitted serial input: 10c0.01
+[Settings] creep constants - X (%/decade) | 1.00
+[Settings] creep constants - Y (%/decade) | 1.00
+
+10c0.015
+Transmitted serial input: 10c0.015
+[Settings] creep constants - X (%/decade) | 1.50
+[Settings] creep constants - Y (%/decade) | 1.50
+
+10c0.02
+Transmitted serial input: 10c0.02
+[Settings] creep constants - X (%/decade) | 2.00
+[Settings] creep constants - Y (%/decade) | 2.00
+
+10c0.005
+Transmitted serial input: 10c0.005
+[Settings] creep constants - X (%/decade) | 0.50
+[Settings] creep constants - Y (%/decade) | 0.50
+
+8v48,48,0.67
+Transmitted serial input: 8v48,48,0.67
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   48.0  
+[Settings] resolution major (px)       |   48.0  
+[Settings] resolution minor (px)       |   48.0  
+[Settings] pixel dimension (nm)        |    0.014
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 1500.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  309.8  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v160,16,1
+Transmitted serial input: 8v160,16,1
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |  160.0  
+[Settings] resolution major (px)       |  160.0  
+[Settings] resolution minor (px)       |   16.0  
+[Settings] pixel dimension (nm)        |    0.006
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  295.9  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v96,32,1
+Transmitted serial input: 8v96,32,1
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   32.0  
+[Settings] pixel dimension (nm)        |    0.010
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  379.1  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+9a1
+Transmitted serial input: 9a1
+8v96,32,1
+Transmitted serial input: 8v96,32,1
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   32.0  
+[Settings] pixel dimension (nm)        |    0.010
+                                       |         
+[Settings] major axis                  |    1.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  379.1  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    1.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v64,64,1
+Transmitted serial input: 8v64,64,1
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   64.0  
+[Settings] resolution major (px)       |   64.0  
+[Settings] resolution minor (px)       |   64.0  
+[Settings] pixel dimension (nm)        |    0.016
+                                       |         
+[Settings] major axis                  |    1.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  545.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v64,32,1
+Transmitted serial input: 8v64,32,1
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   64.0  
+[Settings] resolution major (px)       |   64.0  
+[Settings] resolution minor (px)       |   32.0  
+[Settings] pixel dimension (nm)        |    0.016
+                                       |         
+[Settings] major axis                  |    1.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  276.7  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    1.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v64,32,1
+Transmitted serial input: 8v64,32,1
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   64.0  
+[Settings] resolution major (px)       |   64.0  
+[Settings] resolution minor (px)       |   32.0  
+[Settings] pixel dimension (nm)        |    0.016
+                                       |         
+[Settings] major axis                  |    1.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  276.7  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+9a0
+Transmitted serial input: 9a0
+8v64,32,1
+Transmitted serial input: 8v64,32,1
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   64.0  
+[Settings] resolution major (px)       |   64.0  
+[Settings] resolution minor (px)       |   32.0  
+[Settings] pixel dimension (nm)        |    0.016
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  276.7  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v128,48,1
+Transmitted serial input: 8v128,48,1
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |  128.0  
+[Settings] resolution major (px)       |  128.0  
+[Settings] resolution minor (px)       |   48.0  
+[Settings] pixel dimension (nm)        |    0.008
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  718.3  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v256,96,1
+Transmitted serial input: 8v256,96,1
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |  256.0  
+[Settings] resolution major (px)       |  256.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.004
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 2657.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v64,24,1
+Transmitted serial input: 8v64,24,1
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   64.0  
+[Settings] resolution major (px)       |   64.0  
+[Settings] resolution minor (px)       |   24.0  
+[Settings] pixel dimension (nm)        |    0.016
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  209.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+3d5
+Transmitted serial input: 3d5
+2
+Transmitted serial input: 2
+3d5
+Transmitted serial input: 3d5
+2
+Transmitted serial input: 2
+3d20
+Transmitted serial input: 3d20
+2
+Transmitted serial input: 2
+3d100
+Transmitted serial input: 3d100
+2
+Transmitted serial input: 2
+3d1000
+Transmitted serial input: 3d1000
+2
+Transmitted serial input: 2
+3d5000
+Transmitted serial input: 3d5000
+2
+Transmitted serial input: 2
+3d5000
+Transmitted serial input: 3d5000
+2
+Transmitted serial input: 2
+3c200,25
+Transmitted serial input: 3c200,25
+3c20,34
+Transmitted serial input: 3c20,34
+4
+Transmitted serial input: 4
+2
+Transmitted serial input: 2
+3c10,36
+Transmitted serial input: 3c10,36
+4
+Transmitted serial input: 4
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v64,24,1
+Transmitted serial input: 8v64,24,1
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   64.0  
+[Settings] resolution major (px)       |   64.0  
+[Settings] resolution minor (px)       |   24.0  
+[Settings] pixel dimension (nm)        |    0.016
+                                       |         
+[Settings] major axis                  |    0.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  209.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+9a1
+Transmitted serial input: 9a1
+8v64,24,1
+Transmitted serial input: 8v64,24,1
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   64.0  
+[Settings] resolution major (px)       |   64.0  
+[Settings] resolution minor (px)       |   24.0  
+[Settings] pixel dimension (nm)        |    0.016
+                                       |         
+[Settings] major axis                  |    1.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             |  209.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+8v96,96,2
+Transmitted serial input: 8v96,96,2
+[Settings] mode                        |    1.0  
+[Settings] true resolution major (px)  |   96.0  
+[Settings] resolution major (px)       |   96.0  
+[Settings] resolution minor (px)       |   96.0  
+[Settings] pixel dimension (nm)        |    0.021
+                                       |         
+[Settings] major axis                  |    1.0  
+[Settings] centers[0] - X (nm)         |    0.0  
+[Settings] centers[0] - Y (nm)         |    0.0  
+[Settings] centers[1] - X (nm)         |    0.0  
+[Settings] centers[1] - Y (nm)         |    0.0  
+                                       |         
+[Settings] polynomial peak time (μs)   | 2000.0  
+[Settings] electronic time lag (μs)    |   90.0  
+[Settings] creep setting time (ms)     |    0.0  
+[Settings] image time (ms)             | 1121.5  
+[Settings] feedback time constant (ms) |   20.0  
+                                       |         
+[Settings] setpoint current (pA)       | 1000.0  
+
+3d10000
+Transmitted serial input: 3d10000
+(base) philipturner@M1-Max-MacBook-Pro SerialInterface %         
