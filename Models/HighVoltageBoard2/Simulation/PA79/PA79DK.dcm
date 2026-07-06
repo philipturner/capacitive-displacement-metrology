@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP PA79DK
+D The PA79 is a dual 350V power operational amplifier with a novel input stage that provides extremely high slew rates in pulse applications while maintaining low quiescent current of under 2.5mA. This novel input stage also has the effect of adding variables to the power response and slew rate characteristics of the amplifier.  The output stages for this amplifier are well protected with user defined current limit. External phase compensation provides the user with great flexibility in trading gain, stabilit
+K
+F https://www.apexanalog.com/resources/products/pa79u.pdf
+$ENDCMP
+#
+#End Doc Library

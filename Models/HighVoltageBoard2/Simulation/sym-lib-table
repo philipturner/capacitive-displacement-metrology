@@ -1,0 +1,4 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "PA79DK") (type "KiCad") (uri "${KIPRJMOD}/PA79/PA79DK.kicad_sym") (options "") (descr ""))
+)
