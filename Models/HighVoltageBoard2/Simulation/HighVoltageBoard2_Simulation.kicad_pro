@@ -424,13 +424,25 @@
         "uuid": "9bc71ba4-b324-4c2f-a958-e9450ff9b707"
       }
     ],
-    "used_designators": "R3,R12-13,C11-12,#PWR4",
+    "used_designators": "R_A_probe1,R1-19,IC1-3,C1-24,#PWR1-12,R_B_probe1,V1-4",
     "variants": []
   },
   "sheets": [
     [
       "9bc71ba4-b324-4c2f-a958-e9450ff9b707",
       "Root"
+    ],
+    [
+      "2050f40a-14c6-4f54-9670-197e7dd64f72",
+      "PA79A"
+    ],
+    [
+      "a06ffbea-e0a1-4134-8518-d5f130694c51",
+      "PA79B"
+    ],
+    [
+      "7d0d1278-0b5c-4514-8b25-c7c85a02f86c",
+      "Piezo"
     ]
   ],
   "text_variables": {},
