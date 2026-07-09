@@ -1487,7 +1487,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "194ce5e4-ca29-4f23-a88a-4004eae4c558")
-		(property "Reference" "C12"
+		(property "Reference" "C11"
 			(at 160.02 106.6799 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1551,11 +1551,11 @@
 		(instances
 			(project "HighVoltageBoard2_Simulation"
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/2050f40a-14c6-4f54-9670-197e7dd64f72"
-					(reference "C12")
+					(reference "C11")
 					(unit 1)
 				)
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/a06ffbea-e0a1-4134-8518-d5f130694c51"
-					(reference "C17")
+					(reference "C16")
 					(unit 1)
 				)
 			)
@@ -1573,7 +1573,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1cb9ae5c-2ec2-4c08-a894-af0eab2cdff0")
-		(property "Reference" "#PWR07"
+		(property "Reference" "#PWR06"
 			(at 156.21 72.39 0)
 			(hide yes)
 			(show_name no)
@@ -1633,11 +1633,11 @@
 		(instances
 			(project "HighVoltageBoard2_Simulation"
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/2050f40a-14c6-4f54-9670-197e7dd64f72"
-					(reference "#PWR07")
+					(reference "#PWR06")
 					(unit 1)
 				)
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/a06ffbea-e0a1-4134-8518-d5f130694c51"
-					(reference "#PWR09")
+					(reference "#PWR08")
 					(unit 1)
 				)
 			)
@@ -1655,7 +1655,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "27faf327-3df7-46a6-9239-51c26c36b91e")
-		(property "Reference" "R12"
+		(property "Reference" "R11"
 			(at 99.06 90.17 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1728,11 +1728,11 @@
 		(instances
 			(project "HighVoltageBoard2_Simulation"
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/2050f40a-14c6-4f54-9670-197e7dd64f72"
-					(reference "R12")
+					(reference "R11")
 					(unit 1)
 				)
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/a06ffbea-e0a1-4134-8518-d5f130694c51"
-					(reference "R15")
+					(reference "R14")
 					(unit 1)
 				)
 			)
@@ -1750,7 +1750,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "652a125f-a29d-463c-adbc-a5fa96b765b4")
-		(property "Reference" "#PWR08"
+		(property "Reference" "#PWR07"
 			(at 156.21 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -1810,11 +1810,11 @@
 		(instances
 			(project "HighVoltageBoard2_Simulation"
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/2050f40a-14c6-4f54-9670-197e7dd64f72"
-					(reference "#PWR08")
+					(reference "#PWR07")
 					(unit 1)
 				)
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/a06ffbea-e0a1-4134-8518-d5f130694c51"
-					(reference "#PWR010")
+					(reference "#PWR09")
 					(unit 1)
 				)
 			)
@@ -2123,7 +2123,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9eef839d-a631-40d0-974e-21b97f33cb8d")
-		(property "Reference" "R13"
+		(property "Reference" "R12"
 			(at 171.45 83.8199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2198,11 +2198,11 @@
 		(instances
 			(project "HighVoltageBoard2_Simulation"
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/2050f40a-14c6-4f54-9670-197e7dd64f72"
-					(reference "R13")
+					(reference "R12")
 					(unit 1)
 				)
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/a06ffbea-e0a1-4134-8518-d5f130694c51"
-					(reference "R16")
+					(reference "R15")
 					(unit 1)
 				)
 			)
@@ -2220,7 +2220,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c41921a3-a520-4758-a723-404362b80f9e")
-		(property "Reference" "C11"
+		(property "Reference" "C10"
 			(at 160.02 83.8199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2284,11 +2284,11 @@
 		(instances
 			(project "HighVoltageBoard2_Simulation"
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/2050f40a-14c6-4f54-9670-197e7dd64f72"
-					(reference "C11")
+					(reference "C10")
 					(unit 1)
 				)
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/a06ffbea-e0a1-4134-8518-d5f130694c51"
-					(reference "C16")
+					(reference "C15")
 					(unit 1)
 				)
 			)
@@ -2306,7 +2306,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c95e2d54-30ba-44eb-9345-7dfa6bd7b8e9")
-		(property "Reference" "C9"
+		(property "Reference" "C8"
 			(at 86.36 76.2 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2379,11 +2379,11 @@
 		(instances
 			(project "HighVoltageBoard2_Simulation"
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/2050f40a-14c6-4f54-9670-197e7dd64f72"
-					(reference "C9")
+					(reference "C8")
 					(unit 1)
 				)
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/a06ffbea-e0a1-4134-8518-d5f130694c51"
-					(reference "C14")
+					(reference "C13")
 					(unit 1)
 				)
 			)
@@ -2401,7 +2401,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d4761789-3d1f-40a7-856c-3f7e14dbacb7")
-		(property "Reference" "R11"
+		(property "Reference" "R10"
 			(at 99.06 77.47 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2474,11 +2474,11 @@
 		(instances
 			(project "HighVoltageBoard2_Simulation"
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/2050f40a-14c6-4f54-9670-197e7dd64f72"
-					(reference "R11")
+					(reference "R10")
 					(unit 1)
 				)
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/a06ffbea-e0a1-4134-8518-d5f130694c51"
-					(reference "R14")
+					(reference "R13")
 					(unit 1)
 				)
 			)
@@ -2496,7 +2496,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d4da8b1a-fb07-4f3b-b425-ed9d4778efbc")
-		(property "Reference" "C13"
+		(property "Reference" "C12"
 			(at 172.72 106.6799 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2571,11 +2571,11 @@
 		(instances
 			(project "HighVoltageBoard2_Simulation"
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/2050f40a-14c6-4f54-9670-197e7dd64f72"
-					(reference "C13")
+					(reference "C12")
 					(unit 1)
 				)
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/a06ffbea-e0a1-4134-8518-d5f130694c51"
-					(reference "C18")
+					(reference "C17")
 					(unit 1)
 				)
 			)
@@ -2593,7 +2593,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "dc5ce1e1-260d-426a-994a-d32f40047356")
-		(property "Reference" "C10"
+		(property "Reference" "C9"
 			(at 86.36 88.9 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2666,11 +2666,11 @@
 		(instances
 			(project "HighVoltageBoard2_Simulation"
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/2050f40a-14c6-4f54-9670-197e7dd64f72"
-					(reference "C10")
+					(reference "C9")
 					(unit 1)
 				)
 				(path "/9bc71ba4-b324-4c2f-a958-e9450ff9b707/a06ffbea-e0a1-4134-8518-d5f130694c51"
-					(reference "C15")
+					(reference "C14")
 					(unit 1)
 				)
 			)

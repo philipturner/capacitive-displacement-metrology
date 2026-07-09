@@ -424,7 +424,7 @@
         "uuid": "9bc71ba4-b324-4c2f-a958-e9450ff9b707"
       }
     ],
-    "used_designators": "R_A_probe1,R1-19,IC1-3,C1-24,#PWR1-12,R_B_probe1,V1-4",
+    "used_designators": "",
     "variants": []
   },
   "sheets": [
@@ -443,6 +443,10 @@
     [
       "7d0d1278-0b5c-4514-8b25-c7c85a02f86c",
       "Piezo"
+    ],
+    [
+      "b20c36c8-b0a7-4b2b-96ea-c45f068e165a",
+      "OPA828"
     ]
   ],
   "text_variables": {},

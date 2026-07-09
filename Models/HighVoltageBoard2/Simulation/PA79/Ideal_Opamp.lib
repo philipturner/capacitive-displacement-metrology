@@ -1,0 +1,14 @@
+* Ideal Op Amp Model
+.subckt Ideal_OpAmp 1 2 3
+.param p_gbw=1000Meg
+.param p_a0=1Meg
+.param p_pi=3.14159265
+
+* --- Stage 1: Input Gain & Pole Generation ---
+G1 0 int_node 1 2 1.0
+R1 int_node 0 {p_a0}
+C1 int_node 0 {1.0 / (2.0 * p_pi * p_gbw)}
+
+* --- Stage 2: Ideal Output Buffer ---
+Eout 3 0 int_node 0 1.0
+.ends Ideal_OpAmp
