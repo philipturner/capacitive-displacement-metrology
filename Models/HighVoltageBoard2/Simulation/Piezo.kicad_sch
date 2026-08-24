@@ -940,7 +940,7 @@
 	)
 	(text "wire the slave (with 20% larger current limit)\nto the electrode with 10% larger effective capacitance"
 		(exclude_from_sim no)
-		(at 27.178 22.098 0)
+		(at 27.686 14.986 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -948,6 +948,17 @@
 			(justify left top)
 		)
 		(uuid "a5f0fbf0-5038-4ae2-80b4-6d1be6911a01")
+	)
+	(text "default piezo capacitance: 114p"
+		(exclude_from_sim no)
+		(at 27.94 23.622 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "e6286a3c-abfd-4bb4-9d79-de97560731c6")
 	)
 	(text "the amount of PA79 overshoot doesn't matter; any\nshort voltage step will make the piezo resonate with\nan amplitude of twice the DAC step size\n\n...\n\ncome back to this problem tomorrow\nresonant noise ≥ 2 * DAC resolution...\n\nmaybe we can at least low-pass filter the fine Z output\nbefore summing with the coarse output in the OPA828 stage?\nmake the compensation capacitor swappable, tuning it to match\na specific resonant frequency\n\nthis filter is the second of the dual op-amp for the Z stage,\nwhich then gets fed into the summing op-amp with -1 gain\nperhaps X and Y channels should have this, and we design a board\nfor the future where there will be 6 DAC channels?"
 		(exclude_from_sim no)
@@ -1619,7 +1630,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "114p"
+		(property "Value" "{cappiezo}"
 			(at 54.61 109.2199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1701,7 +1712,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "114p"
+		(property "Value" "{cappiezo}"
 			(at 54.61 58.4199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1783,7 +1794,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "114p"
+		(property "Value" "{cappiezo}"
 			(at 54.61 83.8199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2172,7 +2183,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "114p"
+		(property "Value" "{cappiezo}"
 			(at 54.61 71.1199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2253,7 +2264,7 @@
 				)
 			)
 		)
-		(property "Value" "1"
+		(property "Value" "4"
 			(at 146.05 97.79 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2762,7 +2773,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "114p"
+		(property "Value" "{cappiezo}"
 			(at 54.61 45.7199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2844,7 +2855,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "114p"
+		(property "Value" "{cappiezo}"
 			(at 54.61 96.5199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3003,7 +3014,7 @@
 				)
 			)
 		)
-		(property "Value" "1"
+		(property "Value" "4"
 			(at 133.35 97.79 90)
 			(show_name no)
 			(do_not_autoplace no)

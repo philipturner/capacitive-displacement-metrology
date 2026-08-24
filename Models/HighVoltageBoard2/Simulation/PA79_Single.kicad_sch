@@ -999,7 +999,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "TODO: Revisit C_c and optimize if it limits slew rate\n\nAnalyze whether reaching a maximum input voltage\ntriumphs over C_c in unlocking maximum current\n- Test (±1 V, ±2 V, ±3 V, ±4 V, ±5 V) at the DAC w/ respective slew times\n- Test (5, 7, 10, 15, 20, 30) pF capacitance"
+	(text "TODO: Revisit C_c and optimize if it limits slew rate\n\nAnalyze stability w.r.t:\n1. compensation capacitance\n2. piezo capacitance (dynamically scale 114 pF)\n3. signal magnitude"
 		(exclude_from_sim no)
 		(at 71.882 36.576 0)
 		(effects
@@ -1009,6 +1009,39 @@
 			(justify left top)
 		)
 		(uuid "3677e681-40e3-47db-b4e1-671593e68876")
+	)
+	(text ".PARAM cappiezo = 114p"
+		(exclude_from_sim no)
+		(at 83.312 61.214 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "703f7dd5-e630-4e41-9ac5-6a7c0c0e7193")
+	)
+	(text ".PARAM sigmag = 3"
+		(exclude_from_sim no)
+		(at 83.312 57.404 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "a2265854-ece5-4bea-b476-937ccbb058ca")
+	)
+	(text ".PARAM capc = 3p"
+		(exclude_from_sim no)
+		(at 83.312 64.516 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "e7d9d98f-7f75-4972-b152-a1d8fe9623fa")
 	)
 	(junction
 		(at 168.91 91.44)
@@ -2327,7 +2360,7 @@
 				)
 			)
 		)
-		(property "Value" "10p"
+		(property "Value" "{capc}"
 			(at 86.36 78.74 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2614,7 +2647,7 @@
 				)
 			)
 		)
-		(property "Value" "10p"
+		(property "Value" "{capc}"
 			(at 86.36 91.44 90)
 			(show_name no)
 			(do_not_autoplace no)
