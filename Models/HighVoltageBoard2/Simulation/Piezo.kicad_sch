@@ -916,9 +916,20 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "resistors:\n1 = 20 kHz\n2 = 10 kHz\n4 = 5 kHz\n\nQ-factor: 100"
+	(text "capacitors:\n\nQ = 100\n1.591e-3\n3.978e-8\n\nQ = 20\n3.183e-4\n1.989e-7"
 		(exclude_from_sim no)
-		(at 120.65 74.422 0)
+		(at 146.558 64.008 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "63703467-a2b5-420f-af09-245df661acb1")
+	)
+	(text "resistors:\n\n1 = 20 kHz\n2 = 10 kHz\n4 = 5 kHz"
+		(exclude_from_sim no)
+		(at 120.65 72.136 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2568,7 +2579,7 @@
 			)
 		)
 		(property "Sim.Params" "dc=0 ampl=0 f=0 td=0 theta=0 phase=0 ac=1 ph=0"
-			(at 127.762 128.524 0)
+			(at 127.508 127.508 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
