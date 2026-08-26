@@ -1093,7 +1093,7 @@
 		)
 		(uuid "5a6ebcb2-09e5-4540-a7b1-c4771e2c7e3e")
 	)
-	(text ".control\nset controlswait\n\nmeas tran dynamic_tfall TRIG v(/piezo/pos_unfiltered) VAL=60.2 FALL=1 TARG v(/piezo/pos_unfiltered) VAL=-37.7 FALL=1\nmeas tran dynamic_trise TRIG v(/piezo/pos_unfiltered) VAL=-60.3 RISE=1 TARG v(/piezo/pos_unfiltered) VAL=37.6 RISE=1\nmeas tran Vmin min v(/piezo/pos_unfiltered) from=1u to=60u\nmeas tran Vmax max v(/piezo/pos_unfiltered) from=1u to=60u\n.endc\n"
+	(text ".control\nset controlswait\n\nmeas tran dynamic_tfall5 TRIG v(/piezo/pos_unfiltered) VAL=142.1 FALL=1 TARG v(/piezo/pos_unfiltered) VAL=-86.4 FALL=1\nmeas tran dynamic_trise5 TRIG v(/piezo/pos_unfiltered) VAL=-139.1 RISE=1 TARG v(/piezo/pos_unfiltered) VAL=89.4 RISE=1\nmeas tran Vmin min v(/piezo/pos_unfiltered) from=1u to=60u\nmeas tran Vmax max v(/piezo/pos_unfiltered) from=1u to=60u\n.endc\n"
 		(exclude_from_sim no)
 		(at 23.368 16.51 0)
 		(effects

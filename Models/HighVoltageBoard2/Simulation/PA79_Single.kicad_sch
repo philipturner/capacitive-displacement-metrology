@@ -1010,6 +1010,28 @@
 		)
 		(uuid "3677e681-40e3-47db-b4e1-671593e68876")
 	)
+	(text "ordering PA79:\ncomponentstockers.com has in stock\nMouser is out of stock until 9/15/2026\n\n$53.80 * 6 = $322.80 + shipping"
+		(exclude_from_sim no)
+		(at 101.6 127.254 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "4b93eeeb-6d95-4b52-b106-629835bf36d8")
+	)
+	(text "order the following parts:\n4.7, 6.8, 10, 15, 22 pF\n\nStart out with 10 pF. Once we are testing an actual\nhigh-capacitance piezo in the small-signal regime,\ninspect the waveforms on the scope. Remove and replace\nthe SMT bypass caps or solder a new PA79 sub-board with\na different value for C_c.\n\nCal-Chip Electronics, CHV, 500V rated,\n0805 package, ±0.25pF or 5% tolerance\n4 caps/board * $1.034 (sum of costs across 5 variants) * 7 = $28.95"
+		(exclude_from_sim no)
+		(at 144.78 34.036 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "6c385865-c298-4614-aa83-038ba32ca78a")
+	)
 	(text ".PARAM cappiezo = 114p"
 		(exclude_from_sim no)
 		(at 83.312 61.214 0)
@@ -1021,7 +1043,7 @@
 		)
 		(uuid "703f7dd5-e630-4e41-9ac5-6a7c0c0e7193")
 	)
-	(text ".PARAM sigmag = 3"
+	(text ".PARAM sigmag = 5"
 		(exclude_from_sim no)
 		(at 83.312 57.404 0)
 		(effects

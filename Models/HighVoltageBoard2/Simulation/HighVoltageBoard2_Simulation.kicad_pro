@@ -294,6 +294,7 @@
       "netlist": "",
       "plot": "",
       "specctra_dsn": "",
+      "step": "",
       "vrml": ""
     },
     "page_layout_descr_file": ""
@@ -410,7 +411,7 @@
         "version": 0
       },
       "model_mode": 4,
-      "workbook_filename": ""
+      "workbook_filename": "HighVoltageBoard2_Simulation.wbk"
     },
     "page_layout_descr_file": "",
     "plot_directory": "",
